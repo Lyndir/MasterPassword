@@ -18,7 +18,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MPTypeViewController.h"
-#import "MPSiteQuestionEntity.h"
+#import "MPSiteQuestionEntity+CoreDataClass.h"
 
 @interface MPAnswersViewController : UIViewController
 

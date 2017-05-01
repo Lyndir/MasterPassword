@@ -526,7 +526,7 @@
             <objects>
                 <navigationController definesPresentationContext="YES" navigationBarHidden="YES" id="Q1S-vU-GGO" customClass="MPNavigationController" sceneMemberID="viewController">
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="4yl-zs-iUd">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="4yl-zs-iUd">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -806,7 +806,7 @@
                                                     </constraints>
                                                 </imageView>
                                                 <button opaque="NO" alpha="0.69999998807907104" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DzC-Ts-gew" userLabel="Previous Avatar">
-                                                    <rect key="frame" x="20" y="149.5" width="44" height="50"/>
+                                                    <rect key="frame" x="20" y="148" width="44" height="53"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="1Wu-gS-flK"/>
                                                     </constraints>
@@ -820,7 +820,7 @@
                                                     </connections>
                                                 </button>
                                                 <button opaque="NO" alpha="0.69999998807907104" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yAf-fc-SKl" userLabel="Next Avatar">
-                                                    <rect key="frame" x="311" y="149.5" width="44" height="50"/>
+                                                    <rect key="frame" x="311" y="148" width="44" height="53"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="pEf-Vp-D7s"/>
                                                     </constraints>
@@ -1040,13 +1040,13 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999999999999996" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="999" verticalCompressionResistancePriority="1000" text="© 2011-2017, Maarten Billemont (lhunath)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sPw-mV-mFF">
-                                                    <rect key="frame" x="20" y="4" width="335" height="109"/>
+                                                    <rect key="frame" x="20" y="4" width="335" height="105"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="11"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rl7-cr-FHf">
-                                                    <rect key="frame" x="20" y="121" width="335" height="26"/>
+                                                    <rect key="frame" x="20" y="117" width="335" height="27"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="12"/>
                                                     <state key="normal" title="Home Page">
                                                         <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1056,7 +1056,7 @@
                                                     </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="epW-Rm-9St">
-                                                    <rect key="frame" x="20" y="155" width="335" height="26"/>
+                                                    <rect key="frame" x="20" y="152" width="335" height="27"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="12"/>
                                                     <state key="normal" title="Understanding Master Password's Security">
                                                         <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1066,7 +1066,7 @@
                                                     </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LTN-ch-h8D">
-                                                    <rect key="frame" x="20" y="189" width="335" height="26"/>
+                                                    <rect key="frame" x="20" y="187" width="335" height="27"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="12"/>
                                                     <state key="normal" title="Get the Master Password source code">
                                                         <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1076,7 +1076,7 @@
                                                     </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z60-lc-Nka">
-                                                    <rect key="frame" x="20" y="223" width="335" height="26"/>
+                                                    <rect key="frame" x="20" y="222" width="335" height="27"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="12"/>
                                                     <state key="normal" title="Send Thanks">
                                                         <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1209,7 +1209,7 @@
                                                                                             </connections>
                                                                                         </button>
                                                                                         <label opaque="NO" userInteractionEnabled="NO" alpha="0.20000000000000001" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="⚙" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z3Z-Zc-1EC">
-                                                                                            <rect key="frame" x="332" y="5" width="15" height="13"/>
+                                                                                            <rect key="frame" x="332" y="4.5" width="15" height="13.5"/>
                                                                                             <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="11"/>
                                                                                             <nil key="textColor"/>
                                                                                             <nil key="highlightedColor"/>
@@ -1246,12 +1246,12 @@
                                                                                     </constraints>
                                                                                 </view>
                                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2tX-WK-ASq" userLabel="Password Container">
-                                                                                    <rect key="frame" x="0.0" y="19.5" width="355" height="44"/>
+                                                                                    <rect key="frame" x="0.0" y="19" width="355" height="45"/>
                                                                                     <subviews>
                                                                                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="CuzaSasy3*Rimo" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="blw-Ou-8I8" userLabel="Password">
-                                                                                            <rect key="frame" x="8" y="0.0" width="339" height="32"/>
+                                                                                            <rect key="frame" x="8" y="0.0" width="339" height="33"/>
                                                                                             <color key="textColor" red="0.40000000600000002" green="0.80000001190000003" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                                            <fontDescription key="fontDescription" name="SourceCodePro-Black" family="Source Code Pro" pointSize="25"/>
+                                                                                            <fontDescription key="fontDescription" name="SourceCodePro-Black" family="Source Code Pro" pointSize="26"/>
                                                                                             <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="alphabet" keyboardAppearance="alert" returnKeyType="next"/>
                                                                                             <connections>
                                                                                                 <action selector="textFieldDidChange:" destination="W2g-yv-V3V" eventType="editingChanged" id="gTE-0d-r2l"/>
@@ -1259,7 +1259,7 @@
                                                                                             </connections>
                                                                                         </textField>
                                                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="3" contentMode="left" text="&gt; age of the universe" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="wfM-xz-roR" userLabel="Strength">
-                                                                                            <rect key="frame" x="0.0" y="32" width="355" height="12"/>
+                                                                                            <rect key="frame" x="0.0" y="33" width="355" height="12"/>
                                                                                             <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="10"/>
                                                                                             <color key="textColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                                             <nil key="highlightedColor"/>
@@ -1281,7 +1281,7 @@
                                                                                     </userDefinedRuntimeAttributes>
                                                                                 </view>
                                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tl3-hd-x35" userLabel="Main Container">
-                                                                                    <rect key="frame" x="0.0" y="0.0" width="355" height="100"/>
+                                                                                    <rect key="frame" x="-355" y="0.0" width="355" height="100"/>
                                                                                     <subviews>
                                                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999999999999996" contentMode="left" text="apple.com" lineBreakMode="tailTruncation" minimumFontSize="8" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OwP-sb-Wxl" userLabel="Site Name">
                                                                                             <rect key="frame" x="8" y="74" width="303" height="18"/>
@@ -1306,151 +1306,170 @@
                                                                                     </userDefinedRuntimeAttributes>
                                                                                 </view>
                                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LvK-28-fbm" userLabel="Settings Container">
-                                                                                    <rect key="frame" x="355" y="0.0" width="355" height="100"/>
+                                                                                    <rect key="frame" x="0.0" y="0.0" width="355" height="100"/>
                                                                                     <subviews>
-                                                                                        <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IKd-Ot-0n4" userLabel="Upgrade">
-                                                                                            <rect key="frame" x="40" y="56" width="44" height="44"/>
-                                                                                            <accessibility key="accessibilityConfiguration" hint="Upgrades the password."/>
-                                                                                            <gestureRecognizers/>
-                                                                                            <constraints>
-                                                                                                <constraint firstAttribute="width" constant="44" id="5DT-m6-RYu"/>
-                                                                                                <constraint firstAttribute="height" constant="44" id="kyZ-o1-ntZ"/>
-                                                                                            </constraints>
-                                                                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                                                                            <inset key="contentEdgeInsets" minX="6" minY="6" maxX="6" maxY="6"/>
-                                                                                            <state key="normal" image="icon_up.png">
-                                                                                                <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                                                <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                                            </state>
-                                                                                            <state key="highlighted">
-                                                                                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                                            </state>
-                                                                                            <connections>
-                                                                                                <action selector="doUpgrade:" destination="W2g-yv-V3V" eventType="touchUpInside" id="kTZ-AM-qGa"/>
-                                                                                            </connections>
-                                                                                        </button>
-                                                                                        <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vGk-t6-hZn" userLabel="Answers">
-                                                                                            <rect key="frame" x="84" y="56" width="44" height="44"/>
-                                                                                            <accessibility key="accessibilityConfiguration" hint="Upgrades the password."/>
-                                                                                            <constraints>
-                                                                                                <constraint firstAttribute="width" constant="44" id="8gK-8v-Q0K"/>
-                                                                                                <constraint firstAttribute="height" constant="44" id="hQh-jZ-41x"/>
-                                                                                            </constraints>
-                                                                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                                                                            <inset key="contentEdgeInsets" minX="6" minY="6" maxX="6" maxY="6"/>
-                                                                                            <state key="normal" image="icon_question.png">
-                                                                                                <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                                                <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                                            </state>
-                                                                                            <state key="highlighted">
-                                                                                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                                            </state>
-                                                                                            <connections>
-                                                                                                <segue destination="aow-In-vb8" kind="custom" identifier="answers" customClass="MPOverlaySegue" id="5Wo-YZ-8HZ"/>
-                                                                                            </connections>
-                                                                                        </button>
-                                                                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" text="1" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="PKP-M9-T8E" userLabel="Counter">
-                                                                                            <rect key="frame" x="128" y="67.5" width="7" height="21"/>
-                                                                                            <accessibility key="accessibilityConfiguration" hint="Site's counter."/>
-                                                                                            <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="17"/>
-                                                                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                                            <nil key="highlightedColor"/>
-                                                                                            <color key="shadowColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                                            <size key="shadowOffset" width="0.0" height="1"/>
-                                                                                        </label>
-                                                                                        <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uZi-FT-Fe8" userLabel="Incrementer">
-                                                                                            <rect key="frame" x="135" y="56" width="44" height="44"/>
-                                                                                            <accessibility key="accessibilityConfiguration" hint="Increments the site counter."/>
-                                                                                            <gestureRecognizers/>
-                                                                                            <constraints>
-                                                                                                <constraint firstAttribute="width" constant="44" id="DWo-8r-QIJ"/>
-                                                                                                <constraint firstAttribute="height" constant="44" id="GQS-qz-ufK"/>
-                                                                                            </constraints>
-                                                                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                                                                            <inset key="contentEdgeInsets" minX="6" minY="6" maxX="6" maxY="6"/>
-                                                                                            <state key="normal" image="icon_plus.png">
-                                                                                                <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                                                <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                                            </state>
-                                                                                            <state key="highlighted">
-                                                                                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                                            </state>
-                                                                                            <connections>
-                                                                                                <action selector="doIncrementCounter:" destination="W2g-yv-V3V" eventType="touchUpInside" id="eos-wE-4xq"/>
-                                                                                            </connections>
-                                                                                        </button>
-                                                                                        <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qBo-Kw-vN9" userLabel="Edit">
-                                                                                            <rect key="frame" x="179" y="56" width="44" height="44"/>
-                                                                                            <accessibility key="accessibilityConfiguration" hint="Edits the password."/>
-                                                                                            <constraints>
-                                                                                                <constraint firstAttribute="width" constant="44" id="j1z-K8-OXJ"/>
-                                                                                                <constraint firstAttribute="height" constant="44" id="mEK-dW-ATd"/>
-                                                                                            </constraints>
-                                                                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                                                                            <inset key="contentEdgeInsets" minX="6" minY="6" maxX="6" maxY="6"/>
-                                                                                            <state key="normal" image="icon_edit.png">
-                                                                                                <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                                                <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                                            </state>
-                                                                                            <state key="highlighted">
-                                                                                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                                            </state>
-                                                                                            <connections>
-                                                                                                <action selector="doEdit:" destination="W2g-yv-V3V" eventType="touchUpInside" id="iDD-3T-sqw"/>
-                                                                                            </connections>
-                                                                                        </button>
-                                                                                        <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I0v-ou-hDb" userLabel="Delete">
-                                                                                            <rect key="frame" x="223" y="56" width="44" height="44"/>
-                                                                                            <accessibility key="accessibilityConfiguration" hint="Edits the password."/>
-                                                                                            <constraints>
-                                                                                                <constraint firstAttribute="height" constant="44" id="XvV-Lr-Z21"/>
-                                                                                                <constraint firstAttribute="width" constant="44" id="YNx-Nc-IYW"/>
-                                                                                            </constraints>
-                                                                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                                                                            <inset key="contentEdgeInsets" minX="6" minY="6" maxX="6" maxY="6"/>
-                                                                                            <state key="normal" image="icon_trash.png">
-                                                                                                <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                                                <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                                            </state>
-                                                                                            <state key="highlighted">
-                                                                                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                                            </state>
-                                                                                            <connections>
-                                                                                                <action selector="doDelete:" destination="W2g-yv-V3V" eventType="touchUpInside" id="Zm4-e2-SCp"/>
-                                                                                            </connections>
-                                                                                        </button>
-                                                                                        <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K8q-bM-tzh" userLabel="Type">
-                                                                                            <rect key="frame" x="267" y="56" width="44" height="44"/>
-                                                                                            <accessibility key="accessibilityConfiguration" hint="Edits the password."/>
-                                                                                            <constraints>
-                                                                                                <constraint firstAttribute="height" constant="44" id="K3c-Ok-krB"/>
-                                                                                                <constraint firstAttribute="width" constant="44" id="wtJ-zb-FNx"/>
-                                                                                            </constraints>
-                                                                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                                                                            <inset key="contentEdgeInsets" minX="6" minY="6" maxX="6" maxY="6"/>
-                                                                                            <state key="normal" image="icon_list-names.png">
-                                                                                                <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                                                <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                                            </state>
-                                                                                            <state key="highlighted">
-                                                                                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                                            </state>
-                                                                                            <connections>
-                                                                                                <action selector="doChangeType:" destination="W2g-yv-V3V" eventType="touchUpInside" id="TVb-JM-x9H"/>
-                                                                                            </connections>
-                                                                                        </button>
+                                                                                        <stackView opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="kfn-Wq-g5M">
+                                                                                            <rect key="frame" x="-4" y="56" width="315" height="44"/>
+                                                                                            <subviews>
+                                                                                                <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IKd-Ot-0n4" userLabel="Upgrade">
+                                                                                                    <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
+                                                                                                    <accessibility key="accessibilityConfiguration" hint="Upgrades the password."/>
+                                                                                                    <gestureRecognizers/>
+                                                                                                    <constraints>
+                                                                                                        <constraint firstAttribute="width" constant="44" id="5DT-m6-RYu"/>
+                                                                                                        <constraint firstAttribute="height" constant="44" id="kyZ-o1-ntZ"/>
+                                                                                                    </constraints>
+                                                                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                                                                    <inset key="contentEdgeInsets" minX="6" minY="6" maxX="6" maxY="6"/>
+                                                                                                    <state key="normal" image="icon_up.png">
+                                                                                                        <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                                    </state>
+                                                                                                    <state key="highlighted">
+                                                                                                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                                    </state>
+                                                                                                    <connections>
+                                                                                                        <action selector="doUpgrade:" destination="W2g-yv-V3V" eventType="touchUpInside" id="kTZ-AM-qGa"/>
+                                                                                                    </connections>
+                                                                                                </button>
+                                                                                                <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yPG-30-POQ" userLabel="Action">
+                                                                                                    <rect key="frame" x="44" y="0.0" width="44" height="44"/>
+                                                                                                    <accessibility key="accessibilityConfiguration" hint="Upgrades the password."/>
+                                                                                                    <gestureRecognizers/>
+                                                                                                    <constraints>
+                                                                                                        <constraint firstAttribute="width" constant="44" id="Ruj-lV-Vr6"/>
+                                                                                                        <constraint firstAttribute="height" constant="44" id="fkk-9t-ufv"/>
+                                                                                                    </constraints>
+                                                                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                                                                    <inset key="contentEdgeInsets" minX="6" minY="6" maxX="6" maxY="6"/>
+                                                                                                    <state key="normal" image="icon_action.png">
+                                                                                                        <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                                    </state>
+                                                                                                    <state key="highlighted">
+                                                                                                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                                    </state>
+                                                                                                    <connections>
+                                                                                                        <action selector="doAction:" destination="W2g-yv-V3V" eventType="touchUpInside" id="pGL-dJ-lDW"/>
+                                                                                                    </connections>
+                                                                                                </button>
+                                                                                                <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vGk-t6-hZn" userLabel="Answers">
+                                                                                                    <rect key="frame" x="88" y="0.0" width="44" height="44"/>
+                                                                                                    <accessibility key="accessibilityConfiguration" hint="Upgrades the password."/>
+                                                                                                    <constraints>
+                                                                                                        <constraint firstAttribute="width" constant="44" id="8gK-8v-Q0K"/>
+                                                                                                        <constraint firstAttribute="height" constant="44" id="hQh-jZ-41x"/>
+                                                                                                    </constraints>
+                                                                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                                                                    <inset key="contentEdgeInsets" minX="6" minY="6" maxX="6" maxY="6"/>
+                                                                                                    <state key="normal" image="icon_question.png">
+                                                                                                        <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                                    </state>
+                                                                                                    <state key="highlighted">
+                                                                                                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                                    </state>
+                                                                                                    <connections>
+                                                                                                        <segue destination="aow-In-vb8" kind="custom" identifier="answers" customClass="MPOverlaySegue" id="5Wo-YZ-8HZ"/>
+                                                                                                    </connections>
+                                                                                                </button>
+                                                                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" text="1" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="PKP-M9-T8E" userLabel="Counter">
+                                                                                                    <rect key="frame" x="132" y="11.5" width="7" height="21.5"/>
+                                                                                                    <accessibility key="accessibilityConfiguration" hint="Site's counter."/>
+                                                                                                    <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="17"/>
+                                                                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                                    <nil key="highlightedColor"/>
+                                                                                                    <color key="shadowColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                                    <size key="shadowOffset" width="0.0" height="1"/>
+                                                                                                </label>
+                                                                                                <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uZi-FT-Fe8" userLabel="Incrementer">
+                                                                                                    <rect key="frame" x="139" y="0.0" width="44" height="44"/>
+                                                                                                    <accessibility key="accessibilityConfiguration" hint="Increments the site counter."/>
+                                                                                                    <gestureRecognizers/>
+                                                                                                    <constraints>
+                                                                                                        <constraint firstAttribute="width" constant="44" id="DWo-8r-QIJ"/>
+                                                                                                        <constraint firstAttribute="height" constant="44" id="GQS-qz-ufK"/>
+                                                                                                    </constraints>
+                                                                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                                                                    <inset key="contentEdgeInsets" minX="6" minY="6" maxX="6" maxY="6"/>
+                                                                                                    <state key="normal" image="icon_plus.png">
+                                                                                                        <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                                    </state>
+                                                                                                    <state key="highlighted">
+                                                                                                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                                    </state>
+                                                                                                    <connections>
+                                                                                                        <action selector="doIncrementCounter:" destination="W2g-yv-V3V" eventType="touchUpInside" id="eos-wE-4xq"/>
+                                                                                                    </connections>
+                                                                                                </button>
+                                                                                                <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qBo-Kw-vN9" userLabel="Edit">
+                                                                                                    <rect key="frame" x="183" y="0.0" width="44" height="44"/>
+                                                                                                    <accessibility key="accessibilityConfiguration" hint="Edits the password."/>
+                                                                                                    <constraints>
+                                                                                                        <constraint firstAttribute="width" constant="44" id="j1z-K8-OXJ"/>
+                                                                                                        <constraint firstAttribute="height" constant="44" id="mEK-dW-ATd"/>
+                                                                                                    </constraints>
+                                                                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                                                                    <inset key="contentEdgeInsets" minX="6" minY="6" maxX="6" maxY="6"/>
+                                                                                                    <state key="normal" image="icon_edit.png">
+                                                                                                        <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                                    </state>
+                                                                                                    <state key="highlighted">
+                                                                                                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                                    </state>
+                                                                                                    <connections>
+                                                                                                        <action selector="doEdit:" destination="W2g-yv-V3V" eventType="touchUpInside" id="iDD-3T-sqw"/>
+                                                                                                    </connections>
+                                                                                                </button>
+                                                                                                <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I0v-ou-hDb" userLabel="Delete">
+                                                                                                    <rect key="frame" x="227" y="0.0" width="44" height="44"/>
+                                                                                                    <accessibility key="accessibilityConfiguration" hint="Edits the password."/>
+                                                                                                    <constraints>
+                                                                                                        <constraint firstAttribute="height" constant="44" id="XvV-Lr-Z21"/>
+                                                                                                        <constraint firstAttribute="width" constant="44" id="YNx-Nc-IYW"/>
+                                                                                                    </constraints>
+                                                                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                                                                    <inset key="contentEdgeInsets" minX="6" minY="6" maxX="6" maxY="6"/>
+                                                                                                    <state key="normal" image="icon_trash.png">
+                                                                                                        <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                                    </state>
+                                                                                                    <state key="highlighted">
+                                                                                                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                                    </state>
+                                                                                                    <connections>
+                                                                                                        <action selector="doDelete:" destination="W2g-yv-V3V" eventType="touchUpInside" id="Zm4-e2-SCp"/>
+                                                                                                    </connections>
+                                                                                                </button>
+                                                                                                <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K8q-bM-tzh" userLabel="Type">
+                                                                                                    <rect key="frame" x="271" y="0.0" width="44" height="44"/>
+                                                                                                    <accessibility key="accessibilityConfiguration" hint="Edits the password."/>
+                                                                                                    <constraints>
+                                                                                                        <constraint firstAttribute="height" constant="44" id="K3c-Ok-krB"/>
+                                                                                                        <constraint firstAttribute="width" constant="44" id="wtJ-zb-FNx"/>
+                                                                                                    </constraints>
+                                                                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                                                                    <inset key="contentEdgeInsets" minX="6" minY="6" maxX="6" maxY="6"/>
+                                                                                                    <state key="normal" image="icon_list-names.png">
+                                                                                                        <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                                    </state>
+                                                                                                    <state key="highlighted">
+                                                                                                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                                    </state>
+                                                                                                    <connections>
+                                                                                                        <action selector="doChangeType:" destination="W2g-yv-V3V" eventType="touchUpInside" id="TVb-JM-x9H"/>
+                                                                                                    </connections>
+                                                                                                </button>
+                                                                                            </subviews>
+                                                                                        </stackView>
                                                                                     </subviews>
                                                                                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                                                                     <constraints>
-                                                                                        <constraint firstItem="PKP-M9-T8E" firstAttribute="leading" secondItem="IKd-Ot-0n4" secondAttribute="trailing" priority="750" id="3sN-hc-iUd"/>
-                                                                                        <constraint firstItem="PKP-M9-T8E" firstAttribute="leading" secondItem="vGk-t6-hZn" secondAttribute="trailing" id="47y-gh-Ibs"/>
-                                                                                        <constraint firstItem="PKP-M9-T8E" firstAttribute="centerY" secondItem="uZi-FT-Fe8" secondAttribute="centerY" id="KEK-0r-cob"/>
-                                                                                        <constraint firstItem="qBo-Kw-vN9" firstAttribute="leading" secondItem="uZi-FT-Fe8" secondAttribute="trailing" id="LLk-5B-1g9"/>
-                                                                                        <constraint firstItem="vGk-t6-hZn" firstAttribute="leading" secondItem="IKd-Ot-0n4" secondAttribute="trailing" id="e2D-Rg-OQz"/>
-                                                                                        <constraint firstItem="K8q-bM-tzh" firstAttribute="leading" secondItem="I0v-ou-hDb" secondAttribute="trailing" id="il2-7H-Hgk"/>
-                                                                                        <constraint firstItem="I0v-ou-hDb" firstAttribute="leading" secondItem="qBo-Kw-vN9" secondAttribute="trailing" id="myx-31-6tz"/>
-                                                                                        <constraint firstAttribute="trailing" secondItem="K8q-bM-tzh" secondAttribute="trailing" constant="44" id="qQK-ts-seh"/>
-                                                                                        <constraint firstItem="uZi-FT-Fe8" firstAttribute="leading" secondItem="PKP-M9-T8E" secondAttribute="trailing" id="xFJ-GZ-jp9"/>
+                                                                                        <constraint firstAttribute="trailing" secondItem="kfn-Wq-g5M" secondAttribute="trailing" constant="44" id="lGN-Bt-mrg"/>
+                                                                                        <constraint firstAttribute="bottom" secondItem="kfn-Wq-g5M" secondAttribute="bottom" id="lcH-Rb-skY"/>
                                                                                     </constraints>
                                                                                     <userDefinedRuntimeAttributes>
                                                                                         <userDefinedRuntimeAttribute type="boolean" keyPath="ignoreTouches" value="YES"/>
@@ -1478,7 +1497,7 @@
                                                                                     </connections>
                                                                                 </button>
                                                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="⬇︎" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tuh-Au-J9k">
-                                                                                    <rect key="frame" x="325" y="36" width="17" height="20"/>
+                                                                                    <rect key="frame" x="325" y="35.5" width="17" height="20.5"/>
                                                                                     <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="17"/>
                                                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                                     <nil key="highlightedColor"/>
@@ -1487,20 +1506,14 @@
                                                                             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="bottom" secondItem="tl3-hd-x35" secondAttribute="bottom" id="2x2-iA-utK"/>
-                                                                                <constraint firstItem="b5f-wN-2xb" firstAttribute="centerY" secondItem="I0v-ou-hDb" secondAttribute="centerY" id="KPv-e0-uR0"/>
                                                                                 <constraint firstItem="LvK-28-fbm" firstAttribute="leading" secondItem="tl3-hd-x35" secondAttribute="trailing" id="NXL-Fd-whf"/>
                                                                                 <constraint firstItem="b5f-wN-2xb" firstAttribute="top" secondItem="tuh-Au-J9k" secondAttribute="bottom" id="SBC-kJ-Gku"/>
                                                                                 <constraint firstAttribute="bottom" secondItem="LvK-28-fbm" secondAttribute="bottom" id="ZBx-Lf-XHF"/>
-                                                                                <constraint firstItem="b5f-wN-2xb" firstAttribute="centerY" secondItem="vGk-t6-hZn" secondAttribute="centerY" id="fGB-8g-u5b"/>
-                                                                                <constraint firstItem="tl3-hd-x35" firstAttribute="leading" secondItem="bff-RU-OcY" secondAttribute="leading" id="fx5-KQ-LSM"/>
+                                                                                <constraint firstItem="tl3-hd-x35" firstAttribute="leading" secondItem="bff-RU-OcY" secondAttribute="leading" constant="-355" id="fx5-KQ-LSM"/>
                                                                                 <constraint firstItem="tl3-hd-x35" firstAttribute="top" secondItem="bff-RU-OcY" secondAttribute="top" id="jc9-39-FY3"/>
-                                                                                <constraint firstItem="b5f-wN-2xb" firstAttribute="centerY" secondItem="IKd-Ot-0n4" secondAttribute="centerY" id="mCJ-ug-mmv"/>
-                                                                                <constraint firstItem="K8q-bM-tzh" firstAttribute="centerY" secondItem="b5f-wN-2xb" secondAttribute="centerY" id="ofO-r3-bjz"/>
                                                                                 <constraint firstItem="b5f-wN-2xb" firstAttribute="centerX" secondItem="tuh-Au-J9k" secondAttribute="centerX" id="pYG-bz-kd8"/>
                                                                                 <constraint firstAttribute="trailing" secondItem="LvK-28-fbm" secondAttribute="trailing" id="r9d-ym-Frs"/>
                                                                                 <constraint firstItem="LvK-28-fbm" firstAttribute="top" secondItem="bff-RU-OcY" secondAttribute="top" id="uqb-hB-Iq8"/>
-                                                                                <constraint firstItem="b5f-wN-2xb" firstAttribute="centerY" secondItem="uZi-FT-Fe8" secondAttribute="centerY" id="xz2-kK-B4g"/>
-                                                                                <constraint firstItem="b5f-wN-2xb" firstAttribute="centerY" secondItem="qBo-Kw-vN9" secondAttribute="centerY" id="zaR-iF-Hea"/>
                                                                             </constraints>
                                                                             <connections>
                                                                                 <outlet property="delegate" destination="W2g-yv-V3V" id="HgX-fq-za5"/>
@@ -2022,7 +2035,7 @@ eg. apple.com, rmitchell@twitter.com</string>
             <objects>
                 <navigationController definesPresentationContext="YES" id="LBn-EA-NAH" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Settings" image="icon_gears.png" id="6n3-Ay-Knn"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="h6j-1o-LHf">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="h6j-1o-LHf">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -2273,7 +2286,7 @@ Suspendisse potenti. Etiam ut nisi id augue tempor ultrices et sit amet sapien. 
             <objects>
                 <navigationController definesPresentationContext="YES" id="Ec4-G7-5Td" customClass="PearlNavigationController" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="MA4-cY-VCZ">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" barStyle="black" id="MA4-cY-VCZ">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.47450980390000003" green="0.86666666670000003" blue="0.98431372549999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -3249,6 +3262,7 @@ Ut in geometria, prima si dederis, danda sunt omnia. Nonne igitur tibi videntur,
     <resources>
         <image name="avatar-0.png" width="110" height="110"/>
         <image name="background.png" width="736" height="736"/>
+        <image name="icon_action.png" width="32" height="32"/>
         <image name="icon_book.png" width="32" height="32"/>
         <image name="icon_cancel.png" width="32" height="32"/>
         <image name="icon_edit.png" width="32" height="32"/>

@@ -7,10 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MPSiteEntity.h"
-#import "MPStoredSiteEntity.h"
-#import "MPGeneratedSiteEntity.h"
-#import "MPUserEntity.h"
+#import "MPSiteEntity+CoreDataClass.h"
+#import "MPStoredSiteEntity+CoreDataClass.h"
+#import "MPGeneratedSiteEntity+CoreDataClass.h"
+#import "MPUserEntity+CoreDataClass.h"
 #import "MPAlgorithm.h"
 #import "MPFixable.h"
 

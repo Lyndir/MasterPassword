@@ -17,9 +17,9 @@
 //==============================================================================
 
 #import "MPKey.h"
-#import "MPStoredSiteEntity.h"
-#import "MPGeneratedSiteEntity.h"
-#import "MPSiteQuestionEntity.h"
+#import "MPStoredSiteEntity+CoreDataClass.h"
+#import "MPGeneratedSiteEntity+CoreDataClass.h"
+#import "MPSiteQuestionEntity+CoreDataClass.h"
 #import "mpw-algorithm.h"
 
 #define MPAlgorithmDefaultVersion MPAlgorithmVersionCurrent

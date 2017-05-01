@@ -367,6 +367,31 @@
     }];
 }
 
+- (IBAction)doAction:(UIButton *)sender {
+    
+    [MPiOSAppDelegate managedObjectContextForMainThreadPerformBlock:^(NSManagedObjectContext *mainContext) {
+        MPSiteEntity *mainSite = [self siteInContext:mainContext];
+        [PearlAlert showAlertWithTitle:@"Login Page" message:nil
+                             viewStyle:UIAlertViewStylePlainTextInput
+                             initAlert:^(UIAlertView *alert, UITextField *firstField) {
+                                 firstField.placeholder = strf( @"Login URL for %@", mainSite.name );
+                                 firstField.text = mainSite.url;
+                             }
+                     tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                         if (buttonIndex == alert.cancelButtonIndex)
+                             return;
+
+                         [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+                             MPSiteEntity *site = [self siteInContext:context];
+                             NSURL *url = [NSURL URLWithString:[alert textFieldAtIndex:0].text];
+                             site.url = [url.host? url: nil absoluteString];
+                             [context saveToStore];
+                         }];
+                     }
+                           cancelTitle:@"Cancel" otherTitles:@"Save", nil];
+    }];
+}
+
 - (IBAction)doIncrementCounter:(UIButton *)sender {
 
     [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
@@ -506,6 +531,7 @@
         MPSiteEntity *mainSite = [self siteInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]];
 
         // UI
+        self.backgroundColor = mainSite.url? [UIColor greenColor]: [UIColor redColor];
         self.upgradeButton.gone = !mainSite.requiresExplicitMigration && ![[MPiOSConfig get].allowDowngrade boolValue];
         self.answersButton.gone = ![[MPiOSAppDelegate get] isFeatureUnlocked:MPProductGenerateAnswers];
         BOOL settingsMode = self.mode == MPPasswordCellModeSettings;

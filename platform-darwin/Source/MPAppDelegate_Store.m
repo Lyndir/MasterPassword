@@ -378,7 +378,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
     NSError *error = nil;
     if (![NSPersistentStore migrateStore:oldLocalStoreURL withOptions:@{ STORE_OPTIONS }
                                  toStore:newLocalStoreURL withOptions:@{ STORE_OPTIONS }
-                                   model:nil error:&error]) {
+                                   error:&error]) {
         MPError( error, @"Couldn't migrate the old store to the new location." );
         return NO;
     }
@@ -425,13 +425,51 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
             NSMigratePersistentStoresAutomaticallyOption: @YES,
             NSInferMappingModelAutomaticallyOption      : @YES,
             STORE_OPTIONS
-    }                              model:nil error:&error]) {
+    }                              error:&error]) {
         MPError( error, @"Couldn't migrate the old store to the new location." );
         return NO;
     }
 
     return YES;
 }
+
+//- (BOOL)migrateV3LocalStore {
+//
+//    inf( @"Migrating V3 local store" );
+//    NSURL *localStoreURL = [self localStoreURL];
+//    if (![[NSFileManager defaultManager] fileExistsAtPath:localStoreURL.path isDirectory:NULL]) {
+//        inf( @"No V3 local store to migrate." );
+//        return YES;
+//    }
+//
+//    NSError *error = nil;
+//    NSDictionary<NSString *, id> *metadata = [NSPersistentStore metadataForPersistentStoreWithURL:localStoreURL error:&error];
+//    if (!metadata) {
+//        MPError( error, @"Couldn't inspect metadata for store: %@", localStoreURL );
+//        return NO;
+//    }
+//    NSPersistentStoreCoordinator *coordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:
+//            [NSManagedObjectModel mergedModelFromBundles:nil forStoreMetadata:metadata]];
+//    if (![coordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil
+//                                             URL:localStoreURL options:@{ STORE_OPTIONS }
+//                                           error:&error]) {
+//        MPError( error, @"Couldn't open V3 local store to migrate." );
+//        return NO;
+//    }
+//
+//    NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+//    [context performBlockAndWait:^{
+//        context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy;
+//        context.persistentStoreCoordinator = coordinator;
+//        for (MPStoredSiteEntity *storedSite in [[MPStoredSiteEntity fetchRequest] execute:&error]) {
+//            id contentObject = [storedSite valueForKey:@"contentObject"];
+//            if ([contentObject isKindOfClass:[NSData class]])
+//                storedSite.contentObject = contentObject;
+//        }
+//    }];
+//
+//    return YES;
+//}
 
 #pragma mark - Utilities
 
