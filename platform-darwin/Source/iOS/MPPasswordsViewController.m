@@ -81,6 +81,24 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 
     [self registerObservers];
     [self updateConfigKey:nil];
+
+    static NSRegularExpression *bareHostRE = nil;
+    static dispatch_once_t once = 0;
+    dispatch_once( &once, ^{
+        bareHostRE = [NSRegularExpression regularExpressionWithPattern:@"([^\\.]+\\.[^\\.]+)$" options:0 error:nil];
+    } );
+
+    NSURL *pasteboardURL = nil;
+    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+    if ([pasteboard respondsToSelector:@selector( hasURLs )])
+        pasteboardURL = pasteboard.hasURLs? pasteboard.URL: nil;
+    else
+        pasteboardURL = [NSURL URLWithString:pasteboard.string];
+
+    if (pasteboardURL.host)
+        self.query = NSNullToNil( [pasteboardURL.host firstMatchGroupsOfExpression:bareHostRE][0] );
+    else
+        [self reloadPasswords];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -301,12 +319,6 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 
 - (void)registerObservers {
 
-    static NSRegularExpression *bareHostRE = nil;
-    static dispatch_once_t once = 0;
-    dispatch_once( &once, ^{
-        bareHostRE = [NSRegularExpression regularExpressionWithPattern:@"([^\\.]+\\.[^\\.]+)$" options:0 error:nil];
-    } );
-
     PearlRemoveNotificationObservers();
     PearlAddNotificationObserver( UIApplicationWillResignActiveNotification, nil, [NSOperationQueue mainQueue],
             ^(MPPasswordsViewController *self, NSNotification *note) {
@@ -315,21 +327,13 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
             } );
     PearlAddNotificationObserver( UIApplicationDidBecomeActiveNotification, nil, [NSOperationQueue mainQueue],
             ^(MPPasswordsViewController *self, NSNotification *note) {
-                NSURL *pasteboardURL = nil;
-                UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-                if ([pasteboard respondsToSelector:@selector( hasURLs )])
-                    pasteboardURL = pasteboard.hasURLs? pasteboard.URL: nil;
-                else
-                    pasteboardURL = [NSURL URLWithString:pasteboard.string];
-
-                if (pasteboardURL.host)
-                    self.query = NSNullToNil( [pasteboardURL.host firstMatchGroupsOfExpression:bareHostRE][0] );
-                else
-                    [self reloadPasswords];
-
                 [UIView animateWithDuration:0.7f animations:^{
                     self.passwordSelectionContainer.visible = YES;
                 }];
+            } );
+    PearlAddNotificationObserver( UIApplicationWillEnterForegroundNotification, nil, [NSOperationQueue mainQueue],
+            ^(MPPasswordsViewController *self, NSNotification *note) {
+                [self viewWillAppear:YES];
             } );
     PearlAddNotificationObserver( MPSignedOutNotification, nil, nil,
             ^(MPPasswordsViewController *self, NSNotification *note) {
