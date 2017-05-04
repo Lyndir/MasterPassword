@@ -9,6 +9,7 @@
 #import "MPTypes.h"
 
 NSString *const MPErrorDomain = @"MPErrorDomain";
+NSInteger const MPErrorHangCode = 1;
 
 NSString *const MPSignedInNotification = @"MPSignedInNotification";
 NSString *const MPSignedOutNotification = @"MPSignedOutNotification";

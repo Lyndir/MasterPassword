@@ -273,6 +273,9 @@ typedef NS_ENUM( NSUInteger, MPActiveUserState ) {
 // This isn't really in UITextFieldDelegate.  We fake it from UITextFieldTextDidChangeNotification.
 - (void)textFieldEditingChanged:(UITextField *)textField {
 
+    if ([[textField.text lowercaseString] isEqualToString:@"hangtest"])
+        [NSThread sleepForTimeInterval:10];
+
     if (textField == self.entryField) {
         switch (self.activeUserState) {
             case MPActiveUserStateNone:

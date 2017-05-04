@@ -21,6 +21,8 @@
 #import "MPAppDelegate_Store.h"
 #import "MPStoreViewController.h"
 
+#define MP_HANG_TIME_MAIN 3 // s
+
 @interface MPiOSAppDelegate()<UIDocumentInteractionControllerDelegate>
 
 @property(nonatomic, strong) UIDocumentInteractionController *interactionController;
@@ -73,6 +75,8 @@
                     [Crashlytics sharedInstance].version, [PearlInfoPlist get].CFBundleName, [PearlInfoPlist get].CFBundleVersion );
         }
 #endif
+
+        [self installHangDetector];
     }
     @catch (id exception) {
         err( @"During Analytics Setup: %@", exception );
@@ -137,6 +141,31 @@
     }
 
     return YES;
+}
+
+- (void)installHangDetector {
+
+    __block NSDate *latestPing = [NSDate date];
+    __block __weak VoidBlock wPingOp, wPongOp;
+
+    VoidBlock pingOp = ^{
+        latestPing = [NSDate date];
+        dispatch_after( dispatch_time( DISPATCH_TIME_NOW, 100 * NSEC_PER_MSEC ), dispatch_get_main_queue(), wPingOp );
+    }, pongOp = ^{
+        NSTimeInterval hangTime = -[latestPing timeIntervalSinceNow];
+        if (hangTime > MP_HANG_TIME_MAIN) {
+            MPError( [NSError errorWithDomain:MPErrorDomain code:MPErrorHangCode userInfo:@{
+                    @"time": @(hangTime)
+            }], @"Timeout waiting for main thread after %fs.", hangTime );
+        }
+        else
+            dbg( @"hangTime=%f", hangTime );
+
+        dispatch_after( dispatch_time( DISPATCH_TIME_NOW, NSEC_PER_SEC ), dispatch_get_global_queue( QOS_CLASS_BACKGROUND, 0 ), wPongOp );
+    };
+
+    (wPingOp = pingOp)();
+    (wPongOp = pongOp)();
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
