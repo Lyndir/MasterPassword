@@ -41,9 +41,9 @@ case $PLATFORM_NAME in
     *)      ftl 'ERROR: Unknown platform: %s.' "$PLATFORM_NAME"; exit 1 ;;
 esac
 
-description=$(git describe --always --dirty --long --match "*-$platform-*")
+description=$(git describe --always --dirty --long --match "*-$platform*")
 version=${description%-g*} build=${version##*-} version=${version%-$build}
-version=${version//-*-/.} release=${version%%-*} commit=${description##*-g}
+version=${version//-$platform/} version=${version//-/.} commit=${description##*-g}
 
 addPlistWithKey GITDescription string "$description"
 setPlistWithKey CFBundleVersion "$(hr "${version%%.*}" 14).${version#*.}"
