@@ -20,18 +20,18 @@
 #import "MPEntities.h"
 #import "MPCell.h"
 
-typedef NS_ENUM ( NSUInteger, MPPasswordCellMode ) {
+typedef NS_ENUM ( NSUInteger, MPSiteCellMode ) {
     MPPasswordCellModePassword,
     MPPasswordCellModeSettings,
 };
 
-@interface MPPasswordCell : MPCell<UIScrollViewDelegate, UITextFieldDelegate>
+@interface MPSiteCell : MPCell<UIScrollViewDelegate, UITextFieldDelegate>
 
 @property(nonatomic) NSArray *fuzzyGroups;
 
 - (void)setSite:(MPSiteEntity *)site animated:(BOOL)animated;
 - (void)setTransientSite:(NSString *)siteName animated:(BOOL)animated;
-- (void)setMode:(MPPasswordCellMode)mode animated:(BOOL)animated;
+- (void)setMode:(MPSiteCellMode)mode animated:(BOOL)animated;
 - (MPSiteEntity *)siteInContext:(NSManagedObjectContext *)context;
 
 @end

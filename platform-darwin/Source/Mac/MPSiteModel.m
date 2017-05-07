@@ -17,16 +17,19 @@
 //==============================================================================
 
 #import "MPSiteModel.h"
-#import "MPSiteEntity.h"
 #import "MPEntities.h"
 #import "MPAppDelegate_Shared.h"
 #import "MPAppDelegate_Store.h"
 #import "MPMacAppDelegate.h"
 
-@implementation MPSiteModel {
-    NSManagedObjectID *_entityOID;
-    BOOL _initialized;
-}
+@interface MPSiteModel()
+
+@property(nonatomic, strong) NSManagedObjectID *entityOID;
+@property(nonatomic) BOOL initialized;
+
+@end
+
+@implementation MPSiteModel
 
 - (instancetype)initWithEntity:(MPSiteEntity *)entity fuzzyGroups:(NSArray *)fuzzyGroups {
 
@@ -34,7 +37,7 @@
         return nil;
 
     [self setEntity:entity fuzzyGroups:fuzzyGroups];
-    _initialized = YES;
+    self.initialized = YES;
 
     return self;
 }
@@ -45,16 +48,16 @@
         return nil;
 
     [self setTransientSiteName:siteName forUser:user];
-    _initialized = YES;
+    self.initialized = YES;
 
     return self;
 }
 
 - (void)setEntity:(MPSiteEntity *)entity fuzzyGroups:(NSArray *)fuzzyGroups {
 
-    if ([_entityOID isEqual:entity.permanentObjectID])
+    if ([self.entityOID isEqual:entity.permanentObjectID])
         return;
-    _entityOID = entity.permanentObjectID;
+    self.entityOID = entity.permanentObjectID;
 
     NSString *siteName = entity.name;
     NSMutableAttributedString *attributedSiteName = [[NSMutableAttributedString alloc] initWithString:siteName];
@@ -87,7 +90,7 @@
 
 - (void)setTransientSiteName:(NSString *)siteName forUser:(MPUserEntity *)user {
 
-    _entityOID = nil;
+    self.entityOID = nil;
 
     NSMutableParagraphStyle *paragraphStyle = [NSMutableParagraphStyle new];
     paragraphStyle.alignment = NSCenterTextAlignment;
@@ -109,11 +112,11 @@
 
 - (MPSiteEntity *)entityInContext:(NSManagedObjectContext *)moc {
 
-    if (!_entityOID)
+    if (!self.entityOID)
         return nil;
 
     NSError *error;
-    MPSiteEntity *entity = (MPSiteEntity *)[moc existingObjectWithID:_entityOID error:&error];
+    MPSiteEntity *entity = (MPSiteEntity *)[moc existingObjectWithID:self.entityOID error:&error];
     if (!entity)
         MPError( error, @"Couldn't retrieve active site." );
 
@@ -122,15 +125,15 @@
 
 - (void)setCounter:(NSUInteger)counter {
 
-    if (counter == _counter)
+    if (self.counter == counter)
         return;
     _counter = counter;
 
-    if (!_initialized)
+    if (!self.initialized)
         // This wasn't a change to the entity.
         return;
 
-    if (_entityOID)
+    if (self.entityOID)
         [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
             MPSiteEntity *entity = [self entityInContext:context];
             if ([entity isKindOfClass:[MPGeneratedSiteEntity class]]) {
@@ -146,15 +149,15 @@
 
 - (void)setLoginGenerated:(BOOL)loginGenerated {
 
-    if (loginGenerated == _loginGenerated)
+    if (self.loginGenerated == loginGenerated)
         return;
     _loginGenerated = loginGenerated;
 
-    if (!_initialized)
+    if (!self.initialized)
         // This wasn't a change to the entity.
         return;
 
-    if (_entityOID)
+    if (self.entityOID)
         [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
             MPSiteEntity *entity = [self entityInContext:context];
             entity.loginGenerated = loginGenerated;
@@ -179,7 +182,7 @@
     self.algorithm = MPAlgorithmForVersion( algorithmVersion )?: self.algorithm;
     [self didChangeValueForKey:@"outdated"];
 
-    if (_entityOID)
+    if (self.entityOID)
         [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
             MPSiteEntity *entity = [self entityInContext:context];
             entity.algorithm = self.algorithm;
@@ -193,7 +196,7 @@
 
 - (void)setQuestion:(NSString *)question {
 
-    if ([question isEqualToString:_question])
+    if ([self.question isEqualToString:question])
         return;
     _question = question;
 
@@ -217,14 +220,14 @@
 
 - (BOOL)transient {
 
-    return _entityOID == nil;
+    return self.entityOID == nil;
 }
 
 - (void)updateContent {
 
-    if (_entityOID)
+    if (self.entityOID)
         [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-            [self updateContent:[MPSiteEntity existingObjectWithID:_entityOID inContext:context]];
+            [self updateContent:[MPSiteEntity existingObjectWithID:self.entityOID inContext:context]];
         }];
 
     else

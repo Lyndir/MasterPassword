@@ -21,7 +21,7 @@
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
 #import "UIColor+Expanded.h"
-#import "MPPasswordsViewController.h"
+#import "MPSitesViewController.h"
 #import "MPAppDelegate_InApp.h"
 
 @interface MPPreferencesViewController()
@@ -70,7 +70,7 @@
             examplePassword = [MPAlgorithmDefault generatePasswordForSiteNamed:@"test" ofType:defaultType
                                                                    withCounter:1 usingKey:[MPiOSAppDelegate get].key];
         PearlMainQueue( ^{
-            self.passwordTypeExample.text = [examplePassword length]? [NSString stringWithFormat:@"eg. %@", examplePassword]: nil;
+            self.typeSamplePassword.text = [examplePassword length]? [NSString stringWithFormat:@"eg. %@", examplePassword]: nil;
         } );
     } );
 }
@@ -108,7 +108,7 @@
         [[MPiOSAppDelegate get] showExportForVC:self];
 
     if (cell == self.showHelpCell) {
-        MPPasswordsViewController *passwordsVC = [self dismissPopup];
+        MPSitesViewController *passwordsVC = [self dismissPopup];
         [passwordsVC performSegueWithIdentifier:@"guide" sender:self];
     }
 
@@ -230,11 +230,11 @@
 
 #pragma mark - Private
 
-- (MPPasswordsViewController *)dismissPopup {
+- (MPSitesViewController *)dismissPopup {
 
     for (UIViewController *vc = self; (vc = vc.parentViewController);)
-        if ([vc isKindOfClass:[MPPasswordsViewController class]]) {
-            MPPasswordsViewController *passwordsVC = (MPPasswordsViewController *)vc;
+        if ([vc isKindOfClass:[MPSitesViewController class]]) {
+            MPSitesViewController *passwordsVC = (MPSitesViewController *)vc;
             [passwordsVC dismissPopdown:self];
             return passwordsVC;
         }
@@ -254,31 +254,31 @@
         case 1:
             return MPSiteTypeGeneratedName;
         default:
-    switch (selectedGenerated2Index) {
-        case 0:
-            return MPSiteTypeGeneratedMaximum;
-        case 1:
-            return MPSiteTypeGeneratedLong;
-        case 2:
-            return MPSiteTypeGeneratedMedium;
-        case 3:
-            return MPSiteTypeGeneratedBasic;
-        case 4:
-            return MPSiteTypeGeneratedShort;
-        case 5:
-            return MPSiteTypeGeneratedPIN;
-        default:
-
-            switch (selectedStoredIndex) {
+            switch (selectedGenerated2Index) {
                 case 0:
-                    return MPSiteTypeStoredPersonal;
+                    return MPSiteTypeGeneratedMaximum;
                 case 1:
-                    return MPSiteTypeStoredDevicePrivate;
+                    return MPSiteTypeGeneratedLong;
+                case 2:
+                    return MPSiteTypeGeneratedMedium;
+                case 3:
+                    return MPSiteTypeGeneratedBasic;
+                case 4:
+                    return MPSiteTypeGeneratedShort;
+                case 5:
+                    return MPSiteTypeGeneratedPIN;
                 default:
-                    Throw( @"unsupported selected type index: generated1=%ld, generated2=%ld, stored=%ld",
-                            (long)selectedGenerated1Index, (long)selectedGenerated2Index, (long)selectedStoredIndex );
+
+                    switch (selectedStoredIndex) {
+                        case 0:
+                            return MPSiteTypeStoredPersonal;
+                        case 1:
+                            return MPSiteTypeStoredDevicePrivate;
+                        default:
+                            Throw( @"unsupported selected type index: generated1=%ld, generated2=%ld, stored=%ld",
+                                    (long)selectedGenerated1Index, (long)selectedGenerated2Index, (long)selectedStoredIndex );
+                    }
             }
-    }
     }
 }
 

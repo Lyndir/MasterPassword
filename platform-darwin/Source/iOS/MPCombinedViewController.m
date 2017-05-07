@@ -18,9 +18,9 @@
 
 #import "MPCombinedViewController.h"
 #import "MPUsersViewController.h"
-#import "MPPasswordsViewController.h"
+#import "MPSitesViewController.h"
 #import "MPEmergencyViewController.h"
-#import "MPPasswordsSegue.h"
+#import "MPSitesSegue.h"
 
 @implementation MPCombinedViewController
 
@@ -30,7 +30,7 @@
 
     [super viewDidLoad];
 
-    _mode = MPCombinedModeUserSelection;
+    self.mode = MPCombinedModeUserSelection;
     [self performSegueWithIdentifier:@"users" sender:self];
 }
 
@@ -67,12 +67,12 @@
     if ([segue.identifier isEqualToString:@"users"])
         self.usersVC = segue.destinationViewController;
     if ([segue.identifier isEqualToString:@"passwords"]) {
-        NSAssert( [segue isKindOfClass:[MPPasswordsSegue class]], @"passwords segue should be MPPasswordsSegue: %@", segue );
+        NSAssert( [segue isKindOfClass:[MPSitesSegue class]], @"passwords segue should be MPSitesSegue: %@", segue );
         NSAssert( [sender isKindOfClass:[NSDictionary class]], @"sender should be dictionary: %@", sender );
         NSAssert( [[sender objectForKey:@"animated"] isKindOfClass:[NSNumber class]], @"sender should contain 'animated': %@", sender );
-        [(MPPasswordsSegue *)segue setAnimated:[sender[@"animated"] boolValue]];
+        [(MPSitesSegue *)segue setAnimated:[sender[@"animated"] boolValue]];
         UIViewController *destinationVC = segue.destinationViewController;
-        _passwordsVC = [destinationVC isKindOfClass:[MPPasswordsViewController class]]? (MPPasswordsViewController *)destinationVC: nil;
+        self.sitesVC = [destinationVC isKindOfClass:[MPSitesViewController class]]? (MPSitesViewController *)destinationVC: nil;
     }
     if ([segue.identifier isEqualToString:@"emergency"])
         self.emergencyVC = segue.destinationViewController;
@@ -115,7 +115,7 @@
 
 - (void)setMode:(MPCombinedMode)mode animated:(BOOL)animated {
 
-    if (_mode == mode && animated)
+    if (self.mode == mode && animated)
         return;
     _mode = mode;
 
@@ -129,8 +129,8 @@
         case MPCombinedModeUserSelection: {
             self.usersVC.view.userInteractionEnabled = YES;
             [self.usersVC setActive:YES animated:animated];
-            if (_passwordsVC) {
-                MPPasswordsSegue *segue = [[MPPasswordsSegue alloc] initWithIdentifier:@"passwords" source:_passwordsVC destination:self];
+            if (self.sitesVC) {
+                MPSitesSegue *segue = [[MPSitesSegue alloc] initWithIdentifier:@"passwords" source:self.sitesVC destination:self];
                 [self prepareForSegue:segue sender:@{ @"animated": @(animated) }];
                 [segue perform];
             }

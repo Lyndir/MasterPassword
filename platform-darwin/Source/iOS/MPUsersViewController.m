@@ -54,19 +54,19 @@ typedef NS_ENUM( NSUInteger, MPActiveUserState ) {
 @property(nonatomic, strong) NSTimer *marqueeTipTimer;
 @property(nonatomic, strong) NSArray *marqueeTipTexts;
 @property(nonatomic) NSUInteger marqueeTipTextIndex;
+@property(nonatomic, copy) NSString *masterPasswordChoice;
+@property(nonatomic, strong) NSOperationQueue *afterUpdates;
+@property(nonatomic, weak) id contextChangedObserver;
+
 @end
 
-@implementation MPUsersViewController {
-    NSString *_masterPasswordChoice;
-    NSOperationQueue *_afterUpdates;
-    __weak id _contextChangedObserver;
-}
+@implementation MPUsersViewController
 
 - (void)viewDidLoad {
 
     [super viewDidLoad];
 
-    _afterUpdates = [NSOperationQueue new];
+    self.afterUpdates = [NSOperationQueue new];
 
     self.marqueeTipTexts = @[
             strl( @"Thanks, lhunath ➚" ),
@@ -205,7 +205,7 @@ typedef NS_ENUM( NSUInteger, MPActiveUserState ) {
                     return NO;
                 }
 
-                if (![masterPassword isEqualToString:_masterPasswordChoice]) {
+                if (![masterPassword isEqualToString:self.masterPasswordChoice]) {
                     // Master password confirmation failed.
                     [self showEntryTip:strl( @"Looks like a typo!\nTry again; enter your master password twice." )];
                     self.activeUserState = MPActiveUserStateMasterPasswordChoice;
@@ -655,7 +655,7 @@ referenceSizeForFooterInSection:(NSInteger)section {
 
 - (void)afterUpdatesMainQueue:(void ( ^ )(void))block {
 
-    [_afterUpdates addOperationWithBlock:^{
+    [self.afterUpdates addOperationWithBlock:^{
         PearlMainQueue( block );
     }];
 }
@@ -664,15 +664,15 @@ referenceSizeForFooterInSection:(NSInteger)section {
 
     [self removeKeyPathObservers];
     PearlRemoveNotificationObservers();
-    [[NSNotificationCenter defaultCenter] removeObserver:_contextChangedObserver];
+    [[NSNotificationCenter defaultCenter] removeObserver:self.contextChangedObserver];
 }
 
 - (void)registerObservers {
 
     [self removeObservers];
     [self observeKeyPath:@"avatarCollectionView.contentOffset" withBlock:
-            ^(id from, id to, NSKeyValueChange cause, MPUsersViewController *_self) {
-                [_self updateAvatarVisibility];
+            ^(id from, id to, NSKeyValueChange cause, MPUsersViewController *self) {
+                [self updateAvatarVisibility];
             }];
 
     PearlAddNotificationObserver( UIApplicationDidEnterBackgroundNotification, nil, [NSOperationQueue mainQueue],
@@ -696,13 +696,14 @@ referenceSizeForFooterInSection:(NSInteger)section {
                 [self.keyboardHeightConstraint updateConstant:keyboardHeight];
             } );
 
-    if ((_contextChangedObserver = [MPiOSAppDelegate managedObjectContextChanged:^(NSDictionary<NSManagedObjectID *, NSString *> *affectedObjects) {
-        if ([[[affectedObjects allKeys] filteredArrayUsingPredicate:
-                [NSPredicate predicateWithBlock:^BOOL(NSManagedObjectID *objectID, NSDictionary *bindings) {
-                    return [objectID.entity.name isEqualToString:NSStringFromClass( [MPUserEntity class] )];
-                }]] count])
-            [self reloadUsers];
-    }]))
+    if ((self.contextChangedObserver
+            = [MPiOSAppDelegate managedObjectContextChanged:^(NSDictionary<NSManagedObjectID *, NSString *> *affectedObjects) {
+                if ([[[affectedObjects allKeys] filteredArrayUsingPredicate:
+                        [NSPredicate predicateWithBlock:^BOOL(NSManagedObjectID *objectID, NSDictionary *bindings) {
+                            return [objectID.entity.name isEqualToString:NSStringFromClass( [MPUserEntity class] )];
+                        }]] count])
+                    [self reloadUsers];
+            }]))
         [UIView animateWithDuration:0.3f animations:^{
             self.avatarCollectionView.visible = YES;
             [self.storeLoadingActivity stopAnimating];
@@ -772,7 +773,7 @@ referenceSizeForFooterInSection:(NSInteger)section {
                                                  isNew:&isNew].permanentObjectID;
         [self.avatarCollectionView reloadData];
 
-        NSUInteger selectedAvatarItem = isNew? [_userIDs count]: selectUserID? [_userIDs indexOfObject:selectUserID]: NSNotFound;
+        NSUInteger selectedAvatarItem = isNew? [self.userIDs count]: selectUserID? [self.userIDs indexOfObject:selectUserID]: NSNotFound;
         if (selectedAvatarItem != NSNotFound)
             [self.avatarCollectionView selectItemAtIndexPath:[NSIndexPath indexPathForItem:selectedAvatarItem inSection:0] animated:NO
                                               scrollPosition:UICollectionViewScrollPositionCenteredHorizontally];
@@ -791,7 +792,7 @@ referenceSizeForFooterInSection:(NSInteger)section {
 - (void)setActiveUserState:(MPActiveUserState)activeUserState animated:(BOOL)animated {
 
     _activeUserState = activeUserState;
-    _masterPasswordChoice = nil;
+    self.masterPasswordChoice = nil;
 
     if (activeUserState != MPActiveUserStateMinimized && (!self.active || [MPiOSAppDelegate get].activeUserOID)) {
         [[MPiOSAppDelegate get] signOutAnimated:YES];
@@ -799,7 +800,7 @@ referenceSizeForFooterInSection:(NSInteger)section {
     }
 
     // Set the entry container's contents.
-    [_afterUpdates setSuspended:YES];
+    [self.afterUpdates setSuspended:YES];
     __block BOOL requestFirstResponder = NO;
     [self.view layoutIfNeeded];
     [UIView animateWithDuration:animated? 0.4f: 0 animations:^{
@@ -828,7 +829,7 @@ referenceSizeForFooterInSection:(NSInteger)section {
                 break;
             }
             case MPActiveUserStateMasterPasswordConfirmation: {
-                _masterPasswordChoice = self.entryField.text;
+                self.masterPasswordChoice = self.entryField.text;
                 self.entryLabel.text = strl( @"Confirm your master password:" );
                 self.entryField.secureTextEntry = YES;
                 self.entryField.autocapitalizationType = UITextAutocapitalizationTypeNone;
@@ -890,7 +891,7 @@ referenceSizeForFooterInSection:(NSInteger)section {
 
         [self.view layoutIfNeeded];
     }                completion:^(BOOL finished) {
-        [_afterUpdates setSuspended:NO];
+        [self.afterUpdates setSuspended:NO];
     }];
 
     [self.entryField resignFirstResponder];

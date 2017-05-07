@@ -17,16 +17,15 @@
 //==============================================================================
 
 #import "MPPopdownSegue.h"
-#import "MPPasswordsViewController.h"
+#import "MPSitesViewController.h"
 
-@implementation MPPopdownSegue {
-}
+@implementation MPPopdownSegue
 
 - (void)perform {
 
-    MPPasswordsViewController *passwordsVC;
+    MPSitesViewController *passwordsVC;
     UIViewController *popdownVC;
-    if ([self.sourceViewController isKindOfClass:[MPPasswordsViewController class]]) {
+    if ([self.sourceViewController isKindOfClass:[MPSitesViewController class]]) {
         passwordsVC = self.sourceViewController;
         popdownVC = self.destinationViewController;
         UIView *popdownView = popdownVC.view;
@@ -55,7 +54,7 @@
     }
     else {
         popdownVC = self.sourceViewController;
-        for (passwordsVC = self.sourceViewController; passwordsVC && ![(id)passwordsVC isKindOfClass:[MPPasswordsViewController class]];
+        for (passwordsVC = self.sourceViewController; passwordsVC && ![(id)passwordsVC isKindOfClass:[MPSitesViewController class]];
              passwordsVC = (id)passwordsVC.parentViewController);
         NSAssert( passwordsVC, @"Couldn't find passwords VC to pop back to." );
 

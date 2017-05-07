@@ -16,13 +16,12 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-#import "MPPasswordCell.h"
+#import "MPSiteCell.h"
 #import "MPiOSAppDelegate.h"
 #import "MPAppDelegate_Store.h"
-#import "UIColor+Expanded.h"
 #import "MPAppDelegate_InApp.h"
 
-@interface MPPasswordCell()
+@interface MPSiteCell()
 
 @property(nonatomic, strong) IBOutlet UILabel *siteNameLabel;
 @property(nonatomic, strong) IBOutlet UITextField *passwordField;
@@ -41,14 +40,13 @@
 @property(nonatomic, strong) IBOutlet UIButton *loginNameButton;
 @property(nonatomic, strong) IBOutlet UIView *indicatorView;
 
-@property(nonatomic) MPPasswordCellMode mode;
+@property(nonatomic) MPSiteCellMode mode;
 @property(nonatomic, copy) NSString *transientSite;
+@property(nonatomic, strong) NSManagedObjectID *siteOID;
 
 @end
 
-@implementation MPPasswordCell {
-    NSManagedObjectID *_siteOID;
-}
+@implementation MPSiteCell
 
 #pragma mark - Life cycle
 
@@ -65,9 +63,9 @@
 
     [self setupLayer];
 
-    [self observeKeyPath:@"bounds" withBlock:^(id from, id to, NSKeyValueChange cause, MPPasswordCell *_self) {
+    [self observeKeyPath:@"bounds" withBlock:^(id from, id to, NSKeyValueChange cause, MPSiteCell *self) {
         if (from && !CGSizeEqualToSize( [from CGRectValue].size, [to CGRectValue].size ))
-            [_self setupLayer];
+            [self setupLayer];
     }];
     [self.contentButton observeKeyPath:@"highlighted"
                              withBlock:^(id from, id to, NSKeyValueChange cause, UIButton *button) {
@@ -135,8 +133,8 @@
 
     [super prepareForReuse];
 
-    _siteOID = nil;
-    _fuzzyGroups = nil;
+    self.siteOID = nil;
+    self.fuzzyGroups = nil;
     self.transientSite = nil;
     self.mode = MPPasswordCellModePassword;
     [self updateAnimated:NO];
@@ -153,25 +151,25 @@
 
 - (void)setFuzzyGroups:(NSArray *)fuzzyGroups {
 
-    if (_fuzzyGroups == fuzzyGroups)
+    if (self.fuzzyGroups == fuzzyGroups)
         return;
     _fuzzyGroups = fuzzyGroups;
 
     [self updateSiteName:[self siteInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]]];
 }
 
-- (void)setMode:(MPPasswordCellMode)mode animated:(BOOL)animated {
+- (void)setMode:(MPSiteCellMode)mode animated:(BOOL)animated {
 
-    if (mode == _mode)
+    if (self.mode == mode)
         return;
-
     _mode = mode;
+
     [self updateAnimated:animated];
 }
 
 - (void)setSite:(MPSiteEntity *)site animated:(BOOL)animated {
 
-    _siteOID = site.permanentObjectID;
+    self.siteOID = site.permanentObjectID;
     [self updateAnimated:animated];
 }
 
@@ -368,7 +366,7 @@
 }
 
 - (IBAction)doAction:(UIButton *)sender {
-    
+
     [MPiOSAppDelegate managedObjectContextForMainThreadPerformBlock:^(NSManagedObjectContext *mainContext) {
         MPSiteEntity *mainSite = [self siteInContext:mainContext];
         [PearlAlert showAlertWithTitle:@"Login Page" message:nil
@@ -531,7 +529,7 @@
         MPSiteEntity *mainSite = [self siteInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]];
 
         // UI
-        self.backgroundColor = mainSite.url? [UIColor greenColor]: [UIColor redColor];
+        //self.backgroundColor = mainSite.url? [UIColor greenColor]: [UIColor redColor];
         self.upgradeButton.gone = !mainSite.requiresExplicitMigration && ![[MPiOSConfig get].allowDowngrade boolValue];
         self.answersButton.gone = ![[MPiOSAppDelegate get] isFeatureUnlocked:MPProductGenerateAnswers];
         BOOL settingsMode = self.mode == MPPasswordCellModeSettings;
@@ -678,7 +676,7 @@
         [self.window endEditing:YES];
 
         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-        if ([pasteboard respondsToSelector:@selector(setItems:options:)]) {
+        if ([pasteboard respondsToSelector:@selector( setItems:options: )]) {
             [pasteboard setItems:@[ @{ UIPasteboardTypeAutomatic: password } ]
                          options:@{
                                  UIPasteboardOptionLocalOnly     : @NO,
@@ -718,7 +716,7 @@
 
 - (MPSiteEntity *)siteInContext:(NSManagedObjectContext *)context {
 
-    return [MPSiteEntity existingObjectWithID:_siteOID inContext:context];
+    return [MPSiteEntity existingObjectWithID:self.siteOID inContext:context];
 }
 
 @end

@@ -18,7 +18,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface MPPasswordsSegue : UIStoryboardSegue
+@interface MPSitesSegue : UIStoryboardSegue
 
 @property(nonatomic, assign) BOOL animated;
 

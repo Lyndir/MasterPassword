@@ -19,18 +19,22 @@
 #import "MPEmergencyViewController.h"
 #import "MPEntities.h"
 
-@implementation MPEmergencyViewController {
-    MPKey *_key;
-    NSOperationQueue *_emergencyKeyQueue;
-    NSOperationQueue *_emergencyPasswordQueue;
-}
+@interface MPEmergencyViewController()
+
+@property(nonatomic, strong) MPKey *key;
+@property(nonatomic, strong) NSOperationQueue *emergencyKeyQueue;
+@property(nonatomic, strong) NSOperationQueue *emergencyPasswordQueue;
+
+@end
+
+@implementation MPEmergencyViewController
 
 - (void)viewDidLoad {
 
     [super viewDidLoad];
 
-    [_emergencyKeyQueue = [NSOperationQueue new] setMaxConcurrentOperationCount:1];
-    [_emergencyPasswordQueue = [NSOperationQueue new] setMaxConcurrentOperationCount:1];
+    [self.emergencyKeyQueue = [NSOperationQueue new] setMaxConcurrentOperationCount:1];
+    [self.emergencyPasswordQueue = [NSOperationQueue new] setMaxConcurrentOperationCount:1];
 
     self.view.backgroundColor = [UIColor clearColor];
     self.dialogView.layer.cornerRadius = 5;
@@ -117,12 +121,12 @@
 
     [self.passwordButton setTitle:nil forState:UIControlStateNormal];
     [self.activity startAnimating];
-    [_emergencyKeyQueue cancelAllOperations];
-    [_emergencyKeyQueue addOperationWithBlock:^{
+    [self.emergencyKeyQueue cancelAllOperations];
+    [self.emergencyKeyQueue addOperationWithBlock:^{
         if ([masterPassword length] && [fullName length])
-            _key = [[MPKey alloc] initForFullName:fullName withMasterPassword:masterPassword];
+            self.key = [[MPKey alloc] initForFullName:fullName withMasterPassword:masterPassword];
         else
-            _key = nil;
+            self.key = nil;
 
         PearlMainQueue( ^{
             [self updatePassword];
@@ -139,11 +143,12 @@
 
     [self.passwordButton setTitle:nil forState:UIControlStateNormal];
     [self.activity startAnimating];
-    [_emergencyPasswordQueue cancelAllOperations];
-    [_emergencyPasswordQueue addOperationWithBlock:^{
+    [self.emergencyPasswordQueue cancelAllOperations];
+    [self.emergencyPasswordQueue addOperationWithBlock:^{
         NSString *sitePassword = nil;
-        if (_key && [siteName length])
-            sitePassword = [MPAlgorithmDefault generatePasswordForSiteNamed:siteName ofType:siteType withCounter:siteCounter usingKey:_key];
+        if (self.key && [siteName length])
+            sitePassword = [MPAlgorithmDefault generatePasswordForSiteNamed:siteName ofType:siteType withCounter:siteCounter
+                                                                   usingKey:self.key];
 
         PearlMainQueue( ^{
             [self.activity stopAnimating];

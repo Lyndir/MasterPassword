@@ -16,20 +16,34 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-#import "MPUsersViewController.h"
-#import "MPSitesViewController.h"
-#import "MPEmergencyViewController.h"
+#import "MPSitesWindow.h"
 
-typedef NS_ENUM( NSUInteger, MPCombinedMode ) {
-    MPCombinedModeUserSelection,
-    MPCombinedModePasswordSelection,
-};
+@implementation MPSitesWindow
 
-@interface MPCombinedViewController : UIViewController
+#pragma mark - Life
 
-@property(nonatomic) MPCombinedMode mode;
-@property(nonatomic, weak) MPUsersViewController *usersVC;
-@property(nonatomic, weak) MPSitesViewController *sitesVC;
-@property(nonatomic, weak) MPEmergencyViewController *emergencyVC;
+- (BOOL)canBecomeKeyWindow {
+
+    return YES;
+}
+
+#pragma mark - State
+
+- (void)update {
+
+    if ([[MPMacConfig get].fullScreen boolValue]) {
+        [self setLevel:NSScreenSaverWindowLevel];
+        [self setFrame:self.screen.frame display:YES];
+    }
+    else if (self.level != NSNormalWindowLevel) {
+        [self setLevel:NSNormalWindowLevel];
+        [self setFrame:NSMakeRect( 0, 0, 640, 600 ) display:NO];
+        [self center];
+    }
+
+    [super update];
+}
+
+#pragma mark - Private
 
 @end

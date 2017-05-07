@@ -78,7 +78,6 @@
 }
 
 - (void)handleCoordinatorError:(NSError *)error {
-
 }
 
 @end

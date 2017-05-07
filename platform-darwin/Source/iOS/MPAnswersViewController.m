@@ -23,12 +23,12 @@
 
 @interface MPAnswersViewController()
 
+@property(nonatomic, strong) NSManagedObjectID *siteOID;
+@property(nonatomic) BOOL multiple;
+
 @end
 
-@implementation MPAnswersViewController {
-    NSManagedObjectID *_siteOID;
-    BOOL _multiple;
-}
+@implementation MPAnswersViewController
 
 #pragma mark - Life
 
@@ -80,21 +80,21 @@
 
 - (void)setSite:(MPSiteEntity *)site {
 
-    _siteOID = site.permanentObjectID;
-    _multiple = [site.questions count] > 0;
+    self.siteOID = site.permanentObjectID;
+    self.multiple = [site.questions count] > 0;
     [self.tableView reloadData];
     [self updateAnimated:NO];
 }
 
 - (void)setMultiple:(BOOL)multiple animated:(BOOL)animated {
 
-    _multiple = multiple;
+    self.multiple = multiple;
     [self updateAnimated:animated];
 }
 
 - (MPSiteEntity *)siteInContext:(NSManagedObjectContext *)context {
 
-    return [MPSiteEntity existingObjectWithID:_siteOID inContext:context];
+    return [MPSiteEntity existingObjectWithID:self.siteOID inContext:context];
 }
 
 #pragma mark - UITableViewDelegate
@@ -109,7 +109,7 @@
     if (section == 0)
         return 3;
 
-    if (!_multiple)
+    if (!self.multiple)
         return 0;
 
     return [[self siteInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]].questions count] + 1;
@@ -128,7 +128,7 @@
             return [MPSendAnswersCell dequeueCellFromTableView:tableView indexPath:indexPath];
         if (indexPath.item == 2) {
             MPMultipleAnswersCell *cell = [MPMultipleAnswersCell dequeueCellFromTableView:tableView indexPath:indexPath];
-            cell.accessoryType = _multiple? UITableViewCellAccessoryCheckmark: UITableViewCellAccessoryNone;
+            cell.accessoryType = self.multiple? UITableViewCellAccessoryCheckmark: UITableViewCellAccessoryNone;
             return cell;
         }
         Throw( @"Unsupported row index: %@", indexPath );
@@ -165,10 +165,10 @@
         [self copyAnswer:((MPGlobalAnswersCell *)cell).answerField.text];
 
     else if ([cell isKindOfClass:[MPMultipleAnswersCell class]]) {
-        if (!_multiple)
+        if (!self.multiple)
             [self setMultiple:YES animated:YES];
 
-        else if (_multiple) {
+        else if (self.multiple) {
             if (![site.questions count])
                 [self setMultiple:NO animated:YES];
 
@@ -194,7 +194,7 @@
 
     else if ([cell isKindOfClass:[MPSendAnswersCell class]]) {
         NSString *body;
-        if (!_multiple) {
+        if (!self.multiple) {
             NSObject *answer = [site resolveSiteAnswerUsingKey:[MPiOSAppDelegate get].key];
             body = strf( @"Master Password generated the following security answer for your site: %@\n\n"
                     @"%@\n"
@@ -245,7 +245,7 @@
 
     PearlMainQueue( ^{
         UITableViewCell *multipleAnswersCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForItem:2 inSection:0]];
-        multipleAnswersCell.accessoryType = _multiple? UITableViewCellAccessoryCheckmark: UITableViewCellAccessoryNone;
+        multipleAnswersCell.accessoryType = self.multiple? UITableViewCellAccessoryCheckmark: UITableViewCellAccessoryNone;
 
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -291,19 +291,23 @@
 
 @end
 
-@implementation MPAnswersQuestionCell {
-    NSManagedObjectID *_siteOID;
-    NSManagedObjectID *_questionOID;
-    __weak MPAnswersViewController *_answersVC;
-}
+@interface MPAnswersQuestionCell()
+
+@property(nonatomic, strong) NSManagedObjectID *siteOID;
+@property(nonatomic, strong) NSManagedObjectID *questionOID;
+@property(nonatomic, weak) MPAnswersViewController *answersVC;
+
+@end
+
+@implementation MPAnswersQuestionCell
 
 #pragma mark - State
 
 - (void)setQuestion:(MPSiteQuestionEntity *)question forSite:(MPSiteEntity *)site inVC:(MPAnswersViewController *)answersVC {
 
-    _siteOID = site.permanentObjectID;
-    _questionOID = question.permanentObjectID;
-    _answersVC = answersVC;
+    self.siteOID = site.permanentObjectID;
+    self.questionOID = question.permanentObjectID;
+    self.answersVC = answersVC;
 
     [self updateAnswerForQuestion:question ofSite:site];
 }
@@ -322,8 +326,8 @@
     NSString *keyword = textField.text;
     [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
         BOOL didAddQuestionObject = NO;
-        MPSiteEntity *site = [MPSiteEntity existingObjectWithID:_siteOID inContext:context];
-        MPSiteQuestionEntity *question = [MPSiteQuestionEntity existingObjectWithID:_questionOID inContext:context];
+        MPSiteEntity *site = [MPSiteEntity existingObjectWithID:self.siteOID inContext:context];
+        MPSiteQuestionEntity *question = [MPSiteQuestionEntity existingObjectWithID:self.questionOID inContext:context];
         if (!question) {
             didAddQuestionObject = YES;
             [site addQuestionsObject:question = [MPSiteQuestionEntity insertNewObjectInContext:context]];
@@ -333,11 +337,11 @@
         question.keyword = keyword;
 
         if ([context saveToStore]) {
-            _questionOID = question.permanentObjectID;
+            self.questionOID = question.permanentObjectID;
             [self updateAnswerForQuestion:question ofSite:site];
 
             if (didAddQuestionObject)
-                [_answersVC didAddQuestion:question toSite:site];
+                [self.answersVC didAddQuestion:question toSite:site];
         }
     }];
 }

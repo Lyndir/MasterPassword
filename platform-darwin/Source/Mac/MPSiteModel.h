@@ -17,9 +17,9 @@
 //==============================================================================
 
 #import <Foundation/Foundation.h>
-#import "MPSiteEntity.h"
+#import "MPSiteEntity+CoreDataClass.h"
 #import "MPAlgorithm.h"
-#import "MPUserEntity.h"
+#import "MPUserEntity+CoreDataClass.h"
 
 @class MPSiteEntity;
 

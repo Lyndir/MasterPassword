@@ -16,20 +16,8 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-#import "MPUsersViewController.h"
-#import "MPSitesViewController.h"
-#import "MPEmergencyViewController.h"
+#import <Cocoa/Cocoa.h>
 
-typedef NS_ENUM( NSUInteger, MPCombinedMode ) {
-    MPCombinedModeUserSelection,
-    MPCombinedModePasswordSelection,
-};
-
-@interface MPCombinedViewController : UIViewController
-
-@property(nonatomic) MPCombinedMode mode;
-@property(nonatomic, weak) MPUsersViewController *usersVC;
-@property(nonatomic, weak) MPSitesViewController *sitesVC;
-@property(nonatomic, weak) MPEmergencyViewController *emergencyVC;
+@interface MPSitesWindow : NSWindow
 
 @end

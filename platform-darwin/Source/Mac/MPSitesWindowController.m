@@ -17,18 +17,18 @@
 //==============================================================================
 
 #import <QuartzCore/QuartzCore.h>
-#import "MPPasswordWindowController.h"
+#import "MPSitesWindowController.h"
 #import "MPMacAppDelegate.h"
 #import "MPAppDelegate_Store.h"
 #import "MPAppDelegate_Key.h"
 
-@interface MPPasswordWindowController()
+@interface MPSitesWindowController()
 
 @property(nonatomic, strong) CAGradientLayer *siteGradient;
 
 @end
 
-@implementation MPPasswordWindowController
+@implementation MPSitesWindowController
 
 #pragma mark - Life
 
@@ -67,8 +67,8 @@
     PearlAddNotificationObserver( MPSignedOutNotification, nil, [NSOperationQueue mainQueue], ^(id host, NSNotification *note) {
         [self updateUser];
     } );
-    [self observeKeyPath:@"sitesController.selection" withBlock:^(id from, id to, NSKeyValueChange cause, id _self) {
-        [_self updateSelection];
+    [self observeKeyPath:@"sitesController.selection" withBlock:^(id from, id to, NSKeyValueChange cause, id self) {
+        [self updateSelection];
     }];
     prof_rewind( @"observers" );
 

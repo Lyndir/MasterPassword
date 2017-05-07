@@ -19,22 +19,22 @@
 @class MPSiteEntity;
 @class MPCoachmark;
 
-@interface MPPasswordsViewController : UIViewController<UISearchBarDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+@interface MPSitesViewController : UIViewController<UISearchBarDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
-@property(strong, nonatomic) IBOutlet UIView *passwordSelectionContainer;
-@property(strong, nonatomic) IBOutlet UICollectionView *passwordCollectionView;
-@property(strong, nonatomic) IBOutlet UISearchBar *passwordsSearchBar;
-@property(strong, nonatomic) IBOutlet NSLayoutConstraint *passwordsToBottomConstraint;
-@property(strong, nonatomic) IBOutlet NSLayoutConstraint *navigationBarToTopConstraint;
-@property(strong, nonatomic) IBOutlet NSLayoutConstraint *popdownToTopConstraint;
-@property(strong, nonatomic) IBOutlet UIView *badNameTipContainer;
-@property(strong, nonatomic) IBOutlet UIView *popdownView;
-@property(strong, nonatomic) IBOutlet UIView *popdownContainer;
+@property(nonatomic, strong) IBOutlet UICollectionView *collectionView;
+@property(nonatomic, strong) IBOutlet UINavigationBar *navigationBar;
+@property(nonatomic, strong) IBOutlet UISearchBar *searchBar;
+@property(nonatomic, strong) IBOutlet NSLayoutConstraint *sitesToBottomConstraint;
+@property(nonatomic, strong) IBOutlet NSLayoutConstraint *navigationBarToTopConstraint;
+@property(nonatomic, strong) IBOutlet NSLayoutConstraint *popdownToTopConstraint;
+@property(nonatomic, strong) IBOutlet UIView *badNameTipContainer;
+@property(nonatomic, strong) IBOutlet UIView *popdownView;
+@property(nonatomic, strong) IBOutlet UIView *popdownContainer;
 
 @property(assign, nonatomic) BOOL active;
 
 - (void)setActive:(BOOL)active animated:(BOOL)animated completion:(void ( ^ )(BOOL finished))completion;
-- (void)reloadPasswords;
+- (void)reloadSites;
 
 - (IBAction)dismissPopdown:(id)sender;
 

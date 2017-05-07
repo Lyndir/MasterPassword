@@ -20,7 +20,7 @@
 #import "MPiOSAppDelegate.h"
 #import "UIColor+Expanded.h"
 #import "MPAppDelegate_InApp.h"
-#import "MPPasswordsViewController.h"
+#import "MPSitesViewController.h"
 
 PearlEnum( MPDevelopmentFuelConsumption,
         MPDevelopmentFuelConsumptionQuarterly, MPDevelopmentFuelConsumptionMonthly, MPDevelopmentFuelWeekly );
@@ -191,11 +191,11 @@ PearlEnum( MPDevelopmentFuelConsumption,
 
 #pragma mark - Private
 
-- (MPPasswordsViewController *)dismissPopup {
+- (MPSitesViewController *)dismissPopup {
 
     for (UIViewController *vc = self; (vc = vc.parentViewController);)
-        if ([vc isKindOfClass:[MPPasswordsViewController class]]) {
-            MPPasswordsViewController *passwordsVC = (MPPasswordsViewController *)vc;
+        if ([vc isKindOfClass:[MPSitesViewController class]]) {
+            MPSitesViewController *passwordsVC = (MPSitesViewController *)vc;
             [passwordsVC dismissPopdown:self];
             return passwordsVC;
         }

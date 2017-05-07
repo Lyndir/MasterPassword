@@ -23,7 +23,7 @@
 		93D393DB5325820241BA90A7 /* PearlSizedTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D39A4759186F6D2D34AA6B /* PearlSizedTextView.h */; };
 		93D3942C1B117EE4851AA7B6 /* UIView+Visible.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3952910EDB8E0EBC94BA9 /* UIView+Visible.m */; };
 		93D394982CBD25D46692DD7C /* MPWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3990E0CD1B5CF9FBB2C07 /* MPWebViewController.m */; };
-		93D394B5036C882B33C71872 /* MPPasswordsSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39E7A12CC352B2825AA66 /* MPPasswordsSegue.m */; };
+		93D394B5036C882B33C71872 /* MPSitesSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39E7A12CC352B2825AA66 /* MPSitesSegue.m */; };
 		93D39508A6814612A5B3C226 /* MPMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D399B36CDB2004D7C51391 /* MPMessageViewController.m */; };
 		93D39536EB550E811CCD04BC /* UIResponder+PearlFirstResponder.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D394482BB07F90E8FD1314 /* UIResponder+PearlFirstResponder.h */; };
 		93D3954E96236384AFA00453 /* UIScrollView+PearlAdjustInsets.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D390FB3110DCCE68E600DC /* UIScrollView+PearlAdjustInsets.m */; };
@@ -47,13 +47,13 @@
 		93D399E4BC1E092A8C8B12AE /* NSOrderedSetOrArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D39FBF8FCEB4C106272334 /* NSOrderedSetOrArray.h */; };
 		93D39A27F2506C6FEEF9C588 /* MPAlgorithmV2.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D399A8E3181B442D347CD7 /* MPAlgorithmV2.m */; };
 		93D39A53D76CA70786423458 /* UICollectionView+PearlReloadItems.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D39246FC21C6E63E35D615 /* UICollectionView+PearlReloadItems.h */; };
-		93D39A5FF670957C0AF8298D /* MPPasswordCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39DEA995041A13DC9CAF7 /* MPPasswordCell.m */; };
+		93D39A5FF670957C0AF8298D /* MPSiteCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39DEA995041A13DC9CAF7 /* MPSiteCell.m */; };
 		93D39A8EA1C49CE43B63F47B /* PearlUICollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39D8A953779B35403AF6E /* PearlUICollectionView.m */; };
 		93D39AA4A0BE66A872CCC02E /* NSPersistentStore+PearlMigration.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D397F4BAFFF7CF3F1B21A4 /* NSPersistentStore+PearlMigration.h */; };
 		93D39B429C67A62E29DC02DA /* MPRootSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D399493FEDDE74DD1A0C15 /* MPRootSegue.m */; };
 		93D39B76DD5AB108BA8928E8 /* UIScrollView+PearlAdjustInsets.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D39DE2CB351D4E3789462B /* UIScrollView+PearlAdjustInsets.h */; };
 		93D39B842AB9A5D072810D76 /* NSError+PearlFullDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D398C95847261903D781D3 /* NSError+PearlFullDescription.h */; };
-		93D39B8F90F58A5D158DDBA3 /* MPPasswordsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3924EE15017F8A12CB436 /* MPPasswordsViewController.m */; };
+		93D39B8F90F58A5D158DDBA3 /* MPSitesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3924EE15017F8A12CB436 /* MPSitesViewController.m */; };
 		93D39BA1EA3CAAC8A220B4A6 /* MPAppSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3916C1D8F1427DFBDEBCA /* MPAppSettingsViewController.m */; };
 		93D39BFB5F5F9337F6565DE3 /* UIView+Visible.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D39B7B765546B1F1900CB7 /* UIView+Visible.h */; };
 		93D39C34FE35830EF5BE1D2A /* NSArray+Indexing.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D396D04E57792A54D437AC /* NSArray+Indexing.h */; };
@@ -476,14 +476,14 @@
 		93D390FADEB325D8D54A957D /* PearlOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlOverlay.m; sourceTree = "<group>"; };
 		93D390FB3110DCCE68E600DC /* UIScrollView+PearlAdjustInsets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+PearlAdjustInsets.m"; sourceTree = "<group>"; };
 		93D39149A5F1F9B174D6D061 /* MPStoreViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPStoreViewController.h; sourceTree = "<group>"; };
-		93D3914D7597F9A28DB9D85E /* MPPasswordsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordsViewController.h; sourceTree = "<group>"; };
+		93D3914D7597F9A28DB9D85E /* MPSitesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSitesViewController.h; sourceTree = "<group>"; };
 		93D39156E806BB78E04F78B9 /* PearlSizedTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlSizedTextView.m; sourceTree = "<group>"; };
 		93D3916C1D8F1427DFBDEBCA /* MPAppSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAppSettingsViewController.m; sourceTree = "<group>"; };
 		93D391943675426839501BB8 /* MPLogsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPLogsViewController.h; sourceTree = "<group>"; };
 		93D391AA32F24290C424438E /* NSNotificationCenter+PearlEasyCleanup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNotificationCenter+PearlEasyCleanup.h"; sourceTree = "<group>"; };
 		93D39246FC21C6E63E35D615 /* UICollectionView+PearlReloadItems.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UICollectionView+PearlReloadItems.h"; sourceTree = "<group>"; };
 		93D3924D6F77E6BF41AC32D3 /* MPRootSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPRootSegue.h; sourceTree = "<group>"; };
-		93D3924EE15017F8A12CB436 /* MPPasswordsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPasswordsViewController.m; sourceTree = "<group>"; };
+		93D3924EE15017F8A12CB436 /* MPSitesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSitesViewController.m; sourceTree = "<group>"; };
 		93D392876BE5C011DE73B43F /* MPPopdownSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPopdownSegue.h; sourceTree = "<group>"; };
 		93D392C5A6572DB0EB5B82C8 /* mpw-types.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-types.c"; sourceTree = "<group>"; };
 		93D392D76C091DEA3319F11D /* UIView+AlphaScale.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+AlphaScale.h"; sourceTree = "<group>"; };
@@ -517,7 +517,7 @@
 		93D3990E0CD1B5CF9FBB2C07 /* MPWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPWebViewController.m; sourceTree = "<group>"; };
 		93D399493FEDDE74DD1A0C15 /* MPRootSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPRootSegue.m; sourceTree = "<group>"; };
 		93D3995B1D4DCE5A30D882BA /* MPCoachmarkViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCoachmarkViewController.m; sourceTree = "<group>"; };
-		93D39975CE5AEC99E3F086C7 /* MPPasswordCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordCell.h; sourceTree = "<group>"; };
+		93D39975CE5AEC99E3F086C7 /* MPSiteCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSiteCell.h; sourceTree = "<group>"; };
 		93D3999693660C89A7465F4E /* MPCoachmarkViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPCoachmarkViewController.h; sourceTree = "<group>"; };
 		93D399A8E3181B442D347CD7 /* MPAlgorithmV2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAlgorithmV2.m; sourceTree = "<group>"; };
 		93D399B36CDB2004D7C51391 /* MPMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPMessageViewController.m; sourceTree = "<group>"; };
@@ -541,7 +541,7 @@
 		93D39BAA71DE51B4D8A1286C /* MPCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCell.m; sourceTree = "<group>"; };
 		93D39C41A27AA42D044D68AE /* NSString+MPMarkDown.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+MPMarkDown.m"; path = "iOS/NSString+MPMarkDown.m"; sourceTree = "<group>"; };
 		93D39C426E03358384018E85 /* MPAnswersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAnswersViewController.m; sourceTree = "<group>"; };
-		93D39C44361BE57AF0B3071F /* MPPasswordsSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordsSegue.h; sourceTree = "<group>"; };
+		93D39C44361BE57AF0B3071F /* MPSitesSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSitesSegue.h; sourceTree = "<group>"; };
 		93D39C86E984EC65DA5ACB1D /* MPAppSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAppSettingsViewController.h; sourceTree = "<group>"; };
 		93D39CB0EABD2748740992D8 /* MPMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPMessageViewController.h; sourceTree = "<group>"; };
 		93D39CC01630D0421205C4C4 /* MPNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNavigationController.m; sourceTree = "<group>"; };
@@ -554,8 +554,8 @@
 		93D39D8A953779B35403AF6E /* PearlUICollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlUICollectionView.m; sourceTree = "<group>"; };
 		93D39DA27D768B53C8B1330C /* MPAvatarCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAvatarCell.h; sourceTree = "<group>"; };
 		93D39DE2CB351D4E3789462B /* UIScrollView+PearlAdjustInsets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+PearlAdjustInsets.h"; sourceTree = "<group>"; };
-		93D39DEA995041A13DC9CAF7 /* MPPasswordCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPasswordCell.m; sourceTree = "<group>"; };
-		93D39E7A12CC352B2825AA66 /* MPPasswordsSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPasswordsSegue.m; sourceTree = "<group>"; };
+		93D39DEA995041A13DC9CAF7 /* MPSiteCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSiteCell.m; sourceTree = "<group>"; };
+		93D39E7A12CC352B2825AA66 /* MPSitesSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSitesSegue.m; sourceTree = "<group>"; };
 		93D39F556F2F142740A65E59 /* MPWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPWebViewController.h; sourceTree = "<group>"; };
 		93D39F7C9F47BF6387FBC5C3 /* PearlEMail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlEMail.h; sourceTree = "<group>"; };
 		93D39F9106F2CCFB94283188 /* NSError+PearlFullDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+PearlFullDescription.m"; sourceTree = "<group>"; };
@@ -2885,12 +2885,12 @@
 				93D39CC01630D0421205C4C4 /* MPNavigationController.m */,
 				93D39B455A71EC98C749E623 /* MPOverlayViewController.h */,
 				93D395105935859D71679931 /* MPOverlayViewController.m */,
-				93D39975CE5AEC99E3F086C7 /* MPPasswordCell.h */,
-				93D39DEA995041A13DC9CAF7 /* MPPasswordCell.m */,
-				93D39C44361BE57AF0B3071F /* MPPasswordsSegue.h */,
-				93D39E7A12CC352B2825AA66 /* MPPasswordsSegue.m */,
-				93D3914D7597F9A28DB9D85E /* MPPasswordsViewController.h */,
-				93D3924EE15017F8A12CB436 /* MPPasswordsViewController.m */,
+				93D39975CE5AEC99E3F086C7 /* MPSiteCell.h */,
+				93D39DEA995041A13DC9CAF7 /* MPSiteCell.m */,
+				93D39C44361BE57AF0B3071F /* MPSitesSegue.h */,
+				93D39E7A12CC352B2825AA66 /* MPSitesSegue.m */,
+				93D3914D7597F9A28DB9D85E /* MPSitesViewController.h */,
+				93D3924EE15017F8A12CB436 /* MPSitesViewController.m */,
 				93D392876BE5C011DE73B43F /* MPPopdownSegue.h */,
 				93D39B050DD5F55E9794EFD4 /* MPPopdownSegue.m */,
 				DABD3BEA1711E2DC00CF925C /* MPPreferencesViewController.h */,
@@ -3859,14 +3859,14 @@
 				DA095E75172F4CD8001C948B /* MPLogsViewController.m in Sources */,
 				93D39D596A2E376D6F6F5DA1 /* MPCombinedViewController.m in Sources */,
 				93D3957237D303DE2D38C267 /* MPAvatarCell.m in Sources */,
-				93D39B8F90F58A5D158DDBA3 /* MPPasswordsViewController.m in Sources */,
+				93D39B8F90F58A5D158DDBA3 /* MPSitesViewController.m in Sources */,
 				93D3954FCE045A3CC7E804B7 /* MPUsersViewController.m in Sources */,
 				93D39392DEDA376F93C6C718 /* MPCell.m in Sources */,
 				DA0CC58E1EB6B030009A8ED9 /* MPSiteQuestionEntity+CoreDataClass.m in Sources */,
-				93D39A5FF670957C0AF8298D /* MPPasswordCell.m in Sources */,
+				93D39A5FF670957C0AF8298D /* MPSiteCell.m in Sources */,
 				93D398ECD7D1A0DEDDADF516 /* MPEmergencyViewController.m in Sources */,
 				DA95B50F1C4776F00067F5EF /* NSMutableSet+Pearl.m in Sources */,
-				93D394B5036C882B33C71872 /* MPPasswordsSegue.m in Sources */,
+				93D394B5036C882B33C71872 /* MPSitesSegue.m in Sources */,
 				DA0CC5911EB6B030009A8ED9 /* MPStoredSiteEntity+CoreDataProperties.m in Sources */,
 				93D39673DDC085BE72C34D7C /* MPPopdownSegue.m in Sources */,
 				93D39BA1EA3CAAC8A220B4A6 /* MPAppSettingsViewController.m in Sources */,

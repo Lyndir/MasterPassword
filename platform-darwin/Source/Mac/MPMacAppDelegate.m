@@ -430,8 +430,8 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (IBAction)terminate:(id)sender {
 
-    [self.passwordWindowController close];
-    self.passwordWindowController = nil;
+    [self.sitesWindowController close];
+    self.sitesWindowController = nil;
 
     [NSApp terminate:nil];
 }
@@ -460,11 +460,11 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     prof_rewind( @"activeUserForMainThread" );
 
     // Don't show window if we weren't already running (ie. if we haven't been activated before).
-    if (!self.passwordWindowController)
-        self.passwordWindowController = [[MPPasswordWindowController alloc] initWithWindowNibName:@"MPPasswordWindowController"];
+    if (!self.sitesWindowController)
+        self.sitesWindowController = [[MPSitesWindowController alloc] initWithWindowNibName:@"MPSitesWindowController"];
     prof_rewind( @"initWithWindow" );
 
-    [self.passwordWindowController showWindow:self];
+    [self.sitesWindowController showWindow:self];
     prof_finish( @"showWindow" );
 }
 
@@ -604,7 +604,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 - (void)updateMenuItems {
 
     MPUserEntity *activeUser = [self activeUserForMainThread];
-//    if (!(self.showItem.enabled = ![self.passwordWindowController.window isVisible])) {
+//    if (!(self.showItem.enabled = ![self.sitesWindowController.window isVisible])) {
 //        self.showItem.title = @"Show (Showing)";
 //        self.showItem.toolTip = @"Master Password is already showing.";
 //    }

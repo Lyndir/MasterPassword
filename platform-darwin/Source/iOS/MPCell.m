@@ -18,7 +18,6 @@
 
 #import "MPCell.h"
 
-@implementation MPCell {
-}
+@implementation MPCell
 
 @end

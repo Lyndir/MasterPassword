@@ -17,7 +17,7 @@
 //==============================================================================
 
 #import "MPSitesTableView.h"
-#import "MPPasswordWindowController.h"
+#import "MPSitesWindowController.h"
 
 @implementation MPSitesTableView
 

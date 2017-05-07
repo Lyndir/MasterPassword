@@ -18,15 +18,19 @@
 
 #import "MPOverlayViewController.h"
 
-@implementation MPOverlayViewController {
-    NSMutableDictionary *_dismissSegueByButton;
-}
+@interface MPOverlayViewController()
+
+@property(nonatomic, strong) NSMutableDictionary *dismissSegueByButton;
+
+@end
+
+@implementation MPOverlayViewController
 
 - (void)awakeFromNib {
 
     [super awakeFromNib];
 
-    _dismissSegueByButton = [NSMutableDictionary dictionary];
+    self.dismissSegueByButton = [NSMutableDictionary dictionary];
 }
 
 - (void)viewDidLoad {
@@ -60,7 +64,7 @@
     dismissButton.visible = NO;
     dismissButton.frame = self.view.bounds;
     dismissButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    _dismissSegueByButton[[NSValue valueWithNonretainedObject:dismissButton]] =
+    self.dismissSegueByButton[[NSValue valueWithNonretainedObject:dismissButton]] =
             [[MPOverlaySegue alloc] initWithIdentifier:@"dismiss-overlay"
                                                 source:segue.destinationViewController destination:segue.sourceViewController];
 
@@ -71,14 +75,14 @@
 - (void)dismissOverlay:(UIButton *)dismissButton {
 
     NSValue *dismissSegueKey = [NSValue valueWithNonretainedObject:dismissButton];
-    [((UIStoryboardSegue *)_dismissSegueByButton[dismissSegueKey]) perform];
+    [((UIStoryboardSegue *)self.dismissSegueByButton[dismissSegueKey]) perform];
 }
 
 - (void)removeDismissButtonForViewController:(UIViewController *)viewController {
 
     UIButton *dismissButton = nil;
-    for (NSValue *dismissButtonValue in [_dismissSegueByButton allKeys])
-        if (((UIStoryboardSegue *)_dismissSegueByButton[dismissButtonValue]).sourceViewController == viewController) {
+    for (NSValue *dismissButtonValue in [self.dismissSegueByButton allKeys])
+        if (((UIStoryboardSegue *)self.dismissSegueByButton[dismissButtonValue]).sourceViewController == viewController) {
             dismissButton = [dismissButtonValue nonretainedObjectValue];
             NSAssert( [self.view.subviews containsObject:dismissButton], @"Missing dismiss button in dictionary." );
         }
@@ -86,7 +90,7 @@
         return;
 
     NSValue *dismissSegueKey = [NSValue valueWithNonretainedObject:dismissButton];
-    [_dismissSegueByButton removeObjectForKey:dismissSegueKey];
+    [self.dismissSegueByButton removeObjectForKey:dismissSegueKey];
 
     [UIView animateWithDuration:0.1f animations:^{
         dismissButton.visible = NO;

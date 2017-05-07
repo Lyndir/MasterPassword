@@ -18,9 +18,13 @@
 
 #import "MPGradientView.h"
 
-@implementation MPGradientView {
-    NSGradient *gradient;
-}
+@interface MPGradientView()
+
+@property(nonatomic, strong) NSGradient *gradient;
+
+@end
+
+@implementation MPGradientView
 
 - (id)initWithFrame:(NSRect)frame {
 
@@ -51,28 +55,28 @@
 - (void)setStartingColor:(NSColor *)startingColor {
 
     _startingColor = startingColor;
-    gradient = nil;
+    self.gradient = nil;
     [self setNeedsDisplay:YES];
 }
 
 - (void)setEndingColor:(NSColor *)endingColor {
 
     _endingColor = endingColor;
-    gradient = nil;
+    self.gradient = nil;
     [self setNeedsDisplay:YES];
 }
 
 - (void)setAngle:(NSInteger)angle {
 
     _angle = angle;
-    gradient = nil;
+    self.gradient = nil;
     [self setNeedsDisplay:YES];
 }
 
 - (void)setRatio:(CGFloat)ratio {
 
     _ratio = ratio;
-    gradient = nil;
+    self.gradient = nil;
     [self setNeedsDisplay:YES];
 }
 
@@ -84,7 +88,7 @@
         return;
     }
 
-    [(gradient?: (gradient = [[NSGradient alloc] initWithColorsAndLocations:
+    [(self.gradient?: (self.gradient = [[NSGradient alloc] initWithColorsAndLocations:
             self.startingColor, (CGFloat)0.f,
             [self.startingColor blendedColorWithFraction:0.5f ofColor:self.endingColor], self.ratio,
             self.endingColor, (CGFloat)1.f, nil]))

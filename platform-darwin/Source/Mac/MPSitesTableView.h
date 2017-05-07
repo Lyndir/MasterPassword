@@ -18,10 +18,10 @@
 
 #import <AppKit/AppKit.h>
 
-@class MPPasswordWindowController;
+@class MPSitesWindowController;
 
 @interface MPSitesTableView : NSTableView
 
-@property(nonatomic, weak) MPPasswordWindowController *controller;
+@property(nonatomic, weak) MPSitesWindowController *controller;
 
 @end

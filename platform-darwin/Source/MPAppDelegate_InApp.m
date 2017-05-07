@@ -104,8 +104,10 @@ PearlAssociatedObjectProperty( NSMutableArray*, ProductObservers, productObserve
 
 #if TARGET_OS_IPHONE
     if (![[MPAppDelegate_Shared get] canMakePayments]) {
-        [PearlAlert showAlertWithTitle:@"Store Not Set Up" message:
-                        @"Try logging using the App Store or from Settings."
+        [PearlAlert showAlertWithTitle:@"App Store Not Set Up" message:
+                        @"Make sure your Apple ID is set under Settings -> iTunes & App Store, "
+                                @"you have a payment method added to the account and purchases are"
+                                @"not disabled under General -> Restrictions."
                              viewStyle:UIAlertViewStyleDefault initAlert:nil
                      tappedButtonBlock:nil cancelTitle:@"Thanks" otherTitles:nil];
         return;

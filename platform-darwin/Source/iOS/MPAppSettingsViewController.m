@@ -19,8 +19,7 @@
 #import "MPAppSettingsViewController.h"
 #import "UIColor+Expanded.h"
 
-@implementation MPAppSettingsViewController {
-}
+@implementation MPAppSettingsViewController
 
 - (void)viewWillAppear:(BOOL)animated {
 

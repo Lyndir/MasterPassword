@@ -29,7 +29,7 @@
 #define CRACKING_PER_SECOND 2495000000UL
 #define CRACKING_PRICE      350
 
-NSOperationQueue *_mpwQueue = nil;
+static NSOperationQueue *_mpwQueue = nil;
 
 @implementation MPAlgorithmV0
 

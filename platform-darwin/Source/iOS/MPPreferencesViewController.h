@@ -32,7 +32,7 @@
 @property(weak, nonatomic) IBOutlet UISegmentedControl *generated1TypeControl;
 @property(weak, nonatomic) IBOutlet UISegmentedControl *generated2TypeControl;
 @property(weak, nonatomic) IBOutlet UISegmentedControl *storedTypeControl;
-@property(weak, nonatomic) IBOutlet UILabel *passwordTypeExample;
+@property(weak, nonatomic) IBOutlet UILabel *typeSamplePassword;
 
 - (IBAction)previousAvatar:(id)sender;
 - (IBAction)nextAvatar:(id)sender;

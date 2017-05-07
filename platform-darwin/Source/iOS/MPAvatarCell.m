@@ -32,11 +32,12 @@ const long MPAvatarAdd = 10000;
 @property(strong, nonatomic) IBOutlet NSLayoutConstraint *avatarRaisedConstraint;
 @property(strong, nonatomic) IBOutlet NSLayoutConstraint *keyboardHeightConstraint;
 
+@property(nonatomic, strong) CAAnimationGroup *targetedShadowAnimation;
+
+@property(assign, nonatomic, readwrite) BOOL newUser;
 @end
 
-@implementation MPAvatarCell {
-    CAAnimationGroup *_targetedShadowAnimation;
-}
+@implementation MPAvatarCell
 
 + (NSString *)reuseIdentifier {
 
@@ -57,14 +58,14 @@ const long MPAvatarAdd = 10000;
     self.avatarImageView.layer.masksToBounds = NO;
     self.avatarImageView.backgroundColor = [UIColor clearColor];
 
-    [self observeKeyPath:@"bounds" withBlock:^(id from, id to, NSKeyValueChange cause, MPAvatarCell *_self) {
-        _self.contentView.frame = _self.bounds;
+    [self observeKeyPath:@"bounds" withBlock:^(id from, id to, NSKeyValueChange cause, MPAvatarCell *self) {
+        self.contentView.frame = self.bounds;
     }];
-    [self observeKeyPath:@"selected" withBlock:^(id from, id to, NSKeyValueChange cause, MPAvatarCell *_self) {
-        [_self updateAnimated:_self.superview != nil];
+    [self observeKeyPath:@"selected" withBlock:^(id from, id to, NSKeyValueChange cause, MPAvatarCell *self) {
+        [self updateAnimated:self.superview != nil];
     }];
-    [self observeKeyPath:@"highlighted" withBlock:^(id from, id to, NSKeyValueChange cause, MPAvatarCell *_self) {
-        [_self updateAnimated:_self.superview != nil];
+    [self observeKeyPath:@"highlighted" withBlock:^(id from, id to, NSKeyValueChange cause, MPAvatarCell *self) {
+        [self updateAnimated:self.superview != nil];
     }];
     PearlAddNotificationObserver( UIKeyboardWillShowNotification, nil, [NSOperationQueue mainQueue],
             ^(MPAvatarCell *self, NSNotification *note) {
@@ -85,9 +86,9 @@ const long MPAvatarAdd = 10000;
     pulseShadowOpacityAnimation.autoreverses = YES;
     pulseShadowOpacityAnimation.repeatCount = MAXFLOAT;
 
-    _targetedShadowAnimation = [CAAnimationGroup new];
-    _targetedShadowAnimation.animations = @[ toShadowOpacityAnimation, pulseShadowOpacityAnimation ];
-    _targetedShadowAnimation.duration = MAXFLOAT;
+    self.targetedShadowAnimation = [CAAnimationGroup new];
+    self.targetedShadowAnimation.animations = @[ toShadowOpacityAnimation, pulseShadowOpacityAnimation ];
+    self.targetedShadowAnimation.duration = MAXFLOAT;
     self.avatarImageView.layer.shadowColor = [UIColor whiteColor].CGColor;
     self.avatarImageView.layer.shadowOffset = CGSizeZero;
 }
@@ -96,10 +97,10 @@ const long MPAvatarAdd = 10000;
 
     [super prepareForReuse];
 
-    _newUser = NO;
-    _visibility = 0;
-    _mode = MPAvatarModeLowered;
-    _spinnerActive = NO;
+    self.newUser = NO;
+    self.visibility = 0;
+    self.mode = MPAvatarModeLowered;
+    self.spinnerActive = NO;
 }
 
 - (void)dealloc {
@@ -114,13 +115,13 @@ const long MPAvatarAdd = 10000;
 
     _avatar = avatar == MPAvatarAdd? MPAvatarAdd: (avatar + MPAvatarCount) % MPAvatarCount;
 
-    if (_avatar == MPAvatarAdd) {
+    if (self.avatar == MPAvatarAdd) {
         self.avatarImageView.image = [UIImage imageNamed:@"avatar-add"];
         self.name = strl( @"New User" );
-        _newUser = YES;
+        self.newUser = YES;
     }
     else
-        self.avatarImageView.image = [UIImage imageNamed:strf( @"avatar-%lu", (unsigned long)_avatar )];
+        self.avatarImageView.image = [UIImage imageNamed:strf( @"avatar-%lu", (unsigned long)self.avatar )];
 }
 
 - (NSString *)name {
@@ -140,7 +141,7 @@ const long MPAvatarAdd = 10000;
 
 - (void)setVisibility:(CGFloat)visibility animated:(BOOL)animated {
 
-    if (visibility == _visibility)
+    if (self.visibility == visibility)
         return;
     _visibility = visibility;
 
@@ -161,7 +162,7 @@ const long MPAvatarAdd = 10000;
 
 - (void)setMode:(MPAvatarMode)mode animated:(BOOL)animated {
 
-    if (mode == _mode)
+    if (self.mode == mode)
         return;
     _mode = mode;
 
@@ -175,7 +176,7 @@ const long MPAvatarAdd = 10000;
 
 - (void)setSpinnerActive:(BOOL)spinnerActive animated:(BOOL)animated {
 
-    if (_spinnerActive == spinnerActive)
+    if (self.spinnerActive == spinnerActive)
         return;
     _spinnerActive = spinnerActive;
 
@@ -284,7 +285,7 @@ const long MPAvatarAdd = 10000;
                          if (self.mode == MPAvatarModeRaisedAndMinimized)
                              [self.avatarImageView.layer removeAnimationForKey:@"targetedShadow"];
                          else if (![self.avatarImageView.layer animationForKey:@"targetedShadow"])
-                             [self.avatarImageView.layer addAnimation:_targetedShadowAnimation forKey:@"targetedShadow"];
+                             [self.avatarImageView.layer addAnimation:self.targetedShadowAnimation forKey:@"targetedShadow"];
 
                          // Avatar selection and spinner.
                          if (self.mode != MPAvatarModeRaisedAndMinimized && (self.selected || self.highlighted) && !self.spinnerActive)

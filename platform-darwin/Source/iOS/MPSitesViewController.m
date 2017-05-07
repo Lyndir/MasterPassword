@@ -16,12 +16,12 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-#import "MPPasswordsViewController.h"
+#import "MPSitesViewController.h"
 #import "MPiOSAppDelegate.h"
 #import "MPAppDelegate_Store.h"
 #import "MPPopdownSegue.h"
 #import "MPAppDelegate_Key.h"
-#import "MPPasswordCell.h"
+#import "MPSiteCell.h"
 #import "MPAnswersViewController.h"
 #import "MPMessageViewController.h"
 
@@ -31,22 +31,17 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     MPPasswordsBadNameTip = 1 << 0,
 };
 
-@interface MPPasswordsViewController()<NSFetchedResultsControllerDelegate>
+@interface MPSitesViewController()<NSFetchedResultsControllerDelegate>
 
-@property(nonatomic, strong) IBOutlet UINavigationBar *navigationBar;
+@property(nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
+@property(nonatomic, strong) NSArray *fuzzyGroups;
+@property(nonatomic, strong) NSCharacterSet *siteNameAcceptableCharactersSet;
+@property(nonatomic, strong) NSMutableArray<NSMutableArray *> *dataSource;
+@property(nonatomic, weak) UIViewController *popdownVC;
 
 @end
 
-@implementation MPPasswordsViewController {
-    __weak UITapGestureRecognizer *_passwordsDismissRecognizer;
-    NSFetchedResultsController *_fetchedResultsController;
-    UIColor *_backgroundColor;
-    UIColor *_darkenedBackgroundColor;
-    __weak UIViewController *_popdownVC;
-    NSCharacterSet *_siteNameAcceptableCharactersSet;
-    NSArray *_fuzzyGroups;
-    NSMutableArray<NSMutableArray *> *_passwordCollectionSections;
-}
+@implementation MPSitesViewController
 
 #pragma mark - Life
 
@@ -57,22 +52,20 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     NSMutableCharacterSet *siteNameAcceptableCharactersSet = [[NSCharacterSet alphanumericCharacterSet] mutableCopy];
     [siteNameAcceptableCharactersSet formIntersectionWithCharacterSet:[[NSCharacterSet uppercaseLetterCharacterSet] invertedSet]];
     [siteNameAcceptableCharactersSet addCharactersInString:@"@.-+~&_;:/"];
-    _siteNameAcceptableCharactersSet = siteNameAcceptableCharactersSet;
+    self.siteNameAcceptableCharactersSet = siteNameAcceptableCharactersSet;
 
-    _backgroundColor = self.passwordCollectionView.backgroundColor;
-    _darkenedBackgroundColor = [_backgroundColor colorWithAlphaComponent:0.6f];
-    _passwordCollectionSections = [NSMutableArray new];
+    self.dataSource = [NSMutableArray new];
 
     self.view.backgroundColor = [UIColor clearColor];
-    [self.passwordCollectionView automaticallyAdjustInsetsForKeyboard];
-    self.passwordsSearchBar.autocapitalizationType = UITextAutocapitalizationTypeNone;
-    if ([self.passwordsSearchBar respondsToSelector:@selector( keyboardAppearance )])
-        self.passwordsSearchBar.keyboardAppearance = UIKeyboardAppearanceDark;
+    [self.collectionView automaticallyAdjustInsetsForKeyboard];
+    self.searchBar.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    if ([self.searchBar respondsToSelector:@selector( keyboardAppearance )])
+        self.searchBar.keyboardAppearance = UIKeyboardAppearanceDark;
     else
-        [self.passwordsSearchBar enumerateViews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
+        [self.searchBar enumerateViews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
             if ([subview isKindOfClass:[UITextField class]])
                 ((UITextField *)subview).keyboardAppearance = UIKeyboardAppearanceDark;
-        }                               recurse:YES];
+        }                      recurse:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -98,7 +91,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     if (pasteboardURL.host)
         self.query = NSNullToNil( [pasteboardURL.host firstMatchGroupsOfExpression:bareHostRE][0] );
     else
-        [self reloadPasswords];
+        [self reloadSites];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -131,17 +124,17 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 
     if ([segue.identifier isEqualToString:@"popdown"])
-        _popdownVC = segue.destinationViewController;
+        self.popdownVC = segue.destinationViewController;
     if ([segue.identifier isEqualToString:@"answers"])
         ((MPAnswersViewController *)segue.destinationViewController).site =
-                [[MPPasswordCell findAsSuperviewOf:sender] siteInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]];
+                [[MPSiteCell findAsSuperviewOf:sender] siteInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]];
     if ([segue.identifier isEqualToString:@"message"])
         ((MPMessageViewController *)segue.destinationViewController).message = sender;
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
 
-    [self.passwordCollectionView.collectionViewLayout invalidateLayout];
+    [self.collectionView.collectionViewLayout invalidateLayout];
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
 }
 
@@ -159,7 +152,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
         insetForSectionAtIndex:(NSInteger)section {
 
     UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)collectionViewLayout;
-    UIEdgeInsets occludedInsets = [self.passwordCollectionView occludedInsets];
+    UIEdgeInsets occludedInsets = [self.collectionView occludedInsets];
     UIEdgeInsets insets = layout.sectionInset;
     insets.top = insets.bottom; // Undo storyboard hack for manual top-occluded insets.
 
@@ -176,19 +169,19 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
 
-    return [_passwordCollectionSections count];
+    return [self.dataSource count];
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
 
-    return [_passwordCollectionSections[(NSUInteger)section] count];
+    return [self.dataSource[(NSUInteger)section] count];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
 
-    MPPasswordCell *cell = [MPPasswordCell dequeueCellFromCollectionView:collectionView indexPath:indexPath];
-    [cell setFuzzyGroups:_fuzzyGroups];
-    id item = _passwordCollectionSections[(NSUInteger)indexPath.section][(NSUInteger)indexPath.item];
+    MPSiteCell *cell = [MPSiteCell dequeueCellFromCollectionView:collectionView indexPath:indexPath];
+    [cell setFuzzyGroups:self.fuzzyGroups];
+    id item = self.dataSource[(NSUInteger)indexPath.section][(NSUInteger)indexPath.item];
     if ([item isKindOfClass:[MPSiteEntity class]])
         [cell setSite:item animated:NO];
     else // item == MPTransientPasswordItem
@@ -201,8 +194,8 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
 
-    if (scrollView == self.passwordCollectionView)
-        for (MPPasswordCell *cell in [self.passwordCollectionView visibleCells])
+    if (scrollView == self.collectionView)
+        for (MPSiteCell *cell in [self.collectionView visibleCells])
             [cell setMode:MPPasswordCellModePassword animated:YES];
 }
 
@@ -210,11 +203,11 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
 
-    if (controller == _fetchedResultsController)
+    if (controller == self.fetchedResultsController)
         PearlMainQueue( ^{
-            [self.passwordCollectionView updateDataSource:_passwordCollectionSections
-                                               toSections:[self createPasswordCollectionSections]
-                                              reloadItems:nil completion:nil];
+            [self.collectionView updateDataSource:self.dataSource
+                                       toSections:[self createPasswordCollectionSections]
+                                      reloadItems:nil completion:nil];
         } );
 }
 
@@ -222,7 +215,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
 
-    if (searchBar == self.passwordsSearchBar) {
+    if (searchBar == self.searchBar) {
         searchBar.text = nil;
         return YES;
     }
@@ -232,24 +225,22 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
 
-    if (searchBar == self.passwordsSearchBar) {
-        [self.passwordsSearchBar setShowsCancelButton:YES animated:YES];
+    if (searchBar == self.searchBar) {
+        [self.searchBar setShowsCancelButton:YES animated:YES];
         [UIView animateWithDuration:0.3f animations:^{
-            self.passwordCollectionView.backgroundColor = _darkenedBackgroundColor;
+            self.collectionView.backgroundColor = [self.collectionView.backgroundColor colorWithAlphaComponent:0.6f];
         }];
     }
 }
 
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
 
-    if (searchBar == self.passwordsSearchBar) {
-        [self.passwordsSearchBar setShowsCancelButton:NO animated:YES];
-        if (_passwordsDismissRecognizer)
-            [self.view removeGestureRecognizer:_passwordsDismissRecognizer];
+    if (searchBar == self.searchBar) {
+        [self.searchBar setShowsCancelButton:NO animated:YES];
+        [self reloadSites];
 
-        [self reloadPasswords];
         [UIView animateWithDuration:0.3f animations:^{
-            self.passwordCollectionView.backgroundColor = _backgroundColor;
+            self.collectionView.backgroundColor = [self.collectionView.backgroundColor colorWithAlphaComponent:0];
         }];
     }
 }
@@ -267,11 +258,11 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
 
-    if (searchBar == self.passwordsSearchBar) {
-        if ([[self.query stringByTrimmingCharactersInSet:_siteNameAcceptableCharactersSet] length])
+    if (searchBar == self.searchBar) {
+        if ([[self.query stringByTrimmingCharactersInSet:self.siteNameAcceptableCharactersSet] length])
             [self showTips:MPPasswordsBadNameTip];
 
-        [self reloadPasswords];
+        [self reloadSites];
     }
 }
 
@@ -321,42 +312,42 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 
     PearlRemoveNotificationObservers();
     PearlAddNotificationObserver( UIApplicationWillResignActiveNotification, nil, [NSOperationQueue mainQueue],
-            ^(MPPasswordsViewController *self, NSNotification *note) {
+            ^(MPSitesViewController *self, NSNotification *note) {
                 [self.view endEditing:YES];
-                self.passwordSelectionContainer.visible = NO;
+                self.view.visible = NO;
             } );
     PearlAddNotificationObserver( UIApplicationDidBecomeActiveNotification, nil, [NSOperationQueue mainQueue],
-            ^(MPPasswordsViewController *self, NSNotification *note) {
+            ^(MPSitesViewController *self, NSNotification *note) {
                 [UIView animateWithDuration:0.7f animations:^{
-                    self.passwordSelectionContainer.visible = YES;
+                    self.view.visible = YES;
                 }];
             } );
     PearlAddNotificationObserver( UIApplicationWillEnterForegroundNotification, nil, [NSOperationQueue mainQueue],
-            ^(MPPasswordsViewController *self, NSNotification *note) {
+            ^(MPSitesViewController *self, NSNotification *note) {
                 [self viewWillAppear:YES];
             } );
     PearlAddNotificationObserver( MPSignedOutNotification, nil, nil,
-            ^(MPPasswordsViewController *self, NSNotification *note) {
+            ^(MPSitesViewController *self, NSNotification *note) {
                 PearlMainQueue( ^{
-                    self->_fetchedResultsController = nil;
+                    self.fetchedResultsController = nil;
                     self.query = nil;
                 } );
             } );
     PearlAddNotificationObserver( MPCheckConfigNotification, nil, nil,
-            ^(MPPasswordsViewController *self, NSNotification *note) {
+            ^(MPSitesViewController *self, NSNotification *note) {
                 PearlMainQueue( ^{
                     [self updateConfigKey:note.object];
                 } );
             } );
     PearlAddNotificationObserver( NSPersistentStoreCoordinatorStoresWillChangeNotification, nil, nil,
-            ^(MPPasswordsViewController *self, NSNotification *note) {
-                self->_fetchedResultsController = nil;
-                [self reloadPasswords];
+            ^(MPSitesViewController *self, NSNotification *note) {
+                self.fetchedResultsController = nil;
+                [self reloadSites];
             } );
     PearlAddNotificationObserver( NSPersistentStoreCoordinatorStoresDidChangeNotification, nil, nil,
-            ^(MPPasswordsViewController *self, NSNotification *note) {
+            ^(MPSitesViewController *self, NSNotification *note) {
                 PearlMainQueue( ^{
-                    [self reloadPasswords];
+                    [self reloadSites];
                     [self registerObservers];
                 } );
             } );
@@ -373,12 +364,12 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 - (void)updateConfigKey:(NSString *)key {
 
     if (!key || [key isEqualToString:NSStringFromSelector( @selector( dictationSearch ) )])
-        self.passwordsSearchBar.keyboardType = [[MPiOSConfig get].dictationSearch boolValue]? UIKeyboardTypeDefault: UIKeyboardTypeURL;
+        self.searchBar.keyboardType = [[MPiOSConfig get].dictationSearch boolValue]? UIKeyboardTypeDefault: UIKeyboardTypeURL;
     if (!key || [key isEqualToString:NSStringFromSelector( @selector( hidePasswords ) )])
-        [self.passwordCollectionView reloadData];
+        [self.collectionView reloadData];
 }
 
-- (void)reloadPasswords {
+- (void)reloadSites {
 
     [self.fetchedResultsController.managedObjectContext performBlock:^{
         static NSRegularExpression *fuzzyRE;
@@ -395,7 +386,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
                                usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
                                    [fuzzyGroups addObject:[queryString substringWithRange:result.range]];
                                }];
-        _fuzzyGroups = fuzzyGroups;
+        self.fuzzyGroups = fuzzyGroups;
 
         NSError *error = nil;
         self.fetchedResultsController.fetchRequest.predicate =
@@ -404,11 +395,11 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
             MPError( error, @"Couldn't fetch sites." );
 
         PearlMainQueue( ^{
-            [self.passwordCollectionView updateDataSource:_passwordCollectionSections
-                                               toSections:[self createPasswordCollectionSections]
-                                              reloadItems:@[ MPTransientPasswordItem ] completion:^(BOOL finished) {
-                        for (MPPasswordCell *cell in self.passwordCollectionView.visibleCells)
-                            [cell setFuzzyGroups:_fuzzyGroups];
+            [self.collectionView updateDataSource:self.dataSource
+                                       toSections:[self createPasswordCollectionSections]
+                                      reloadItems:@[ MPTransientPasswordItem ] completion:^(BOOL finished) {
+                        for (MPSiteCell *cell in self.collectionView.visibleCells)
+                            [cell setFuzzyGroups:self.fuzzyGroups];
                     }];
         } );
     }];
@@ -418,33 +409,33 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 
 - (NSString *)query {
 
-    return [self.passwordsSearchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    return [self.searchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 }
 
 - (void)setQuery:(NSString *)query {
 
-    self.passwordsSearchBar.text = [query stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    [self reloadPasswords];
+    self.searchBar.text = [query stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    [self reloadSites];
 }
 
 - (NSFetchedResultsController *)fetchedResultsController {
 
-    if (!_fetchedResultsController) {
+    if (!self.fetchedResultsController) {
         [MPiOSAppDelegate managedObjectContextForMainThreadPerformBlockAndWait:^(NSManagedObjectContext *mainContext) {
             NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPSiteEntity class] )];
             fetchRequest.sortDescriptors = @[
                     [[NSSortDescriptor alloc] initWithKey:NSStringFromSelector( @selector( lastUsed ) ) ascending:NO]
             ];
             fetchRequest.fetchBatchSize = 10;
-            _fetchedResultsController =
+            self.fetchedResultsController =
                     [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:mainContext
                                                           sectionNameKeyPath:nil cacheName:nil];
-            _fetchedResultsController.delegate = self;
+            self.fetchedResultsController.delegate = self;
         }];
         [self registerObservers];
     }
 
-    return _fetchedResultsController;
+    return self.fetchedResultsController;
 }
 
 - (void)setActive:(BOOL)active {
@@ -458,7 +449,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 
     [UIView animateWithDuration:animated? 0.4f: 0 animations:^{
         [self.navigationBarToTopConstraint updatePriority:active? 1: UILayoutPriorityDefaultHigh];
-        [self.passwordsToBottomConstraint updatePriority:active? 1: UILayoutPriorityDefaultHigh];
+        [self.sitesToBottomConstraint updatePriority:active? 1: UILayoutPriorityDefaultHigh];
         [self.view layoutIfNeeded];
     }                completion:completion];
 }
@@ -467,8 +458,8 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 
 - (IBAction)dismissPopdown:(id)sender {
 
-    if (_popdownVC)
-        [[[MPPopdownSegue alloc] initWithIdentifier:@"unwind-popdown" source:_popdownVC destination:self] perform];
+    if (self.popdownVC)
+        [[[MPPopdownSegue alloc] initWithIdentifier:@"unwind-popdown" source:self.popdownVC destination:self] perform];
     else
         self.popdownToTopConstraint.priority = UILayoutPriorityDefaultHigh;
 }

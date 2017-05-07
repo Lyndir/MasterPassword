@@ -25,8 +25,7 @@
 
 @end
 
-@implementation MPMacApplication {
-}
+@implementation MPMacApplication
 
 - (void)sendEvent:(NSEvent *)event {
 

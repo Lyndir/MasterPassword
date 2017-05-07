@@ -18,13 +18,13 @@
 
 #import <Cocoa/Cocoa.h>
 #import "MPAppDelegate_Shared.h"
-#import "MPPasswordWindowController.h"
+#import "MPSitesWindowController.h"
 #import "MPInitialWindowController.h"
 
 @interface MPMacAppDelegate : MPAppDelegate_Shared<NSApplicationDelegate>
 
 @property(nonatomic, strong) NSStatusItem *statusView;
-@property(nonatomic, strong) MPPasswordWindowController *passwordWindowController;
+@property(nonatomic, strong) MPSitesWindowController *sitesWindowController;
 @property(nonatomic, strong) MPInitialWindowController *initialWindowController;
 @property(nonatomic, weak) IBOutlet NSMenuItem *lockItem;
 @property(nonatomic, weak) IBOutlet NSMenuItem *showItem;

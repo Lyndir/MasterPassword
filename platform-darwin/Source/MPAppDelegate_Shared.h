@@ -19,7 +19,9 @@
 #import "MPEntities.h"
 
 #if TARGET_OS_IPHONE
+
 @interface MPAppDelegate_Shared : PearlAppDelegate
+
 #else
 
 @interface MPAppDelegate_Shared : NSObject<PearlConfigDelegate>

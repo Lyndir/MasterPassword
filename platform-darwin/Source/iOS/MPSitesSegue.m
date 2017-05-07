@@ -16,12 +16,11 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-#import "MPPasswordsSegue.h"
-#import "MPPasswordsViewController.h"
+#import "MPSitesSegue.h"
+#import "MPSitesViewController.h"
 #import "MPCombinedViewController.h"
 
-@implementation MPPasswordsSegue {
-}
+@implementation MPSitesSegue
 
 - (id)initWithIdentifier:(NSString *)identifier source:(UIViewController *)source destination:(UIViewController *)destination {
 
@@ -35,34 +34,34 @@
 
 - (void)perform {
 
-    if ([self.destinationViewController isKindOfClass:[MPPasswordsViewController class]]) {
-        __weak MPPasswordsViewController *passwordsVC = self.destinationViewController;
+    if ([self.destinationViewController isKindOfClass:[MPSitesViewController class]]) {
+        __weak MPSitesViewController *sitesVC = self.destinationViewController;
         MPCombinedViewController *combinedVC = self.sourceViewController;
-        [combinedVC addChildViewController:passwordsVC];
-        passwordsVC.active = NO;
+        [combinedVC addChildViewController:sitesVC];
+        sitesVC.active = NO;
 
-        UIView *passwordsView = passwordsVC.view;
-        passwordsView.frame = combinedVC.view.bounds;
-        passwordsView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        [combinedVC.view insertSubview:passwordsView belowSubview:combinedVC.usersVC.view];
+        UIView *sitesView = sitesVC.view;
+        sitesView.frame = combinedVC.view.bounds;
+        sitesView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        [combinedVC.view insertSubview:sitesView belowSubview:combinedVC.usersVC.view];
 
-        [passwordsVC setActive:YES animated:self.animated completion:^(BOOL finished) {
+        [sitesVC setActive:YES animated:self.animated completion:^(BOOL finished) {
             if (!finished)
                 return;
 
-            [passwordsVC didMoveToParentViewController:combinedVC];
+            [sitesVC didMoveToParentViewController:combinedVC];
         }];
     }
-    else if ([self.sourceViewController isKindOfClass:[MPPasswordsViewController class]]) {
-        __weak MPPasswordsViewController *passwordsVC = self.sourceViewController;
+    else if ([self.sourceViewController isKindOfClass:[MPSitesViewController class]]) {
+        __weak MPSitesViewController *sitesVC = self.sourceViewController;
 
-        [passwordsVC willMoveToParentViewController:nil];
-        [passwordsVC setActive:NO animated:self.animated completion:^(BOOL finished) {
+        [sitesVC willMoveToParentViewController:nil];
+        [sitesVC setActive:NO animated:self.animated completion:^(BOOL finished) {
             if (!finished)
                 return;
 
-            [passwordsVC.view removeFromSuperview];
-            [passwordsVC removeFromParentViewController];
+            [sitesVC.view removeFromSuperview];
+            [sitesVC removeFromParentViewController];
         }];
     }
 }

@@ -18,17 +18,23 @@
 
 #import "MPCoachmarkViewController.h"
 
-@implementation MPCoachmarkViewController {
-    NSArray *_views;
-    NSUInteger _nextView;
-    __weak NSTimer *_viewTimer;
-}
+@interface MPCoachmarkViewController()
+
+@property(nonatomic, strong) NSArray *views;
+@property(nonatomic) NSUInteger nextView;
+@property(nonatomic, weak) NSTimer *viewTimer;
+
+@end
+
+@implementation MPCoachmarkViewController
 
 - (void)viewDidLoad {
 
     [super viewDidLoad];
 
-    _views = @[ self.view0, self.view1, self.view2, self.view3, self.view4, self.view5, self.view6, self.view7, self.view8, self.view9 ];
+    self.views = @[
+            self.view0, self.view1, self.view2, self.view3, self.view4, self.view5, self.view6, self.view7, self.view8, self.view9
+    ];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -37,8 +43,8 @@
 
     self.viewProgress.visible = YES;
     self.viewProgress.progress = 0;
-    [_views makeObjectsPerformSelector:@selector( setVisible: ) withObject:@NO];
-    _nextView = 0;
+    [self.views makeObjectsPerformSelector:@selector( setVisible: ) withObject:@NO];
+    self.nextView = 0;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -46,23 +52,23 @@
     [super viewDidAppear:animated];
 
     [UIView animateWithDuration:0.3f animations:^{
-        [_views[_nextView++] setVisible:YES];
+        [self.views[self.nextView++] setVisible:YES];
     }];
 
-    _viewTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 block:^(NSTimer *timer) {
+    self.viewTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 block:^(NSTimer *timer) {
         self.viewProgress.progress += 1.0f / 50;
 
         if (self.viewProgress.progress == 1)
             [UIView animateWithDuration:0.3f animations:^{
                 self.viewProgress.progress = 0;
-                [_views[_nextView++] setVisible:YES];
+                [self.views[self.nextView++] setVisible:YES];
 
-                if (_nextView >= [_views count]) {
-                    [_viewTimer invalidate];
+                if (self.nextView >= [self.views count]) {
+                    [self.viewTimer invalidate];
                     self.viewProgress.visible = NO;
                 }
             }];
-    }                                            repeats:YES];
+    }                                                repeats:YES];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
