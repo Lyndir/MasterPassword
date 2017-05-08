@@ -109,10 +109,27 @@ PearlAssociatedObjectProperty( NSMutableArray*, ProductObservers, productObserve
                                 @"you have a payment method added to the account and purchases are"
                                 @"not disabled under General -> Restrictions."
                              viewStyle:UIAlertViewStyleDefault initAlert:nil
-                     tappedButtonBlock:nil cancelTitle:@"Thanks" otherTitles:nil];
+                     tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                         if (buttonIndex == alert.cancelButtonIndex)
+                             // Cancel
+                             return;
+                         if (buttonIndex == alert.firstOtherButtonIndex) {
+                             // Settings
+                             [PearlLinks openSettingsStore];
+                             return;
+                         }
+
+                         // Try Anyway
+                         [self performPurchaseProductWithIdentifier:productIdentifier quantity:quantity];
+                     } cancelTitle:@"Cancel" otherTitles:@"Settings", @"Try Anyway", nil];
         return;
     }
 #endif
+
+    [self performPurchaseProductWithIdentifier:productIdentifier quantity:quantity];
+}
+
+- (void)performPurchaseProductWithIdentifier:(NSString *)productIdentifier quantity:(NSInteger)quantity {
 
     for (SKProduct *product in [self.products allValues])
         if ([product.productIdentifier isEqualToString:productIdentifier]) {
