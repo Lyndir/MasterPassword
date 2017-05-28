@@ -206,7 +206,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     if (controller == self.fetchedResultsController)
         PearlMainQueue( ^{
             [self.collectionView updateDataSource:self.dataSource
-                                       toSections:[self createPasswordCollectionSections]
+                                       toSections:[self createDataSource]
                                       reloadItems:nil completion:nil];
         } );
 }
@@ -283,7 +283,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     }];
 }
 
-- (NSMutableArray<NSMutableArray *> *)createPasswordCollectionSections {
+- (NSMutableArray<NSMutableArray *> *)createDataSource {
 
     NSString *query = self.query;
     BOOL needTransientItem = [query length] > 0;
@@ -396,7 +396,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 
         PearlMainQueue( ^{
             [self.collectionView updateDataSource:self.dataSource
-                                       toSections:[self createPasswordCollectionSections]
+                                       toSections:[self createDataSource]
                                       reloadItems:@[ MPTransientPasswordItem ] completion:^(BOOL finished) {
                         for (MPSiteCell *cell in self.collectionView.visibleCells)
                             [cell setFuzzyGroups:self.fuzzyGroups];
@@ -420,22 +420,21 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 
 - (NSFetchedResultsController *)fetchedResultsController {
 
-    if (!self.fetchedResultsController) {
+    if (!_fetchedResultsController) {
         [MPiOSAppDelegate managedObjectContextForMainThreadPerformBlockAndWait:^(NSManagedObjectContext *mainContext) {
             NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPSiteEntity class] )];
             fetchRequest.sortDescriptors = @[
                     [[NSSortDescriptor alloc] initWithKey:NSStringFromSelector( @selector( lastUsed ) ) ascending:NO]
             ];
             fetchRequest.fetchBatchSize = 10;
-            self.fetchedResultsController =
-                    [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:mainContext
-                                                          sectionNameKeyPath:nil cacheName:nil];
-            self.fetchedResultsController.delegate = self;
+            (self.fetchedResultsController = [[NSFetchedResultsController alloc]
+                    initWithFetchRequest:fetchRequest managedObjectContext:mainContext
+                      sectionNameKeyPath:nil cacheName:nil]).delegate = self;
         }];
         [self registerObservers];
     }
 
-    return self.fetchedResultsController;
+    return _fetchedResultsController;
 }
 
 - (void)setActive:(BOOL)active {
