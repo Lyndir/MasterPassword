@@ -53,6 +53,7 @@ static void usage() {
             "                                 | the most significant word(s) of the question.\n\n" );
     fprintf( stderr, "    -v           Increase output verbosity (can be repeated).\n\n" );
     fprintf( stderr, "    -q           Decrease output verbosity (can be repeated).\n\n" );
+    fprintf( stderr, "    -p           Doesn't print identicon in order to be used in a pipeline.\n\n" );
     fprintf( stderr, "    ENVIRONMENT\n\n"
             "        %-14s | The full name of the user (see -u).\n"
             "        %-14s | The default password template (see -t).\n"
@@ -105,6 +106,7 @@ int main(int argc, char *const argv[]) {
     const char *siteVariantString = NULL;
     const char *siteContextString = NULL;
     uint32_t siteCounter = 1;
+    uint32_t pipe = 0;
     const char *siteCounterString = getenv( MP_env_sitecounter );
     MPAlgorithmVersion algorithmVersion = MPAlgorithmVersionCurrent;
     const char *algorithmVersionString = getenv( MP_env_algorithm );
@@ -113,7 +115,7 @@ int main(int argc, char *const argv[]) {
             ftl( "Invalid %s: %s\n", MP_env_algorithm, algorithmVersionString );
 
     // Read the options.
-    for (int opt; (opt = getopt( argc, argv, "u:P:t:c:V:a:C:vqh" )) != -1;)
+    for (int opt; (opt = getopt( argc, argv, "u:P:t:c:V:a:C:vqph" )) != -1;)
         switch (opt) {
             case 'u':
                 fullName = strdup( optarg );
@@ -144,6 +146,9 @@ int main(int argc, char *const argv[]) {
                 break;
             case 'q':
                 --mpw_verbosity;
+                break;
+            case 'p':
+                pipe = 1;
                 break;
             case 'h':
                 usage();
@@ -209,15 +214,17 @@ int main(int argc, char *const argv[]) {
         mpw_free( line, linecap );
     }
     while (!masterPassword || !strlen(masterPassword))
-        masterPassword = getpass( "Your master password: " );
+        masterPassword = getpass( "Type your master password: " );
 
     // Summarize operation.
-    const char *identicon = mpw_identicon( fullName, masterPassword );
-    if (!identicon) {
-        err( "Couldn't determine identicon.\n" );
-    } else {
-        fprintf( stderr, "%s's password for %s:\n[ %s ]: ", fullName, siteName, identicon );
-        mpw_free_string( identicon );
+    if(!pipe) {
+        const char *identicon = mpw_identicon( fullName, masterPassword );
+        if (!identicon) {
+            err( "Couldn't determine identicon.\n" );
+        } else {
+            fprintf( stderr, "%s's password for %s:\n[ %s ]: ", fullName, siteName, identicon );
+            mpw_free_string( identicon );
+        }
     }
 
     // Output the password.
