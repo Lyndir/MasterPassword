@@ -38,6 +38,7 @@
 @property(nonatomic, strong) IBOutlet UIScrollView *modeScrollView;
 @property(nonatomic, strong) IBOutlet UIButton *contentButton;
 @property(nonatomic, strong) IBOutlet UIButton *loginNameButton;
+@property(nonatomic, strong) IBOutlet UILabel *loginNameHint;
 @property(nonatomic, strong) IBOutlet UIView *indicatorView;
 
 @property(nonatomic) MPSiteCellMode mode;
@@ -198,7 +199,7 @@
                            atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:YES];
 
     if (textField == self.loginNameField)
-        self.loginNameButton.hidden = [self.loginNameField.attributedText length] || self.loginNameField.enabled;
+        self.loginNameHint.hidden = [self.loginNameField.attributedText length] || self.loginNameField.enabled;
 }
 
 - (IBAction)textFieldDidChange:(UITextField *)textField {
@@ -546,9 +547,9 @@
             [self.passwordField resignFirstResponder];
         }
         if ([[MPiOSAppDelegate get] isFeatureUnlocked:MPProductGenerateLogins])
-            [self.loginNameButton setTitle:@"Tap here to ⚙ generate username or the pencil to type one" forState:UIControlStateNormal];
+            self.loginNameHint.text = @"Tap here to ⚙ generate username or the pencil to type one";
         else
-            [self.loginNameButton setTitle:@"Tap the pencil to type a username" forState:UIControlStateNormal];
+            self.loginNameHint.text = @"Tap the pencil to type a username";
 
         // Site Name
         [self updateSiteName:mainSite];
@@ -607,7 +608,7 @@
                 self.loginNameGenerated.hidden = !loginGenerated;
                 self.loginNameField.attributedText =
                         strarm( stra( loginName?: @"", self.siteNameLabel.textAttributes ), NSParagraphStyleAttributeName, nil );
-                self.loginNameButton.hidden = [loginName length] || self.loginNameField.enabled;
+                self.loginNameHint.hidden = [loginName length] || self.loginNameField.enabled;
 
                 if (![password length]) {
                     self.indicatorView.hidden = NO;

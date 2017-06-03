@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES" initialViewController="Q1S-vU-GGO">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES" initialViewController="Q1S-vU-GGO">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -103,7 +103,7 @@
                                                             </constraints>
                                                         </imageView>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Sa-Vg-EEI" userLabel="Name Backdrop">
-                                                            <rect key="frame" x="44" y="263" width="128.5" height="16"/>
+                                                            <rect key="frame" x="43.5" y="263" width="128.5" height="16"/>
                                                             <subviews>
                                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalCompressionResistancePriority="1000" text="Maarten Billemont" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cLT-s0-4SQ" userLabel="Name Field">
                                                                     <rect key="frame" x="5" y="0.0" width="118.5" height="16"/>
@@ -525,7 +525,7 @@
             <objects>
                 <navigationController definesPresentationContext="YES" navigationBarHidden="YES" id="Q1S-vU-GGO" customClass="MPNavigationController" sceneMemberID="viewController">
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="4yl-zs-iUd">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="4yl-zs-iUd">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -1124,12 +1124,12 @@
                         <outlet property="feedbackCell" destination="9QG-lM-ymM" id="18X-Ph-0ac"/>
                         <outlet property="generated1TypeControl" destination="E0r-Ey-eVH" id="w47-Md-FAy"/>
                         <outlet property="generated2TypeControl" destination="H8F-E0-dqF" id="t7o-RI-Sgq"/>
-                        <outlet property="typeSamplePassword" destination="lhS-L1-2OB" id="Q3B-ey-VM6"/>
                         <outlet property="savePasswordSwitch" destination="Jr5-mX-nw0" id="eqq-Xo-9Iq"/>
                         <outlet property="showHelpCell" destination="eth-Dc-JYn" id="0Tq-I3-SwK"/>
                         <outlet property="signOutCell" destination="R30-AU-bR6" id="Sam-x5-p3H"/>
                         <outlet property="storedTypeControl" destination="Rei-aO-UBD" id="WGp-D2-DmU"/>
                         <outlet property="touchIDSwitch" destination="wOM-X3-jCG" id="Nua-by-TAO"/>
+                        <outlet property="typeSamplePassword" destination="lhS-L1-2OB" id="Q3B-ey-VM6"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fk3-aq-W8p" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1191,12 +1191,11 @@
                                                                                         <constraint firstAttribute="height" constant="1" id="jyk-dC-QLb"/>
                                                                                     </constraints>
                                                                                 </view>
-                                                                                <button opaque="NO" alpha="0.40000000000000002" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Iwe-rQ-ma0" userLabel="Copy Login">
+                                                                                <button opaque="NO" alpha="0.40000000000000002" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Iwe-rQ-ma0" userLabel="Copy">
                                                                                     <rect key="frame" x="0.0" y="0.0" width="355" height="33"/>
                                                                                     <color key="backgroundColor" red="0.18431372549019609" green="0.15686274509803921" blue="0.15686274509803921" alpha="0.01" colorSpace="custom" customColorSpace="sRGB"/>
                                                                                     <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="11"/>
-                                                                                    <inset key="titleEdgeInsets" minX="0.0" minY="-4" maxX="0.0" maxY="0.0"/>
-                                                                                    <state key="normal" title="Tap to ⚙ generate username or use pencil to save one">
+                                                                                    <state key="normal">
                                                                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                                         <color key="titleShadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                                                     </state>
@@ -1204,10 +1203,16 @@
                                                                                         <action selector="doLoginName:" destination="W2g-yv-V3V" eventType="touchUpInside" id="Ex0-re-QrI"/>
                                                                                     </connections>
                                                                                 </button>
-                                                                                <label opaque="NO" userInteractionEnabled="NO" alpha="0.20000000000000001" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="⚙" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z3Z-Zc-1EC">
+                                                                                <label opaque="NO" userInteractionEnabled="NO" alpha="0.20000000000000001" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="⚙" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z3Z-Zc-1EC" userLabel="Generated">
                                                                                     <rect key="frame" x="332" y="4.5" width="15" height="13.5"/>
                                                                                     <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="11"/>
                                                                                     <nil key="textColor"/>
+                                                                                    <nil key="highlightedColor"/>
+                                                                                </label>
+                                                                                <label opaque="NO" userInteractionEnabled="NO" alpha="0.40000000000000002" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap to ⚙ generate username or use pencil to save one" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YCd-me-k1t" userLabel="Hint">
+                                                                                    <rect key="frame" x="41" y="4" width="273" height="13.5"/>
+                                                                                    <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="11"/>
+                                                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                                     <nil key="highlightedColor"/>
                                                                                 </label>
                                                                                 <textField opaque="NO" clipsSubviews="YES" alpha="0.69999999999999996" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="3I9-vf-IZK" userLabel="Login">
@@ -1233,12 +1238,14 @@
                                                                                 <constraint firstItem="q3g-CJ-LbN" firstAttribute="leading" secondItem="w2g-zN-1wZ" secondAttribute="leading" id="HJR-cB-QA1"/>
                                                                                 <constraint firstAttribute="bottom" secondItem="q3g-CJ-LbN" secondAttribute="bottom" id="Iv4-lL-Lr9"/>
                                                                                 <constraint firstAttribute="trailing" secondItem="z3Z-Zc-1EC" secondAttribute="trailing" constant="8" id="QMF-zJ-2ub"/>
+                                                                                <constraint firstItem="YCd-me-k1t" firstAttribute="centerX" secondItem="w2g-zN-1wZ" secondAttribute="centerX" id="c7J-KA-acH"/>
                                                                                 <constraint firstItem="3I9-vf-IZK" firstAttribute="leading" secondItem="w2g-zN-1wZ" secondAttribute="leading" constant="8" id="cMp-Hs-Hpl"/>
                                                                                 <constraint firstItem="3I9-vf-IZK" firstAttribute="top" secondItem="w2g-zN-1wZ" secondAttribute="top" id="eg4-pX-Itm"/>
                                                                                 <constraint firstAttribute="trailing" secondItem="3I9-vf-IZK" secondAttribute="trailing" constant="8" id="jOw-lP-CuB"/>
                                                                                 <constraint firstAttribute="bottom" secondItem="Iwe-rQ-ma0" secondAttribute="bottom" constant="-12" id="oyp-AJ-Nu6"/>
                                                                                 <constraint firstItem="z3Z-Zc-1EC" firstAttribute="baseline" secondItem="3I9-vf-IZK" secondAttribute="baseline" id="pqO-rW-DWP"/>
                                                                                 <constraint firstItem="Iwe-rQ-ma0" firstAttribute="top" secondItem="w2g-zN-1wZ" secondAttribute="top" id="q2j-Aa-lEd"/>
+                                                                                <constraint firstItem="YCd-me-k1t" firstAttribute="baseline" secondItem="3I9-vf-IZK" secondAttribute="baseline" id="viC-Tq-3Ne"/>
                                                                             </constraints>
                                                                         </view>
                                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2tX-WK-ASq" userLabel="Password Container">
@@ -1564,6 +1571,7 @@
                                                     <outlet property="loginNameContainer" destination="w2g-zN-1wZ" id="BND-oz-bt0"/>
                                                     <outlet property="loginNameField" destination="3I9-vf-IZK" id="jK4-LI-4ST"/>
                                                     <outlet property="loginNameGenerated" destination="z3Z-Zc-1EC" id="Fik-Nj-C0P"/>
+                                                    <outlet property="loginNameHint" destination="YCd-me-k1t" id="4K5-SC-PoO"/>
                                                     <outlet property="modeButton" destination="b5f-wN-2xb" id="m2X-BZ-Lbv"/>
                                                     <outlet property="modeScrollView" destination="bff-RU-OcY" id="Mdp-fj-00L"/>
                                                     <outlet property="passwordField" destination="blw-Ou-8I8" id="bov-At-Wpd"/>
@@ -1621,7 +1629,7 @@
                                 </connections>
                             </searchBar>
                             <view hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LEX-BK-PdS" userLabel="Bad Name Tip">
-                                <rect key="frame" x="38" y="86" width="300.5" height="75.5"/>
+                                <rect key="frame" x="37.5" y="86" width="300.5" height="75.5"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black_top.png" translatesAutoresizingMaskIntoConstraints="NO" id="Rt5-v4-I0R">
                                         <rect key="frame" x="0.0" y="0.0" width="300.5" height="75.5"/>
@@ -1730,11 +1738,11 @@ eg. apple.com, rmitchell@twitter.com</string>
                         <outlet property="collectionView" destination="aXw-tn-8Sj" id="fNR-qS-qNP"/>
                         <outlet property="navigationBar" destination="uuT-jm-2La" id="lRz-Ok-jvw"/>
                         <outlet property="navigationBarToTopConstraint" destination="48O-MN-C75" id="bbn-GO-2Ke"/>
-                        <outlet property="searchBar" destination="aGs-1S-aC3" id="iFW-aL-CVu"/>
-                        <outlet property="sitesToBottomConstraint" destination="dNt-uf-8BC" id="Ta6-eL-z7w"/>
                         <outlet property="popdownContainer" destination="bnY-br-a2v" id="7QN-qY-iCl"/>
                         <outlet property="popdownToTopConstraint" destination="BdD-Kc-eHl" id="59Y-ap-Yn4"/>
                         <outlet property="popdownView" destination="XNM-XQ-rMe" id="FaW-4m-Fff"/>
+                        <outlet property="searchBar" destination="aGs-1S-aC3" id="iFW-aL-CVu"/>
+                        <outlet property="sitesToBottomConstraint" destination="dNt-uf-8BC" id="Ta6-eL-z7w"/>
                         <segue destination="z9O-w0-6oR" kind="modal" identifier="guide" id="Ql4-wf-T8u"/>
                         <segue destination="Foa-Er-RBr" kind="custom" identifier="message" customClass="MPOverlaySegue" id="Xne-Sm-HQt"/>
                     </connections>
@@ -1763,7 +1771,7 @@ eg. apple.com, rmitchell@twitter.com</string>
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1lc-e7-Qme" userLabel="Emergency Generator">
-                                        <rect key="frame" x="20" y="135" width="335" height="397.5"/>
+                                        <rect key="frame" x="20" y="135.5" width="335" height="397.5"/>
                                         <subviews>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Emergency Generator" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="4Lh-s0-Dbt">
                                                 <rect key="frame" x="20" y="20" width="295" height="21"/>
@@ -2018,7 +2026,7 @@ eg. apple.com, rmitchell@twitter.com</string>
             <objects>
                 <navigationController definesPresentationContext="YES" id="LBn-EA-NAH" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Settings" image="icon_gears.png" id="6n3-Ay-Knn"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="h6j-1o-LHf">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="h6j-1o-LHf">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -2269,7 +2277,7 @@ Suspendisse potenti. Etiam ut nisi id augue tempor ultrices et sit amet sapien. 
             <objects>
                 <navigationController definesPresentationContext="YES" id="Ec4-G7-5Td" customClass="PearlNavigationController" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="MA4-cY-VCZ">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" barStyle="black" id="MA4-cY-VCZ">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.47450980390000003" green="0.86666666670000003" blue="0.98431372549999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
