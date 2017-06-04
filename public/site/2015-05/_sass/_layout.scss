@@ -67,18 +67,54 @@ header, section {
     width:                  100%;
     min-height:             90%;
 }
-
 header {
     display:                flex;
+    position:               relative;
     overflow:               hidden;
-
-    background:             url('../img/shot-laptop-just-iphone.jpg') center top;
-    background-size:        cover;
 
     flex-direction:         column;
     justify-content:        stretch;
     align-items:            stretch;
 
+    &::before, &::after {
+        position:           absolute;
+    background-size:        cover !important;
+    opacity: 0;
+    transition: 0.3s opacity;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+        content: " ";
+    }
+    &::after {
+        z-index: -2;
+    background:             url('../img/hero_ios.jpg') center top;
+    opacity: 1;
+    }
+    &.hero_ios::before {
+        background:   url('../img/hero_ios.jpg') center top;
+    opacity: 1;
+    }
+    &.hero_android::before {
+        background:   url('../img/hero_android.jpg') center center;
+    opacity: 1;
+    }
+    &.hero_mac::before {
+        background:   url('../img/hero_mac.jpg') center center;
+    opacity: 1;
+    }
+    &.hero_desktop::before {
+        background:   url('../img/hero_desktop.jpg') center bottom;
+    opacity: 1;
+    }
+    &.hero_cli::before {
+        background:   url('../img/hero_cli.jpg') center center;
+    opacity: 1;
+    }
+    &.hero_web::before {
+        background:   url('../img/hero_web.jpg') center center;
+    opacity: 1;
+    }
     h1 {
         height:             1em;
 
