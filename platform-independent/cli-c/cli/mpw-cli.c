@@ -212,12 +212,14 @@ int main(int argc, char *const argv[]) {
         masterPassword = getpass( "Your master password: " );
 
     // Summarize operation.
-    const char *identicon = mpw_identicon( fullName, masterPassword );
-    if (!identicon) {
-        err( "Couldn't determine identicon.\n" );
-    } else {
-        fprintf( stderr, "%s's password for %s:\n[ %s ]: ", fullName, siteName, identicon );
-        mpw_free_string( identicon );
+    if (mpw_verbosity >= 0) {
+        const char *identicon = mpw_identicon( fullName, masterPassword );
+        if (!identicon) {
+            err( "Couldn't determine identicon.\n" );
+        } else {
+            fprintf( stderr, "%s's password for %s:\n[ %s ]: ", fullName, siteName, identicon );
+            mpw_free_string( identicon );
+        }
     }
 
     // Output the password.
