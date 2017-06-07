@@ -21,11 +21,10 @@
 #import "MPAppDelegate_Store.h"
 #import "MPStoreViewController.h"
 
-#define MP_HANG_TIME_MAIN 3 // s
-
 @interface MPiOSAppDelegate()<UIDocumentInteractionControllerDelegate>
 
 @property(nonatomic, strong) UIDocumentInteractionController *interactionController;
+@property(nonatomic, strong) PearlHangDetector *hangDetector;
 
 @end
 
@@ -37,7 +36,7 @@
     dispatch_once( &once, ^{
         [PearlLogger get].historyLevel = [[MPiOSConfig get].traceMode boolValue]? PearlLogLevelTrace: PearlLogLevelInfo;
 #ifdef DEBUG
-        [PearlLogger get].printLevel = PearlLogLevelDebug; //Trace;
+        [PearlLogger get].printLevel = PearlLogLevelTrace;
 #else
         [PearlLogger get].printLevel = [[MPiOSConfig get].traceMode boolValue]? PearlLogLevelDebug: PearlLogLevelInfo;
 #endif
@@ -76,7 +75,11 @@
         }
 #endif
 
-        [self installHangDetector];
+        [self.hangDetector = [[PearlHangDetector alloc] initWithHangAction:^(NSTimeInterval hangTime) {
+            MPError( [NSError errorWithDomain:MPErrorDomain code:MPErrorHangCode userInfo:@{
+                    @"time": @(hangTime)
+            }], @"Timeout waiting for main thread after %fs.", hangTime );
+        }] start];
     }
     @catch (id exception) {
         err( @"During Analytics Setup: %@", exception );
@@ -141,31 +144,6 @@
     }
 
     return YES;
-}
-
-- (void)installHangDetector {
-
-    __block NSDate *latestPing = [NSDate date];
-    __block __weak VoidBlock wPingOp, wPongOp;
-
-    VoidBlock pingOp = ^{
-        latestPing = [NSDate date];
-        dispatch_after( dispatch_time( DISPATCH_TIME_NOW, 100 * NSEC_PER_MSEC ), dispatch_get_main_queue(), wPingOp );
-    }, pongOp = ^{
-        NSTimeInterval hangTime = -[latestPing timeIntervalSinceNow];
-        if (hangTime > MP_HANG_TIME_MAIN) {
-            MPError( [NSError errorWithDomain:MPErrorDomain code:MPErrorHangCode userInfo:@{
-                    @"time": @(hangTime)
-            }], @"Timeout waiting for main thread after %fs.", hangTime );
-        }
-        else
-            dbg( @"hangTime=%f", hangTime );
-
-        dispatch_after( dispatch_time( DISPATCH_TIME_NOW, NSEC_PER_SEC ), dispatch_get_global_queue( QOS_CLASS_BACKGROUND, 0 ), wPongOp );
-    };
-
-    (wPingOp = pingOp)();
-    (wPongOp = pongOp)();
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
@@ -257,6 +235,40 @@
     [activityOverlay cancelOverlayAnimated:YES];
 }
 
+- (void)applicationWillEnterForeground:(UIApplication *)application {
+
+    inf( @"Will foreground" );
+
+    [super applicationWillEnterForeground:application];
+
+    [self.hangDetector start];
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+
+    inf( @"Re-activated" );
+    [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:nil];
+
+    PearlNotMainQueue( ^{
+        NSString *importHeader = @"# Master Password site export";
+        NSString *importedSitesString = [UIPasteboard generalPasteboard].string;
+        if ([importedSitesString length] > [importHeader length] &&
+            [[importedSitesString substringToIndex:[importHeader length]] isEqualToString:importHeader])
+            [PearlAlert showAlertWithTitle:@"Import Sites?" message:
+                            @"We've detected Master Password import sites on your pasteboard, would you like to import them?"
+                                 viewStyle:UIAlertViewStyleDefault initAlert:nil
+                         tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                             if (buttonIndex == [alert cancelButtonIndex])
+                                 return;
+
+                             [self importSites:importedSitesString];
+                             [UIPasteboard generalPasteboard].string = @"";
+                         } cancelTitle:@"No" otherTitles:@"Import Sites", nil];
+    } );
+
+    [super applicationDidBecomeActive:application];
+}
+
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
 
     inf( @"Received memory warning." );
@@ -266,9 +278,11 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
 
-    inf( @"Will background" );
+    inf( @"Did background" );
     if (![[MPiOSConfig get].rememberLogin boolValue])
         [self signOutAnimated:NO];
+
+    [self.hangDetector stop];
 
 //    self.task = [application beginBackgroundTaskWithExpirationHandler:^{
 //        [application endBackgroundTask:self.task];
@@ -309,31 +323,6 @@
 //    } );
 
     [super applicationDidEnterBackground:application];
-}
-
-- (void)applicationDidBecomeActive:(UIApplication *)application {
-
-    inf( @"Re-activated" );
-    [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:nil];
-
-    PearlNotMainQueue( ^{
-        NSString *importHeader = @"# Master Password site export";
-        NSString *importedSitesString = [UIPasteboard generalPasteboard].string;
-        if ([importedSitesString length] > [importHeader length] &&
-            [[importedSitesString substringToIndex:[importHeader length]] isEqualToString:importHeader])
-            [PearlAlert showAlertWithTitle:@"Import Sites?" message:
-                            @"We've detected Master Password import sites on your pasteboard, would you like to import them?"
-                                 viewStyle:UIAlertViewStyleDefault initAlert:nil
-                         tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                             if (buttonIndex == [alert cancelButtonIndex])
-                                 return;
-
-                             [self importSites:importedSitesString];
-                             [UIPasteboard generalPasteboard].string = @"";
-                         } cancelTitle:@"No" otherTitles:@"Import Sites", nil];
-    } );
-
-    [super applicationDidBecomeActive:application];
 }
 
 #pragma mark - Behavior
