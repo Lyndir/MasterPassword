@@ -65,7 +65,7 @@ public class ModelSite extends Site {
 
     @Override
     public void setSiteCounter(final UnsignedInteger siteCounter) {
-        if (siteCounter.equals( getSiteCounter() )) {
+        if (!siteCounter.equals( getSiteCounter() )) {
             model.setSiteCounter( siteCounter );
             MPUserFileManager.get().save();
         }
