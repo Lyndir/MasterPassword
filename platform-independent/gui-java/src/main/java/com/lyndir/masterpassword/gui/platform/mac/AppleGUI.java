@@ -15,24 +15,29 @@ public class AppleGUI extends GUI {
 
     public AppleGUI() {
 
-        Application application = Application.getApplication();
-        application.addAppEventListener( new AppForegroundListener() {
+        try {
+            Application application = Application.getApplication();
+            application.addAppEventListener(new AppForegroundListener() {
 
-            @Override
-            public void appMovedToBackground(final AppEvent.AppForegroundEvent arg0) {
-            }
+                @Override
+                public void appMovedToBackground(final AppEvent.AppForegroundEvent arg0) {
+                }
 
-            @Override
-            public void appRaisedToForeground(final AppEvent.AppForegroundEvent arg0) {
-                open();
-            }
-        } );
-        application.addAppEventListener( new AppReOpenedListener() {
-            @Override
-            public void appReOpened(final AppEvent.AppReOpenedEvent arg0) {
-                open();
-            }
-        } );
+                @Override
+                public void appRaisedToForeground(final AppEvent.AppForegroundEvent arg0) {
+                    open();
+                }
+            });
+            application.addAppEventListener(new AppReOpenedListener() {
+                @Override
+                public void appReOpened(final AppEvent.AppReOpenedEvent arg0) {
+                    open();
+                }
+            });
+        } catch (Throwable t) {
+            unlockFrame.dispose();
+            throw t;
+        }
     }
 
     @Override

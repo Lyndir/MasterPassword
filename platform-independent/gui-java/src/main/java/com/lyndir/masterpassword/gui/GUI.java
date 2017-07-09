@@ -43,7 +43,7 @@ public class GUI implements UnlockFrame.SignInCallback {
     @SuppressWarnings("UnusedDeclaration")
     private static final Logger logger = Logger.get( GUI.class );
 
-    private final UnlockFrame unlockFrame = new UnlockFrame( this );
+    protected final UnlockFrame unlockFrame = new UnlockFrame( this );
     private PasswordFrame passwordFrame;
 
     public static void main(final String... args) {
