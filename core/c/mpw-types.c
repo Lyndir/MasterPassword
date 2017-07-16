@@ -143,8 +143,7 @@ const MPSiteVariant mpw_variantWithName(const char *variantName) {
     if (0 == strcmp( stdVariantName, "a" ) || 0 == strcmp( stdVariantName, "answer" ))
         return MPSiteVariantAnswer;
 
-    fprintf( stderr, "Not a variant name: %s", stdVariantName );
-    abort();
+    ftl( "Not a variant name: %s", stdVariantName );
 }
 
 const char *mpw_scopeForVariant(MPSiteVariant variant) {
@@ -160,8 +159,7 @@ const char *mpw_scopeForVariant(MPSiteVariant variant) {
             return "com.lyndir.masterpassword.answer";
         }
         default: {
-            fprintf( stderr, "Unknown variant: %d", variant );
-            abort();
+            ftl( "Unknown variant: %d", variant );
         }
     }
 }
@@ -190,8 +188,7 @@ const char *mpw_charactersInClass(char characterClass) {
         case ' ':
             return " ";
         default: {
-            fprintf( stderr, "Unknown character class: %c", characterClass );
-            abort();
+            ftl( "Unknown character class: %c", characterClass );
         }
     }
 }

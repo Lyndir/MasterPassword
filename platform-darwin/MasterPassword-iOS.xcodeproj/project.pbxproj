@@ -248,6 +248,7 @@
 		DAA1765219D8B82B0044227B /* copy_pw.png in Resources */ = {isa = PBXBuildFile; fileRef = DAA1763C19D8B82B0044227B /* copy_pw.png */; };
 		DAA1765319D8B82B0044227B /* choose_type@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAA1763D19D8B82B0044227B /* choose_type@2x.png */; };
 		DAA1765419D8B82B0044227B /* choose_type.png in Resources */ = {isa = PBXBuildFile; fileRef = DAA1763E19D8B82B0044227B /* choose_type.png */; };
+		DAA449D21EEC4B5800E7BDD5 /* mpw-marshall.c in Sources */ = {isa = PBXBuildFile; fileRef = DAA449D01EEC4B5800E7BDD5 /* mpw-marshall.c */; };
 		DAADBFE01A68763B00F7A756 /* mpw-algorithm.c in Sources */ = {isa = PBXBuildFile; fileRef = 93D3969393A3A46BD27D7078 /* mpw-algorithm.c */; };
 		DABB981615100B4000B05417 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DABB981515100B4000B05417 /* SystemConfiguration.framework */; };
 		DABD39371711E29700CF925C /* avatar-0.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD366C1711E29400CF925C /* avatar-0.png */; };
@@ -855,6 +856,8 @@
 		DAA1763C19D8B82B0044227B /* copy_pw.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = copy_pw.png; sourceTree = "<group>"; };
 		DAA1763D19D8B82B0044227B /* choose_type@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "choose_type@2x.png"; sourceTree = "<group>"; };
 		DAA1763E19D8B82B0044227B /* choose_type.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = choose_type.png; sourceTree = "<group>"; };
+		DAA449D01EEC4B5800E7BDD5 /* mpw-marshall.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-marshall.c"; sourceTree = "<group>"; };
+		DAA449D11EEC4B5800E7BDD5 /* mpw-marshall.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-marshall.h"; sourceTree = "<group>"; };
 		DAAC35DD156BD77D00C5FD93 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		DABB981515100B4000B05417 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		DABD360F1711E29400CF925C /* ui_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ui_background.png; sourceTree = "<group>"; };
@@ -1722,6 +1725,8 @@
 				93D39D4E713564B7654341B0 /* mpw-algorithm_v3.c */,
 				93D3969393A3A46BD27D7078 /* mpw-algorithm.c */,
 				93D3990D850D76A94C6B7A4D /* mpw-algorithm.h */,
+				DAA449D01EEC4B5800E7BDD5 /* mpw-marshall.c */,
+				DAA449D11EEC4B5800E7BDD5 /* mpw-marshall.h */,
 				93D392C5A6572DB0EB5B82C8 /* mpw-types.c */,
 				93D39AFD17CBE324D745DAB0 /* mpw-types.h */,
 				93D396C311C3725870343EE0 /* mpw-util.c */,
@@ -3862,6 +3867,7 @@
 				DABD3C151711E2DC00CF925C /* MPiOSAppDelegate.m in Sources */,
 				DA0CC5941EB6B030009A8ED9 /* MPSiteEntity+CoreDataClass.m in Sources */,
 				DABD3C1C1711E2DC00CF925C /* MPGuideViewController.m in Sources */,
+				DAA449D21EEC4B5800E7BDD5 /* mpw-marshall.c in Sources */,
 				DABD3C1E1711E2DC00CF925C /* MPPreferencesViewController.m in Sources */,
 				DABD3C1F1711E2DC00CF925C /* MPTypeViewController.m in Sources */,
 				DABD3C211711E2DC00CF925C /* MPiOSConfig.m in Sources */,

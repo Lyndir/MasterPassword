@@ -17,6 +17,7 @@
 //==============================================================================
 
 #import "MPAppDelegate_Store.h"
+#import "mpw-marshall.h"
 
 #if TARGET_OS_IPHONE
 #define STORE_OPTIONS NSPersistentStoreFileProtectionKey : NSFileProtectionComplete,
@@ -840,68 +841,26 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
     MPUserEntity *activeUser = [self activeUserForMainThread];
     inf( @"Exporting sites, %@, for user: %@", revealPasswords? @"revealing passwords": @"omitting passwords", activeUser.userID );
 
-    // Header.
-    NSMutableString *export = [NSMutableString new];
-    [export appendFormat:@"# Master Password site export\n"];
-    if (revealPasswords)
-        [export appendFormat:@"#     Export of site names and passwords in clear-text.\n"];
-    else
-        [export appendFormat:@"#     Export of site names and stored passwords (unless device-private) encrypted with the master key.\n"];
-    [export appendFormat:@"# \n"];
-    [export appendFormat:@"##\n"];
-    [export appendFormat:@"# Format: 1\n"];
-    [export appendFormat:@"# Date: %@\n", [[NSDateFormatter rfc3339DateFormatter] stringFromDate:[NSDate date]]];
-    [export appendFormat:@"# User Name: %@\n", activeUser.name];
-    [export appendFormat:@"# Full Name: %@\n", activeUser.name];
-    [export appendFormat:@"# Avatar: %lu\n", (unsigned long)activeUser.avatar];
-    [export appendFormat:@"# Key ID: %@\n", [activeUser.keyID encodeHex]];
-    [export appendFormat:@"# Version: %@\n", [PearlInfoPlist get].CFBundleVersion];
-    [export appendFormat:@"# Algorithm: %d\n", activeUser.algorithm.version];
-    [export appendFormat:@"# Default Type: %d\n", activeUser.defaultType];
-    [export appendFormat:@"# Passwords: %@\n", revealPasswords? @"VISIBLE": @"PROTECTED"];
-    [export appendFormat:@"##\n"];
-    [export appendFormat:@"#\n"];
-    [export appendFormat:@"#               Last     Times  Password                      Login\t                     Site\tSite\n"];
-    [export appendFormat:@"#               used      used      type                       name\t                     name\tpassword\n"];
+    MPMarshalledUser exportUser = mpw_marshall_user( activeUser.name.UTF8String,
+            [self.key keyForAlgorithm:activeUser.algorithm], activeUser.algorithm.version );
+    exportUser.avatar = activeUser.avatar;
+    exportUser.defaultType = activeUser.defaultType;
+    exportUser.lastUsed = (time_t)activeUser.lastUsed.timeIntervalSince1970;
 
-    // Sites.
+
     for (MPSiteEntity *site in activeUser.sites) {
-        NSDate *lastUsed = site.lastUsed;
-        NSUInteger uses = site.uses;
-        MPSiteType type = site.type;
-        id<MPAlgorithm> algorithm = site.algorithm;
-        NSUInteger counter = 0;
-        NSString *loginName = site.loginName;
-        NSString *siteName = site.name;
-        NSString *content = nil;
+        MPMarshalledSite exportSite = mpw_marshall_site( &exportUser,
+                site.name.UTF8String, site.type, site.counter, site.algorithm.version );
+        exportSite.loginName = site.loginName.UTF8String;
+        exportSite.url = site.url.UTF8String;
+        exportSite.uses = site.uses;
+        exportSite.lastUsed = (time_t)site.lastUsed.timeIntervalSince1970;
 
-        // Generated-specific
-        if ([site isKindOfClass:[MPGeneratedSiteEntity class]])
-            counter = ((MPGeneratedSiteEntity *)site).counter;
-
-
-        // Determine the content to export.
-        if (!(type & MPSiteFeatureDevicePrivate)) {
-            if (revealPasswords)
-                content = [site.algorithm resolvePasswordForSite:site usingKey:self.key];
-            else if (type & MPSiteFeatureExportContent)
-                content = [site.algorithm exportPasswordForSite:site usingKey:self.key];
-        }
-
-        NSString *lastUsedExport = [[NSDateFormatter rfc3339DateFormatter] stringFromDate:lastUsed];
-        long usesExport = (long)uses;
-        NSString *typeExport = strf( @"%lu:%lu:%lu", (long)type, (long)[algorithm version], (long)counter );
-        NSString *loginNameExport = loginName?: @"";
-        NSString *contentExport = content?: @"";
-        [export appendFormat:@"%@  %8ld  %8S  %25S\t%25S\t%@\n",
-                             lastUsedExport, usesExport,
-                             (const unsigned short *)[typeExport cStringUsingEncoding:NSUTF16StringEncoding],
-                             (const unsigned short *)[loginNameExport cStringUsingEncoding:NSUTF16StringEncoding],
-                             (const unsigned short *)[siteName cStringUsingEncoding:NSUTF16StringEncoding],
-                             contentExport];
+        for (MPSiteQuestionEntity *siteQuestion in site.questions)
+            mpw_marshal_question( &exportSite, siteQuestion.keyword.UTF8String );
     }
 
-    return export;
+    mpw_marshall_write( &export, MPMarshallFormatFlat, exportUser );
 }
 
 @end

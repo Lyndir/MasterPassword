@@ -23,8 +23,6 @@
 		93D39F833DEC1C89B2F795AC /* MPSitesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39A57A7823DE98A0FF83C /* MPSitesWindowController.m */; };
 		DA0933CC1747AD2D00DE1CEF /* shot-laptop-leaning-iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0933CB1747AD2D00DE1CEF /* shot-laptop-leaning-iphone.png */; };
 		DA0933D01747B91B00DE1CEF /* appstore.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0933CF1747B91B00DE1CEF /* appstore.png */; };
-		DA09745A1E99582900F0BFE8 /* mpw-tests-util.c in Sources */ = {isa = PBXBuildFile; fileRef = DA0974561E99582200F0BFE8 /* mpw-tests-util.c */; };
-		DA09745B1E99582900F0BFE8 /* mpw-tests.c in Sources */ = {isa = PBXBuildFile; fileRef = DA0974571E99582200F0BFE8 /* mpw-tests.c */; };
 		DA09745E1E99586600F0BFE8 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DA09745D1E99586600F0BFE8 /* libxml2.tbd */; };
 		DA0979681E9A834C00F0BFE8 /* libsodium.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA0979571E9A824700F0BFE8 /* libsodium.a */; };
 		DA0CC53E1EB57B69009A8ED9 /* Fabric.plist in Resources */ = {isa = PBXBuildFile; fileRef = DA0CC53D1EB57B69009A8ED9 /* Fabric.plist */; };
@@ -34,6 +32,22 @@
 		DA16B342170661E0000A0EAB /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC632871486D95D0075AEA5 /* Security.framework */; };
 		DA16B344170661EE000A0EAB /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA16B343170661EE000A0EAB /* Cocoa.framework */; };
 		DA16B345170661F2000A0EAB /* libPearl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC77CAD148291A600BCF976 /* libPearl.a */; };
+		DA1C7AAA1F1A8F24009A3551 /* mpw-marshall.c in Sources */ = {isa = PBXBuildFile; fileRef = DAA449D31EEC4B6B00E7BDD5 /* mpw-marshall.c */; };
+		DA1C7AAB1F1A8F24009A3551 /* mpw-types.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773C21A4746AF004F356A /* mpw-types.c */; };
+		DA1C7AAC1F1A8F24009A3551 /* mpw-util.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773C51A4746AF004F356A /* mpw-util.c */; };
+		DA1C7AAD1F1A8F24009A3551 /* mpw-algorithm.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773BB1A4746AF004F356A /* mpw-algorithm.c */; };
+		DA1C7AAF1F1A8F24009A3551 /* libsodium.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA0979571E9A824700F0BFE8 /* libsodium.a */; };
+		DA1C7AB01F1A8F24009A3551 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DA09745D1E99586600F0BFE8 /* libxml2.tbd */; };
+		DA1C7AC31F1A8FBA009A3551 /* mpw-cli.c in Sources */ = {isa = PBXBuildFile; fileRef = DA1C7AB91F1A8F6E009A3551 /* mpw-cli.c */; };
+		DA1C7AC81F1A8FD8009A3551 /* mpw-marshall.c in Sources */ = {isa = PBXBuildFile; fileRef = DAA449D31EEC4B6B00E7BDD5 /* mpw-marshall.c */; };
+		DA1C7ACA1F1A8FD8009A3551 /* mpw-types.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773C21A4746AF004F356A /* mpw-types.c */; };
+		DA1C7ACB1F1A8FD8009A3551 /* mpw-util.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773C51A4746AF004F356A /* mpw-util.c */; };
+		DA1C7ACD1F1A8FD8009A3551 /* mpw-algorithm.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773BB1A4746AF004F356A /* mpw-algorithm.c */; };
+		DA1C7ACF1F1A8FD8009A3551 /* libsodium.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA0979571E9A824700F0BFE8 /* libsodium.a */; };
+		DA1C7AD01F1A8FD8009A3551 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DA09745D1E99586600F0BFE8 /* libxml2.tbd */; };
+		DA1C7AD71F1A8FE6009A3551 /* mpw-bench.c in Sources */ = {isa = PBXBuildFile; fileRef = DA1C7AB81F1A8F6E009A3551 /* mpw-bench.c */; };
+		DA1C7AD81F1A8FF4009A3551 /* mpw-tests-util.c in Sources */ = {isa = PBXBuildFile; fileRef = DA1C7ABA1F1A8F6E009A3551 /* mpw-tests-util.c */; };
+		DA1C7AD91F1A8FF4009A3551 /* mpw-tests.c in Sources */ = {isa = PBXBuildFile; fileRef = DA1C7ABC1F1A8F6E009A3551 /* mpw-tests.c */; };
 		DA2508F119511D3600AC23F1 /* MPPasswordWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA2508F019511D3600AC23F1 /* MPPasswordWindowController.xib */; };
 		DA250925195148E200AC23F1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBC45214F6364500987BF6 /* QuartzCore.framework */; };
 		DA26861D1EBFD7A40001E37E /* MPGeneratedSiteEntity+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = DA26860A1EBFD7A40001E37E /* MPGeneratedSiteEntity+CoreDataClass.m */; };
@@ -70,6 +84,7 @@
 		DA4DAE951A7D8117003E5423 /* MPTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4DAE931A7D8117003E5423 /* MPTypes.m */; };
 		DA5180CA19FF2F9200A587E9 /* MPAlgorithmV2.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5180C719FF2F9200A587E9 /* MPAlgorithmV2.m */; };
 		DA5180CE19FF307E00A587E9 /* MPAppDelegate_Store.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5180CD19FF307E00A587E9 /* MPAppDelegate_Store.m */; };
+		DA531CC31EFF3BF4008C72CB /* mpw-marshall.c in Sources */ = {isa = PBXBuildFile; fileRef = DAA449D31EEC4B6B00E7BDD5 /* mpw-marshall.c */; };
 		DA5E5CF61724A667003798D8 /* MPAlgorithm.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5C981724A667003798D8 /* MPAlgorithm.m */; };
 		DA5E5CF71724A667003798D8 /* MPAlgorithmV0.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5C9A1724A667003798D8 /* MPAlgorithmV0.m */; };
 		DA5E5CF81724A667003798D8 /* MPAlgorithmV1.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5C9C1724A667003798D8 /* MPAlgorithmV1.m */; };
@@ -103,6 +118,7 @@
 		DA9261521BE1A86700369DE5 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA9261501BE1A86700369DE5 /* Fabric.framework */; };
 		DA9261541BE1A88900369DE5 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DA9261531BE1A88900369DE5 /* libc++.tbd */; };
 		DA9261561BE1A89600369DE5 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DA9261551BE1A89600369DE5 /* libz.tbd */; };
+		DAA449D51EEC4B6B00E7BDD5 /* mpw-marshall.c in Sources */ = {isa = PBXBuildFile; fileRef = DAA449D31EEC4B6B00E7BDD5 /* mpw-marshall.c */; };
 		DAAA81B0195A8D1300FA30D9 /* gradient.png in Resources */ = {isa = PBXBuildFile; fileRef = DAAA81AF195A8D1300FA30D9 /* gradient.png */; };
 		DAADCC4719FAFFAD00987B1D /* NSNotificationCenter+PearlEasyCleanup.h in Headers */ = {isa = PBXBuildFile; fileRef = DAADCC3E19FAFFAD00987B1D /* NSNotificationCenter+PearlEasyCleanup.h */; };
 		DAADCC4819FAFFAD00987B1D /* NSPersistentStore+PearlMigration.h in Headers */ = {isa = PBXBuildFile; fileRef = DAADCC3F19FAFFAD00987B1D /* NSPersistentStore+PearlMigration.h */; };
@@ -234,6 +250,24 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		DA1C7AB11F1A8F24009A3551 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		DA1C7AD11F1A8FD8009A3551 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 		DA6774391A474A03004F356A /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -291,9 +325,6 @@
 		DA0933C91747A56A00DE1CEF /* MPInitialWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MPInitialWindow.xib; sourceTree = "<group>"; };
 		DA0933CB1747AD2D00DE1CEF /* shot-laptop-leaning-iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shot-laptop-leaning-iphone.png"; sourceTree = "<group>"; };
 		DA0933CF1747B91B00DE1CEF /* appstore.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = appstore.png; sourceTree = "<group>"; };
-		DA0974561E99582200F0BFE8 /* mpw-tests-util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "mpw-tests-util.c"; path = "../../platform-independent/cli-c/cli/mpw-tests-util.c"; sourceTree = "<group>"; };
-		DA0974571E99582200F0BFE8 /* mpw-tests.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "mpw-tests.c"; path = "../../platform-independent/cli-c/cli/mpw-tests.c"; sourceTree = "<group>"; };
-		DA09745C1E99583B00F0BFE8 /* mpw-tests-util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "mpw-tests-util.h"; path = "../../platform-independent/cli-c/cli/mpw-tests-util.h"; sourceTree = "<group>"; };
 		DA09745D1E99586600F0BFE8 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
 		DA09745F1E995EB500F0BFE8 /* mpw_tests.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = mpw_tests.xml; path = ../../core/java/tests/src/main/resources/mpw_tests.xml; sourceTree = "<group>"; };
 		DA09791B1E9A824700F0BFE8 /* core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = core.h; sourceTree = "<group>"; };
@@ -367,6 +398,13 @@
 		DA0CC5581EB6AE45009A8ED9 /* MasterPassword 9.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 9.xcdatamodel"; sourceTree = "<group>"; };
 		DA16B340170661DB000A0EAB /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		DA16B343170661EE000A0EAB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		DA1C7AB61F1A8F24009A3551 /* mpw-cli */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "mpw-cli"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA1C7AB81F1A8F6E009A3551 /* mpw-bench.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-bench.c"; sourceTree = "<group>"; };
+		DA1C7AB91F1A8F6E009A3551 /* mpw-cli.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-cli.c"; sourceTree = "<group>"; };
+		DA1C7ABA1F1A8F6E009A3551 /* mpw-tests-util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-tests-util.c"; sourceTree = "<group>"; };
+		DA1C7ABB1F1A8F6E009A3551 /* mpw-tests-util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-tests-util.h"; sourceTree = "<group>"; };
+		DA1C7ABC1F1A8F6E009A3551 /* mpw-tests.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-tests.c"; sourceTree = "<group>"; };
+		DA1C7AD61F1A8FD8009A3551 /* mpw-bench */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "mpw-bench"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA2508F019511D3600AC23F1 /* MPPasswordWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MPPasswordWindowController.xib; sourceTree = "<group>"; };
 		DA2508F919513C1400AC23F1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		DA2508FA19513C1400AC23F1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -874,6 +912,8 @@
 		DA9261501BE1A86700369DE5 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		DA9261531BE1A88900369DE5 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		DA9261551BE1A89600369DE5 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		DAA449D31EEC4B6B00E7BDD5 /* mpw-marshall.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-marshall.c"; sourceTree = "<group>"; };
+		DAA449D41EEC4B6B00E7BDD5 /* mpw-marshall.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-marshall.h"; sourceTree = "<group>"; };
 		DAAA81AF195A8D1300FA30D9 /* gradient.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gradient.png; sourceTree = "<group>"; };
 		DAADCC3E19FAFFAD00987B1D /* NSNotificationCenter+PearlEasyCleanup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNotificationCenter+PearlEasyCleanup.h"; sourceTree = "<group>"; };
 		DAADCC3F19FAFFAD00987B1D /* NSPersistentStore+PearlMigration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSPersistentStore+PearlMigration.h"; sourceTree = "<group>"; };
@@ -999,6 +1039,24 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		DA1C7AAE1F1A8F24009A3551 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA1C7AAF1F1A8F24009A3551 /* libsodium.a in Frameworks */,
+				DA1C7AB01F1A8F24009A3551 /* libxml2.tbd in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DA1C7ACE1F1A8FD8009A3551 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA1C7ACF1F1A8FD8009A3551 /* libsodium.a in Frameworks */,
+				DA1C7AD01F1A8FD8009A3551 /* libxml2.tbd in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DA5BFA41147E415C00F98B1E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -1156,6 +1214,19 @@
 			path = Fabric;
 			sourceTree = "<group>";
 		};
+		DA1C7AB71F1A8F6E009A3551 /* cli */ = {
+			isa = PBXGroup;
+			children = (
+				DA1C7AB81F1A8F6E009A3551 /* mpw-bench.c */,
+				DA1C7AB91F1A8F6E009A3551 /* mpw-cli.c */,
+				DA1C7ABA1F1A8F6E009A3551 /* mpw-tests-util.c */,
+				DA1C7ABB1F1A8F6E009A3551 /* mpw-tests-util.h */,
+				DA1C7ABC1F1A8F6E009A3551 /* mpw-tests.c */,
+			);
+			name = cli;
+			path = "../../platform-independent/cli-c/cli";
+			sourceTree = "<group>";
+		};
 		DA2508F819513C1400AC23F1 /* Other Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -1196,6 +1267,8 @@
 				DAC6326C148680650075AEA5 /* libjrswizzle.a */,
 				DAADCC5019FB006500987B1D /* libKCOrderedAccessorFix.a */,
 				DA67743B1A474A03004F356A /* mpw-test */,
+				DA1C7AB61F1A8F24009A3551 /* mpw-cli */,
+				DA1C7AD61F1A8FD8009A3551 /* mpw-bench */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1734,15 +1807,15 @@
 		DA6773291A4746AF004F356A /* C */ = {
 			isa = PBXGroup;
 			children = (
+				DA1C7AB71F1A8F6E009A3551 /* cli */,
 				DA831A271A6E1146000AC234 /* mpw-algorithm_v0.c */,
 				DA831A281A6E1146000AC234 /* mpw-algorithm_v1.c */,
 				DA831A291A6E1146000AC234 /* mpw-algorithm_v2.c */,
 				DA831A2A1A6E1146000AC234 /* mpw-algorithm_v3.c */,
 				DA6773BB1A4746AF004F356A /* mpw-algorithm.c */,
 				DA6773BC1A4746AF004F356A /* mpw-algorithm.h */,
-				DA0974561E99582200F0BFE8 /* mpw-tests-util.c */,
-				DA09745C1E99583B00F0BFE8 /* mpw-tests-util.h */,
-				DA0974571E99582200F0BFE8 /* mpw-tests.c */,
+				DAA449D31EEC4B6B00E7BDD5 /* mpw-marshall.c */,
+				DAA449D41EEC4B6B00E7BDD5 /* mpw-marshall.h */,
 				DA6773C21A4746AF004F356A /* mpw-types.c */,
 				DA6773C31A4746AF004F356A /* mpw-types.h */,
 				DA6773C51A4746AF004F356A /* mpw-util.c */,
@@ -2101,6 +2174,40 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		DA1C7AA61F1A8F24009A3551 /* mpw-cli */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DA1C7AB21F1A8F24009A3551 /* Build configuration list for PBXNativeTarget "mpw-cli" */;
+			buildPhases = (
+				DA1C7AA71F1A8F24009A3551 /* Sources */,
+				DA1C7AAE1F1A8F24009A3551 /* Frameworks */,
+				DA1C7AB11F1A8F24009A3551 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "mpw-cli";
+			productName = "mpw-test";
+			productReference = DA1C7AB61F1A8F24009A3551 /* mpw-cli */;
+			productType = "com.apple.product-type.tool";
+		};
+		DA1C7AC61F1A8FD8009A3551 /* mpw-bench */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DA1C7AD21F1A8FD8009A3551 /* Build configuration list for PBXNativeTarget "mpw-bench" */;
+			buildPhases = (
+				DA1C7AC71F1A8FD8009A3551 /* Sources */,
+				DA1C7ACE1F1A8FD8009A3551 /* Frameworks */,
+				DA1C7AD11F1A8FD8009A3551 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "mpw-bench";
+			productName = "mpw-test";
+			productReference = DA1C7AD61F1A8FD8009A3551 /* mpw-bench */;
+			productType = "com.apple.product-type.tool";
+		};
 		DA5BFA43147E415C00F98B1E /* MasterPassword */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword" */;
@@ -2205,6 +2312,12 @@
 				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = Lyndir;
 				TargetAttributes = {
+					DA1C7AA61F1A8F24009A3551 = {
+						DevelopmentTeam = HL3Q45LX9N;
+					};
+					DA1C7AC61F1A8FD8009A3551 = {
+						DevelopmentTeam = HL3Q45LX9N;
+					};
 					DA5BFA43147E415C00F98B1E = {
 						DevelopmentTeam = HL3Q45LX9N;
 						ProvisioningStyle = Automatic;
@@ -2254,6 +2367,8 @@
 				DAC6326B148680650075AEA5 /* jrswizzle */,
 				DAADCC4F19FB006500987B1D /* KCOrderedAccessorFix */,
 				DA67743A1A474A03004F356A /* mpw-test */,
+				DA1C7AC61F1A8FD8009A3551 /* mpw-bench */,
+				DA1C7AA61F1A8F24009A3551 /* mpw-cli */,
 			);
 		};
 /* End PBXProject section */
@@ -2403,6 +2518,30 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		DA1C7AA71F1A8F24009A3551 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA1C7AAA1F1A8F24009A3551 /* mpw-marshall.c in Sources */,
+				DA1C7AAB1F1A8F24009A3551 /* mpw-types.c in Sources */,
+				DA1C7AAC1F1A8F24009A3551 /* mpw-util.c in Sources */,
+				DA1C7AC31F1A8FBA009A3551 /* mpw-cli.c in Sources */,
+				DA1C7AAD1F1A8F24009A3551 /* mpw-algorithm.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DA1C7AC71F1A8FD8009A3551 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA1C7AC81F1A8FD8009A3551 /* mpw-marshall.c in Sources */,
+				DA1C7ACA1F1A8FD8009A3551 /* mpw-types.c in Sources */,
+				DA1C7ACB1F1A8FD8009A3551 /* mpw-util.c in Sources */,
+				DA1C7AD71F1A8FE6009A3551 /* mpw-bench.c in Sources */,
+				DA1C7ACD1F1A8FD8009A3551 /* mpw-algorithm.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DA5BFA40147E415C00F98B1E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2411,6 +2550,7 @@
 				DA5E5CF61724A667003798D8 /* MPAlgorithm.m in Sources */,
 				DA2686201EBFD7A40001E37E /* MPSiteEntity+CoreDataProperties.m in Sources */,
 				DA5E5CF71724A667003798D8 /* MPAlgorithmV0.m in Sources */,
+				DAA449D51EEC4B6B00E7BDD5 /* mpw-marshall.c in Sources */,
 				DA26861E1EBFD7A40001E37E /* MPGeneratedSiteEntity+CoreDataProperties.m in Sources */,
 				DA5E5CF81724A667003798D8 /* MPAlgorithmV1.m in Sources */,
 				DA2686231EBFD7A40001E37E /* MPStoredSiteEntity+CoreDataClass.m in Sources */,
@@ -2453,10 +2593,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DA09745B1E99582900F0BFE8 /* mpw-tests.c in Sources */,
-				DA09745A1E99582900F0BFE8 /* mpw-tests-util.c in Sources */,
+				DA531CC31EFF3BF4008C72CB /* mpw-marshall.c in Sources */,
+				DA1C7AD81F1A8FF4009A3551 /* mpw-tests-util.c in Sources */,
 				DA6774451A474A3B004F356A /* mpw-types.c in Sources */,
 				DA6774461A474A3B004F356A /* mpw-util.c in Sources */,
+				DA1C7AD91F1A8FF4009A3551 /* mpw-tests.c in Sources */,
 				DA6774431A474A3B004F356A /* mpw-algorithm.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2724,17 +2865,145 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib",
+					/usr/local/lib,
 					"$(inherited)",
-					"$(PROJECT_DIR)/External/Pearl/Pearl-Crypto/lib",
-					/usr/local/Cellar/libsodium/1.0.12/lib,
-					/usr/local/Cellar/libscrypt/1.21/lib,
-					"$(PROJECT_DIR)/External/libsodium/libsodium-ios/lib",
-					"$(PROJECT_DIR)/External/libsodium/libsodium-osx/lib",
 				);
 				OTHER_CFLAGS = (
 					"-DHAS_CPERCIVA=0",
 					"-DHAS_SODIUM=1",
 				);
+			};
+			name = Test;
+		};
+		DA1C7AB31F1A8F24009A3551 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/include/libxml2,
+					/usr/local/include,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib",
+					/usr/local/lib,
+					"$(inherited)",
+				);
+				OTHER_CFLAGS = (
+					"-DHAS_CPERCIVA=0",
+					"-DHAS_SODIUM=1",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		DA1C7AB41F1A8F24009A3551 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/include/libxml2,
+					/usr/local/include,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib",
+					/usr/local/lib,
+					"$(inherited)",
+				);
+				OTHER_CFLAGS = (
+					"-DHAS_CPERCIVA=0",
+					"-DHAS_SODIUM=1",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		DA1C7AB51F1A8F24009A3551 /* Test */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/include/libxml2,
+					/usr/local/include,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib",
+					/usr/local/lib,
+					"$(inherited)",
+				);
+				OTHER_CFLAGS = (
+					"-DHAS_CPERCIVA=0",
+					"-DHAS_SODIUM=1",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Test;
+		};
+		DA1C7AD31F1A8FD8009A3551 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/include/libxml2,
+					/usr/local/include,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib",
+					/usr/local/lib,
+					"$(inherited)",
+				);
+				OTHER_CFLAGS = (
+					"-DHAS_CPERCIVA=0",
+					"-DHAS_SODIUM=1",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		DA1C7AD41F1A8FD8009A3551 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/include/libxml2,
+					/usr/local/include,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib",
+					/usr/local/lib,
+					"$(inherited)",
+				);
+				OTHER_CFLAGS = (
+					"-DHAS_CPERCIVA=0",
+					"-DHAS_SODIUM=1",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		DA1C7AD51F1A8FD8009A3551 /* Test */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/include/libxml2,
+					/usr/local/include,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib",
+					/usr/local/lib,
+					"$(inherited)",
+				);
+				OTHER_CFLAGS = (
+					"-DHAS_CPERCIVA=0",
+					"-DHAS_SODIUM=1",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Test;
 		};
@@ -2987,12 +3256,8 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib",
+					/usr/local/lib,
 					"$(inherited)",
-					"$(PROJECT_DIR)/External/Pearl/Pearl-Crypto/lib",
-					/usr/local/Cellar/libsodium/1.0.12/lib,
-					/usr/local/Cellar/libscrypt/1.21/lib,
-					"$(PROJECT_DIR)/External/libsodium/libsodium-ios/lib",
-					"$(PROJECT_DIR)/External/libsodium/libsodium-osx/lib",
 				);
 				OTHER_CFLAGS = (
 					"-DHAS_CPERCIVA=0",
@@ -3012,12 +3277,8 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib",
+					/usr/local/lib,
 					"$(inherited)",
-					"$(PROJECT_DIR)/External/Pearl/Pearl-Crypto/lib",
-					/usr/local/Cellar/libsodium/1.0.12/lib,
-					/usr/local/Cellar/libscrypt/1.21/lib,
-					"$(PROJECT_DIR)/External/libsodium/libsodium-ios/lib",
-					"$(PROJECT_DIR)/External/libsodium/libsodium-osx/lib",
 				);
 				OTHER_CFLAGS = (
 					"-DHAS_CPERCIVA=0",
@@ -3097,6 +3358,26 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		DA1C7AB21F1A8F24009A3551 /* Build configuration list for PBXNativeTarget "mpw-cli" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DA1C7AB31F1A8F24009A3551 /* Debug */,
+				DA1C7AB41F1A8F24009A3551 /* Release */,
+				DA1C7AB51F1A8F24009A3551 /* Test */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Test;
+		};
+		DA1C7AD21F1A8FD8009A3551 /* Build configuration list for PBXNativeTarget "mpw-bench" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DA1C7AD31F1A8FD8009A3551 /* Debug */,
+				DA1C7AD41F1A8FD8009A3551 /* Release */,
+				DA1C7AD51F1A8FD8009A3551 /* Test */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Test;
+		};
 		DA5BFA3E147E415C00F98B1E /* Build configuration list for PBXProject "MasterPassword-macOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

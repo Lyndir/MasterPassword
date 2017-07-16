@@ -20,6 +20,7 @@
 #define _MPW_TYPES_H
 #include <stdlib.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 #ifdef NS_ENUM
 #define enum(_type, _name) NS_ENUM(_type, _name)
@@ -27,9 +28,10 @@
 #define enum(_type, _name) _type _name; enum
 #endif
 
-#define MP_dkLen            64
-
 //// Types.
+
+#define MPMasterKeySize 64
+typedef const uint8_t *MPMasterKey;
 
 typedef enum( unsigned int, MPSiteVariant ) {
     /** Generate a key for authentication. */
@@ -54,7 +56,7 @@ typedef enum( unsigned int, MPSiteFeature ) {
             MPSiteFeatureDevicePrivate = 1 << 11,
 };
 
-typedef enum( unsigned int, MPSiteType) {
+typedef enum( unsigned int, MPSiteType ) {
     MPSiteTypeGeneratedMaximum = 0x0 | MPSiteTypeClassGenerated | 0x0,
     MPSiteTypeGeneratedLong = 0x1 | MPSiteTypeClassGenerated | 0x0,
     MPSiteTypeGeneratedMedium = 0x2 | MPSiteTypeClassGenerated | 0x0,

@@ -17,7 +17,10 @@
 //==============================================================================
 
 #include <stdio.h>
-#include <stdint.h>
+#include "mpw-types.h"
+
+#ifndef _MPW_UTIL_H
+#define _MPW_UTIL_H
 
 //// Logging.
 
@@ -25,41 +28,39 @@
 extern int mpw_verbosity;
     #define trc_level 3
     #define trc(...) \
-        if (mpw_verbosity >= 3) \
-            fprintf( stderr, __VA_ARGS__ )
+        ({ if (mpw_verbosity >= 3) \
+            fprintf( stderr, __VA_ARGS__ ); })
 #endif
 #ifndef dbg
     #define dbg_level 2
     #define dbg(...) \
-        if (mpw_verbosity >= 2) \
-            fprintf( stderr, __VA_ARGS__ )
+        ({ if (mpw_verbosity >= 2) \
+            fprintf( stderr, __VA_ARGS__ ); })
 #endif
 #ifndef inf
     #define inf_level 1
     #define inf(...) \
-        if (mpw_verbosity >= 1) \
-            fprintf( stderr, __VA_ARGS__ )
+        ({ if (mpw_verbosity >= 1) \
+            fprintf( stderr, __VA_ARGS__ ); })
 #endif
 #ifndef wrn
     #define wrn_level 0
     #define wrn(...) \
-        if (mpw_verbosity >= 0) \
-            fprintf( stderr, __VA_ARGS__ )
+        ({ if (mpw_verbosity >= 0) \
+            fprintf( stderr, __VA_ARGS__ ); })
 #endif
 #ifndef err
     #define err_level -1
     #define err(...) \
-        if (mpw_verbosity >= -1) \
-            fprintf( stderr, __VA_ARGS__ )
+        ({ if (mpw_verbosity >= -1) \
+            fprintf( stderr, __VA_ARGS__ ); })
 #endif
 #ifndef ftl
     #define ftl_level -2
     #define ftl(...) \
-        do { \
-            if (mpw_verbosity >= -2) \
-                fprintf( stderr, __VA_ARGS__ ); \
-            exit( 2 ); \
-        } while (0)
+        ({ if (mpw_verbosity >= -2) \
+            fprintf( stderr, __VA_ARGS__ ); \
+        exit( 2 ); })
 #endif
 
 //// Buffers and memory.
@@ -73,19 +74,19 @@ extern int mpw_verbosity;
  })
 
 /** Push a buffer onto a buffer.  reallocs the given buffer and appends the given buffer. */
-void mpw_push_buf(
+bool mpw_push_buf(
         uint8_t **const buffer, size_t *const bufferSize, const void *pushBuffer, const size_t pushSize);
 /** Push a string onto a buffer.  reallocs the given buffer and appends the given string. */
-void mpw_push_string(
+bool mpw_push_string(
         uint8_t **buffer, size_t *const bufferSize, const char *pushString);
 /** Push an integer onto a buffer.  reallocs the given buffer and appends the given integer. */
-void mpw_push_int(
+bool mpw_push_int(
         uint8_t **const buffer, size_t *const bufferSize, const uint32_t pushInt);
 /** Free a buffer after zero'ing its contents. */
-void mpw_free(
+bool mpw_free(
         const void *buffer, const size_t bufferSize);
 /** Free a string after zero'ing its contents. */
-void mpw_free_string(
+bool mpw_free_string(
         const char *string);
 
 //// Cryptographic functions.
@@ -117,3 +118,5 @@ const char *mpw_identicon(const char *fullName, const char *masterPassword);
 
 /** @return The amount of display characters in the given UTF-8 string. */
 const size_t mpw_utf8_strlen(const char *utf8String);
+
+#endif // _MPW_UTIL_H

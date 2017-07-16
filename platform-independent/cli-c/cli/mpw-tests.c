@@ -15,10 +15,8 @@ int main(int argc, char *const argv[]) {
     int failedTests = 0;
 
     xmlNodePtr tests = xmlDocGetRootElement( xmlParseFile( "mpw_tests.xml" ) );
-    if (!tests) {
+    if (!tests)
         ftl( "Couldn't find test case: mpw_tests.xml\n" );
-        abort();
-    }
 
     for (xmlNodePtr testCase = tests->children; testCase; testCase = testCase->next) {
         if (testCase->type != XML_ELEMENT_NODE || xmlStrcmp( testCase->name, BAD_CAST "case" ) != 0)
@@ -48,7 +46,7 @@ int main(int argc, char *const argv[]) {
         }
 
         // 1. calculate the master key.
-        const uint8_t *masterKey = mpw_masterKeyForUser(
+        MPMasterKey masterKey = mpw_masterKeyForUser(
                 (char *)fullName, (char *)masterPassword, algorithm );
         if (!masterKey)
             ftl( "Couldn't derive master key." );
@@ -56,7 +54,7 @@ int main(int argc, char *const argv[]) {
         // 2. calculate the site password.
         const char *sitePassword = mpw_passwordForSite(
                 masterKey, (char *)siteName, siteType, siteCounter, siteVariant, (char *)siteContext, algorithm );
-        mpw_free( masterKey, MP_dkLen );
+        mpw_free( masterKey, MPMasterKeySize );
         if (!sitePassword)
             ftl( "Couldn't derive site password." );
 

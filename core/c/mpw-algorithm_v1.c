@@ -28,7 +28,7 @@
 #define MP_p                2
 #define MP_hash             PearlHashSHA256
 
-static const uint8_t *mpw_masterKeyForUser_v1(const char *fullName, const char *masterPassword) {
+static MPMasterKey mpw_masterKeyForUser_v1(const char *fullName, const char *masterPassword) {
 
     const char *mpKeyScope = mpw_scopeForVariant( MPSiteVariantPassword );
     trc( "algorithm: v%d\n", 1 );
@@ -51,18 +51,18 @@ static const uint8_t *mpw_masterKeyForUser_v1(const char *fullName, const char *
 
     // Calculate the master key.
     // masterKey = scrypt( masterPassword, masterKeySalt )
-    const uint8_t *masterKey = mpw_scrypt( MP_dkLen, masterPassword, masterKeySalt, masterKeySaltSize, MP_N, MP_r, MP_p );
+    MPMasterKey masterKey = mpw_scrypt( MPMasterKeySize, masterPassword, masterKeySalt, masterKeySaltSize, MP_N, MP_r, MP_p );
     mpw_free( masterKeySalt, masterKeySaltSize );
     if (!masterKey) {
         ftl( "Could not allocate master key: %d\n", errno );
         return NULL;
     }
-    trc( "masterKey ID: %s\n", mpw_id_buf( masterKey, MP_dkLen ) );
+    trc( "masterKey ID: %s\n", mpw_id_buf( masterKey, MPMasterKeySize ) );
 
     return masterKey;
 }
 
-static const char *mpw_passwordForSite_v1(const uint8_t *masterKey, const char *siteName, const MPSiteType siteType, const uint32_t siteCounter,
+static const char *mpw_passwordForSite_v1(MPMasterKey masterKey, const char *siteName, const MPSiteType siteType, const uint32_t siteCounter,
         const MPSiteVariant siteVariant, const char *siteContext) {
 
     const char *siteScope = mpw_scopeForVariant( siteVariant );
@@ -95,7 +95,7 @@ static const char *mpw_passwordForSite_v1(const uint8_t *masterKey, const char *
     }
     trc( "sitePasswordInfo ID: %s\n", mpw_id_buf( sitePasswordInfo, sitePasswordInfoSize ) );
 
-    const uint8_t *sitePasswordSeed = mpw_hmac_sha256( masterKey, MP_dkLen, sitePasswordInfo, sitePasswordInfoSize );
+    const uint8_t *sitePasswordSeed = mpw_hmac_sha256( masterKey, MPMasterKeySize, sitePasswordInfo, sitePasswordInfoSize );
     mpw_free( sitePasswordInfo, sitePasswordInfoSize );
     if (!sitePasswordSeed) {
         ftl( "Could not allocate site seed: %d\n", errno );

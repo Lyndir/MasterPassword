@@ -128,21 +128,21 @@ static NSOperationQueue *_mpwQueue = nil;
     __block NSData *keyData;
     [self mpw_perform:^{
         NSDate *start = [NSDate date];
-        uint8_t const *masterKeyBytes = mpw_masterKeyForUser( fullName.UTF8String, masterPassword.UTF8String, [self version] );
-        if (masterKeyBytes) {
-            keyData = [NSData dataWithBytes:masterKeyBytes length:MP_dkLen];
+        MPMasterKey masterKey = mpw_masterKeyForUser( fullName.UTF8String, masterPassword.UTF8String, [self version] );
+        if (masterKey) {
+            keyData = [NSData dataWithBytes:masterKey length:MPMasterKeySize];
             trc( @"User: %@, password: %@ derives to key ID: %@ (took %0.2fs)", //
-                    fullName, masterPassword, [self keyIDForKeyData:keyData], -[start timeIntervalSinceNow] );
-            mpw_free( masterKeyBytes, MP_dkLen );
+                    fullName, masterPassword, [self keyIDForKey:masterKey], -[start timeIntervalSinceNow] );
+            mpw_free( masterKey, MPMasterKeySize );
         }
     }];
 
     return keyData;
 }
 
-- (NSData *)keyIDForKeyData:(NSData *)keyData {
+- (NSData *)keyIDForKey:(MPMasterKey)masterKey {
 
-    return [keyData hashWith:PearlHashSHA256];
+    return [[NSData dataWithBytesNoCopy:(void *)masterKey length:MPMasterKeySize] hashWith:PearlHashSHA256];
 }
 
 - (NSString *)nameOfType:(MPSiteType)type {
@@ -350,9 +350,9 @@ static NSOperationQueue *_mpwQueue = nil;
 - (NSString *)generateContentForSiteNamed:(NSString *)name ofType:(MPSiteType)type withCounter:(NSUInteger)counter
                                   variant:(MPSiteVariant)variant context:(NSString *)context usingKey:(MPKey *)key {
 
-    __block NSString *content;
+    __block NSString *content = nil;
     [self mpw_perform:^{
-        char const *contentBytes = mpw_passwordForSite( [key keyDataForAlgorithm:self].bytes,
+        char const *contentBytes = mpw_passwordForSite( [key keyForAlgorithm:self],
                 name.UTF8String, type, (uint32_t)counter, variant, context.UTF8String, [self version] );
         if (contentBytes) {
             content = [NSString stringWithCString:contentBytes encoding:NSUTF8StringEncoding];
@@ -396,7 +396,7 @@ static NSOperationQueue *_mpwQueue = nil;
                 return NO;
             }
 
-            NSData *encryptionKey = [siteKey keyDataForAlgorithm:self trimmedLength:PearlCryptKeySize];
+            NSData *encryptionKey = [siteKey keyForAlgorithm:self trimmedLength:PearlCryptKeySize];
             NSData *encryptedContent = [[clearContent dataUsingEncoding:NSUTF8StringEncoding]
                     encryptWithSymmetricKey:encryptionKey padding:YES];
             if ([((MPStoredSiteEntity *)site).contentObject isEqualToData:encryptedContent])
@@ -412,7 +412,7 @@ static NSOperationQueue *_mpwQueue = nil;
                 return NO;
             }
 
-            NSData *encryptionKey = [siteKey keyDataForAlgorithm:self trimmedLength:PearlCryptKeySize];
+            NSData *encryptionKey = [siteKey keyForAlgorithm:self trimmedLength:PearlCryptKeySize];
             NSData *encryptedContent = [[clearContent dataUsingEncoding:NSUTF8StringEncoding]
                     encryptWithSymmetricKey:encryptionKey padding:YES];
             NSDictionary *siteQuery = [self queryForDevicePrivateSiteNamed:site.name];
@@ -713,7 +713,7 @@ static NSOperationQueue *_mpwQueue = nil;
         return nil;
     NSData *decryptedContent = nil;
     if ([encryptedContent length]) {
-        NSData *encryptionKey = [key keyDataForAlgorithm:self trimmedLength:PearlCryptKeySize];
+        NSData *encryptionKey = [key keyForAlgorithm:self trimmedLength:PearlCryptKeySize];
         decryptedContent = [encryptedContent decryptWithSymmetricKey:encryptionKey padding:YES];
     }
     if (!decryptedContent)

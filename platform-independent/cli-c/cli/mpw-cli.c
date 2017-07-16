@@ -1,5 +1,3 @@
-#define _GNU_SOURCE
-
 #include <stdio.h>
 #include <unistd.h>
 #include <pwd.h>
@@ -15,18 +13,22 @@
 
 #include "mpw-algorithm.h"
 #include "mpw-util.h"
+#include "mpw-marshall.h"
 
-#define MP_env_fullname     "MP_FULLNAME"
-#define MP_env_sitetype     "MP_SITETYPE"
-#define MP_env_sitecounter  "MP_SITECOUNTER"
+#define MP_env_fullName     "MP_FULLNAME"
+#define MP_env_siteType     "MP_SITETYPE"
+#define MP_env_siteCounter  "MP_SITECOUNTER"
 #define MP_env_algorithm    "MP_ALGORITHM"
 
 static void usage() {
 
-    fprintf( stderr, "Usage: mpw [-u name] [-t type] [-c counter] [-a algorithm] [-V variant] [-C context] [-v|-q] [-h] site\n\n" );
-    fprintf( stderr, "    -u name      Specify the full name of the user.\n"
-            "                 Defaults to %s in env or prompts.\n\n", MP_env_fullname );
-    fprintf( stderr, "    -t type      Specify the password's template.\n"
+    inf( ""
+            "Usage: mpw [-u name] [-t type] [-c counter] [-a algorithm] [-V variant] [-C context] [-v|-q] [-h] site\n\n" );
+    inf( ""
+            "    -u name      Specify the full name of the user.\n"
+            "                 Defaults to %s in env or prompts.\n\n", MP_env_fullName );
+    inf( ""
+            "    -t type      Specify the password's template.\n"
             "                 Defaults to %s in env or 'long' for password, 'name' for login.\n"
             "                     x, max, maximum | 20 characters, contains symbols.\n"
             "                     l, long         | Copy-friendly, 14 characters, contains symbols.\n"
@@ -35,34 +37,41 @@ static void usage() {
             "                     s, short        | Copy-friendly, 4 characters, no symbols.\n"
             "                     i, pin          | 4 numbers.\n"
             "                     n, name         | 9 letter name.\n"
-            "                     p, phrase       | 20 character sentence.\n\n", MP_env_sitetype );
-    fprintf( stderr, "    -c counter   The value of the counter.\n"
-            "                 Defaults to %s in env or 1.\n\n", MP_env_sitecounter );
-    fprintf( stderr, "    -a version   The algorithm version to use.\n"
+            "                     p, phrase       | 20 character sentence.\n\n", MP_env_siteType );
+    inf( ""
+            "    -c counter   The value of the counter.\n"
+            "                 Defaults to %s in env or 1.\n\n", MP_env_siteCounter );
+    inf( ""
+            "    -a version   The algorithm version to use.\n"
             "                 Defaults to %s in env or %d.\n\n", MP_env_algorithm, MPAlgorithmVersionCurrent );
-    fprintf( stderr, "    -V variant   The kind of content to generate.\n"
+    inf( ""
+            "    -V variant   The kind of content to generate.\n"
             "                 Defaults to 'password'.\n"
             "                     p, password | The password to log in with.\n"
             "                     l, login    | The username to log in as.\n"
             "                     a, answer   | The answer to a security question.\n\n" );
-    fprintf( stderr, "    -C context   A variant-specific context.\n"
+    inf( ""
+            "    -C context   A variant-specific context.\n"
             "                 Defaults to empty.\n"
             "                  -V p, password | Doesn't currently use a context.\n"
             "                  -V l, login    | Doesn't currently use a context.\n"
             "                  -V a, answer   | Empty for a universal site answer or\n"
             "                                 | the most significant word(s) of the question.\n\n" );
-    fprintf( stderr, "    -v           Increase output verbosity (can be repeated).\n\n" );
-    fprintf( stderr, "    -q           Decrease output verbosity (can be repeated).\n\n" );
-    fprintf( stderr, "    ENVIRONMENT\n\n"
+    inf( ""
+            "    -v           Increase output verbosity (can be repeated).\n\n" );
+    inf( ""
+            "    -q           Decrease output verbosity (can be repeated).\n\n" );
+    inf( ""
+            "    ENVIRONMENT\n\n"
             "        %-14s | The full name of the user (see -u).\n"
             "        %-14s | The default password template (see -t).\n"
             "        %-14s | The default counter value (see -c).\n"
             "        %-14s | The default algorithm version (see -a).\n\n",
-            MP_env_fullname, MP_env_sitetype, MP_env_sitecounter, MP_env_algorithm );
+            MP_env_fullName, MP_env_siteType, MP_env_siteCounter, MP_env_algorithm );
     exit( 0 );
 }
 
-static char *homedir(const char *filename) {
+static char *mpwPath(const char *prefix, const char *extension) {
 
     char *homedir = NULL;
     struct passwd *passwd = getpwuid( getuid() );
@@ -73,9 +82,15 @@ static char *homedir(const char *filename) {
     if (!homedir)
         homedir = getcwd( NULL, 0 );
 
-    char *homefile = NULL;
-    asprintf( &homefile, "%s/%s", homedir, filename );
-    return homefile;
+    char *mpwPath = NULL;
+    asprintf( &mpwPath, "%s.%s", prefix, extension );
+
+    char *slash = strstr( mpwPath, "/" );
+    if (slash)
+        *slash = '\0';
+
+    asprintf( &mpwPath, "%s/.mpw.d/%s", homedir, mpwPath );
+    return mpwPath;
 }
 
 static char *getline_prompt(const char *prompt) {
@@ -95,49 +110,43 @@ static char *getline_prompt(const char *prompt) {
 
 int main(int argc, char *const argv[]) {
 
-    // Read the environment.
-    const char *fullName = NULL;
-    const char *masterPassword = NULL;
-    const char *siteName = NULL;
+    // Master Password defaults.
+    const char *fullName = NULL, *masterPassword = NULL, *siteName = NULL;
     MPSiteType siteType = MPSiteTypeGeneratedLong;
-    const char *siteTypeString = getenv( MP_env_sitetype );
     MPSiteVariant siteVariant = MPSiteVariantPassword;
-    const char *siteVariantString = NULL;
-    const char *siteContextString = NULL;
-    uint32_t siteCounter = 1;
-    const char *siteCounterString = getenv( MP_env_sitecounter );
     MPAlgorithmVersion algorithmVersion = MPAlgorithmVersionCurrent;
-    const char *algorithmVersionString = getenv( MP_env_algorithm );
-    if (algorithmVersionString && strlen( algorithmVersionString ))
-        if (sscanf( algorithmVersionString, "%u", &algorithmVersion ) != 1)
-            ftl( "Invalid %s: %s\n", MP_env_algorithm, algorithmVersionString );
+    uint32_t siteCounter = 1;
 
-    // Read the options.
+    // Read the environment.
+    const char *fullNameArg = getenv( MP_env_fullName ), *masterPasswordArg = NULL, *siteNameArg = NULL;
+    const char *siteTypeArg = getenv( MP_env_siteType ), *siteVariantArg = NULL, *siteContextArg = NULL;
+    const char *siteCounterArg = getenv( MP_env_siteCounter );
+    const char *algorithmVersionArg = getenv( MP_env_algorithm );
+
+    // Read the command-line options.
     for (int opt; (opt = getopt( argc, argv, "u:P:t:c:V:a:C:vqh" )) != -1;)
         switch (opt) {
             case 'u':
-                fullName = strdup( optarg );
+                fullNameArg = optarg;
                 break;
             case 'P':
-                // Do not use this.  Passing your master password via the command-line
-                // is insecure.  This is here for non-interactive testing purposes only.
-                masterPassword = strcpy( malloc( strlen( optarg ) + 1 ), optarg );
+                // Passing your master password via the command-line is insecure.  Testing purposes only.
+                masterPasswordArg = optarg;
                 break;
             case 't':
-                siteTypeString = optarg;
+                siteTypeArg = optarg;
                 break;
             case 'c':
-                siteCounterString = optarg;
+                siteCounterArg = optarg;
                 break;
             case 'V':
-                siteVariantString = optarg;
+                siteVariantArg = optarg;
                 break;
             case 'a':
-                if (sscanf( optarg, "%u", &algorithmVersion ) != 1)
-                    ftl( "Not a version: %s\n", optarg );
+                algorithmVersionArg = optarg;
                 break;
             case 'C':
-                siteContextString = optarg;
+                siteContextArg = optarg;
                 break;
             case 'v':
                 ++mpw_verbosity;
@@ -161,64 +170,112 @@ int main(int argc, char *const argv[]) {
                         break;
                     default:
                         ftl( "Unknown option: -%c\n", optopt );
+                        break;
                 }
             default:
-                ftl("Unexpected option: %c", opt);
+                ftl( "Unexpected option: %c", opt );
+                break;
         }
     if (optind < argc)
-        siteName = strdup( argv[optind] );
+        siteNameArg = argv[optind];
 
-    // Convert and validate input.
-    if (!fullName && (fullName = getenv( MP_env_fullname )))
-        fullName = strdup( fullName );
-    if (!fullName && !(fullName = getline_prompt( "Your full name:" )))
+    // Empty strings unset the argument.
+    fullNameArg = fullNameArg && strlen( fullNameArg )? fullNameArg: NULL;
+    masterPasswordArg = masterPasswordArg && strlen( masterPasswordArg )? masterPasswordArg: NULL;
+    siteNameArg = siteNameArg && strlen( siteNameArg )? siteNameArg: NULL;
+    siteTypeArg = siteTypeArg && strlen( siteTypeArg )? siteTypeArg: NULL;
+    siteVariantArg = siteVariantArg && strlen( siteVariantArg )? siteVariantArg: NULL;
+    siteContextArg = siteContextArg && strlen( siteContextArg )? siteContextArg: NULL;
+    siteCounterArg = siteCounterArg && strlen( siteCounterArg )? siteCounterArg: NULL;
+    algorithmVersionArg = algorithmVersionArg && strlen( algorithmVersionArg )? algorithmVersionArg: NULL;
+
+    // Determine fullName and siteName.
+    if (!(fullNameArg && (fullName = strdup( fullNameArg ))) &&
+        !(fullName = getline_prompt( "Your full name:" )))
         ftl( "Missing full name.\n" );
-    if (!siteName && !(siteName = getline_prompt( "Site name:" )))
+    if (!(siteNameArg && (siteName = strdup( siteNameArg ))) &&
+        !(siteName = getline_prompt( "Site name:" )))
         ftl( "Missing site name.\n" );
-    if (siteCounterString)
-        siteCounter = (uint32_t)atol( siteCounterString );
-    if (siteCounter < 1)
-        ftl( "Invalid site counter: %d\n", siteCounter );
-    if (siteVariantString)
-        siteVariant = mpw_variantWithName( siteVariantString );
+
+    // Read defaults for fullName user from config.
+    char *mpwSitesPath = mpwPath( fullName, "mpsites" );
+    if (!mpwSitesPath)
+        wrn( "Couldn't resolve path for configuration file: %d\n", errno );
+
+    else {
+        FILE *mpwSites = fopen( mpwSitesPath, "r" );
+        free( mpwSitesPath );
+        if (!mpwSites)
+            dbg( "Couldn't open configuration file: %s: %d\n", mpwSitesPath, errno );
+
+        else {
+            size_t readAmount = 4096, bufSize = 0, bufPointer = 0, readSize = 0;
+            void *buf = NULL;
+            while ((buf = realloc( buf, bufSize += readAmount )) &&
+                   (bufPointer += (readSize = fread( buf + bufPointer, 1, readAmount, mpwSites ))) &&
+                   (readSize == readAmount));
+
+            // Load personal defaults from user config.
+            MPMarshalledUser user = mpw_marshall_read( buf, MPMarshallFormatFlat );
+            if (!user.name)
+                wrn( "Couldn't parse configuration file: %s\n", mpwSitesPath );
+
+            else {
+                fullName = user.name;
+                algorithmVersion = user.version;
+                siteType = user.defaultType;
+
+                for (int s = 0; s < user.sites_count; ++s) {
+                    MPMarshalledSite site = user.sites[s];
+
+                    if (strcmp( siteName, site.name ) == 0) {
+                        siteType = site.type;
+                        siteCounter = site.counter;
+                        algorithmVersion = site.version;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    // Parse default-overriding command-line parameters.
+    if ((algorithmVersionArg && sscanf( algorithmVersionArg, "%u", &algorithmVersion ) != 1) ||
+        algorithmVersion > MPAlgorithmVersionLatest)
+        ftl( "Invalid algorithm: %s\n", algorithmVersionArg );
+    if (siteCounterArg) {
+        long long int siteCounterInt = atoll( siteCounterArg );
+        if (siteCounterInt < 0 || siteCounterInt > UINT32_MAX)
+            ftl( "Invalid site counter: %s\n", siteCounterArg );
+        siteCounter = (uint32_t)siteCounterInt;
+    }
+    if (siteVariantArg)
+        siteVariant = mpw_variantWithName( siteVariantArg );
     if (siteVariant == MPSiteVariantLogin)
         siteType = MPSiteTypeGeneratedName;
     if (siteVariant == MPSiteVariantAnswer)
         siteType = MPSiteTypeGeneratedPhrase;
-    if (siteTypeString)
-        siteType = mpw_typeWithName( siteTypeString );
-    trc( "algorithmVersion: %u\n", algorithmVersion );
-
-    // Read the master password.
-    char *mpwConfigPath = homedir( ".mpw" );
-    if (!mpwConfigPath)
-        ftl( "Couldn't resolve path for configuration file: %d\n", errno );
-    trc( "mpwConfigPath: %s\n", mpwConfigPath );
-    FILE *mpwConfig = fopen( mpwConfigPath, "r" );
-    free( mpwConfigPath );
-    if (mpwConfig) {
-        char *line = NULL;
-        size_t linecap = 0;
-        while (getline( &line, &linecap, mpwConfig ) > 0) {
-            char *lineData = line;
-            if (strcmp( strsep( &lineData, ":" ), fullName ) == 0) {
-                masterPassword = strcpy( malloc( strlen( lineData ) ), strsep( &lineData, "\n" ) );
-                break;
-            }
-        }
-        mpw_free( line, linecap );
-    }
-    while (!masterPassword || !strlen(masterPassword))
-        masterPassword = getpass( "Your master password: " );
+    if (siteTypeArg)
+        siteType = mpw_typeWithName( siteTypeArg );
+    if (!(masterPasswordArg && (masterPassword = strdup( masterPasswordArg ))))
+        while (!masterPassword || !strlen( masterPassword ))
+            masterPassword = getpass( "Your master password: " );
 
     // Summarize operation.
     const char *identicon = mpw_identicon( fullName, masterPassword );
-    if (!identicon) {
-        err( "Couldn't determine identicon.\n" );
-    } else {
-        fprintf( stderr, "%s's password for %s:\n[ %s ]: ", fullName, siteName, identicon );
-        mpw_free_string( identicon );
-    }
+    if (!identicon)
+        wrn( "Couldn't determine identicon.\n" );
+    dbg( "-----------------\n" );
+    dbg( "fullName         : %s\n", fullName );
+    trc( "masterPassword   : %s\n", masterPassword );
+    dbg( "identicon        : %s\n", identicon );
+    dbg( "siteName         : %s\n", siteName );
+    dbg( "siteType         : %u\n", siteType );
+    dbg( "algorithmVersion : %u\n", algorithmVersion );
+    dbg( "siteCounter      : %u\n", siteCounter );
+    dbg( "-----------------\n\n" );
+    inf( "%s's password for %s:\n[ %s ]: ", fullName, siteName, identicon );
+    mpw_free_string( identicon );
 
     // Output the password.
     const uint8_t *masterKey = mpw_masterKeyForUser(
@@ -229,8 +286,8 @@ int main(int argc, char *const argv[]) {
         ftl( "Couldn't derive master key." );
 
     const char *sitePassword = mpw_passwordForSite(
-            masterKey, siteName, siteType, siteCounter, siteVariant, siteContextString, algorithmVersion );
-    mpw_free( masterKey, MP_dkLen );
+            masterKey, siteName, siteType, siteCounter, siteVariant, siteContextArg, algorithmVersion );
+    mpw_free( masterKey, MPMasterKeySize );
     mpw_free_string( siteName );
     if (!sitePassword)
         ftl( "Couldn't derive site password." );
