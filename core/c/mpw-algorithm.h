@@ -16,6 +16,10 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // NOTE: mpw is currently NOT thread-safe.
 #include "mpw-types.h"
 
@@ -41,3 +45,8 @@ const uint8_t *mpw_masterKeyForUser(
 const char *mpw_passwordForSite(
         const uint8_t *masterKey, const char *siteName, const MPSiteType siteType, const uint32_t siteCounter,
         const MPSiteVariant siteVariant, const char *siteContext, const MPAlgorithmVersion algorithmVersion);
+    
+#ifdef __cplusplus
+}
+#endif
+
