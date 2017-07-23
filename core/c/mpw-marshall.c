@@ -378,8 +378,10 @@ MPMarshalledUser *mpw_marshall_read_flat(
                 importKeyID = strdup( headerValue );
             if (strcmp( headerName, "Algorithm" ) == 0) {
                 int importAlgorithmInt = atoi( headerValue );
-                if (importAlgorithmInt < MPAlgorithmVersionFirst || importAlgorithmInt > MPAlgorithmVersionLast)
-                    ftl( "Invalid algorithm version: %s\n", headerValue );
+                if (importAlgorithmInt < MPAlgorithmVersionFirst || importAlgorithmInt > MPAlgorithmVersionLast) {
+                    err( "Invalid algorithm version: %s\n", headerValue );
+                    return false;
+                }
                 importAlgorithm = (MPAlgorithmVersion)importAlgorithmInt;
             }
             if (strcmp( headerName, "Default Type" ) == 0)
