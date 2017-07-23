@@ -35,6 +35,23 @@ typedef enum( unsigned int, MPMarshallFormat ) {
             MPMarshallFormatJSON,
 };
 
+typedef enum( unsigned int, MPMarshallError ) {
+    /** The marshalling operation completed successfully. */
+            MPMarshallSuccess,
+    /** An error in the structure of the marshall file interrupted marshalling. */
+            MPMarshallErrorStructure,
+    /** The marshall file uses an unsupported format version. */
+            MPMarshallErrorFormat,
+    /** A required value is missing or not specified. */
+            MPMarshallErrorMissing,
+    /** The given master password is not valid. */
+            MPMarshallErrorMasterPassword,
+    /** An illegal value was specified. */
+            MPMarshallErrorIllegal,
+    /** An internal system error interrupted marshalling. */
+            MPMarshallErrorInternal,
+};
+
 typedef struct MPMarshalledQuestion {
     const char *keyword;
 } MPMarshalledQuestion;
@@ -74,12 +91,12 @@ typedef struct MPMarshalledUser {
 //// Marshalling.
 
 bool mpw_marshall_write(
-        char **out, const MPMarshallFormat outFormat, const MPMarshalledUser *marshalledUser);
+        char **out, const MPMarshallFormat outFormat, const MPMarshalledUser *marshalledUser, MPMarshallError *error);
 
 //// Unmarshalling.
 
 MPMarshalledUser *mpw_marshall_read(
-        char *in, const MPMarshallFormat inFormat, const char *masterPassword);
+        char *in, const MPMarshallFormat inFormat, const char *masterPassword, MPMarshallError *error);
 
 //// Utilities.
 

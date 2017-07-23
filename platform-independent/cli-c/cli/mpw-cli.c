@@ -226,10 +226,11 @@ int main(int argc, char *const argv[]) {
         fclose( mpwSites );
 
         // Parse file.
-        MPMarshalledUser *user = mpw_marshall_read( buf, mpwSitesFormat, masterPassword );
+        MPMarshallError marshallError = MPMarshallSuccess;
+        MPMarshalledUser *user = mpw_marshall_read( buf, mpwSitesFormat, masterPassword, &marshallError );
         mpw_free_string( buf );
-        if (!user)
-            wrn( "Couldn't parse configuration file: %s\n", mpwSitesPath );
+        if (!user || marshallError != MPMarshallSuccess)
+            wrn( "Couldn't parse configuration file: %s: %d\n", mpwSitesPath, marshallError );
 
         else {
             // Load defaults.
@@ -257,8 +258,8 @@ int main(int argc, char *const argv[]) {
 
                 else {
                     buf = NULL;
-                    if (!mpw_marshall_write( &buf, MPMarshallFormatJSON, user ))
-                        wrn( "Couldn't encode updated configuration file." );
+                    if (!mpw_marshall_write( &buf, MPMarshallFormatJSON, user, &marshallError ) || marshallError != MPMarshallSuccess)
+                        wrn( "Couldn't encode updated configuration file: %s: %d", mpwSitesPath, marshallError );
 
                     else if (fwrite( buf, sizeof( char ), strlen( buf ), mpwSites ) != strlen( buf ))
                         wrn( "Error while writing updated configuration file: %s: %d\n", mpwSitesPath, ferror( mpwSites ) );
