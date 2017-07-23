@@ -243,7 +243,7 @@ Currently, there is only one toggleable feature:
 Using [Docker](https://hub.docker.com/r/ellioseven/mpw/), run with:
 
 ```
-docker run --device /dev/snd -it --rm --name mpsyt ellioseven/mps-youtube mpsyt
+docker run -ti --rm ellioseven/mpw /usr/bin/mpw
 ```
 
 ## Support
