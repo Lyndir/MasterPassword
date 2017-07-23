@@ -27,40 +27,52 @@
 #ifndef trc
 extern int mpw_verbosity;
     #define trc_level 3
-    #define trc(...) \
-        ({ if (mpw_verbosity >= 3) \
+    #define trc(...) ({ \
+        if (mpw_verbosity >= 3) \
             fprintf( stderr, __VA_ARGS__ ); })
 #endif
 #ifndef dbg
     #define dbg_level 2
-    #define dbg(...) \
-        ({ if (mpw_verbosity >= 2) \
+    #define dbg(...) ({ \
+        if (mpw_verbosity >= 2) \
             fprintf( stderr, __VA_ARGS__ ); })
 #endif
 #ifndef inf
     #define inf_level 1
-    #define inf(...) \
-        ({ if (mpw_verbosity >= 1) \
+    #define inf(...) ({ \
+        if (mpw_verbosity >= 1) \
             fprintf( stderr, __VA_ARGS__ ); })
 #endif
 #ifndef wrn
     #define wrn_level 0
-    #define wrn(...) \
-        ({ if (mpw_verbosity >= 0) \
+    #define wrn(...) ({ \
+        if (mpw_verbosity >= 0) \
             fprintf( stderr, __VA_ARGS__ ); })
 #endif
 #ifndef err
     #define err_level -1
-    #define err(...) \
-        ({ if (mpw_verbosity >= -1) \
+    #define err(...) ({ \
+        if (mpw_verbosity >= -1) \
             fprintf( stderr, __VA_ARGS__ ); })
 #endif
 #ifndef ftl
     #define ftl_level -2
-    #define ftl(...) \
-        ({ if (mpw_verbosity >= -2) \
+    #define ftl(...) ({ \
+        if (mpw_verbosity >= -2) \
             fprintf( stderr, __VA_ARGS__ ); \
         exit( 2 ); })
+#endif
+#ifndef min
+#define min(a, b) ({ \
+    __typeof__ (a) _a = (a); \
+    __typeof__ (b) _b = (b); \
+    _a < _b ? _a : _b; })
+#endif
+#ifndef max
+#define max(a, b) ({ \
+    __typeof__ (a) _a = (a); \
+    __typeof__ (b) _b = (b); \
+    _a > _b ? _a : _b; })
 #endif
 
 //// Buffers and memory.

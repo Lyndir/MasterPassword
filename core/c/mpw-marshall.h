@@ -44,7 +44,7 @@ typedef struct MPMarshalledSite {
     const char *content;
     MPSiteType type;
     uint32_t counter;
-    MPAlgorithmVersion version;
+    MPAlgorithmVersion algorithm;
 
     const char *loginName;
     bool loginGenerated;
@@ -60,7 +60,7 @@ typedef struct MPMarshalledSite {
 typedef struct MPMarshalledUser {
     const char *name;
     MPMasterKey key;
-    MPAlgorithmVersion version;
+    MPAlgorithmVersion algorithm;
 
     unsigned int avatar;
     MPSiteType defaultType;
@@ -78,17 +78,19 @@ bool mpw_marshall_write(
 
 //// Unmarshalling.
 
-MPMarshalledUser mpw_marshall_read(
+MPMarshalledUser *mpw_marshall_read(
         char *in, const MPMarshallFormat outFormat);
 
 //// Utilities.
 
-MPMarshalledUser mpw_marshall_user(
+MPMarshalledUser *mpw_marshall_user(
         const char *fullName, MPMasterKey masterKey, const MPAlgorithmVersion algorithmVersion);
-MPMarshalledSite mpw_marshall_site(
+MPMarshalledSite *mpw_marshall_site(
         MPMarshalledUser *marshalledUser,
         const char *siteName, const MPSiteType siteType, const uint32_t siteCounter, const MPAlgorithmVersion algorithmVersion);
-MPMarshalledQuestion mpw_marshal_question(
+MPMarshalledQuestion *mpw_marshal_question(
         MPMarshalledSite *marshalledSite, const char *keyword);
+bool mpw_marshal_free(
+        MPMarshalledUser *marshalledUser);
 
 #endif // _MPW_MARSHALL_H

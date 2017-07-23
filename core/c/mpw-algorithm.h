@@ -33,7 +33,8 @@ typedef enum( unsigned int, MPAlgorithmVersion ) {
             MPAlgorithmVersion3,
 
     MPAlgorithmVersionCurrent = MPAlgorithmVersion3,
-    MPAlgorithmVersionLatest = MPAlgorithmVersion3,
+    MPAlgorithmVersionFirst = MPAlgorithmVersion0,
+    MPAlgorithmVersionLast = MPAlgorithmVersion3,
 };
 
 /** Derive the master key for a user based on their name and master password.

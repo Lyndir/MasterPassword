@@ -189,13 +189,16 @@ int main(int argc, char *const argv[]) {
     siteCounterArg = siteCounterArg && strlen( siteCounterArg )? siteCounterArg: NULL;
     algorithmVersionArg = algorithmVersionArg && strlen( algorithmVersionArg )? algorithmVersionArg: NULL;
 
-    // Determine fullName and siteName.
+    // Determine fullName, siteName & masterPassword.
     if (!(fullNameArg && (fullName = strdup( fullNameArg ))) &&
         !(fullName = getline_prompt( "Your full name:" )))
         ftl( "Missing full name.\n" );
     if (!(siteNameArg && (siteName = strdup( siteNameArg ))) &&
         !(siteName = getline_prompt( "Site name:" )))
         ftl( "Missing site name.\n" );
+    if (!(masterPasswordArg && (masterPassword = strdup( masterPasswordArg ))))
+        while (!masterPassword || !strlen( masterPassword ))
+            masterPassword = getpass( "Your master password: " );
 
     // Read defaults for fullName user from config.
     char *mpwSitesPath = mpwPath( fullName, "mpsites" );
@@ -216,33 +219,36 @@ int main(int argc, char *const argv[]) {
                    (readSize == readAmount));
 
             // Load personal defaults from user config.
-            MPMarshalledUser user = mpw_marshall_read( buf, MPMarshallFormatFlat );
-            if (!user.name)
+            MPMarshalledUser *user = mpw_marshall_read( buf, MPMarshallFormatFlat );
+            if (!user)
                 wrn( "Couldn't parse configuration file: %s\n", mpwSitesPath );
 
             else {
-                fullName = user.name;
-                algorithmVersion = user.version;
-                siteType = user.defaultType;
+                fullName = user->name;
+                algorithmVersion = user->algorithm;
+                siteType = user->defaultType;
 
-                for (int s = 0; s < user.sites_count; ++s) {
-                    MPMarshalledSite site = user.sites[s];
-
+                for (int s = 0; s < user->sites_count; ++s) {
+                    MPMarshalledSite site = user->sites[s];
                     if (strcmp( siteName, site.name ) == 0) {
                         siteType = site.type;
                         siteCounter = site.counter;
-                        algorithmVersion = site.version;
+                        algorithmVersion = site.algorithm;
                         break;
                     }
                 }
+                mpw_marshal_free( user );
             }
         }
     }
 
-    // Parse default-overriding command-line parameters.
-    if ((algorithmVersionArg && sscanf( algorithmVersionArg, "%u", &algorithmVersion ) != 1) ||
-        algorithmVersion > MPAlgorithmVersionLatest)
-        ftl( "Invalid algorithm: %s\n", algorithmVersionArg );
+    // Parse default/config-overriding command-line parameters.
+    if (algorithmVersionArg) {
+        int algorithmVersionInt = atoi( algorithmVersionArg );
+        if (algorithmVersionInt < MPAlgorithmVersionFirst || algorithmVersionInt > MPAlgorithmVersionLast)
+            ftl( "Invalid algorithm version: %s\n", algorithmVersionArg );
+        algorithmVersion = (MPAlgorithmVersion)algorithmVersionInt;
+    }
     if (siteCounterArg) {
         long long int siteCounterInt = atoll( siteCounterArg );
         if (siteCounterInt < 0 || siteCounterInt > UINT32_MAX)
@@ -257,9 +263,6 @@ int main(int argc, char *const argv[]) {
         siteType = MPSiteTypeGeneratedPhrase;
     if (siteTypeArg)
         siteType = mpw_typeWithName( siteTypeArg );
-    if (!(masterPasswordArg && (masterPassword = strdup( masterPasswordArg ))))
-        while (!masterPassword || !strlen( masterPassword ))
-            masterPassword = getpass( "Your master password: " );
 
     // Summarize operation.
     const char *identicon = mpw_identicon( fullName, masterPassword );

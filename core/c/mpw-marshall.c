@@ -18,18 +18,25 @@
 
 
 #include <stdio.h>
+#include <string.h>
 #include <time.h>
 #include <json-c/json.h>
+#include <ctype.h>
+#include <math.h>
 #include "mpw-marshall.h"
 #include "mpw-util.h"
 
-MPMarshalledUser mpw_marshall_user(
+MPMarshalledUser *mpw_marshall_user(
         const char *fullName, MPMasterKey masterKey, const MPAlgorithmVersion algorithmVersion) {
 
-    return (MPMarshalledUser){
+    MPMarshalledUser *user = malloc( sizeof( MPMarshalledUser ) );
+    if (!user)
+        return NULL;
+
+    *user = (MPMarshalledUser){
             .name = fullName,
             .key = masterKey,
-            .version = algorithmVersion,
+            .algorithm = algorithmVersion,
 
             .avatar = 0,
             .defaultType = MPSiteTypeGeneratedLong,
@@ -38,21 +45,25 @@ MPMarshalledUser mpw_marshall_user(
             .sites_count = 0,
             .sites = NULL,
     };
+    return user;
 };
 
-MPMarshalledSite mpw_marshall_site(
+MPMarshalledSite *mpw_marshall_site(
         MPMarshalledUser *marshalledUser,
         const char *siteName, const MPSiteType siteType, const uint32_t siteCounter, const MPAlgorithmVersion algorithmVersion) {
 
-    marshalledUser->sites = realloc( marshalledUser->sites, marshalledUser->sites_count + 1 );
-    return marshalledUser->sites[marshalledUser->sites_count++] = (MPMarshalledSite){
+    if (!(marshalledUser->sites =
+            realloc( marshalledUser->sites, sizeof( MPMarshalledSite ) * (++marshalledUser->sites_count) )))
+        return NULL;
+
+    marshalledUser->sites[marshalledUser->sites_count - 1] = (MPMarshalledSite){
             .name = siteName,
             .type = siteType,
             .counter = siteCounter,
-            .version = algorithmVersion,
+            .algorithm = algorithmVersion,
 
             .loginName = NULL,
-            .loginGenerated = 0,
+            .loginGenerated = false,
 
             .url = NULL,
             .uses = 0,
@@ -61,15 +72,37 @@ MPMarshalledSite mpw_marshall_site(
             .questions_count = 0,
             .questions = NULL,
     };
+    return marshalledUser->sites + sizeof( MPMarshalledSite ) * (marshalledUser->sites_count - 1);
 };
 
-MPMarshalledQuestion mpw_marshal_question(
+MPMarshalledQuestion *mpw_marshal_question(
         MPMarshalledSite *marshalledSite, const char *keyword) {
 
-    marshalledSite->questions = realloc( marshalledSite->questions, marshalledSite->questions_count + 1 );
-    return marshalledSite->questions[marshalledSite->questions_count++] = (MPMarshalledQuestion){
+    if (!(marshalledSite->questions =
+            realloc( marshalledSite->questions, sizeof( MPMarshalledQuestion ) * (++marshalledSite->questions_count) )))
+        return NULL;
+
+    marshalledSite->questions[marshalledSite->questions_count - 1] = (MPMarshalledQuestion){
             .keyword = keyword,
     };
+    return marshalledSite->questions + sizeof( MPMarshalledSite ) * (marshalledSite->questions_count - 1);
+}
+
+bool mpw_marshal_free(
+        MPMarshalledUser *marshalledUser) {
+
+    for (int s = 0; s < marshalledUser->sites_count; ++s) {
+        MPMarshalledSite site = marshalledUser->sites[s];
+        if (!mpw_free( site.questions, sizeof( MPMarshalledQuestion ) * site.questions_count ))
+            return false;
+    }
+    if (!mpw_free( marshalledUser->sites, sizeof( MPMarshalledSite ) * marshalledUser->sites_count ))
+        return false;
+
+    if (!mpw_free( marshalledUser, sizeof( MPMarshalledUser ) ))
+        return false;
+
+    return true;
 }
 
 #define try_asprintf(...) ({ if (asprintf( __VA_ARGS__ ) < 0) return false; })
@@ -95,7 +128,7 @@ bool mpw_marshall_write_flat(
     try_asprintf( out, "# Full Name: %s\n", marshalledUser->name );
     try_asprintf( out, "# Avatar: %u\n", marshalledUser->avatar );
     try_asprintf( out, "# Key ID: %s\n", mpw_id_buf( marshalledUser->key, MPMasterKeySize ) );
-    try_asprintf( out, "# Algorithm: %d\n", marshalledUser->version );
+    try_asprintf( out, "# Algorithm: %d\n", marshalledUser->algorithm );
     try_asprintf( out, "# Default Type: %d\n", marshalledUser->defaultType );
     try_asprintf( out, "# Passwords: %s\n", redacted? "PROTECTED": "VISIBLE" );
     try_asprintf( out, "##\n" );
@@ -110,12 +143,12 @@ bool mpw_marshall_write_flat(
         const char *content = NULL;
         if (!redacted && site.type & MPSiteTypeClassGenerated)
             content = mpw_passwordForSite( marshalledUser->key, site.name, site.type, site.counter,
-                    MPSiteVariantPassword, NULL, site.version );
+                    MPSiteVariantPassword, NULL, site.algorithm );
         // TODO: Personal Passwords
 
         if (strftime( dateString, dateSize, "yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'", gmtime( &site.lastUsed ) ))
             try_asprintf( out, "%s  %8ld  %lu:%lu:%lu  %25s\t%25s\t%s\n",
-                    dateString, (long)site.uses, (long)site.type, (long)site.version, (long)site.counter,
+                    dateString, (long)site.uses, (long)site.type, (long)site.algorithm, (long)site.counter,
                     site.loginName?: "", site.name, content?: "" );
     }
     return true;
@@ -149,7 +182,7 @@ bool mpw_marshall_write_json(
         json_object_object_add( json_user, "last_used", json_object_new_string( dateString ) );
     json_object_object_add( json_user, "key_id", json_object_new_string( mpw_id_buf( marshalledUser->key, MPMasterKeySize ) ) );
 
-    json_object_object_add( json_user, "algorithm", json_object_new_int( marshalledUser->version ) );
+    json_object_object_add( json_user, "algorithm", json_object_new_int( marshalledUser->algorithm ) );
     json_object_object_add( json_user, "default_type", json_object_new_int( marshalledUser->defaultType ) );
     json_object_put( json_user );
 
@@ -162,7 +195,7 @@ bool mpw_marshall_write_json(
         const char *content = site.content;
         if (!redacted && site.type & MPSiteTypeClassGenerated)
             content = mpw_passwordForSite( marshalledUser->key, site.name, site.type, site.counter,
-                    MPSiteVariantPassword, NULL, site.version );
+                    MPSiteVariantPassword, NULL, site.algorithm );
         // TODO: Personal Passwords
         //else if (redacted && content)
         //    content = aes128_cbc( marshalledUser->key, content );
@@ -171,7 +204,7 @@ bool mpw_marshall_write_json(
         json_object_object_add( json_sites, site.name, json_site );
         json_object_object_add( json_site, "type", json_object_new_int( site.type ) );
         json_object_object_add( json_site, "counter", json_object_new_int( site.counter ) );
-        json_object_object_add( json_site, "algorithm", json_object_new_int( site.version ) );
+        json_object_object_add( json_site, "algorithm", json_object_new_int( site.algorithm ) );
         if (content)
             json_object_object_add( json_site, "password", json_object_new_string( content ) );
 
@@ -193,7 +226,7 @@ bool mpw_marshall_write_json(
             if (!redacted)
                 json_object_object_add( json_site_question, "answer", json_object_new_string(
                         mpw_passwordForSite( marshalledUser->key, site.name, MPSiteTypeGeneratedPhrase, 1,
-                                MPSiteVariantAnswer, question.keyword, site.version ) ) );
+                                MPSiteVariantAnswer, question.keyword, site.algorithm ) ) );
             json_object_put( json_site_question );
         }
         json_object_put( json_site_questions );
@@ -226,289 +259,169 @@ bool mpw_marshall_write(
     return false;
 }
 
-MPMarshalledUser mpw_marshall_read_flat(
+char *mpw_get_token(char **in, char *eol, char *delim) {
+
+    // Skip leading spaces.
+    for (; **in == ' '; ++*in);
+
+    // Find characters up to the first delim.
+    size_t len = strcspn( *in, delim );
+    char *token = len? strndup( *in, len ): NULL;
+
+    // Advance past the delimitor.
+    *in = min( eol, *in + len + 1 );
+    return token;
+}
+
+MPMarshalledUser *mpw_marshall_read_flat(
         char *in) {
 
-//    // Compile patterns.
-//    static NSRegularExpression *headerPattern;
-//    static NSArray *sitePatterns;
-//    NSError *error = NULL;
-//    if (!headerPattern) {
-//        headerPattern = [[NSRegularExpression alloc]
-//                initWithPattern:"^#[[:space:]]*([^:]+): (.*)"
-//                        options:(NSRegularExpressionOptions)0 error:&error];
-//        if (error) {
-//            MPError( error, "Error loading the header pattern." );
-//            return MPImportResultInternalError;
-//        }
-//    }
-//    if (!sitePatterns) {
-//        sitePatterns = @[
-//                [[NSRegularExpression alloc] // Format 0
-//                        initWithPattern:"^([^ ]+) +([[:digit:]]+) +([[:digit:]]+)(:[[:digit:]]+)? +([^\t]+)\t(.*)"
-//                                options:(NSRegularExpressionOptions)0 error:&error],
-//                [[NSRegularExpression alloc] // Format 1
-//                        initWithPattern:"^([^ ]+) +([[:digit:]]+) +([[:digit:]]+)(:[[:digit:]]+)?(:[[:digit:]]+)? +([^\t]*)\t *([^\t]+)\t(.*)"
-//                                options:(NSRegularExpressionOptions)0 error:&error]
-//        ];
-//        if (error) {
-//            MPError( error, "Error loading the site patterns." );
-//            return MPImportResultInternalError;
-//        }
-//    }
-//
     // Parse import data.
     int importFormat = 0;
-    MPMarshalledUser user;
-    int importAvatar = -1;
+    MPMarshalledUser *user = NULL;
+    unsigned int importAvatar = 0;
     int importKeyID;
     char *importUserName = NULL;
+    char *importDate = NULL;
     MPAlgorithmVersion importAlgorithm = MPAlgorithmVersionCurrent;
     MPSiteType importDefaultType = (MPSiteType)0;
-    bool headerStarted = false, headerEnded = false, clearText = false;
-//    NSMutableSet *sitesToDelete = [NSMutableSet set];
-//    NSMutableArray *importedSiteSites = [NSMutableArray arrayWithCapacity:[importedSiteLines count]];
-//    NSFetchRequest *siteFetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPSiteEntity class] )];
-//    for (NSString *importedSiteLine in importedSiteLines) {
+    bool headerStarted = false, headerEnded = false, importRedacted = false;
+    for (char *endOfLine, *positionInLine = in; (endOfLine = strstr( positionInLine, "\n" )); positionInLine = endOfLine + 1) {
 
-//        if ([importedSiteLine hasPrefix:"#"]) {
-//            // Comment or header
-//            if (!headerStarted) {
-//                if ([importedSiteLine isEqualToString:"##"])
-//                    headerStarted = YES;
-//                continue;
-//            }
-//            if (headerEnded)
-//                continue;
-//            if ([importedSiteLine isEqualToString:"##"]) {
-//                headerEnded = YES;
-//                continue;
-//            }
-//
-//            // Header
-//            if ([headerPattern numberOfMatchesInString:importedSiteLine options:(NSMatchingOptions)0
-//                                                 range:NSMakeRange( 0, [importedSiteLine length] )] != 1) {
-//                err( "Invalid header format in line: %", importedSiteLine );
-//                return MPImportResultMalformedInput;
-//            }
-//            NSTextCheckingResult *headerSites = [[headerPattern matchesInString:importedSiteLine options:(NSMatchingOptions)0
-//                                                                          range:NSMakeRange( 0, [importedSiteLine length] )] lastObject];
-//            NSString *headerName = [importedSiteLine substringWithRange:[headerSites rangeAtIndex:1]];
-//            NSString *headerValue = [importedSiteLine substringWithRange:[headerSites rangeAtIndex:2]];
-//
-//            if ([headerName isEqualToString:"Format"]) {
-//                importFormat = (NSUInteger)[headerValue integerValue];
-//                if (importFormat >= [sitePatterns count]) {
-//                    err( "Unsupported import format: %lu", (unsigned long)importFormat );
-//                    return MPImportResultInternalError;
-//                }
-//            }
-//            if (([headerName isEqualToString:"User Name"] || [headerName isEqualToString:"Full Name"]) && !importUserName) {
-//                importUserName = headerValue;
-//
-//                NSFetchRequest *userFetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPUserEntity class] )];
-//                userFetchRequest.predicate = [NSPredicate predicateWithFormat:"name == %", importUserName];
-//                NSArray *users = [context executeFetchRequest:userFetchRequest error:&error];
-//                if (!users) {
-//                    MPError( error, "While looking for user: %@.", importUserName );
-//                    return MPImportResultInternalError;
-//                }
-//                if ([users count] > 1) {
-//                    err( "While looking for user: %@, found more than one: %lu", importUserName, (unsigned long)[users count] );
-//                    return MPImportResultInternalError;
-//                }
-//
-//                user = [users lastObject];
-//                dbg( "Existing user? %", [user debugDescription] );
-//            }
-//            if ([headerName isEqualToString:"Avatar"])
-//                importAvatar = (NSUInteger)[headerValue integerValue];
-//            if ([headerName isEqualToString:"Key ID"])
-//                importKeyID = [headerValue decodeHex];
-//            if ([headerName isEqualToString:"Version"]) {
-//                importBundleVersion = headerValue;
-//                importAlgorithm = MPAlgorithmDefaultForBundleVersion( importBundleVersion );
-//            }
-//            if ([headerName isEqualToString:"Algorithm"])
-//                importAlgorithm = MPAlgorithmForVersion( (MPAlgorithmVersion)[headerValue integerValue] );
-//            if ([headerName isEqualToString:"Default Type"])
-//                importDefaultType = (MPSiteType)[headerValue integerValue];
-//            if ([headerName isEqualToString:"Passwords"]) {
-//                if ([headerValue isEqualToString:"VISIBLE"])
-//                    clearText = YES;
-//            }
-//
-//            continue;
-//        }
-//        if (!headerEnded)
-//            continue;
-//        if (![importUserName length])
-//            return MPImportResultMalformedInput;
-//        if (![importedSiteLine length])
-//            continue;
-//
-//        // Site
-//        NSRegularExpression *sitePattern = sitePatterns[importFormat];
-//        if ([sitePattern numberOfMatchesInString:importedSiteLine options:(NSMatchingOptions)0
-//                                           range:NSMakeRange( 0, [importedSiteLine length] )] != 1) {
-//            err( "Invalid site format in line: %", importedSiteLine );
-//            return MPImportResultMalformedInput;
-//        }
-//        NSTextCheckingResult *siteElements = [[sitePattern matchesInString:importedSiteLine options:(NSMatchingOptions)0
-//                                                                     range:NSMakeRange( 0, [importedSiteLine length] )] lastObject];
-//        NSString *lastUsed, *uses, *type, *version, *counter, *siteName, *loginName, *exportContent;
-//        switch (importFormat) {
-//            case 0:
-//                lastUsed = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:1]];
-//                uses = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:2]];
-//                type = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:3]];
-//                version = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:4]];
-//                if ([version length])
-//                    version = [version substringFromIndex:1]; // Strip the leading colon.
-//                counter = "";
-//                loginName = "";
-//                siteName = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:5]];
-//                exportContent = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:6]];
-//                break;
-//            case 1:
-//                lastUsed = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:1]];
-//                uses = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:2]];
-//                type = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:3]];
-//                version = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:4]];
-//                if ([version length])
-//                    version = [version substringFromIndex:1]; // Strip the leading colon.
-//                counter = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:5]];
-//                if ([counter length])
-//                    counter = [counter substringFromIndex:1]; // Strip the leading colon.
-//                loginName = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:6]];
-//                siteName = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:7]];
-//                exportContent = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:8]];
-//                break;
-//            default:
-//                err( "Unexpected import format: %lu", (unsigned long)importFormat );
-//                return MPImportResultInternalError;
-//        }
-//
-//        // Find existing site.
-//        if (user) {
-//            siteFetchRequest.predicate = [NSPredicate predicateWithFormat:"name == %@ AND user == %", siteName, user];
-//            NSArray *existingSites = [context executeFetchRequest:siteFetchRequest error:&error];
-//            if (!existingSites) {
-//                MPError( error, "Lookup of existing sites failed for site: %@, user: %@.", siteName, user.userID );
-//                return MPImportResultInternalError;
-//            }
-//            if ([existingSites count]) {
-//                dbg( "Existing sites: %", existingSites );
-//                [sitesToDelete addObjectsFromArray:existingSites];
-//            }
-//        }
-//        [importedSiteSites addObject:@[ lastUsed, uses, type, version, counter, loginName, siteName, exportContent ]];
-//        dbg( "Will import site: lastUsed=%@, uses=%@, type=%@, version=%@, counter=%@, loginName=%@, siteName=%@, exportContent=%",
-//                lastUsed, uses, type, version, counter, loginName, siteName, exportContent );
-//    }
-//
-//    // Ask for confirmation to import these sites and the master password of the user.
-//    inf( "Importing %lu sites, deleting %lu sites, for user: %", (unsigned long)[importedSiteSites count],
-//            (unsigned long)[sitesToDelete count], [MPUserEntity idFor:importUserName] );
-//    NSString *userMasterPassword = askUserPassword( user? user.name: importUserName, [importedSiteSites count],
-//            [sitesToDelete count] );
-//    if (!userMasterPassword) {
-//        inf( "Import cancelled." );
-//        return MPImportResultCancelled;
-//    }
-//    MPKey *userKey = [[MPKey alloc] initForFullName:user? user.name: importUserName withMasterPassword:userMasterPassword];
-//    if (user && ![[userKey keyIDForAlgorithm:user.algorithm] isEqualToData:user.keyID])
-//        return MPImportResultInvalidPassword;
-//    __block MPKey *importKey = userKey;
-//    if (importKeyID && ![[importKey keyIDForAlgorithm:importAlgorithm] isEqualToData:importKeyID])
-//        importKey = [[MPKey alloc] initForFullName:importUserName withMasterPassword:askImportPassword( importUserName )];
-//    if (importKeyID && ![[importKey keyIDForAlgorithm:importAlgorithm] isEqualToData:importKeyID])
-//        return MPImportResultInvalidPassword;
-//
-//    // Delete existing sites.
-//    if (sitesToDelete.count)
-//        [sitesToDelete enumerateObjectsUsingBlock:^(id obj, bool *stop) {
-//            inf( "Deleting site: %@, it will be replaced by an imported site.", [obj name] );
-//            [context deleteObject:obj];
-//        }];
-//
-//    // Make sure there is a user.
-//    if (user) {
-//        if (importAvatar != NSNotFound)
-//            user.avatar = importAvatar;
-//        if (importDefaultType)
-//            user.defaultType = importDefaultType;
-//        dbg( "Updating User: %", [user debugDescription] );
-//    }
-//    else {
-//        user = [MPUserEntity insertNewObjectInContext:context];
-//        user.name = importUserName;
-//        user.algorithm = MPAlgorithmDefault;
-//        user.keyID = [userKey keyIDForAlgorithm:user.algorithm];
-//        user.defaultType = importDefaultType?: user.algorithm.defaultType;
-//        if (importAvatar != NSNotFound)
-//            user.avatar = importAvatar;
-//        dbg( "Created User: %", [user debugDescription] );
-//    }
-//
-//    // Import new sites.
-//    for (NSArray *siteElements in importedSiteSites) {
-//        NSDate *lastUsed = [[NSDateFormatter rfc3339DateFormatter] dateFromString:siteElements[0]];
-//        NSUInteger uses = (unsigned)[siteElements[1] integerValue];
-//        MPSiteType type = (MPSiteType)[siteElements[2] integerValue];
-//        MPAlgorithmVersion version = (MPAlgorithmVersion)[siteElements[3] integerValue];
-//        NSUInteger counter = [siteElements[4] length]? (unsigned)[siteElements[4] integerValue]: NSNotFound;
-//        NSString *loginName = [siteElements[5] length]? siteElements[5]: NULL;
-//        NSString *siteName = siteElements[6];
-//        NSString *exportContent = siteElements[7];
-//
-//        // Create new site.
-//        id<MPAlgorithm> algorithm = MPAlgorithmForVersion( version );
-//        Class entityType = [algorithm classOfType:type];
-//        if (!entityType) {
-//            err( "Invalid site type in import file: %@ has type %lu", siteName, (long)type );
-//            return MPImportResultInternalError;
-//        }
-//        MPSiteEntity *site = (MPSiteEntity *)[entityType insertNewObjectInContext:context];
-//        site.name = siteName;
-//        site.loginName = loginName;
-//        site.user = user;
-//        site.type = type;
-//        site.uses = uses;
-//        site.lastUsed = lastUsed;
-//        site.algorithm = algorithm;
-//        if ([exportContent length]) {
-//            if (clearText)
-//                [site.algorithm importClearTextPassword:exportContent intoSite:site usingKey:userKey];
-//            else
-//                [site.algorithm importProtectedPassword:exportContent protectedByKey:importKey intoSite:site usingKey:userKey];
-//        }
-//        if ([site isKindOfClass:[MPGeneratedSiteEntity class]] && counter != NSNotFound)
-//            ((MPGeneratedSiteEntity *)site).counter = counter;
-//
-//        dbg( "Created Site: %", [site debugDescription] );
-//    }
-//
-//    if (![context saveToStore])
-//        return MPImportResultInternalError;
-//
-//    inf( "Import completed successfully." );
-//
-//    [[NSNotificationCenter defaultCenter] postNotificationName:MPSitesImportedNotification object:NULL userInfo:@{
-//            MPSitesImportedNotificationUserKey: user
-//    }];
-//
-//    return MPImportResultSuccess;
-    return (MPMarshalledUser){};
+        // Comment or header
+        if (*positionInLine == '#') {
+            ++positionInLine;
+
+            if (!headerStarted) {
+                if (*positionInLine == '#')
+                    // ## starts header
+                    headerStarted = true;
+                // Comment before header
+                continue;
+            }
+            if (headerEnded)
+                // Comment after header
+                continue;
+            if (*positionInLine == '#') {
+                // ## ends header
+                headerEnded = true;
+                continue;
+            }
+
+            // Header
+            char *headerName = mpw_get_token( &positionInLine, endOfLine, ":\n" );
+            char *headerValue = mpw_get_token( &positionInLine, endOfLine, "\n" );
+            if (!headerName || !headerValue)
+                ftl( "Invalid header: %s\n", strndup( positionInLine, endOfLine - positionInLine ) );
+
+            if (strcmp( headerName, "Format" ) == 0)
+                importFormat = atoi( headerValue );
+            if (strcmp( headerName, "Date" ) == 0)
+                importDate = strdup( headerValue );
+            if (strcmp( headerName, "Full Name" ) == 0 || strcmp( headerName, "User Name" ) == 0)
+                importUserName = strdup( headerValue );
+            if (strcmp( headerName, "Avatar" ) == 0)
+                importAvatar = (unsigned int)atoi( headerValue );
+            //if (strcmp( headerName, "Key ID" ) == 0)
+            //    importKeyID = strdup( headerValue );
+            if (strcmp( headerName, "Algorithm" ) == 0) {
+                int importAlgorithmInt = atoi( headerValue );
+                if (importAlgorithmInt < MPAlgorithmVersionFirst || importAlgorithmInt > MPAlgorithmVersionLast)
+                    ftl( "Invalid algorithm version: %s\n", headerValue );
+                importAlgorithm = (MPAlgorithmVersion)importAlgorithmInt;
+            }
+            if (strcmp( headerName, "Default Type" ) == 0)
+                importDefaultType = (MPSiteType)atoi( headerValue );
+            if (strcmp( headerName, "Passwords" ) == 0)
+                importRedacted = strcmp( headerValue, "VISIBLE" ) != 0;
+
+            continue;
+        }
+        if (!headerEnded)
+            continue;
+        if (!importUserName)
+            ftl( "Missing header: Full Name\n" ); //MPImportResultMalformedInput;
+        if (positionInLine >= endOfLine)
+            continue;
+
+        if (!user) {
+            if (!(user = mpw_marshall_user( importUserName, NULL, importAlgorithm )))
+                ftl( "Couldn't allocate a new user." );
+
+            //user.key = importKeyID;
+            user->avatar = importAvatar;
+            user->defaultType = importDefaultType;
+        }
+
+
+        // Site
+        char *lastUsed = NULL, *uses = NULL, *type = NULL, *version = NULL, *counter = NULL;
+        char *loginName = NULL, *siteName = NULL, *exportContent = NULL;
+        switch (importFormat) {
+            case 0: {
+                lastUsed = mpw_get_token( &positionInLine, endOfLine, " \t\n" );
+                uses = mpw_get_token( &positionInLine, endOfLine, " \t\n" );
+                char *typeAndVersion = mpw_get_token( &positionInLine, endOfLine, " \t\n" );
+                if (typeAndVersion) {
+                    type = strdup( strtok( typeAndVersion, ":" ) );
+                    version = strdup( strtok( NULL, "" ) );
+                    mpw_free_string( typeAndVersion );
+                }
+                counter = "";
+                loginName = "";
+                siteName = mpw_get_token( &positionInLine, endOfLine, "\t\n" );
+                exportContent = mpw_get_token( &positionInLine, endOfLine, "\n" );
+                break;
+            }
+            case 1: {
+                lastUsed = mpw_get_token( &positionInLine, endOfLine, " \t\n" );
+                uses = mpw_get_token( &positionInLine, endOfLine, " \t\n" );
+                char *typeAndVersionAndCounter = mpw_get_token( &positionInLine, endOfLine, " \t\n" );
+                if (typeAndVersionAndCounter) {
+                    type = strdup( strtok( typeAndVersionAndCounter, ":" ) );
+                    version = strdup( strtok( NULL, ":" ) );
+                    counter = strdup( strtok( NULL, "" ) );
+                    mpw_free_string( typeAndVersionAndCounter );
+                }
+                loginName = mpw_get_token( &positionInLine, endOfLine, "\t\n" );
+                siteName = mpw_get_token( &positionInLine, endOfLine, "\t\n" );
+                exportContent = mpw_get_token( &positionInLine, endOfLine, "\n" );
+                break;
+            }
+            default: {
+                ftl( "Unexpected import format: %lu\n", (unsigned long)importFormat );
+            }
+        }
+
+        if (siteName && type && counter && version && uses && lastUsed) {
+            MPMarshalledSite *site = mpw_marshall_site( user, siteName,
+                    (MPSiteType)atoi( type ), (uint32_t)atoi( counter ), (MPAlgorithmVersion)atoi( version ) );
+            site->content = exportContent;
+            site->loginName = loginName;
+            site->uses = (unsigned int)atoi( uses );
+            struct tm lastUsed_tm = { .tm_isdst = -1, .tm_gmtoff = 0 };
+            sscanf( lastUsed, "%4d-%2d-%2dT%2d:%2d:%2dZ",
+                    &lastUsed_tm.tm_year, &lastUsed_tm.tm_mon, &lastUsed_tm.tm_mday,
+                    &lastUsed_tm.tm_hour, &lastUsed_tm.tm_min, &lastUsed_tm.tm_sec );
+            lastUsed_tm.tm_year -= 1900; // tm_year 0 = rfc3339 year  1900
+            lastUsed_tm.tm_mon -= 1;     // tm_mon  0 = rfc3339 month 1
+            site->lastUsed = mktime( &lastUsed_tm );
+        }
+        else
+            wrn( "Skipping: lastUsed=%s, uses=%s, type=%s, version=%s, counter=%s, loginName=%s, siteName=%s\n",
+                    lastUsed, uses, type, version, counter, loginName, siteName );
+    }
+
+    return user;
 }
 
-MPMarshalledUser mpw_marshall_read_json(
+MPMarshalledUser *mpw_marshall_read_json(
         char *in) {
 
-    return (MPMarshalledUser){};
+    return NULL;
 }
 
-MPMarshalledUser mpw_marshall_read(
+MPMarshalledUser *mpw_marshall_read(
         char *in, const MPMarshallFormat outFormat) {
 
     switch (outFormat) {
@@ -518,5 +431,5 @@ MPMarshalledUser mpw_marshall_read(
             return mpw_marshall_read_json( in );
     }
 
-    return (MPMarshalledUser){};
+    return NULL;
 }
