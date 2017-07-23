@@ -238,6 +238,13 @@ Currently, there is only one toggleable feature:
 
  - `mpw_color`: [default: 1] Colorized Identicon, depends on `ncurses-dev`.
 
+### Docker
+
+Using [Docker](https://hub.docker.com/r/ellioseven/mpw/), run with:
+
+```
+docker run --device /dev/snd -it --rm --name mpsyt ellioseven/mps-youtube mpsyt
+```
 
 ## Support
 
