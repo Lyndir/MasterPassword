@@ -32,6 +32,7 @@
 
 #define MPMasterKeySize 64
 typedef const uint8_t *MPMasterKey;
+typedef const char *MPMasterKeyID;
 
 typedef enum( unsigned int, MPSiteVariant ) {
     /** Generate a key for authentication. */

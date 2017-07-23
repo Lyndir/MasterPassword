@@ -58,7 +58,7 @@ int main(int argc, char *const argv[]) {
     struct timeval startTime;
     unsigned int iterations;
     float percent;
-    const uint8_t *masterKey;
+    MPMasterKey masterKey;
 
     // Start HMAC-SHA-256
     // Similar to phase-two of mpw

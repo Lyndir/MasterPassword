@@ -200,45 +200,74 @@ int main(int argc, char *const argv[]) {
         while (!masterPassword || !strlen( masterPassword ))
             masterPassword = getpass( "Your master password: " );
 
-    // Read defaults for fullName user from config.
-    char *mpwSitesPath = mpwPath( fullName, "mpsites" );
-    if (!mpwSitesPath)
-        wrn( "Couldn't resolve path for configuration file: %d\n", errno );
-
-    else {
-        FILE *mpwSites = fopen( mpwSitesPath, "r" );
+    // Find the user's sites file.
+    FILE *mpwSites = NULL;
+    MPMarshallFormat mpwSitesFormat = MPMarshallFormatJSON;
+    char *mpwSitesPath = mpwPath( fullName, "mpsites.json" );
+    if (!mpwSitesPath || !(mpwSites = fopen( mpwSitesPath, "r" ))) {
         free( mpwSitesPath );
-        if (!mpwSites)
+        mpwSitesFormat = MPMarshallFormatFlat;
+        mpwSitesPath = mpwPath( fullName, "mpsites" );
+        if (!mpwSitesPath || !(mpwSites = fopen( mpwSitesPath, "r" )))
             dbg( "Couldn't open configuration file: %s: %d\n", mpwSitesPath, errno );
+    }
+    free( mpwSitesPath );
+
+    // Read the user's sites file.
+    if (mpwSites) {
+        // Read file.
+        size_t readAmount = 4096, bufSize = 0, bufPointer = 0, readSize = 0;
+        char *buf = NULL;
+        while ((buf = realloc( buf, bufSize += readAmount )) &&
+               (bufPointer += (readSize = fread( buf + bufPointer, 1, readAmount, mpwSites ))) &&
+               (readSize == readAmount));
+        if (ferror( mpwSites ))
+            wrn( "Error while reading configuration file: %s: %d", mpwSitesPath, ferror( mpwSites ) );
+        fclose( mpwSites );
+
+        // Parse file.
+        MPMarshalledUser *user = mpw_marshall_read( buf, mpwSitesFormat, masterPassword );
+        mpw_free_string( buf );
+        if (!user)
+            wrn( "Couldn't parse configuration file: %s\n", mpwSitesPath );
 
         else {
-            size_t readAmount = 4096, bufSize = 0, bufPointer = 0, readSize = 0;
-            void *buf = NULL;
-            while ((buf = realloc( buf, bufSize += readAmount )) &&
-                   (bufPointer += (readSize = fread( buf + bufPointer, 1, readAmount, mpwSites ))) &&
-                   (readSize == readAmount));
-
-            // Load personal defaults from user config.
-            MPMarshalledUser *user = mpw_marshall_read( buf, MPMarshallFormatFlat );
-            if (!user)
-                wrn( "Couldn't parse configuration file: %s\n", mpwSitesPath );
-
-            else {
-                fullName = user->name;
-                algorithmVersion = user->algorithm;
-                siteType = user->defaultType;
-
-                for (int s = 0; s < user->sites_count; ++s) {
-                    MPMarshalledSite site = user->sites[s];
-                    if (strcmp( siteName, site.name ) == 0) {
-                        siteType = site.type;
-                        siteCounter = site.counter;
-                        algorithmVersion = site.algorithm;
-                        break;
-                    }
+            // Load defaults.
+            mpw_free_string( fullName );
+            mpw_free_string( masterPassword );
+            fullName = strdup( user->name );
+            masterPassword = strdup( user->masterPassword );
+            algorithmVersion = user->algorithm;
+            siteType = user->defaultType;
+            for (int s = 0; s < user->sites_count; ++s) {
+                MPMarshalledSite site = user->sites[s];
+                if (strcmp( siteName, site.name ) == 0) {
+                    siteType = site.type;
+                    siteCounter = site.counter;
+                    algorithmVersion = site.algorithm;
+                    break;
                 }
-                mpw_marshal_free( user );
             }
+
+            // Current format is not current, write out a new current format config file.
+            if (mpwSitesFormat != MPMarshallFormatJSON) {
+                mpwSitesPath = mpwPath( fullName, "mpsites.json" );
+                if (!mpwSitesPath || !(mpwSites = fopen( mpwSitesPath, "w" )))
+                    wrn( "Couldn't create updated configuration file: %s: %d\n", mpwSitesPath, errno );
+
+                else {
+                    buf = NULL;
+                    if (!mpw_marshall_write( &buf, MPMarshallFormatJSON, user ))
+                        wrn( "Couldn't encode updated configuration file." );
+
+                    else if (fwrite( buf, sizeof( char ), strlen( buf ), mpwSites ) != strlen( buf ))
+                        wrn( "Error while writing updated configuration file: %s: %d\n", mpwSitesPath, ferror( mpwSites ) );
+
+                    mpw_free_string( buf );
+                    fclose( mpwSites );
+                }
+            }
+            mpw_marshal_free( user );
         }
     }
 
@@ -281,7 +310,7 @@ int main(int argc, char *const argv[]) {
     mpw_free_string( identicon );
 
     // Output the password.
-    const uint8_t *masterKey = mpw_masterKeyForUser(
+    MPMasterKey masterKey = mpw_masterKeyForUser(
             fullName, masterPassword, algorithmVersion );
     mpw_free_string( masterPassword );
     mpw_free_string( fullName );
