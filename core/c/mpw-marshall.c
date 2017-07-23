@@ -24,6 +24,37 @@
 #include "mpw-marshall.h"
 #include "mpw-util.h"
 
+static char *mpw_get_token(char **in, char *eol, char *delim) {
+
+    // Skip leading spaces.
+    for (; **in == ' '; ++*in);
+
+    // Find characters up to the first delim.
+    size_t len = strcspn( *in, delim );
+    char *token = len? strndup( *in, len ): NULL;
+
+    // Advance past the delimitor.
+    *in = min( eol, *in + len + 1 );
+    return token;
+}
+
+static bool mpw_update_masterKey(MPMasterKey *masterKey, MPAlgorithmVersion *masterKeyAlgorithm, MPAlgorithmVersion targetKeyAlgorithm,
+        const char *fullName, const char *masterPassword) {
+
+    if (*masterKeyAlgorithm != targetKeyAlgorithm) {
+        mpw_free( *masterKey, MPMasterKeySize );
+        *masterKeyAlgorithm = targetKeyAlgorithm;
+        *masterKey = mpw_masterKeyForUser(
+                fullName, masterPassword, *masterKeyAlgorithm );
+        if (!*masterKey) {
+            err( "Couldn't derive master key for user %s, algorithm %d.\n", fullName, *masterKeyAlgorithm );
+            return false;
+        }
+    }
+
+    return true;
+}
+
 MPMarshalledUser *mpw_marshall_user(
         const char *fullName, const char *masterPassword, const MPAlgorithmVersion algorithmVersion) {
 
@@ -114,13 +145,11 @@ bool mpw_marshal_free(
 bool mpw_marshall_write_flat(
         char **out, const MPMarshalledUser *marshalledUser) {
 
-    MPAlgorithmVersion masterKeyAlgorithm = marshalledUser->algorithm;
-    MPMasterKey masterKey = mpw_masterKeyForUser(
-            marshalledUser->name, marshalledUser->masterPassword, masterKeyAlgorithm );
-    if (!masterKey) {
-        err( "Couldn't derive master key for user %s, algorithm %d.\n", marshalledUser->name, masterKeyAlgorithm );
+    MPMasterKey masterKey = NULL;
+    MPAlgorithmVersion masterKeyAlgorithm = marshalledUser->algorithm - 1;
+    if (!mpw_update_masterKey( &masterKey, &masterKeyAlgorithm,
+            marshalledUser->algorithm, marshalledUser->name, marshalledUser->masterPassword ))
         return false;
-    }
 
     try_asprintf( out, "# Master Password site export\n" );
     if (marshalledUser->redacted)
@@ -154,16 +183,9 @@ bool mpw_marshall_write_flat(
 
         const char *content = site.type & MPSiteFeatureExportContent? site.content: NULL;
         if (!marshalledUser->redacted) {
-            if (masterKeyAlgorithm != site.algorithm) {
-                mpw_free( masterKey, MPMasterKeySize );
-                masterKeyAlgorithm = site.algorithm;
-                masterKey = mpw_masterKeyForUser(
-                        marshalledUser->name, marshalledUser->masterPassword, masterKeyAlgorithm );
-                if (!masterKey) {
-                    err( "Couldn't derive master key for user %s, algorithm %d.\n", marshalledUser->name, masterKeyAlgorithm );
-                    return false;
-                }
-            }
+            if (!mpw_update_masterKey( &masterKey, &masterKeyAlgorithm,
+                    site.algorithm, marshalledUser->name, marshalledUser->masterPassword ))
+                return false;
 
             if (site.type & MPSiteTypeClassGenerated)
                 content = mpw_passwordForSite( masterKey, site.name, site.type, site.counter,
@@ -187,13 +209,11 @@ bool mpw_marshall_write_flat(
 bool mpw_marshall_write_json(
         char **out, const MPMarshalledUser *marshalledUser) {
 
-    MPAlgorithmVersion masterKeyAlgorithm = marshalledUser->algorithm;
-    MPMasterKey masterKey = mpw_masterKeyForUser(
-            marshalledUser->name, marshalledUser->masterPassword, masterKeyAlgorithm );
-    if (!masterKey) {
-        err( "Couldn't derive master key for user %s, algorithm %d.\n", marshalledUser->name, masterKeyAlgorithm );
+    MPMasterKey masterKey = NULL;
+    MPAlgorithmVersion masterKeyAlgorithm = marshalledUser->algorithm - 1;
+    if (!mpw_update_masterKey( &masterKey, &masterKeyAlgorithm,
+            marshalledUser->algorithm, marshalledUser->name, marshalledUser->masterPassword ))
         return false;
-    }
 
     json_object *json_out = json_object_new_object();
 
@@ -232,16 +252,9 @@ bool mpw_marshall_write_json(
 
         const char *content = site.type & MPSiteFeatureExportContent? site.content: NULL;
         if (!marshalledUser->redacted) {
-            if (masterKeyAlgorithm != site.algorithm) {
-                mpw_free( masterKey, MPMasterKeySize );
-                masterKeyAlgorithm = site.algorithm;
-                masterKey = mpw_masterKeyForUser(
-                        marshalledUser->name, marshalledUser->masterPassword, masterKeyAlgorithm );
-                if (!masterKey) {
-                    err( "Couldn't derive master key for user %s, algorithm %d.\n", marshalledUser->name, masterKeyAlgorithm );
-                    return false;
-                }
-            }
+            if (!mpw_update_masterKey( &masterKey, &masterKeyAlgorithm,
+                    site.algorithm, marshalledUser->name, marshalledUser->masterPassword ))
+                return false;
 
             if (site.type & MPSiteTypeClassGenerated)
                 content = mpw_passwordForSite( masterKey, site.name, site.type, site.counter,
@@ -311,20 +324,6 @@ bool mpw_marshall_write(
     return false;
 }
 
-char *mpw_get_token(char **in, char *eol, char *delim) {
-
-    // Skip leading spaces.
-    for (; **in == ' '; ++*in);
-
-    // Find characters up to the first delim.
-    size_t len = strcspn( *in, delim );
-    char *token = len? strndup( *in, len ): NULL;
-
-    // Advance past the delimitor.
-    *in = min( eol, *in + len + 1 );
-    return token;
-}
-
 MPMarshalledUser *mpw_marshall_read_flat(
         char *in, const char *masterPassword) {
 
@@ -333,7 +332,7 @@ MPMarshalledUser *mpw_marshall_read_flat(
     MPMarshalledUser *user = NULL;
     unsigned int importFormat = 0, importAvatar = 0;
     char *importUserName = NULL, *importKeyID = NULL, *importDate = NULL;
-    MPAlgorithmVersion importAlgorithm = MPAlgorithmVersionCurrent, masterKeyAlgorithm = importAlgorithm;
+    MPAlgorithmVersion importAlgorithm = MPAlgorithmVersionCurrent, masterKeyAlgorithm = (MPAlgorithmVersion)-1;
     MPSiteType importDefaultType = (MPSiteType)0;
     bool headerStarted = false, headerEnded = false, importRedacted = false;
     for (char *endOfLine, *positionInLine = in; (endOfLine = strstr( positionInLine, "\n" )); positionInLine = endOfLine + 1) {
@@ -403,14 +402,9 @@ MPMarshalledUser *mpw_marshall_read_flat(
             continue;
 
         if (!user) {
-            mpw_free( masterKey, MPMasterKeySize );
-            masterKeyAlgorithm = importAlgorithm;
-            masterKey = mpw_masterKeyForUser(
-                    importUserName, masterPassword, masterKeyAlgorithm );
-            if (!masterKey) {
-                err( "Couldn't derive master key for user %s, algorithm %d.\n", importUserName, masterKeyAlgorithm );
+            if (!mpw_update_masterKey( &masterKey, &masterKeyAlgorithm,
+                    importAlgorithm, importUserName, masterPassword ))
                 return false;
-            }
             if (importKeyID && strcmp( importKeyID, mpw_id_buf( masterKey, MPMasterKeySize ) ) != 0) {
                 err( "Incorrect master password for user import file.\n" );
                 return false;
@@ -424,7 +418,6 @@ MPMarshalledUser *mpw_marshall_read_flat(
             user->avatar = importAvatar;
             user->defaultType = importDefaultType;
         }
-
 
         // Site
         char *lastUsed = NULL, *uses = NULL, *type = NULL, *version = NULL, *counter = NULL;
@@ -471,20 +464,14 @@ MPMarshalledUser *mpw_marshall_read_flat(
                     (MPSiteType)atoi( type ), (uint32_t)atoi( counter ), (MPAlgorithmVersion)atoi( version ) );
             if (exportContent) {
                 if (user->redacted) {
-                    if (masterKeyAlgorithm != site->algorithm) {
-                        mpw_free( masterKey, MPMasterKeySize );
-                        masterKeyAlgorithm = site->algorithm;
-                        masterKey = mpw_masterKeyForUser(
-                                user->name, user->masterPassword, masterKeyAlgorithm );
-                        if (!masterKey) {
-                            err( "Couldn't derive master key for user %s, algorithm %d.\n", user->name, masterKeyAlgorithm );
-                            return false;
-                        }
-                    }
+                    if (!mpw_update_masterKey( &masterKey, &masterKeyAlgorithm,
+                            site->algorithm, importUserName, masterPassword ))
+                        return false;
 
                     // TODO: Encrypt Personal Passwords
                     //site->content = aes128_cbc( masterKey, exportContent );
-                } else
+                }
+                else
                     site->content = exportContent;
             }
 
@@ -511,11 +498,10 @@ MPMarshalledUser *mpw_marshall_read_flat(
         mpw_free_string( siteName );
         mpw_free_string( exportContent );
     }
-
-    mpw_free( masterKey, MPMasterKeySize );
     mpw_free_string( importUserName );
     mpw_free_string( importKeyID );
     mpw_free_string( importDate );
+    mpw_free( masterKey, MPMasterKeySize );
 
     return user;
 }
