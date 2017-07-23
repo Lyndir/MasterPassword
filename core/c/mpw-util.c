@@ -19,6 +19,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #if MPW_COLOR
 #include <unistd.h>
@@ -80,7 +81,7 @@ bool mpw_free(const void *buffer, const size_t bufferSize) {
 
 bool mpw_free_string(const char *string) {
 
-    return mpw_free( string, strlen( string ) );
+    return string && mpw_free( string, strlen( string ) );
 }
 
 uint8_t const *mpw_scrypt(const size_t keySize, const char *secret, const uint8_t *salt, const size_t saltSize,
@@ -141,14 +142,25 @@ const char *mpw_id_buf(const void *buf, size_t length) {
 #if HAS_CPERCIVA
     uint8_t hash[32];
     SHA256_Buf( buf, length, hash );
-
-    return mpw_hex( hash, 32 );
 #elif HAS_SODIUM
     uint8_t hash[crypto_hash_sha256_BYTES];
     crypto_hash_sha256( hash, buf, length );
-
-    return mpw_hex( hash, crypto_hash_sha256_BYTES );
 #endif
+
+    return mpw_hex( hash, sizeof( hash ) / sizeof( uint8_t ) );
+}
+
+bool mpw_id_buf_equals(const char *id1, const char *id2) {
+
+    size_t size = strlen( id1 );
+    if (size != strlen( id2 ))
+        return false;
+
+    for (int c = 0; c < size; ++c)
+        if (tolower(id1[c]) != tolower(id2[c]))
+            return false;
+
+    return true;
 }
 
 static char **mpw_hex_buf = NULL;

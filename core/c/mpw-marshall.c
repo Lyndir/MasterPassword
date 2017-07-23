@@ -228,7 +228,6 @@ bool mpw_marshall_write_json(
     time_t now = time( NULL );
     if (strftime( dateString, dateSize, "yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'", gmtime( &now ) ))
         json_object_object_add( json_export, "date", json_object_new_string( dateString ) );
-    json_object_put( json_export );
 
     // Section: "user"
     json_object *json_user = json_object_new_object();
@@ -242,7 +241,6 @@ bool mpw_marshall_write_json(
 
     json_object_object_add( json_user, "algorithm", json_object_new_int( marshalledUser->algorithm ) );
     json_object_object_add( json_user, "default_type", json_object_new_int( marshalledUser->defaultType ) );
-    json_object_put( json_user );
 
     // Section "sites"
     json_object *json_sites = json_object_new_object();
@@ -272,8 +270,8 @@ bool mpw_marshall_write_json(
         json_object_object_add( json_site, "algorithm", json_object_new_int( site.algorithm ) );
         if (content)
             json_object_object_add( json_site, "password", json_object_new_string( content ) );
-
-        json_object_object_add( json_site, "login_name", json_object_new_string( site.loginName?: "" ) );
+        if (site.loginName)
+            json_object_object_add( json_site, "login_name", json_object_new_string( site.loginName ) );
         json_object_object_add( json_site, "login_generated", json_object_new_boolean( site.loginGenerated ) );
 
         json_object_object_add( json_site, "uses", json_object_new_int( site.uses ) );
@@ -292,21 +290,17 @@ bool mpw_marshall_write_json(
                 json_object_object_add( json_site_question, "answer", json_object_new_string(
                         mpw_passwordForSite( masterKey, site.name, MPSiteTypeGeneratedPhrase, 1,
                                 MPSiteVariantAnswer, question.keyword, site.algorithm ) ) );
-            json_object_put( json_site_question );
         }
-        json_object_put( json_site_questions );
 
         json_object *json_site_mpw = json_object_new_object();
         json_object_object_add( json_site, "_ext_mpw", json_site_mpw );
-        json_object_object_add( json_site_mpw, "url", json_object_new_string( site.url ) );
-        json_object_put( json_site_mpw );
-        json_object_put( json_site );
+        if (site.url)
+            json_object_object_add( json_site_mpw, "url", json_object_new_string( site.url ) );
     }
-    json_object_put( json_sites );
 
-    try_asprintf( out, "%s\n", json_object_to_json_string_ext( json_out, JSON_C_TO_STRING_PRETTY ) );
-    json_object_put( json_out );
+    try_asprintf( out, "%s\n", json_object_to_json_string_ext( json_out, JSON_C_TO_STRING_PRETTY | JSON_C_TO_STRING_SPACED ) );
     mpw_free( masterKey, MPMasterKeySize );
+    json_object_put( json_out );
 
     return true;
 }
@@ -405,8 +399,8 @@ MPMarshalledUser *mpw_marshall_read_flat(
             if (!mpw_update_masterKey( &masterKey, &masterKeyAlgorithm,
                     importAlgorithm, importUserName, masterPassword ))
                 return false;
-            if (importKeyID && strcmp( importKeyID, mpw_id_buf( masterKey, MPMasterKeySize ) ) != 0) {
-                err( "Incorrect master password for user import file.\n" );
+            if (importKeyID && !mpw_id_buf_equals( importKeyID, mpw_id_buf( masterKey, MPMasterKeySize ) )) {
+                err( "Incorrect master password for user import file: %s != %s\n", importKeyID, mpw_id_buf( masterKey, MPMasterKeySize ) );
                 return false;
             }
             if (!(user = mpw_marshall_user( importUserName, masterPassword, importAlgorithm ))) {
