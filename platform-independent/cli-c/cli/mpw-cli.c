@@ -112,7 +112,7 @@ int main(int argc, char *const argv[]) {
 
     // Master Password defaults.
     const char *fullName = NULL, *masterPassword = NULL, *siteName = NULL;
-    MPSiteType siteType = MPSiteTypeGeneratedLong;
+    MPSiteType siteType = MPSiteTypeDefault;
     MPSiteVariant siteVariant = MPSiteVariantPassword;
     MPAlgorithmVersion algorithmVersion = MPAlgorithmVersionCurrent;
     uint32_t siteCounter = 1;

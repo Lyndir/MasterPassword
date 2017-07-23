@@ -60,7 +60,7 @@ const MPSiteType mpw_typeWithName(const char *typeName) {
         return MPSiteTypeGeneratedPhrase;
 
     ftl( "Not a generated type name: %s", stdTypeName );
-    return MPSiteTypeGeneratedLong;
+    return MPSiteTypeDefault;
 }
 
 const char **mpw_templatesForType(MPSiteType type, size_t *count) {

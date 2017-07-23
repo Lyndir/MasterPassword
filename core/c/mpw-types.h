@@ -69,6 +69,8 @@ typedef enum( unsigned int, MPSiteType ) {
 
     MPSiteTypeStoredPersonal = 0x0 | MPSiteTypeClassStored | MPSiteFeatureExportContent,
     MPSiteTypeStoredDevicePrivate = 0x1 | MPSiteTypeClassStored | MPSiteFeatureDevicePrivate,
+
+    MPSiteTypeDefault = MPSiteTypeGeneratedLong,
 };
 
 //// Type utilities.

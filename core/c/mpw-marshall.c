@@ -38,6 +38,18 @@ static char *mpw_get_token(char **in, char *eol, char *delim) {
     return token;
 }
 
+static time_t mpw_mktime(
+        const char *time) {
+
+    struct tm tm = { .tm_isdst = -1, .tm_gmtoff = 0 };
+    sscanf( time, "%4d-%2d-%2dT%2d:%2d:%2dZ",
+            &tm.tm_year, &tm.tm_mon, &tm.tm_mday,
+            &tm.tm_hour, &tm.tm_min, &tm.tm_sec );
+    tm.tm_year -= 1900; // tm_year 0 = rfc3339 year  1900
+    tm.tm_mon -= 1;     // tm_mon  0 = rfc3339 month 1
+    return mktime( &tm );
+}
+
 static bool mpw_update_masterKey(MPMasterKey *masterKey, MPAlgorithmVersion *masterKeyAlgorithm, MPAlgorithmVersion targetKeyAlgorithm,
         const char *fullName, const char *masterPassword) {
 
@@ -69,7 +81,7 @@ MPMarshalledUser *mpw_marshall_user(
             .redacted = true,
 
             .avatar = 0,
-            .defaultType = MPSiteTypeGeneratedLong,
+            .defaultType = MPSiteTypeDefault,
             .lastUsed = 0,
 
             .sites_count = 0,
@@ -215,11 +227,11 @@ bool mpw_marshall_write_json(
             marshalledUser->algorithm, marshalledUser->name, marshalledUser->masterPassword ))
         return false;
 
-    json_object *json_out = json_object_new_object();
+    json_object *json_file = json_object_new_object();
 
     // Section: "export"
     json_object *json_export = json_object_new_object();
-    json_object_object_add( json_out, "export", json_export );
+    json_object_object_add( json_file, "export", json_export );
     json_object_object_add( json_export, "format", json_object_new_int( 1 ) );
     json_object_object_add( json_export, "redacted", json_object_new_boolean( marshalledUser->redacted ) );
 
@@ -231,7 +243,7 @@ bool mpw_marshall_write_json(
 
     // Section: "user"
     json_object *json_user = json_object_new_object();
-    json_object_object_add( json_out, "user", json_user );
+    json_object_object_add( json_file, "user", json_user );
     json_object_object_add( json_user, "avatar", json_object_new_int( marshalledUser->avatar ) );
     json_object_object_add( json_user, "full_name", json_object_new_string( marshalledUser->name ) );
 
@@ -244,7 +256,7 @@ bool mpw_marshall_write_json(
 
     // Section "sites"
     json_object *json_sites = json_object_new_object();
-    json_object_object_add( json_out, "sites", json_sites );
+    json_object_object_add( json_file, "sites", json_sites );
     for (int s = 0; s < marshalledUser->sites_count; ++s) {
         MPMarshalledSite site = marshalledUser->sites[s];
 
@@ -298,9 +310,9 @@ bool mpw_marshall_write_json(
             json_object_object_add( json_site_mpw, "url", json_object_new_string( site.url ) );
     }
 
-    try_asprintf( out, "%s\n", json_object_to_json_string_ext( json_out, JSON_C_TO_STRING_PRETTY | JSON_C_TO_STRING_SPACED ) );
+    try_asprintf( out, "%s\n", json_object_to_json_string_ext( json_file, JSON_C_TO_STRING_PRETTY | JSON_C_TO_STRING_SPACED ) );
     mpw_free( masterKey, MPMasterKeySize );
-    json_object_put( json_out );
+    json_object_put( json_file );
 
     return true;
 }
@@ -327,7 +339,7 @@ MPMarshalledUser *mpw_marshall_read_flat(
     unsigned int importFormat = 0, importAvatar = 0;
     char *importUserName = NULL, *importKeyID = NULL, *importDate = NULL;
     MPAlgorithmVersion importAlgorithm = MPAlgorithmVersionCurrent, masterKeyAlgorithm = (MPAlgorithmVersion)-1;
-    MPSiteType importDefaultType = (MPSiteType)0;
+    MPSiteType importDefaultType = MPSiteTypeDefault;
     bool headerStarted = false, headerEnded = false, importRedacted = false;
     for (char *endOfLine, *positionInLine = in; (endOfLine = strstr( positionInLine, "\n" )); positionInLine = endOfLine + 1) {
 
@@ -404,7 +416,7 @@ MPMarshalledUser *mpw_marshall_read_flat(
                 return false;
             }
             if (!(user = mpw_marshall_user( importUserName, masterPassword, importAlgorithm ))) {
-                err( "Couldn't allocate a new user." );
+                err( "Couldn't allocate a new user.\n" );
                 return false;
             }
 
@@ -456,6 +468,10 @@ MPMarshalledUser *mpw_marshall_read_flat(
         if (siteName && type && counter && version && uses && lastUsed) {
             MPMarshalledSite *site = mpw_marshall_site( user, siteName,
                     (MPSiteType)atoi( type ), (uint32_t)atoi( counter ), (MPAlgorithmVersion)atoi( version ) );
+            site->loginName = loginName;
+            site->uses = (unsigned int)atoi( uses );
+            site->lastUsed = mpw_mktime( lastUsed );
+
             if (exportContent) {
                 if (user->redacted) {
                     if (!mpw_update_masterKey( &masterKey, &masterKeyAlgorithm,
@@ -468,16 +484,6 @@ MPMarshalledUser *mpw_marshall_read_flat(
                 else
                     site->content = exportContent;
             }
-
-            site->loginName = loginName;
-            site->uses = (unsigned int)atoi( uses );
-            struct tm lastUsed_tm = { .tm_isdst = -1, .tm_gmtoff = 0 };
-            sscanf( lastUsed, "%4d-%2d-%2dT%2d:%2d:%2dZ",
-                    &lastUsed_tm.tm_year, &lastUsed_tm.tm_mon, &lastUsed_tm.tm_mday,
-                    &lastUsed_tm.tm_hour, &lastUsed_tm.tm_min, &lastUsed_tm.tm_sec );
-            lastUsed_tm.tm_year -= 1900; // tm_year 0 = rfc3339 year  1900
-            lastUsed_tm.tm_mon -= 1;     // tm_mon  0 = rfc3339 month 1
-            site->lastUsed = mktime( &lastUsed_tm );
         }
         else
             wrn( "Skipping: lastUsed=%s, uses=%s, type=%s, version=%s, counter=%s, loginName=%s, siteName=%s\n",
@@ -500,10 +506,146 @@ MPMarshalledUser *mpw_marshall_read_flat(
     return user;
 }
 
+static json_object *mpw_marshall_get_json_section(
+        json_object *obj, const char *section) {
+
+    json_object *json_value = obj;
+    char *sectionTokenizer = strdup( section ), *sectionToken = sectionTokenizer;
+    for (sectionToken = strtok( sectionToken, "." ); sectionToken; sectionToken = strtok( NULL, "." ))
+        if (!json_object_object_get_ex( json_value, sectionToken, &json_value ) || !json_value) {
+            err( "While resolving: %s: Missing value for: %s\n", section, sectionToken );
+            json_value = NULL;
+            break;
+        }
+    free( sectionTokenizer );
+
+    return json_value;
+}
+
+static const char *mpw_marshall_get_json_string(
+        json_object *obj, const char *section, const char *defaultValue) {
+
+    json_object *json_value = mpw_marshall_get_json_section( obj, section );
+    if (!json_value)
+        return defaultValue;
+
+    return json_object_get_string( json_value );
+}
+
+static int32_t mpw_marshall_get_json_int(
+        json_object *obj, const char *section, int32_t defaultValue) {
+
+    json_object *json_value = mpw_marshall_get_json_section( obj, section );
+    if (!json_value)
+        return defaultValue;
+
+    return json_object_get_int( json_value );
+}
+
+static bool mpw_marshall_get_json_boolean(
+        json_object *obj, const char *section, bool defaultValue) {
+
+    json_object *json_value = mpw_marshall_get_json_section( obj, section );
+    if (!json_value)
+        return defaultValue;
+
+    return json_object_get_boolean( json_value ) == TRUE;
+}
+
 MPMarshalledUser *mpw_marshall_read_json(
         char *in, const char *masterPassword) {
 
-    return NULL;
+    enum json_tokener_error error = json_tokener_success;
+    json_object *json_file = json_tokener_parse_verbose( in, &error );
+    if (error != json_tokener_success)
+        err( "JSON error: %s\n", json_tokener_error_desc( error ) );
+    if (!json_file)
+        return NULL;
+
+    // Parse import data.
+    MPMasterKey masterKey = NULL;
+    MPAlgorithmVersion masterKeyAlgorithm = (MPAlgorithmVersion)-1;
+    MPMarshalledUser *user = NULL;
+
+    // Section: "export"
+    unsigned int importFormat = (unsigned int)mpw_marshall_get_json_int( json_file, "export.format", 0 );
+    if (importFormat < 1) {
+        err( "Unsupported format: %d\n", importFormat );
+        return NULL;
+    }
+    bool importRedacted = mpw_marshall_get_json_boolean( json_file, "export.redacted", true );
+    const char *importDate = mpw_marshall_get_json_string( json_file, "export.date", NULL );
+
+    // Section: "user"
+    unsigned int importAvatar = (unsigned int)mpw_marshall_get_json_int( json_file, "user.avatar", 0 );
+    const char *importUserName = mpw_marshall_get_json_string( json_file, "user.full_name", NULL );
+    const char *importLastUsed = mpw_marshall_get_json_string( json_file, "user.last_used", NULL );
+    const char *importKeyID = mpw_marshall_get_json_string( json_file, "user.key_id", NULL );
+    MPAlgorithmVersion
+            importAlgorithm = (MPAlgorithmVersion)mpw_marshall_get_json_int( json_file, "user.algorithm", MPAlgorithmVersionCurrent );
+    MPSiteType importDefaultType = (MPSiteType)mpw_marshall_get_json_int( json_file, "user.default_type", MPSiteTypeDefault );
+
+    if (!mpw_update_masterKey( &masterKey, &masterKeyAlgorithm,
+            importAlgorithm, importUserName, masterPassword ))
+        return false;
+    if (importKeyID && !mpw_id_buf_equals( importKeyID, mpw_id_buf( masterKey, MPMasterKeySize ) )) {
+        err( "Incorrect master password for user import file: %s != %s\n", importKeyID, mpw_id_buf( masterKey, MPMasterKeySize ) );
+        return false;
+    }
+    if (!(user = mpw_marshall_user( importUserName, masterPassword, importAlgorithm ))) {
+        err( "Couldn't allocate a new user.\n" );
+        return false;
+    }
+
+    user->redacted = importRedacted;
+    user->avatar = importAvatar;
+    user->defaultType = importDefaultType;
+    user->lastUsed = mpw_mktime( importLastUsed );
+
+    // Section "sites"
+    json_object_iter json_site;
+    json_object *json_sites = mpw_marshall_get_json_section( json_file, "sites" );
+    json_object_object_foreachC( json_sites, json_site ) {
+        MPSiteType siteType = (MPSiteType)mpw_marshall_get_json_int( json_site.val, "type", user->defaultType );
+        uint32_t siteCounter = (uint32_t)mpw_marshall_get_json_int( json_site.val, "counter", 1 );
+        MPAlgorithmVersion algorithm = (MPAlgorithmVersion)mpw_marshall_get_json_int( json_site.val, "algorithm", user->algorithm );
+        const char *exportContent = mpw_marshall_get_json_string( json_site.val, "password", NULL );
+        const char *loginName = mpw_marshall_get_json_string( json_site.val, "login_name", NULL );
+        bool loginGenerated = mpw_marshall_get_json_boolean( json_site.val, "login_generated", false );
+        unsigned int uses = (unsigned int)mpw_marshall_get_json_int( json_site.val, "uses", 0 );
+        const char *lastUsed = mpw_marshall_get_json_string( json_site.val, "last_used", NULL );
+
+        json_object *json_site_mpw = mpw_marshall_get_json_section( json_site.val, "_ext_mpw" );
+        const char *url = mpw_marshall_get_json_string( json_site_mpw, "url", NULL );
+
+        MPMarshalledSite *site = mpw_marshall_site( user, json_site.key, siteType, siteCounter, algorithm );
+        site->loginName = loginName;
+        site->loginGenerated = loginGenerated;
+        site->url = url;
+        site->uses = uses;
+        site->lastUsed = mpw_mktime( lastUsed );
+
+        if (exportContent) {
+            if (user->redacted) {
+                if (!mpw_update_masterKey( &masterKey, &masterKeyAlgorithm,
+                        site->algorithm, importUserName, masterPassword ))
+                    return false;
+
+                // TODO: Encrypt Personal Passwords
+                //site->content = aes128_cbc( masterKey, exportContent );
+            }
+            else
+                site->content = exportContent;
+        }
+
+        json_object_iter json_site_question;
+        json_object *json_site_questions = mpw_marshall_get_json_section( json_site.val, "questions" );
+        json_object_object_foreachC( json_site_questions, json_site_question )
+            mpw_marshal_question( site, json_site_question.key );
+    }
+    json_object_put( json_file );
+
+    return user;
 }
 
 MPMarshalledUser *mpw_marshall_read(

@@ -52,7 +52,7 @@ int main(int argc, char *const argv[]) {
     const char *masterPassword = "banana colored duckling";
     const char *siteName = "masterpasswordapp.com";
     const uint32_t siteCounter = 1;
-    const MPSiteType siteType = MPSiteTypeGeneratedLong;
+    const MPSiteType siteType = MPSiteTypeDefault;
     const MPSiteVariant siteVariant = MPSiteVariantPassword;
     const char *siteContext = NULL;
     struct timeval startTime;
