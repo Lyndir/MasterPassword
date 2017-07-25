@@ -1,13 +1,22 @@
 <header>
+    <!--div class="hero">
+        <img class="ios" src="/img/hero_ios.jpg" />
+        <img class="android" src="/img/hero_android.jpg" />
+        <img class="mac" src="/img/hero_mac.jpg" />
+        <img class="desktop" src="/img/hero_desktop.jpg" />
+        <img class="cli" src="/img/hero_cli.jpg" />
+        <img class="web" src="/img/hero_web.jpg" />
+    </div-->
+
     <nav>
         <a href="/">Master Password</a>
         <div class="flex-auto">
-            <a href="https://itunes.apple.com/app/id510296984">iOS.<img class="popup" src="img/ios.png" /></a>
-            <a href="https://ssl.masterpasswordapp.com/masterpassword-android.apk">Android.<img class="popup" src="img/android.png" /></a>
-            <a href="https://ssl.masterpasswordapp.com/masterpassword-mac.zip">Mac.<img class="popup border" src="img/mac-gui.png" /></a>
-            <a href="https://ssl.masterpasswordapp.com/masterpassword-gui.jar">Desktop.<img class="popup" src="img/java-gui.png" /></a>
-            <a href="https://ssl.masterpasswordapp.com/masterpassword-cli.tar.gz">Terminal.<img class="popup" src="img/c-cli.png" /></a>
-            <a href="https://js.masterpasswordapp.com/">Web.<img class="popup border" src="img/web.png" /></a>
+            <a href="https://itunes.apple.com/app/id510296984" data-hero="ios">iOS.<img class="popup" src="img/ios.png" /></a>
+            <a href="https://ssl.masterpasswordapp.com/masterpassword-android.apk" data-hero="android">Android.<img class="popup" src="img/android.png" /></a>
+            <a href="https://ssl.masterpasswordapp.com/masterpassword-mac.zip" data-hero="mac">Mac.<img class="popup border" src="img/mac-gui.png" /></a>
+            <a href="https://ssl.masterpasswordapp.com/masterpassword-gui.jar" data-hero="desktop">Desktop.<img class="popup" src="img/java-gui.png" /></a>
+            <a href="https://ssl.masterpasswordapp.com/masterpassword-cli.tar.gz" data-hero="cli">Terminal.<img class="popup" src="img/c-cli.png" /></a>
+            <a href="https://js.masterpasswordapp.com/">Web.<img class="popup border" src="img/web.png" data-hero="web" /></a>
         </div>
         <a href="http://help.masterpasswordapp.com">Support</a>
     </nav>
@@ -15,8 +24,8 @@
     <div class="flex-auto"></div>
 
     <nav>
-        <a href="/" class="active">Why</a>
-        <a href="how.html">How</a>
-        <a href="what.html">What</a>
+        <a href="/"{% if page.nav == "why" %} class="active"{% endif %}>Why</a>
+        <a href="how.html"{% if page.nav == "how" %} class="active"{% endif %}>How</a>
+        <a href="what.html"{% if page.nav == "what" %} class="active"{% endif %}>What</a>
     </nav>
 </header>

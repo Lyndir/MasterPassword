@@ -89,7 +89,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
         pasteboardURL = [NSURL URLWithString:pasteboard.string];
 
     if (pasteboardURL.host)
-        self.query = NSNullToNil( [pasteboardURL.host firstMatchGroupsOfExpression:bareHostRE][0] );
+        self.query = NSNullToNil( [[pasteboardURL.host firstMatchGroupsOfExpression:bareHostRE] firstObject] );
     else
         [self reloadSites];
 }

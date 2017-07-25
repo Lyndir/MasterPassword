@@ -18,6 +18,7 @@
 
 #import <Foundation/Foundation.h>
 #import "MPAlgorithm.h"
+#import "mpw-types.h"
 
 @protocol MPAlgorithm;
 
@@ -37,8 +38,7 @@ typedef NS_ENUM( NSUInteger, MPKeyOrigin ) {
                       keyOrigin:(MPKeyOrigin)origin;
 
 - (NSData *)keyIDForAlgorithm:(id<MPAlgorithm>)algorithm;
-- (NSData *)keyDataForAlgorithm:(id<MPAlgorithm>)algorithm;
-- (NSData *)keyDataForAlgorithm:(id<MPAlgorithm>)algorithm trimmedLength:(NSUInteger)subKeyLength;
+- (MPMasterKey)keyForAlgorithm:(id<MPAlgorithm>)algorithm;
 
 - (BOOL)isEqualToKey:(MPKey *)key;
 

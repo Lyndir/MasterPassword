@@ -19,8 +19,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
-#if COLOR
+#if MPW_COLOR
 #include <unistd.h>
 #include <curses.h>
 #include <term.h>
@@ -33,17 +34,14 @@
 #include "sodium.h"
 #endif
 
-#ifndef trc
-int mpw_verbosity;
-#endif
-
 #include "mpw-util.h"
+int mpw_verbosity = inf_level;
 
-void mpw_push_buf(uint8_t **const buffer, size_t *const bufferSize, const void *pushBuffer, const size_t pushSize) {
+bool mpw_push_buf(uint8_t **const buffer, size_t *const bufferSize, const void *pushBuffer, const size_t pushSize) {
 
     if (*bufferSize == (size_t)-1)
         // The buffer was marked as broken, it is missing a previous push.  Abort to avoid corrupt content.
-        return;
+        return false;
 
     *bufferSize += pushSize;
     uint8_t *resizedBuffer = realloc( *buffer, *bufferSize );
@@ -52,35 +50,38 @@ void mpw_push_buf(uint8_t **const buffer, size_t *const bufferSize, const void *
         mpw_free( *buffer, *bufferSize - pushSize );
         *bufferSize = (size_t)-1;
         *buffer = NULL;
-        return;
+        return false;
     }
 
     *buffer = resizedBuffer;
     uint8_t *pushDst = *buffer + *bufferSize - pushSize;
     memcpy( pushDst, pushBuffer, pushSize );
+    return true;
 }
 
-void mpw_push_string(uint8_t **buffer, size_t *const bufferSize, const char *pushString) {
+bool mpw_push_string(uint8_t **buffer, size_t *const bufferSize, const char *pushString) {
 
-    mpw_push_buf( buffer, bufferSize, pushString, strlen( pushString ) );
+    return mpw_push_buf( buffer, bufferSize, pushString, strlen( pushString ) );
 }
 
-void mpw_push_int(uint8_t **const buffer, size_t *const bufferSize, const uint32_t pushInt) {
+bool mpw_push_int(uint8_t **const buffer, size_t *const bufferSize, const uint32_t pushInt) {
 
-    mpw_push_buf( buffer, bufferSize, &pushInt, sizeof( pushInt ) );
+    return mpw_push_buf( buffer, bufferSize, &pushInt, sizeof( pushInt ) );
 }
 
-void mpw_free(const void *buffer, const size_t bufferSize) {
+bool mpw_free(const void *buffer, const size_t bufferSize) {
 
-    if (buffer) {
-        memset( (void *)buffer, 0, bufferSize );
-        free( (void *)buffer );
-    }
+    if (!buffer)
+        return false;
+
+    memset( (void *)buffer, 0, bufferSize );
+    free( (void *)buffer );
+    return true;
 }
 
-void mpw_free_string(const char *string) {
+bool mpw_free_string(const char *string) {
 
-    mpw_free( string, strlen( string ) );
+    return string && mpw_free( string, strlen( string ) );
 }
 
 uint8_t const *mpw_scrypt(const size_t keySize, const char *secret, const uint8_t *salt, const size_t saltSize,
@@ -141,14 +142,25 @@ const char *mpw_id_buf(const void *buf, size_t length) {
 #if HAS_CPERCIVA
     uint8_t hash[32];
     SHA256_Buf( buf, length, hash );
-
-    return mpw_hex( hash, 32 );
 #elif HAS_SODIUM
     uint8_t hash[crypto_hash_sha256_BYTES];
     crypto_hash_sha256( hash, buf, length );
-
-    return mpw_hex( hash, crypto_hash_sha256_BYTES );
 #endif
+
+    return mpw_hex( hash, sizeof( hash ) / sizeof( uint8_t ) );
+}
+
+bool mpw_id_buf_equals(const char *id1, const char *id2) {
+
+    size_t size = strlen( id1 );
+    if (size != strlen( id2 ))
+        return false;
+
+    for (int c = 0; c < size; ++c)
+        if (tolower(id1[c]) != tolower(id2[c]))
+            return false;
+
+    return true;
 }
 
 static char **mpw_hex_buf = NULL;

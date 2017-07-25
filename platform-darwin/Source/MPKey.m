@@ -53,28 +53,21 @@
 
 - (NSData *)keyIDForAlgorithm:(id<MPAlgorithm>)algorithm {
 
-    return [algorithm keyIDForKeyData:[self keyDataForAlgorithm:algorithm]];
+    return [algorithm keyIDForKey:[self keyForAlgorithm:algorithm]];
 }
 
-- (NSData *)keyDataForAlgorithm:(id<MPAlgorithm>)algorithm {
+- (MPMasterKey)keyForAlgorithm:(id<MPAlgorithm>)algorithm {
 
     @synchronized (self) {
         NSData *keyData = [self.keyCache objectForKey:algorithm];
-        if (keyData)
-            return keyData;
+        if (!keyData) {
+            keyData = self.keyResolver( algorithm );
+            if (keyData)
+                [self.keyCache setObject:keyData forKey:algorithm];
+        }
 
-        keyData = self.keyResolver( algorithm );
-        if (keyData)
-            [self.keyCache setObject:keyData forKey:algorithm];
-
-        return keyData;
+        return keyData.length == MPMasterKeySize? keyData.bytes: NULL;
     }
-}
-
-- (NSData *)keyDataForAlgorithm:(id<MPAlgorithm>)algorithm trimmedLength:(NSUInteger)subKeyLength {
-
-    NSData *keyData = [self keyDataForAlgorithm:algorithm];
-    return [keyData subdataWithRange:NSMakeRange( 0, MIN( subKeyLength, keyData.length ) )];
 }
 
 - (BOOL)isEqualToKey:(MPKey *)key {
@@ -84,10 +77,7 @@
 
 - (BOOL)isEqual:(id)object {
 
-    if (![object isKindOfClass:[MPKey class]])
-        return NO;
-
-    return [self isEqualToKey:object];
+    return [object isKindOfClass:[MPKey class]] && [self isEqualToKey:object];
 }
 
 @end

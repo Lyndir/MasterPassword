@@ -27,7 +27,7 @@
 #define MP_p                2
 #define MP_hash             PearlHashSHA256
 
-const uint8_t *mpw_masterKeyForUser(const char *fullName, const char *masterPassword, const MPAlgorithmVersion algorithmVersion) {
+MPMasterKey mpw_masterKeyForUser(const char *fullName, const char *masterPassword, const MPAlgorithmVersion algorithmVersion) {
 
     if (!fullName || !masterPassword)
         return NULL;
@@ -47,7 +47,7 @@ const uint8_t *mpw_masterKeyForUser(const char *fullName, const char *masterPass
     }
 }
 
-const char *mpw_passwordForSite(const uint8_t *masterKey, const char *siteName, const MPSiteType siteType, const uint32_t siteCounter,
+const char *mpw_passwordForSite(MPMasterKey masterKey, const char *siteName, const MPSiteType siteType, const uint32_t siteCounter,
         const MPSiteVariant siteVariant, const char *siteContext, const MPAlgorithmVersion algorithmVersion) {
 
     if (!masterKey || !siteName)
