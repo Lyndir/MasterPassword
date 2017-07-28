@@ -16,8 +16,6 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 
@@ -35,6 +33,7 @@
 #endif
 
 #include "mpw-util.h"
+
 int mpw_verbosity = inf_level;
 
 bool mpw_push_buf(uint8_t **const buffer, size_t *const bufferSize, const void *pushBuffer, const size_t pushSize) {
@@ -100,7 +99,7 @@ uint8_t const *mpw_scrypt(const size_t keySize, const char *secret, const uint8_
         return NULL;
     }
 #elif HAS_SODIUM
-    if (crypto_pwhash_scryptsalsa208sha256_ll( (const uint8_t *)secret, strlen( secret ), salt, saltSize, N, r, p, key, keySize) != 0 ) {
+    if (crypto_pwhash_scryptsalsa208sha256_ll( (const uint8_t *)secret, strlen( secret ), salt, saltSize, N, r, p, key, keySize ) != 0) {
         mpw_free( key, keySize );
         return NULL;
     }
@@ -156,8 +155,8 @@ bool mpw_id_buf_equals(const char *id1, const char *id2) {
     if (size != strlen( id2 ))
         return false;
 
-    for (int c = 0; c < size; ++c)
-        if (tolower(id1[c]) != tolower(id2[c]))
+    for (size_t c = 0; c < size; ++c)
+        if (tolower( id1[c] ) != tolower( id2[c] ))
             return false;
 
     return true;
@@ -226,7 +225,8 @@ const char *mpw_identicon(const char *fullName, const char *masterPassword) {
             "♨", "♩", "♪", "♫", "⚐", "⚑", "⚔", "⚖", "⚙", "⚠", "⌘", "⏎", "✄", "✆", "✈", "✉", "✌"
     };
 
-    const uint8_t *identiconSeed = mpw_hmac_sha256( (const uint8_t *)masterPassword, strlen( masterPassword ), (const uint8_t *)fullName, strlen( fullName ) );
+    const uint8_t *identiconSeed = mpw_hmac_sha256( (const uint8_t *)masterPassword, strlen( masterPassword ), (const uint8_t *)fullName,
+            strlen( fullName ) );
     if (!identiconSeed)
         return NULL;
 

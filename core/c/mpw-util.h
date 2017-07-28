@@ -16,11 +16,12 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-#include <stdio.h>
-#include "mpw-types.h"
-
 #ifndef _MPW_UTIL_H
 #define _MPW_UTIL_H
+
+#include <stdio.h>
+
+#include "mpw-types.h"
 
 //// Logging.
 

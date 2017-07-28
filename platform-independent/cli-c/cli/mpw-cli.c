@@ -240,7 +240,7 @@ int main(int argc, char *const argv[]) {
             masterPassword = strdup( user->masterPassword );
             algorithmVersion = user->algorithm;
             siteType = user->defaultType;
-            for (int s = 0; s < user->sites_count; ++s) {
+            for (size_t s = 0; s < user->sites_count; ++s) {
                 MPMarshalledSite site = user->sites[s];
                 if (strcmp( siteName, site.name ) == 0) {
                     siteType = site.type;

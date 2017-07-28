@@ -19,56 +19,10 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <time.h>
-#include <json-c/json.h>
+
 #include "mpw-marshall.h"
 #include "mpw-util.h"
-
-static char *mpw_get_token(char **in, char *eol, char *delim) {
-
-    // Skip leading spaces.
-    for (; **in == ' '; ++*in);
-
-    // Find characters up to the first delim.
-    size_t len = strcspn( *in, delim );
-    char *token = len? strndup( *in, len ): NULL;
-
-    // Advance past the delimitor.
-    *in = min( eol, *in + len + 1 );
-    return token;
-}
-
-static time_t mpw_mktime(
-        const char *time) {
-
-    struct tm tm = { .tm_isdst = -1, .tm_gmtoff = 0 };
-    if (time && sscanf( time, "%4d-%2d-%2dT%2d:%2d:%2dZ",
-            &tm.tm_year, &tm.tm_mon, &tm.tm_mday,
-            &tm.tm_hour, &tm.tm_min, &tm.tm_sec ) == 6) {
-        tm.tm_year -= 1900; // tm_year 0 = rfc3339 year  1900
-        tm.tm_mon -= 1;     // tm_mon  0 = rfc3339 month 1
-        return mktime( &tm );
-    }
-
-    return false;
-}
-
-static bool mpw_update_masterKey(MPMasterKey *masterKey, MPAlgorithmVersion *masterKeyAlgorithm, MPAlgorithmVersion targetKeyAlgorithm,
-        const char *fullName, const char *masterPassword) {
-
-    if (*masterKeyAlgorithm != targetKeyAlgorithm) {
-        mpw_free( *masterKey, MPMasterKeySize );
-        *masterKeyAlgorithm = targetKeyAlgorithm;
-        *masterKey = mpw_masterKeyForUser(
-                fullName, masterPassword, *masterKeyAlgorithm );
-        if (!*masterKey) {
-            err( "Couldn't derive master key for user %s, algorithm %d.\n", fullName, *masterKeyAlgorithm );
-            return false;
-        }
-    }
-
-    return true;
-}
+#include "mpw-marshall-util.h"
 
 MPMarshalledUser *mpw_marshall_user(
         const char *fullName, const char *masterPassword, const MPAlgorithmVersion algorithmVersion) {
@@ -138,10 +92,10 @@ bool mpw_marshal_free(
         MPMarshalledUser *marshalledUser) {
 
     bool success = true;
-    for (int s = 0; s < marshalledUser->sites_count; ++s) {
+    for (size_t s = 0; s < marshalledUser->sites_count; ++s) {
         MPMarshalledSite site = marshalledUser->sites[s];
         success &= mpw_free_string( site.name );
-        for (int q = 0; q < site.questions_count; ++q) {
+        for (size_t q = 0; q < site.questions_count; ++q) {
             MPMarshalledQuestion question = site.questions[q];
             success &= mpw_free_string( question.keyword );
         }
@@ -157,7 +111,7 @@ bool mpw_marshal_free(
 
 #define try_asprintf(...) ({ if (asprintf( __VA_ARGS__ ) < 0) return false; })
 
-bool mpw_marshall_write_flat(
+static bool mpw_marshall_write_flat(
         char **out, const MPMarshalledUser *user, MPMarshallError *error) {
 
     *error = MPMarshallErrorInternal;
@@ -204,7 +158,7 @@ bool mpw_marshall_write_flat(
     try_asprintf( out, "#               used      used      type                       name\t                     name\tpassword\n" );
 
     // Sites.
-    for (int s = 0; s < user->sites_count; ++s) {
+    for (size_t s = 0; s < user->sites_count; ++s) {
         MPMarshalledSite site = user->sites[s];
         if (!site.name || !strlen( site.name ))
             continue;
@@ -235,7 +189,7 @@ bool mpw_marshall_write_flat(
     return true;
 }
 
-bool mpw_marshall_write_json(
+static bool mpw_marshall_write_json(
         char **out, const MPMarshalledUser *user, MPMarshallError *error) {
 
     *error = MPMarshallErrorInternal;
@@ -271,20 +225,20 @@ bool mpw_marshall_write_json(
     // Section: "user"
     json_object *json_user = json_object_new_object();
     json_object_object_add( json_file, "user", json_user );
-    json_object_object_add( json_user, "avatar", json_object_new_int( user->avatar ) );
+    json_object_object_add( json_user, "avatar", json_object_new_int( (int)user->avatar ) );
     json_object_object_add( json_user, "full_name", json_object_new_string( user->name ) );
 
     if (strftime( dateString, sizeof( dateString ), "%FT%TZ", gmtime( &user->lastUsed ) ))
         json_object_object_add( json_user, "last_used", json_object_new_string( dateString ) );
     json_object_object_add( json_user, "key_id", json_object_new_string( mpw_id_buf( masterKey, MPMasterKeySize ) ) );
 
-    json_object_object_add( json_user, "algorithm", json_object_new_int( user->algorithm ) );
-    json_object_object_add( json_user, "default_type", json_object_new_int( user->defaultType ) );
+    json_object_object_add( json_user, "algorithm", json_object_new_int( (int)user->algorithm ) );
+    json_object_object_add( json_user, "default_type", json_object_new_int( (int)user->defaultType ) );
 
     // Section "sites"
     json_object *json_sites = json_object_new_object();
     json_object_object_add( json_file, "sites", json_sites );
-    for (int s = 0; s < user->sites_count; ++s) {
+    for (size_t s = 0; s < user->sites_count; ++s) {
         MPMarshalledSite site = user->sites[s];
         if (!site.name || !strlen( site.name ))
             continue;
@@ -306,22 +260,22 @@ bool mpw_marshall_write_json(
 
         json_object *json_site = json_object_new_object();
         json_object_object_add( json_sites, site.name, json_site );
-        json_object_object_add( json_site, "type", json_object_new_int( site.type ) );
-        json_object_object_add( json_site, "counter", json_object_new_int( site.counter ) );
-        json_object_object_add( json_site, "algorithm", json_object_new_int( site.algorithm ) );
+        json_object_object_add( json_site, "type", json_object_new_int( (int)site.type ) );
+        json_object_object_add( json_site, "counter", json_object_new_int( (int)site.counter ) );
+        json_object_object_add( json_site, "algorithm", json_object_new_int( (int)site.algorithm ) );
         if (content)
             json_object_object_add( json_site, "password", json_object_new_string( content ) );
         if (site.loginName)
             json_object_object_add( json_site, "login_name", json_object_new_string( site.loginName ) );
         json_object_object_add( json_site, "login_generated", json_object_new_boolean( site.loginGenerated ) );
 
-        json_object_object_add( json_site, "uses", json_object_new_int( site.uses ) );
+        json_object_object_add( json_site, "uses", json_object_new_int( (int)site.uses ) );
         if (strftime( dateString, sizeof( dateString ), "%FT%TZ", gmtime( &site.lastUsed ) ))
             json_object_object_add( json_site, "last_used", json_object_new_string( dateString ) );
 
         json_object *json_site_questions = json_object_new_object();
         json_object_object_add( json_site, "questions", json_site_questions );
-        for (int q = 0; q < site.questions_count; ++q) {
+        for (size_t q = 0; q < site.questions_count; ++q) {
             MPMarshalledQuestion question = site.questions[q];
             if (!question.keyword)
                 continue;
@@ -366,7 +320,7 @@ bool mpw_marshall_write(
     return false;
 }
 
-MPMarshalledUser *mpw_marshall_read_flat(
+static MPMarshalledUser *mpw_marshall_read_flat(
         char *in, const char *masterPassword, MPMarshallError *error) {
 
     *error = MPMarshallErrorInternal;
@@ -405,7 +359,7 @@ MPMarshalledUser *mpw_marshall_read_flat(
             char *headerName = mpw_get_token( &positionInLine, endOfLine, ":\n" );
             char *headerValue = mpw_get_token( &positionInLine, endOfLine, "\n" );
             if (!headerName || !headerValue) {
-                err( "Invalid header: %s\n", strndup( positionInLine, endOfLine - positionInLine ) );
+                err( "Invalid header: %s\n", strndup( positionInLine, (size_t)(endOfLine - positionInLine) ) );
                 *error = MPMarshallErrorStructure;
                 return NULL;
             }
@@ -563,53 +517,7 @@ MPMarshalledUser *mpw_marshall_read_flat(
     return user;
 }
 
-static json_object *mpw_marshall_get_json_section(
-        json_object *obj, const char *section) {
-
-    json_object *json_value = obj;
-    char *sectionTokenizer = strdup( section ), *sectionToken = sectionTokenizer;
-    for (sectionToken = strtok( sectionToken, "." ); sectionToken; sectionToken = strtok( NULL, "." ))
-        if (!json_object_object_get_ex( json_value, sectionToken, &json_value ) || !json_value) {
-            dbg( "While resolving: %s: Missing value for: %s\n", section, sectionToken );
-            json_value = NULL;
-            break;
-        }
-    free( sectionTokenizer );
-
-    return json_value;
-}
-
-static const char *mpw_marshall_get_json_string(
-        json_object *obj, const char *section, const char *defaultValue) {
-
-    json_object *json_value = mpw_marshall_get_json_section( obj, section );
-    if (!json_value)
-        return defaultValue;
-
-    return json_object_get_string( json_value );
-}
-
-static int32_t mpw_marshall_get_json_int(
-        json_object *obj, const char *section, int32_t defaultValue) {
-
-    json_object *json_value = mpw_marshall_get_json_section( obj, section );
-    if (!json_value)
-        return defaultValue;
-
-    return json_object_get_int( json_value );
-}
-
-static bool mpw_marshall_get_json_boolean(
-        json_object *obj, const char *section, bool defaultValue) {
-
-    json_object *json_value = mpw_marshall_get_json_section( obj, section );
-    if (!json_value)
-        return defaultValue;
-
-    return json_object_get_boolean( json_value ) == TRUE;
-}
-
-MPMarshalledUser *mpw_marshall_read_json(
+static MPMarshalledUser *mpw_marshall_read_json(
         char *in, const char *masterPassword, MPMarshallError *error) {
 
     *error = MPMarshallErrorInternal;
@@ -630,27 +538,27 @@ MPMarshalledUser *mpw_marshall_read_json(
     MPMarshalledUser *user = NULL;
 
     // Section: "export"
-    unsigned int fileFormat = (unsigned int)mpw_marshall_get_json_int( json_file, "export.format", 0 );
+    unsigned int fileFormat = (unsigned int)mpw_get_json_int( json_file, "export.format", 0 );
     if (fileFormat < 1) {
         err( "Unsupported format: %u\n", fileFormat );
         *error = MPMarshallErrorFormat;
         return NULL;
     }
-    bool fileRedacted = mpw_marshall_get_json_boolean( json_file, "export.redacted", true );
-    const char *fileDate = mpw_marshall_get_json_string( json_file, "export.date", NULL );
+    bool fileRedacted = mpw_get_json_boolean( json_file, "export.redacted", true );
+    //const char *fileDate = mpw_get_json_string( json_file, "export.date", NULL ); // unused
 
     // Section: "user"
-    unsigned int avatar = (unsigned int)mpw_marshall_get_json_int( json_file, "user.avatar", 0 );
-    const char *fullName = mpw_marshall_get_json_string( json_file, "user.full_name", NULL );
-    const char *lastUsed = mpw_marshall_get_json_string( json_file, "user.last_used", NULL );
-    const char *keyID = mpw_marshall_get_json_string( json_file, "user.key_id", NULL );
-    MPAlgorithmVersion algorithm = (MPAlgorithmVersion)mpw_marshall_get_json_int( json_file, "user.algorithm", MPAlgorithmVersionCurrent );
+    unsigned int avatar = (unsigned int)mpw_get_json_int( json_file, "user.avatar", 0 );
+    const char *fullName = mpw_get_json_string( json_file, "user.full_name", NULL );
+    const char *lastUsed = mpw_get_json_string( json_file, "user.last_used", NULL );
+    const char *keyID = mpw_get_json_string( json_file, "user.key_id", NULL );
+    MPAlgorithmVersion algorithm = (MPAlgorithmVersion)mpw_get_json_int( json_file, "user.algorithm", MPAlgorithmVersionCurrent );
     if (algorithm < MPAlgorithmVersionFirst || algorithm > MPAlgorithmVersionLast) {
         err( "Invalid user algorithm version: %u\n", algorithm );
         *error = MPMarshallErrorIllegal;
         return NULL;
     }
-    MPSiteType defaultType = (MPSiteType)mpw_marshall_get_json_int( json_file, "user.default_type", MPSiteTypeDefault );
+    MPSiteType defaultType = (MPSiteType)mpw_get_json_int( json_file, "user.default_type", MPSiteTypeDefault );
 
     if (!fullName || !strlen( fullName )) {
         err( "Missing value for full name.\n" );
@@ -678,24 +586,24 @@ MPMarshalledUser *mpw_marshall_read_json(
 
     // Section "sites"
     json_object_iter json_site;
-    json_object *json_sites = mpw_marshall_get_json_section( json_file, "sites" );
+    json_object *json_sites = mpw_get_json_section( json_file, "sites" );
     json_object_object_foreachC( json_sites, json_site ) {
-        MPSiteType siteType = (MPSiteType)mpw_marshall_get_json_int( json_site.val, "type", user->defaultType );
-        uint32_t siteCounter = (uint32_t)mpw_marshall_get_json_int( json_site.val, "counter", 1 );
-        MPAlgorithmVersion siteAlgorithm = (MPAlgorithmVersion)mpw_marshall_get_json_int( json_site.val, "algorithm", user->algorithm );
+        MPSiteType siteType = (MPSiteType)mpw_get_json_int( json_site.val, "type", (int)user->defaultType );
+        uint32_t siteCounter = (uint32_t)mpw_get_json_int( json_site.val, "counter", 1 );
+        MPAlgorithmVersion siteAlgorithm = (MPAlgorithmVersion)mpw_get_json_int( json_site.val, "algorithm", (int)user->algorithm );
         if (siteAlgorithm < MPAlgorithmVersionFirst || siteAlgorithm > MPAlgorithmVersionLast) {
             err( "Invalid site algorithm version: %u\n", siteAlgorithm );
             *error = MPMarshallErrorIllegal;
             return NULL;
         }
-        const char *siteContent = mpw_marshall_get_json_string( json_site.val, "password", NULL );
-        const char *siteLoginName = mpw_marshall_get_json_string( json_site.val, "login_name", NULL );
-        bool siteLoginGenerated = mpw_marshall_get_json_boolean( json_site.val, "login_generated", false );
-        unsigned int siteUses = (unsigned int)mpw_marshall_get_json_int( json_site.val, "uses", 0 );
-        const char *siteLastUsed = mpw_marshall_get_json_string( json_site.val, "last_used", NULL );
+        const char *siteContent = mpw_get_json_string( json_site.val, "password", NULL );
+        const char *siteLoginName = mpw_get_json_string( json_site.val, "login_name", NULL );
+        bool siteLoginGenerated = mpw_get_json_boolean( json_site.val, "login_generated", false );
+        unsigned int siteUses = (unsigned int)mpw_get_json_int( json_site.val, "uses", 0 );
+        const char *siteLastUsed = mpw_get_json_string( json_site.val, "last_used", NULL );
 
-        json_object *json_site_mpw = mpw_marshall_get_json_section( json_site.val, "_ext_mpw" );
-        const char *siteURL = mpw_marshall_get_json_string( json_site_mpw, "url", NULL );
+        json_object *json_site_mpw = mpw_get_json_section( json_site.val, "_ext_mpw" );
+        const char *siteURL = mpw_get_json_string( json_site_mpw, "url", NULL );
 
         MPMarshalledSite *site = mpw_marshall_site( user, json_site.key, siteType, siteCounter, siteAlgorithm );
         if (!site) {
@@ -723,7 +631,7 @@ MPMarshalledUser *mpw_marshall_read_json(
         }
 
         json_object_iter json_site_question;
-        json_object *json_site_questions = mpw_marshall_get_json_section( json_site.val, "questions" );
+        json_object *json_site_questions = mpw_get_json_section( json_site.val, "questions" );
         json_object_object_foreachC( json_site_questions, json_site_question )
             mpw_marshal_question( site, json_site_question.key );
     }

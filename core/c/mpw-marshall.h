@@ -18,13 +18,10 @@
 
 #ifndef _MPW_MARSHALL_H
 #define _MPW_MARSHALL_H
-#include "mpw-algorithm.h"
 
-#ifdef NS_ENUM
-#define enum(_type, _name) NS_ENUM(_type, _name)
-#else
-#define enum(_type, _name) _type _name; enum
-#endif
+#include <time.h>
+
+#include "mpw-algorithm.h"
 
 //// Types.
 

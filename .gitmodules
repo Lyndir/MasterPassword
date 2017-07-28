@@ -22,3 +22,6 @@
 [submodule "platform-darwin/External/libsodium"]
 	path = platform-darwin/External/libsodium
 	url = https://github.com/jedisct1/libsodium.git
+[submodule "platform-darwin/External/libjson-c"]
+	path = platform-darwin/External/libjson-c
+	url = https://github.com/json-c/json-c.git

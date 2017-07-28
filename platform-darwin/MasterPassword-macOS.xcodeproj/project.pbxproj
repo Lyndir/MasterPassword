@@ -39,7 +39,6 @@
 		DA1C7AAF1F1A8F24009A3551 /* libsodium.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA0979571E9A824700F0BFE8 /* libsodium.a */; };
 		DA1C7AB01F1A8F24009A3551 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DA09745D1E99586600F0BFE8 /* libxml2.tbd */; };
 		DA1C7AC31F1A8FBA009A3551 /* mpw-cli.c in Sources */ = {isa = PBXBuildFile; fileRef = DA1C7AB91F1A8F6E009A3551 /* mpw-cli.c */; };
-		DA1C7AC81F1A8FD8009A3551 /* mpw-marshall.c in Sources */ = {isa = PBXBuildFile; fileRef = DAA449D31EEC4B6B00E7BDD5 /* mpw-marshall.c */; };
 		DA1C7ACA1F1A8FD8009A3551 /* mpw-types.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773C21A4746AF004F356A /* mpw-types.c */; };
 		DA1C7ACB1F1A8FD8009A3551 /* mpw-util.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773C51A4746AF004F356A /* mpw-util.c */; };
 		DA1C7ACD1F1A8FD8009A3551 /* mpw-algorithm.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773BB1A4746AF004F356A /* mpw-algorithm.c */; };
@@ -84,7 +83,6 @@
 		DA4DAE951A7D8117003E5423 /* MPTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4DAE931A7D8117003E5423 /* MPTypes.m */; };
 		DA5180CA19FF2F9200A587E9 /* MPAlgorithmV2.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5180C719FF2F9200A587E9 /* MPAlgorithmV2.m */; };
 		DA5180CE19FF307E00A587E9 /* MPAppDelegate_Store.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5180CD19FF307E00A587E9 /* MPAppDelegate_Store.m */; };
-		DA531CC31EFF3BF4008C72CB /* mpw-marshall.c in Sources */ = {isa = PBXBuildFile; fileRef = DAA449D31EEC4B6B00E7BDD5 /* mpw-marshall.c */; };
 		DA5E5CF61724A667003798D8 /* MPAlgorithm.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5C981724A667003798D8 /* MPAlgorithm.m */; };
 		DA5E5CF71724A667003798D8 /* MPAlgorithmV0.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5C9A1724A667003798D8 /* MPAlgorithmV0.m */; };
 		DA5E5CF81724A667003798D8 /* MPAlgorithmV1.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5C9C1724A667003798D8 /* MPAlgorithmV1.m */; };
@@ -108,6 +106,8 @@
 		DA6774431A474A3B004F356A /* mpw-algorithm.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773BB1A4746AF004F356A /* mpw-algorithm.c */; };
 		DA6774451A474A3B004F356A /* mpw-types.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773C21A4746AF004F356A /* mpw-types.c */; };
 		DA6774461A474A3B004F356A /* mpw-util.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773C51A4746AF004F356A /* mpw-util.c */; };
+		DA7471A31F2B71AE005F3468 /* mpw-marshall-util.c in Sources */ = {isa = PBXBuildFile; fileRef = DA7471A01F2B71A9005F3468 /* mpw-marshall-util.c */; };
+		DA7471A61F2B71B9005F3468 /* mpw-marshall-util.c in Sources */ = {isa = PBXBuildFile; fileRef = DA7471A01F2B71A9005F3468 /* mpw-marshall-util.c */; };
 		DA89D4EC1A51EABD00AC64D7 /* Pearl-Cocoa.h in Headers */ = {isa = PBXBuildFile; fileRef = DA89D4EA1A51EABD00AC64D7 /* Pearl-Cocoa.h */; };
 		DA89D4ED1A51EABD00AC64D7 /* Pearl-Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = DA89D4EB1A51EABD00AC64D7 /* Pearl-Cocoa.m */; };
 		DA8ED895192906920099B726 /* PearlTween.m in Sources */ = {isa = PBXBuildFile; fileRef = DA8ED891192906920099B726 /* PearlTween.m */; };
@@ -898,6 +898,8 @@
 		DA6773C51A4746AF004F356A /* mpw-util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-util.c"; sourceTree = "<group>"; };
 		DA6773C61A4746AF004F356A /* mpw-util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-util.h"; sourceTree = "<group>"; };
 		DA67743B1A474A03004F356A /* mpw-test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "mpw-test"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA7471A01F2B71A9005F3468 /* mpw-marshall-util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-marshall-util.c"; sourceTree = "<group>"; };
+		DA7471A11F2B71A9005F3468 /* mpw-marshall-util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-marshall-util.h"; sourceTree = "<group>"; };
 		DA771FE51E6E15A1004D7EDE /* MasterPassword-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MasterPassword-Prefix.pch"; sourceTree = "<group>"; };
 		DA831A271A6E1146000AC234 /* mpw-algorithm_v0.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "mpw-algorithm_v0.c"; sourceTree = "<group>"; };
 		DA831A281A6E1146000AC234 /* mpw-algorithm_v1.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "mpw-algorithm_v1.c"; sourceTree = "<group>"; };
@@ -1814,6 +1816,8 @@
 				DA831A2A1A6E1146000AC234 /* mpw-algorithm_v3.c */,
 				DA6773BB1A4746AF004F356A /* mpw-algorithm.c */,
 				DA6773BC1A4746AF004F356A /* mpw-algorithm.h */,
+				DA7471A01F2B71A9005F3468 /* mpw-marshall-util.c */,
+				DA7471A11F2B71A9005F3468 /* mpw-marshall-util.h */,
 				DAA449D31EEC4B6B00E7BDD5 /* mpw-marshall.c */,
 				DAA449D41EEC4B6B00E7BDD5 /* mpw-marshall.h */,
 				DA6773C21A4746AF004F356A /* mpw-types.c */,
@@ -2526,6 +2530,7 @@
 				DA1C7AAB1F1A8F24009A3551 /* mpw-types.c in Sources */,
 				DA1C7AAC1F1A8F24009A3551 /* mpw-util.c in Sources */,
 				DA1C7AC31F1A8FBA009A3551 /* mpw-cli.c in Sources */,
+				DA7471A31F2B71AE005F3468 /* mpw-marshall-util.c in Sources */,
 				DA1C7AAD1F1A8F24009A3551 /* mpw-algorithm.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2534,7 +2539,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DA1C7AC81F1A8FD8009A3551 /* mpw-marshall.c in Sources */,
 				DA1C7ACA1F1A8FD8009A3551 /* mpw-types.c in Sources */,
 				DA1C7ACB1F1A8FD8009A3551 /* mpw-util.c in Sources */,
 				DA1C7AD71F1A8FE6009A3551 /* mpw-bench.c in Sources */,
@@ -2585,6 +2589,7 @@
 				DA4DAE941A7D8117003E5423 /* MPAlgorithmV3.m in Sources */,
 				DA4DAE951A7D8117003E5423 /* MPTypes.m in Sources */,
 				93D393A1646430FAAC73E7FE /* MPMacApplication.m in Sources */,
+				DA7471A61F2B71B9005F3468 /* mpw-marshall-util.c in Sources */,
 				93D398D1F5D8CD5A22AF6929 /* MPGradientView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2593,7 +2598,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DA531CC31EFF3BF4008C72CB /* mpw-marshall.c in Sources */,
 				DA1C7AD81F1A8FF4009A3551 /* mpw-tests-util.c in Sources */,
 				DA6774451A474A3B004F356A /* mpw-types.c in Sources */,
 				DA6774461A474A3B004F356A /* mpw-util.c in Sources */,
