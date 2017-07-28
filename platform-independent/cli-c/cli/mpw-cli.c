@@ -295,20 +295,22 @@ int main(int argc, char *const argv[]) {
         siteType = mpw_typeWithName( siteTypeArg );
 
     // Summarize operation.
-    const char *identicon = mpw_identicon( fullName, masterPassword );
-    if (!identicon)
-        wrn( "Couldn't determine identicon.\n" );
-    dbg( "-----------------\n" );
-    dbg( "fullName         : %s\n", fullName );
-    trc( "masterPassword   : %s\n", masterPassword );
-    dbg( "identicon        : %s\n", identicon );
-    dbg( "siteName         : %s\n", siteName );
-    dbg( "siteType         : %u\n", siteType );
-    dbg( "algorithmVersion : %u\n", algorithmVersion );
-    dbg( "siteCounter      : %u\n", siteCounter );
-    dbg( "-----------------\n\n" );
-    inf( "%s's password for %s:\n[ %s ]: ", fullName, siteName, identicon );
-    mpw_free_string( identicon );
+    if (mpw_verbosity >= 0) {
+        const char *identicon = mpw_identicon( fullName, masterPassword );
+        if (!identicon)
+            wrn( "Couldn't determine identicon.\n" );
+        dbg( "-----------------\n" );
+        dbg( "fullName         : %s\n", fullName );
+        trc( "masterPassword   : %s\n", masterPassword );
+        dbg( "identicon        : %s\n", identicon );
+        dbg( "siteName         : %s\n", siteName );
+        dbg( "siteType         : %u\n", siteType );
+        dbg( "algorithmVersion : %u\n", algorithmVersion );
+        dbg( "siteCounter      : %u\n", siteCounter );
+        dbg( "-----------------\n\n" );
+        inf( "%s's password for %s:\n[ %s ]: ", fullName, siteName, identicon );
+        mpw_free_string( identicon );
+    }
 
     // Output the password.
     MPMasterKey masterKey = mpw_masterKeyForUser(
