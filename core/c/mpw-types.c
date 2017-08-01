@@ -42,25 +42,63 @@ const MPPasswordType mpw_typeWithName(const char *typeName) {
     stdTypeName[stdTypeNameSize] = '\0';
 
     // Find what password type is represented by the type name.
-    if (0 == strncmp( "maximum", stdTypeName, strlen( stdTypeName ) ) || 0 == strncmp( "x", stdTypeName, 1 ))
+    if (0 == strncmp( "x", stdTypeName, 1 )
+        || strncmp( mpw_nameForType( MPPasswordTypeGeneratedMaximum ), stdTypeName, strlen( stdTypeName ) ) == 0)
         return MPPasswordTypeGeneratedMaximum;
-    if (0 == strncmp( "long", stdTypeName, strlen( stdTypeName ) ) || 0 == strncmp( "l", stdTypeName, 1 ))
+    if (0 == strncmp( "l", stdTypeName, 1 )
+        || strncmp( mpw_nameForType( MPPasswordTypeGeneratedLong ), stdTypeName, strlen( stdTypeName ) ) == 0)
         return MPPasswordTypeGeneratedLong;
-    if (0 == strncmp( "medium", stdTypeName, strlen( stdTypeName ) ) || 0 == strncmp( "m", stdTypeName, 1 ))
+    if (0 == strncmp( "m", stdTypeName, 1 )
+        || strncmp( mpw_nameForType( MPPasswordTypeGeneratedMedium ), stdTypeName, strlen( stdTypeName ) ) == 0)
         return MPPasswordTypeGeneratedMedium;
-    if (0 == strncmp( "basic", stdTypeName, strlen( stdTypeName ) ) || 0 == strncmp( "b", stdTypeName, 1 ))
+    if (0 == strncmp( "b", stdTypeName, 1 )
+        || strncmp( mpw_nameForType( MPPasswordTypeGeneratedBasic ), stdTypeName, strlen( stdTypeName ) ) == 0)
         return MPPasswordTypeGeneratedBasic;
-    if (0 == strncmp( "short", stdTypeName, strlen( stdTypeName ) ) || 0 == strncmp( "s", stdTypeName, 1 ))
+    if (0 == strncmp( "s", stdTypeName, 1 )
+        || strncmp( mpw_nameForType( MPPasswordTypeGeneratedShort ), stdTypeName, strlen( stdTypeName ) ) == 0)
         return MPPasswordTypeGeneratedShort;
-    if (0 == strncmp( "pin", stdTypeName, strlen( stdTypeName ) ) || 0 == strncmp( "i", stdTypeName, 1 ))
+    if (0 == strncmp( "i", stdTypeName, 1 )
+        || strncmp( mpw_nameForType( MPPasswordTypeGeneratedPIN ), stdTypeName, strlen( stdTypeName ) ) == 0)
         return MPPasswordTypeGeneratedPIN;
-    if (0 == strncmp( "name", stdTypeName, strlen( stdTypeName ) ) || 0 == strncmp( "n", stdTypeName, 1 ))
+    if (0 == strncmp( "n", stdTypeName, 1 )
+        || strncmp( mpw_nameForType( MPPasswordTypeGeneratedName ), stdTypeName, strlen( stdTypeName ) ) == 0)
         return MPPasswordTypeGeneratedName;
-    if (0 == strncmp( "phrase", stdTypeName, strlen( stdTypeName ) ) || 0 == strncmp( "p", stdTypeName, 1 ))
+    if (0 == strncmp( "p", stdTypeName, 1 )
+        || strncmp( mpw_nameForType( MPPasswordTypeGeneratedPhrase ), stdTypeName, strlen( stdTypeName ) ) == 0)
         return MPPasswordTypeGeneratedPhrase;
 
     ftl( "Not a generated type name: %s", stdTypeName );
     return MPPasswordTypeDefault;
+}
+
+const char *mpw_nameForType(MPPasswordType passwordType) {
+
+    switch (passwordType) {
+        case MPPasswordTypeGeneratedMaximum:
+            return "maximum";
+        case MPPasswordTypeGeneratedLong:
+            return "long";
+        case MPPasswordTypeGeneratedMedium:
+            return "medium";
+        case MPPasswordTypeGeneratedBasic:
+            return "basic";
+        case MPPasswordTypeGeneratedShort:
+            return "short";
+        case MPPasswordTypeGeneratedPIN:
+            return "pin";
+        case MPPasswordTypeGeneratedName:
+            return "name";
+        case MPPasswordTypeGeneratedPhrase:
+            return "phrase";
+        case MPPasswordTypeStoredPersonal:
+            return "personal";
+        case MPPasswordTypeStoredDevice:
+            return "device";
+        default: {
+            ftl( "Unknown password type: %d", passwordType );
+            return "";
+        }
+    }
 }
 
 const char **mpw_templatesForType(MPPasswordType type, size_t *count) {
@@ -128,14 +166,30 @@ const MPKeyPurpose mpw_purposeWithName(const char *purposeName) {
         stdPurposeName[c] = (char)tolower( purposeName[c] );
     stdPurposeName[stdPurposeNameSize] = '\0';
 
-    if (strncmp( "authentication", stdPurposeName, strlen( stdPurposeName ) ) == 0)
+    if (strncmp( mpw_nameForPurpose( MPKeyPurposeAuthentication ), stdPurposeName, strlen( stdPurposeName ) ) == 0)
         return MPKeyPurposeAuthentication;
-    if (strncmp( "identification", stdPurposeName, strlen( stdPurposeName ) ) == 0)
+    if (strncmp( mpw_nameForPurpose( MPKeyPurposeIdentification ), stdPurposeName, strlen( stdPurposeName ) ) == 0)
         return MPKeyPurposeIdentification;
-    if (strncmp( "recovery", stdPurposeName, strlen( stdPurposeName ) ) == 0)
+    if (strncmp( mpw_nameForPurpose( MPKeyPurposeRecovery ), stdPurposeName, strlen( stdPurposeName ) ) == 0)
         return MPKeyPurposeRecovery;
 
     ftl( "Not a purpose name: %s", stdPurposeName );
+}
+
+const char *mpw_nameForPurpose(MPKeyPurpose purpose) {
+
+    switch (purpose) {
+        case MPKeyPurposeAuthentication:
+            return "authentication";
+        case MPKeyPurposeIdentification:
+            return "identification";
+        case MPKeyPurposeRecovery:
+            return "recovery";
+        default: {
+            ftl( "Unknown purpose: %d", purpose );
+            return "";
+        }
+    }
 }
 
 const char *mpw_scopeForPurpose(MPKeyPurpose purpose) {

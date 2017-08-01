@@ -81,7 +81,7 @@ typedef enum( unsigned int, MPPasswordType ) {
     /** Custom saved password. */
     MPPasswordTypeStoredPersonal = 0x0 | MPPasswordTypeClassStored | MPSiteFeatureExportContent,
     /** Custom saved password that should not be exported from the device. */
-    MPPasswordTypeStoredDevicePrivate = 0x1 | MPPasswordTypeClassStored | MPSiteFeatureDevicePrivate,
+    MPPasswordTypeStoredDevice = 0x1 | MPPasswordTypeClassStored | MPSiteFeatureDevicePrivate,
 
     MPPasswordTypeDefault = MPPasswordTypeGeneratedLong,
 };
@@ -93,14 +93,22 @@ typedef enum( unsigned int, MPPasswordType ) {
  */
 const MPKeyPurpose mpw_purposeWithName(const char *purposeName);
 /**
+ * @return The standard name for the given purpose.
+ */
+const char *mpw_nameForPurpose(MPKeyPurpose purpose);
+/**
  * @return An internal string containing the scope identifier to apply when encoding for the given purpose.
  */
 const char *mpw_scopeForPurpose(MPKeyPurpose purpose);
 
 /**
- * @return The type represented by the given name.
+ * @return The password type represented by the given name.
  */
 const MPPasswordType mpw_typeWithName(const char *typeName);
+/**
+ * @return The standard name for the given password type.
+ */
+const char *mpw_nameForType(MPPasswordType passwordType);
 
 /**
  * @return A newly allocated array of internal strings that express the templates to use for the given type.

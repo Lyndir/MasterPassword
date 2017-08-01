@@ -299,9 +299,11 @@ int main(int argc, char *const argv[]) {
     trc( "masterPassword   : %s\n", masterPassword );
     dbg( "identicon        : %s\n", identicon );
     dbg( "siteName         : %s\n", siteName );
-    dbg( "passwordType     : %u\n", passwordType );
-    dbg( "algorithmVersion : %u\n", algorithmVersion );
     dbg( "siteCounter      : %u\n", siteCounter );
+    dbg( "keyPurpose       : %s (%u)\n", mpw_nameForPurpose( keyPurpose ), keyPurpose );
+    dbg( "keyContext       : %s\n", keyContext );
+    dbg( "passwordType     : %s (%u)\n", mpw_nameForType( passwordType ), passwordType );
+    dbg( "algorithmVersion : %u\n", algorithmVersion );
     dbg( "-----------------\n\n" );
     inf( "%s's password for %s:\n[ %s ]: ", fullName, siteName, identicon );
     mpw_free_string( identicon );
