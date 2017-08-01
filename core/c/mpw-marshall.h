@@ -48,6 +48,7 @@ typedef enum( unsigned int, MPMarshallError ) {
     /** An internal system error interrupted marshalling. */
             MPMarshallErrorInternal,
 };
+const char *mpw_explainMarshallError(const MPMarshallError error);
 
 typedef struct MPMarshalledQuestion {
     const char *keyword;

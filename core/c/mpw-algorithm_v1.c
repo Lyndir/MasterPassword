@@ -43,7 +43,7 @@ static MPMasterKey mpw_masterKeyForUser_v1(const char *fullName, const char *mas
     mpw_push_int( &masterKeySalt, &masterKeySaltSize, htonl( mpw_utf8_strlen( fullName ) ) );
     mpw_push_string( &masterKeySalt, &masterKeySaltSize, fullName );
     if (!masterKeySalt) {
-        ftl( "Could not allocate master key salt: %d\n", errno );
+        ftl( "Could not allocate master key salt: %s\n", strerror( errno ) );
         return NULL;
     }
     trc( "masterKeySalt ID: %s\n", mpw_id_buf( masterKeySalt, masterKeySaltSize ) );
@@ -53,7 +53,7 @@ static MPMasterKey mpw_masterKeyForUser_v1(const char *fullName, const char *mas
     MPMasterKey masterKey = mpw_scrypt( MPMasterKeySize, masterPassword, masterKeySalt, masterKeySaltSize, MP_N, MP_r, MP_p );
     mpw_free( masterKeySalt, masterKeySaltSize );
     if (!masterKey) {
-        ftl( "Could not allocate master key: %d\n", errno );
+        ftl( "Could not allocate master key: %s\n", strerror( errno ) );
         return NULL;
     }
     trc( "masterKey ID: %s\n", mpw_id_buf( masterKey, MPMasterKeySize ) );
@@ -89,7 +89,7 @@ static MPSiteKey mpw_siteKey_v1(
         mpw_push_string( &siteSalt, &siteSaltSize, keyContext );
     }
     if (!siteSalt || !siteSaltSize) {
-        ftl( "Could not allocate site salt: %d\n", errno );
+        ftl( "Could not allocate site salt: %s\n", strerror( errno ) );
         mpw_free( siteSalt, siteSaltSize );
         return NULL;
     }
@@ -98,7 +98,7 @@ static MPSiteKey mpw_siteKey_v1(
     MPSiteKey siteKey = mpw_hmac_sha256( masterKey, MPMasterKeySize, siteSalt, siteSaltSize );
     mpw_free( siteSalt, siteSaltSize );
     if (!siteKey) {
-        ftl( "Could not allocate site key: %d\n", errno );
+        ftl( "Could not allocate site key: %s\n", strerror( errno ) );
         return NULL;
     }
     trc( "siteKey ID: %s\n", mpw_id_buf( siteKey, MPSiteKeySize ) );

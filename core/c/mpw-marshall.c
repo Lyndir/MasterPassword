@@ -662,3 +662,24 @@ MPMarshalledUser *mpw_marshall_read(
     *error = MPMarshallErrorFormat;
     return NULL;
 }
+
+const char *mpw_explainMarshallError(const MPMarshallError error) {
+    switch (error) {
+        case MPMarshallSuccess:
+            return "The marshalling operation completed successfully.";
+        case MPMarshallErrorStructure:
+            return "An error in the structure of the marshall file interrupted marshalling.";
+        case MPMarshallErrorFormat:
+            return "The marshall file uses an unsupported format version.";
+        case MPMarshallErrorMissing:
+            return "A required value is missing or not specified.";
+        case MPMarshallErrorMasterPassword:
+            return "The given master password is not valid.";
+        case MPMarshallErrorIllegal:
+            return "An illegal value was specified.";
+        case MPMarshallErrorInternal:
+            return "An internal system error interrupted marshalling.";
+    }
+
+    return "An unrecognized error occurred.";
+}

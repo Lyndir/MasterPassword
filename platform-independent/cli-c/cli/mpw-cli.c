@@ -207,9 +207,9 @@ int main(int argc, char *const argv[]) {
         mpwSitesFormat = MPMarshallFormatFlat;
         mpwSitesPath = mpwPath( fullName, "mpsites" );
         if (!mpwSitesPath || !(mpwSites = fopen( mpwSitesPath, "r" )))
-            dbg( "Couldn't open configuration file: %s: %d\n", mpwSitesPath, errno );
+            dbg( "Couldn't open configuration file:\n  %s: %s\n",
+                    mpwSitesPath, strerror( errno ) );
     }
-    free( mpwSitesPath );
 
     // Read the user's sites file.
     if (mpwSites) {
@@ -220,7 +220,8 @@ int main(int argc, char *const argv[]) {
                (bufPointer += (readSize = fread( buf + bufPointer, 1, readAmount, mpwSites ))) &&
                (readSize == readAmount));
         if (ferror( mpwSites ))
-            wrn( "Error while reading configuration file: %s: %d", mpwSitesPath, ferror( mpwSites ) );
+            wrn( "Error while reading configuration file:\n  %s: %d",
+                    mpwSitesPath, ferror( mpwSites ) );
         fclose( mpwSites );
 
         // Parse file.
@@ -228,7 +229,8 @@ int main(int argc, char *const argv[]) {
         MPMarshalledUser *user = mpw_marshall_read( buf, mpwSitesFormat, masterPassword, &marshallError );
         mpw_free_string( buf );
         if (!user || marshallError != MPMarshallSuccess)
-            wrn( "Couldn't parse configuration file: %s: %d\n", mpwSitesPath, marshallError );
+            wrn( "Couldn't parse configuration file:\n  %s: %s\n",
+                    mpwSitesPath, mpw_explainMarshallError( marshallError ) );
 
         else {
             // Load defaults.
@@ -252,15 +254,18 @@ int main(int argc, char *const argv[]) {
             if (mpwSitesFormat != MPMarshallFormatJSON) {
                 mpwSitesPath = mpwPath( fullName, "mpsites.json" );
                 if (!mpwSitesPath || !(mpwSites = fopen( mpwSitesPath, "w" )))
-                    wrn( "Couldn't create updated configuration file: %s: %d\n", mpwSitesPath, errno );
+                    wrn( "Couldn't create updated configuration file:\n  %s: %s\n",
+                            mpwSitesPath, strerror( errno ) );
 
                 else {
                     buf = NULL;
                     if (!mpw_marshall_write( &buf, MPMarshallFormatJSON, user, &marshallError ) || marshallError != MPMarshallSuccess)
-                        wrn( "Couldn't encode updated configuration file: %s: %d", mpwSitesPath, marshallError );
+                        wrn( "Couldn't encode updated configuration file:\n  %s: %s",
+                                mpwSitesPath, mpw_explainMarshallError( marshallError ) );
 
                     else if (fwrite( buf, sizeof( char ), strlen( buf ), mpwSites ) != strlen( buf ))
-                        wrn( "Error while writing updated configuration file: %s: %d\n", mpwSitesPath, ferror( mpwSites ) );
+                        wrn( "Error while writing updated configuration file:\n  %s: %d\n",
+                                mpwSitesPath, ferror( mpwSites ) );
 
                     mpw_free_string( buf );
                     fclose( mpwSites );
@@ -269,6 +274,7 @@ int main(int argc, char *const argv[]) {
             mpw_marshal_free( user );
         }
     }
+    free( mpwSitesPath );
 
     // Parse default/config-overriding command-line parameters.
     if (algorithmVersionArg) {
@@ -327,7 +333,7 @@ int main(int argc, char *const argv[]) {
     }
 
     MPSiteKey siteKey = mpw_siteKey( masterKey, siteName, siteCounter, keyPurpose, keyContext, algorithmVersion );
-    const char *sitePassword = mpw_sitePassword(siteKey, passwordType, algorithmVersion );
+    const char *sitePassword = mpw_sitePassword( siteKey, passwordType, algorithmVersion );
     mpw_free( masterKey, MPMasterKeySize );
     mpw_free( siteKey, MPSiteKeySize );
     mpw_free_string( siteName );
