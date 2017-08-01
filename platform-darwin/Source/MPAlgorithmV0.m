@@ -128,7 +128,7 @@ static NSOperationQueue *_mpwQueue = nil;
     __block NSData *keyData;
     [self mpw_perform:^{
         NSDate *start = [NSDate date];
-        MPMasterKey masterKey = mpw_masterKeyForUser( fullName.UTF8String, masterPassword.UTF8String, [self version] );
+        MPMasterKey masterKey = mpw_masterKey( fullName.UTF8String, masterPassword.UTF8String, [self version] );
         if (masterKey) {
             keyData = [NSData dataWithBytes:masterKey length:MPMasterKeySize];
             trc( @"User: %@, password: %@ derives to key ID: %@ (took %0.2fs)", //

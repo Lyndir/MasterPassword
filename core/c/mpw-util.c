@@ -136,7 +136,10 @@ uint8_t const *mpw_hmac_sha256(const uint8_t *key, const size_t keySize, const u
     return NULL;
 }
 
-const char *mpw_id_buf(const void *buf, size_t length) {
+MPKeyID mpw_id_buf(const void *buf, size_t length) {
+
+    if (!buf)
+        return "<unset>";
 
 #if HAS_CPERCIVA
     uint8_t hash[32];

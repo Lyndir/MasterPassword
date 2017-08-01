@@ -170,8 +170,11 @@ static bool mpw_marshall_write_flat(
                 return false;
             }
 
-            if (site.type & MPSiteTypeClassGenerated)
-                content = mpw_passwordForSite( masterKey, site.name, site.type, site.counter, MPSiteVariantPassword, NULL, site.algorithm );
+            if (site.type & MPSiteTypeClassGenerated) {
+                MPSiteKey siteKey = mpw_siteKey( masterKey, site.name, site.counter, MPSiteVariantPassword, NULL, site.algorithm );
+                content = mpw_sitePassword( siteKey, site.type, site.algorithm );
+                mpw_free( siteKey, MPSiteKeySize );
+            }
             else if (content) {
                 // TODO: Decrypt Personal Passwords
                 //content = aes128_cbc( masterKey, content );
@@ -250,8 +253,11 @@ static bool mpw_marshall_write_json(
                 return false;
             }
 
-            if (site.type & MPSiteTypeClassGenerated)
-                content = mpw_passwordForSite( masterKey, site.name, site.type, site.counter, MPSiteVariantPassword, NULL, site.algorithm );
+            if (site.type & MPSiteTypeClassGenerated) {
+                MPSiteKey siteKey = mpw_siteKey( masterKey, site.name, site.counter, MPSiteVariantPassword, NULL, site.algorithm );
+                content = mpw_sitePassword( siteKey, site.type, site.algorithm );
+                mpw_free( siteKey, MPSiteKeySize );
+            }
             else if (content) {
                 // TODO: Decrypt Personal Passwords
                 //content = aes128_cbc( masterKey, content );
@@ -284,8 +290,9 @@ static bool mpw_marshall_write_json(
             json_object_object_add( json_site_questions, question.keyword, json_site_question );
 
             if (!user->redacted) {
-                const char *answer = mpw_passwordForSite( masterKey, site.name, MPSiteTypeGeneratedPhrase, 1,
-                        MPSiteVariantAnswer, question.keyword, site.algorithm );
+                MPSiteKey siteKey = mpw_siteKey( masterKey, site.name, 1, MPSiteVariantAnswer, question.keyword, site.algorithm );
+                const char *answer = mpw_sitePassword( siteKey, MPSiteTypeGeneratedPhrase, site.algorithm );
+                mpw_free( siteKey, MPSiteKeySize );
                 if (answer)
                     json_object_object_add( json_site_question, "answer", json_object_new_string( answer ) );
             }

@@ -38,14 +38,19 @@ typedef enum( unsigned int, MPAlgorithmVersion ) {
 };
 
 /** Derive the master key for a user based on their name and master password.
- * @return A new MP_dkLen-byte allocated buffer or NULL if an allocation error occurred. */
-MPMasterKey mpw_masterKeyForUser(
+ * @return A new MPMasterKeySize-byte allocated buffer or NULL if an error occurred. */
+MPMasterKey mpw_masterKey(
         const char *fullName, const char *masterPassword, const MPAlgorithmVersion algorithmVersion);
 
-/** Encode a password for the site from the given master key and site parameters.
- * @return A newly allocated string or NULL if an allocation error occurred. */
-const char *mpw_passwordForSite(
-        MPMasterKey masterKey, const char *siteName, const MPSiteType siteType, const uint32_t siteCounter,
+/** Derive the site key for a user's site from the given master key and site parameters.
+ * @return A new MPSiteKeySize-byte allocated buffer or NULL if an error occurred. */
+MPSiteKey mpw_siteKey(
+        MPMasterKey masterKey, const char *siteName, const uint32_t siteCounter,
         const MPSiteVariant siteVariant, const char *siteContext, const MPAlgorithmVersion algorithmVersion);
+
+/** Encode a password for the site from the given site key.
+ * @return A newly allocated string or NULL if an error occurred. */
+const char *mpw_sitePassword(
+        MPSiteKey siteKey, const MPSiteType siteType, const MPAlgorithmVersion algorithmVersion);
 
 #endif // _MPW_ALGORITHM_H

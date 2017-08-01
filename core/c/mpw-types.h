@@ -33,7 +33,9 @@
 
 #define MPMasterKeySize 64
 typedef const uint8_t *MPMasterKey;
-typedef const char *MPMasterKeyID;
+#define MPSiteKeySize 256 / 8 // Bytes in HMAC-SHA-256
+typedef const uint8_t *MPSiteKey;
+typedef const char *MPKeyID;
 
 typedef enum( unsigned int, MPSiteVariant ) {
     /** Generate a key for authentication. */

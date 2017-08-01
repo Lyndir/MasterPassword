@@ -64,7 +64,7 @@ int main(int argc, char *const argv[]) {
     // Similar to phase-two of mpw
     uint8_t *sitePasswordInfo = malloc( 128 );
     iterations = 3000000;
-    masterKey = mpw_masterKeyForUser( fullName, masterPassword, MPAlgorithmVersionCurrent );
+    masterKey = mpw_masterKey( fullName, masterPassword, MPAlgorithmVersionCurrent );
     if (!masterKey)
         ftl( "Could not allocate master key: %d\n", errno );
     mpw_getTime( &startTime );
@@ -95,7 +95,7 @@ int main(int argc, char *const argv[]) {
     iterations = 50;
     mpw_getTime( &startTime );
     for (int i = 1; i <= iterations; ++i) {
-        free( (void *)mpw_masterKeyForUser( fullName, masterPassword, MPAlgorithmVersionCurrent ) );
+        free( (void *)mpw_masterKey( fullName, masterPassword, MPAlgorithmVersionCurrent ) );
 
         if (modff(100.f * i / iterations, &percent) == 0)
             fprintf( stderr, "\rscrypt_mpw: iteration %d / %d (%.0f%%)..", i, iterations, percent );
@@ -107,13 +107,16 @@ int main(int argc, char *const argv[]) {
     iterations = 50;
     mpw_getTime( &startTime );
     for (int i = 1; i <= iterations; ++i) {
-        masterKey = mpw_masterKeyForUser( fullName, masterPassword, MPAlgorithmVersionCurrent );
+        masterKey = mpw_masterKey( fullName, masterPassword, MPAlgorithmVersionCurrent );
         if (!masterKey)
             ftl( "Could not allocate master key: %d\n", errno );
 
-        free( (void *)mpw_passwordForSite(
-                masterKey, siteName, siteType, siteCounter, siteVariant, siteContext, MPAlgorithmVersionCurrent ) );
+        MPSiteKey siteKey = mpw_siteKey(
+                masterKey, siteName, siteCounter, siteVariant, siteContext, MPAlgorithmVersionCurrent );
+        free( (void *)mpw_sitePassword(
+                siteKey, siteType, MPAlgorithmVersionCurrent ) );
         free( (void *)masterKey );
+        free( (void *)siteKey );
 
         if (modff(100.f * i / iterations, &percent) == 0)
             fprintf( stderr, "\rmpw: iteration %d / %d (%.0f%%)..", i, iterations, percent );

@@ -24,7 +24,7 @@ int main(int argc, char *const argv[]) {
 
         // Read in the test case.
         xmlChar *id = mpw_xmlTestCaseString( testCase, "id" );
-        uint32_t algorithm = mpw_xmlTestCaseInteger( testCase, "algorithm" );
+        MPAlgorithmVersion algorithm = (MPAlgorithmVersion)mpw_xmlTestCaseInteger( testCase, "algorithm" );
         xmlChar *fullName = mpw_xmlTestCaseString( testCase, "fullName" );
         xmlChar *masterPassword = mpw_xmlTestCaseString( testCase, "masterPassword" );
         xmlChar *keyID = mpw_xmlTestCaseString( testCase, "keyID" );
@@ -46,15 +46,18 @@ int main(int argc, char *const argv[]) {
         }
 
         // 1. calculate the master key.
-        MPMasterKey masterKey = mpw_masterKeyForUser(
+        MPMasterKey masterKey = mpw_masterKey(
                 (char *)fullName, (char *)masterPassword, algorithm );
         if (!masterKey)
             ftl( "Couldn't derive master key." );
 
         // 2. calculate the site password.
-        const char *sitePassword = mpw_passwordForSite(
-                masterKey, (char *)siteName, siteType, siteCounter, siteVariant, (char *)siteContext, algorithm );
+        MPSiteKey siteKey = mpw_siteKey(
+                masterKey, (char *)siteName, siteCounter, siteVariant, (char *)siteContext, algorithm );
+        const char *sitePassword = mpw_sitePassword(
+                siteKey, siteType, algorithm );
         mpw_free( masterKey, MPMasterKeySize );
+        mpw_free( siteKey, MPSiteKeySize );
         if (!sitePassword)
             ftl( "Couldn't derive site password." );
 

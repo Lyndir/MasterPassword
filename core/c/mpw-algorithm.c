@@ -22,12 +22,7 @@
 #include "mpw-algorithm_v2.c"
 #include "mpw-algorithm_v3.c"
 
-#define MP_N                32768
-#define MP_r                8
-#define MP_p                2
-#define MP_hash             PearlHashSHA256
-
-MPMasterKey mpw_masterKeyForUser(const char *fullName, const char *masterPassword, const MPAlgorithmVersion algorithmVersion) {
+MPMasterKey mpw_masterKey(const char *fullName, const char *masterPassword, const MPAlgorithmVersion algorithmVersion) {
 
     if (!fullName || !masterPassword)
         return NULL;
@@ -47,7 +42,8 @@ MPMasterKey mpw_masterKeyForUser(const char *fullName, const char *masterPasswor
     }
 }
 
-const char *mpw_passwordForSite(MPMasterKey masterKey, const char *siteName, const MPSiteType siteType, const uint32_t siteCounter,
+MPSiteKey mpw_siteKey(
+        MPMasterKey masterKey, const char *siteName, const uint32_t siteCounter,
         const MPSiteVariant siteVariant, const char *siteContext, const MPAlgorithmVersion algorithmVersion) {
 
     if (!masterKey || !siteName)
@@ -55,13 +51,34 @@ const char *mpw_passwordForSite(MPMasterKey masterKey, const char *siteName, con
 
     switch (algorithmVersion) {
         case MPAlgorithmVersion0:
-            return mpw_passwordForSite_v0( masterKey, siteName, siteType, siteCounter, siteVariant, siteContext );
+            return mpw_siteKey_v0( masterKey, siteName, siteCounter, siteVariant, siteContext );
         case MPAlgorithmVersion1:
-            return mpw_passwordForSite_v1( masterKey, siteName, siteType, siteCounter, siteVariant, siteContext );
+            return mpw_siteKey_v1( masterKey, siteName, siteCounter, siteVariant, siteContext );
         case MPAlgorithmVersion2:
-            return mpw_passwordForSite_v2( masterKey, siteName, siteType, siteCounter, siteVariant, siteContext );
+            return mpw_siteKey_v2( masterKey, siteName, siteCounter, siteVariant, siteContext );
         case MPAlgorithmVersion3:
-            return mpw_passwordForSite_v3( masterKey, siteName, siteType, siteCounter, siteVariant, siteContext );
+            return mpw_siteKey_v3( masterKey, siteName, siteCounter, siteVariant, siteContext );
+        default:
+            ftl( "Unsupported version: %d", algorithmVersion );
+            return NULL;
+    }
+}
+
+const char *mpw_sitePassword(
+        MPSiteKey siteKey, const MPSiteType siteType, const MPAlgorithmVersion algorithmVersion) {
+
+    if (!siteKey)
+        return NULL;
+
+    switch (algorithmVersion) {
+        case MPAlgorithmVersion0:
+            return mpw_sitePassword_v0( siteKey, siteType );
+        case MPAlgorithmVersion1:
+            return mpw_sitePassword_v1( siteKey, siteType );
+        case MPAlgorithmVersion2:
+            return mpw_sitePassword_v2( siteKey, siteType );
+        case MPAlgorithmVersion3:
+            return mpw_sitePassword_v3( siteKey, siteType );
         default:
             ftl( "Unsupported version: %d", algorithmVersion );
             return NULL;

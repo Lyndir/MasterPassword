@@ -311,16 +311,17 @@ int main(int argc, char *const argv[]) {
     mpw_free_string( identicon );
 
     // Output the password.
-    MPMasterKey masterKey = mpw_masterKeyForUser(
+    MPMasterKey masterKey = mpw_masterKey(
             fullName, masterPassword, algorithmVersion );
     mpw_free_string( masterPassword );
     mpw_free_string( fullName );
     if (!masterKey)
         ftl( "Couldn't derive master key." );
 
-    const char *sitePassword = mpw_passwordForSite(
-            masterKey, siteName, siteType, siteCounter, siteVariant, siteContextArg, algorithmVersion );
+    MPSiteKey siteKey = mpw_siteKey( masterKey, siteName, siteCounter, siteVariant, siteContextArg, algorithmVersion );
+    const char *sitePassword = mpw_sitePassword(siteKey, siteType, algorithmVersion );
     mpw_free( masterKey, MPMasterKeySize );
+    mpw_free( siteKey, MPSiteKeySize );
     mpw_free_string( siteName );
     if (!sitePassword)
         ftl( "Couldn't derive site password." );

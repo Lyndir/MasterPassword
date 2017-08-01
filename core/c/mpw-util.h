@@ -122,7 +122,7 @@ const char *mpw_hex(const void *buf, size_t length);
 const char *mpw_hex_l(uint32_t number);
 /** Encode a fingerprint for a buffer.
   * @return A C-string in a reused buffer, do not free or store it. */
-const char *mpw_id_buf(const void *buf, size_t length);
+MPKeyID mpw_id_buf(const void *buf, size_t length);
 /** Compare two fingerprints for equality.
   * @return true if the buffers represent identical fingerprints. */
 bool mpw_id_buf_equals(const char *id1, const char *id2);
