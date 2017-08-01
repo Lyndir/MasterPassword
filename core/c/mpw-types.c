@@ -105,16 +105,15 @@ const char **mpw_templatesForType(MPPasswordType type, size_t *count) {
 
     if (!(type & MPPasswordTypeClassGenerated)) {
         ftl( "Not a generated type: %d", type );
-        *count = 0;
         return NULL;
     }
 
     switch (type) {
         case MPPasswordTypeGeneratedMaximum:
-            return mpw_alloc_array( *count, const char *,
+            return mpw_alloc_array( count, const char *,
                     "anoxxxxxxxxxxxxxxxxx", "axxxxxxxxxxxxxxxxxno" );
         case MPPasswordTypeGeneratedLong:
-            return mpw_alloc_array( *count, const char *,
+            return mpw_alloc_array( count, const char *,
                     "CvcvnoCvcvCvcv", "CvcvCvcvnoCvcv", "CvcvCvcvCvcvno",
                     "CvccnoCvcvCvcv", "CvccCvcvnoCvcv", "CvccCvcvCvcvno",
                     "CvcvnoCvccCvcv", "CvcvCvccnoCvcv", "CvcvCvccCvcvno",
@@ -123,26 +122,25 @@ const char **mpw_templatesForType(MPPasswordType type, size_t *count) {
                     "CvcvnoCvccCvcc", "CvcvCvccnoCvcc", "CvcvCvccCvccno",
                     "CvccnoCvcvCvcc", "CvccCvcvnoCvcc", "CvccCvcvCvccno" );
         case MPPasswordTypeGeneratedMedium:
-            return mpw_alloc_array( *count, const char *,
+            return mpw_alloc_array( count, const char *,
                     "CvcnoCvc", "CvcCvcno" );
         case MPPasswordTypeGeneratedBasic:
-            return mpw_alloc_array( *count, const char *,
+            return mpw_alloc_array( count, const char *,
                     "aaanaaan", "aannaaan", "aaannaaa" );
         case MPPasswordTypeGeneratedShort:
-            return mpw_alloc_array( *count, const char *,
+            return mpw_alloc_array( count, const char *,
                     "Cvcn" );
         case MPPasswordTypeGeneratedPIN:
-            return mpw_alloc_array( *count, const char *,
+            return mpw_alloc_array( count, const char *,
                     "nnnn" );
         case MPPasswordTypeGeneratedName:
-            return mpw_alloc_array( *count, const char *,
+            return mpw_alloc_array( count, const char *,
                     "cvccvcvcv" );
         case MPPasswordTypeGeneratedPhrase:
-            return mpw_alloc_array( *count, const char *,
+            return mpw_alloc_array( count, const char *,
                     "cvcc cvc cvccvcv cvc", "cvc cvccvcvcv cvcv", "cv cvccv cvc cvcvccv" );
         default: {
             ftl( "Unknown generated type: %d", type );
-            *count = 0;
             return NULL;
         }
     }
@@ -174,6 +172,7 @@ const MPKeyPurpose mpw_purposeWithName(const char *purposeName) {
         return MPKeyPurposeRecovery;
 
     ftl( "Not a purpose name: %s", stdPurposeName );
+    return MPKeyPurposeAuthentication;
 }
 
 const char *mpw_nameForPurpose(MPKeyPurpose purpose) {

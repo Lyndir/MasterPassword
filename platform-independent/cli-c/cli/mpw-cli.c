@@ -155,20 +155,20 @@ int main(int argc, char *const argv[]) {
                 switch (optopt) {
                     case 'u':
                         ftl( "Missing full name to option: -%c\n", optopt );
-                        break;
+                        abort();
                     case 't':
                         ftl( "Missing type name to option: -%c\n", optopt );
-                        break;
+                        abort();
                     case 'c':
                         ftl( "Missing counter value to option: -%c\n", optopt );
-                        break;
+                        abort();
                     default:
                         ftl( "Unknown option: -%c\n", optopt );
-                        break;
+                        abort();
                 }
             default:
                 ftl( "Unexpected option: %c", opt );
-                break;
+                abort();
         }
     if (optind < argc)
         siteNameArg = argv[optind];
@@ -185,11 +185,15 @@ int main(int argc, char *const argv[]) {
 
     // Determine fullName, siteName & masterPassword.
     if (!(fullNameArg && (fullName = strdup( fullNameArg ))) &&
-        !(fullName = getline_prompt( "Your full name:" )))
+        !(fullName = getline_prompt( "Your full name:" ))) {
         ftl( "Missing full name.\n" );
+        abort();
+    }
     if (!(siteNameArg && (siteName = strdup( siteNameArg ))) &&
-        !(siteName = getline_prompt( "Site name:" )))
+        !(siteName = getline_prompt( "Site name:" ))) {
         ftl( "Missing site name.\n" );
+        abort();
+    }
     if (!(masterPasswordArg && (masterPassword = strdup( masterPasswordArg ))))
         while (!masterPassword || !strlen( masterPassword ))
             masterPassword = getpass( "Your master password: " );
@@ -269,14 +273,18 @@ int main(int argc, char *const argv[]) {
     // Parse default/config-overriding command-line parameters.
     if (algorithmVersionArg) {
         int algorithmVersionInt = atoi( algorithmVersionArg );
-        if (algorithmVersionInt < MPAlgorithmVersionFirst || algorithmVersionInt > MPAlgorithmVersionLast)
+        if (algorithmVersionInt < MPAlgorithmVersionFirst || algorithmVersionInt > MPAlgorithmVersionLast) {
             ftl( "Invalid algorithm version: %s\n", algorithmVersionArg );
+            abort();
+        }
         algorithmVersion = (MPAlgorithmVersion)algorithmVersionInt;
     }
     if (siteCounterArg) {
         long long int siteCounterInt = atoll( siteCounterArg );
-        if (siteCounterInt < 0 || siteCounterInt > UINT32_MAX)
+        if (siteCounterInt < 0 || siteCounterInt > UINT32_MAX) {
             ftl( "Invalid site counter: %s\n", siteCounterArg );
+            abort();
+        }
         siteCounter = (uint32_t)siteCounterInt;
     }
     if (keyPurposeArg)
@@ -313,8 +321,10 @@ int main(int argc, char *const argv[]) {
             fullName, masterPassword, algorithmVersion );
     mpw_free_string( masterPassword );
     mpw_free_string( fullName );
-    if (!masterKey)
+    if (!masterKey) {
         ftl( "Couldn't derive master key." );
+        abort();
+    }
 
     MPSiteKey siteKey = mpw_siteKey( masterKey, siteName, siteCounter, keyPurpose, keyContext, algorithmVersion );
     const char *sitePassword = mpw_sitePassword(siteKey, passwordType, algorithmVersion );
@@ -322,8 +332,10 @@ int main(int argc, char *const argv[]) {
     mpw_free( siteKey, MPSiteKeySize );
     mpw_free_string( siteName );
     mpw_free_string( keyContext );
-    if (!sitePassword)
+    if (!sitePassword) {
         ftl( "Couldn't derive site password." );
+        abort();
+    }
 
     fprintf( stdout, "%s\n", sitePassword );
     mpw_free_string( sitePassword );

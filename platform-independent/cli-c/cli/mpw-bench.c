@@ -21,8 +21,6 @@
 #define MP_N                32768
 #define MP_r                8
 #define MP_p                2
-#define MP_dkLen            64
-#define MP_hash             PearlHashSHA256
 
 static void mpw_getTime(struct timeval *time) {
 
@@ -65,8 +63,10 @@ int main(int argc, char *const argv[]) {
     uint8_t *sitePasswordInfo = malloc( 128 );
     iterations = 3000000;
     masterKey = mpw_masterKey( fullName, masterPassword, MPAlgorithmVersionCurrent );
-    if (!masterKey)
+    if (!masterKey) {
         ftl( "Could not allocate master key: %d\n", errno );
+        abort();
+    }
     mpw_getTime( &startTime );
     for (int i = 1; i <= iterations; ++i) {
         free( (void *)mpw_hmac_sha256( masterKey, MPMasterKeySize, sitePasswordInfo, 128 ) );
@@ -108,8 +108,10 @@ int main(int argc, char *const argv[]) {
     mpw_getTime( &startTime );
     for (int i = 1; i <= iterations; ++i) {
         masterKey = mpw_masterKey( fullName, masterPassword, MPAlgorithmVersionCurrent );
-        if (!masterKey)
+        if (!masterKey) {
             ftl( "Could not allocate master key: %d\n", errno );
+            break;
+        }
 
         MPSiteKey siteKey = mpw_siteKey(
                 masterKey, siteName, siteCounter, keyPurpose, keyContext, MPAlgorithmVersionCurrent );

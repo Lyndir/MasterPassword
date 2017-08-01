@@ -60,8 +60,7 @@ extern int mpw_verbosity;
     #define ftl_level -2
     #define ftl(...) ({ \
         if (mpw_verbosity >= -2) \
-            fprintf( stderr, __VA_ARGS__ ); \
-        exit( 2 ); })
+            fprintf( stderr, __VA_ARGS__ ); })
 #endif
 #ifndef min
 #define min(a, b) ({ \
@@ -78,9 +77,11 @@ extern int mpw_verbosity;
 
 //// Buffers and memory.
 
+/** Allocate a new array of _type, assign its element count to _count if not NULL and populate it with the varargs. */
 #define mpw_alloc_array(_count, _type, ...) ({ \
     _type stackElements[] = { __VA_ARGS__ }; \
-    _count = sizeof( stackElements ) / sizeof( _type ); \
+    if (_count) \
+        *_count = sizeof( stackElements ) / sizeof( _type ); \
     _type *allocElements = malloc( sizeof( stackElements ) ); \
     memcpy( allocElements, stackElements, sizeof( stackElements ) ); \
     allocElements; \
