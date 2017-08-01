@@ -48,7 +48,7 @@ xmlNodePtr mpw_xmlTestCaseNode(xmlNodePtr testCaseNode, const char *nodeName) {
 
     for (xmlNodePtr otherTestCaseNode = testCaseNode->parent->children; otherTestCaseNode; otherTestCaseNode = otherTestCaseNode->next) {
         xmlChar *id = mpw_xmlTestCaseString( otherTestCaseNode, "id" );
-        int foundParent = xmlStrcmp( id, parentId ) == 0;
+        int foundParent = id && xmlStrcmp( id, parentId ) == 0;
         xmlFree( id );
 
         if (foundParent) {
@@ -58,18 +58,19 @@ xmlNodePtr mpw_xmlTestCaseNode(xmlNodePtr testCaseNode, const char *nodeName) {
     }
 
     ftl( "Missing parent: %s, for case: %s\n", parentId, mpw_xmlTestCaseString( testCaseNode, "id" ) );
+    return NULL;
 }
 
 xmlChar *mpw_xmlTestCaseString(xmlNodePtr context, const char *nodeName) {
 
     xmlNodePtr child = mpw_xmlTestCaseNode( context, nodeName );
-    return xmlNodeGetContent( child );
+    return child? xmlNodeGetContent( child ): NULL;
 }
 
 uint32_t mpw_xmlTestCaseInteger(xmlNodePtr context, const char *nodeName) {
 
     xmlChar *string = mpw_xmlTestCaseString( context, nodeName );
-    uint32_t integer = (uint32_t)atol( (char *)string );
+    uint32_t integer = string? (uint32_t)atol( (char *)string ): 0;
     xmlFree( string );
 
     return integer;

@@ -26,13 +26,12 @@
 #define MP_N                32768
 #define MP_r                8
 #define MP_p                2
-#define MP_hash             PearlHashSHA256
 
 static const char *mpw_templateForType_v0(MPPasswordType type, uint16_t seedByte) {
 
     size_t count = 0;
     const char **templates = mpw_templatesForType( type, &count );
-    char const *template = count? templates[seedByte % count]: NULL;
+    char const *template = templates && count? templates[seedByte % count]: NULL;
     free( templates );
     return template;
 }
