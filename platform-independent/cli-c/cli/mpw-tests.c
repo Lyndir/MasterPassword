@@ -1,5 +1,3 @@
-#define _GNU_SOURCE
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -30,13 +28,13 @@ int main(int argc, char *const argv[]) {
         xmlChar *keyID = mpw_xmlTestCaseString( testCase, "keyID" );
         xmlChar *siteName = mpw_xmlTestCaseString( testCase, "siteName" );
         uint32_t siteCounter = mpw_xmlTestCaseInteger( testCase, "siteCounter" );
-        xmlChar *siteTypeString = mpw_xmlTestCaseString( testCase, "siteType" );
-        xmlChar *siteVariantString = mpw_xmlTestCaseString( testCase, "siteVariant" );
-        xmlChar *siteContext = mpw_xmlTestCaseString( testCase, "siteContext" );
+        xmlChar *passwordTypeString = mpw_xmlTestCaseString( testCase, "passwordType" );
+        xmlChar *keyPurposeString = mpw_xmlTestCaseString( testCase, "keyPurpose" );
+        xmlChar *keyContext = mpw_xmlTestCaseString( testCase, "keyContext" );
         xmlChar *result = mpw_xmlTestCaseString( testCase, "result" );
 
-        MPSiteType siteType = mpw_typeWithName( (char *)siteTypeString );
-        MPSiteVariant siteVariant = mpw_variantWithName( (char *)siteVariantString );
+        MPPasswordType siteType = mpw_typeWithName( (char *)passwordTypeString );
+        MPKeyPurpose siteVariant = mpw_purposeWithName( (char *)keyPurposeString );
 
         // Run the test case.
         fprintf( stdout, "test case %s... ", id );
@@ -53,7 +51,7 @@ int main(int argc, char *const argv[]) {
 
         // 2. calculate the site password.
         MPSiteKey siteKey = mpw_siteKey(
-                masterKey, (char *)siteName, siteCounter, siteVariant, (char *)siteContext, algorithm );
+                masterKey, (char *)siteName, siteCounter, siteVariant, (char *)keyContext, algorithm );
         const char *sitePassword = mpw_sitePassword(
                 siteKey, siteType, algorithm );
         mpw_free( masterKey, MPMasterKeySize );
@@ -77,9 +75,9 @@ int main(int argc, char *const argv[]) {
         xmlFree( masterPassword );
         xmlFree( keyID );
         xmlFree( siteName );
-        xmlFree( siteTypeString );
-        xmlFree( siteVariantString );
-        xmlFree( siteContext );
+        xmlFree( passwordTypeString );
+        xmlFree( keyPurposeString );
+        xmlFree( keyContext );
         xmlFree( result );
     }
 

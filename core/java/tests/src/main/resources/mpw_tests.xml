@@ -7,8 +7,8 @@
         <keyID>98EEF4D1DF46D849574A82A03C3177056B15DFFCA29BB3899DE4628453675302</keyID>
         <siteName>masterpasswordapp.com</siteName>
         <siteCounter>1</siteCounter>
-        <siteType>GeneratedLong</siteType>
-        <siteVariant>Password</siteVariant>
+        <passwordType>GeneratedLong</passwordType>
+        <keyPurpose>Password</keyPurpose>
         <result><!-- abstract --></result>
     </case>
 
@@ -32,45 +32,45 @@
         <result>LiheCuwhSerz6)</result>
     </case>
     <case id="v3_loginName" parent="v3">
-        <siteVariant>Login</siteVariant>
-        <siteType>GeneratedName</siteType>
+        <keyPurpose>Login</keyPurpose>
+        <passwordType>GeneratedName</passwordType>
         <result>wohzaqage</result>
     </case>
     <case id="v3_securityAnswer" parent="v3">
-        <siteVariant>Answer</siteVariant>
-        <siteType>GeneratedPhrase</siteType>
+        <keyPurpose>Answer</keyPurpose>
+        <passwordType>GeneratedPhrase</passwordType>
         <result>xin diyjiqoja hubu</result>
     </case>
     <case id="v3_securityAnswer_context" parent="v3_securityAnswer">
-        <siteContext>question</siteContext>
+        <keyContext>question</keyContext>
         <result>xogx tem cegyiva jab</result>
     </case>
     <case id="v3_type_maximum" parent="v3">
-        <siteType>GeneratedMaximum</siteType>
+        <passwordType>GeneratedMaximum</passwordType>
         <result>W6@692^B1#&amp;@gVdSdLZ@</result>
     </case>
     <case id="v3_type_medium" parent="v3">
-        <siteType>GeneratedMedium</siteType>
+        <passwordType>GeneratedMedium</passwordType>
         <result>Jej2$Quv</result>
     </case>
     <case id="v3_type_basic" parent="v3">
-        <siteType>GeneratedBasic</siteType>
+        <passwordType>GeneratedBasic</passwordType>
         <result>WAo2xIg6</result>
     </case>
     <case id="v3_type_short" parent="v3">
-        <siteType>GeneratedShort</siteType>
+        <passwordType>GeneratedShort</passwordType>
         <result>Jej2</result>
     </case>
     <case id="v3_type_pin" parent="v3">
-        <siteType>GeneratedPIN</siteType>
+        <passwordType>GeneratedPIN</passwordType>
         <result>7662</result>
     </case>
     <case id="v3_type_name" parent="v3">
-        <siteType>GeneratedName</siteType>
+        <passwordType>GeneratedName</passwordType>
         <result>jejraquvo</result>
     </case>
     <case id="v3_type_phrase" parent="v3">
-        <siteType>GeneratedPhrase</siteType>
+        <passwordType>GeneratedPhrase</passwordType>
         <result>jejr quv cabsibu tam</result>
     </case>
     <case id="v3_counter_ceiling" parent="v3">
@@ -98,45 +98,45 @@
         <result>LiheCuwhSerz6)</result>
     </case>
     <case id="v2_loginName" parent="v2">
-        <siteVariant>Login</siteVariant>
-        <siteType>GeneratedName</siteType>
+        <keyPurpose>Login</keyPurpose>
+        <passwordType>GeneratedName</passwordType>
         <result>wohzaqage</result>
     </case>
     <case id="v2_securityAnswer" parent="v2">
-        <siteVariant>Answer</siteVariant>
-        <siteType>GeneratedPhrase</siteType>
+        <keyPurpose>Answer</keyPurpose>
+        <passwordType>GeneratedPhrase</passwordType>
         <result>xin diyjiqoja hubu</result>
     </case>
     <case id="v2_securityAnswer_context" parent="v2_securityAnswer">
-        <siteContext>question</siteContext>
+        <keyContext>question</keyContext>
         <result>xogx tem cegyiva jab</result>
     </case>
     <case id="v2_type_maximum" parent="v2">
-        <siteType>GeneratedMaximum</siteType>
+        <passwordType>GeneratedMaximum</passwordType>
         <result>W6@692^B1#&amp;@gVdSdLZ@</result>
     </case>
     <case id="v2_type_medium" parent="v2">
-        <siteType>GeneratedMedium</siteType>
+        <passwordType>GeneratedMedium</passwordType>
         <result>Jej2$Quv</result>
     </case>
     <case id="v2_type_basic" parent="v2">
-        <siteType>GeneratedBasic</siteType>
+        <passwordType>GeneratedBasic</passwordType>
         <result>WAo2xIg6</result>
     </case>
     <case id="v2_type_short" parent="v2">
-        <siteType>GeneratedShort</siteType>
+        <passwordType>GeneratedShort</passwordType>
         <result>Jej2</result>
     </case>
     <case id="v2_type_pin" parent="v2">
-        <siteType>GeneratedPIN</siteType>
+        <passwordType>GeneratedPIN</passwordType>
         <result>7662</result>
     </case>
     <case id="v2_type_name" parent="v2">
-        <siteType>GeneratedName</siteType>
+        <passwordType>GeneratedName</passwordType>
         <result>jejraquvo</result>
     </case>
     <case id="v2_type_phrase" parent="v2">
-        <siteType>GeneratedPhrase</siteType>
+        <passwordType>GeneratedPhrase</passwordType>
         <result>jejr quv cabsibu tam</result>
     </case>
     <case id="v2_counter_ceiling" parent="v2">
@@ -164,45 +164,45 @@
         <result>WawiYarp2@Kodh</result>
     </case>
     <case id="v1_loginName" parent="v1">
-        <siteVariant>Login</siteVariant>
-        <siteType>GeneratedName</siteType>
+        <keyPurpose>Login</keyPurpose>
+        <passwordType>GeneratedName</passwordType>
         <result>wohzaqage</result>
     </case>
     <case id="v1_securityAnswer" parent="v1">
-        <siteVariant>Answer</siteVariant>
-        <siteType>GeneratedPhrase</siteType>
+        <keyPurpose>Answer</keyPurpose>
+        <passwordType>GeneratedPhrase</passwordType>
         <result>xin diyjiqoja hubu</result>
     </case>
     <case id="v1_securityAnswer_context" parent="v1_securityAnswer">
-        <siteContext>question</siteContext>
+        <keyContext>question</keyContext>
         <result>xogx tem cegyiva jab</result>
     </case>
     <case id="v1_type_maximum" parent="v1">
-        <siteType>GeneratedMaximum</siteType>
+        <passwordType>GeneratedMaximum</passwordType>
         <result>W6@692^B1#&amp;@gVdSdLZ@</result>
     </case>
     <case id="v1_type_medium" parent="v1">
-        <siteType>GeneratedMedium</siteType>
+        <passwordType>GeneratedMedium</passwordType>
         <result>Jej2$Quv</result>
     </case>
     <case id="v1_type_basic" parent="v1">
-        <siteType>GeneratedBasic</siteType>
+        <passwordType>GeneratedBasic</passwordType>
         <result>WAo2xIg6</result>
     </case>
     <case id="v1_type_short" parent="v1">
-        <siteType>GeneratedShort</siteType>
+        <passwordType>GeneratedShort</passwordType>
         <result>Jej2</result>
     </case>
     <case id="v1_type_pin" parent="v1">
-        <siteType>GeneratedPIN</siteType>
+        <passwordType>GeneratedPIN</passwordType>
         <result>7662</result>
     </case>
     <case id="v1_type_name" parent="v1">
-        <siteType>GeneratedName</siteType>
+        <passwordType>GeneratedName</passwordType>
         <result>jejraquvo</result>
     </case>
     <case id="v1_type_phrase" parent="v1">
-        <siteType>GeneratedPhrase</siteType>
+        <passwordType>GeneratedPhrase</passwordType>
         <result>jejr quv cabsibu tam</result>
     </case>
     <case id="v1_counter_ceiling" parent="v1">
@@ -230,45 +230,45 @@
         <result>HahiVana2@Nole</result>
     </case>
     <case id="v0_loginName" parent="v0">
-        <siteVariant>Login</siteVariant>
-        <siteType>GeneratedName</siteType>
+        <keyPurpose>Login</keyPurpose>
+        <passwordType>GeneratedName</passwordType>
         <result>lozwajave</result>
     </case>
     <case id="v0_securityAnswer" parent="v0">
-        <siteVariant>Answer</siteVariant>
-        <siteType>GeneratedPhrase</siteType>
+        <keyPurpose>Answer</keyPurpose>
+        <passwordType>GeneratedPhrase</passwordType>
         <result>miy lirfijoja dubu</result>
     </case>
     <case id="v0_securityAnswer_context" parent="v0_securityAnswer">
-        <siteContext>question</siteContext>
+        <keyContext>question</keyContext>
         <result>movm bex gevrica jaf</result>
     </case>
     <case id="v0_type_maximum" parent="v0">
-        <siteType>GeneratedMaximum</siteType>
+        <passwordType>GeneratedMaximum</passwordType>
         <result>w1!3bA3icmRAc)SS@lwl</result>
     </case>
     <case id="v0_type_medium" parent="v0">
-        <siteType>GeneratedMedium</siteType>
+        <passwordType>GeneratedMedium</passwordType>
         <result>Fej7]Jug</result>
     </case>
     <case id="v0_type_basic" parent="v0">
-        <siteType>GeneratedBasic</siteType>
+        <passwordType>GeneratedBasic</passwordType>
         <result>wvH7irC1</result>
     </case>
     <case id="v0_type_short" parent="v0">
-        <siteType>GeneratedShort</siteType>
+        <passwordType>GeneratedShort</passwordType>
         <result>Fej7</result>
     </case>
     <case id="v0_type_pin" parent="v0">
-        <siteType>GeneratedPIN</siteType>
+        <passwordType>GeneratedPIN</passwordType>
         <result>2117</result>
     </case>
     <case id="v0_type_name" parent="v0">
-        <siteType>GeneratedName</siteType>
+        <passwordType>GeneratedName</passwordType>
         <result>fejrajugo</result>
     </case>
     <case id="v0_type_phrase" parent="v0">
-        <siteType>GeneratedPhrase</siteType>
+        <passwordType>GeneratedPhrase</passwordType>
         <result>fejr jug gabsibu bax</result>
     </case>
     <case id="v0_counter_ceiling" parent="v0">

@@ -38,7 +38,7 @@ MPMarshalledUser *mpw_marshall_user(
             .redacted = true,
 
             .avatar = 0,
-            .defaultType = MPSiteTypeDefault,
+            .defaultType = MPPasswordTypeDefault,
             .lastUsed = 0,
 
             .sites_count = 0,
@@ -49,7 +49,7 @@ MPMarshalledUser *mpw_marshall_user(
 
 MPMarshalledSite *mpw_marshall_site(
         MPMarshalledUser *marshalledUser,
-        const char *siteName, const MPSiteType siteType, const uint32_t siteCounter, const MPAlgorithmVersion algorithmVersion) {
+        const char *siteName, const MPPasswordType siteType, const uint32_t siteCounter, const MPAlgorithmVersion algorithmVersion) {
 
     if (!siteName || !(marshalledUser->sites =
             realloc( marshalledUser->sites, sizeof( MPMarshalledSite ) * (++marshalledUser->sites_count) )))
@@ -170,8 +170,8 @@ static bool mpw_marshall_write_flat(
                 return false;
             }
 
-            if (site.type & MPSiteTypeClassGenerated) {
-                MPSiteKey siteKey = mpw_siteKey( masterKey, site.name, site.counter, MPSiteVariantPassword, NULL, site.algorithm );
+            if (site.type & MPPasswordTypeClassGenerated) {
+                MPSiteKey siteKey = mpw_siteKey( masterKey, site.name, site.counter, MPKeyPurposeAuthentication, NULL, site.algorithm );
                 content = mpw_sitePassword( siteKey, site.type, site.algorithm );
                 mpw_free( siteKey, MPSiteKeySize );
             }
@@ -253,8 +253,8 @@ static bool mpw_marshall_write_json(
                 return false;
             }
 
-            if (site.type & MPSiteTypeClassGenerated) {
-                MPSiteKey siteKey = mpw_siteKey( masterKey, site.name, site.counter, MPSiteVariantPassword, NULL, site.algorithm );
+            if (site.type & MPPasswordTypeClassGenerated) {
+                MPSiteKey siteKey = mpw_siteKey( masterKey, site.name, site.counter, MPKeyPurposeAuthentication, NULL, site.algorithm );
                 content = mpw_sitePassword( siteKey, site.type, site.algorithm );
                 mpw_free( siteKey, MPSiteKeySize );
             }
@@ -290,8 +290,8 @@ static bool mpw_marshall_write_json(
             json_object_object_add( json_site_questions, question.keyword, json_site_question );
 
             if (!user->redacted) {
-                MPSiteKey siteKey = mpw_siteKey( masterKey, site.name, 1, MPSiteVariantAnswer, question.keyword, site.algorithm );
-                const char *answer = mpw_sitePassword( siteKey, MPSiteTypeGeneratedPhrase, site.algorithm );
+                MPSiteKey siteKey = mpw_siteKey( masterKey, site.name, 1, MPKeyPurposeRecovery, question.keyword, site.algorithm );
+                const char *answer = mpw_sitePassword( siteKey, MPPasswordTypeGeneratedPhrase, site.algorithm );
                 mpw_free( siteKey, MPSiteKeySize );
                 if (answer)
                     json_object_object_add( json_site_question, "answer", json_object_new_string( answer ) );
@@ -338,7 +338,7 @@ static MPMarshalledUser *mpw_marshall_read_flat(
     unsigned int importFormat = 0, importAvatar = 0;
     char *importUserName = NULL, *importKeyID = NULL, *importDate = NULL;
     MPAlgorithmVersion importAlgorithm = MPAlgorithmVersionCurrent, masterKeyAlgorithm = (MPAlgorithmVersion)-1;
-    MPSiteType importDefaultType = MPSiteTypeDefault;
+    MPPasswordType importDefaultType = MPPasswordTypeDefault;
     bool headerStarted = false, headerEnded = false, importRedacted = false;
     for (char *endOfLine, *positionInLine = in; (endOfLine = strstr( positionInLine, "\n" )); positionInLine = endOfLine + 1) {
 
@@ -391,7 +391,7 @@ static MPMarshalledUser *mpw_marshall_read_flat(
                 importAlgorithm = (MPAlgorithmVersion)importAlgorithmInt;
             }
             if (strcmp( headerName, "Default Type" ) == 0)
-                importDefaultType = (MPSiteType)atoi( headerValue );
+                importDefaultType = (MPPasswordType)atoi( headerValue );
             if (strcmp( headerName, "Passwords" ) == 0)
                 importRedacted = strcmp( headerValue, "VISIBLE" ) != 0;
 
@@ -479,7 +479,7 @@ static MPMarshalledUser *mpw_marshall_read_flat(
             }
 
             MPMarshalledSite *site = mpw_marshall_site( user, siteName,
-                    (MPSiteType)atoi( siteType ), (uint32_t)atoi( siteCounter ), siteAlgorithmInt );
+                    (MPPasswordType)atoi( siteType ), (uint32_t)atoi( siteCounter ), siteAlgorithmInt );
             if (!site) {
                 err( "Couldn't allocate a new site.\n" );
                 return NULL;
@@ -565,7 +565,7 @@ static MPMarshalledUser *mpw_marshall_read_json(
         *error = MPMarshallErrorIllegal;
         return NULL;
     }
-    MPSiteType defaultType = (MPSiteType)mpw_get_json_int( json_file, "user.default_type", MPSiteTypeDefault );
+    MPPasswordType defaultType = (MPPasswordType)mpw_get_json_int( json_file, "user.default_type", MPPasswordTypeDefault );
 
     if (!fullName || !strlen( fullName )) {
         err( "Missing value for full name.\n" );
@@ -595,7 +595,7 @@ static MPMarshalledUser *mpw_marshall_read_json(
     json_object_iter json_site;
     json_object *json_sites = mpw_get_json_section( json_file, "sites" );
     json_object_object_foreachC( json_sites, json_site ) {
-        MPSiteType siteType = (MPSiteType)mpw_get_json_int( json_site.val, "type", (int)user->defaultType );
+        MPPasswordType siteType = (MPPasswordType)mpw_get_json_int( json_site.val, "type", (int)user->defaultType );
         uint32_t siteCounter = (uint32_t)mpw_get_json_int( json_site.val, "counter", 1 );
         MPAlgorithmVersion siteAlgorithm = (MPAlgorithmVersion)mpw_get_json_int( json_site.val, "algorithm", (int)user->algorithm );
         if (siteAlgorithm < MPAlgorithmVersionFirst || siteAlgorithm > MPAlgorithmVersionLast) {

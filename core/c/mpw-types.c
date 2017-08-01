@@ -29,54 +29,53 @@
 #include "mpw-types.h"
 #include "mpw-util.h"
 
-const MPSiteType mpw_typeWithName(const char *typeName) {
+const MPPasswordType mpw_typeWithName(const char *typeName) {
 
     // Lower-case and trim optionally leading "Generated" string from typeName to standardize it.
     size_t stdTypeNameOffset = 0;
     size_t stdTypeNameSize = strlen( typeName );
-    if (strstr(typeName, "Generated" ) == typeName)
+    if (strstr( typeName, "Generated" ) == typeName)
         stdTypeNameSize -= (stdTypeNameOffset = strlen( "Generated" ));
     char stdTypeName[stdTypeNameSize + 1];
     for (size_t c = 0; c < stdTypeNameSize; ++c)
         stdTypeName[c] = (char)tolower( typeName[c + stdTypeNameOffset] );
     stdTypeName[stdTypeNameSize] = '\0';
 
-    // Find what site type is represented by the type name.
-    if (0 == strcmp( stdTypeName, "x" ) || 0 == strcmp( stdTypeName, "max" ) || 0 == strcmp( stdTypeName, "maximum" ))
-        return MPSiteTypeGeneratedMaximum;
-    if (0 == strcmp( stdTypeName, "l" ) || 0 == strcmp( stdTypeName, "long" ))
-        return MPSiteTypeGeneratedLong;
-    if (0 == strcmp( stdTypeName, "m" ) || 0 == strcmp( stdTypeName, "med" ) || 0 == strcmp( stdTypeName, "medium" ))
-        return MPSiteTypeGeneratedMedium;
-    if (0 == strcmp( stdTypeName, "b" ) || 0 == strcmp( stdTypeName, "basic" ))
-        return MPSiteTypeGeneratedBasic;
-    if (0 == strcmp( stdTypeName, "s" ) || 0 == strcmp( stdTypeName, "short" ))
-        return MPSiteTypeGeneratedShort;
-    if (0 == strcmp( stdTypeName, "i" ) || 0 == strcmp( stdTypeName, "pin" ))
-        return MPSiteTypeGeneratedPIN;
-    if (0 == strcmp( stdTypeName, "n" ) || 0 == strcmp( stdTypeName, "name" ))
-        return MPSiteTypeGeneratedName;
-    if (0 == strcmp( stdTypeName, "p" ) || 0 == strcmp( stdTypeName, "phrase" ))
-        return MPSiteTypeGeneratedPhrase;
+    // Find what password type is represented by the type name.
+    if (0 == strncmp( "maximum", stdTypeName, strlen( stdTypeName ) ) || 0 == strncmp( "x", stdTypeName, 1 ))
+        return MPPasswordTypeGeneratedMaximum;
+    if (0 == strncmp( "long", stdTypeName, strlen( stdTypeName ) ) || 0 == strncmp( "l", stdTypeName, 1 ))
+        return MPPasswordTypeGeneratedLong;
+    if (0 == strncmp( "medium", stdTypeName, strlen( stdTypeName ) ) || 0 == strncmp( "m", stdTypeName, 1 ))
+        return MPPasswordTypeGeneratedMedium;
+    if (0 == strncmp( "basic", stdTypeName, strlen( stdTypeName ) ) || 0 == strncmp( "b", stdTypeName, 1 ))
+        return MPPasswordTypeGeneratedBasic;
+    if (0 == strncmp( "short", stdTypeName, strlen( stdTypeName ) ) || 0 == strncmp( "s", stdTypeName, 1 ))
+        return MPPasswordTypeGeneratedShort;
+    if (0 == strncmp( "pin", stdTypeName, strlen( stdTypeName ) ) || 0 == strncmp( "i", stdTypeName, 1 ))
+        return MPPasswordTypeGeneratedPIN;
+    if (0 == strncmp( "name", stdTypeName, strlen( stdTypeName ) ) || 0 == strncmp( "n", stdTypeName, 1 ))
+        return MPPasswordTypeGeneratedName;
+    if (0 == strncmp( "phrase", stdTypeName, strlen( stdTypeName ) ) || 0 == strncmp( "p", stdTypeName, 1 ))
+        return MPPasswordTypeGeneratedPhrase;
 
     ftl( "Not a generated type name: %s", stdTypeName );
-    return MPSiteTypeDefault;
+    return MPPasswordTypeDefault;
 }
 
-const char **mpw_templatesForType(MPSiteType type, size_t *count) {
+const char **mpw_templatesForType(MPPasswordType type, size_t *count) {
 
-    if (!(type & MPSiteTypeClassGenerated)) {
+    if (!(type & MPPasswordTypeClassGenerated)) {
         ftl( "Not a generated type: %d", type );
         *count = 0;
         return NULL;
     }
 
     switch (type) {
-        case MPSiteTypeGeneratedMaximum: {
+        case MPPasswordTypeGeneratedMaximum:
             return mpw_alloc_array( *count, const char *,
                     "anoxxxxxxxxxxxxxxxxx", "axxxxxxxxxxxxxxxxxno" );
-        }
-        case MPSiteTypeGeneratedLong: {
+        case MPPasswordTypeGeneratedLong:
             return mpw_alloc_array( *count, const char *,
                     "CvcvnoCvcvCvcv", "CvcvCvcvnoCvcv", "CvcvCvcvCvcvno",
                     "CvccnoCvcvCvcv", "CvccCvcvnoCvcv", "CvccCvcvCvcvno",
@@ -85,31 +84,24 @@ const char **mpw_templatesForType(MPSiteType type, size_t *count) {
                     "CvccnoCvccCvcv", "CvccCvccnoCvcv", "CvccCvccCvcvno",
                     "CvcvnoCvccCvcc", "CvcvCvccnoCvcc", "CvcvCvccCvccno",
                     "CvccnoCvcvCvcc", "CvccCvcvnoCvcc", "CvccCvcvCvccno" );
-        }
-        case MPSiteTypeGeneratedMedium: {
+        case MPPasswordTypeGeneratedMedium:
             return mpw_alloc_array( *count, const char *,
                     "CvcnoCvc", "CvcCvcno" );
-        }
-        case MPSiteTypeGeneratedBasic: {
+        case MPPasswordTypeGeneratedBasic:
             return mpw_alloc_array( *count, const char *,
                     "aaanaaan", "aannaaan", "aaannaaa" );
-        }
-        case MPSiteTypeGeneratedShort: {
+        case MPPasswordTypeGeneratedShort:
             return mpw_alloc_array( *count, const char *,
                     "Cvcn" );
-        }
-        case MPSiteTypeGeneratedPIN: {
+        case MPPasswordTypeGeneratedPIN:
             return mpw_alloc_array( *count, const char *,
                     "nnnn" );
-        }
-        case MPSiteTypeGeneratedName: {
+        case MPPasswordTypeGeneratedName:
             return mpw_alloc_array( *count, const char *,
                     "cvccvcvcv" );
-        }
-        case MPSiteTypeGeneratedPhrase: {
+        case MPPasswordTypeGeneratedPhrase:
             return mpw_alloc_array( *count, const char *,
                     "cvcc cvc cvccvcv cvc", "cvc cvccvcvcv cvcv", "cv cvccv cvc cvcvccv" );
-        }
         default: {
             ftl( "Unknown generated type: %d", type );
             *count = 0;
@@ -118,7 +110,7 @@ const char **mpw_templatesForType(MPSiteType type, size_t *count) {
     }
 }
 
-const char *mpw_templateForType(MPSiteType type, uint8_t seedByte) {
+const char *mpw_templateForType(MPPasswordType type, uint8_t seedByte) {
 
     size_t count = 0;
     const char **templates = mpw_templatesForType( type, &count );
@@ -127,39 +119,37 @@ const char *mpw_templateForType(MPSiteType type, uint8_t seedByte) {
     return template;
 }
 
-const MPSiteVariant mpw_variantWithName(const char *variantName) {
+const MPKeyPurpose mpw_purposeWithName(const char *purposeName) {
 
     // Lower-case and trim optionally leading "generated" string from typeName to standardize it.
-    size_t stdVariantNameSize = strlen( variantName );
-    char stdVariantName[stdVariantNameSize + 1];
-    for (size_t c = 0; c < stdVariantNameSize; ++c)
-        stdVariantName[c] = (char)tolower( variantName[c] );
-    stdVariantName[stdVariantNameSize] = '\0';
+    size_t stdPurposeNameSize = strlen( purposeName );
+    char stdPurposeName[stdPurposeNameSize + 1];
+    for (size_t c = 0; c < stdPurposeNameSize; ++c)
+        stdPurposeName[c] = (char)tolower( purposeName[c] );
+    stdPurposeName[stdPurposeNameSize] = '\0';
 
-    if (0 == strcmp( stdVariantName, "p" ) || 0 == strcmp( stdVariantName, "password" ))
-        return MPSiteVariantPassword;
-    if (0 == strcmp( stdVariantName, "l" ) || 0 == strcmp( stdVariantName, "login" ))
-        return MPSiteVariantLogin;
-    if (0 == strcmp( stdVariantName, "a" ) || 0 == strcmp( stdVariantName, "answer" ))
-        return MPSiteVariantAnswer;
+    if (strncmp( "authentication", stdPurposeName, strlen( stdPurposeName ) ) == 0)
+        return MPKeyPurposeAuthentication;
+    if (strncmp( "identification", stdPurposeName, strlen( stdPurposeName ) ) == 0)
+        return MPKeyPurposeIdentification;
+    if (strncmp( "recovery", stdPurposeName, strlen( stdPurposeName ) ) == 0)
+        return MPKeyPurposeRecovery;
 
-    ftl( "Not a variant name: %s", stdVariantName );
+    ftl( "Not a purpose name: %s", stdPurposeName );
 }
 
-const char *mpw_scopeForVariant(MPSiteVariant variant) {
+const char *mpw_scopeForPurpose(MPKeyPurpose purpose) {
 
-    switch (variant) {
-        case MPSiteVariantPassword: {
+    switch (purpose) {
+        case MPKeyPurposeAuthentication:
             return "com.lyndir.masterpassword";
-        }
-        case MPSiteVariantLogin: {
+        case MPKeyPurposeIdentification:
             return "com.lyndir.masterpassword.login";
-        }
-        case MPSiteVariantAnswer: {
+        case MPKeyPurposeRecovery:
             return "com.lyndir.masterpassword.answer";
-        }
         default: {
-            ftl( "Unknown variant: %d", variant );
+            ftl( "Unknown purpose: %d", purpose );
+            return "";
         }
     }
 }
@@ -189,6 +179,7 @@ const char *mpw_charactersInClass(char characterClass) {
             return " ";
         default: {
             ftl( "Unknown character class: %c", characterClass );
+            return "";
         }
     }
 }

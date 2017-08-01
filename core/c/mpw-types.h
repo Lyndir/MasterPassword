@@ -37,20 +37,20 @@ typedef const uint8_t *MPMasterKey;
 typedef const uint8_t *MPSiteKey;
 typedef const char *MPKeyID;
 
-typedef enum( unsigned int, MPSiteVariant ) {
+typedef enum( unsigned int, MPKeyPurpose ) {
     /** Generate a key for authentication. */
-            MPSiteVariantPassword,
+            MPKeyPurposeAuthentication,
     /** Generate a name for identification. */
-            MPSiteVariantLogin,
-    /** Generate an answer to a security question. */
-            MPSiteVariantAnswer,
+            MPKeyPurposeIdentification,
+    /** Generate a recovery token. */
+            MPKeyPurposeRecovery,
 };
 
-typedef enum( unsigned int, MPSiteTypeClass ) {
+typedef enum( unsigned int, MPPasswordTypeClass ) {
     /** Generate the password. */
-            MPSiteTypeClassGenerated = 1 << 4,
+            MPPasswordTypeClassGenerated = 1 << 4,
     /** Store the password. */
-            MPSiteTypeClassStored = 1 << 5,
+            MPPasswordTypeClassStored = 1 << 5,
 };
 
 typedef enum( unsigned int, MPSiteFeature ) {
@@ -60,37 +60,47 @@ typedef enum( unsigned int, MPSiteFeature ) {
             MPSiteFeatureDevicePrivate = 1 << 11,
 };
 
-typedef enum( unsigned int, MPSiteType ) {
-    MPSiteTypeGeneratedMaximum = 0x0 | MPSiteTypeClassGenerated | 0x0,
-    MPSiteTypeGeneratedLong = 0x1 | MPSiteTypeClassGenerated | 0x0,
-    MPSiteTypeGeneratedMedium = 0x2 | MPSiteTypeClassGenerated | 0x0,
-    MPSiteTypeGeneratedBasic = 0x4 | MPSiteTypeClassGenerated | 0x0,
-    MPSiteTypeGeneratedShort = 0x3 | MPSiteTypeClassGenerated | 0x0,
-    MPSiteTypeGeneratedPIN = 0x5 | MPSiteTypeClassGenerated | 0x0,
-    MPSiteTypeGeneratedName = 0xE | MPSiteTypeClassGenerated | 0x0,
-    MPSiteTypeGeneratedPhrase = 0xF | MPSiteTypeClassGenerated | 0x0,
+typedef enum( unsigned int, MPPasswordType ) {
+    /** pg^VMAUBk5x3p%HP%i4= */
+    MPPasswordTypeGeneratedMaximum = 0x0 | MPPasswordTypeClassGenerated | 0x0,
+    /** BiroYena8:Kixa */
+    MPPasswordTypeGeneratedLong = 0x1 | MPPasswordTypeClassGenerated | 0x0,
+    /** BirSuj0- */
+    MPPasswordTypeGeneratedMedium = 0x2 | MPPasswordTypeClassGenerated | 0x0,
+    /** pO98MoD0 */
+    MPPasswordTypeGeneratedBasic = 0x4 | MPPasswordTypeClassGenerated | 0x0,
+    /** Bir8 */
+    MPPasswordTypeGeneratedShort = 0x3 | MPPasswordTypeClassGenerated | 0x0,
+    /** 2798 */
+    MPPasswordTypeGeneratedPIN = 0x5 | MPPasswordTypeClassGenerated | 0x0,
+    /** birsujano */
+    MPPasswordTypeGeneratedName = 0xE | MPPasswordTypeClassGenerated | 0x0,
+    /** bir yennoquce fefi */
+    MPPasswordTypeGeneratedPhrase = 0xF | MPPasswordTypeClassGenerated | 0x0,
 
-    MPSiteTypeStoredPersonal = 0x0 | MPSiteTypeClassStored | MPSiteFeatureExportContent,
-    MPSiteTypeStoredDevicePrivate = 0x1 | MPSiteTypeClassStored | MPSiteFeatureDevicePrivate,
+    /** Custom saved password. */
+    MPPasswordTypeStoredPersonal = 0x0 | MPPasswordTypeClassStored | MPSiteFeatureExportContent,
+    /** Custom saved password that should not be exported from the device. */
+    MPPasswordTypeStoredDevicePrivate = 0x1 | MPPasswordTypeClassStored | MPSiteFeatureDevicePrivate,
 
-    MPSiteTypeDefault = MPSiteTypeGeneratedLong,
+    MPPasswordTypeDefault = MPPasswordTypeGeneratedLong,
 };
 
 //// Type utilities.
 
 /**
- * @return The variant represented by the given name.
+ * @return The purpose represented by the given name.
  */
-const MPSiteVariant mpw_variantWithName(const char *variantName);
+const MPKeyPurpose mpw_purposeWithName(const char *purposeName);
 /**
- * @return An internal string containing the scope identifier to apply when encoding for the given variant.
+ * @return An internal string containing the scope identifier to apply when encoding for the given purpose.
  */
-const char *mpw_scopeForVariant(MPSiteVariant variant);
+const char *mpw_scopeForPurpose(MPKeyPurpose purpose);
 
 /**
  * @return The type represented by the given name.
  */
-const MPSiteType mpw_typeWithName(const char *typeName);
+const MPPasswordType mpw_typeWithName(const char *typeName);
 
 /**
  * @return A newly allocated array of internal strings that express the templates to use for the given type.
@@ -98,12 +108,12 @@ const MPSiteType mpw_typeWithName(const char *typeName);
  *         If an unsupported type is given, count will be 0 and will return NULL.
 *          The array needs to be free'ed, the strings themselves must not be free'ed or modified.
  */
-const char **mpw_templatesForType(MPSiteType type, size_t *count);
+const char **mpw_templatesForType(MPPasswordType type, size_t *count);
 /**
  * @return An internal string that contains the password encoding template of the given type
  *         for a seed that starts with the given byte.
  */
-const char *mpw_templateForType(MPSiteType type, uint8_t seedByte);
+const char *mpw_templateForType(MPPasswordType type, uint8_t seedByte);
 
 /**
  * @return An internal string that contains all the characters that occur in the given character class.

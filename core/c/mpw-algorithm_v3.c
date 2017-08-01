@@ -29,7 +29,7 @@
 
 static MPMasterKey mpw_masterKeyForUser_v3(const char *fullName, const char *masterPassword) {
 
-    const char *mpKeyScope = mpw_scopeForVariant( MPSiteVariantPassword );
+    const char *mpKeyScope = mpw_scopeForPurpose( MPKeyPurposeAuthentication );
     trc( "-- mpw_masterKeyForUser_v3\n" );
     trc( "fullName: %s (%zu)\n", fullName, strlen( fullName ) );
     trc( "masterPassword: %s\n", masterPassword );
@@ -63,58 +63,59 @@ static MPMasterKey mpw_masterKeyForUser_v3(const char *fullName, const char *mas
 
 static MPSiteKey mpw_siteKey_v3(
         MPMasterKey masterKey, const char *siteName, const uint32_t siteCounter,
-        const MPSiteVariant siteVariant, const char *siteContext) {
+        const MPKeyPurpose keyPurpose, const char *keyContext) {
 
-    const char *siteScope = mpw_scopeForVariant( siteVariant );
+    const char *keyScope = mpw_scopeForPurpose( keyPurpose );
     trc( "-- mpw_siteKey_v3\n" );
     trc( "siteName: %s\n", siteName );
     trc( "siteCounter: %d\n", siteCounter );
-    trc( "siteVariant: %d\n", siteVariant );
-    trc( "site scope: %s, context: %s\n", siteScope, siteContext? "<empty>": siteContext );
-    trc( "seed from: hmac-sha256(masterKey, %s | %s | %s | %s | %s | %s)\n",
-            siteScope, mpw_hex_l( htonl( strlen( siteName ) ) ), siteName,
+    trc( "keyPurpose: %d\n", keyPurpose );
+    trc( "keyScope: %s, keyContext: %s\n", keyScope, keyContext? "<empty>": keyContext );
+    trc( "siteKey: hmac-sha256(masterKey, %s | %s | %s | %s | %s | %s)\n",
+            keyScope, mpw_hex_l( htonl( strlen( siteName ) ) ), siteName,
             mpw_hex_l( htonl( siteCounter ) ),
-            mpw_hex_l( htonl( siteContext? strlen( siteContext ): 0 ) ), siteContext? "(null)": siteContext );
+            mpw_hex_l( htonl( keyContext? strlen( keyContext ): 0 ) ), keyContext? "(null)": keyContext );
 
     // Calculate the site seed.
-    // siteKey = hmac-sha256( masterKey, siteScope . #siteName . siteName . siteCounter . #siteContext . siteContext )
-    size_t sitePasswordInfoSize = 0;
-    uint8_t *sitePasswordInfo = NULL;
-    mpw_push_string( &sitePasswordInfo, &sitePasswordInfoSize, siteScope );
-    mpw_push_int( &sitePasswordInfo, &sitePasswordInfoSize, htonl( strlen( siteName ) ) );
-    mpw_push_string( &sitePasswordInfo, &sitePasswordInfoSize, siteName );
-    mpw_push_int( &sitePasswordInfo, &sitePasswordInfoSize, htonl( siteCounter ) );
-    if (siteContext) {
-        mpw_push_int( &sitePasswordInfo, &sitePasswordInfoSize, htonl( strlen( siteContext ) ) );
-        mpw_push_string( &sitePasswordInfo, &sitePasswordInfoSize, siteContext );
+    // siteKey = hmac-sha256( masterKey, keyScope . #siteName . siteName . siteCounter . #keyContext . keyContext )
+    size_t siteSaltSize = 0;
+    uint8_t *siteSalt = NULL;
+    mpw_push_string( &siteSalt, &siteSaltSize, keyScope );
+    mpw_push_int( &siteSalt, &siteSaltSize, htonl( strlen( siteName ) ) );
+    mpw_push_string( &siteSalt, &siteSaltSize, siteName );
+    mpw_push_int( &siteSalt, &siteSaltSize, htonl( siteCounter ) );
+    if (keyContext) {
+        mpw_push_int( &siteSalt, &siteSaltSize, htonl( strlen( keyContext ) ) );
+        mpw_push_string( &siteSalt, &siteSaltSize, keyContext );
     }
-    if (!sitePasswordInfo) {
-        ftl( "Could not allocate site seed info: %d\n", errno );
+    if (!siteSalt) {
+        ftl( "Could not allocate site salt: %d\n", errno );
         return NULL;
     }
-    trc( "sitePasswordInfo ID: %s\n", mpw_id_buf( sitePasswordInfo, sitePasswordInfoSize ) );
+    trc( "siteSalt ID: %s\n", mpw_id_buf( siteSalt, siteSaltSize ) );
 
-    MPSiteKey siteKey = mpw_hmac_sha256( masterKey, MPMasterKeySize, sitePasswordInfo, sitePasswordInfoSize );
-    mpw_free( sitePasswordInfo, sitePasswordInfoSize );
-    if (!siteKey) {
-        ftl( "Could not allocate site seed: %d\n", errno );
+    MPSiteKey siteKey = mpw_hmac_sha256( masterKey, MPMasterKeySize, siteSalt, siteSaltSize );
+    mpw_free( siteSalt, siteSaltSize );
+    if (!siteKey || !siteSaltSize) {
+        ftl( "Could not allocate site key: %d\n", errno );
+        mpw_free( siteSalt, siteSaltSize );
         return NULL;
     }
-    trc( "siteKey ID: %s\n", mpw_id_buf( siteKey, 32 ) );
+    trc( "siteKey ID: %s\n", mpw_id_buf( siteKey, MPSiteKeySize ) );
 
     return siteKey;
 }
 
 static const char *mpw_sitePassword_v3(
-        MPSiteKey siteKey, const MPSiteType siteType) {
+        MPSiteKey siteKey, const MPPasswordType passwordType) {
 
     trc( "-- mpw_sitePassword_v3\n" );
-    trc( "siteType: %d\n", siteType );
+    trc( "passwordType: %d\n", passwordType );
 
     // Determine the template.
-    const char *template = mpw_templateForType( siteType, siteKey[0] );
-    trc( "type %d, template: %s\n", siteType, template );
-    if (strlen( template ) > 32) {
+    const char *template = mpw_templateForType( passwordType, siteKey[0] );
+    trc( "type %d, template: %s\n", passwordType, template );
+    if (strlen( template ) > MPSiteKeySize) {
         ftl( "Template too long for password seed: %lu", strlen( template ) );
         mpw_free( siteKey, sizeof( siteKey ) );
         return NULL;

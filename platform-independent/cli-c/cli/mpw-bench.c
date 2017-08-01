@@ -52,9 +52,9 @@ int main(int argc, char *const argv[]) {
     const char *masterPassword = "banana colored duckling";
     const char *siteName = "masterpasswordapp.com";
     const uint32_t siteCounter = 1;
-    const MPSiteType siteType = MPSiteTypeDefault;
-    const MPSiteVariant siteVariant = MPSiteVariantPassword;
-    const char *siteContext = NULL;
+    const MPPasswordType passwordType = MPPasswordTypeDefault;
+    const MPKeyPurpose keyPurpose = MPKeyPurposeAuthentication;
+    const char *keyContext = NULL;
     struct timeval startTime;
     unsigned int iterations;
     float percent;
@@ -112,9 +112,9 @@ int main(int argc, char *const argv[]) {
             ftl( "Could not allocate master key: %d\n", errno );
 
         MPSiteKey siteKey = mpw_siteKey(
-                masterKey, siteName, siteCounter, siteVariant, siteContext, MPAlgorithmVersionCurrent );
+                masterKey, siteName, siteCounter, keyPurpose, keyContext, MPAlgorithmVersionCurrent );
         free( (void *)mpw_sitePassword(
-                siteKey, siteType, MPAlgorithmVersionCurrent ) );
+                siteKey, passwordType, MPAlgorithmVersionCurrent ) );
         free( (void *)masterKey );
         free( (void *)siteKey );
 

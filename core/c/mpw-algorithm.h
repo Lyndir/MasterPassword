@@ -46,11 +46,11 @@ MPMasterKey mpw_masterKey(
  * @return A new MPSiteKeySize-byte allocated buffer or NULL if an error occurred. */
 MPSiteKey mpw_siteKey(
         MPMasterKey masterKey, const char *siteName, const uint32_t siteCounter,
-        const MPSiteVariant siteVariant, const char *siteContext, const MPAlgorithmVersion algorithmVersion);
+        const MPKeyPurpose keyPurpose, const char *keyContext, const MPAlgorithmVersion algorithmVersion);
 
 /** Encode a password for the site from the given site key.
  * @return A newly allocated string or NULL if an error occurred. */
 const char *mpw_sitePassword(
-        MPSiteKey siteKey, const MPSiteType siteType, const MPAlgorithmVersion algorithmVersion);
+        MPSiteKey siteKey, const MPPasswordType passwordType, const MPAlgorithmVersion algorithmVersion);
 
 #endif // _MPW_ALGORITHM_H

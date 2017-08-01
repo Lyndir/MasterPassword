@@ -331,20 +331,20 @@ static NSOperationQueue *_mpwQueue = nil;
 - (NSString *)generateLoginForSiteNamed:(NSString *)name usingKey:(MPKey *)key {
 
     return [self generateContentForSiteNamed:name ofType:MPSiteTypeGeneratedName withCounter:1
-                                     variant:MPSiteVariantLogin context:nil usingKey:key];
+                                     variant:MPKeyPurposeIdentification context:nil usingKey:key];
 }
 
 - (NSString *)generatePasswordForSiteNamed:(NSString *)name ofType:(MPSiteType)type withCounter:(NSUInteger)counter
                                   usingKey:(MPKey *)key {
 
     return [self generateContentForSiteNamed:name ofType:type withCounter:counter
-                                     variant:MPSiteVariantPassword context:nil usingKey:key];
+                                     variant:MPKeyPurposeAuthentication context:nil usingKey:key];
 }
 
 - (NSString *)generateAnswerForSiteNamed:(NSString *)name onQuestion:(NSString *)question usingKey:(MPKey *)key {
 
     return [self generateContentForSiteNamed:name ofType:MPSiteTypeGeneratedPhrase withCounter:1
-                                     variant:MPSiteVariantAnswer context:question usingKey:key];
+                                     variant:MPKeyPurposeRecovery context:question usingKey:key];
 }
 
 - (NSString *)generateContentForSiteNamed:(NSString *)name ofType:(MPSiteType)type withCounter:(NSUInteger)counter

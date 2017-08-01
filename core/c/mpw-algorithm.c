@@ -44,20 +44,20 @@ MPMasterKey mpw_masterKey(const char *fullName, const char *masterPassword, cons
 
 MPSiteKey mpw_siteKey(
         MPMasterKey masterKey, const char *siteName, const uint32_t siteCounter,
-        const MPSiteVariant siteVariant, const char *siteContext, const MPAlgorithmVersion algorithmVersion) {
+        const MPKeyPurpose keyPurpose, const char *keyContext, const MPAlgorithmVersion algorithmVersion) {
 
     if (!masterKey || !siteName)
         return NULL;
 
     switch (algorithmVersion) {
         case MPAlgorithmVersion0:
-            return mpw_siteKey_v0( masterKey, siteName, siteCounter, siteVariant, siteContext );
+            return mpw_siteKey_v0( masterKey, siteName, siteCounter, keyPurpose, keyContext );
         case MPAlgorithmVersion1:
-            return mpw_siteKey_v1( masterKey, siteName, siteCounter, siteVariant, siteContext );
+            return mpw_siteKey_v1( masterKey, siteName, siteCounter, keyPurpose, keyContext );
         case MPAlgorithmVersion2:
-            return mpw_siteKey_v2( masterKey, siteName, siteCounter, siteVariant, siteContext );
+            return mpw_siteKey_v2( masterKey, siteName, siteCounter, keyPurpose, keyContext );
         case MPAlgorithmVersion3:
-            return mpw_siteKey_v3( masterKey, siteName, siteCounter, siteVariant, siteContext );
+            return mpw_siteKey_v3( masterKey, siteName, siteCounter, keyPurpose, keyContext );
         default:
             ftl( "Unsupported version: %d", algorithmVersion );
             return NULL;
@@ -65,20 +65,20 @@ MPSiteKey mpw_siteKey(
 }
 
 const char *mpw_sitePassword(
-        MPSiteKey siteKey, const MPSiteType siteType, const MPAlgorithmVersion algorithmVersion) {
+        MPSiteKey siteKey, const MPPasswordType passwordType, const MPAlgorithmVersion algorithmVersion) {
 
     if (!siteKey)
         return NULL;
 
     switch (algorithmVersion) {
         case MPAlgorithmVersion0:
-            return mpw_sitePassword_v0( siteKey, siteType );
+            return mpw_sitePassword_v0( siteKey, passwordType );
         case MPAlgorithmVersion1:
-            return mpw_sitePassword_v1( siteKey, siteType );
+            return mpw_sitePassword_v1( siteKey, passwordType );
         case MPAlgorithmVersion2:
-            return mpw_sitePassword_v2( siteKey, siteType );
+            return mpw_sitePassword_v2( siteKey, passwordType );
         case MPAlgorithmVersion3:
-            return mpw_sitePassword_v3( siteKey, siteType );
+            return mpw_sitePassword_v3( siteKey, passwordType );
         default:
             ftl( "Unsupported version: %d", algorithmVersion );
             return NULL;
