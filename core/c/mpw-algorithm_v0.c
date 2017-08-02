@@ -39,6 +39,9 @@ static const char *mpw_templateForType_v0(MPPasswordType type, uint16_t seedByte
 static const char mpw_characterFromClass_v0(char characterClass, uint16_t seedByte) {
 
     const char *classCharacters = mpw_charactersInClass( characterClass );
+    if (!classCharacters)
+        return '\0';
+
     return classCharacters[seedByte % strlen( classCharacters )];
 }
 
@@ -131,9 +134,10 @@ static const char *mpw_sitePassword_v0(
     const char *_siteKey = (const char *)siteKey;
     const char *template = mpw_templateForType_v0( passwordType, htons( _siteKey[0] ) );
     trc( "type %d, template: %s\n", passwordType, template );
+    if (!template)
+        return NULL;
     if (strlen( template ) > MPSiteKeySize) {
         ftl( "Template too long for password seed: %lu", strlen( template ) );
-        mpw_free( _siteKey, sizeof( _siteKey ) );
         return NULL;
     }
 

@@ -38,6 +38,8 @@ int mpw_verbosity = inf_level;
 
 bool mpw_push_buf(uint8_t **const buffer, size_t *const bufferSize, const void *pushBuffer, const size_t pushSize) {
 
+    if (!buffer || !*buffer || !bufferSize || !pushBuffer || !pushSize)
+        return false;
     if (*bufferSize == (size_t)-1)
         // The buffer was marked as broken, it is missing a previous push.  Abort to avoid corrupt content.
         return false;
@@ -60,7 +62,7 @@ bool mpw_push_buf(uint8_t **const buffer, size_t *const bufferSize, const void *
 
 bool mpw_push_string(uint8_t **buffer, size_t *const bufferSize, const char *pushString) {
 
-    return mpw_push_buf( buffer, bufferSize, pushString, strlen( pushString ) );
+    return pushString && mpw_push_buf( buffer, bufferSize, pushString, strlen( pushString ) );
 }
 
 bool mpw_push_int(uint8_t **const buffer, size_t *const bufferSize, const uint32_t pushInt) {
@@ -170,7 +172,7 @@ static unsigned int mpw_hex_buf_i = 0;
 
 const char *mpw_hex(const void *buf, size_t length) {
 
-    // FIXME
+    // FIXME: Not thread-safe
     if (!mpw_hex_buf) {
         mpw_hex_buf = malloc( 10 * sizeof( char * ) );
         for (uint8_t i = 0; i < 10; ++i)
@@ -288,7 +290,7 @@ static int mpw_utf8_sizeof(unsigned char utf8Byte) {
 
 const size_t mpw_utf8_strlen(const char *utf8String) {
 
-    // TODO: is this ever different from strlen?
+    // TODO: is this ever different from strlen?  If not, remove.
     size_t charlen = 0;
     char *remainingString = (char *)utf8String;
     for (int charByteSize; (charByteSize = mpw_utf8_sizeof( (unsigned char)*remainingString )); remainingString += charByteSize)

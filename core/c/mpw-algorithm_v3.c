@@ -115,9 +115,10 @@ static const char *mpw_sitePassword_v3(
     // Determine the template.
     const char *template = mpw_templateForType( passwordType, siteKey[0] );
     trc( "type %d, template: %s\n", passwordType, template );
+    if (!template)
+        return NULL;
     if (strlen( template ) > MPSiteKeySize) {
         ftl( "Template too long for password seed: %lu", strlen( template ) );
-        mpw_free( siteKey, sizeof( siteKey ) );
         return NULL;
     }
 

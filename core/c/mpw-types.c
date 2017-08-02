@@ -96,7 +96,7 @@ const char *mpw_nameForType(MPPasswordType passwordType) {
             return "device";
         default: {
             ftl( "Unknown password type: %d", passwordType );
-            return "";
+            return NULL;
         }
     }
 }
@@ -152,6 +152,7 @@ const char *mpw_templateForType(MPPasswordType type, uint8_t seedByte) {
     const char **templates = mpw_templatesForType( type, &count );
     char const *template = templates && count? templates[seedByte % count]: NULL;
     free( templates );
+
     return template;
 }
 
@@ -186,7 +187,7 @@ const char *mpw_nameForPurpose(MPKeyPurpose purpose) {
             return "recovery";
         default: {
             ftl( "Unknown purpose: %d", purpose );
-            return "";
+            return NULL;
         }
     }
 }
@@ -202,7 +203,7 @@ const char *mpw_scopeForPurpose(MPKeyPurpose purpose) {
             return "com.lyndir.masterpassword.answer";
         default: {
             ftl( "Unknown purpose: %d", purpose );
-            return "";
+            return NULL;
         }
     }
 }
@@ -232,7 +233,7 @@ const char *mpw_charactersInClass(char characterClass) {
             return " ";
         default: {
             ftl( "Unknown character class: %c", characterClass );
-            return "";
+            return NULL;
         }
     }
 }
@@ -240,5 +241,8 @@ const char *mpw_charactersInClass(char characterClass) {
 const char mpw_characterFromClass(char characterClass, uint8_t seedByte) {
 
     const char *classCharacters = mpw_charactersInClass( characterClass );
+    if (!classCharacters)
+        return '\0';
+
     return classCharacters[seedByte % strlen( classCharacters )];
 }
