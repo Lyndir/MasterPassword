@@ -20,6 +20,7 @@
 #define _MPW_UTIL_H
 
 #include <stdio.h>
+#include <stdarg.h>
 
 #include "mpw-types.h"
 
@@ -27,41 +28,42 @@
 
 #ifndef trc
 extern int mpw_verbosity;
-    #define trc_level 3
-    #define trc(...) ({ \
-        if (mpw_verbosity >= 3) \
-            fprintf( stderr, __VA_ARGS__ ); })
+#define trc_level 3
+#define trc(...) ({ \
+    if (mpw_verbosity >= 3) \
+        fprintf( stderr, __VA_ARGS__ ); })
 #endif
 #ifndef dbg
-    #define dbg_level 2
-    #define dbg(...) ({ \
-        if (mpw_verbosity >= 2) \
-            fprintf( stderr, __VA_ARGS__ ); })
+#define dbg_level 2
+#define dbg(...) ({ \
+    if (mpw_verbosity >= 2) \
+        fprintf( stderr, __VA_ARGS__ ); })
 #endif
 #ifndef inf
-    #define inf_level 1
-    #define inf(...) ({ \
-        if (mpw_verbosity >= 1) \
-            fprintf( stderr, __VA_ARGS__ ); })
+#define inf_level 1
+#define inf(...) ({ \
+    if (mpw_verbosity >= 1) \
+        fprintf( stderr, __VA_ARGS__ ); })
 #endif
 #ifndef wrn
-    #define wrn_level 0
-    #define wrn(...) ({ \
-        if (mpw_verbosity >= 0) \
-            fprintf( stderr, __VA_ARGS__ ); })
+#define wrn_level 0
+#define wrn(...) ({ \
+    if (mpw_verbosity >= 0) \
+        fprintf( stderr, __VA_ARGS__ ); })
 #endif
 #ifndef err
-    #define err_level -1
-    #define err(...) ({ \
-        if (mpw_verbosity >= -1) \
-            fprintf( stderr, __VA_ARGS__ ); })
+#define err_level -1
+#define err(...) ({ \
+    if (mpw_verbosity >= -1) \
+        fprintf( stderr, __VA_ARGS__ ); })
 #endif
 #ifndef ftl
-    #define ftl_level -2
-    #define ftl(...) ({ \
-        if (mpw_verbosity >= -2) \
-            fprintf( stderr, __VA_ARGS__ ); })
+#define ftl_level -2
+#define ftl(...) ({ \
+    if (mpw_verbosity >= -2) \
+        fprintf( stderr, __VA_ARGS__ ); })
 #endif
+
 #ifndef min
 #define min(a, b) ({ \
     __typeof__ (a) _a = (a); \
@@ -93,6 +95,11 @@ bool mpw_push_buf(
 /** Push a string onto a buffer.  reallocs the given buffer and appends the given string. */
 bool mpw_push_string(
         uint8_t **buffer, size_t *const bufferSize, const char *pushString);
+/** Push a string onto another string.  reallocs the target string and appends the source string. */
+bool mpw_string_push(
+        char **const string, const char *pushString);
+bool mpw_string_pushf(
+        char **const string, const char *pushFormat, ...);
 /** Push an integer onto a buffer.  reallocs the given buffer and appends the given integer. */
 bool mpw_push_int(
         uint8_t **const buffer, size_t *const bufferSize, const uint32_t pushInt);
@@ -117,6 +124,9 @@ uint8_t const *mpw_hmac_sha256(
 
 //// Visualizers.
 
+/** Compose a formatted string.
+  * @return A C-string in a reused buffer, do not free or store it. */
+const char *mpw_str(const char *format, ...);
 /** Encode a buffer as a string of hexadecimal characters.
   * @return A C-string in a reused buffer, do not free or store it. */
 const char *mpw_hex(const void *buf, size_t length);

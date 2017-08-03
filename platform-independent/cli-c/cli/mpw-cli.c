@@ -207,8 +207,7 @@ int main(int argc, char *const argv[]) {
         mpwSitesFormat = MPMarshallFormatFlat;
         mpwSitesPath = mpwPath( fullName, "mpsites" );
         if (!mpwSitesPath || !(mpwSites = fopen( mpwSitesPath, "r" )))
-            dbg( "Couldn't open configuration file:\n  %s: %s\n",
-                    mpwSitesPath, strerror( errno ) );
+            dbg( "Couldn't open configuration file:\n  %s: %s\n", mpwSitesPath, strerror( errno ) );
     }
 
     // Read the user's sites file.
@@ -220,17 +219,15 @@ int main(int argc, char *const argv[]) {
                (bufPointer += (readSize = fread( buf + bufPointer, 1, readAmount, mpwSites ))) &&
                (readSize == readAmount));
         if (ferror( mpwSites ))
-            wrn( "Error while reading configuration file:\n  %s: %d",
-                    mpwSitesPath, ferror( mpwSites ) );
+            wrn( "Error while reading configuration file:\n  %s: %d", mpwSitesPath, ferror( mpwSites ) );
         fclose( mpwSites );
 
         // Parse file.
-        MPMarshallError marshallError = MPMarshallSuccess;
+        MPMarshallError marshallError = { MPMarshallSuccess };
         MPMarshalledUser *user = mpw_marshall_read( buf, mpwSitesFormat, masterPassword, &marshallError );
         mpw_free_string( buf );
-        if (!user || marshallError != MPMarshallSuccess)
-            wrn( "Couldn't parse configuration file:\n  %s: %s\n",
-                    mpwSitesPath, mpw_explainMarshallError( marshallError ) );
+        if (!user || marshallError.type != MPMarshallSuccess)
+            wrn( "Couldn't parse configuration file:\n  %s: %s\n", mpwSitesPath, marshallError.description );
 
         else {
             // Load defaults.
@@ -254,18 +251,15 @@ int main(int argc, char *const argv[]) {
             if (mpwSitesFormat != MPMarshallFormatJSON) {
                 mpwSitesPath = mpwPath( fullName, "mpsites.json" );
                 if (!mpwSitesPath || !(mpwSites = fopen( mpwSitesPath, "w" )))
-                    wrn( "Couldn't create updated configuration file:\n  %s: %s\n",
-                            mpwSitesPath, strerror( errno ) );
+                    wrn( "Couldn't create updated configuration file:\n  %s: %s\n", mpwSitesPath, strerror( errno ) );
 
                 else {
                     buf = NULL;
-                    if (!mpw_marshall_write( &buf, MPMarshallFormatJSON, user, &marshallError ) || marshallError != MPMarshallSuccess)
-                        wrn( "Couldn't encode updated configuration file:\n  %s: %s",
-                                mpwSitesPath, mpw_explainMarshallError( marshallError ) );
+                    if (!mpw_marshall_write( &buf, MPMarshallFormatJSON, user, &marshallError ) || marshallError.type != MPMarshallSuccess)
+                        wrn( "Couldn't encode updated configuration file:\n  %s: %s", mpwSitesPath, marshallError.description );
 
                     else if (fwrite( buf, sizeof( char ), strlen( buf ), mpwSites ) != strlen( buf ))
-                        wrn( "Error while writing updated configuration file:\n  %s: %d\n",
-                                mpwSitesPath, ferror( mpwSites ) );
+                        wrn( "Error while writing updated configuration file:\n  %s: %d\n", mpwSitesPath, ferror( mpwSites ) );
 
                     mpw_free_string( buf );
                     fclose( mpwSites );

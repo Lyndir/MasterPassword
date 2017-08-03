@@ -32,7 +32,7 @@ typedef enum( unsigned int, MPMarshallFormat ) {
             MPMarshallFormatJSON,
 };
 
-typedef enum( unsigned int, MPMarshallError ) {
+typedef enum( unsigned int, MPMarshallErrorType ) {
     /** The marshalling operation completed successfully. */
             MPMarshallSuccess,
     /** An error in the structure of the marshall file interrupted marshalling. */
@@ -48,7 +48,10 @@ typedef enum( unsigned int, MPMarshallError ) {
     /** An internal system error interrupted marshalling. */
             MPMarshallErrorInternal,
 };
-const char *mpw_explainMarshallError(const MPMarshallError error);
+typedef struct MPMarshallError {
+    MPMarshallErrorType type;
+    const char *description;
+} MPMarshallError;
 
 typedef struct MPMarshalledQuestion {
     const char *keyword;

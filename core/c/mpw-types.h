@@ -62,26 +62,26 @@ typedef enum( unsigned int, MPSiteFeature ) {
 
 typedef enum( unsigned int, MPPasswordType ) {
     /** pg^VMAUBk5x3p%HP%i4= */
-    MPPasswordTypeGeneratedMaximum = 0x0 | MPPasswordTypeClassGenerated | 0x0,
+            MPPasswordTypeGeneratedMaximum = 0x0 | MPPasswordTypeClassGenerated | 0x0,
     /** BiroYena8:Kixa */
-    MPPasswordTypeGeneratedLong = 0x1 | MPPasswordTypeClassGenerated | 0x0,
+            MPPasswordTypeGeneratedLong = 0x1 | MPPasswordTypeClassGenerated | 0x0,
     /** BirSuj0- */
-    MPPasswordTypeGeneratedMedium = 0x2 | MPPasswordTypeClassGenerated | 0x0,
+            MPPasswordTypeGeneratedMedium = 0x2 | MPPasswordTypeClassGenerated | 0x0,
     /** pO98MoD0 */
-    MPPasswordTypeGeneratedBasic = 0x4 | MPPasswordTypeClassGenerated | 0x0,
+            MPPasswordTypeGeneratedBasic = 0x4 | MPPasswordTypeClassGenerated | 0x0,
     /** Bir8 */
-    MPPasswordTypeGeneratedShort = 0x3 | MPPasswordTypeClassGenerated | 0x0,
+            MPPasswordTypeGeneratedShort = 0x3 | MPPasswordTypeClassGenerated | 0x0,
     /** 2798 */
-    MPPasswordTypeGeneratedPIN = 0x5 | MPPasswordTypeClassGenerated | 0x0,
+            MPPasswordTypeGeneratedPIN = 0x5 | MPPasswordTypeClassGenerated | 0x0,
     /** birsujano */
-    MPPasswordTypeGeneratedName = 0xE | MPPasswordTypeClassGenerated | 0x0,
+            MPPasswordTypeGeneratedName = 0xE | MPPasswordTypeClassGenerated | 0x0,
     /** bir yennoquce fefi */
-    MPPasswordTypeGeneratedPhrase = 0xF | MPPasswordTypeClassGenerated | 0x0,
+            MPPasswordTypeGeneratedPhrase = 0xF | MPPasswordTypeClassGenerated | 0x0,
 
     /** Custom saved password. */
-    MPPasswordTypeStoredPersonal = 0x0 | MPPasswordTypeClassStored | MPSiteFeatureExportContent,
+            MPPasswordTypeStoredPersonal = 0x0 | MPPasswordTypeClassStored | MPSiteFeatureExportContent,
     /** Custom saved password that should not be exported from the device. */
-    MPPasswordTypeStoredDevice = 0x1 | MPPasswordTypeClassStored | MPSiteFeatureDevicePrivate,
+            MPPasswordTypeStoredDevice = 0x1 | MPPasswordTypeClassStored | MPSiteFeatureDevicePrivate,
 
     MPPasswordTypeDefault = MPPasswordTypeGeneratedLong,
 };

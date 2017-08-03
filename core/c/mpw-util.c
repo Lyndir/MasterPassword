@@ -60,9 +60,27 @@ bool mpw_push_buf(uint8_t **const buffer, size_t *const bufferSize, const void *
     return true;
 }
 
-bool mpw_push_string(uint8_t **buffer, size_t *const bufferSize, const char *pushString) {
+bool mpw_push_string(uint8_t **const buffer, size_t *const bufferSize, const char *pushString) {
 
     return pushString && mpw_push_buf( buffer, bufferSize, pushString, strlen( pushString ) );
+}
+
+bool mpw_string_push(char **const string, const char *pushString) {
+
+    size_t stringLength = strlen( *string );
+    return pushString && mpw_push_buf( (uint8_t **const)string, &stringLength, pushString, strlen( pushString ) + 1 );
+}
+
+bool mpw_string_pushf(char **const string, const char *pushFormat, ...) {
+
+    va_list args;
+    va_start( args, pushFormat );
+    char *pushString = NULL;
+    bool success = vasprintf( &pushString, pushFormat, args ) >= 0 && mpw_string_push( string, pushString );
+    va_end( args );
+    mpw_free_string( pushString );
+
+    return success;
 }
 
 bool mpw_push_int(uint8_t **const buffer, size_t *const bufferSize, const uint32_t pushInt) {
@@ -167,17 +185,26 @@ bool mpw_id_buf_equals(const char *id1, const char *id2) {
     return true;
 }
 
-static char **mpw_hex_buf = NULL;
-static unsigned int mpw_hex_buf_i = 0;
+static char *str_str;
+
+const char *mpw_str(const char *format, ...) {
+
+    va_list args;
+    va_start( args, format );
+    vasprintf( &str_str, format, args );
+    va_end( args );
+
+    return str_str;
+}
+
+static char **mpw_hex_buf;
+static unsigned int mpw_hex_buf_i;
 
 const char *mpw_hex(const void *buf, size_t length) {
 
     // FIXME: Not thread-safe
-    if (!mpw_hex_buf) {
-        mpw_hex_buf = malloc( 10 * sizeof( char * ) );
-        for (uint8_t i = 0; i < 10; ++i)
-            mpw_hex_buf[i] = NULL;
-    }
+    if (!mpw_hex_buf)
+        mpw_hex_buf = calloc( 10, sizeof( char * ) );
     mpw_hex_buf_i = (mpw_hex_buf_i + 1) % 10;
 
     mpw_hex_buf[mpw_hex_buf_i] = realloc( mpw_hex_buf[mpw_hex_buf_i], length * 2 + 1 );
