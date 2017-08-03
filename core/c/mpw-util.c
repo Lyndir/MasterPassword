@@ -38,7 +38,7 @@ int mpw_verbosity = inf_level;
 
 bool mpw_push_buf(uint8_t **const buffer, size_t *const bufferSize, const void *pushBuffer, const size_t pushSize) {
 
-    if (!buffer || !*buffer || !bufferSize || !pushBuffer || !pushSize)
+    if (!buffer || !bufferSize || !pushBuffer || !pushSize)
         return false;
     if (*bufferSize == (size_t)-1)
         // The buffer was marked as broken, it is missing a previous push.  Abort to avoid corrupt content.
