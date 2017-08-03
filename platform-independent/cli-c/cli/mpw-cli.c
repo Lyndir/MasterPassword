@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
+#include <sysexits.h>
 
 #if defined(READLINE)
 #include <readline/readline.h>
@@ -66,7 +67,7 @@ static void usage() {
     exit( 0 );
 }
 
-static char *mpwPath(const char *prefix, const char *extension) {
+static char *mpw_path(const char *prefix, const char *extension) {
 
     char *homedir = NULL;
     struct passwd *passwd = getpwuid( getuid() );
@@ -155,20 +156,20 @@ int main(int argc, char *const argv[]) {
                 switch (optopt) {
                     case 'u':
                         ftl( "Missing full name to option: -%c\n", optopt );
-                        return 1;
+                        return EX_USAGE;
                     case 't':
                         ftl( "Missing type name to option: -%c\n", optopt );
-                        return 1;
+                        return EX_USAGE;
                     case 'c':
                         ftl( "Missing counter value to option: -%c\n", optopt );
-                        return 1;
+                        return EX_USAGE;
                     default:
                         ftl( "Unknown option: -%c\n", optopt );
-                        return 1;
+                        return EX_USAGE;
                 }
             default:
                 ftl( "Unexpected option: %c", opt );
-                return 1;
+                return EX_USAGE;
         }
     if (optind < argc)
         siteNameArg = argv[optind];
@@ -187,12 +188,12 @@ int main(int argc, char *const argv[]) {
     if (!(fullNameArg && (fullName = strdup( fullNameArg ))) &&
         !(fullName = getline_prompt( "Your full name:" ))) {
         ftl( "Missing full name.\n" );
-        return 1;
+        return EX_DATAERR;
     }
     if (!(siteNameArg && (siteName = strdup( siteNameArg ))) &&
         !(siteName = getline_prompt( "Site name:" ))) {
         ftl( "Missing site name.\n" );
-        return 1;
+        return EX_DATAERR;
     }
     if (!(masterPasswordArg && (masterPassword = strdup( masterPasswordArg ))))
         while (!masterPassword || !strlen( masterPassword ))
@@ -201,11 +202,12 @@ int main(int argc, char *const argv[]) {
     // Find the user's sites file.
     FILE *mpwSites = NULL;
     MPMarshallFormat mpwSitesFormat = MPMarshallFormatJSON;
-    char *mpwSitesPath = mpwPath( fullName, "mpsites.json" );
+    char *mpwSitesPath = mpw_path( fullName, "mpsites.json" );
     if (!mpwSitesPath || !(mpwSites = fopen( mpwSitesPath, "r" ))) {
+        dbg( "Couldn't open configuration file:\n  %s: %s\n", mpwSitesPath, strerror( errno ) );
         free( mpwSitesPath );
         mpwSitesFormat = MPMarshallFormatFlat;
-        mpwSitesPath = mpwPath( fullName, "mpsites" );
+        mpwSitesPath = mpw_path( fullName, "mpsites" );
         if (!mpwSitesPath || !(mpwSites = fopen( mpwSitesPath, "r" )))
             dbg( "Couldn't open configuration file:\n  %s: %s\n", mpwSitesPath, strerror( errno ) );
     }
@@ -229,7 +231,7 @@ int main(int argc, char *const argv[]) {
         if (!user || marshallError.type != MPMarshallSuccess) {
             if (marshallError.type == MPMarshallErrorMasterPassword) {
                 ftl( "Incorrect master password according to configuration:\n  %s: %s\n", mpwSitesPath, marshallError.description );
-                return 1;
+                return EX_DATAERR;
             } else
                 err( "Couldn't parse configuration file:\n  %s: %s\n", mpwSitesPath, marshallError.description );
         }
@@ -254,7 +256,7 @@ int main(int argc, char *const argv[]) {
 
             // Current format is not current, write out a new current format config file.
             if (mpwSitesFormat != MPMarshallFormatJSON) {
-                mpwSitesPath = mpwPath( fullName, "mpsites.json" );
+                mpwSitesPath = mpw_path( fullName, "mpsites.json" );
                 if (!mpwSitesPath || !(mpwSites = fopen( mpwSitesPath, "w" )))
                     wrn( "Couldn't create updated configuration file:\n  %s: %s\n", mpwSitesPath, strerror( errno ) );
 
@@ -280,7 +282,7 @@ int main(int argc, char *const argv[]) {
         int algorithmVersionInt = atoi( algorithmVersionArg );
         if (algorithmVersionInt < MPAlgorithmVersionFirst || algorithmVersionInt > MPAlgorithmVersionLast) {
             ftl( "Invalid algorithm version: %s\n", algorithmVersionArg );
-            return 1;
+            return EX_USAGE;
         }
         algorithmVersion = (MPAlgorithmVersion)algorithmVersionInt;
     }
@@ -288,18 +290,18 @@ int main(int argc, char *const argv[]) {
         long long int siteCounterInt = atoll( siteCounterArg );
         if (siteCounterInt < 0 || siteCounterInt > UINT32_MAX) {
             ftl( "Invalid site counter: %s\n", siteCounterArg );
-            return 1;
+            return EX_USAGE;
         }
         siteCounter = (uint32_t)siteCounterInt;
     }
     if (keyPurposeArg)
-        keyPurpose = mpw_purposeWithName( keyPurposeArg );
+        keyPurpose = mpw_purposeWithName( keyPurposeArg ); // TODO: error check
     if (keyPurpose == MPKeyPurposeIdentification)
         passwordType = MPPasswordTypeGeneratedName;
     if (keyPurpose == MPKeyPurposeRecovery)
         passwordType = MPPasswordTypeGeneratedPhrase;
     if (passwordTypeArg)
-        passwordType = mpw_typeWithName( passwordTypeArg );
+        passwordType = mpw_typeWithName( passwordTypeArg ); // TODO: error check
     if (keyContextArg)
         keyContext = strdup( keyContextArg );
 
@@ -328,7 +330,7 @@ int main(int argc, char *const argv[]) {
     mpw_free_string( fullName );
     if (!masterKey) {
         ftl( "Couldn't derive master key." );
-        return 1;
+        return EX_SOFTWARE;
     }
 
     MPSiteKey siteKey = mpw_siteKey( masterKey, siteName, siteCounter, keyPurpose, keyContext, algorithmVersion );
@@ -339,7 +341,7 @@ int main(int argc, char *const argv[]) {
     mpw_free_string( keyContext );
     if (!sitePassword) {
         ftl( "Couldn't derive site password." );
-        return 1;
+        return EX_SOFTWARE;
     }
 
     fprintf( stdout, "%s\n", sitePassword );
