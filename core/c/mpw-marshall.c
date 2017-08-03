@@ -410,7 +410,7 @@ static MPMarshalledUser *mpw_marshall_read_flat(
                 return NULL;
             }
             if (keyID && !mpw_id_buf_equals( keyID, mpw_id_buf( masterKey, MPMasterKeySize ) )) {
-                *error = (MPMarshallError){ MPMarshallErrorMasterPassword, "Incorrect master password for import file." };
+                *error = (MPMarshallError){ MPMarshallErrorMasterPassword, "Master password doesn't match key ID." };
                 return NULL;
             }
             if (!(user = mpw_marshall_user( fullName, masterPassword, algorithm ))) {
@@ -586,7 +586,7 @@ static MPMarshalledUser *mpw_marshall_read_json(
         return NULL;
     }
     if (keyID && !mpw_id_buf_equals( keyID, mpw_id_buf( masterKey, MPMasterKeySize ) )) {
-        *error = (MPMarshallError){ MPMarshallErrorMasterPassword, "Incorrect master password for import file." };
+        *error = (MPMarshallError){ MPMarshallErrorMasterPassword, "Master password doesn't match key ID." };
         return NULL;
     }
     if (!(user = mpw_marshall_user( fullName, masterPassword, algorithm ))) {

@@ -155,20 +155,20 @@ int main(int argc, char *const argv[]) {
                 switch (optopt) {
                     case 'u':
                         ftl( "Missing full name to option: -%c\n", optopt );
-                        abort();
+                        return 1;
                     case 't':
                         ftl( "Missing type name to option: -%c\n", optopt );
-                        abort();
+                        return 1;
                     case 'c':
                         ftl( "Missing counter value to option: -%c\n", optopt );
-                        abort();
+                        return 1;
                     default:
                         ftl( "Unknown option: -%c\n", optopt );
-                        abort();
+                        return 1;
                 }
             default:
                 ftl( "Unexpected option: %c", opt );
-                abort();
+                return 1;
         }
     if (optind < argc)
         siteNameArg = argv[optind];
@@ -187,12 +187,12 @@ int main(int argc, char *const argv[]) {
     if (!(fullNameArg && (fullName = strdup( fullNameArg ))) &&
         !(fullName = getline_prompt( "Your full name:" ))) {
         ftl( "Missing full name.\n" );
-        abort();
+        return 1;
     }
     if (!(siteNameArg && (siteName = strdup( siteNameArg ))) &&
         !(siteName = getline_prompt( "Site name:" ))) {
         ftl( "Missing site name.\n" );
-        abort();
+        return 1;
     }
     if (!(masterPasswordArg && (masterPassword = strdup( masterPasswordArg ))))
         while (!masterPassword || !strlen( masterPassword ))
@@ -226,8 +226,13 @@ int main(int argc, char *const argv[]) {
         MPMarshallError marshallError = { MPMarshallSuccess };
         MPMarshalledUser *user = mpw_marshall_read( buf, mpwSitesFormat, masterPassword, &marshallError );
         mpw_free_string( buf );
-        if (!user || marshallError.type != MPMarshallSuccess)
-            wrn( "Couldn't parse configuration file:\n  %s: %s\n", mpwSitesPath, marshallError.description );
+        if (!user || marshallError.type != MPMarshallSuccess) {
+            if (marshallError.type == MPMarshallErrorMasterPassword) {
+                ftl( "Incorrect master password according to configuration:\n  %s: %s\n", mpwSitesPath, marshallError.description );
+                return 1;
+            } else
+                err( "Couldn't parse configuration file:\n  %s: %s\n", mpwSitesPath, marshallError.description );
+        }
 
         else {
             // Load defaults.
@@ -275,7 +280,7 @@ int main(int argc, char *const argv[]) {
         int algorithmVersionInt = atoi( algorithmVersionArg );
         if (algorithmVersionInt < MPAlgorithmVersionFirst || algorithmVersionInt > MPAlgorithmVersionLast) {
             ftl( "Invalid algorithm version: %s\n", algorithmVersionArg );
-            abort();
+            return 1;
         }
         algorithmVersion = (MPAlgorithmVersion)algorithmVersionInt;
     }
@@ -283,7 +288,7 @@ int main(int argc, char *const argv[]) {
         long long int siteCounterInt = atoll( siteCounterArg );
         if (siteCounterInt < 0 || siteCounterInt > UINT32_MAX) {
             ftl( "Invalid site counter: %s\n", siteCounterArg );
-            abort();
+            return 1;
         }
         siteCounter = (uint32_t)siteCounterInt;
     }
@@ -323,7 +328,7 @@ int main(int argc, char *const argv[]) {
     mpw_free_string( fullName );
     if (!masterKey) {
         ftl( "Couldn't derive master key." );
-        abort();
+        return 1;
     }
 
     MPSiteKey siteKey = mpw_siteKey( masterKey, siteName, siteCounter, keyPurpose, keyContext, algorithmVersion );
@@ -334,7 +339,7 @@ int main(int argc, char *const argv[]) {
     mpw_free_string( keyContext );
     if (!sitePassword) {
         ftl( "Couldn't derive site password." );
-        abort();
+        return 1;
     }
 
     fprintf( stdout, "%s\n", sitePassword );
