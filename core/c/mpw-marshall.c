@@ -469,7 +469,13 @@ static MPMarshalledUser *mpw_marshall_read_flat(
                 *error = (MPMarshallError){ MPMarshallErrorIllegal, mpw_str( "Invalid site type: %s: %s", siteName, str_type ) };
                 return NULL;
             }
-            int value = atoi( str_algorithm );
+            long long int value = atoll( str_counter );
+            if (value < 0 || value > UINT32_MAX) {
+                *error = (MPMarshallError){ MPMarshallErrorIllegal, mpw_str( "Invalid site counter: %s: %s", siteName, str_counter ) };
+                return NULL;
+            }
+            uint32_t siteCounter = (uint32_t)value;
+            value = atoll( str_algorithm );
             if (value < MPAlgorithmVersionFirst || value > MPAlgorithmVersionLast) {
                 *error = (MPMarshallError){ MPMarshallErrorIllegal, mpw_str( "Invalid site algorithm: %s: %s", siteName, str_algorithm ) };
                 return NULL;
@@ -482,7 +488,7 @@ static MPMarshalledUser *mpw_marshall_read_flat(
             }
 
             MPMarshalledSite *site = mpw_marshall_site(
-                    user, siteName, siteType, (uint32_t)atoi( str_counter ), siteAlgorithm );
+                    user, siteName, siteType, siteCounter, siteAlgorithm );
             if (!site) {
                 *error = (MPMarshallError){ MPMarshallErrorInternal, "Couldn't allocate a new site." };
                 return NULL;
@@ -561,7 +567,7 @@ static MPMarshalledUser *mpw_marshall_read_json(
     const char *fullName = mpw_get_json_string( json_file, "user.full_name", NULL );
     const char *str_lastUsed = mpw_get_json_string( json_file, "user.last_used", NULL );
     const char *keyID = mpw_get_json_string( json_file, "user.key_id", NULL );
-    int value = mpw_get_json_int( json_file, "user.algorithm", MPAlgorithmVersionCurrent );
+    int32_t value = mpw_get_json_int( json_file, "user.algorithm", MPAlgorithmVersionCurrent );
     if (value < MPAlgorithmVersionFirst || value > MPAlgorithmVersionLast) {
         *error = (MPMarshallError){ MPMarshallErrorIllegal, mpw_str( "Invalid user algorithm version: %u", value ) };
         return NULL;
@@ -605,7 +611,7 @@ static MPMarshalledUser *mpw_marshall_read_json(
         const char *siteName = json_site.key;
         value = mpw_get_json_int( json_site.val, "algorithm", (int)user->algorithm );
         if (value < MPAlgorithmVersionFirst || value > MPAlgorithmVersionLast) {
-            *error = (MPMarshallError){ MPMarshallErrorIllegal, mpw_str( "Invalid site algorithm version: %s: %u", siteName, value ) };
+            *error = (MPMarshallError){ MPMarshallErrorIllegal, mpw_str( "Invalid site algorithm version: %s: %d", siteName, value ) };
             return NULL;
         }
         MPAlgorithmVersion siteAlgorithm = (MPAlgorithmVersion)value;
@@ -614,7 +620,12 @@ static MPMarshalledUser *mpw_marshall_read_json(
             *error = (MPMarshallError){ MPMarshallErrorIllegal, mpw_str( "Invalid site type: %s: %u", siteName, siteType ) };
             return NULL;
         }
-        uint32_t siteCounter = (uint32_t)mpw_get_json_int( json_site.val, "counter", 1 );
+        value = mpw_get_json_int( json_site.val, "counter", 1 );
+        if (value < 0 || value > UINT32_MAX) {
+            *error = (MPMarshallError){ MPMarshallErrorIllegal, mpw_str( "Invalid site counter: %s: %d", siteName, value ) };
+            return NULL;
+        }
+        uint32_t siteCounter = (uint32_t)value;
         const char *siteContent = mpw_get_json_string( json_site.val, "password", NULL );
         const char *siteLoginName = mpw_get_json_string( json_site.val, "login_name", NULL );
         bool siteLoginGenerated = mpw_get_json_boolean( json_site.val, "login_generated", false );

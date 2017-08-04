@@ -37,7 +37,7 @@ MPMasterKey mpw_masterKey(const char *fullName, const char *masterPassword, cons
         case MPAlgorithmVersion3:
             return mpw_masterKeyForUser_v3( fullName, masterPassword );
         default:
-            ftl( "Unsupported version: %d", algorithmVersion );
+            err( "Unsupported version: %d\n", algorithmVersion );
             return NULL;
     }
 }
@@ -59,7 +59,7 @@ MPSiteKey mpw_siteKey(
         case MPAlgorithmVersion3:
             return mpw_siteKey_v3( masterKey, siteName, siteCounter, keyPurpose, keyContext );
         default:
-            ftl( "Unsupported version: %d", algorithmVersion );
+            err( "Unsupported version: %d\n", algorithmVersion );
             return NULL;
     }
 }
@@ -80,7 +80,7 @@ const char *mpw_sitePassword(
         case MPAlgorithmVersion3:
             return mpw_sitePassword_v3( siteKey, passwordType );
         default:
-            ftl( "Unsupported version: %d", algorithmVersion );
+            err( "Unsupported version: %d\n", algorithmVersion );
             return NULL;
     }
 }

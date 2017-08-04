@@ -119,7 +119,7 @@ int main(int argc, char *const argv[]) {
     const char *algorithmVersionArg = getenv( MP_env_algorithm );
 
     // Read the command-line options.
-    for (int opt; (opt = getopt( argc, argv, "u:P:t:c:V:a:C:vqh" )) != -1;)
+    for (int opt; (opt = getopt( argc, argv, "u:P:t:c:V:a:C:vqh" )) != EOF;)
         switch (opt) {
             case 'u':
                 fullNameArg = optarg;
@@ -168,7 +168,7 @@ int main(int argc, char *const argv[]) {
                         return EX_USAGE;
                 }
             default:
-                ftl( "Unexpected option: %c", opt );
+                ftl( "Unexpected option: %c\n", opt );
                 return EX_USAGE;
         }
     if (optind < argc)
@@ -221,7 +221,7 @@ int main(int argc, char *const argv[]) {
                (bufPointer += (readSize = fread( buf + bufPointer, 1, readAmount, mpwSites ))) &&
                (readSize == readAmount));
         if (ferror( mpwSites ))
-            wrn( "Error while reading configuration file:\n  %s: %d", mpwSitesPath, ferror( mpwSites ) );
+            wrn( "Error while reading configuration file:\n  %s: %d\n", mpwSitesPath, ferror( mpwSites ) );
         fclose( mpwSites );
 
         // Parse file.
@@ -232,7 +232,8 @@ int main(int argc, char *const argv[]) {
             if (marshallError.type == MPMarshallErrorMasterPassword) {
                 ftl( "Incorrect master password according to configuration:\n  %s: %s\n", mpwSitesPath, marshallError.description );
                 return EX_DATAERR;
-            } else
+            }
+            else
                 err( "Couldn't parse configuration file:\n  %s: %s\n", mpwSitesPath, marshallError.description );
         }
 
@@ -263,7 +264,7 @@ int main(int argc, char *const argv[]) {
                 else {
                     buf = NULL;
                     if (!mpw_marshall_write( &buf, MPMarshallFormatJSON, user, &marshallError ) || marshallError.type != MPMarshallSuccess)
-                        wrn( "Couldn't encode updated configuration file:\n  %s: %s", mpwSitesPath, marshallError.description );
+                        wrn( "Couldn't encode updated configuration file:\n  %s: %s\n", mpwSitesPath, marshallError.description );
 
                     else if (fwrite( buf, sizeof( char ), strlen( buf ), mpwSites ) != strlen( buf ))
                         wrn( "Error while writing updated configuration file:\n  %s: %d\n", mpwSitesPath, ferror( mpwSites ) );
@@ -278,7 +279,7 @@ int main(int argc, char *const argv[]) {
     free( mpwSitesPath );
 
     // Parse default/config-overriding command-line parameters.
-    if (algorithmVersionArg) {
+    if (algorithmVersionArg && strlen( algorithmVersionArg )) {
         int algorithmVersionInt = atoi( algorithmVersionArg );
         if (algorithmVersionInt < MPAlgorithmVersionFirst || algorithmVersionInt > MPAlgorithmVersionLast) {
             ftl( "Invalid algorithm version: %s\n", algorithmVersionArg );
@@ -286,7 +287,7 @@ int main(int argc, char *const argv[]) {
         }
         algorithmVersion = (MPAlgorithmVersion)algorithmVersionInt;
     }
-    if (siteCounterArg) {
+    if (siteCounterArg && strlen( siteCounterArg )) {
         long long int siteCounterInt = atoll( siteCounterArg );
         if (siteCounterInt < 0 || siteCounterInt > UINT32_MAX) {
             ftl( "Invalid site counter: %s\n", siteCounterArg );
@@ -294,15 +295,25 @@ int main(int argc, char *const argv[]) {
         }
         siteCounter = (uint32_t)siteCounterInt;
     }
-    if (keyPurposeArg)
-        keyPurpose = mpw_purposeWithName( keyPurposeArg ); // TODO: error check
+    if (keyPurposeArg && strlen( keyPurposeArg )) {
+        keyPurpose = mpw_purposeWithName( keyPurposeArg );
+        if (ERR == keyPurpose) {
+            ftl( "Invalid purpose: %s\n", keyPurposeArg );
+            return EX_USAGE;
+        }
+    }
     if (keyPurpose == MPKeyPurposeIdentification)
         passwordType = MPPasswordTypeGeneratedName;
     if (keyPurpose == MPKeyPurposeRecovery)
         passwordType = MPPasswordTypeGeneratedPhrase;
-    if (passwordTypeArg)
-        passwordType = mpw_typeWithName( passwordTypeArg ); // TODO: error check
-    if (keyContextArg)
+    if (passwordTypeArg && strlen( passwordTypeArg )) {
+        passwordType = mpw_typeWithName( passwordTypeArg );
+        if (ERR == passwordType) {
+            ftl( "Invalid type: %s\n", passwordTypeArg );
+            return EX_USAGE;
+        }
+    }
+    if (keyContextArg && strlen( keyContextArg ))
         keyContext = strdup( keyContextArg );
 
     // Summarize operation.
@@ -329,7 +340,7 @@ int main(int argc, char *const argv[]) {
     mpw_free_string( masterPassword );
     mpw_free_string( fullName );
     if (!masterKey) {
-        ftl( "Couldn't derive master key." );
+        ftl( "Couldn't derive master key.\n" );
         return EX_SOFTWARE;
     }
 
@@ -340,7 +351,7 @@ int main(int argc, char *const argv[]) {
     mpw_free_string( siteName );
     mpw_free_string( keyContext );
     if (!sitePassword) {
-        ftl( "Couldn't derive site password." );
+        ftl( "Couldn't derive site password.\n" );
         return EX_SOFTWARE;
     }
 

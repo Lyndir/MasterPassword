@@ -29,36 +29,42 @@
 #ifndef trc
 extern int mpw_verbosity;
 #define trc_level 3
+/** Logging internal state. */
 #define trc(...) ({ \
     if (mpw_verbosity >= 3) \
         fprintf( stderr, __VA_ARGS__ ); })
 #endif
 #ifndef dbg
 #define dbg_level 2
+/** Logging state and events interesting when investigating issues. */
 #define dbg(...) ({ \
     if (mpw_verbosity >= 2) \
         fprintf( stderr, __VA_ARGS__ ); })
 #endif
 #ifndef inf
 #define inf_level 1
+/** User messages. */
 #define inf(...) ({ \
     if (mpw_verbosity >= 1) \
         fprintf( stderr, __VA_ARGS__ ); })
 #endif
 #ifndef wrn
 #define wrn_level 0
+/** Recoverable issues and user suggestions. */
 #define wrn(...) ({ \
     if (mpw_verbosity >= 0) \
         fprintf( stderr, __VA_ARGS__ ); })
 #endif
 #ifndef err
 #define err_level -1
+/** Unrecoverable issues. */
 #define err(...) ({ \
     if (mpw_verbosity >= -1) \
         fprintf( stderr, __VA_ARGS__ ); })
 #endif
 #ifndef ftl
 #define ftl_level -2
+/** Issues that lead to abortion. */
 #define ftl(...) ({ \
     if (mpw_verbosity >= -2) \
         fprintf( stderr, __VA_ARGS__ ); })
@@ -75,6 +81,9 @@ extern int mpw_verbosity;
     __typeof__ (a) _a = (a); \
     __typeof__ (b) _b = (b); \
     _a > _b ? _a : _b; })
+#endif
+#ifndef ERR
+#define ERR -1
 #endif
 
 //// Buffers and memory.

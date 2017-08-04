@@ -42,33 +42,33 @@ const MPPasswordType mpw_typeWithName(const char *typeName) {
     stdTypeName[stdTypeNameSize] = '\0';
 
     // Find what password type is represented by the type name.
-    if (0 == strncmp( "x", stdTypeName, 1 )
+    if (0 == strcmp( "x", stdTypeName )
         || strncmp( mpw_nameForType( MPPasswordTypeGeneratedMaximum ), stdTypeName, strlen( stdTypeName ) ) == 0)
         return MPPasswordTypeGeneratedMaximum;
-    if (0 == strncmp( "l", stdTypeName, 1 )
+    if (0 == strcmp( "l", stdTypeName )
         || strncmp( mpw_nameForType( MPPasswordTypeGeneratedLong ), stdTypeName, strlen( stdTypeName ) ) == 0)
         return MPPasswordTypeGeneratedLong;
-    if (0 == strncmp( "m", stdTypeName, 1 )
+    if (0 == strcmp( "m", stdTypeName )
         || strncmp( mpw_nameForType( MPPasswordTypeGeneratedMedium ), stdTypeName, strlen( stdTypeName ) ) == 0)
         return MPPasswordTypeGeneratedMedium;
-    if (0 == strncmp( "b", stdTypeName, 1 )
+    if (0 == strcmp( "b", stdTypeName )
         || strncmp( mpw_nameForType( MPPasswordTypeGeneratedBasic ), stdTypeName, strlen( stdTypeName ) ) == 0)
         return MPPasswordTypeGeneratedBasic;
-    if (0 == strncmp( "s", stdTypeName, 1 )
+    if (0 == strcmp( "s", stdTypeName )
         || strncmp( mpw_nameForType( MPPasswordTypeGeneratedShort ), stdTypeName, strlen( stdTypeName ) ) == 0)
         return MPPasswordTypeGeneratedShort;
-    if (0 == strncmp( "i", stdTypeName, 1 )
+    if (0 == strcmp( "i", stdTypeName )
         || strncmp( mpw_nameForType( MPPasswordTypeGeneratedPIN ), stdTypeName, strlen( stdTypeName ) ) == 0)
         return MPPasswordTypeGeneratedPIN;
-    if (0 == strncmp( "n", stdTypeName, 1 )
+    if (0 == strcmp( "n", stdTypeName )
         || strncmp( mpw_nameForType( MPPasswordTypeGeneratedName ), stdTypeName, strlen( stdTypeName ) ) == 0)
         return MPPasswordTypeGeneratedName;
-    if (0 == strncmp( "p", stdTypeName, 1 )
+    if (0 == strcmp( "p", stdTypeName )
         || strncmp( mpw_nameForType( MPPasswordTypeGeneratedPhrase ), stdTypeName, strlen( stdTypeName ) ) == 0)
         return MPPasswordTypeGeneratedPhrase;
 
-    ftl( "Not a generated type name: %s", stdTypeName );
-    return MPPasswordTypeDefault;
+    dbg( "Not a generated type name: %s\n", stdTypeName );
+    return (MPPasswordType)ERR;
 }
 
 const char *mpw_nameForType(MPPasswordType passwordType) {
@@ -95,7 +95,7 @@ const char *mpw_nameForType(MPPasswordType passwordType) {
         case MPPasswordTypeStoredDevice:
             return "device";
         default: {
-            ftl( "Unknown password type: %d", passwordType );
+            dbg( "Unknown password type: %d\n", passwordType );
             return NULL;
         }
     }
@@ -104,7 +104,7 @@ const char *mpw_nameForType(MPPasswordType passwordType) {
 const char **mpw_templatesForType(MPPasswordType type, size_t *count) {
 
     if (!(type & MPPasswordTypeClassGenerated)) {
-        ftl( "Not a generated type: %d", type );
+        dbg( "Not a generated type: %d\n", type );
         return NULL;
     }
 
@@ -140,7 +140,7 @@ const char **mpw_templatesForType(MPPasswordType type, size_t *count) {
             return mpw_alloc_array( count, const char *,
                     "cvcc cvc cvccvcv cvc", "cvc cvccvcvcv cvcv", "cv cvccv cvc cvcvccv" );
         default: {
-            ftl( "Unknown generated type: %d", type );
+            dbg( "Unknown generated type: %d\n", type );
             return NULL;
         }
     }
@@ -172,8 +172,8 @@ const MPKeyPurpose mpw_purposeWithName(const char *purposeName) {
     if (strncmp( mpw_nameForPurpose( MPKeyPurposeRecovery ), stdPurposeName, strlen( stdPurposeName ) ) == 0)
         return MPKeyPurposeRecovery;
 
-    ftl( "Not a purpose name: %s", stdPurposeName );
-    return MPKeyPurposeAuthentication;
+    dbg( "Not a purpose name: %s\n", stdPurposeName );
+    return (MPKeyPurpose)ERR;
 }
 
 const char *mpw_nameForPurpose(MPKeyPurpose purpose) {
@@ -186,7 +186,7 @@ const char *mpw_nameForPurpose(MPKeyPurpose purpose) {
         case MPKeyPurposeRecovery:
             return "recovery";
         default: {
-            ftl( "Unknown purpose: %d", purpose );
+            dbg( "Unknown purpose: %d\n", purpose );
             return NULL;
         }
     }
@@ -202,7 +202,7 @@ const char *mpw_scopeForPurpose(MPKeyPurpose purpose) {
         case MPKeyPurposeRecovery:
             return "com.lyndir.masterpassword.answer";
         default: {
-            ftl( "Unknown purpose: %d", purpose );
+            dbg( "Unknown purpose: %d\n", purpose );
             return NULL;
         }
     }
@@ -232,7 +232,7 @@ const char *mpw_charactersInClass(char characterClass) {
         case ' ':
             return " ";
         default: {
-            ftl( "Unknown character class: %c", characterClass );
+            dbg( "Unknown character class: %c\n", characterClass );
             return NULL;
         }
     }

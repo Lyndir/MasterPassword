@@ -57,7 +57,7 @@ xmlNodePtr mpw_xmlTestCaseNode(xmlNodePtr testCaseNode, const char *nodeName) {
         }
     }
 
-    ftl( "Missing parent: %s, for case: %s\n", parentId, mpw_xmlTestCaseString( testCaseNode, "id" ) );
+    err( "Missing parent: %s, for case: %s\n", parentId, mpw_xmlTestCaseString( testCaseNode, "id" ) );
     return NULL;
 }
 

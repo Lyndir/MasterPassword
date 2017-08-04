@@ -49,7 +49,7 @@ int main(int argc, char *const argv[]) {
         MPMasterKey masterKey = mpw_masterKey(
                 (char *)fullName, (char *)masterPassword, algorithm );
         if (!masterKey) {
-            ftl( "Couldn't derive master key." );
+            ftl( "Couldn't derive master key.\n" );
             continue;
         }
 
@@ -61,7 +61,7 @@ int main(int argc, char *const argv[]) {
         mpw_free( masterKey, MPMasterKeySize );
         mpw_free( siteKey, MPSiteKeySize );
         if (!sitePassword) {
-            ftl( "Couldn't derive site password." );
+            ftl( "Couldn't derive site password.\n" );
             continue;
         }
 
