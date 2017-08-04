@@ -84,3 +84,45 @@ const char *mpw_sitePassword(
             return NULL;
     }
 }
+
+const char *mpw_encrypt(
+        MPMasterKey masterKey, const char *plainText, const MPAlgorithmVersion algorithmVersion) {
+
+    if (!masterKey || !plainText)
+        return NULL;
+
+    switch (algorithmVersion) {
+        case MPAlgorithmVersion0:
+            return mpw_encrypt_v0( masterKey, plainText );
+        case MPAlgorithmVersion1:
+            return mpw_encrypt_v1( masterKey, plainText );
+        case MPAlgorithmVersion2:
+            return mpw_encrypt_v2( masterKey, plainText );
+        case MPAlgorithmVersion3:
+            return mpw_encrypt_v3( masterKey, plainText );
+        default:
+            err( "Unsupported version: %d\n", algorithmVersion );
+            return NULL;
+    }
+}
+
+const char *mpw_decrypt(
+        MPMasterKey masterKey, const char *cipherText, const MPAlgorithmVersion algorithmVersion) {
+
+    if (!masterKey || !cipherText)
+        return NULL;
+
+    switch (algorithmVersion) {
+        case MPAlgorithmVersion0:
+            return mpw_decrypt_v0( masterKey, cipherText );
+        case MPAlgorithmVersion1:
+            return mpw_decrypt_v1( masterKey, cipherText );
+        case MPAlgorithmVersion2:
+            return mpw_decrypt_v2( masterKey, cipherText );
+        case MPAlgorithmVersion3:
+            return mpw_decrypt_v3( masterKey, cipherText );
+        default:
+            err( "Unsupported version: %d\n", algorithmVersion );
+            return NULL;
+    }
+}

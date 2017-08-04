@@ -159,7 +159,7 @@ static bool mpw_marshall_write_flat(
         if (!site.name || !strlen( site.name ))
             continue;
 
-        const char *content = site.type & MPSiteFeatureExportContent? site.content: NULL;
+        const char *content = NULL;
         if (!user->redacted) {
             if (!mpw_update_masterKey( &masterKey, &masterKeyAlgorithm, site.algorithm, user->name, user->masterPassword )) {
                 *error = (MPMarshallError){ MPMarshallErrorInternal, "Couldn't derive master key." };
@@ -171,16 +171,16 @@ static bool mpw_marshall_write_flat(
                 content = mpw_sitePassword( siteKey, site.type, site.algorithm );
                 mpw_free( siteKey, MPSiteKeySize );
             }
-            else if (content) {
-                // TODO: Decrypt Personal Passwords
-                //content = aes128_cbc( masterKey, content );
-            }
-        }
+            else if (site.type & MPSiteFeatureExportContent && site.content && strlen( site.content ))
+                content = mpw_decrypt( masterKey, site.content, site.algorithm );
+        } else if (site.type & MPSiteFeatureExportContent && site.content && strlen( site.content ))
+            content = strdup( site.content );
 
         if (strftime( dateString, sizeof( dateString ), "%FT%TZ", gmtime( &site.lastUsed ) ))
             mpw_string_pushf( out, "%s  %8ld  %lu:%lu:%lu  %25s\t%25s\t%s\n",
                     dateString, (long)site.uses, (long)site.type, (long)site.algorithm, (long)site.counter,
                     site.loginName?: "", site.name, content?: "" );
+        mpw_free_string( content );
     }
     mpw_free( masterKey, MPMasterKeySize );
 
@@ -240,7 +240,7 @@ static bool mpw_marshall_write_json(
         if (!site.name || !strlen( site.name ))
             continue;
 
-        const char *content = site.type & MPSiteFeatureExportContent? site.content: NULL;
+        const char *content = NULL;
         if (!user->redacted) {
             if (!mpw_update_masterKey( &masterKey, &masterKeyAlgorithm, site.algorithm, user->name, user->masterPassword )) {
                 *error = (MPMarshallError){ MPMarshallErrorInternal, "Couldn't derive master key." };
@@ -252,11 +252,11 @@ static bool mpw_marshall_write_json(
                 content = mpw_sitePassword( siteKey, site.type, site.algorithm );
                 mpw_free( siteKey, MPSiteKeySize );
             }
-            else if (content) {
-                // TODO: Decrypt Personal Passwords
-                //content = aes128_cbc( masterKey, content );
-            }
+            else if (site.type & MPSiteFeatureExportContent && site.content && strlen( site.content ))
+                content = mpw_decrypt( masterKey, site.content, site.algorithm );
         }
+        else if (site.type & MPSiteFeatureExportContent && site.content && strlen( site.content ))
+            content = strdup( site.content );
 
         json_object *json_site = json_object_new_object();
         json_object_object_add( json_sites, site.name, json_site );
@@ -296,6 +296,8 @@ static bool mpw_marshall_write_json(
         json_object_object_add( json_site, "_ext_mpw", json_site_mpw );
         if (site.url)
             json_object_object_add( json_site_mpw, "url", json_object_new_string( site.url ) );
+
+        mpw_free_string( content );
     }
 
     mpw_string_pushf( out, "%s\n", json_object_to_json_string_ext( json_file, JSON_C_TO_STRING_PRETTY | JSON_C_TO_STRING_SPACED ) );
@@ -504,8 +506,7 @@ static MPMarshalledUser *mpw_marshall_read_flat(
                         return NULL;
                     }
 
-                    // TODO: Encrypt Personal Passwords
-                    //site->content = aes128_cbc( masterKey, exportContent );
+                    site->content = mpw_encrypt( masterKey, siteContent, site->algorithm );
                 }
                 else
                     site->content = strdup( siteContent );
@@ -658,8 +659,7 @@ static MPMarshalledUser *mpw_marshall_read_json(
                     return NULL;
                 }
 
-                // TODO: Encrypt Personal Passwords
-                //site->content = aes128_cbc( masterKey, exportContent );
+                site->content = mpw_encrypt( masterKey, siteContent, site->algorithm );
             }
             else
                 site->content = strdup( siteContent );

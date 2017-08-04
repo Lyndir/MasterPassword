@@ -132,3 +132,15 @@ static const char *mpw_sitePassword_v2(
 
     return sitePassword;
 }
+
+const char *mpw_encrypt_v2(
+        MPMasterKey masterKey, const char *plainText) {
+
+    return NULL; // TODO: aes128_cbc
+}
+
+const char *mpw_decrypt_v2(
+        MPMasterKey masterKey, const char *cipherText) {
+
+    return NULL; // TODO: aes128_cbc
+}
