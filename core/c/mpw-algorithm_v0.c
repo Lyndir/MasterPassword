@@ -22,6 +22,7 @@
 
 #include "mpw-types.h"
 #include "mpw-util.h"
+#include "base64.h"
 
 #define MP_N                32768
 #define MP_r                8
@@ -155,11 +156,38 @@ static const char *mpw_sitePassword_v0(
 const char *mpw_encrypt_v0(
         MPMasterKey masterKey, const char *plainText) {
 
-    return NULL; // TODO: aes128_cbc
+    // Encrypt
+    dbg( "-- encrypting plainText: %s\n", plainText );
+    size_t bufSize = strlen( plainText );
+    const uint8_t *cipherBuf = mpw_aes_encrypt( masterKey, MPMasterKeySize, (const uint8_t *)plainText, bufSize );
+    dbg( "--   cipherBuf: %lu bytes = ", bufSize );
+    printb( cipherBuf, bufSize );
+
+    // Base64-encode
+    char *cipherText = calloc( 1, Base64encode_len( bufSize ) + 1 );
+    Base64encode( cipherText, cipherBuf, bufSize );
+    dbg( "--   b64 encoded -> cipherText: %s\n", cipherText );
+    mpw_free( cipherBuf, bufSize );
+
+    return cipherText;
 }
 
 const char *mpw_decrypt_v0(
         MPMasterKey masterKey, const char *cipherText) {
 
-    return NULL; // TODO: aes128_cbc
+    // Base64-decode
+    dbg( "-- decrypting cipherText: %s\n", cipherText );
+    size_t bufSize = Base64decode_len( cipherText ) + 1;
+    uint8_t *cipherBuf = calloc( 1, bufSize );
+    Base64decode( cipherBuf, cipherText );
+    dbg( "--   b64 decoded: %lu bytes = ", bufSize );
+    printb( cipherBuf, bufSize );
+
+
+    // Decrypt
+    const char *plainText = (const char *)mpw_aes_decrypt( masterKey, MPMasterKeySize, cipherBuf, bufSize );
+    dbg( "--   decrypted -> plainText: %s\n", plainText );
+    mpw_free( cipherBuf, bufSize );
+
+    return plainText;
 }

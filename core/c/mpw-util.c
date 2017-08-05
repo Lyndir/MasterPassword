@@ -30,6 +30,9 @@
 #include <scrypt/sha256.h>
 #elif HAS_SODIUM
 #include "sodium.h"
+#ifdef SODIUM_LIBRARY_MINIMAL
+#include "crypto_stream_aes128ctr.h"
+#endif
 #endif
 
 #include "mpw-util.h"
@@ -66,6 +69,9 @@ bool mpw_push_string(uint8_t **const buffer, size_t *const bufferSize, const cha
 }
 
 bool mpw_string_push(char **const string, const char *pushString) {
+
+    if (!*string)
+        *string = calloc( 1, sizeof( char ) );
 
     size_t stringLength = strlen( *string );
     return pushString && mpw_push_buf( (uint8_t **const)string, &stringLength, pushString, strlen( pushString ) + 1 );
@@ -123,37 +129,79 @@ uint8_t const *mpw_scrypt(const size_t keySize, const char *secret, const uint8_
         mpw_free( key, keySize );
         return NULL;
     }
+#else
+#error No crypto support for mpw_scrypt.
 #endif
 
     return key;
 }
 
-uint8_t const *mpw_hmac_sha256(const uint8_t *key, const size_t keySize, const uint8_t *salt, const size_t saltSize) {
+uint8_t const *mpw_hmac_sha256(const uint8_t *key, const size_t keySize, const uint8_t *message, const size_t messageSize) {
 
-#if HAS_CPERCIVA
-    uint8_t *const buffer = malloc( 32 );
-    if (!buffer)
+    if (!key || !keySize || !message || !messageSize)
         return NULL;
 
-    HMAC_SHA256_Buf( key, keySize, salt, saltSize, buffer );
-    return buffer;
+#if HAS_CPERCIVA
+    uint8_t *const mac = malloc( 32 );
+    if (!mac)
+        return NULL;
+
+    HMAC_SHA256_Buf( key, keySize, message, messageSize, mac );
 #elif HAS_SODIUM
-    uint8_t *const buffer = malloc( crypto_auth_hmacsha256_BYTES );
-    if (!buffer)
+    uint8_t *const mac = malloc( crypto_auth_hmacsha256_BYTES );
+    if (!mac)
         return NULL;
 
     crypto_auth_hmacsha256_state state;
     if (crypto_auth_hmacsha256_init( &state, key, keySize ) != 0 ||
-        crypto_auth_hmacsha256_update( &state, salt, saltSize ) != 0 ||
-        crypto_auth_hmacsha256_final( &state, buffer ) != 0) {
-        mpw_free( buffer, crypto_auth_hmacsha256_BYTES );
+        crypto_auth_hmacsha256_update( &state, message, messageSize ) != 0 ||
+        crypto_auth_hmacsha256_final( &state, mac ) != 0) {
+        mpw_free( mac, crypto_auth_hmacsha256_BYTES );
         return NULL;
     }
-
-    return buffer;
+#else
+#error No crypto support for mpw_hmac_sha256.
 #endif
 
-    return NULL;
+    return mac;
+}
+
+static uint8_t const *mpw_aes(bool encrypt, const uint8_t *key, const size_t keySize, const uint8_t *buf, const size_t bufSize) {
+
+#if HAS_SODIUM
+    if (!key || keySize < crypto_stream_KEYBYTES)
+        return NULL;
+
+    uint8_t cipherKey[crypto_stream_KEYBYTES];
+    memcpy( cipherKey, key, sizeof( cipherKey ) );
+
+    uint8_t nonce[crypto_stream_NONCEBYTES];
+    bzero( (void *)nonce, sizeof( nonce ) );
+
+    if (encrypt) {
+        uint8_t *const cipherBuf = malloc( bufSize );
+        crypto_stream_aes128ctr_xor( cipherBuf, buf, bufSize, nonce, cipherKey );
+        return cipherBuf;
+    } else {
+        uint8_t *const plainBuf = malloc( bufSize );
+        crypto_stream_aes128ctr( plainBuf, bufSize, nonce, cipherKey );
+        for (size_t c = 0; c < bufSize; ++c)
+            plainBuf[c] = buf[c] ^ plainBuf[c];
+        return plainBuf;
+    }
+#else
+#error No crypto support for mpw_aes.
+#endif
+}
+
+uint8_t const *mpw_aes_encrypt(const uint8_t *key, const size_t keySize, const uint8_t *plainBuf, const size_t bufSize) {
+
+    return mpw_aes( true, key, keySize, plainBuf, bufSize );
+}
+
+uint8_t const *mpw_aes_decrypt(const uint8_t *key, const size_t keySize, const uint8_t *cipherBuf, const size_t bufSize) {
+
+    return mpw_aes( false, key, keySize, cipherBuf, bufSize );
 }
 
 MPKeyID mpw_id_buf(const void *buf, size_t length) {
@@ -167,6 +215,8 @@ MPKeyID mpw_id_buf(const void *buf, size_t length) {
 #elif HAS_SODIUM
     uint8_t hash[crypto_hash_sha256_BYTES];
     crypto_hash_sha256( hash, buf, length );
+#else
+#error No crypto support for mpw_id_buf.
 #endif
 
     return mpw_hex( hash, sizeof( hash ) / sizeof( uint8_t ) );
@@ -324,4 +374,11 @@ const size_t mpw_utf8_strlen(const char *utf8String) {
         ++charlen;
 
     return charlen;
+}
+
+void printb(const void *p, size_t size) {
+
+    for (int i = 0; i < size; ++i)
+        dbg( "%02hhX ", ((const uint8_t *)p)[i] );
+    dbg( "\n" );
 }

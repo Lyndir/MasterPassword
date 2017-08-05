@@ -121,15 +121,23 @@ bool mpw_free_string(
 
 //// Cryptographic functions.
 
-/** Perform a scrypt-based key derivation on the given key using the given salt and scrypt parameters.
-  * @return A new keySize-size allocated buffer. */
+/** Derive a key from the given secret and salt using the scrypt KDF.
+  * @return A new keySize allocated buffer containing the key. */
 uint8_t const *mpw_scrypt(
         const size_t keySize, const char *secret, const uint8_t *salt, const size_t saltSize,
         uint64_t N, uint32_t r, uint32_t p);
-/** Calculate a SHA256-based HMAC by encrypting the given salt with the given key.
-  * @return A new 32-byte allocated buffer. */
+/** Calculate the MAC for the given message with the given key using SHA256-HMAC.
+  * @return A new 32-byte allocated buffer containing the MAC. */
 uint8_t const *mpw_hmac_sha256(
         const uint8_t *key, const size_t keySize, const uint8_t *salt, const size_t saltSize);
+/** Encrypt a plainBuf with the given key using AES-128-CBC.
+  * @return A new bufSize allocated buffer containing the cipherBuf. */
+uint8_t const *mpw_aes_encrypt(
+        const uint8_t *key, const size_t keySize, const uint8_t *plainBuf, const size_t bufSize);
+/** Decrypt a cipherBuf with the given key using AES-128-CBC.
+  * @return A new bufSize allocated buffer containing the plainBuf. */
+uint8_t const *mpw_aes_decrypt(
+        const uint8_t *key, const size_t keySize, const uint8_t *cipherBuf, const size_t bufSize);
 
 //// Visualizers.
 
@@ -154,5 +162,7 @@ const char *mpw_identicon(const char *fullName, const char *masterPassword);
 
 /** @return The amount of display characters in the given UTF-8 string. */
 const size_t mpw_utf8_strlen(const char *utf8String);
+
+void printb(const void *p, size_t size);
 
 #endif // _MPW_UTIL_H

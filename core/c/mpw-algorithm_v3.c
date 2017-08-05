@@ -136,11 +136,11 @@ static const char *mpw_sitePassword_v3(
 const char *mpw_encrypt_v3(
         MPMasterKey masterKey, const char *plainText) {
 
-    return NULL; // TODO: aes128_cbc
+    return mpw_encrypt_v2( masterKey, plainText );
 }
 
 const char *mpw_decrypt_v3(
         MPMasterKey masterKey, const char *cipherText) {
 
-    return NULL; // TODO: aes128_cbc
+    return mpw_decrypt_v2( masterKey, cipherText );
 }

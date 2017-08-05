@@ -57,7 +57,7 @@ json_object *mpw_get_json_section(
     char *sectionTokenizer = strdup( section ), *sectionToken = sectionTokenizer;
     for (sectionToken = strtok( sectionToken, "." ); sectionToken; sectionToken = strtok( NULL, "." ))
         if (!json_object_object_get_ex( json_value, sectionToken, &json_value ) || !json_value) {
-            dbg( "While resolving: %s: Missing value for: %s\n", section, sectionToken );
+            trc( "While resolving: %s: Missing value for: %s\n", section, sectionToken );
             json_value = NULL;
             break;
         }

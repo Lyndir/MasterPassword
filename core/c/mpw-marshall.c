@@ -55,7 +55,8 @@ MPMarshalledSite *mpw_marshall_site(
             realloc( marshalledUser->sites, sizeof( MPMarshalledSite ) * (++marshalledUser->sites_count) )))
         return NULL;
 
-    marshalledUser->sites[marshalledUser->sites_count - 1] = (MPMarshalledSite){
+    MPMarshalledSite *site = &marshalledUser->sites[marshalledUser->sites_count - 1];
+    *site = (MPMarshalledSite){
             .name = strdup( siteName ),
             .content = NULL,
             .type = siteType,
@@ -72,7 +73,7 @@ MPMarshalledSite *mpw_marshall_site(
             .questions_count = 0,
             .questions = NULL,
     };
-    return marshalledUser->sites + sizeof( MPMarshalledSite ) * (marshalledUser->sites_count - 1);
+    return site;
 };
 
 MPMarshalledQuestion *mpw_marshal_question(
@@ -82,10 +83,11 @@ MPMarshalledQuestion *mpw_marshal_question(
             realloc( marshalledSite->questions, sizeof( MPMarshalledQuestion ) * (++marshalledSite->questions_count) )))
         return NULL;
 
-    marshalledSite->questions[marshalledSite->questions_count - 1] = (MPMarshalledQuestion){
+    MPMarshalledQuestion *question = &marshalledSite->questions[marshalledSite->questions_count - 1];
+    *question = (MPMarshalledQuestion){
             .keyword = strdup( keyword ),
     };
-    return marshalledSite->questions + sizeof( MPMarshalledSite ) * (marshalledSite->questions_count - 1);
+    return question;
 }
 
 bool mpw_marshal_free(
@@ -130,9 +132,9 @@ static bool mpw_marshall_write_flat(
 
     mpw_string_pushf( out, "# Master Password site export\n" );
     if (user->redacted)
-        mpw_string_pushf( out, "#     Export of site names and passwords in clear-text.\n" );
-    else
         mpw_string_pushf( out, "#     Export of site names and stored passwords (unless device-private) encrypted with the master key.\n" );
+    else
+        mpw_string_pushf( out, "#     Export of site names and passwords in clear-text.\n" );
     mpw_string_pushf( out, "# \n" );
     mpw_string_pushf( out, "##\n" );
     mpw_string_pushf( out, "# Format: %d\n", 1 );
@@ -161,6 +163,7 @@ static bool mpw_marshall_write_flat(
 
         const char *content = NULL;
         if (!user->redacted) {
+            // Clear Text
             if (!mpw_update_masterKey( &masterKey, &masterKeyAlgorithm, site.algorithm, user->name, user->masterPassword )) {
                 *error = (MPMarshallError){ MPMarshallErrorInternal, "Couldn't derive master key." };
                 return false;
@@ -174,6 +177,7 @@ static bool mpw_marshall_write_flat(
             else if (site.type & MPSiteFeatureExportContent && site.content && strlen( site.content ))
                 content = mpw_decrypt( masterKey, site.content, site.algorithm );
         } else if (site.type & MPSiteFeatureExportContent && site.content && strlen( site.content ))
+            // Redacted
             content = strdup( site.content );
 
         if (strftime( dateString, sizeof( dateString ), "%FT%TZ", gmtime( &site.lastUsed ) ))
@@ -242,6 +246,7 @@ static bool mpw_marshall_write_json(
 
         const char *content = NULL;
         if (!user->redacted) {
+            // Clear Text
             if (!mpw_update_masterKey( &masterKey, &masterKeyAlgorithm, site.algorithm, user->name, user->masterPassword )) {
                 *error = (MPMarshallError){ MPMarshallErrorInternal, "Couldn't derive master key." };
                 return false;
@@ -256,6 +261,7 @@ static bool mpw_marshall_write_json(
                 content = mpw_decrypt( masterKey, site.content, site.algorithm );
         }
         else if (site.type & MPSiteFeatureExportContent && site.content && strlen( site.content ))
+            // Redacted
             content = strdup( site.content );
 
         json_object *json_site = json_object_new_object();
@@ -284,6 +290,7 @@ static bool mpw_marshall_write_json(
             json_object_object_add( json_site_questions, question.keyword, json_site_question );
 
             if (!user->redacted) {
+                // Clear Text
                 MPSiteKey siteKey = mpw_siteKey( masterKey, site.name, 1, MPKeyPurposeRecovery, question.keyword, site.algorithm );
                 const char *answer = mpw_sitePassword( siteKey, MPPasswordTypeGeneratedPhrase, site.algorithm );
                 mpw_free( siteKey, MPSiteKeySize );
@@ -500,7 +507,8 @@ static MPMarshalledUser *mpw_marshall_read_flat(
             site->uses = (unsigned int)atoi( str_uses );
             site->lastUsed = siteLastUsed;
             if (siteContent && strlen( siteContent )) {
-                if (user->redacted) {
+                if (!user->redacted) {
+                    // Clear Text
                     if (!mpw_update_masterKey( &masterKey, &masterKeyAlgorithm, site->algorithm, fullName, masterPassword )) {
                         *error = (MPMarshallError){ MPMarshallErrorInternal, "Couldn't derive master key." };
                         return NULL;
@@ -509,6 +517,7 @@ static MPMarshalledUser *mpw_marshall_read_flat(
                     site->content = mpw_encrypt( masterKey, siteContent, site->algorithm );
                 }
                 else
+                    // Redacted
                     site->content = strdup( siteContent );
             }
         }
@@ -653,7 +662,8 @@ static MPMarshalledUser *mpw_marshall_read_json(
         site->uses = siteUses;
         site->lastUsed = siteLastUsed;
         if (siteContent && strlen( siteContent )) {
-            if (user->redacted) {
+            if (!user->redacted) {
+                // Clear Text
                 if (!mpw_update_masterKey( &masterKey, &masterKeyAlgorithm, site->algorithm, fullName, masterPassword )) {
                     *error = (MPMarshallError){ MPMarshallErrorInternal, "Couldn't derive master key." };
                     return NULL;
@@ -662,6 +672,7 @@ static MPMarshalledUser *mpw_marshall_read_json(
                 site->content = mpw_encrypt( masterKey, siteContent, site->algorithm );
             }
             else
+                // Redacted
                 site->content = strdup( siteContent );
         }
 
