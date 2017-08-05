@@ -215,10 +215,10 @@ int main(int argc, char *const argv[]) {
     // Read the user's sites file.
     if (mpwSites) {
         // Read file.
-        size_t readAmount = 4096, bufSize = 0, bufPointer = 0, readSize = 0;
+        size_t readAmount = 4096, bufSize = 0, bufOffset = 0, readSize = 0;
         char *buf = NULL;
-        while ((buf = realloc( buf, bufSize += readAmount )) &&
-               (bufPointer += (readSize = fread( buf + bufPointer, 1, readAmount, mpwSites ))) &&
+        while ((mpw_realloc( &buf, &bufSize, readAmount )) &&
+               (bufOffset += (readSize = fread( buf + bufOffset, 1, readAmount, mpwSites ))) &&
                (readSize == readAmount));
         if (ferror( mpwSites ))
             wrn( "Error while reading configuration file:\n  %s: %d\n", mpwSitesPath, ferror( mpwSites ) );
@@ -227,7 +227,7 @@ int main(int argc, char *const argv[]) {
         // Parse file.
         MPMarshallError marshallError = { MPMarshallSuccess };
         MPMarshalledUser *user = mpw_marshall_read( buf, mpwSitesFormat, masterPassword, &marshallError );
-        mpw_free_string( buf );
+        mpw_free( buf, bufSize );
         if (!user || marshallError.type != MPMarshallSuccess) {
             if (marshallError.type == MPMarshallErrorMasterPassword) {
                 ftl( "Incorrect master password according to configuration:\n  %s: %s\n", mpwSitesPath, marshallError.description );

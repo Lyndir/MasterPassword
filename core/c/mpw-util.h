@@ -112,6 +112,17 @@ bool mpw_string_pushf(
 /** Push an integer onto a buffer.  reallocs the given buffer and appends the given integer. */
 bool mpw_push_int(
         uint8_t **const buffer, size_t *const bufferSize, const uint32_t pushInt);
+/** Reallocate the given buffer from the given size by adding the delta size.
+  * On success, the buffer size pointer will be updated to the buffer's new size
+  * and the buffer pointer may be updated to a new memory address.
+  * On failure, the buffer and pointers will remain unaffected.
+  * @param buffer A pointer to the buffer to reallocate.
+  * @param bufferSize A pointer to the buffer's actual size.
+  * @param deltaSize The amount to increase the buffer's size by.
+  * @return true if successful, false if reallocation failed.
+  */
+bool mpw_realloc(
+        void **buffer, size_t *bufferSize, const size_t deltaSize);
 /** Free a buffer after zero'ing its contents. */
 bool mpw_free(
         const void *buffer, const size_t bufferSize);

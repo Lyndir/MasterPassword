@@ -51,8 +51,7 @@ MPMarshalledSite *mpw_marshall_site(
         MPMarshalledUser *marshalledUser,
         const char *siteName, const MPPasswordType siteType, const uint32_t siteCounter, const MPAlgorithmVersion algorithmVersion) {
 
-    if (!siteName || !(marshalledUser->sites =
-            realloc( marshalledUser->sites, sizeof( MPMarshalledSite ) * (++marshalledUser->sites_count) )))
+    if (!siteName || !mpw_realloc( &marshalledUser->sites, NULL, sizeof( MPMarshalledSite ) * ++marshalledUser->sites_count ))
         return NULL;
 
     MPMarshalledSite *site = &marshalledUser->sites[marshalledUser->sites_count - 1];
@@ -79,8 +78,7 @@ MPMarshalledSite *mpw_marshall_site(
 MPMarshalledQuestion *mpw_marshal_question(
         MPMarshalledSite *marshalledSite, const char *keyword) {
 
-    if (!keyword || !(marshalledSite->questions =
-            realloc( marshalledSite->questions, sizeof( MPMarshalledQuestion ) * (++marshalledSite->questions_count) )))
+    if (!keyword || !mpw_realloc( &marshalledSite->questions, NULL, sizeof( MPMarshalledQuestion ) * ++marshalledSite->questions_count ))
         return NULL;
 
     MPMarshalledQuestion *question = &marshalledSite->questions[marshalledSite->questions_count - 1];
@@ -176,7 +174,8 @@ static bool mpw_marshall_write_flat(
             }
             else if (site.type & MPSiteFeatureExportContent && site.content && strlen( site.content ))
                 content = mpw_decrypt( masterKey, site.content, site.algorithm );
-        } else if (site.type & MPSiteFeatureExportContent && site.content && strlen( site.content ))
+        }
+        else if (site.type & MPSiteFeatureExportContent && site.content && strlen( site.content ))
             // Redacted
             content = strdup( site.content );
 

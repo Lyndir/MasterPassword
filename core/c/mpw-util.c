@@ -47,19 +47,16 @@ bool mpw_push_buf(uint8_t **const buffer, size_t *const bufferSize, const void *
         // The buffer was marked as broken, it is missing a previous push.  Abort to avoid corrupt content.
         return false;
 
-    *bufferSize += pushSize;
-    uint8_t *resizedBuffer = realloc( *buffer, *bufferSize );
-    if (!resizedBuffer) {
+    if (!mpw_realloc( buffer, bufferSize, pushSize )) {
         // realloc failed, we can't push.  Mark the buffer as broken.
-        mpw_free( *buffer, *bufferSize - pushSize );
+        mpw_free( *buffer, *bufferSize );
         *bufferSize = (size_t)ERR;
         *buffer = NULL;
         return false;
     }
 
-    *buffer = resizedBuffer;
-    uint8_t *pushDst = *buffer + *bufferSize - pushSize;
-    memcpy( pushDst, pushBuffer, pushSize );
+    uint8_t *bufferOffset = *buffer + *bufferSize - pushSize;
+    memcpy( bufferOffset, pushBuffer, pushSize );
     return true;
 }
 
@@ -92,6 +89,22 @@ bool mpw_string_pushf(char **const string, const char *pushFormat, ...) {
 bool mpw_push_int(uint8_t **const buffer, size_t *const bufferSize, const uint32_t pushInt) {
 
     return mpw_push_buf( buffer, bufferSize, &pushInt, sizeof( pushInt ) );
+}
+
+bool mpw_realloc(void **buffer, size_t *bufferSize, const size_t deltaSize) {
+
+    if (!buffer)
+        return false;
+
+    void *newBuffer = realloc( *buffer, (bufferSize? *bufferSize: 0) + deltaSize );
+    if (!newBuffer)
+        return false;
+
+    *buffer = newBuffer;
+    if (bufferSize)
+        *bufferSize += deltaSize;
+
+    return true;
 }
 
 bool mpw_free(const void *buffer, const size_t bufferSize) {
@@ -257,7 +270,7 @@ const char *mpw_hex(const void *buf, size_t length) {
         mpw_hex_buf = calloc( 10, sizeof( char * ) );
     mpw_hex_buf_i = (mpw_hex_buf_i + 1) % 10;
 
-    mpw_hex_buf[mpw_hex_buf_i] = realloc( mpw_hex_buf[mpw_hex_buf_i], length * 2 + 1 );
+    if (mpw_realloc( &mpw_hex_buf[mpw_hex_buf_i], NULL, length * 2 + 1 ))
     for (size_t kH = 0; kH < length; kH++)
         sprintf( &(mpw_hex_buf[mpw_hex_buf_i][kH * 2]), "%02X", ((const uint8_t *)buf)[kH] );
 
