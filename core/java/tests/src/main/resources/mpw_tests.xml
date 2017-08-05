@@ -8,7 +8,7 @@
         <siteName>masterpasswordapp.com</siteName>
         <siteCounter>1</siteCounter>
         <passwordType>GeneratedLong</passwordType>
-        <keyPurpose>Password</keyPurpose>
+        <keyPurpose>Authentication</keyPurpose>
         <result><!-- abstract --></result>
     </case>
 
@@ -32,12 +32,12 @@
         <result>LiheCuwhSerz6)</result>
     </case>
     <case id="v3_loginName" parent="v3">
-        <keyPurpose>Login</keyPurpose>
+        <keyPurpose>Identification</keyPurpose>
         <passwordType>GeneratedName</passwordType>
         <result>wohzaqage</result>
     </case>
     <case id="v3_securityAnswer" parent="v3">
-        <keyPurpose>Answer</keyPurpose>
+        <keyPurpose>Recovery</keyPurpose>
         <passwordType>GeneratedPhrase</passwordType>
         <result>xin diyjiqoja hubu</result>
     </case>
@@ -98,12 +98,12 @@
         <result>LiheCuwhSerz6)</result>
     </case>
     <case id="v2_loginName" parent="v2">
-        <keyPurpose>Login</keyPurpose>
+        <keyPurpose>Identification</keyPurpose>
         <passwordType>GeneratedName</passwordType>
         <result>wohzaqage</result>
     </case>
     <case id="v2_securityAnswer" parent="v2">
-        <keyPurpose>Answer</keyPurpose>
+        <keyPurpose>Recovery</keyPurpose>
         <passwordType>GeneratedPhrase</passwordType>
         <result>xin diyjiqoja hubu</result>
     </case>
@@ -164,12 +164,12 @@
         <result>WawiYarp2@Kodh</result>
     </case>
     <case id="v1_loginName" parent="v1">
-        <keyPurpose>Login</keyPurpose>
+        <keyPurpose>Identification</keyPurpose>
         <passwordType>GeneratedName</passwordType>
         <result>wohzaqage</result>
     </case>
     <case id="v1_securityAnswer" parent="v1">
-        <keyPurpose>Answer</keyPurpose>
+        <keyPurpose>Recovery</keyPurpose>
         <passwordType>GeneratedPhrase</passwordType>
         <result>xin diyjiqoja hubu</result>
     </case>
@@ -230,12 +230,12 @@
         <result>HahiVana2@Nole</result>
     </case>
     <case id="v0_loginName" parent="v0">
-        <keyPurpose>Login</keyPurpose>
+        <keyPurpose>Identification</keyPurpose>
         <passwordType>GeneratedName</passwordType>
         <result>lozwajave</result>
     </case>
     <case id="v0_securityAnswer" parent="v0">
-        <keyPurpose>Answer</keyPurpose>
+        <keyPurpose>Recovery</keyPurpose>
         <passwordType>GeneratedPhrase</passwordType>
         <result>miy lirfijoja dubu</result>
     </case>
