@@ -30,6 +30,8 @@ typedef enum( unsigned int, MPMarshallFormat ) {
             MPMarshallFormatFlat,
     /** Generate a name for identification. */
             MPMarshallFormatJSON,
+
+    MPMarshallFormatDefault = MPMarshallFormatJSON,
 };
 
 typedef enum( unsigned int, MPMarshallErrorType ) {
@@ -76,7 +78,7 @@ typedef struct MPMarshalledSite {
 } MPMarshalledSite;
 
 typedef struct MPMarshalledUser {
-    const char *name;
+    const char *fullName;
     const char *masterPassword;
     MPAlgorithmVersion algorithm;
     bool redacted;
@@ -93,9 +95,6 @@ typedef struct MPMarshalledUser {
 
 bool mpw_marshall_write(
         char **out, const MPMarshallFormat outFormat, const MPMarshalledUser *marshalledUser, MPMarshallError *error);
-
-//// Unmarshalling.
-
 MPMarshalledUser *mpw_marshall_read(
         char *in, const MPMarshallFormat inFormat, const char *masterPassword, MPMarshallError *error);
 
@@ -110,5 +109,20 @@ MPMarshalledQuestion *mpw_marshal_question(
         MPMarshalledSite *marshalledSite, const char *keyword);
 bool mpw_marshal_free(
         MPMarshalledUser *marshalledUser);
+
+//// Format.
+
+/**
+ * @return The purpose represented by the given name.
+ */
+const MPMarshallFormat mpw_formatWithName(
+        const char *formatName);
+/**
+ * @return The standard name for the given purpose.
+ */
+const char *mpw_nameForFormat(
+        const MPMarshallFormat format);
+const char *mpw_marshall_format_extension(
+        const MPMarshallFormat format);
 
 #endif // _MPW_MARSHALL_H
