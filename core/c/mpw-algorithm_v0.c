@@ -132,7 +132,7 @@ static const char *mpw_sitePassword_v0(
     if (!template)
         return NULL;
     if (strlen( template ) > MPSiteKeySize) {
-        err( "Template too long for password seed: %lu\n", strlen( template ) );
+        err( "Template too long for password seed: %zu\n", strlen( template ) );
         return NULL;
     }
 
@@ -158,7 +158,7 @@ const char *mpw_encrypt_v0(
         err( "AES encryption error: %s\n", strerror( errno ) );
         return NULL;
     }
-    trc( "cipherBuf: %lu bytes = %s\n", bufSize, mpw_hex( cipherBuf, bufSize ) );
+    trc( "cipherBuf: %zu bytes = %s\n", bufSize, mpw_hex( cipherBuf, bufSize ) );
 
     // Base64-encode
     size_t b64Max = mpw_base64_encode_max( bufSize );

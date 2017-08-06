@@ -61,7 +61,7 @@ static const char *mpw_sitePassword_v1(
     if (!template)
         return NULL;
     if (strlen( template ) > MPSiteKeySize) {
-        err( "Template too long for password seed: %lu\n", strlen( template ) );
+        err( "Template too long for password seed: %zu\n", strlen( template ) );
         return NULL;
     }
 
