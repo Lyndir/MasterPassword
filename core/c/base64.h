@@ -57,8 +57,23 @@
 #include <stddef.h>
 #include <stdint.h>
 
-size_t Base64decode_len(const char *bufcoded);
-int Base64decode(uint8_t *bufplain, const char *bufcoded);
+/**
+ * @return The amount of bytes needed to decode the given b64Text.
+ */
+size_t mpw_base64_decode_max(const char *b64Text);
+/** Decodes a base-64 encoded string into a plain byte buffer.
+  * @param plainMax the maximum amount of bytes to write to plainBuf.
+  * @return The amount of bytes that were written to plainBuf or -1 if this amount would have exceeded plainMax.
+  */
+int mpw_base64_decode(uint8_t *plainBuf, size_t plainMax, const char *b64Text);
 
-size_t Base64encode_len(size_t len);
-int Base64encode(char *encoded, const uint8_t *string, size_t len);
+/**
+ * @return The amount of characters needed to encode a plainBuf of the given size as base-64 (excluding the terminating NUL).
+ */
+size_t mpw_base64_encode_max(size_t plainSize);
+/** Encodes a plain byte buffer into a base-64 encoded string.
+  * @param b64Max the maximum amount of characters to write to b64Text, excluding the terminating NUL.
+  * @return The amount of characters that were written to b64Text, excluding the terminating NUL
+  *         or -1 if this amount would have exceeded b64Max.
+  */
+int mpw_base64_encode(char *b64Text, size_t b64Max, const uint8_t *plainBuf, size_t plainSize);

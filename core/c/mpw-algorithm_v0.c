@@ -157,16 +157,22 @@ const char *mpw_encrypt_v0(
         MPMasterKey masterKey, const char *plainText) {
 
     // Encrypt
-    dbg( "-- encrypting plainText: %s\n", plainText );
     size_t bufSize = strlen( plainText );
     const uint8_t *cipherBuf = mpw_aes_encrypt( masterKey, MPMasterKeySize, (const uint8_t *)plainText, bufSize );
-    dbg( "--   cipherBuf: %lu bytes = ", bufSize );
-    printb( cipherBuf, bufSize );
+    if (!cipherBuf) {
+        err( "AES encryption error: %s\n", strerror( errno ) );
+        return NULL;
+    }
+
 
     // Base64-encode
-    char *cipherText = calloc( 1, Base64encode_len( bufSize ) + 1 );
-    Base64encode( cipherText, cipherBuf, bufSize );
-    dbg( "--   b64 encoded -> cipherText: %s\n", cipherText );
+    size_t b64Max = mpw_base64_encode_max( bufSize );
+    char *cipherText = calloc( 1, b64Max + 1 );
+    if (mpw_base64_encode( cipherText, b64Max, cipherBuf, bufSize ) < 0) {
+        err( "Base64 encoding error." );
+        mpw_free_string( cipherText );
+        cipherText = NULL;
+    }
     mpw_free( cipherBuf, bufSize );
 
     return cipherText;
@@ -176,17 +182,19 @@ const char *mpw_decrypt_v0(
         MPMasterKey masterKey, const char *cipherText) {
 
     // Base64-decode
-    dbg( "-- decrypting cipherText: %s\n", cipherText );
-    size_t bufSize = Base64decode_len( cipherText ) + 1;
+    size_t bufSize = mpw_base64_decode_max( cipherText );
     uint8_t *cipherBuf = calloc( 1, bufSize );
-    Base64decode( cipherBuf, cipherText );
-    dbg( "--   b64 decoded: %lu bytes = ", bufSize );
-    printb( cipherBuf, bufSize );
+    if ((bufSize = (size_t)mpw_base64_decode( cipherBuf, bufSize, cipherText )) < 0) {
+        err( "Base64 decoding error." );
+        mpw_free( cipherBuf, mpw_base64_decode_max( cipherText ) );
+        return NULL;
+    }
 
 
     // Decrypt
     const char *plainText = (const char *)mpw_aes_decrypt( masterKey, MPMasterKeySize, cipherBuf, bufSize );
-    dbg( "--   decrypted -> plainText: %s\n", plainText );
+    if (!plainText)
+        err( "AES decryption error: %s\n", strerror( errno ) );
     mpw_free( cipherBuf, bufSize );
 
     return plainText;

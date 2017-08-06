@@ -185,19 +185,22 @@ static uint8_t const *mpw_aes(bool encrypt, const uint8_t *key, const size_t key
     if (!key || keySize < crypto_stream_KEYBYTES)
         return NULL;
 
-    uint8_t cipherKey[crypto_stream_KEYBYTES];
-    memcpy( cipherKey, key, sizeof( cipherKey ) );
-
     uint8_t nonce[crypto_stream_NONCEBYTES];
     bzero( (void *)nonce, sizeof( nonce ) );
 
     if (encrypt) {
         uint8_t *const cipherBuf = malloc( bufSize );
-        crypto_stream_aes128ctr_xor( cipherBuf, buf, bufSize, nonce, cipherKey );
+        if (crypto_stream_aes128ctr_xor( cipherBuf, buf, bufSize, nonce, key ) != 0) {
+            mpw_free( cipherBuf, bufSize );
+            return NULL;
+        }
         return cipherBuf;
     } else {
         uint8_t *const plainBuf = malloc( bufSize );
-        crypto_stream_aes128ctr( plainBuf, bufSize, nonce, cipherKey );
+        if (crypto_stream_aes128ctr( plainBuf, bufSize, nonce, key ) != 0) {
+            mpw_free( plainBuf, bufSize );
+            return NULL;
+        }
         for (size_t c = 0; c < bufSize; ++c)
             plainBuf[c] = buf[c] ^ plainBuf[c];
         return plainBuf;
