@@ -24,18 +24,21 @@
 
 MPMasterKey mpw_masterKey(const char *fullName, const char *masterPassword, const MPAlgorithmVersion algorithmVersion) {
 
+    trc( "-- mpw_masterKey (algorithm: %u)\n", algorithmVersion );
+    trc( "fullName: %s\n", fullName );
+    trc( "masterPassword.id: %s\n", mpw_id_buf( masterPassword, strlen( masterPassword ) ) );
     if (!fullName || !masterPassword)
         return NULL;
 
     switch (algorithmVersion) {
         case MPAlgorithmVersion0:
-            return mpw_masterKeyForUser_v0( fullName, masterPassword );
+            return mpw_masterKey_v0( fullName, masterPassword );
         case MPAlgorithmVersion1:
-            return mpw_masterKeyForUser_v1( fullName, masterPassword );
+            return mpw_masterKey_v1( fullName, masterPassword );
         case MPAlgorithmVersion2:
-            return mpw_masterKeyForUser_v2( fullName, masterPassword );
+            return mpw_masterKey_v2( fullName, masterPassword );
         case MPAlgorithmVersion3:
-            return mpw_masterKeyForUser_v3( fullName, masterPassword );
+            return mpw_masterKey_v3( fullName, masterPassword );
         default:
             err( "Unsupported version: %d\n", algorithmVersion );
             return NULL;
@@ -46,6 +49,11 @@ MPSiteKey mpw_siteKey(
         MPMasterKey masterKey, const char *siteName, const uint32_t siteCounter,
         const MPKeyPurpose keyPurpose, const char *keyContext, const MPAlgorithmVersion algorithmVersion) {
 
+    trc( "-- mpw_siteKey (algorithm: %u)\n", algorithmVersion );
+    trc( "siteName: %s\n", siteName );
+    trc( "siteCounter: %d\n", siteCounter );
+    trc( "keyPurpose: %d (%s)\n", keyPurpose, mpw_nameForPurpose( keyPurpose ) );
+    trc( "keyContext: %s\n", keyContext );
     if (!masterKey || !siteName)
         return NULL;
 
@@ -67,6 +75,8 @@ MPSiteKey mpw_siteKey(
 const char *mpw_sitePassword(
         MPSiteKey siteKey, const MPPasswordType passwordType, const MPAlgorithmVersion algorithmVersion) {
 
+    trc( "-- mpw_sitePassword (algorithm: %u)\n", algorithmVersion );
+    trc( "passwordType: %d (%s)\n", passwordType, mpw_nameForType( passwordType ) );
     if (!siteKey)
         return NULL;
 
@@ -88,6 +98,8 @@ const char *mpw_sitePassword(
 const char *mpw_encrypt(
         MPMasterKey masterKey, const char *plainText, const MPAlgorithmVersion algorithmVersion) {
 
+    trc( "-- mpw_encrypt (algorithm: %u)\n", algorithmVersion );
+    trc( "plainText: %s = %s\n", plainText, mpw_hex( plainText, sizeof( plainText ) ) );
     if (!masterKey || !plainText)
         return NULL;
 
@@ -109,6 +121,8 @@ const char *mpw_encrypt(
 const char *mpw_decrypt(
         MPMasterKey masterKey, const char *cipherText, const MPAlgorithmVersion algorithmVersion) {
 
+    trc( "-- mpw_decrypt (algorithm: %u)\n", algorithmVersion );
+    trc( "cipherText: %s = %s\n", cipherText, mpw_hex( cipherText, sizeof( cipherText ) ) );
     if (!masterKey || !cipherText)
         return NULL;
 

@@ -383,7 +383,6 @@ static int mpw_utf8_sizeof(unsigned char utf8Byte) {
 
 const size_t mpw_utf8_strlen(const char *utf8String) {
 
-    // TODO: is this ever different from strlen?  If not, remove.
     size_t charlen = 0;
     char *remainingString = (char *)utf8String;
     for (int charByteSize; (charByteSize = mpw_utf8_sizeof( (unsigned char)*remainingString )); remainingString += charByteSize)

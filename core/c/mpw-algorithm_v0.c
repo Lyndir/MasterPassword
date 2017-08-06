@@ -24,10 +24,11 @@
 #include "mpw-util.h"
 #include "base64.h"
 
-#define MP_N                32768
-#define MP_r                8
-#define MP_p                2
+#define MP_N                32768LU
+#define MP_r                8U
+#define MP_p                2U
 
+// Algorithm version helpers.
 static const char *mpw_templateForType_v0(MPPasswordType type, uint16_t seedByte) {
 
     size_t count = 0;
@@ -46,36 +47,36 @@ static const char mpw_characterFromClass_v0(char characterClass, uint16_t seedBy
     return classCharacters[seedByte % strlen( classCharacters )];
 }
 
-static MPMasterKey mpw_masterKeyForUser_v0(const char *fullName, const char *masterPassword) {
+// Algorithm version overrides.
+static MPMasterKey mpw_masterKey_v0(
+        const char *fullName, const char *masterPassword) {
 
-    const char *mpKeyScope = mpw_scopeForPurpose( MPKeyPurposeAuthentication );
-    trc( "algorithm: v%d\n", 0 );
-    trc( "fullName: %s (%zu)\n", fullName, mpw_utf8_strlen( fullName ) );
-    trc( "masterPassword: %s\n", masterPassword );
-    trc( "key scope: %s\n", mpKeyScope );
+    const char *keyScope = mpw_scopeForPurpose( MPKeyPurposeAuthentication );
+    trc( "keyScope: %s\n", keyScope );
 
     // Calculate the master key salt.
-    // masterKeySalt = mpKeyScope . #fullName . fullName
+    trc( "masterKeySalt: keyScope=%s | #fullName=%s | fullName=%s\n",
+            keyScope, mpw_hex_l( htonl( mpw_utf8_strlen( fullName ) ) ), fullName );
     size_t masterKeySaltSize = 0;
     uint8_t *masterKeySalt = NULL;
-    mpw_push_string( &masterKeySalt, &masterKeySaltSize, mpKeyScope );
+    mpw_push_string( &masterKeySalt, &masterKeySaltSize, keyScope );
     mpw_push_int( &masterKeySalt, &masterKeySaltSize, htonl( mpw_utf8_strlen( fullName ) ) );
     mpw_push_string( &masterKeySalt, &masterKeySaltSize, fullName );
     if (!masterKeySalt) {
         err( "Could not allocate master key salt: %s\n", strerror( errno ) );
         return NULL;
     }
-    trc( "masterKeySalt ID: %s\n", mpw_id_buf( masterKeySalt, masterKeySaltSize ) );
+    trc( "  => masterKeySalt.id: %s\n", mpw_id_buf( masterKeySalt, masterKeySaltSize ) );
 
     // Calculate the master key.
-    // masterKey = scrypt( masterPassword, masterKeySalt )
-    const uint8_t *masterKey = mpw_scrypt( MPMasterKeySize, masterPassword, masterKeySalt, masterKeySaltSize, MP_N, MP_r, MP_p );
+    trc( "masterKey: scrypt( masterPassword, masterKeySalt, N=%lu, r=%u, p=%u )\n", MP_N, MP_r, MP_p );
+    MPMasterKey masterKey = mpw_scrypt( MPMasterKeySize, masterPassword, masterKeySalt, masterKeySaltSize, MP_N, MP_r, MP_p );
     mpw_free( masterKeySalt, masterKeySaltSize );
     if (!masterKey) {
         err( "Could not allocate master key: %s\n", strerror( errno ) );
         return NULL;
     }
-    trc( "masterKey ID: %s\n", mpw_id_buf( masterKey, MPMasterKeySize ) );
+    trc( "  => masterKey.id: %s\n", mpw_id_buf( masterKey, MPMasterKeySize ) );
 
     return masterKey;
 }
@@ -85,18 +86,12 @@ static MPSiteKey mpw_siteKey_v0(
         const MPKeyPurpose keyPurpose, const char *keyContext) {
 
     const char *keyScope = mpw_scopeForPurpose( keyPurpose );
-    trc( "-- mpw_siteKey_v0\n" );
-    trc( "siteName: %s\n", siteName );
-    trc( "siteCounter: %d\n", siteCounter );
-    trc( "keyPurpose: %d\n", keyPurpose );
-    trc( "keyScope: %s, keyContext: %s\n", keyScope, keyContext? "<empty>": keyContext );
-    trc( "siteKey: hmac-sha256(masterKey, %s | %s | %s | %s | %s | %s)\n",
-            keyScope, mpw_hex_l( htonl( strlen( siteName ) ) ), siteName,
-            mpw_hex_l( htonl( siteCounter ) ),
-            mpw_hex_l( htonl( keyContext? strlen( keyContext ): 0 ) ), keyContext? "(null)": keyContext );
+    trc( "keyScope: %s\n", keyScope );
 
     // Calculate the site seed.
-    // siteKey = hmac-sha256( masterKey, keyScope . #siteName . siteName . siteCounter . #keyContext . keyContext )
+    trc( "siteSalt: keyScope=%s | #siteName=%s | siteName=%s | siteCounter=%s | #keyContext=%s | keyContext=%s\n",
+            keyScope, mpw_hex_l( htonl( mpw_utf8_strlen( siteName ) ) ), siteName, mpw_hex_l( htonl( siteCounter ) ),
+            keyContext? mpw_hex_l( htonl( mpw_utf8_strlen( keyContext ) ) ): NULL, keyContext );
     size_t siteSaltSize = 0;
     uint8_t *siteSalt = NULL;
     mpw_push_string( &siteSalt, &siteSaltSize, keyScope );
@@ -112,15 +107,17 @@ static MPSiteKey mpw_siteKey_v0(
         mpw_free( siteSalt, siteSaltSize );
         return NULL;
     }
-    trc( "siteSalt ID: %s\n", mpw_id_buf( siteSalt, siteSaltSize ) );
+    trc( "  => siteSalt.id: %s\n", mpw_id_buf( siteSalt, siteSaltSize ) );
 
+    trc( "siteKey: hmac-sha256( masterKey.id=%s, siteSalt )\n",
+            mpw_id_buf( masterKey, MPMasterKeySize ) );
     MPSiteKey siteKey = mpw_hmac_sha256( masterKey, MPMasterKeySize, siteSalt, siteSaltSize );
     mpw_free( siteSalt, siteSaltSize );
     if (!siteKey) {
         err( "Could not allocate site key: %s\n", strerror( errno ) );
         return NULL;
     }
-    trc( "siteKey ID: %s\n", mpw_id_buf( siteKey, MPSiteKeySize ) );
+    trc( "  => siteKey.id: %s\n", mpw_id_buf( siteKey, MPSiteKeySize ) );
 
     return siteKey;
 }
@@ -128,13 +125,10 @@ static MPSiteKey mpw_siteKey_v0(
 static const char *mpw_sitePassword_v0(
         MPSiteKey siteKey, const MPPasswordType passwordType) {
 
-    trc( "-- mpw_sitePassword_v0\n" );
-    trc( "passwordType: %d\n", passwordType );
-
     // Determine the template.
     const char *_siteKey = (const char *)siteKey;
     const char *template = mpw_templateForType_v0( passwordType, htons( _siteKey[0] ) );
-    trc( "type %d, template: %s\n", passwordType, template );
+    trc( "template: %u => %s\n", htons( _siteKey[0] ), template );
     if (!template)
         return NULL;
     if (strlen( template ) > MPSiteKeySize) {
@@ -146,18 +140,16 @@ static const char *mpw_sitePassword_v0(
     char *const sitePassword = calloc( strlen( template ) + 1, sizeof( char ) );
     for (size_t c = 0; c < strlen( template ); ++c) {
         sitePassword[c] = mpw_characterFromClass_v0( template[c], htons( _siteKey[c + 1] ) );
-        trc( "class %c, index %u (0x%02X) -> character: %c\n",
+        trc( "  - class: %c, index: %5u (0x%02hX) => character: %c\n",
                 template[c], htons( _siteKey[c + 1] ), htons( _siteKey[c + 1] ), sitePassword[c] );
     }
+    trc( "  => password: %s\n", sitePassword );
 
     return sitePassword;
 }
 
 const char *mpw_encrypt_v0(
         MPMasterKey masterKey, const char *plainText) {
-
-    trc( "-- mpw_encrypt_v0\n" );
-    trc( "plainText: %s = %s\n", plainText, mpw_hex( plainText, sizeof( plainText ) ) );
 
     // Encrypt
     size_t bufSize = strlen( plainText );
@@ -167,7 +159,6 @@ const char *mpw_encrypt_v0(
         return NULL;
     }
     trc( "cipherBuf: %lu bytes = %s\n", bufSize, mpw_hex( cipherBuf, bufSize ) );
-
 
     // Base64-encode
     size_t b64Max = mpw_base64_encode_max( bufSize );
@@ -185,9 +176,6 @@ const char *mpw_encrypt_v0(
 
 const char *mpw_decrypt_v0(
         MPMasterKey masterKey, const char *cipherText) {
-
-    trc( "-- mpw_decrypt_v0\n" );
-    trc( "cipherText: %s = %s\n", cipherText, mpw_hex( cipherText, sizeof( cipherText ) ) );
 
     // Base64-decode
     size_t bufSize = mpw_base64_decode_max( cipherText );
