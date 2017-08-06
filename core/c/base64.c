@@ -57,7 +57,7 @@
 #include "base64.h"
 
 /* aaaack but it's fast and const should make it shared text page. */
-static const unsigned char pr2six[256] =
+static const unsigned char b64ToBits[256] =
         {
                 /* ASCII table */
                 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
@@ -80,58 +80,39 @@ static const unsigned char pr2six[256] =
 
 size_t mpw_base64_decode_max(const char *b64Text) {
 
-    register const uint8_t *bufin;
-    register int nprbytes;
+    register const uint8_t *b64Cursor = (uint8_t *)b64Text;
+    while (b64ToBits[*(b64Cursor++)] <= 63);
+    int b64Size = (int)(b64Cursor - (uint8_t *)b64Text) - 1;
 
-    bufin = (uint8_t *)b64Text;
-    while (pr2six[*(bufin++)] <= 63);
-
-    nprbytes = (int)(bufin - (uint8_t *)b64Text) - 1;
-    return (size_t)(((nprbytes + 3) / 4) * 3);
+    // Every 4 b64 chars yield 3 plain bytes => len = 3 * ceil(b64Size / 4)
+    return (size_t)(3 /*bytes*/ * ((b64Size + 4 /*chars*/ - 1) / 4 /*chars*/));
 }
 
-int mpw_base64_decode(uint8_t *plainBuf, size_t plainMax, const char *b64Text) {
+int mpw_base64_decode(uint8_t *plainBuf, const char *b64Text) {
 
-    register const uint8_t *bufin;
-    register uint8_t *bufout;
-    register int nprbytes;
+    register const uint8_t *b64Cursor = (uint8_t *)b64Text;
+    while (b64ToBits[*(b64Cursor++)] <= 63);
+    int b64Remaining = (int)(b64Cursor - (uint8_t *)b64Text) - 1;
 
-    bufin = (uint8_t *)b64Text;
-    while (pr2six[*(bufin++)] <= 63);
-    nprbytes = (int)(bufin - (uint8_t *)b64Text) - 1;
-
-    bufout = plainBuf;
-    bufin = (uint8_t *)b64Text;
-
-    while (nprbytes > 4) {
-        if (bufout + 2 >= plainBuf + plainMax)
-            return -1;
-
-        *(bufout++) = (pr2six[*bufin] << 2 | pr2six[bufin[1]] >> 4);
-        *(bufout++) = (pr2six[bufin[1]] << 4 | pr2six[bufin[2]] >> 2);
-        *(bufout++) = (pr2six[bufin[2]] << 6 | pr2six[bufin[3]]);
-        bufin += 4;
-        nprbytes -= 4;
+    b64Cursor = (uint8_t *)b64Text;
+    register uint8_t *plainCursor = plainBuf;
+    while (b64Remaining > 4) {
+        *(plainCursor++) = (b64ToBits[b64Cursor[0]] << 2 | b64ToBits[b64Cursor[1]] >> 4);
+        *(plainCursor++) = (b64ToBits[b64Cursor[1]] << 4 | b64ToBits[b64Cursor[2]] >> 2);
+        *(plainCursor++) = (b64ToBits[b64Cursor[2]] << 6 | b64ToBits[b64Cursor[3]]);
+        b64Cursor += 4;
+        b64Remaining -= 4;
     }
 
-    /* Note: (nprbytes == 1) would be an error, so just ingore that case */
-    if (nprbytes > 1) {
-        if (bufout >= plainBuf + plainMax)
-            return -1;
-        *(bufout++) = (pr2six[*bufin] << 2 | pr2six[bufin[1]] >> 4);
-    }
-    if (nprbytes > 2) {
-        if (bufout >= plainBuf + plainMax)
-            return -1;
-        *(bufout++) = (pr2six[bufin[1]] << 4 | pr2six[bufin[2]] >> 2);
-    }
-    if (nprbytes > 3) {
-        if (bufout >= plainBuf + plainMax)
-            return -1;
-        *(bufout++) = (pr2six[bufin[2]] << 6 | pr2six[bufin[3]]);
-    }
+    /* Note: (b64Size == 1) would be an error, so just ingore that case */
+    if (b64Remaining > 1)
+        *(plainCursor++) = (b64ToBits[b64Cursor[0]] << 2 | b64ToBits[b64Cursor[1]] >> 4);
+    if (b64Remaining > 2)
+        *(plainCursor++) = (b64ToBits[b64Cursor[1]] << 4 | b64ToBits[b64Cursor[2]] >> 2);
+    if (b64Remaining > 3)
+        *(plainCursor++) = (b64ToBits[b64Cursor[2]] << 6 | b64ToBits[b64Cursor[3]]);
 
-    return (int)(bufout - plainBuf);
+    return (int)(plainCursor - plainBuf);
 }
 
 static const char basis_64[] =
@@ -143,40 +124,32 @@ size_t mpw_base64_encode_max(size_t plainSize) {
     return 4 /*chars*/ * (plainSize + 3 /*bytes*/ - 1) / 3 /*bytes*/;
 }
 
-int mpw_base64_encode(char *b64Text, size_t b64Max, const uint8_t *plainBuf, size_t plainSize) {
+int mpw_base64_encode(char *b64Text, const uint8_t *plainBuf, size_t plainSize) {
 
-    int i;
-    char *p;
-
-    p = b64Text;
-    for (i = 0; i < plainSize - 2; i += 3) {
-        if (p >= b64Text + b64Max)
-            return -1;
-
-        *p++ = basis_64[(plainBuf[i] >> 2) & 0x3F];
-        *p++ = basis_64[((plainBuf[i] & 0x3) << 4) |
-                        ((plainBuf[i + 1] & 0xF0) >> 4)];
-        *p++ = basis_64[((plainBuf[i + 1] & 0xF) << 2) |
-                        ((plainBuf[i + 2] & 0xC0) >> 6)];
-        *p++ = basis_64[plainBuf[i + 2] & 0x3F];
+    int plainCursor = 0;
+    char *b64Cursor = b64Text;
+    for (; plainCursor < plainSize - 2; plainCursor += 3) {
+        *b64Cursor++ = basis_64[((plainBuf[plainCursor] >> 2)) & 0x3F];
+        *b64Cursor++ = basis_64[((plainBuf[plainCursor] & 0x3) << 4) |
+                                ((plainBuf[plainCursor + 1] & 0xF0) >> 4)];
+        *b64Cursor++ = basis_64[((plainBuf[plainCursor + 1] & 0xF) << 2) |
+                                ((plainBuf[plainCursor + 2] & 0xC0) >> 6)];
+        *b64Cursor++ = basis_64[plainBuf[plainCursor + 2] & 0x3F];
     }
-    if (i < plainSize) {
-        if (p + 3 >= b64Text + b64Max)
-            return -1;
-
-        *p++ = basis_64[(plainBuf[i] >> 2) & 0x3F];
-        if (i == (plainSize - 1)) {
-            *p++ = basis_64[((plainBuf[i] & 0x3) << 4)];
-            *p++ = '=';
+    if (plainCursor < plainSize) {
+        *b64Cursor++ = basis_64[(plainBuf[plainCursor] >> 2) & 0x3F];
+        if (plainCursor == (plainSize - 1)) {
+            *b64Cursor++ = basis_64[((plainBuf[plainCursor] & 0x3) << 4)];
+            *b64Cursor++ = '=';
         }
         else {
-            *p++ = basis_64[((plainBuf[i] & 0x3) << 4) |
-                            ((plainBuf[i + 1] & 0xF0) >> 4)];
-            *p++ = basis_64[((plainBuf[i + 1] & 0xF) << 2)];
+            *b64Cursor++ = basis_64[((plainBuf[plainCursor] & 0x3) << 4) |
+                                    ((plainBuf[plainCursor + 1] & 0xF0) >> 4)];
+            *b64Cursor++ = basis_64[((plainBuf[plainCursor + 1] & 0xF) << 2)];
         }
-        *p++ = '=';
+        *b64Cursor++ = '=';
     }
 
-    *p = '\0';
-    return (int)(p - b64Text);
+    *b64Cursor = '\0';
+    return (int)(b64Cursor - b64Text);
 }

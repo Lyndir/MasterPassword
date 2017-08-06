@@ -121,8 +121,9 @@ bool mpw_push_int(
   * @param deltaSize The amount to increase the buffer's size by.
   * @return true if successful, false if reallocation failed.
   */
-bool mpw_realloc(
-        void **buffer, size_t *bufferSize, const size_t deltaSize);
+#define mpw_realloc(buffer, bufferSize, deltaSize) \
+        __mpw_realloc( (void **)buffer, bufferSize, deltaSize )
+bool __mpw_realloc(void **buffer, size_t *bufferSize, const size_t deltaSize);
 /** Free a buffer after zero'ing its contents. */
 bool mpw_free(
         const void *buffer, const size_t bufferSize);

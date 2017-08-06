@@ -91,7 +91,7 @@ bool mpw_push_int(uint8_t **const buffer, size_t *const bufferSize, const uint32
     return mpw_push_buf( buffer, bufferSize, &pushInt, sizeof( pushInt ) );
 }
 
-bool mpw_realloc(void **buffer, size_t *bufferSize, const size_t deltaSize) {
+bool __mpw_realloc(void **buffer, size_t *bufferSize, const size_t deltaSize) {
 
     if (!buffer)
         return false;
@@ -188,6 +188,10 @@ static uint8_t const *mpw_aes(bool encrypt, const uint8_t *key, const size_t key
     uint8_t nonce[crypto_stream_NONCEBYTES];
     bzero( (void *)nonce, sizeof( nonce ) );
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     if (encrypt) {
         uint8_t *const cipherBuf = malloc( bufSize );
         if (crypto_stream_aes128ctr_xor( cipherBuf, buf, bufSize, nonce, key ) != 0) {
@@ -195,7 +199,8 @@ static uint8_t const *mpw_aes(bool encrypt, const uint8_t *key, const size_t key
             return NULL;
         }
         return cipherBuf;
-    } else {
+    }
+    else {
         uint8_t *const plainBuf = malloc( bufSize );
         if (crypto_stream_aes128ctr( plainBuf, bufSize, nonce, key ) != 0) {
             mpw_free( plainBuf, bufSize );
@@ -205,6 +210,8 @@ static uint8_t const *mpw_aes(bool encrypt, const uint8_t *key, const size_t key
             plainBuf[c] = buf[c] ^ plainBuf[c];
         return plainBuf;
     }
+#pragma clang diagnostic pop
+#pragma GCC diagnostic pop
 #else
 #error No crypto support for mpw_aes.
 #endif
@@ -274,8 +281,8 @@ const char *mpw_hex(const void *buf, size_t length) {
     mpw_hex_buf_i = (mpw_hex_buf_i + 1) % 10;
 
     if (mpw_realloc( &mpw_hex_buf[mpw_hex_buf_i], NULL, length * 2 + 1 ))
-    for (size_t kH = 0; kH < length; kH++)
-        sprintf( &(mpw_hex_buf[mpw_hex_buf_i][kH * 2]), "%02X", ((const uint8_t *)buf)[kH] );
+        for (size_t kH = 0; kH < length; kH++)
+            sprintf( &(mpw_hex_buf[mpw_hex_buf_i][kH * 2]), "%02X", ((const uint8_t *)buf)[kH] );
 
     return mpw_hex_buf[mpw_hex_buf_i];
 }

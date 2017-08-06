@@ -163,7 +163,7 @@ const char *mpw_encrypt_v0(
     // Base64-encode
     size_t b64Max = mpw_base64_encode_max( bufSize );
     char *cipherText = calloc( 1, b64Max + 1 );
-    if (mpw_base64_encode( cipherText, b64Max, cipherBuf, bufSize ) < 0) {
+    if (mpw_base64_encode( cipherText, cipherBuf, bufSize ) < 0) {
         err( "Base64 encoding error." );
         mpw_free_string( cipherText );
         cipherText = NULL;
@@ -178,14 +178,14 @@ const char *mpw_decrypt_v0(
         MPMasterKey masterKey, const char *cipherText) {
 
     // Base64-decode
-    size_t bufSize = mpw_base64_decode_max( cipherText );
-    uint8_t *cipherBuf = calloc( 1, bufSize );
-    if ((bufSize = (size_t)mpw_base64_decode( cipherBuf, bufSize, cipherText )) < 0) {
+    uint8_t *cipherBuf = calloc( 1, mpw_base64_decode_max( cipherText ) );
+    size_t bufSize = (size_t)mpw_base64_decode( cipherBuf, cipherText );
+    if ((int)bufSize < 0) {
         err( "Base64 decoding error." );
         mpw_free( cipherBuf, mpw_base64_decode_max( cipherText ) );
         return NULL;
     }
-    trc( "b64 decoded: %lu bytes = %s\n", bufSize, mpw_hex( cipherBuf, bufSize ) );
+    trc( "b64 decoded: %zu bytes = %s\n", bufSize, mpw_hex( cipherBuf, bufSize ) );
 
     // Decrypt
     const uint8_t *plainBytes = mpw_aes_decrypt( masterKey, MPMasterKeySize, cipherBuf, bufSize );
