@@ -391,10 +391,3 @@ const size_t mpw_utf8_strlen(const char *utf8String) {
 
     return charlen;
 }
-
-void printb(const void *p, size_t size) {
-
-    for (int i = 0; i < size; ++i)
-        dbg( "%02hhX ", ((const uint8_t *)p)[i] );
-    dbg( "\n" );
-}

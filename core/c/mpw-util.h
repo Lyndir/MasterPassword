@@ -174,6 +174,4 @@ const char *mpw_identicon(const char *fullName, const char *masterPassword);
 /** @return The amount of display characters in the given UTF-8 string. */
 const size_t mpw_utf8_strlen(const char *utf8String);
 
-void printb(const void *p, size_t size);
-
 #endif // _MPW_UTIL_H

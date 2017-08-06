@@ -156,6 +156,9 @@ static const char *mpw_sitePassword_v0(
 const char *mpw_encrypt_v0(
         MPMasterKey masterKey, const char *plainText) {
 
+    trc( "-- mpw_encrypt_v0\n" );
+    trc( "plainText: %s = %s\n", plainText, mpw_hex( plainText, sizeof( plainText ) ) );
+
     // Encrypt
     size_t bufSize = strlen( plainText );
     const uint8_t *cipherBuf = mpw_aes_encrypt( masterKey, MPMasterKeySize, (const uint8_t *)plainText, bufSize );
@@ -163,6 +166,7 @@ const char *mpw_encrypt_v0(
         err( "AES encryption error: %s\n", strerror( errno ) );
         return NULL;
     }
+    trc( "cipherBuf: %lu bytes = %s\n", bufSize, mpw_hex( cipherBuf, bufSize ) );
 
 
     // Base64-encode
@@ -173,6 +177,7 @@ const char *mpw_encrypt_v0(
         mpw_free_string( cipherText );
         cipherText = NULL;
     }
+    trc( "b64 encoded -> cipherText: %s = %s\n", cipherText, mpw_hex( cipherText, sizeof( cipherText ) ) );
     mpw_free( cipherBuf, bufSize );
 
     return cipherText;
@@ -180,6 +185,9 @@ const char *mpw_encrypt_v0(
 
 const char *mpw_decrypt_v0(
         MPMasterKey masterKey, const char *cipherText) {
+
+    trc( "-- mpw_decrypt_v0\n" );
+    trc( "cipherText: %s = %s\n", cipherText, mpw_hex( cipherText, sizeof( cipherText ) ) );
 
     // Base64-decode
     size_t bufSize = mpw_base64_decode_max( cipherText );
@@ -189,12 +197,15 @@ const char *mpw_decrypt_v0(
         mpw_free( cipherBuf, mpw_base64_decode_max( cipherText ) );
         return NULL;
     }
-
+    trc( "b64 decoded: %lu bytes = %s\n", bufSize, mpw_hex( cipherBuf, bufSize ) );
 
     // Decrypt
-    const char *plainText = (const char *)mpw_aes_decrypt( masterKey, MPMasterKeySize, cipherBuf, bufSize );
+    const uint8_t *plainBytes = mpw_aes_decrypt( masterKey, MPMasterKeySize, cipherBuf, bufSize );
+    const char *plainText = strndup( (char *)plainBytes, bufSize );
+    mpw_free( plainBytes, bufSize );
     if (!plainText)
         err( "AES decryption error: %s\n", strerror( errno ) );
+    trc( "decrypted -> plainText: %s = %s\n", plainText, mpw_hex( plainText, sizeof( plainText ) ) );
     mpw_free( cipherBuf, bufSize );
 
     return plainText;
