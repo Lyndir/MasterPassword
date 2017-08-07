@@ -94,7 +94,7 @@ typedef struct MPMarshalledUser {
 //// Marshalling.
 
 bool mpw_marshall_write(
-        char **out, const MPMarshallFormat outFormat, const MPMarshalledUser *marshalledUser, MPMarshallError *error);
+        char **out, const MPMarshallFormat outFormat, const MPMarshalledUser *user, MPMarshallError *error);
 MPMarshalledUser *mpw_marshall_read(
         char *in, const MPMarshallFormat inFormat, const char *masterPassword, MPMarshallError *error);
 
@@ -103,12 +103,12 @@ MPMarshalledUser *mpw_marshall_read(
 MPMarshalledUser *mpw_marshall_user(
         const char *fullName, const char *masterPassword, const MPAlgorithmVersion algorithmVersion);
 MPMarshalledSite *mpw_marshall_site(
-        MPMarshalledUser *marshalledUser,
-        const char *siteName, const MPPasswordType siteType, const uint32_t siteCounter, const MPAlgorithmVersion algorithmVersion);
+        MPMarshalledUser *user,
+        const char *siteName, const MPPasswordType passwordType, const uint32_t siteCounter, const MPAlgorithmVersion algorithmVersion);
 MPMarshalledQuestion *mpw_marshal_question(
-        MPMarshalledSite *marshalledSite, const char *keyword);
+        MPMarshalledSite *site, const char *keyword);
 bool mpw_marshal_free(
-        MPMarshalledUser *marshalledUser);
+        MPMarshalledUser *user);
 
 //// Format.
 

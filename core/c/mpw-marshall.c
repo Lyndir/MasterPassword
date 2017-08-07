@@ -49,17 +49,17 @@ MPMarshalledUser *mpw_marshall_user(
 };
 
 MPMarshalledSite *mpw_marshall_site(
-        MPMarshalledUser *marshalledUser,
-        const char *siteName, const MPPasswordType siteType, const uint32_t siteCounter, const MPAlgorithmVersion algorithmVersion) {
+        MPMarshalledUser *user, const char *siteName, const MPPasswordType passwordType,
+        const uint32_t siteCounter, const MPAlgorithmVersion algorithmVersion) {
 
-    if (!siteName || !mpw_realloc( &marshalledUser->sites, NULL, sizeof( MPMarshalledSite ) * ++marshalledUser->sites_count ))
+    if (!siteName || !mpw_realloc( &user->sites, NULL, sizeof( MPMarshalledSite ) * ++user->sites_count ))
         return NULL;
 
-    MPMarshalledSite *site = &marshalledUser->sites[marshalledUser->sites_count - 1];
+    MPMarshalledSite *site = &user->sites[user->sites_count - 1];
     *site = (MPMarshalledSite){
             .name = strdup( siteName ),
             .content = NULL,
-            .type = siteType,
+            .type = passwordType,
             .counter = siteCounter,
             .algorithm = algorithmVersion,
 
@@ -77,12 +77,12 @@ MPMarshalledSite *mpw_marshall_site(
 };
 
 MPMarshalledQuestion *mpw_marshal_question(
-        MPMarshalledSite *marshalledSite, const char *keyword) {
+        MPMarshalledSite *site, const char *keyword) {
 
-    if (!keyword || !mpw_realloc( &marshalledSite->questions, NULL, sizeof( MPMarshalledQuestion ) * ++marshalledSite->questions_count ))
+    if (!keyword || !mpw_realloc( &site->questions, NULL, sizeof( MPMarshalledQuestion ) * ++site->questions_count ))
         return NULL;
 
-    MPMarshalledQuestion *question = &marshalledSite->questions[marshalledSite->questions_count - 1];
+    MPMarshalledQuestion *question = &site->questions[site->questions_count - 1];
     *question = (MPMarshalledQuestion){
             .keyword = strdup( keyword ),
     };
@@ -90,11 +90,14 @@ MPMarshalledQuestion *mpw_marshal_question(
 }
 
 bool mpw_marshal_free(
-        MPMarshalledUser *marshalledUser) {
+        MPMarshalledUser *user) {
+
+    if (!user)
+        return true;
 
     bool success = true;
-    for (size_t s = 0; s < marshalledUser->sites_count; ++s) {
-        MPMarshalledSite *site = &marshalledUser->sites[s];
+    for (size_t s = 0; s < user->sites_count; ++s) {
+        MPMarshalledSite *site = &user->sites[s];
         success &= mpw_free_string( site->name );
         for (size_t q = 0; q < site->questions_count; ++q) {
             MPMarshalledQuestion *question = &site->questions[q];
@@ -102,10 +105,10 @@ bool mpw_marshal_free(
         }
         success &= mpw_free( site->questions, sizeof( MPMarshalledQuestion ) * site->questions_count );
     }
-    success &= mpw_free( marshalledUser->sites, sizeof( MPMarshalledSite ) * marshalledUser->sites_count );
-    success &= mpw_free_string( marshalledUser->fullName );
-    success &= mpw_free_string( marshalledUser->masterPassword );
-    success &= mpw_free( marshalledUser, sizeof( MPMarshalledUser ) );
+    success &= mpw_free( user->sites, sizeof( MPMarshalledSite ) * user->sites_count );
+    success &= mpw_free_string( user->fullName );
+    success &= mpw_free_string( user->masterPassword );
+    success &= mpw_free( user, sizeof( MPMarshalledUser ) );
 
     return success;
 }
@@ -316,13 +319,13 @@ static bool mpw_marshall_write_json(
 }
 
 bool mpw_marshall_write(
-        char **out, const MPMarshallFormat outFormat, const MPMarshalledUser *marshalledUser, MPMarshallError *error) {
+        char **out, const MPMarshallFormat outFormat, const MPMarshalledUser *user, MPMarshallError *error) {
 
     switch (outFormat) {
         case MPMarshallFormatFlat:
-            return mpw_marshall_write_flat( out, marshalledUser, error );
+            return mpw_marshall_write_flat( out, user, error );
         case MPMarshallFormatJSON:
-            return mpw_marshall_write_json( out, marshalledUser, error );
+            return mpw_marshall_write_json( out, user, error );
     }
 
     *error = (MPMarshallError){ MPMarshallErrorFormat, mpw_str( "Unsupported output format: %u", outFormat ) };

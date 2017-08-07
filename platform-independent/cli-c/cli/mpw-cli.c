@@ -22,9 +22,10 @@
 static void usage() {
 
     inf( ""
-            "Usage: mpw [-u name] [-t type] [-c counter] [-a algorithm] [-p purpose] [-C context] [-f|-F format] [-v|-q] [-h] site\n\n" );
+            "Usage: mpw [-u|-U name] [-t type] [-c counter] [-a algorithm] [-p purpose] [-C context] [-f|-F format] [-v|-q] [-h] site\n\n" );
     inf( ""
             "    -u name      Specify the full name of the user.\n"
+            "                 -u checks the master password against the config, -U allows updating to a new master password.\n"
             "                 Defaults to %s in env or prompts.\n\n", MP_env_fullName );
     inf( ""
             "    -t type      Specify the password's template.\n"
@@ -95,18 +96,31 @@ static char *mpw_path(const char *prefix, const char *extension) {
     return mpwPath;
 }
 
-static char *getline_prompt(const char *prompt) {
+static char *mpw_getline(const char *prompt) {
+
+    fprintf( stderr, "%s ", prompt );
 
     char *buf = NULL;
     size_t bufSize = 0;
-    ssize_t lineSize;
-    fprintf( stderr, "%s", prompt );
-    fprintf( stderr, " " );
-    if ((lineSize = getline( &buf, &bufSize, stdin )) <= 1) {
+    ssize_t lineSize = getline( &buf, &bufSize, stdin );
+    if (lineSize <= 1) {
         free( buf );
         return NULL;
     }
-    buf[lineSize - 1] = 0;
+
+    // Remove the newline.
+    buf[lineSize - 1] = '\0';
+    return buf;
+}
+
+static char *mpw_getpass(const char *prompt) {
+
+    char *passBuf = getpass( prompt );
+    if (!passBuf)
+        return NULL;
+
+    char *buf = strdup( passBuf );
+    bzero( passBuf, strlen( passBuf ) );
     return buf;
 }
 
@@ -119,7 +133,7 @@ int main(int argc, char *const argv[]) {
     MPKeyPurpose keyPurpose = MPKeyPurposeAuthentication;
     MPAlgorithmVersion algorithmVersion = MPAlgorithmVersionCurrent;
     MPMarshallFormat sitesFormat = MPMarshallFormatDefault;
-    bool sitesFormatFixed = false;
+    bool allowPasswordUpdate = false, sitesFormatFixed = false;
 
     // Read the environment.
     const char *fullNameArg = getenv( MP_env_fullName ), *masterPasswordArg = NULL;
@@ -127,10 +141,15 @@ int main(int argc, char *const argv[]) {
     const char *keyPurposeArg = NULL, *keyContextArg = NULL, *sitesFormatArg = NULL, *siteNameArg = NULL;
 
     // Read the command-line options.
-    for (int opt; (opt = getopt( argc, argv, "u:P:t:c:a:p:C:f:F:vqh" )) != EOF;)
+    for (int opt; (opt = getopt( argc, argv, "u:U:P:t:c:a:p:C:f:F:vqh" )) != EOF;)
         switch (opt) {
             case 'u':
                 fullNameArg = optarg;
+                allowPasswordUpdate = false;
+                break;
+            case 'U':
+                fullNameArg = optarg;
+                allowPasswordUpdate = true;
                 break;
             case 'P':
                 // Passing your master password via the command-line is insecure.  Testing purposes only.
@@ -203,18 +222,18 @@ int main(int argc, char *const argv[]) {
 
     // Determine fullName, siteName & masterPassword.
     if (!(fullNameArg && (fullName = strdup( fullNameArg ))) &&
-        !(fullName = getline_prompt( "Your full name:" ))) {
+        !(fullName = mpw_getline( "Your full name:" ))) {
         ftl( "Missing full name.\n" );
         return EX_DATAERR;
     }
     if (!(siteNameArg && (siteName = strdup( siteNameArg ))) &&
-        !(siteName = getline_prompt( "Site name:" ))) {
+        !(siteName = mpw_getline( "Site name:" ))) {
         ftl( "Missing site name.\n" );
         return EX_DATAERR;
     }
     if (!(masterPasswordArg && (masterPassword = strdup( masterPasswordArg ))))
         while (!masterPassword || !strlen( masterPassword ))
-            masterPassword = getpass( "Your master password: " );
+            masterPassword = mpw_getpass( "Your master password: " );
     if (sitesFormatArg) {
         sitesFormat = mpw_formatWithName( sitesFormatArg );
         if (ERR == sitesFormat) {
@@ -260,21 +279,43 @@ int main(int argc, char *const argv[]) {
         // Parse file.
         MPMarshallError marshallError = { MPMarshallSuccess };
         user = mpw_marshall_read( buf, sitesFormat, masterPassword, &marshallError );
-        mpw_free( buf, bufSize );
-        if (!user || marshallError.type != MPMarshallSuccess) {
-            if (marshallError.type == MPMarshallErrorMasterPassword) {
+        if (marshallError.type == MPMarshallErrorMasterPassword) {
+            // Incorrect master password.
+            if (!allowPasswordUpdate) {
                 ftl( "Incorrect master password according to configuration:\n  %s: %s\n", sitesPath, marshallError.description );
+                mpw_marshal_free( user );
+                mpw_free( buf, bufSize );
+                free( sitesPath );
                 return EX_DATAERR;
             }
-            else
-                err( "Couldn't parse configuration file:\n  %s: %s\n", sitesPath, marshallError.description );
+
+            // Update user's master password.
+            while (marshallError.type == MPMarshallErrorMasterPassword) {
+                inf( "Given master password does not match configuration.\n" );
+                inf( "To update the configuration with this new master password, first confirm the old master password.\n" );
+
+                char *importMasterPassword = NULL;
+                while (!importMasterPassword || !strlen( importMasterPassword ))
+                    importMasterPassword = mpw_getpass( "Old master password: " );
+
+                mpw_marshal_free( user );
+                user = mpw_marshall_read( buf, sitesFormat, importMasterPassword, &marshallError );
+            }
+            if (user) {
+                mpw_free_string( user->masterPassword );
+                user->masterPassword = strdup( masterPassword );
+            }
+        }
+        mpw_free( buf, bufSize );
+        if (!user || marshallError.type != MPMarshallSuccess) {
+            err( "Couldn't parse configuration file:\n  %s: %s\n", sitesPath, marshallError.description );
             mpw_marshal_free( user );
             user = NULL;
             free( sitesPath );
             sitesPath = NULL;
         }
 
-        else {
+        if (user) {
             // Load defaults.
             mpw_free_string( fullName );
             mpw_free_string( masterPassword );
@@ -379,7 +420,10 @@ int main(int argc, char *const argv[]) {
     }
 
     // Output the result.
-    if (passwordType & MPPasswordTypeClassGenerated) {
+    if (keyPurpose == MPKeyPurposeIdentification && site && !site->loginGenerated && site->loginName)
+        fprintf( stdout, "%s\n", site->loginName );
+
+    else if (passwordType & MPPasswordTypeClassGenerated) {
         MPSiteKey siteKey = mpw_siteKey( masterKey, siteName, siteCounter, keyPurpose, keyContext, algorithmVersion );
         const char *sitePassword = mpw_sitePassword( siteKey, passwordType, algorithmVersion );
         mpw_free( siteKey, MPSiteKeySize );
@@ -409,10 +453,35 @@ int main(int argc, char *const argv[]) {
 
     // Update the mpsites file.
     if (user) {
+        if (keyPurpose == MPKeyPurposeAuthentication) {
+            if (!site)
+                site = mpw_marshall_site( user, siteName, passwordType, siteCounter, algorithmVersion );
+            else {
+                site->type = passwordType;
+                site->counter = siteCounter;
+                site->algorithm = algorithmVersion;
+            }
+        }
+        else if (keyPurpose == MPKeyPurposeIdentification && site) {
+            // TODO: We're not persisting the passwordType of the generated login
+            if (passwordType & MPPasswordTypeClassGenerated)
+                site->loginGenerated = true;
+        }
+        else if (keyPurpose == MPKeyPurposeRecovery && site && keyContext) {
+            // TODO: We're not persisting the passwordType of the recovery question
+            MPMarshalledQuestion *question = NULL;
+            for (size_t q = 0; q < site->questions_count; ++q) {
+                question = &site->questions[q];
+                if (strcmp( keyContext, question->keyword ) != 0) {
+                    question = NULL;
+                    continue;
+                }
+                break;
+            }
+            if (!question)
+                mpw_marshal_question( site, keyContext );
+        }
         if (site) {
-            site->type = passwordType;
-            site->counter = siteCounter;
-            site->algorithm = algorithmVersion;
             site->lastUsed = user->lastUsed = time( NULL );
             site->uses++;
         }
