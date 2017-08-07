@@ -22,54 +22,60 @@
 static void usage() {
 
     inf( ""
-            "Usage: mpw [-u|-U name] [-t type] [-c counter] [-a algorithm] [-p purpose] [-C context] [-f|-F format] [-v|-q] [-h] site\n\n" );
+            "Usage: mpw [-u|-U name] [-t type] [-c counter] [-a algorithm] [-p purpose]"
+            "           [-C context] [-f|-F format] [-R 0|1] [-v|-q] [-h] site-name\n\n" );
     inf( ""
-            "    -u name      Specify the full name of the user.\n"
-            "                 -u checks the master password against the config, -U allows updating to a new master password.\n"
-            "                 Defaults to %s in env or prompts.\n\n", MP_env_fullName );
+            "  -u name      Specify the full name of the user.\n"
+            "               -u checks the master password against the config,"
+            "               -U allows updating to a new master password.\n"
+            "               Defaults to %s in env or prompts.\n\n", MP_env_fullName );
     inf( ""
-            "    -t type      Specify the password's template.\n"
-            "                 Defaults to 'long' for auth, 'name' for ident and 'phrase' for recovery.\n"
-            "                     x, max, maximum | 20 characters, contains symbols.\n"
-            "                     l, long         | Copy-friendly, 14 characters, contains symbols.\n"
-            "                     m, med, medium  | Copy-friendly, 8 characters, contains symbols.\n"
-            "                     b, basic        | 8 characters, no symbols.\n"
-            "                     s, short        | Copy-friendly, 4 characters, no symbols.\n"
-            "                     i, pin          | 4 numbers.\n"
-            "                     n, name         | 9 letter name.\n"
-            "                     p, phrase       | 20 character sentence.\n\n" );
+            "  -t type      Specify the password's template.\n"
+            "               Defaults to 'long' (auth), 'name' (ident) or 'phrase'(recovery).\n"
+            "                   x, max, maximum | 20 characters, contains symbols.\n"
+            "                   l, long         | Copy-friendly, 14 characters, symbols.\n"
+            "                   m, med, medium  | Copy-friendly, 8 characters, symbols.\n"
+            "                   b, basic        | 8 characters, no symbols.\n"
+            "                   s, short        | Copy-friendly, 4 characters, no symbols.\n"
+            "                   i, pin          | 4 numbers.\n"
+            "                   n, name         | 9 letter name.\n"
+            "                   p, phrase       | 20 character sentence.\n\n" );
     inf( ""
-            "    -c counter   The value of the counter.\n"
-            "                 Defaults to 1.\n\n" );
+            "  -c counter   The value of the counter.\n"
+            "               Defaults to 1.\n\n" );
     inf( ""
-            "    -a version   The algorithm version to use.\n"
-            "                 Defaults to %s in env or %d.\n\n", MP_env_algorithm, MPAlgorithmVersionCurrent );
+            "  -a version   The algorithm version to use.\n"
+            "               Defaults to %s in env or %d.\n\n", MP_env_algorithm, MPAlgorithmVersionCurrent );
     inf( ""
-            "    -p purpose   The purpose of the generated token.\n"
-            "                 Defaults to 'password'.\n"
-            "                     a, auth     | An authentication token such as a password.\n"
-            "                     i, ident    | An identification token such as a username.\n"
-            "                     r, rec      | A recovery token such as a security answer.\n\n" );
+            "  -p purpose   The purpose of the generated token.\n"
+            "               Defaults to 'password'.\n"
+            "                   a, auth     | An authentication token such as a password.\n"
+            "                   i, ident    | An identification token such as a username.\n"
+            "                   r, rec      | A recovery token such as a security answer.\n\n" );
     inf( ""
-            "    -C context   A purpose-specific context.\n"
-            "                 Defaults to empty.\n"
-            "                  -p a, auth     | -\n"
-            "                  -p i, ident    | -\n"
-            "                  -p r, rec      | Most significant word in security question.\n\n" );
+            "  -C context   A purpose-specific context.\n"
+            "               Defaults to empty.\n"
+            "                -p a, auth     | -\n"
+            "                -p i, ident    | -\n"
+            "                -p r, rec      | Most significant word in security question.\n\n" );
     inf( ""
-            "    -f|F format  The mpsites format to use for reading/writing site parameters.\n"
-            "                 -F forces the use of the given format, -f allows fallback/migration.\n"
-            "                 Defaults to json, falls back to plain.\n"
-            "                     f, flat     | ~/.mpw.d/Full Name.%s\n"
-            "                     j, json     | ~/.mpw.d/Full Name.%s\n\n",
+            "  -f|F format  The mpsites format to use for reading/writing site parameters.\n"
+            "               -F forces the use of the given format,"
+            "               -f allows fallback/migration.\n"
+            "               Defaults to json, falls back to plain.\n"
+            "                   f, flat     | ~/.mpw.d/Full Name.%s\n"
+            "                   j, json     | ~/.mpw.d/Full Name.%s\n\n",
             mpw_marshall_format_extension( MPMarshallFormatFlat ), mpw_marshall_format_extension( MPMarshallFormatJSON ) );
     inf( ""
-            "    -v           Increase output verbosity (can be repeated).\n"
-            "    -q           Decrease output verbosity (can be repeated).\n\n" );
+            "  -R redacted  Whether to save the mpsites in redacted format or not.\n"
+            "               Defaults to 1, redacted.\n\n" );
     inf( ""
-            "    ENVIRONMENT\n\n"
-            "        %-14s | The full name of the user (see -u).\n"
-            "        %-14s | The default algorithm version (see -a).\n\n",
+            "  -v           Increase output verbosity (can be repeated).\n"
+            "  -q           Decrease output verbosity (can be repeated).\n\n" );
+    inf( ""
+            "  ENVIRONMENT\n\n"
+            "      %-14s | The full name of the user (see -u).\n"
+            "      %-14s | The default algorithm version (see -a).\n\n",
             MP_env_fullName, MP_env_algorithm );
     exit( 0 );
 }
@@ -133,15 +139,15 @@ int main(int argc, char *const argv[]) {
     MPKeyPurpose keyPurpose = MPKeyPurposeAuthentication;
     MPAlgorithmVersion algorithmVersion = MPAlgorithmVersionCurrent;
     MPMarshallFormat sitesFormat = MPMarshallFormatDefault;
-    bool allowPasswordUpdate = false, sitesFormatFixed = false;
+    bool allowPasswordUpdate = false, sitesFormatFixed = false, sitesRedacted = true;
 
     // Read the environment.
-    const char *fullNameArg = getenv( MP_env_fullName ), *masterPasswordArg = NULL;
+    const char *fullNameArg = getenv( MP_env_fullName ), *masterPasswordArg = NULL, *siteNameArg = NULL;
     const char *passwordTypeArg = NULL, *siteCounterArg = NULL, *algorithmVersionArg = getenv( MP_env_algorithm );
-    const char *keyPurposeArg = NULL, *keyContextArg = NULL, *sitesFormatArg = NULL, *siteNameArg = NULL;
+    const char *keyPurposeArg = NULL, *keyContextArg = NULL, *sitesFormatArg = NULL, *sitesRedactedArg = NULL;
 
     // Read the command-line options.
-    for (int opt; (opt = getopt( argc, argv, "u:U:P:t:c:a:p:C:f:F:vqh" )) != EOF;)
+    for (int opt; (opt = getopt( argc, argv, "u:U:P:t:c:a:p:C:f:F:R:vqh" )) != EOF;)
         switch (opt) {
             case 'u':
                 fullNameArg = optarg;
@@ -177,6 +183,9 @@ int main(int argc, char *const argv[]) {
             case 'F':
                 sitesFormatArg = optarg;
                 sitesFormatFixed = true;
+                break;
+            case 'R':
+                sitesRedactedArg = optarg;
                 break;
             case 'v':
                 ++mpw_verbosity;
@@ -218,6 +227,7 @@ int main(int argc, char *const argv[]) {
     keyPurposeArg = keyPurposeArg && strlen( keyPurposeArg )? keyPurposeArg: NULL;
     keyContextArg = keyContextArg && strlen( keyContextArg )? keyContextArg: NULL;
     sitesFormatArg = sitesFormatArg && strlen( sitesFormatArg )? sitesFormatArg: NULL;
+    sitesRedactedArg = sitesRedactedArg && strlen( sitesRedactedArg )? sitesRedactedArg: NULL;
     siteNameArg = siteNameArg && strlen( siteNameArg )? siteNameArg: NULL;
 
     // Determine fullName, siteName & masterPassword.
@@ -323,6 +333,11 @@ int main(int argc, char *const argv[]) {
             masterPassword = strdup( user->masterPassword );
             algorithmVersion = user->algorithm;
             passwordType = user->defaultType;
+            sitesRedacted = user->redacted;
+
+            if (!sitesRedacted && !sitesRedactedArg)
+                wrn( "Sites configuration is not redacted.  Use -R 1 to change this.\n" );
+
             for (size_t s = 0; s < user->sites_count; ++s) {
                 site = &user->sites[s];
                 if (strcmp( siteName, site->name ) != 0) {
@@ -339,6 +354,8 @@ int main(int argc, char *const argv[]) {
     }
 
     // Parse default/config-overriding command-line parameters.
+    if (sitesRedactedArg)
+        sitesRedacted = strcmp( sitesRedactedArg, "1" ) == 0;
     if (siteCounterArg) {
         long long int siteCounterInt = atoll( siteCounterArg );
         if (siteCounterInt < 0 || siteCounterInt > UINT32_MAX) {
@@ -447,6 +464,8 @@ int main(int argc, char *const argv[]) {
         fprintf( stdout, "%s\n", sitePassword );
         mpw_free_string( sitePassword );
     }
+    if (site && site->url)
+        inf( "See: %s\n", site->url );
     mpw_free( masterKey, MPMasterKeySize );
     mpw_free_string( siteName );
     mpw_free_string( keyContext );
@@ -488,6 +507,7 @@ int main(int argc, char *const argv[]) {
 
         if (!sitesFormatFixed)
             sitesFormat = MPMarshallFormatDefault;
+        user->redacted = sitesRedacted;
 
         sitesPath = mpw_path( user->fullName, mpw_marshall_format_extension( sitesFormat ) );
         dbg( "Updating: %s (%s)\n", sitesPath, mpw_nameForFormat( sitesFormat ) );

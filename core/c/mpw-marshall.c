@@ -622,13 +622,13 @@ static MPMarshalledUser *mpw_marshall_read_json(
     json_object *json_sites = mpw_get_json_section( json_file, "sites" );
     json_object_object_foreachC( json_sites, json_site ) {
         const char *siteName = json_site.key;
-        value = mpw_get_json_int( json_site.val, "algorithm", (int)user->algorithm );
+        value = mpw_get_json_int( json_site.val, "algorithm", user->algorithm );
         if (value < MPAlgorithmVersionFirst || value > MPAlgorithmVersionLast) {
             *error = (MPMarshallError){ MPMarshallErrorIllegal, mpw_str( "Invalid site algorithm version: %s: %d", siteName, value ) };
             return NULL;
         }
         MPAlgorithmVersion siteAlgorithm = (MPAlgorithmVersion)value;
-        MPPasswordType siteType = (MPPasswordType)mpw_get_json_int( json_site.val, "type", (int)user->defaultType );
+        MPPasswordType siteType = (MPPasswordType)mpw_get_json_int( json_site.val, "type", user->defaultType );
         if (!mpw_nameForType( siteType )) {
             *error = (MPMarshallError){ MPMarshallErrorIllegal, mpw_str( "Invalid site type: %s: %u", siteName, siteType ) };
             return NULL;
