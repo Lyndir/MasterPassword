@@ -47,6 +47,12 @@ mpw_sodium=${mpw_sodium:-1} # Use libsodium if available instead of cperciva's l
 export CFLAGS="-O3 $CFLAGS"
 export LDFLAGS="$LDFLAGS"
 
+# Version.
+if { mpw_version=$(git describe --match '*-cli*' --long --dirty --broken) || mpw_version=$(<VERSION); } 2>/dev/null; then
+    CFLAGS+=" -DMP_VERSION=$mpw_version"
+fi
+echo 2>&1 "Building mpw version ${mpw_version:-<unknown>}..."
+
 # Distribution specific configuration.
 # Homebrew - openssl for scrypt
 if hash brew 2>/dev/null; then
@@ -144,7 +150,6 @@ fetchSource() (
         }
 
     else
-
         echo >&2 "error: Missing git-svn or svn."
         echo >&2 "error: Please install either or manually check out the sources"
         echo >&2 "error: from: $home"

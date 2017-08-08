@@ -16,11 +16,17 @@
 #include "mpw-util.h"
 #include "mpw-marshall.h"
 
-#define MP_env_fullName     "MP_FULLNAME"
-#define MP_env_algorithm    "MP_ALGORITHM"
+#ifndef MP_VERSION
+#define MP_VERSION ?
+#endif
+#define MP_ENV_fullName     "MP_FULLNAME"
+#define MP_ENV_algorithm    "MP_ALGORITHM"
 
 static void usage() {
 
+    inf( ""
+            "  Master Password v%s\n"
+            "    https://masterpasswordapp.com\n\n", stringify_def( MP_VERSION ) );
     inf( ""
             "Usage:\n"
             "  mpw [-u|-U full-name] [-t pw-type] [-c counter] [-a algorithm] [-s value]\n"
@@ -29,7 +35,7 @@ static void usage() {
             "  -u full-name Specify the full name of the user.\n"
             "               -u checks the master password against the config,\n"
             "               -U allows updating to a new master password.\n"
-            "               Defaults to %s in env or prompts.\n\n", MP_env_fullName );
+            "               Defaults to %s in env or prompts.\n\n", MP_ENV_fullName );
     inf( ""
             "  -t pw-type   Specify the password's template.\n"
             "               Defaults to 'long' (-p a), 'name' (-p i) or 'phrase' (-p r).\n"
@@ -48,7 +54,7 @@ static void usage() {
     inf( ""
             "  -a version   The algorithm version to use, %d - %d.\n"
             "               Defaults to %s in env or %d.\n\n",
-            MPAlgorithmVersionFirst, MPAlgorithmVersionLast, MP_env_algorithm, MPAlgorithmVersionCurrent );
+            MPAlgorithmVersionFirst, MPAlgorithmVersionLast, MP_ENV_algorithm, MPAlgorithmVersionCurrent );
     inf( ""
             "  -s value     The value to save for -t P or -p i.\n\n" );
     inf( ""
@@ -81,7 +87,7 @@ static void usage() {
             "  ENVIRONMENT\n\n"
             "      %-14s | The full name of the user (see -u).\n"
             "      %-14s | The default algorithm version (see -a).\n\n",
-            MP_env_fullName, MP_env_algorithm );
+            MP_ENV_fullName, MP_ENV_algorithm );
     exit( 0 );
 }
 
@@ -156,8 +162,8 @@ int main(int argc, char *const argv[]) {
     const char *fullNameArg = NULL, *masterPasswordArg = NULL, *siteNameArg = NULL;
     const char *passwordTypeArg = NULL, *siteCounterArg = NULL, *algorithmVersionArg = NULL, *saveValueArg = NULL;
     const char *keyPurposeArg = NULL, *keyContextArg = NULL, *sitesFormatArg = NULL, *sitesRedactedArg = NULL;
-    fullNameArg = mpw_getenv( MP_env_fullName );
-    algorithmVersionArg = mpw_getenv( MP_env_algorithm );
+    fullNameArg = mpw_getenv( MP_ENV_fullName );
+    algorithmVersionArg = mpw_getenv( MP_ENV_algorithm );
 
     // Read the command-line options.
     for (int opt; (opt = getopt( argc, argv, "u:U:P:t:c:a:s:p:C:f:F:R:vqh" )) != EOF;)

@@ -85,6 +85,12 @@ extern int mpw_verbosity;
 #ifndef ERR
 #define ERR -1
 #endif
+#ifndef stringify
+#define stringify(s) #s
+#endif
+#ifndef stringify_def
+#define stringify_def(s) stringify(s)
+#endif
 
 //// Buffers and memory.
 
