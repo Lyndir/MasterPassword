@@ -22,45 +22,50 @@
 static void usage() {
 
     inf( ""
-            "Usage: mpw [-u|-U name] [-t type] [-c counter] [-a algorithm] [-p purpose]"
-            "           [-C context] [-f|-F format] [-R 0|1] [-v|-q] [-h] site-name\n\n" );
+            "Usage:\n"
+            "  mpw [-u|-U full-name] [-t pw-type] [-c counter] [-a algorithm] [-s value]\n"
+            "      [-p purpose] [-C context] [-f|-F format] [-R 0|1] [-v|-q] [-h] site-name\n\n" );
     inf( ""
-            "  -u name      Specify the full name of the user.\n"
-            "               -u checks the master password against the config,"
+            "  -u full-name Specify the full name of the user.\n"
+            "               -u checks the master password against the config,\n"
             "               -U allows updating to a new master password.\n"
             "               Defaults to %s in env or prompts.\n\n", MP_env_fullName );
     inf( ""
-            "  -t type      Specify the password's template.\n"
-            "               Defaults to 'long' (auth), 'name' (ident) or 'phrase'(recovery).\n"
-            "                   x, max, maximum | 20 characters, contains symbols.\n"
-            "                   l, long         | Copy-friendly, 14 characters, symbols.\n"
-            "                   m, med, medium  | Copy-friendly, 8 characters, symbols.\n"
-            "                   b, basic        | 8 characters, no symbols.\n"
-            "                   s, short        | Copy-friendly, 4 characters, no symbols.\n"
-            "                   i, pin          | 4 numbers.\n"
-            "                   n, name         | 9 letter name.\n"
-            "                   p, phrase       | 20 character sentence.\n\n" );
+            "  -t pw-type   Specify the password's template.\n"
+            "               Defaults to 'long' (-p a), 'name' (-p i) or 'phrase' (-p r).\n"
+            "                   x, maximum  | 20 characters, contains symbols.\n"
+            "                   l, long     | Copy-friendly, 14 characters, symbols.\n"
+            "                   m, medium   | Copy-friendly, 8 characters, symbols.\n"
+            "                   b, basic    | 8 characters, no symbols.\n"
+            "                   s, short    | Copy-friendly, 4 characters, no symbols.\n"
+            "                   i, pin      | 4 numbers.\n"
+            "                   n, name     | 9 letter name.\n"
+            "                   p, phrase   | 20 character sentence.\n"
+            "                   P, personal | saved personal password (see -s).\n\n" );
     inf( ""
             "  -c counter   The value of the counter.\n"
             "               Defaults to 1.\n\n" );
     inf( ""
-            "  -a version   The algorithm version to use.\n"
-            "               Defaults to %s in env or %d.\n\n", MP_env_algorithm, MPAlgorithmVersionCurrent );
+            "  -a version   The algorithm version to use, %d - %d.\n"
+            "               Defaults to %s in env or %d.\n\n",
+            MPAlgorithmVersionFirst, MPAlgorithmVersionLast, MP_env_algorithm, MPAlgorithmVersionCurrent );
+    inf( ""
+            "  -s value     The value to save for -t P or -p i.\n\n" );
     inf( ""
             "  -p purpose   The purpose of the generated token.\n"
-            "               Defaults to 'password'.\n"
+            "               Defaults to 'auth'.\n"
             "                   a, auth     | An authentication token such as a password.\n"
             "                   i, ident    | An identification token such as a username.\n"
             "                   r, rec      | A recovery token such as a security answer.\n\n" );
     inf( ""
             "  -C context   A purpose-specific context.\n"
             "               Defaults to empty.\n"
-            "                -p a, auth     | -\n"
-            "                -p i, ident    | -\n"
-            "                -p r, rec      | Most significant word in security question.\n\n" );
+            "                   -p a        | -\n"
+            "                   -p i        | -\n"
+            "                   -p r        | Most significant word in security question.\n\n" );
     inf( ""
             "  -f|F format  The mpsites format to use for reading/writing site parameters.\n"
-            "               -F forces the use of the given format,"
+            "               -F forces the use of the given format,\n"
             "               -f allows fallback/migration.\n"
             "               Defaults to json, falls back to plain.\n"
             "                   f, flat     | ~/.mpw.d/Full Name.%s\n"
@@ -78,6 +83,40 @@ static void usage() {
             "      %-14s | The default algorithm version (see -a).\n\n",
             MP_env_fullName, MP_env_algorithm );
     exit( 0 );
+}
+
+static const char *mpw_getenv(const char *variableName) {
+
+    char *envBuf = getenv( variableName );
+    return envBuf? strdup( envBuf ): NULL;
+}
+
+static const char *mpw_getline(const char *prompt) {
+
+    fprintf( stderr, "%s ", prompt );
+
+    char *buf = NULL;
+    size_t bufSize = 0;
+    ssize_t lineSize = getline( &buf, &bufSize, stdin );
+    if (lineSize <= 1) {
+        free( buf );
+        return NULL;
+    }
+
+    // Remove the newline.
+    buf[lineSize - 1] = '\0';
+    return buf;
+}
+
+static const char *mpw_getpass(const char *prompt) {
+
+    char *passBuf = getpass( prompt );
+    if (!passBuf)
+        return NULL;
+
+    char *buf = strdup( passBuf );
+    bzero( passBuf, strlen( passBuf ) );
+    return buf;
 }
 
 static char *mpw_path(const char *prefix, const char *extension) {
@@ -102,39 +141,11 @@ static char *mpw_path(const char *prefix, const char *extension) {
     return mpwPath;
 }
 
-static char *mpw_getline(const char *prompt) {
-
-    fprintf( stderr, "%s ", prompt );
-
-    char *buf = NULL;
-    size_t bufSize = 0;
-    ssize_t lineSize = getline( &buf, &bufSize, stdin );
-    if (lineSize <= 1) {
-        free( buf );
-        return NULL;
-    }
-
-    // Remove the newline.
-    buf[lineSize - 1] = '\0';
-    return buf;
-}
-
-static char *mpw_getpass(const char *prompt) {
-
-    char *passBuf = getpass( prompt );
-    if (!passBuf)
-        return NULL;
-
-    char *buf = strdup( passBuf );
-    bzero( passBuf, strlen( passBuf ) );
-    return buf;
-}
-
 int main(int argc, char *const argv[]) {
 
     // Master Password defaults.
-    const char *fullName = NULL, *masterPassword = NULL, *siteName = NULL, *keyContext = NULL;
-    uint32_t siteCounter = 1;
+    const char *fullName = NULL, *masterPassword = NULL, *siteName = NULL, *saveValue = NULL, *keyContext = NULL;
+    MPCounterValue siteCounter = MPCounterValueDefault;
     MPPasswordType passwordType = MPPasswordTypeDefault;
     MPKeyPurpose keyPurpose = MPKeyPurposeAuthentication;
     MPAlgorithmVersion algorithmVersion = MPAlgorithmVersionCurrent;
@@ -142,50 +153,55 @@ int main(int argc, char *const argv[]) {
     bool allowPasswordUpdate = false, sitesFormatFixed = false, sitesRedacted = true;
 
     // Read the environment.
-    const char *fullNameArg = getenv( MP_env_fullName ), *masterPasswordArg = NULL, *siteNameArg = NULL;
-    const char *passwordTypeArg = NULL, *siteCounterArg = NULL, *algorithmVersionArg = getenv( MP_env_algorithm );
+    const char *fullNameArg = NULL, *masterPasswordArg = NULL, *siteNameArg = NULL;
+    const char *passwordTypeArg = NULL, *siteCounterArg = NULL, *algorithmVersionArg = NULL, *saveValueArg = NULL;
     const char *keyPurposeArg = NULL, *keyContextArg = NULL, *sitesFormatArg = NULL, *sitesRedactedArg = NULL;
+    fullNameArg = mpw_getenv( MP_env_fullName );
+    algorithmVersionArg = mpw_getenv( MP_env_algorithm );
 
     // Read the command-line options.
-    for (int opt; (opt = getopt( argc, argv, "u:U:P:t:c:a:p:C:f:F:R:vqh" )) != EOF;)
+    for (int opt; (opt = getopt( argc, argv, "u:U:P:t:c:a:s:p:C:f:F:R:vqh" )) != EOF;)
         switch (opt) {
             case 'u':
-                fullNameArg = optarg;
+                fullNameArg = optarg && strlen( optarg )? strdup( optarg ): NULL;
                 allowPasswordUpdate = false;
                 break;
             case 'U':
-                fullNameArg = optarg;
+                fullNameArg = optarg && strlen( optarg )? strdup( optarg ): NULL;
                 allowPasswordUpdate = true;
                 break;
             case 'P':
                 // Passing your master password via the command-line is insecure.  Testing purposes only.
-                masterPasswordArg = optarg;
+                masterPasswordArg = optarg && strlen( optarg )? strdup( optarg ): NULL;
                 break;
             case 't':
-                passwordTypeArg = optarg;
+                passwordTypeArg = optarg && strlen( optarg )? strdup( optarg ): NULL;
                 break;
             case 'c':
-                siteCounterArg = optarg;
+                siteCounterArg = optarg && strlen( optarg )? strdup( optarg ): NULL;
                 break;
             case 'a':
-                algorithmVersionArg = optarg;
+                algorithmVersionArg = optarg && strlen( optarg )? strdup( optarg ): NULL;
+                break;
+            case 's':
+                saveValueArg = optarg && strlen( optarg )? strdup( optarg ): NULL;
                 break;
             case 'p':
-                keyPurposeArg = optarg;
+                keyPurposeArg = optarg && strlen( optarg )? strdup( optarg ): NULL;
                 break;
             case 'C':
-                keyContextArg = optarg;
+                keyContextArg = optarg && strlen( optarg )? strdup( optarg ): NULL;
                 break;
             case 'f':
-                sitesFormatArg = optarg;
+                sitesFormatArg = optarg && strlen( optarg )? strdup( optarg ): NULL;
                 sitesFormatFixed = false;
                 break;
             case 'F':
-                sitesFormatArg = optarg;
+                sitesFormatArg = optarg && strlen( optarg )? strdup( optarg ): NULL;
                 sitesFormatFixed = true;
                 break;
             case 'R':
-                sitesRedactedArg = optarg;
+                sitesRedactedArg = optarg && strlen( optarg )? strdup( optarg ): NULL;
                 break;
             case 'v':
                 ++mpw_verbosity;
@@ -216,19 +232,7 @@ int main(int argc, char *const argv[]) {
                 return EX_USAGE;
         }
     if (optind < argc)
-        siteNameArg = argv[optind];
-
-    // Empty strings unset the argument.
-    fullNameArg = fullNameArg && strlen( fullNameArg )? fullNameArg: NULL;
-    masterPasswordArg = masterPasswordArg && strlen( masterPasswordArg )? masterPasswordArg: NULL;
-    passwordTypeArg = passwordTypeArg && strlen( passwordTypeArg )? passwordTypeArg: NULL;
-    siteCounterArg = siteCounterArg && strlen( siteCounterArg )? siteCounterArg: NULL;
-    algorithmVersionArg = algorithmVersionArg && strlen( algorithmVersionArg )? algorithmVersionArg: NULL;
-    keyPurposeArg = keyPurposeArg && strlen( keyPurposeArg )? keyPurposeArg: NULL;
-    keyContextArg = keyContextArg && strlen( keyContextArg )? keyContextArg: NULL;
-    sitesFormatArg = sitesFormatArg && strlen( sitesFormatArg )? sitesFormatArg: NULL;
-    sitesRedactedArg = sitesRedactedArg && strlen( sitesRedactedArg )? sitesRedactedArg: NULL;
-    siteNameArg = siteNameArg && strlen( siteNameArg )? siteNameArg: NULL;
+        siteNameArg = strdup( argv[optind] );
 
     // Determine fullName, siteName & masterPassword.
     if (!(fullNameArg && (fullName = strdup( fullNameArg ))) &&
@@ -246,7 +250,7 @@ int main(int argc, char *const argv[]) {
             masterPassword = mpw_getpass( "Your master password: " );
     if (sitesFormatArg) {
         sitesFormat = mpw_formatWithName( sitesFormatArg );
-        if (ERR == sitesFormat) {
+        if (ERR == (int)sitesFormat) {
             ftl( "Invalid sites format: %s\n", sitesFormatArg );
             return EX_USAGE;
         }
@@ -304,7 +308,7 @@ int main(int argc, char *const argv[]) {
                 inf( "Given master password does not match configuration.\n" );
                 inf( "To update the configuration with this new master password, first confirm the old master password.\n" );
 
-                char *importMasterPassword = NULL;
+                const char *importMasterPassword = NULL;
                 while (!importMasterPassword || !strlen( importMasterPassword ))
                     importMasterPassword = mpw_getpass( "Old master password: " );
 
@@ -345,6 +349,7 @@ int main(int argc, char *const argv[]) {
                     continue;
                 }
 
+                mpw_free_string( saveValue );
                 passwordType = site->type;
                 siteCounter = site->counter;
                 algorithmVersion = site->algorithm;
@@ -358,11 +363,11 @@ int main(int argc, char *const argv[]) {
         sitesRedacted = strcmp( sitesRedactedArg, "1" ) == 0;
     if (siteCounterArg) {
         long long int siteCounterInt = atoll( siteCounterArg );
-        if (siteCounterInt < 0 || siteCounterInt > UINT32_MAX) {
+        if (siteCounterInt < MPCounterValueFirst || siteCounterInt > MPCounterValueLast) {
             ftl( "Invalid site counter: %s\n", siteCounterArg );
             return EX_USAGE;
         }
-        siteCounter = (uint32_t)siteCounterInt;
+        siteCounter = (MPCounterValue)siteCounterInt;
     }
     if (algorithmVersionArg) {
         int algorithmVersionInt = atoi( algorithmVersionArg );
@@ -372,9 +377,13 @@ int main(int argc, char *const argv[]) {
         }
         algorithmVersion = (MPAlgorithmVersion)algorithmVersionInt;
     }
+    if (saveValueArg) {
+        mpw_free_string( saveValue );
+        saveValue = strdup( saveValueArg );
+    }
     if (keyPurposeArg) {
         keyPurpose = mpw_purposeWithName( keyPurposeArg );
-        if (ERR == keyPurpose) {
+        if (ERR == (int)keyPurpose) {
             ftl( "Invalid purpose: %s\n", keyPurposeArg );
             return EX_USAGE;
         }
@@ -396,13 +405,26 @@ int main(int argc, char *const argv[]) {
     }
     if (passwordTypeArg) {
         passwordType = mpw_typeWithName( passwordTypeArg );
-        if (ERR == passwordType) {
+        if (ERR == (int)passwordType) {
             ftl( "Invalid type: %s\n", passwordTypeArg );
             return EX_USAGE;
         }
     }
-    if (keyContextArg)
+    if (keyContextArg) {
+        mpw_free_string( keyContext );
         keyContext = strdup( keyContextArg );
+    }
+    mpw_free_string( fullNameArg );
+    mpw_free_string( masterPasswordArg );
+    mpw_free_string( siteNameArg );
+    mpw_free_string( passwordTypeArg );
+    mpw_free_string( siteCounterArg );
+    mpw_free_string( algorithmVersionArg );
+    mpw_free_string( saveValueArg );
+    mpw_free_string( keyPurposeArg );
+    mpw_free_string( keyContextArg );
+    mpw_free_string( sitesFormatArg );
+    mpw_free_string( sitesRedactedArg );
 
     // Operation summary.
     const char *identicon = mpw_identicon( fullName, masterPassword );
@@ -416,6 +438,7 @@ int main(int argc, char *const argv[]) {
     dbg( "sitesPath        : %s\n", sitesPath );
     dbg( "siteName         : %s\n", siteName );
     dbg( "siteCounter      : %u\n", siteCounter );
+    dbg( "saveValue        : %s\n", saveValue );
     dbg( "keyPurpose       : %s (%u)\n", mpw_nameForPurpose( keyPurpose ), keyPurpose );
     dbg( "keyContext       : %s\n", keyContext );
     dbg( "passwordType     : %s (%u)\n", mpw_nameForType( passwordType ), passwordType );
@@ -453,25 +476,42 @@ int main(int argc, char *const argv[]) {
         fprintf( stdout, "%s\n", sitePassword );
         mpw_free_string( sitePassword );
     }
-    else if (site && site->content) {
-        const char *sitePassword = mpw_decrypt( masterKey, site->content, algorithmVersion );
-        if (!sitePassword) {
-            ftl( "Couldn't decrypt site password.\n" );
-            mpw_free( masterKey, MPMasterKeySize );
-            return EX_SOFTWARE;
+
+    else {
+        const char *content = NULL;
+        if (saveValue) {
+            content = strdup( saveValue );
+            if (site) {
+                // TODO: Doesn't save content for newly created sites.
+                mpw_free_string( site->content );
+                if (!(site->content = mpw_encrypt( masterKey, saveValue, algorithmVersion )))
+                    err( "Couldn't encrypt site content.\n" );
+            }
         }
 
-        fprintf( stdout, "%s\n", sitePassword );
-        mpw_free_string( sitePassword );
+        else if (site && site->content) {
+            content = mpw_decrypt( masterKey, site->content, algorithmVersion );
+            if (!content) {
+                ftl( "Couldn't decrypt site content.\n" );
+                mpw_free( masterKey, MPMasterKeySize );
+                return EX_SOFTWARE;
+            }
+        }
+
+        fprintf( stdout, "%s\n", content );
+        mpw_free_string( content );
     }
+
     if (site && site->url)
         inf( "See: %s\n", site->url );
     mpw_free( masterKey, MPMasterKeySize );
     mpw_free_string( siteName );
+    mpw_free_string( saveValue );
     mpw_free_string( keyContext );
 
     // Update the mpsites file.
     if (user) {
+        // TODO: Move this up above the summary and replace the mpw lvars by user/site accessors.
         if (keyPurpose == MPKeyPurposeAuthentication) {
             if (!site)
                 site = mpw_marshall_site( user, siteName, passwordType, siteCounter, algorithmVersion );

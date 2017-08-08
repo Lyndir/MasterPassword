@@ -50,7 +50,7 @@ MPMarshalledUser *mpw_marshall_user(
 
 MPMarshalledSite *mpw_marshall_site(
         MPMarshalledUser *user, const char *siteName, const MPPasswordType passwordType,
-        const uint32_t siteCounter, const MPAlgorithmVersion algorithmVersion) {
+        const MPCounterValue siteCounter, const MPAlgorithmVersion algorithmVersion) {
 
     if (!siteName || !mpw_realloc( &user->sites, NULL, sizeof( MPMarshalledSite ) * ++user->sites_count ))
         return NULL;
@@ -294,7 +294,8 @@ static bool mpw_marshall_write_json(
 
             if (!user->redacted) {
                 // Clear Text
-                MPSiteKey siteKey = mpw_siteKey( masterKey, site->name, 1, MPKeyPurposeRecovery, question->keyword, site->algorithm );
+                MPSiteKey siteKey = mpw_siteKey( masterKey, site->name,
+                        MPCounterValueInitial, MPKeyPurposeRecovery, question->keyword, site->algorithm );
                 const char *answer = mpw_sitePassword( siteKey, MPPasswordTypeGeneratedPhrase, site->algorithm );
                 mpw_free( siteKey, MPSiteKeySize );
                 if (answer)
@@ -482,11 +483,11 @@ static MPMarshalledUser *mpw_marshall_read_flat(
                 return NULL;
             }
             long long int value = atoll( str_counter );
-            if (value < 0 || value > UINT32_MAX) {
+            if (value < MPCounterValueFirst || value > MPCounterValueLast) {
                 *error = (MPMarshallError){ MPMarshallErrorIllegal, mpw_str( "Invalid site counter: %s: %s", siteName, str_counter ) };
                 return NULL;
             }
-            uint32_t siteCounter = (uint32_t)value;
+            MPCounterValue siteCounter = (MPCounterValue)value;
             value = atoll( str_algorithm );
             if (value < MPAlgorithmVersionFirst || value > MPAlgorithmVersionLast) {
                 *error = (MPMarshallError){ MPMarshallErrorIllegal, mpw_str( "Invalid site algorithm: %s: %s", siteName, str_algorithm ) };
@@ -634,11 +635,11 @@ static MPMarshalledUser *mpw_marshall_read_json(
             return NULL;
         }
         value = mpw_get_json_int( json_site.val, "counter", 1 );
-        if (value < 0 || value > UINT32_MAX) {
+        if (value < MPCounterValueFirst || value > MPCounterValueLast) {
             *error = (MPMarshallError){ MPMarshallErrorIllegal, mpw_str( "Invalid site counter: %s: %d", siteName, value ) };
             return NULL;
         }
-        uint32_t siteCounter = (uint32_t)value;
+        MPCounterValue siteCounter = (MPCounterValue)value;
         const char *siteContent = mpw_get_json_string( json_site.val, "password", NULL );
         const char *siteLoginName = mpw_get_json_string( json_site.val, "login_name", NULL );
         bool siteLoginGenerated = mpw_get_json_boolean( json_site.val, "login_generated", false );

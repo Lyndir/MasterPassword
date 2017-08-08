@@ -45,7 +45,7 @@ MPMasterKey mpw_masterKey(
 /** Derive the site key for a user's site from the given master key and site parameters.
  * @return A new MPSiteKeySize-byte allocated buffer or NULL if an error occurred. */
 MPSiteKey mpw_siteKey(
-        MPMasterKey masterKey, const char *siteName, const uint32_t siteCounter,
+        MPMasterKey masterKey, const char *siteName, const MPCounterValue siteCounter,
         const MPKeyPurpose keyPurpose, const char *keyContext, const MPAlgorithmVersion algorithmVersion);
 
 /** Encode a password for the site from the given site key.

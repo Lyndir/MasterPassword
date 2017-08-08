@@ -29,7 +29,7 @@ int main(int argc, char *const argv[]) {
         xmlChar *masterPassword = mpw_xmlTestCaseString( testCase, "masterPassword" );
         xmlChar *keyID = mpw_xmlTestCaseString( testCase, "keyID" );
         xmlChar *siteName = mpw_xmlTestCaseString( testCase, "siteName" );
-        uint32_t siteCounter = mpw_xmlTestCaseInteger( testCase, "siteCounter" );
+        MPCounterValue siteCounter = (MPCounterValue)mpw_xmlTestCaseInteger( testCase, "siteCounter" );
         xmlChar *passwordTypeString = mpw_xmlTestCaseString( testCase, "passwordType" );
         xmlChar *keyPurposeString = mpw_xmlTestCaseString( testCase, "keyPurpose" );
         xmlChar *keyContext = mpw_xmlTestCaseString( testCase, "keyContext" );

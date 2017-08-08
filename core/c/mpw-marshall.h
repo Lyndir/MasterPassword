@@ -63,7 +63,7 @@ typedef struct MPMarshalledSite {
     const char *name;
     const char *content;
     MPPasswordType type;
-    uint32_t counter;
+    MPCounterValue counter;
     MPAlgorithmVersion algorithm;
 
     const char *loginName;
@@ -104,7 +104,7 @@ MPMarshalledUser *mpw_marshall_user(
         const char *fullName, const char *masterPassword, const MPAlgorithmVersion algorithmVersion);
 MPMarshalledSite *mpw_marshall_site(
         MPMarshalledUser *user,
-        const char *siteName, const MPPasswordType passwordType, const uint32_t siteCounter, const MPAlgorithmVersion algorithmVersion);
+        const char *siteName, const MPPasswordType passwordType, const MPCounterValue siteCounter, const MPAlgorithmVersion algorithmVersion);
 MPMarshalledQuestion *mpw_marshal_question(
         MPMarshalledSite *site, const char *keyword);
 bool mpw_marshal_free(

@@ -31,6 +31,28 @@
 
 const MPPasswordType mpw_typeWithName(const char *typeName) {
 
+    // Find what password type is represented by the type letter.
+    if (strlen( typeName ) == 1) {
+        if ('x' == typeName[0])
+            return MPPasswordTypeGeneratedMaximum;
+        if ('l' == typeName[0])
+            return MPPasswordTypeGeneratedLong;
+        if ('m' == typeName[0])
+            return MPPasswordTypeGeneratedMedium;
+        if ('b' == typeName[0])
+            return MPPasswordTypeGeneratedBasic;
+        if ('s' == typeName[0])
+            return MPPasswordTypeGeneratedShort;
+        if ('i' == typeName[0])
+            return MPPasswordTypeGeneratedPIN;
+        if ('n' == typeName[0])
+            return MPPasswordTypeGeneratedName;
+        if ('P' == typeName[0])
+            return MPPasswordTypeStoredPersonal;
+        if ('D' == typeName[0])
+            return MPPasswordTypeStoredDevice;
+    }
+
     // Lower-case and trim optionally leading "Generated" string from typeName to standardize it.
     size_t stdTypeNameOffset = 0;
     size_t stdTypeNameSize = strlen( typeName );
@@ -42,29 +64,23 @@ const MPPasswordType mpw_typeWithName(const char *typeName) {
     stdTypeName[stdTypeNameSize] = '\0';
 
     // Find what password type is represented by the type name.
-    if (0 == strcmp( "x", stdTypeName )
-        || strncmp( mpw_nameForType( MPPasswordTypeGeneratedMaximum ), stdTypeName, strlen( stdTypeName ) ) == 0)
+    if (strncmp( mpw_nameForType( MPPasswordTypeGeneratedPhrase ), stdTypeName, strlen( stdTypeName ) ) == 0)
+        return MPPasswordTypeGeneratedPhrase;
+    if (strncmp( mpw_nameForType( MPPasswordTypeGeneratedMaximum ), stdTypeName, strlen( stdTypeName ) ) == 0)
         return MPPasswordTypeGeneratedMaximum;
-    if (0 == strcmp( "l", stdTypeName )
-        || strncmp( mpw_nameForType( MPPasswordTypeGeneratedLong ), stdTypeName, strlen( stdTypeName ) ) == 0)
+    if (strncmp( mpw_nameForType( MPPasswordTypeGeneratedLong ), stdTypeName, strlen( stdTypeName ) ) == 0)
         return MPPasswordTypeGeneratedLong;
-    if (0 == strcmp( "m", stdTypeName )
-        || strncmp( mpw_nameForType( MPPasswordTypeGeneratedMedium ), stdTypeName, strlen( stdTypeName ) ) == 0)
+    if (strncmp( mpw_nameForType( MPPasswordTypeGeneratedMedium ), stdTypeName, strlen( stdTypeName ) ) == 0)
         return MPPasswordTypeGeneratedMedium;
-    if (0 == strcmp( "b", stdTypeName )
-        || strncmp( mpw_nameForType( MPPasswordTypeGeneratedBasic ), stdTypeName, strlen( stdTypeName ) ) == 0)
+    if (strncmp( mpw_nameForType( MPPasswordTypeGeneratedBasic ), stdTypeName, strlen( stdTypeName ) ) == 0)
         return MPPasswordTypeGeneratedBasic;
-    if (0 == strcmp( "s", stdTypeName )
-        || strncmp( mpw_nameForType( MPPasswordTypeGeneratedShort ), stdTypeName, strlen( stdTypeName ) ) == 0)
+    if (strncmp( mpw_nameForType( MPPasswordTypeGeneratedShort ), stdTypeName, strlen( stdTypeName ) ) == 0)
         return MPPasswordTypeGeneratedShort;
-    if (0 == strcmp( "i", stdTypeName )
-        || strncmp( mpw_nameForType( MPPasswordTypeGeneratedPIN ), stdTypeName, strlen( stdTypeName ) ) == 0)
+    if (strncmp( mpw_nameForType( MPPasswordTypeGeneratedPIN ), stdTypeName, strlen( stdTypeName ) ) == 0)
         return MPPasswordTypeGeneratedPIN;
-    if (0 == strcmp( "n", stdTypeName )
-        || strncmp( mpw_nameForType( MPPasswordTypeGeneratedName ), stdTypeName, strlen( stdTypeName ) ) == 0)
+    if (strncmp( mpw_nameForType( MPPasswordTypeGeneratedName ), stdTypeName, strlen( stdTypeName ) ) == 0)
         return MPPasswordTypeGeneratedName;
-    if (0 == strcmp( "p", stdTypeName )
-        || strncmp( mpw_nameForType( MPPasswordTypeGeneratedPhrase ), stdTypeName, strlen( stdTypeName ) ) == 0)
+    if (strncmp( mpw_nameForType( MPPasswordTypeGeneratedPhrase ), stdTypeName, strlen( stdTypeName ) ) == 0)
         return MPPasswordTypeGeneratedPhrase;
 
     dbg( "Not a generated type name: %s\n", stdTypeName );

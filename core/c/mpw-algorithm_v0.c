@@ -82,11 +82,13 @@ static MPMasterKey mpw_masterKey_v0(
 }
 
 static MPSiteKey mpw_siteKey_v0(
-        MPMasterKey masterKey, const char *siteName, const uint32_t siteCounter,
+        MPMasterKey masterKey, const char *siteName, const MPCounterValue siteCounter,
         const MPKeyPurpose keyPurpose, const char *keyContext) {
 
     const char *keyScope = mpw_scopeForPurpose( keyPurpose );
     trc( "keyScope: %s\n", keyScope );
+
+    // TODO: Implement MPCounterValueTOTP
 
     // Calculate the site seed.
     trc( "siteSalt: keyScope=%s | #siteName=%s | siteName=%s | siteCounter=%s | #keyContext=%s | keyContext=%s\n",

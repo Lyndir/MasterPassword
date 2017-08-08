@@ -31,7 +31,7 @@
 MPMasterKey mpw_masterKey_v0(
         const char *fullName, const char *masterPassword);
 MPSiteKey mpw_siteKey_v0(
-        MPMasterKey masterKey, const char *siteName, const uint32_t siteCounter,
+        MPMasterKey masterKey, const char *siteName, const MPCounterValue siteCounter,
         const MPKeyPurpose keyPurpose, const char *keyContext);
 const char *mpw_encrypt_v0(
         MPMasterKey masterKey, const char *plainText);
@@ -46,7 +46,7 @@ static MPMasterKey mpw_masterKey_v1(
 }
 
 static MPSiteKey mpw_siteKey_v1(
-        MPMasterKey masterKey, const char *siteName, const uint32_t siteCounter,
+        MPMasterKey masterKey, const char *siteName, const MPCounterValue siteCounter,
         const MPKeyPurpose keyPurpose, const char *keyContext) {
 
     return mpw_siteKey_v0( masterKey, siteName, siteCounter, keyPurpose, keyContext );

@@ -31,13 +31,13 @@
 
 //// Types.
 
-#define MPMasterKeySize 64
+#define MPMasterKeySize 64 /* bytes */
 typedef const uint8_t *MPMasterKey;
-#define MPSiteKeySize 256 / 8 // Bytes in HMAC-SHA-256
+#define MPSiteKeySize (256 / 8) /* bytes */ // Size of HMAC-SHA-256
 typedef const uint8_t *MPSiteKey;
 typedef const char *MPKeyID;
 
-typedef enum( unsigned int, MPKeyPurpose ) {
+typedef enum( uint8_t, MPKeyPurpose ) {
     /** Generate a key for authentication. */
             MPKeyPurposeAuthentication,
     /** Generate a name for identification. */
@@ -46,21 +46,24 @@ typedef enum( unsigned int, MPKeyPurpose ) {
             MPKeyPurposeRecovery,
 };
 
-typedef enum( unsigned int, MPPasswordTypeClass ) {
+// bit 4 - 9
+typedef enum( uint16_t, MPPasswordTypeClass ) {
     /** Generate the password. */
             MPPasswordTypeClassGenerated = 1 << 4,
     /** Store the password. */
             MPPasswordTypeClassStored = 1 << 5,
 };
 
-typedef enum( unsigned int, MPSiteFeature ) {
+// bit 10 - 15
+typedef enum( uint16_t, MPSiteFeature ) {
     /** Export the key-protected content data. */
             MPSiteFeatureExportContent = 1 << 10,
     /** Never export content. */
             MPSiteFeatureDevicePrivate = 1 << 11,
 };
 
-typedef enum( unsigned int, MPPasswordType ) {
+// bit 0-3 | MPPasswordTypeClass | MPSiteFeature
+typedef enum( uint32_t, MPPasswordType ) {
     /** pg^VMAUBk5x3p%HP%i4= */
             MPPasswordTypeGeneratedMaximum = 0x0 | MPPasswordTypeClassGenerated | 0x0,
     /** BiroYena8:Kixa */
@@ -84,6 +87,17 @@ typedef enum( unsigned int, MPPasswordType ) {
             MPPasswordTypeStoredDevice = 0x1 | MPPasswordTypeClassStored | MPSiteFeatureDevicePrivate,
 
     MPPasswordTypeDefault = MPPasswordTypeGeneratedLong,
+};
+
+typedef enum ( uint32_t, MPCounterValue ) {
+    /** Use a time-based counter value, resulting in a TOTP generator. */
+            MPCounterValueTOTP = 0,
+    /** The initial value for a site's counter. */
+            MPCounterValueInitial = 1,
+
+    MPCounterValueDefault = MPCounterValueInitial,
+    MPCounterValueFirst = MPCounterValueTOTP,
+    MPCounterValueLast = UINT32_MAX,
 };
 
 //// Type utilities.

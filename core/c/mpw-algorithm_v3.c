@@ -29,7 +29,7 @@
 
 // Inherited functions.
 MPSiteKey mpw_siteKey_v2(
-        MPMasterKey masterKey, const char *siteName, const uint32_t siteCounter,
+        MPMasterKey masterKey, const char *siteName, const MPCounterValue siteCounter,
         const MPKeyPurpose keyPurpose, const char *keyContext);
 const char *mpw_sitePassword_v2(
         MPSiteKey siteKey, const MPPasswordType passwordType);
@@ -73,7 +73,7 @@ static MPMasterKey mpw_masterKey_v3(
 }
 
 static MPSiteKey mpw_siteKey_v3(
-        MPMasterKey masterKey, const char *siteName, const uint32_t siteCounter,
+        MPMasterKey masterKey, const char *siteName, const MPCounterValue siteCounter,
         const MPKeyPurpose keyPurpose, const char *keyContext) {
 
     return mpw_siteKey_v2( masterKey, siteName, siteCounter, keyPurpose, keyContext );

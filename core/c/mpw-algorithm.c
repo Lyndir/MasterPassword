@@ -46,7 +46,7 @@ MPMasterKey mpw_masterKey(const char *fullName, const char *masterPassword, cons
 }
 
 MPSiteKey mpw_siteKey(
-        MPMasterKey masterKey, const char *siteName, const uint32_t siteCounter,
+        MPMasterKey masterKey, const char *siteName, const MPCounterValue siteCounter,
         const MPKeyPurpose keyPurpose, const char *keyContext, const MPAlgorithmVersion algorithmVersion) {
 
     trc( "-- mpw_siteKey (algorithm: %u)\n", algorithmVersion );
