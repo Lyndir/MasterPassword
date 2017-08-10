@@ -144,7 +144,7 @@ bool mpw_free_string(
 uint8_t const *mpw_kdf_scrypt(
         const size_t keySize, const char *secret, const uint8_t *salt, const size_t saltSize,
         uint64_t N, uint32_t r, uint32_t p);
-/** Derive a subkey from the given key.
+/** Derive a subkey from the given key using the blake2b KDF.
   * @return A new keySize allocated buffer containing the key. */
 uint8_t const *mpw_kdf_blake2b(
         const size_t subkeySize, const uint8_t *key, const size_t keySize,

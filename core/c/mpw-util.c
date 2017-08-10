@@ -190,7 +190,7 @@ uint8_t const *mpw_kdf_blake2b(const size_t subkeySize, const uint8_t *key, cons
         return NULL;
     }
 #else
-#error No crypto support for mpw_scrypt.
+#error No crypto support for mpw_kdf_blake2b.
 #endif
 
     return subkey;
