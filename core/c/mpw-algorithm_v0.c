@@ -190,8 +190,8 @@ static const char *mpw_sitePasswordFromDerive_v0(
                 return NULL;
             }
             int resultParamInt = atoi( resultParam );
-            if (resultParamInt <= 0 || resultParamInt > UINT16_MAX || resultParamInt % 8 != 0) {
-                err( "Parameter is not a valid key size: %s\n", resultParam );
+            if (resultParamInt < 128 || resultParamInt > 512 || resultParamInt % 8 != 0) {
+                err( "Parameter is not a valid key size (should be 128 - 512): %s\n", resultParam );
                 return NULL;
             }
             uint16_t keySize = (uint16_t)(resultParamInt / 8);
