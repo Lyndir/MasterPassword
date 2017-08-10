@@ -62,7 +62,7 @@ typedef struct MPMarshalledQuestion {
 typedef struct MPMarshalledSite {
     const char *name;
     const char *content;
-    MPPasswordType type;
+    MPResultType type;
     MPCounterValue counter;
     MPAlgorithmVersion algorithm;
 
@@ -84,7 +84,7 @@ typedef struct MPMarshalledUser {
     bool redacted;
 
     unsigned int avatar;
-    MPPasswordType defaultType;
+    MPResultType defaultType;
     time_t lastUsed;
 
     size_t sites_count;
@@ -104,7 +104,7 @@ MPMarshalledUser *mpw_marshall_user(
         const char *fullName, const char *masterPassword, const MPAlgorithmVersion algorithmVersion);
 MPMarshalledSite *mpw_marshall_site(
         MPMarshalledUser *user,
-        const char *siteName, const MPPasswordType passwordType, const MPCounterValue siteCounter, const MPAlgorithmVersion algorithmVersion);
+        const char *siteName, const MPResultType resultType, const MPCounterValue siteCounter, const MPAlgorithmVersion algorithmVersion);
 MPMarshalledQuestion *mpw_marshal_question(
         MPMarshalledSite *site, const char *keyword);
 bool mpw_marshal_free(

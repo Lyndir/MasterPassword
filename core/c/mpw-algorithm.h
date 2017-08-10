@@ -50,17 +50,18 @@ MPSiteKey mpw_siteKey(
 
 /** Encode a password for the site from the given site key.
  * @return A newly allocated string or NULL if an error occurred. */
-const char *mpw_sitePassword(
-        MPSiteKey siteKey, const MPPasswordType passwordType, const MPAlgorithmVersion algorithmVersion);
+const char *mpw_siteResult(
+        MPMasterKey masterKey, const char *siteName, const MPCounterValue siteCounter,
+        const MPKeyPurpose keyPurpose, const char *keyContext,
+        const MPResultType resultType, const char *resultParam,
+        const MPAlgorithmVersion algorithmVersion);
 
 /** Perform symmetric encryption on a secret token's plainText.
  * @return The newly allocated cipherText of the secret token encrypted by the masterKey. */
-const char *mpw_encrypt(
-        MPMasterKey masterKey, const char *plainText, const MPAlgorithmVersion algorithmVersion);
-
-/** Perform symmetric decryption on a secret token's cipherText.
- * @return The newly allocated plainText of the secret token decrypted by the masterKey. */
-const char *mpw_decrypt(
-        MPMasterKey masterKey, const char *cipherText, const MPAlgorithmVersion algorithmVersion);
+const char *mpw_siteState(
+        MPMasterKey masterKey, const char *siteName, const MPCounterValue siteCounter,
+        const MPKeyPurpose keyPurpose, const char *keyContext,
+        const MPResultType resultType, const char *state,
+        const MPAlgorithmVersion algorithmVersion);
 
 #endif // _MPW_ALGORITHM_H

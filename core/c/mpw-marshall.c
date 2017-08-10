@@ -39,7 +39,7 @@ MPMarshalledUser *mpw_marshall_user(
             .redacted = true,
 
             .avatar = 0,
-            .defaultType = MPPasswordTypeDefault,
+            .defaultType = MPResultTypeDefault,
             .lastUsed = 0,
 
             .sites_count = 0,
@@ -49,7 +49,7 @@ MPMarshalledUser *mpw_marshall_user(
 };
 
 MPMarshalledSite *mpw_marshall_site(
-        MPMarshalledUser *user, const char *siteName, const MPPasswordType passwordType,
+        MPMarshalledUser *user, const char *siteName, const MPResultType resultType,
         const MPCounterValue siteCounter, const MPAlgorithmVersion algorithmVersion) {
 
     if (!siteName || !mpw_realloc( &user->sites, NULL, sizeof( MPMarshalledSite ) * ++user->sites_count ))
@@ -59,7 +59,7 @@ MPMarshalledSite *mpw_marshall_site(
     *site = (MPMarshalledSite){
             .name = strdup( siteName ),
             .content = NULL,
-            .type = passwordType,
+            .type = resultType,
             .counter = siteCounter,
             .algorithm = algorithmVersion,
 
@@ -171,13 +171,9 @@ static bool mpw_marshall_write_flat(
                 return false;
             }
 
-            if (site->type & MPPasswordTypeClassGenerated) {
-                MPSiteKey siteKey = mpw_siteKey( masterKey, site->name, site->counter, MPKeyPurposeAuthentication, NULL, site->algorithm );
-                content = mpw_sitePassword( siteKey, site->type, site->algorithm );
-                mpw_free( siteKey, MPSiteKeySize );
-            }
-            else if (site->type & MPSiteFeatureExportContent && site->content && strlen( site->content ))
-                content = mpw_decrypt( masterKey, site->content, site->algorithm );
+            if (site->type & MPResultTypeClassTemplate)
+                content = mpw_siteResult( masterKey, site->name, site->counter,
+                        MPKeyPurposeAuthentication, NULL, site->type, site->content, site->algorithm );
         }
         else if (site->type & MPSiteFeatureExportContent && site->content && strlen( site->content ))
             // Redacted
@@ -255,13 +251,9 @@ static bool mpw_marshall_write_json(
                 return false;
             }
 
-            if (site->type & MPPasswordTypeClassGenerated) {
-                MPSiteKey siteKey = mpw_siteKey( masterKey, site->name, site->counter, MPKeyPurposeAuthentication, NULL, site->algorithm );
-                content = mpw_sitePassword( siteKey, site->type, site->algorithm );
-                mpw_free( siteKey, MPSiteKeySize );
-            }
-            else if (site->type & MPSiteFeatureExportContent && site->content && strlen( site->content ))
-                content = mpw_decrypt( masterKey, site->content, site->algorithm );
+            if (site->type & MPResultTypeClassTemplate)
+                content = mpw_siteResult( masterKey, site->name, site->counter,
+                        MPKeyPurposeAuthentication, NULL, site->type, site->content, site->algorithm );
         }
         else if (site->type & MPSiteFeatureExportContent && site->content && strlen( site->content ))
             // Redacted
@@ -294,10 +286,8 @@ static bool mpw_marshall_write_json(
 
             if (!user->redacted) {
                 // Clear Text
-                MPSiteKey siteKey = mpw_siteKey( masterKey, site->name,
-                        MPCounterValueInitial, MPKeyPurposeRecovery, question->keyword, site->algorithm );
-                const char *answer = mpw_sitePassword( siteKey, MPPasswordTypeGeneratedPhrase, site->algorithm );
-                mpw_free( siteKey, MPSiteKeySize );
+                const char *answer = mpw_siteResult( masterKey, site->name, MPCounterValueInitial,
+                        MPKeyPurposeRecovery, question->keyword, MPResultTypeTemplatePhrase, NULL, site->algorithm );
                 if (answer)
                     json_object_object_add( json_site_question, "answer", json_object_new_string( answer ) );
             }
@@ -327,10 +317,10 @@ bool mpw_marshall_write(
             return mpw_marshall_write_flat( out, user, error );
         case MPMarshallFormatJSON:
             return mpw_marshall_write_json( out, user, error );
+        default:
+            *error = (MPMarshallError){ MPMarshallErrorFormat, mpw_str( "Unsupported output format: %u", outFormat ) };
+            return false;
     }
-
-    *error = (MPMarshallError){ MPMarshallErrorFormat, mpw_str( "Unsupported output format: %u", outFormat ) };
-    return false;
 }
 
 static MPMarshalledUser *mpw_marshall_read_flat(
@@ -344,7 +334,7 @@ static MPMarshalledUser *mpw_marshall_read_flat(
     unsigned int format = 0, avatar = 0;
     char *fullName = NULL, *keyID = NULL;
     MPAlgorithmVersion algorithm = MPAlgorithmVersionCurrent, masterKeyAlgorithm = (MPAlgorithmVersion)-1;
-    MPPasswordType defaultType = MPPasswordTypeDefault;
+    MPResultType defaultType = MPResultTypeDefault;
     bool headerStarted = false, headerEnded = false, importRedacted = false;
     for (char *endOfLine, *positionInLine = in; (endOfLine = strstr( positionInLine, "\n" )); positionInLine = endOfLine + 1) {
 
@@ -395,11 +385,11 @@ static MPMarshalledUser *mpw_marshall_read_flat(
             }
             if (strcmp( headerName, "Default Type" ) == 0) {
                 int value = atoi( headerValue );
-                if (!mpw_nameForType( (MPPasswordType)value )) {
+                if (!mpw_nameForType( (MPResultType)value )) {
                     *error = (MPMarshallError){ MPMarshallErrorIllegal, mpw_str( "Invalid user default type: %s", headerValue ) };
                     return NULL;
                 }
-                defaultType = (MPPasswordType)value;
+                defaultType = (MPResultType)value;
             }
             if (strcmp( headerName, "Passwords" ) == 0)
                 importRedacted = strcmp( headerValue, "VISIBLE" ) != 0;
@@ -477,7 +467,7 @@ static MPMarshalledUser *mpw_marshall_read_flat(
         }
 
         if (siteName && str_type && str_counter && str_algorithm && str_uses && str_lastUsed) {
-            MPPasswordType siteType = (MPPasswordType)atoi( str_type );
+            MPResultType siteType = (MPResultType)atoi( str_type );
             if (!mpw_nameForType( siteType )) {
                 *error = (MPMarshallError){ MPMarshallErrorIllegal, mpw_str( "Invalid site type: %s: %s", siteName, str_type ) };
                 return NULL;
@@ -518,7 +508,8 @@ static MPMarshalledUser *mpw_marshall_read_flat(
                         return NULL;
                     }
 
-                    site->content = mpw_encrypt( masterKey, siteContent, site->algorithm );
+                    site->content = mpw_siteState( masterKey, site->name, site->counter,
+                            MPKeyPurposeAuthentication, NULL, site->type, siteContent, site->algorithm );
                 }
                 else
                     // Redacted
@@ -587,7 +578,7 @@ static MPMarshalledUser *mpw_marshall_read_json(
         return NULL;
     }
     MPAlgorithmVersion algorithm = (MPAlgorithmVersion)value;
-    MPPasswordType defaultType = (MPPasswordType)mpw_get_json_int( json_file, "user.default_type", MPPasswordTypeDefault );
+    MPResultType defaultType = (MPResultType)mpw_get_json_int( json_file, "user.default_type", MPResultTypeDefault );
     if (!mpw_nameForType( defaultType )) {
         *error = (MPMarshallError){ MPMarshallErrorIllegal, mpw_str( "Invalid user default type: %u", defaultType ) };
         return NULL;
@@ -629,7 +620,7 @@ static MPMarshalledUser *mpw_marshall_read_json(
             return NULL;
         }
         MPAlgorithmVersion siteAlgorithm = (MPAlgorithmVersion)value;
-        MPPasswordType siteType = (MPPasswordType)mpw_get_json_int( json_site.val, "type", user->defaultType );
+        MPResultType siteType = (MPResultType)mpw_get_json_int( json_site.val, "type", user->defaultType );
         if (!mpw_nameForType( siteType )) {
             *error = (MPMarshallError){ MPMarshallErrorIllegal, mpw_str( "Invalid site type: %s: %u", siteName, siteType ) };
             return NULL;
@@ -673,7 +664,8 @@ static MPMarshalledUser *mpw_marshall_read_json(
                     return NULL;
                 }
 
-                site->content = mpw_encrypt( masterKey, siteContent, site->algorithm );
+                site->content = mpw_siteState( masterKey, site->name, site->counter,
+                        MPKeyPurposeAuthentication, NULL, site->type, siteContent, site->algorithm );
             }
             else
                 // Redacted
@@ -699,10 +691,10 @@ MPMarshalledUser *mpw_marshall_read(
             return mpw_marshall_read_flat( in, masterPassword, error );
         case MPMarshallFormatJSON:
             return mpw_marshall_read_json( in, masterPassword, error );
+        default:
+            *error = (MPMarshallError){ MPMarshallErrorFormat, mpw_str( "Unsupported input format: %u", inFormat ) };
+            return NULL;
     }
-
-    *error = (MPMarshallError){ MPMarshallErrorFormat, mpw_str( "Unsupported input format: %u", inFormat ) };
-    return NULL;
 }
 
 const MPMarshallFormat mpw_formatWithName(

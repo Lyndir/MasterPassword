@@ -33,10 +33,12 @@ MPMasterKey mpw_masterKey_v0(
 MPSiteKey mpw_siteKey_v0(
         MPMasterKey masterKey, const char *siteName, const MPCounterValue siteCounter,
         const MPKeyPurpose keyPurpose, const char *keyContext);
-const char *mpw_encrypt_v0(
-        MPMasterKey masterKey, const char *plainText);
-const char *mpw_decrypt_v0(
-        MPMasterKey masterKey, const char *cipherText);
+const char *mpw_sitePasswordFromCrypt_v0(
+        MPMasterKey masterKey, MPSiteKey siteKey, const MPResultType resultType, const char *cipherText);
+const char *mpw_sitePasswordFromDerive_v0(
+        MPMasterKey masterKey, MPSiteKey siteKey, const MPResultType resultType, const char *resultParam);
+const char *mpw_siteState_v0(
+        MPMasterKey masterKey, MPSiteKey siteKey, const MPResultType resultType, const char *state);
 
 // Algorithm version overrides.
 static MPMasterKey mpw_masterKey_v1(
@@ -52,11 +54,11 @@ static MPSiteKey mpw_siteKey_v1(
     return mpw_siteKey_v0( masterKey, siteName, siteCounter, keyPurpose, keyContext );
 }
 
-static const char *mpw_sitePassword_v1(
-        MPSiteKey siteKey, const MPPasswordType passwordType) {
+static const char *mpw_sitePasswordFromTemplate_v1(
+        MPMasterKey masterKey, MPSiteKey siteKey, const MPResultType resultType, const char *resultParam) {
 
     // Determine the template.
-    const char *template = mpw_templateForType( passwordType, siteKey[0] );
+    const char *template = mpw_templateForType( resultType, siteKey[0] );
     trc( "template: %u => %s\n", siteKey[0], template );
     if (!template)
         return NULL;
@@ -77,14 +79,20 @@ static const char *mpw_sitePassword_v1(
     return sitePassword;
 }
 
-static const char *mpw_encrypt_v1(
-        MPMasterKey masterKey, const char *plainText) {
+static const char *mpw_sitePasswordFromCrypt_v1(
+        MPMasterKey masterKey, MPSiteKey siteKey, const MPResultType resultType, const char *cipherText) {
 
-    return mpw_encrypt_v0( masterKey, plainText );
+    return mpw_sitePasswordFromCrypt_v0( masterKey, siteKey, resultType, cipherText );
 }
 
-static const char *mpw_decrypt_v1(
-        MPMasterKey masterKey, const char *cipherText) {
+static const char *mpw_sitePasswordFromDerive_v1(
+        MPMasterKey masterKey, MPSiteKey siteKey, const MPResultType resultType, const char *resultParam) {
 
-    return mpw_decrypt_v0( masterKey, cipherText );
+    return mpw_sitePasswordFromDerive_v0( masterKey, siteKey, resultType, resultParam );
+}
+
+static const char *mpw_siteState_v1(
+        MPMasterKey masterKey, MPSiteKey siteKey, const MPResultType resultType, const char *state) {
+
+    return mpw_siteState_v0( masterKey, siteKey, resultType, state );
 }

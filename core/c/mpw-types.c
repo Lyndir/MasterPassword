@@ -29,28 +29,30 @@
 #include "mpw-types.h"
 #include "mpw-util.h"
 
-const MPPasswordType mpw_typeWithName(const char *typeName) {
+const MPResultType mpw_typeWithName(const char *typeName) {
 
     // Find what password type is represented by the type letter.
     if (strlen( typeName ) == 1) {
         if ('x' == typeName[0])
-            return MPPasswordTypeGeneratedMaximum;
+            return MPResultTypeTemplateMaximum;
         if ('l' == typeName[0])
-            return MPPasswordTypeGeneratedLong;
+            return MPResultTypeTemplateLong;
         if ('m' == typeName[0])
-            return MPPasswordTypeGeneratedMedium;
+            return MPResultTypeTemplateMedium;
         if ('b' == typeName[0])
-            return MPPasswordTypeGeneratedBasic;
+            return MPResultTypeTemplateBasic;
         if ('s' == typeName[0])
-            return MPPasswordTypeGeneratedShort;
+            return MPResultTypeTemplateShort;
         if ('i' == typeName[0])
-            return MPPasswordTypeGeneratedPIN;
+            return MPResultTypeTemplatePIN;
         if ('n' == typeName[0])
-            return MPPasswordTypeGeneratedName;
+            return MPResultTypeTemplateName;
         if ('P' == typeName[0])
-            return MPPasswordTypeStoredPersonal;
+            return MPResultTypeStatePersonal;
         if ('D' == typeName[0])
-            return MPPasswordTypeStoredDevice;
+            return MPResultTypeStateDevice;
+        if ('k' == typeName[0])
+            return MPResultTypeDeriveKey;
     }
 
     // Lower-case and trim optionally leading "Generated" string from typeName to standardize it.
@@ -64,71 +66,77 @@ const MPPasswordType mpw_typeWithName(const char *typeName) {
     stdTypeName[stdTypeNameSize] = '\0';
 
     // Find what password type is represented by the type name.
-    if (strncmp( mpw_nameForType( MPPasswordTypeGeneratedPhrase ), stdTypeName, strlen( stdTypeName ) ) == 0)
-        return MPPasswordTypeGeneratedPhrase;
-    if (strncmp( mpw_nameForType( MPPasswordTypeGeneratedMaximum ), stdTypeName, strlen( stdTypeName ) ) == 0)
-        return MPPasswordTypeGeneratedMaximum;
-    if (strncmp( mpw_nameForType( MPPasswordTypeGeneratedLong ), stdTypeName, strlen( stdTypeName ) ) == 0)
-        return MPPasswordTypeGeneratedLong;
-    if (strncmp( mpw_nameForType( MPPasswordTypeGeneratedMedium ), stdTypeName, strlen( stdTypeName ) ) == 0)
-        return MPPasswordTypeGeneratedMedium;
-    if (strncmp( mpw_nameForType( MPPasswordTypeGeneratedBasic ), stdTypeName, strlen( stdTypeName ) ) == 0)
-        return MPPasswordTypeGeneratedBasic;
-    if (strncmp( mpw_nameForType( MPPasswordTypeGeneratedShort ), stdTypeName, strlen( stdTypeName ) ) == 0)
-        return MPPasswordTypeGeneratedShort;
-    if (strncmp( mpw_nameForType( MPPasswordTypeGeneratedPIN ), stdTypeName, strlen( stdTypeName ) ) == 0)
-        return MPPasswordTypeGeneratedPIN;
-    if (strncmp( mpw_nameForType( MPPasswordTypeGeneratedName ), stdTypeName, strlen( stdTypeName ) ) == 0)
-        return MPPasswordTypeGeneratedName;
-    if (strncmp( mpw_nameForType( MPPasswordTypeGeneratedPhrase ), stdTypeName, strlen( stdTypeName ) ) == 0)
-        return MPPasswordTypeGeneratedPhrase;
+    if (strncmp( mpw_nameForType( MPResultTypeTemplateMaximum ), stdTypeName, strlen( stdTypeName ) ) == 0)
+        return MPResultTypeTemplateMaximum;
+    if (strncmp( mpw_nameForType( MPResultTypeTemplateLong ), stdTypeName, strlen( stdTypeName ) ) == 0)
+        return MPResultTypeTemplateLong;
+    if (strncmp( mpw_nameForType( MPResultTypeTemplateMedium ), stdTypeName, strlen( stdTypeName ) ) == 0)
+        return MPResultTypeTemplateMedium;
+    if (strncmp( mpw_nameForType( MPResultTypeTemplateBasic ), stdTypeName, strlen( stdTypeName ) ) == 0)
+        return MPResultTypeTemplateBasic;
+    if (strncmp( mpw_nameForType( MPResultTypeTemplateShort ), stdTypeName, strlen( stdTypeName ) ) == 0)
+        return MPResultTypeTemplateShort;
+    if (strncmp( mpw_nameForType( MPResultTypeTemplatePIN ), stdTypeName, strlen( stdTypeName ) ) == 0)
+        return MPResultTypeTemplatePIN;
+    if (strncmp( mpw_nameForType( MPResultTypeTemplateName ), stdTypeName, strlen( stdTypeName ) ) == 0)
+        return MPResultTypeTemplateName;
+    if (strncmp( mpw_nameForType( MPResultTypeTemplatePhrase ), stdTypeName, strlen( stdTypeName ) ) == 0)
+        return MPResultTypeTemplatePhrase;
+    if (strncmp( mpw_nameForType( MPResultTypeStatePersonal ), stdTypeName, strlen( stdTypeName ) ) == 0)
+        return MPResultTypeStatePersonal;
+    if (strncmp( mpw_nameForType( MPResultTypeStateDevice ), stdTypeName, strlen( stdTypeName ) ) == 0)
+        return MPResultTypeStateDevice;
+    if (strncmp( mpw_nameForType( MPResultTypeDeriveKey ), stdTypeName, strlen( stdTypeName ) ) == 0)
+        return MPResultTypeDeriveKey;
 
     dbg( "Not a generated type name: %s\n", stdTypeName );
-    return (MPPasswordType)ERR;
+    return (MPResultType)ERR;
 }
 
-const char *mpw_nameForType(MPPasswordType passwordType) {
+const char *mpw_nameForType(MPResultType resultType) {
 
-    switch (passwordType) {
-        case MPPasswordTypeGeneratedMaximum:
+    switch (resultType) {
+        case MPResultTypeTemplateMaximum:
             return "maximum";
-        case MPPasswordTypeGeneratedLong:
+        case MPResultTypeTemplateLong:
             return "long";
-        case MPPasswordTypeGeneratedMedium:
+        case MPResultTypeTemplateMedium:
             return "medium";
-        case MPPasswordTypeGeneratedBasic:
+        case MPResultTypeTemplateBasic:
             return "basic";
-        case MPPasswordTypeGeneratedShort:
+        case MPResultTypeTemplateShort:
             return "short";
-        case MPPasswordTypeGeneratedPIN:
+        case MPResultTypeTemplatePIN:
             return "pin";
-        case MPPasswordTypeGeneratedName:
+        case MPResultTypeTemplateName:
             return "name";
-        case MPPasswordTypeGeneratedPhrase:
+        case MPResultTypeTemplatePhrase:
             return "phrase";
-        case MPPasswordTypeStoredPersonal:
+        case MPResultTypeStatePersonal:
             return "personal";
-        case MPPasswordTypeStoredDevice:
+        case MPResultTypeStateDevice:
             return "device";
+        case MPResultTypeDeriveKey:
+            return "key";
         default: {
-            dbg( "Unknown password type: %d\n", passwordType );
+            dbg( "Unknown password type: %d\n", resultType );
             return NULL;
         }
     }
 }
 
-const char **mpw_templatesForType(MPPasswordType type, size_t *count) {
+const char **mpw_templatesForType(MPResultType type, size_t *count) {
 
-    if (!(type & MPPasswordTypeClassGenerated)) {
+    if (!(type & MPResultTypeClassTemplate)) {
         dbg( "Not a generated type: %d\n", type );
         return NULL;
     }
 
     switch (type) {
-        case MPPasswordTypeGeneratedMaximum:
+        case MPResultTypeTemplateMaximum:
             return mpw_alloc_array( count, const char *,
                     "anoxxxxxxxxxxxxxxxxx", "axxxxxxxxxxxxxxxxxno" );
-        case MPPasswordTypeGeneratedLong:
+        case MPResultTypeTemplateLong:
             return mpw_alloc_array( count, const char *,
                     "CvcvnoCvcvCvcv", "CvcvCvcvnoCvcv", "CvcvCvcvCvcvno",
                     "CvccnoCvcvCvcv", "CvccCvcvnoCvcv", "CvccCvcvCvcvno",
@@ -137,22 +145,22 @@ const char **mpw_templatesForType(MPPasswordType type, size_t *count) {
                     "CvccnoCvccCvcv", "CvccCvccnoCvcv", "CvccCvccCvcvno",
                     "CvcvnoCvccCvcc", "CvcvCvccnoCvcc", "CvcvCvccCvccno",
                     "CvccnoCvcvCvcc", "CvccCvcvnoCvcc", "CvccCvcvCvccno" );
-        case MPPasswordTypeGeneratedMedium:
+        case MPResultTypeTemplateMedium:
             return mpw_alloc_array( count, const char *,
                     "CvcnoCvc", "CvcCvcno" );
-        case MPPasswordTypeGeneratedBasic:
+        case MPResultTypeTemplateBasic:
             return mpw_alloc_array( count, const char *,
                     "aaanaaan", "aannaaan", "aaannaaa" );
-        case MPPasswordTypeGeneratedShort:
+        case MPResultTypeTemplateShort:
             return mpw_alloc_array( count, const char *,
                     "Cvcn" );
-        case MPPasswordTypeGeneratedPIN:
+        case MPResultTypeTemplatePIN:
             return mpw_alloc_array( count, const char *,
                     "nnnn" );
-        case MPPasswordTypeGeneratedName:
+        case MPResultTypeTemplateName:
             return mpw_alloc_array( count, const char *,
                     "cvccvcvcv" );
-        case MPPasswordTypeGeneratedPhrase:
+        case MPResultTypeTemplatePhrase:
             return mpw_alloc_array( count, const char *,
                     "cvcc cvc cvccvcv cvc", "cvc cvccvcvcv cvcv", "cv cvccv cvc cvcvccv" );
         default: {
@@ -162,7 +170,7 @@ const char **mpw_templatesForType(MPPasswordType type, size_t *count) {
     }
 }
 
-const char *mpw_templateForType(MPPasswordType type, uint8_t seedByte) {
+const char *mpw_templateForType(MPResultType type, uint8_t seedByte) {
 
     size_t count = 0;
     const char **templates = mpw_templatesForType( type, &count );

@@ -5,7 +5,6 @@ cd "${BASH_SOURCE%/*}"
 tag=$(git describe --match '*-cli*')
 commit=$(git describe --long --dirty --match '*-cli*')
 [[ $commit != *-dirty ]] || { echo >&2 "Tree is dirty, first commit any changes."; exit 1; }
-git show --show-signature --pretty=format:%H --quiet "$tag" > VERSION
 
 mpwArchive=mpw-$commit.tar.gz
 [[ -e $mpwArchive ]] && echo >&2 "WARNING: $mpwArchive already exists.  Will overwrite."
@@ -15,6 +14,7 @@ echo "Cleaning .."
 ( git clean -ffdx . && cd core && git clean -ffdx . )
 
 echo "Creating archive $mpwArchive .."
+git show --show-signature --pretty=format:%H --quiet "$tag" > VERSION
 git ls-files -z . | xargs -0 tar -Lcvzf "$mpwArchive"
 
 echo "Creating archive signature $mpwArchive.sig .."

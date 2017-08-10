@@ -18,6 +18,7 @@
 
 #include <string.h>
 #include <ctype.h>
+#include <errno.h>
 
 #if MPW_COLOR
 #include <unistd.h>
@@ -32,6 +33,7 @@
 #include "sodium.h"
 #ifdef SODIUM_LIBRARY_MINIMAL
 #include "crypto_stream_aes128ctr.h"
+#include "crypto_kdf_blake2b.h"
 #endif
 #endif
 
@@ -122,7 +124,7 @@ bool mpw_free_string(const char *string) {
     return string && mpw_free( string, strlen( string ) );
 }
 
-uint8_t const *mpw_scrypt(const size_t keySize, const char *secret, const uint8_t *salt, const size_t saltSize,
+uint8_t const *mpw_kdf_scrypt(const size_t keySize, const char *secret, const uint8_t *salt, const size_t saltSize,
         uint64_t N, uint32_t r, uint32_t p) {
 
     if (!secret || !salt)
@@ -149,7 +151,49 @@ uint8_t const *mpw_scrypt(const size_t keySize, const char *secret, const uint8_
     return key;
 }
 
-uint8_t const *mpw_hmac_sha256(const uint8_t *key, const size_t keySize, const uint8_t *message, const size_t messageSize) {
+uint8_t const *mpw_kdf_blake2b(const size_t subkeySize, const uint8_t *key, const size_t keySize,
+        const uint8_t *context, const size_t contextSize, const uint64_t id, const char *personal) {
+
+    if (!key || !keySize || !subkeySize) {
+        errno = EINVAL;
+        return NULL;
+    }
+
+    uint8_t *subkey = malloc( subkeySize );
+    if (!subkey)
+        return NULL;
+
+#if HAS_SODIUM
+    if (personal && strlen( personal ) > crypto_generichash_blake2b_PERSONALBYTES) {
+        errno = EINVAL;
+        free( subkey );
+        return NULL;
+    }
+
+    uint8_t saltBuf[crypto_generichash_blake2b_SALTBYTES];
+    bzero( saltBuf, sizeof saltBuf );
+    if (id) {
+        uint64_t id_n = htonll( id );
+        memcpy( saltBuf, &id_n, sizeof id_n );
+    }
+
+    uint8_t personalBuf[crypto_generichash_blake2b_PERSONALBYTES];
+    bzero( personalBuf, sizeof saltBuf );
+    if (personal && strlen( personal ))
+        memcpy( personalBuf, personal, strlen( personal ) );
+
+    if (crypto_generichash_blake2b_salt_personal( subkey, subkeySize, context, contextSize, key, keySize, saltBuf, personalBuf ) != 0) {
+        mpw_free( subkey, subkeySize );
+        return NULL;
+    }
+#else
+#error No crypto support for mpw_scrypt.
+#endif
+
+    return subkey;
+}
+
+uint8_t const *mpw_hash_hmac_sha256(const uint8_t *key, const size_t keySize, const uint8_t *message, const size_t messageSize) {
 
     if (!key || !keySize || !message || !messageSize)
         return NULL;
@@ -330,7 +374,8 @@ const char *mpw_identicon(const char *fullName, const char *masterPassword) {
             "♨", "♩", "♪", "♫", "⚐", "⚑", "⚔", "⚖", "⚙", "⚠", "⌘", "⏎", "✄", "✆", "✈", "✉", "✌"
     };
 
-    const uint8_t *identiconSeed = mpw_hmac_sha256( (const uint8_t *)masterPassword, strlen( masterPassword ), (const uint8_t *)fullName,
+    const uint8_t *identiconSeed = mpw_hash_hmac_sha256( (const uint8_t *)masterPassword, strlen( masterPassword ),
+            (const uint8_t *)fullName,
             strlen( fullName ) );
     if (!identiconSeed)
         return NULL;

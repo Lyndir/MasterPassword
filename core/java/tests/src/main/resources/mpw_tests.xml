@@ -7,7 +7,7 @@
         <keyID>98EEF4D1DF46D849574A82A03C3177056B15DFFCA29BB3899DE4628453675302</keyID>
         <siteName>masterpasswordapp.com</siteName>
         <siteCounter>1</siteCounter>
-        <passwordType>GeneratedLong</passwordType>
+        <resultType>GeneratedLong</resultType>
         <keyPurpose>Authentication</keyPurpose>
         <result><!-- abstract --></result>
     </case>
@@ -33,12 +33,12 @@
     </case>
     <case id="v3_loginName" parent="v3">
         <keyPurpose>Identification</keyPurpose>
-        <passwordType>GeneratedName</passwordType>
+        <resultType>GeneratedName</resultType>
         <result>wohzaqage</result>
     </case>
     <case id="v3_securityAnswer" parent="v3">
         <keyPurpose>Recovery</keyPurpose>
-        <passwordType>GeneratedPhrase</passwordType>
+        <resultType>GeneratedPhrase</resultType>
         <result>xin diyjiqoja hubu</result>
     </case>
     <case id="v3_securityAnswer_context" parent="v3_securityAnswer">
@@ -46,31 +46,31 @@
         <result>xogx tem cegyiva jab</result>
     </case>
     <case id="v3_type_maximum" parent="v3">
-        <passwordType>GeneratedMaximum</passwordType>
+        <resultType>GeneratedMaximum</resultType>
         <result>W6@692^B1#&amp;@gVdSdLZ@</result>
     </case>
     <case id="v3_type_medium" parent="v3">
-        <passwordType>GeneratedMedium</passwordType>
+        <resultType>GeneratedMedium</resultType>
         <result>Jej2$Quv</result>
     </case>
     <case id="v3_type_basic" parent="v3">
-        <passwordType>GeneratedBasic</passwordType>
+        <resultType>GeneratedBasic</resultType>
         <result>WAo2xIg6</result>
     </case>
     <case id="v3_type_short" parent="v3">
-        <passwordType>GeneratedShort</passwordType>
+        <resultType>GeneratedShort</resultType>
         <result>Jej2</result>
     </case>
     <case id="v3_type_pin" parent="v3">
-        <passwordType>GeneratedPIN</passwordType>
+        <resultType>GeneratedPIN</resultType>
         <result>7662</result>
     </case>
     <case id="v3_type_name" parent="v3">
-        <passwordType>GeneratedName</passwordType>
+        <resultType>GeneratedName</resultType>
         <result>jejraquvo</result>
     </case>
     <case id="v3_type_phrase" parent="v3">
-        <passwordType>GeneratedPhrase</passwordType>
+        <resultType>GeneratedPhrase</resultType>
         <result>jejr quv cabsibu tam</result>
     </case>
     <case id="v3_counter_ceiling" parent="v3">
@@ -99,12 +99,12 @@
     </case>
     <case id="v2_loginName" parent="v2">
         <keyPurpose>Identification</keyPurpose>
-        <passwordType>GeneratedName</passwordType>
+        <resultType>GeneratedName</resultType>
         <result>wohzaqage</result>
     </case>
     <case id="v2_securityAnswer" parent="v2">
         <keyPurpose>Recovery</keyPurpose>
-        <passwordType>GeneratedPhrase</passwordType>
+        <resultType>GeneratedPhrase</resultType>
         <result>xin diyjiqoja hubu</result>
     </case>
     <case id="v2_securityAnswer_context" parent="v2_securityAnswer">
@@ -112,31 +112,31 @@
         <result>xogx tem cegyiva jab</result>
     </case>
     <case id="v2_type_maximum" parent="v2">
-        <passwordType>GeneratedMaximum</passwordType>
+        <resultType>GeneratedMaximum</resultType>
         <result>W6@692^B1#&amp;@gVdSdLZ@</result>
     </case>
     <case id="v2_type_medium" parent="v2">
-        <passwordType>GeneratedMedium</passwordType>
+        <resultType>GeneratedMedium</resultType>
         <result>Jej2$Quv</result>
     </case>
     <case id="v2_type_basic" parent="v2">
-        <passwordType>GeneratedBasic</passwordType>
+        <resultType>GeneratedBasic</resultType>
         <result>WAo2xIg6</result>
     </case>
     <case id="v2_type_short" parent="v2">
-        <passwordType>GeneratedShort</passwordType>
+        <resultType>GeneratedShort</resultType>
         <result>Jej2</result>
     </case>
     <case id="v2_type_pin" parent="v2">
-        <passwordType>GeneratedPIN</passwordType>
+        <resultType>GeneratedPIN</resultType>
         <result>7662</result>
     </case>
     <case id="v2_type_name" parent="v2">
-        <passwordType>GeneratedName</passwordType>
+        <resultType>GeneratedName</resultType>
         <result>jejraquvo</result>
     </case>
     <case id="v2_type_phrase" parent="v2">
-        <passwordType>GeneratedPhrase</passwordType>
+        <resultType>GeneratedPhrase</resultType>
         <result>jejr quv cabsibu tam</result>
     </case>
     <case id="v2_counter_ceiling" parent="v2">
@@ -165,12 +165,12 @@
     </case>
     <case id="v1_loginName" parent="v1">
         <keyPurpose>Identification</keyPurpose>
-        <passwordType>GeneratedName</passwordType>
+        <resultType>GeneratedName</resultType>
         <result>wohzaqage</result>
     </case>
     <case id="v1_securityAnswer" parent="v1">
         <keyPurpose>Recovery</keyPurpose>
-        <passwordType>GeneratedPhrase</passwordType>
+        <resultType>GeneratedPhrase</resultType>
         <result>xin diyjiqoja hubu</result>
     </case>
     <case id="v1_securityAnswer_context" parent="v1_securityAnswer">
@@ -178,31 +178,31 @@
         <result>xogx tem cegyiva jab</result>
     </case>
     <case id="v1_type_maximum" parent="v1">
-        <passwordType>GeneratedMaximum</passwordType>
+        <resultType>GeneratedMaximum</resultType>
         <result>W6@692^B1#&amp;@gVdSdLZ@</result>
     </case>
     <case id="v1_type_medium" parent="v1">
-        <passwordType>GeneratedMedium</passwordType>
+        <resultType>GeneratedMedium</resultType>
         <result>Jej2$Quv</result>
     </case>
     <case id="v1_type_basic" parent="v1">
-        <passwordType>GeneratedBasic</passwordType>
+        <resultType>GeneratedBasic</resultType>
         <result>WAo2xIg6</result>
     </case>
     <case id="v1_type_short" parent="v1">
-        <passwordType>GeneratedShort</passwordType>
+        <resultType>GeneratedShort</resultType>
         <result>Jej2</result>
     </case>
     <case id="v1_type_pin" parent="v1">
-        <passwordType>GeneratedPIN</passwordType>
+        <resultType>GeneratedPIN</resultType>
         <result>7662</result>
     </case>
     <case id="v1_type_name" parent="v1">
-        <passwordType>GeneratedName</passwordType>
+        <resultType>GeneratedName</resultType>
         <result>jejraquvo</result>
     </case>
     <case id="v1_type_phrase" parent="v1">
-        <passwordType>GeneratedPhrase</passwordType>
+        <resultType>GeneratedPhrase</resultType>
         <result>jejr quv cabsibu tam</result>
     </case>
     <case id="v1_counter_ceiling" parent="v1">
@@ -231,12 +231,12 @@
     </case>
     <case id="v0_loginName" parent="v0">
         <keyPurpose>Identification</keyPurpose>
-        <passwordType>GeneratedName</passwordType>
+        <resultType>GeneratedName</resultType>
         <result>lozwajave</result>
     </case>
     <case id="v0_securityAnswer" parent="v0">
         <keyPurpose>Recovery</keyPurpose>
-        <passwordType>GeneratedPhrase</passwordType>
+        <resultType>GeneratedPhrase</resultType>
         <result>miy lirfijoja dubu</result>
     </case>
     <case id="v0_securityAnswer_context" parent="v0_securityAnswer">
@@ -244,31 +244,31 @@
         <result>movm bex gevrica jaf</result>
     </case>
     <case id="v0_type_maximum" parent="v0">
-        <passwordType>GeneratedMaximum</passwordType>
+        <resultType>GeneratedMaximum</resultType>
         <result>w1!3bA3icmRAc)SS@lwl</result>
     </case>
     <case id="v0_type_medium" parent="v0">
-        <passwordType>GeneratedMedium</passwordType>
+        <resultType>GeneratedMedium</resultType>
         <result>Fej7]Jug</result>
     </case>
     <case id="v0_type_basic" parent="v0">
-        <passwordType>GeneratedBasic</passwordType>
+        <resultType>GeneratedBasic</resultType>
         <result>wvH7irC1</result>
     </case>
     <case id="v0_type_short" parent="v0">
-        <passwordType>GeneratedShort</passwordType>
+        <resultType>GeneratedShort</resultType>
         <result>Fej7</result>
     </case>
     <case id="v0_type_pin" parent="v0">
-        <passwordType>GeneratedPIN</passwordType>
+        <resultType>GeneratedPIN</resultType>
         <result>2117</result>
     </case>
     <case id="v0_type_name" parent="v0">
-        <passwordType>GeneratedName</passwordType>
+        <resultType>GeneratedName</resultType>
         <result>fejrajugo</result>
     </case>
     <case id="v0_type_phrase" parent="v0">
-        <passwordType>GeneratedPhrase</passwordType>
+        <resultType>GeneratedPhrase</resultType>
         <result>fejr jug gabsibu bax</result>
     </case>
     <case id="v0_counter_ceiling" parent="v0">

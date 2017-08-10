@@ -30,13 +30,13 @@ int main(int argc, char *const argv[]) {
         xmlChar *keyID = mpw_xmlTestCaseString( testCase, "keyID" );
         xmlChar *siteName = mpw_xmlTestCaseString( testCase, "siteName" );
         MPCounterValue siteCounter = (MPCounterValue)mpw_xmlTestCaseInteger( testCase, "siteCounter" );
-        xmlChar *passwordTypeString = mpw_xmlTestCaseString( testCase, "passwordType" );
+        xmlChar *resultTypeString = mpw_xmlTestCaseString( testCase, "resultType" );
         xmlChar *keyPurposeString = mpw_xmlTestCaseString( testCase, "keyPurpose" );
         xmlChar *keyContext = mpw_xmlTestCaseString( testCase, "keyContext" );
         xmlChar *result = mpw_xmlTestCaseString( testCase, "result" );
 
-        MPPasswordType siteType = mpw_typeWithName( (char *)passwordTypeString );
-        MPKeyPurpose siteVariant = mpw_purposeWithName( (char *)keyPurposeString );
+        MPResultType resultType = mpw_typeWithName( (char *)resultTypeString );
+        MPKeyPurpose keyPurpose = mpw_purposeWithName( (char *)keyPurposeString );
 
         // Run the test case.
         fprintf( stdout, "test case %s... ", id );
@@ -54,12 +54,9 @@ int main(int argc, char *const argv[]) {
         }
 
         // 2. calculate the site password.
-        MPSiteKey siteKey = mpw_siteKey(
-                masterKey, (char *)siteName, siteCounter, siteVariant, (char *)keyContext, algorithm );
-        const char *sitePassword = mpw_sitePassword(
-                siteKey, siteType, algorithm );
+        const char *sitePassword = mpw_siteResult(
+                masterKey, (char *)siteName, siteCounter, keyPurpose, (char *)keyContext, resultType, NULL, algorithm );
         mpw_free( masterKey, MPMasterKeySize );
-        mpw_free( siteKey, MPSiteKeySize );
         if (!sitePassword) {
             ftl( "Couldn't derive site password.\n" );
             continue;
@@ -81,7 +78,7 @@ int main(int argc, char *const argv[]) {
         xmlFree( masterPassword );
         xmlFree( keyID );
         xmlFree( siteName );
-        xmlFree( passwordTypeString );
+        xmlFree( resultTypeString );
         xmlFree( keyPurposeString );
         xmlFree( keyContext );
         xmlFree( result );

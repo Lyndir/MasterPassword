@@ -47,7 +47,8 @@ static void usage() {
             "                   i, pin      | 4 numbers.\n"
             "                   n, name     | 9 letter name.\n"
             "                   p, phrase   | 20 character sentence.\n"
-            "                   P, personal | saved personal password (see -s).\n\n" );
+            "                   K, key      | encryption key (set key size -s bits).\n"
+            "                   P, personal | saved personal password (save with -s pw).\n\n" );
     inf( ""
             "  -c counter   The value of the counter.\n"
             "               Defaults to 1.\n\n" );
@@ -56,7 +57,8 @@ static void usage() {
             "               Defaults to %s in env or %d.\n\n",
             MPAlgorithmVersionFirst, MPAlgorithmVersionLast, MP_ENV_algorithm, MPAlgorithmVersionCurrent );
     inf( ""
-            "  -s value     The value to save for -t P or -p i.\n\n" );
+            "  -s value     The value to save for -t P or -p i.\n"
+            "               The size of they key to generate for -t K, in bits (eg. 256).\n\n" );
     inf( ""
             "  -p purpose   The purpose of the generated token.\n"
             "               Defaults to 'auth'.\n"
@@ -150,9 +152,9 @@ static char *mpw_path(const char *prefix, const char *extension) {
 int main(int argc, char *const argv[]) {
 
     // Master Password defaults.
-    const char *fullName = NULL, *masterPassword = NULL, *siteName = NULL, *saveValue = NULL, *keyContext = NULL;
+    const char *fullName = NULL, *masterPassword = NULL, *siteName = NULL, *resultParam = NULL, *keyContext = NULL;
     MPCounterValue siteCounter = MPCounterValueDefault;
-    MPPasswordType passwordType = MPPasswordTypeDefault;
+    MPResultType resultType = MPResultTypeDefault;
     MPKeyPurpose keyPurpose = MPKeyPurposeAuthentication;
     MPAlgorithmVersion algorithmVersion = MPAlgorithmVersionCurrent;
     MPMarshallFormat sitesFormat = MPMarshallFormatDefault;
@@ -160,13 +162,13 @@ int main(int argc, char *const argv[]) {
 
     // Read the environment.
     const char *fullNameArg = NULL, *masterPasswordArg = NULL, *siteNameArg = NULL;
-    const char *passwordTypeArg = NULL, *siteCounterArg = NULL, *algorithmVersionArg = NULL, *saveValueArg = NULL;
+    const char *resultTypeArg = NULL, *resultParamArg = NULL, *siteCounterArg = NULL, *algorithmVersionArg = NULL;
     const char *keyPurposeArg = NULL, *keyContextArg = NULL, *sitesFormatArg = NULL, *sitesRedactedArg = NULL;
     fullNameArg = mpw_getenv( MP_ENV_fullName );
     algorithmVersionArg = mpw_getenv( MP_ENV_algorithm );
 
     // Read the command-line options.
-    for (int opt; (opt = getopt( argc, argv, "u:U:P:t:c:a:s:p:C:f:F:R:vqh" )) != EOF;)
+    for (int opt; (opt = getopt( argc, argv, "u:U:M:t:P:c:a:s:p:C:f:F:R:vqh" )) != EOF;)
         switch (opt) {
             case 'u':
                 fullNameArg = optarg && strlen( optarg )? strdup( optarg ): NULL;
@@ -176,21 +178,21 @@ int main(int argc, char *const argv[]) {
                 fullNameArg = optarg && strlen( optarg )? strdup( optarg ): NULL;
                 allowPasswordUpdate = true;
                 break;
-            case 'P':
+            case 'M':
                 // Passing your master password via the command-line is insecure.  Testing purposes only.
                 masterPasswordArg = optarg && strlen( optarg )? strdup( optarg ): NULL;
                 break;
             case 't':
-                passwordTypeArg = optarg && strlen( optarg )? strdup( optarg ): NULL;
+                resultTypeArg = optarg && strlen( optarg )? strdup( optarg ): NULL;
+                break;
+            case 'P':
+                resultParamArg = optarg && strlen( optarg )? strdup( optarg ): NULL;
                 break;
             case 'c':
                 siteCounterArg = optarg && strlen( optarg )? strdup( optarg ): NULL;
                 break;
             case 'a':
                 algorithmVersionArg = optarg && strlen( optarg )? strdup( optarg ): NULL;
-                break;
-            case 's':
-                saveValueArg = optarg && strlen( optarg )? strdup( optarg ): NULL;
                 break;
             case 'p':
                 keyPurposeArg = optarg && strlen( optarg )? strdup( optarg ): NULL;
@@ -342,7 +344,7 @@ int main(int argc, char *const argv[]) {
             fullName = strdup( user->fullName );
             masterPassword = strdup( user->masterPassword );
             algorithmVersion = user->algorithm;
-            passwordType = user->defaultType;
+            resultType = user->defaultType;
             sitesRedacted = user->redacted;
 
             if (!sitesRedacted && !sitesRedactedArg)
@@ -355,8 +357,8 @@ int main(int argc, char *const argv[]) {
                     continue;
                 }
 
-                mpw_free_string( saveValue );
-                passwordType = site->type;
+                mpw_free_string( resultParam );
+                resultType = site->type;
                 siteCounter = site->counter;
                 algorithmVersion = site->algorithm;
                 break;
@@ -383,10 +385,6 @@ int main(int argc, char *const argv[]) {
         }
         algorithmVersion = (MPAlgorithmVersion)algorithmVersionInt;
     }
-    if (saveValueArg) {
-        mpw_free_string( saveValue );
-        saveValue = strdup( saveValueArg );
-    }
     if (keyPurposeArg) {
         keyPurpose = mpw_purposeWithName( keyPurposeArg );
         if (ERR == (int)keyPurpose) {
@@ -399,22 +397,26 @@ int main(int argc, char *const argv[]) {
         case MPKeyPurposeAuthentication:
             break;
         case MPKeyPurposeIdentification: {
-            passwordType = MPPasswordTypeGeneratedName;
+            resultType = MPResultTypeTemplateName;
             purposeResult = "login";
             break;
         }
         case MPKeyPurposeRecovery: {
-            passwordType = MPPasswordTypeGeneratedPhrase;
+            resultType = MPResultTypeTemplatePhrase;
             purposeResult = "answer";
             break;
         }
     }
-    if (passwordTypeArg) {
-        passwordType = mpw_typeWithName( passwordTypeArg );
-        if (ERR == (int)passwordType) {
-            ftl( "Invalid type: %s\n", passwordTypeArg );
+    if (resultTypeArg) {
+        resultType = mpw_typeWithName( resultTypeArg );
+        if (ERR == (int)resultType) {
+            ftl( "Invalid type: %s\n", resultTypeArg );
             return EX_USAGE;
         }
+    }
+    if (resultParamArg) {
+        mpw_free_string( resultParam );
+        resultParam = strdup( resultParamArg );
     }
     if (keyContextArg) {
         mpw_free_string( keyContext );
@@ -423,10 +425,10 @@ int main(int argc, char *const argv[]) {
     mpw_free_string( fullNameArg );
     mpw_free_string( masterPasswordArg );
     mpw_free_string( siteNameArg );
-    mpw_free_string( passwordTypeArg );
+    mpw_free_string( resultTypeArg );
+    mpw_free_string( resultParamArg );
     mpw_free_string( siteCounterArg );
     mpw_free_string( algorithmVersionArg );
-    mpw_free_string( saveValueArg );
     mpw_free_string( keyPurposeArg );
     mpw_free_string( keyContextArg );
     mpw_free_string( sitesFormatArg );
@@ -444,10 +446,10 @@ int main(int argc, char *const argv[]) {
     dbg( "sitesPath        : %s\n", sitesPath );
     dbg( "siteName         : %s\n", siteName );
     dbg( "siteCounter      : %u\n", siteCounter );
-    dbg( "saveValue        : %s\n", saveValue );
+    dbg( "resultType       : %s (%u)\n", mpw_nameForType( resultType ), resultType );
+    dbg( "resultParam      : %s\n", resultParam );
     dbg( "keyPurpose       : %s (%u)\n", mpw_nameForPurpose( keyPurpose ), keyPurpose );
     dbg( "keyContext       : %s\n", keyContext );
-    dbg( "passwordType     : %s (%u)\n", mpw_nameForType( passwordType ), passwordType );
     dbg( "algorithmVersion : %u\n", algorithmVersion );
     dbg( "-----------------\n\n" );
     inf( "%s's %s for %s:\n[ %s ]: ", fullName, purposeResult, siteName, identicon );
@@ -469,71 +471,57 @@ int main(int argc, char *const argv[]) {
     if (keyPurpose == MPKeyPurposeIdentification && site && !site->loginGenerated && site->loginName)
         fprintf( stdout, "%s\n", site->loginName );
 
-    else if (passwordType & MPPasswordTypeClassGenerated) {
-        MPSiteKey siteKey = mpw_siteKey( masterKey, siteName, siteCounter, keyPurpose, keyContext, algorithmVersion );
-        const char *sitePassword = mpw_sitePassword( siteKey, passwordType, algorithmVersion );
-        mpw_free( siteKey, MPSiteKeySize );
-        if (!sitePassword) {
-            ftl( "Couldn't derive site password.\n" );
+    else if (resultParam && site && resultType & MPResultTypeClassState) {
+        mpw_free_string( site->content );
+        if (!(site->content = mpw_siteState( masterKey, siteName, siteCounter,
+                keyPurpose, keyContext, resultType, resultParam, algorithmVersion ))) {
+            ftl( "Couldn't encrypt site content.\n" );
             mpw_free( masterKey, MPMasterKeySize );
             return EX_SOFTWARE;
         }
 
-        fprintf( stdout, "%s\n", sitePassword );
-        mpw_free_string( sitePassword );
+        inf( "saved.\n" );
     }
-
     else {
-        const char *content = NULL;
-        if (saveValue) {
-            content = strdup( saveValue );
-            if (site) {
-                // TODO: Doesn't save content for newly created sites.
-                mpw_free_string( site->content );
-                if (!(site->content = mpw_encrypt( masterKey, saveValue, algorithmVersion )))
-                    err( "Couldn't encrypt site content.\n" );
-            }
+        if (!resultParam && site && site->content && resultType & MPResultTypeClassState)
+            resultParam = strdup( site->content );
+        const char *siteResult = mpw_siteResult( masterKey, siteName, siteCounter,
+                keyPurpose, keyContext, resultType, resultParam, algorithmVersion );
+        if (!siteResult) {
+            ftl( "Couldn't generate site result.\n" );
+            mpw_free( masterKey, MPMasterKeySize );
+            return EX_SOFTWARE;
         }
 
-        else if (site && site->content) {
-            content = mpw_decrypt( masterKey, site->content, algorithmVersion );
-            if (!content) {
-                ftl( "Couldn't decrypt site content.\n" );
-                mpw_free( masterKey, MPMasterKeySize );
-                return EX_SOFTWARE;
-            }
-        }
-
-        fprintf( stdout, "%s\n", content );
-        mpw_free_string( content );
+        fprintf( stdout, "%s\n", siteResult );
+        mpw_free_string( siteResult );
     }
-
     if (site && site->url)
         inf( "See: %s\n", site->url );
     mpw_free( masterKey, MPMasterKeySize );
     mpw_free_string( siteName );
-    mpw_free_string( saveValue );
+    mpw_free_string( resultParam );
     mpw_free_string( keyContext );
 
     // Update the mpsites file.
     if (user) {
         // TODO: Move this up above the summary and replace the mpw lvars by user/site accessors.
-        if (keyPurpose == MPKeyPurposeAuthentication) {
+        if (keyPurpose == MPKeyPurposeAuthentication && !(resultType & MPSiteFeatureAlternative)) {
             if (!site)
-                site = mpw_marshall_site( user, siteName, passwordType, siteCounter, algorithmVersion );
+                site = mpw_marshall_site( user, siteName, resultType, siteCounter, algorithmVersion );
             else {
-                site->type = passwordType;
+                site->type = resultType;
                 site->counter = siteCounter;
                 site->algorithm = algorithmVersion;
             }
         }
         else if (keyPurpose == MPKeyPurposeIdentification && site) {
-            // TODO: We're not persisting the passwordType of the generated login
-            if (passwordType & MPPasswordTypeClassGenerated)
+            // TODO: We're not persisting the resultType of the generated login
+            if (resultType & MPResultTypeClassTemplate)
                 site->loginGenerated = true;
         }
         else if (keyPurpose == MPKeyPurposeRecovery && site && keyContext) {
-            // TODO: We're not persisting the passwordType of the recovery question
+            // TODO: We're not persisting the resultType of the recovery question
             MPMarshalledQuestion *question = NULL;
             for (size_t q = 0; q < site->questions_count; ++q) {
                 question = &site->questions[q];

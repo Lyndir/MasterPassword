@@ -50,7 +50,7 @@ int main(int argc, char *const argv[]) {
     const char *masterPassword = "banana colored duckling";
     const char *siteName = "masterpasswordapp.com";
     const MPCounterValue siteCounter = MPCounterValueDefault;
-    const MPPasswordType passwordType = MPPasswordTypeDefault;
+    const MPResultType resultType = MPResultTypeDefault;
     const MPKeyPurpose keyPurpose = MPKeyPurposeAuthentication;
     const char *keyContext = NULL;
     struct timeval startTime;
@@ -69,7 +69,7 @@ int main(int argc, char *const argv[]) {
     }
     mpw_getTime( &startTime );
     for (int i = 1; i <= iterations; ++i) {
-        free( (void *)mpw_hmac_sha256( masterKey, MPMasterKeySize, sitePasswordInfo, 128 ) );
+        free( (void *)mpw_hash_hmac_sha256( masterKey, MPMasterKeySize, sitePasswordInfo, 128 ) );
 
         if (modff(100.f * i / iterations, &percent) == 0)
             fprintf( stderr, "\rhmac-sha-256: iteration %d / %d (%.0f%%)..", i, iterations, percent );
@@ -113,12 +113,9 @@ int main(int argc, char *const argv[]) {
             break;
         }
 
-        MPSiteKey siteKey = mpw_siteKey(
-                masterKey, siteName, siteCounter, keyPurpose, keyContext, MPAlgorithmVersionCurrent );
-        free( (void *)mpw_sitePassword(
-                siteKey, passwordType, MPAlgorithmVersionCurrent ) );
+        free( (void *)mpw_siteResult(
+                masterKey, siteName, siteCounter, keyPurpose, keyContext, resultType, NULL, MPAlgorithmVersionCurrent ) );
         free( (void *)masterKey );
-        free( (void *)siteKey );
 
         if (modff(100.f * i / iterations, &percent) == 0)
             fprintf( stderr, "\rmpw: iteration %d / %d (%.0f%%)..", i, iterations, percent );

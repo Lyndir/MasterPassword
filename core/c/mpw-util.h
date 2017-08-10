@@ -141,12 +141,17 @@ bool mpw_free_string(
 
 /** Derive a key from the given secret and salt using the scrypt KDF.
   * @return A new keySize allocated buffer containing the key. */
-uint8_t const *mpw_scrypt(
+uint8_t const *mpw_kdf_scrypt(
         const size_t keySize, const char *secret, const uint8_t *salt, const size_t saltSize,
         uint64_t N, uint32_t r, uint32_t p);
+/** Derive a subkey from the given key.
+  * @return A new keySize allocated buffer containing the key. */
+uint8_t const *mpw_kdf_blake2b(
+        const size_t subkeySize, const uint8_t *key, const size_t keySize,
+        const uint8_t *context, const size_t contextSize, const uint64_t id, const char *personal);
 /** Calculate the MAC for the given message with the given key using SHA256-HMAC.
   * @return A new 32-byte allocated buffer containing the MAC. */
-uint8_t const *mpw_hmac_sha256(
+uint8_t const *mpw_hash_hmac_sha256(
         const uint8_t *key, const size_t keySize, const uint8_t *salt, const size_t saltSize);
 /** Encrypt a plainBuf with the given key using AES-128-CBC.
   * @return A new bufSize allocated buffer containing the cipherBuf. */

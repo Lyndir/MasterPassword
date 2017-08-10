@@ -72,69 +72,98 @@ MPSiteKey mpw_siteKey(
     }
 }
 
-const char *mpw_sitePassword(
-        MPSiteKey siteKey, const MPPasswordType passwordType, const MPAlgorithmVersion algorithmVersion) {
+const char *mpw_siteResult(
+        MPMasterKey masterKey, const char *siteName, const MPCounterValue siteCounter,
+        const MPKeyPurpose keyPurpose, const char *keyContext,
+        const MPResultType resultType, const char *resultParam,
+        const MPAlgorithmVersion algorithmVersion) {
 
-    trc( "-- mpw_sitePassword (algorithm: %u)\n", algorithmVersion );
-    trc( "passwordType: %d (%s)\n", passwordType, mpw_nameForType( passwordType ) );
+    MPSiteKey siteKey = mpw_siteKey_v0( masterKey, siteName, siteCounter, keyPurpose, keyContext );
     if (!siteKey)
         return NULL;
 
-    switch (algorithmVersion) {
-        case MPAlgorithmVersion0:
-            return mpw_sitePassword_v0( siteKey, passwordType );
-        case MPAlgorithmVersion1:
-            return mpw_sitePassword_v1( siteKey, passwordType );
-        case MPAlgorithmVersion2:
-            return mpw_sitePassword_v2( siteKey, passwordType );
-        case MPAlgorithmVersion3:
-            return mpw_sitePassword_v3( siteKey, passwordType );
-        default:
-            err( "Unsupported version: %d\n", algorithmVersion );
-            return NULL;
+    trc( "-- mpw_siteResult (algorithm: %u)\n", algorithmVersion );
+    trc( "resultType: %d (%s)\n", resultType, mpw_nameForType( resultType ) );
+    trc( "resultParam: %s\n", resultParam );
+
+    char *sitePassword = NULL;
+    if (resultType & MPResultTypeClassTemplate) {
+        switch (algorithmVersion) {
+            case MPAlgorithmVersion0:
+                return mpw_sitePasswordFromTemplate_v0( masterKey, siteKey, resultType, resultParam );
+            case MPAlgorithmVersion1:
+                return mpw_sitePasswordFromTemplate_v1( masterKey, siteKey, resultType, resultParam );
+            case MPAlgorithmVersion2:
+                return mpw_sitePasswordFromTemplate_v2( masterKey, siteKey, resultType, resultParam );
+            case MPAlgorithmVersion3:
+                return mpw_sitePasswordFromTemplate_v3( masterKey, siteKey, resultType, resultParam );
+            default:
+                err( "Unsupported version: %d\n", algorithmVersion );
+                return NULL;
+        }
     }
+    else if (resultType & MPResultTypeClassState) {
+        switch (algorithmVersion) {
+            case MPAlgorithmVersion0:
+                return mpw_sitePasswordFromCrypt_v0( masterKey, siteKey, resultType, resultParam );
+            case MPAlgorithmVersion1:
+                return mpw_sitePasswordFromCrypt_v1( masterKey, siteKey, resultType, resultParam );
+            case MPAlgorithmVersion2:
+                return mpw_sitePasswordFromCrypt_v2( masterKey, siteKey, resultType, resultParam );
+            case MPAlgorithmVersion3:
+                return mpw_sitePasswordFromCrypt_v3( masterKey, siteKey, resultType, resultParam );
+            default:
+                err( "Unsupported version: %d\n", algorithmVersion );
+                return NULL;
+        }
+    }
+    else if (resultType & MPResultTypeClassDerive) {
+        switch (algorithmVersion) {
+            case MPAlgorithmVersion0:
+                return mpw_sitePasswordFromDerive_v0( masterKey, siteKey, resultType, resultParam );
+            case MPAlgorithmVersion1:
+                return mpw_sitePasswordFromDerive_v1( masterKey, siteKey, resultType, resultParam );
+            case MPAlgorithmVersion2:
+                return mpw_sitePasswordFromDerive_v2( masterKey, siteKey, resultType, resultParam );
+            case MPAlgorithmVersion3:
+                return mpw_sitePasswordFromDerive_v3( masterKey, siteKey, resultType, resultParam );
+            default:
+                err( "Unsupported version: %d\n", algorithmVersion );
+                return NULL;
+        }
+    }
+    else {
+        err( "Unsupported password type: %d\n", resultType );
+    }
+
+    return sitePassword;
 }
 
-const char *mpw_encrypt(
-        MPMasterKey masterKey, const char *plainText, const MPAlgorithmVersion algorithmVersion) {
+const char *mpw_siteState(
+        MPMasterKey masterKey, const char *siteName, const MPCounterValue siteCounter,
+        const MPKeyPurpose keyPurpose, const char *keyContext,
+        const MPResultType resultType, const char *state,
+        const MPAlgorithmVersion algorithmVersion) {
 
-    trc( "-- mpw_encrypt (algorithm: %u)\n", algorithmVersion );
-    trc( "plainText: %s = %s\n", plainText, mpw_hex( plainText, sizeof( plainText ) ) );
-    if (!masterKey || !plainText)
+    MPSiteKey siteKey = mpw_siteKey_v0( masterKey, siteName, siteCounter, keyPurpose, keyContext );
+    if (!siteKey)
+        return NULL;
+
+    trc( "-- mpw_siteState (algorithm: %u)\n", algorithmVersion );
+    trc( "resultType: %d (%s)\n", resultType, mpw_nameForType( resultType ) );
+    trc( "state: %s\n", state );
+    if (!masterKey || !state)
         return NULL;
 
     switch (algorithmVersion) {
         case MPAlgorithmVersion0:
-            return mpw_encrypt_v0( masterKey, plainText );
+            return mpw_siteState_v0( masterKey, siteKey, resultType, state );
         case MPAlgorithmVersion1:
-            return mpw_encrypt_v1( masterKey, plainText );
+            return mpw_siteState_v1( masterKey, siteKey, resultType, state );
         case MPAlgorithmVersion2:
-            return mpw_encrypt_v2( masterKey, plainText );
+            return mpw_siteState_v2( masterKey, siteKey, resultType, state );
         case MPAlgorithmVersion3:
-            return mpw_encrypt_v3( masterKey, plainText );
-        default:
-            err( "Unsupported version: %d\n", algorithmVersion );
-            return NULL;
-    }
-}
-
-const char *mpw_decrypt(
-        MPMasterKey masterKey, const char *cipherText, const MPAlgorithmVersion algorithmVersion) {
-
-    trc( "-- mpw_decrypt (algorithm: %u)\n", algorithmVersion );
-    trc( "cipherText: %s = %s\n", cipherText, mpw_hex( cipherText, sizeof( cipherText ) ) );
-    if (!masterKey || !cipherText)
-        return NULL;
-
-    switch (algorithmVersion) {
-        case MPAlgorithmVersion0:
-            return mpw_decrypt_v0( masterKey, cipherText );
-        case MPAlgorithmVersion1:
-            return mpw_decrypt_v1( masterKey, cipherText );
-        case MPAlgorithmVersion2:
-            return mpw_decrypt_v2( masterKey, cipherText );
-        case MPAlgorithmVersion3:
-            return mpw_decrypt_v3( masterKey, cipherText );
+            return mpw_siteState_v3( masterKey, siteKey, resultType, state );
         default:
             err( "Unsupported version: %d\n", algorithmVersion );
             return NULL;
