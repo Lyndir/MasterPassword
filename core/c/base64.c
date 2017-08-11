@@ -57,7 +57,7 @@
 #include "base64.h"
 
 /* aaaack but it's fast and const should make it shared text page. */
-static const unsigned char b64ToBits[256] =
+static const uint8_t b64ToBits[256] =
         {
                 /* ASCII table */
                 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
@@ -97,20 +97,20 @@ int mpw_base64_decode(uint8_t *plainBuf, const char *b64Text) {
     b64Cursor = (uint8_t *)b64Text;
     register uint8_t *plainCursor = plainBuf;
     while (b64Remaining > 4) {
-        *(plainCursor++) = (b64ToBits[b64Cursor[0]] << 2 | b64ToBits[b64Cursor[1]] >> 4);
-        *(plainCursor++) = (b64ToBits[b64Cursor[1]] << 4 | b64ToBits[b64Cursor[2]] >> 2);
-        *(plainCursor++) = (b64ToBits[b64Cursor[2]] << 6 | b64ToBits[b64Cursor[3]]);
+        *(plainCursor++) = (uint8_t)(b64ToBits[b64Cursor[0]] << 2 | b64ToBits[b64Cursor[1]] >> 4);
+        *(plainCursor++) = (uint8_t)(b64ToBits[b64Cursor[1]] << 4 | b64ToBits[b64Cursor[2]] >> 2);
+        *(plainCursor++) = (uint8_t)(b64ToBits[b64Cursor[2]] << 6 | b64ToBits[b64Cursor[3]]);
         b64Cursor += 4;
         b64Remaining -= 4;
     }
 
     /* Note: (b64Size == 1) would be an error, so just ingore that case */
     if (b64Remaining > 1)
-        *(plainCursor++) = (b64ToBits[b64Cursor[0]] << 2 | b64ToBits[b64Cursor[1]] >> 4);
+        *(plainCursor++) = (uint8_t)(b64ToBits[b64Cursor[0]] << 2 | b64ToBits[b64Cursor[1]] >> 4);
     if (b64Remaining > 2)
-        *(plainCursor++) = (b64ToBits[b64Cursor[1]] << 4 | b64ToBits[b64Cursor[2]] >> 2);
+        *(plainCursor++) = (uint8_t)(b64ToBits[b64Cursor[1]] << 4 | b64ToBits[b64Cursor[2]] >> 2);
     if (b64Remaining > 3)
-        *(plainCursor++) = (b64ToBits[b64Cursor[2]] << 6 | b64ToBits[b64Cursor[3]]);
+        *(plainCursor++) = (uint8_t)(b64ToBits[b64Cursor[2]] << 6 | b64ToBits[b64Cursor[3]]);
 
     return (int)(plainCursor - plainBuf);
 }
@@ -126,7 +126,7 @@ size_t mpw_base64_encode_max(size_t plainSize) {
 
 int mpw_base64_encode(char *b64Text, const uint8_t *plainBuf, size_t plainSize) {
 
-    int plainCursor = 0;
+    size_t plainCursor = 0;
     char *b64Cursor = b64Text;
     for (; plainCursor < plainSize - 2; plainCursor += 3) {
         *b64Cursor++ = basis_64[((plainBuf[plainCursor] >> 2)) & 0x3F];

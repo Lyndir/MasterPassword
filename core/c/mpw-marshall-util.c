@@ -76,14 +76,14 @@ const char *mpw_get_json_string(
     return json_object_get_string( json_value );
 }
 
-int32_t mpw_get_json_int(
-        json_object *obj, const char *section, int32_t defaultValue) {
+int64_t mpw_get_json_int(
+        json_object *obj, const char *section, int64_t defaultValue) {
 
     json_object *json_value = mpw_get_json_section( obj, section );
     if (!json_value)
         return defaultValue;
 
-    return json_object_get_int( json_value );
+    return json_object_get_int64( json_value );
 }
 
 bool mpw_get_json_boolean(

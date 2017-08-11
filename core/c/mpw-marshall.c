@@ -187,7 +187,7 @@ static bool mpw_marshall_write_flat(
     }
     mpw_free( masterKey, MPMasterKeySize );
 
-    *error = (MPMarshallError){ MPMarshallSuccess };
+    *error = (MPMarshallError){ .type = MPMarshallSuccess };
     return true;
 }
 
@@ -305,7 +305,7 @@ static bool mpw_marshall_write_json(
     mpw_free( masterKey, MPMasterKeySize );
     json_object_put( json_file );
 
-    *error = (MPMarshallError){ MPMarshallSuccess };
+    *error = (MPMarshallError){ .type = MPMarshallSuccess };
     return true;
 }
 
@@ -537,14 +537,14 @@ static MPMarshalledUser *mpw_marshall_read_flat(
     mpw_free_string( keyID );
     mpw_free( masterKey, MPMasterKeySize );
 
-    *error = (MPMarshallError){ MPMarshallSuccess };
+    *error = (MPMarshallError){ .type = MPMarshallSuccess };
     return user;
 }
 
 static MPMarshalledUser *mpw_marshall_read_json(
         char *in, const char *masterPassword, MPMarshallError *error) {
 
-    *error = (MPMarshallError){ MPMarshallErrorInternal };
+    *error = (MPMarshallError){ MPMarshallErrorInternal, "Unexpected internal error." };
 
     // Parse JSON.
     enum json_tokener_error json_error = json_tokener_success;
@@ -560,7 +560,7 @@ static MPMarshalledUser *mpw_marshall_read_json(
     MPMarshalledUser *user = NULL;
 
     // Section: "export"
-    unsigned int fileFormat = (unsigned int)mpw_get_json_int( json_file, "export.format", 0 );
+    int64_t fileFormat = mpw_get_json_int( json_file, "export.format", 0 );
     if (fileFormat < 1) {
         *error = (MPMarshallError){ MPMarshallErrorFormat, mpw_str( "Unsupported format: %u", fileFormat ) };
         return NULL;
@@ -572,7 +572,7 @@ static MPMarshalledUser *mpw_marshall_read_json(
     const char *fullName = mpw_get_json_string( json_file, "user.full_name", NULL );
     const char *str_lastUsed = mpw_get_json_string( json_file, "user.last_used", NULL );
     const char *keyID = mpw_get_json_string( json_file, "user.key_id", NULL );
-    int32_t value = mpw_get_json_int( json_file, "user.algorithm", MPAlgorithmVersionCurrent );
+    int64_t value = mpw_get_json_int( json_file, "user.algorithm", MPAlgorithmVersionCurrent );
     if (value < MPAlgorithmVersionFirst || value > MPAlgorithmVersionLast) {
         *error = (MPMarshallError){ MPMarshallErrorIllegal, mpw_str( "Invalid user algorithm version: %u", value ) };
         return NULL;
@@ -614,13 +614,13 @@ static MPMarshalledUser *mpw_marshall_read_json(
     json_object *json_sites = mpw_get_json_section( json_file, "sites" );
     json_object_object_foreachC( json_sites, json_site ) {
         const char *siteName = json_site.key;
-        value = mpw_get_json_int( json_site.val, "algorithm", user->algorithm );
+        value = mpw_get_json_int( json_site.val, "algorithm", (int32_t)user->algorithm );
         if (value < MPAlgorithmVersionFirst || value > MPAlgorithmVersionLast) {
             *error = (MPMarshallError){ MPMarshallErrorIllegal, mpw_str( "Invalid site algorithm version: %s: %d", siteName, value ) };
             return NULL;
         }
         MPAlgorithmVersion siteAlgorithm = (MPAlgorithmVersion)value;
-        MPResultType siteType = (MPResultType)mpw_get_json_int( json_site.val, "type", user->defaultType );
+        MPResultType siteType = (MPResultType)mpw_get_json_int( json_site.val, "type", (int32_t)user->defaultType );
         if (!mpw_nameForType( siteType )) {
             *error = (MPMarshallError){ MPMarshallErrorIllegal, mpw_str( "Invalid site type: %s: %u", siteName, siteType ) };
             return NULL;
@@ -679,7 +679,7 @@ static MPMarshalledUser *mpw_marshall_read_json(
     }
     json_object_put( json_file );
 
-    *error = (MPMarshallError){ MPMarshallSuccess };
+    *error = (MPMarshallError){ .type = MPMarshallSuccess };
     return user;
 }
 

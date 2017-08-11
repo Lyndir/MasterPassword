@@ -299,7 +299,7 @@ int main(int argc, char *const argv[]) {
         fclose( sitesFile );
 
         // Parse file.
-        MPMarshallError marshallError = { MPMarshallSuccess };
+        MPMarshallError marshallError = { .type = MPMarshallSuccess };
         user = mpw_marshall_read( buf, sitesFormat, masterPassword, &marshallError );
         if (marshallError.type == MPMarshallErrorMasterPassword) {
             // Incorrect master password.
@@ -550,7 +550,7 @@ int main(int argc, char *const argv[]) {
 
         else {
             char *buf = NULL;
-            MPMarshallError marshallError = { MPMarshallSuccess };
+            MPMarshallError marshallError = { .type = MPMarshallSuccess };
             if (!mpw_marshall_write( &buf, sitesFormat, user, &marshallError ) || marshallError.type != MPMarshallSuccess)
                 wrn( "Couldn't encode updated configuration file:\n  %s: %s\n", sitesPath, marshallError.description );
 

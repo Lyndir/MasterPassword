@@ -45,7 +45,7 @@ bool mpw_push_buf(uint8_t **const buffer, size_t *const bufferSize, const void *
 
     if (!buffer || !bufferSize || !pushBuffer || !pushSize)
         return false;
-    if (*bufferSize == ERR)
+    if (*bufferSize == (size_t)ERR)
         // The buffer was marked as broken, it is missing a previous push.  Abort to avoid corrupt content.
         return false;
 

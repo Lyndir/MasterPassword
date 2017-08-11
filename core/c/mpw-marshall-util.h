@@ -50,8 +50,8 @@ const char *mpw_get_json_string(
 /** Search for an integer in a JSON object tree.
   * @param section A dot-delimited list of JSON object keys to walk toward the child object.
   * @return The integer value or defaultValue if one of the section's object keys was not found in the source object's tree. */
-int32_t mpw_get_json_int(
-        json_object *obj, const char *section, int32_t defaultValue);
+int64_t mpw_get_json_int(
+        json_object *obj, const char *section, int64_t defaultValue);
 /** Search for a boolean in a JSON object tree.
   * @param section A dot-delimited list of JSON object keys to walk toward the child object.
   * @return The boolean value or defaultValue if one of the section's object keys was not found in the source object's tree. */
