@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -e
+echo "ARGS: $*"
+
+cd "${BASH_SOURCE%/*}/../External/libjson-c"
+[[ -d libjson-c-osx ]] && exit
+
+# Prepare
+autoreconf -Iautoconf-archive/m4 --verbose --install --symlink --force 2>&1 | sed 's/^\([^:]*\):[0-9]\{1,\}: /\1: /'
+rm -rf "${prefix=$PWD/libjson-c-osx}"
+mkdir -p "$prefix"
+
+# SDK: macOS
+sdkPath="$(xcrun --show-sdk-path --sdk macosx)"
+platformPath="$(xcrun --show-sdk-platform-path --sdk macosx)"
+(
+    ## ARCH: x86_64
+    export PATH="$platformPath/usr/bin:$platformPath/usr/sbin:$PATH"
+    export CFLAGS="-arch x86_64 -isysroot $sdkPath -mmacosx-version-min=${MACOSX_DEPLOYMENT_TARGET:-"10.8"} -O2 -g -flto $CFLAGS"
+    export LDFLAGS="-arch x86_64 -isysroot $sdkPath -mmacosx-version-min=${MACOSX_DEPLOYMENT_TARGET:-"10.8"} -flto $LDFLAGS"
+    [[ -e Makefile ]] && make -s clean #distclean
+    ./configure --disable-shared --prefix="$prefix"
+    make -j3 #check
+    make -j3 install
+)
+
+# Cleanup
+make -s clean #distclean

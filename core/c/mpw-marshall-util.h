@@ -20,7 +20,7 @@
 #define _MPW_MARSHALL_UTIL_H
 
 #include <time.h>
-#include <json-c/json.h>
+#include "json-c/json.h"
 
 #include "mpw-algorithm.h"
 

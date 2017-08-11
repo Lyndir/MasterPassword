@@ -130,6 +130,9 @@
 		DAADCC4B19FB000C00987B1D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBC45214F6364500987BF6 /* QuartzCore.framework */; };
 		DAADCC6919FB007F00987B1D /* NSManagedObjectModel+KCOrderedAccessorFix.m in Sources */ = {isa = PBXBuildFile; fileRef = DAADCC6719FB007F00987B1D /* NSManagedObjectModel+KCOrderedAccessorFix.m */; };
 		DAADCC6A19FB00B500987B1D /* libKCOrderedAccessorFix.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAADCC5019FB006500987B1D /* libKCOrderedAccessorFix.a */; };
+		DAB7AE5A1F3D74E700C856B1 /* libjson-c.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB7AE591F3D74E700C856B1 /* libjson-c.a */; };
+		DAB7AE5B1F3D750B00C856B1 /* libjson-c.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB7AE591F3D74E700C856B1 /* libjson-c.a */; };
+		DAB7AE941F3D757B00C856B1 /* libjson-c.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB7AE901F3D757B00C856B1 /* libjson-c.a */; };
 		DAC6326D148680650075AEA5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DAC77CAE148291A600BCF976 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DACA26FE1705DF81002C6C22 /* logo-bare.png in Resources */ = {isa = PBXBuildFile; fileRef = DACA241C1705DF7D002C6C22 /* logo-bare.png */; };
@@ -230,6 +233,48 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		DAB7AE341F3D423600C856B1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DA5BFA3B147E415C00F98B1E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DA5B0B611F3D416500B663F0;
+			remoteInfo = "libsodium-osx";
+		};
+		DAB7AE361F3D423D00C856B1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DA5BFA3B147E415C00F98B1E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DA5B0B611F3D416500B663F0;
+			remoteInfo = "libsodium-osx";
+		};
+		DAB7AE381F3D424200C856B1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DA5BFA3B147E415C00F98B1E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DA5B0B611F3D416500B663F0;
+			remoteInfo = "libsodium-osx";
+		};
+		DAB7AE3A1F3D424700C856B1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DA5BFA3B147E415C00F98B1E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DA5B0B611F3D416500B663F0;
+			remoteInfo = "libsodium-osx";
+		};
+		DAB7AE511F3D649400C856B1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DA5BFA3B147E415C00F98B1E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DAB7AE421F3D466D00C856B1;
+			remoteInfo = "libjson-c";
+		};
+		DAB7AE571F3D64A600C856B1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DA5BFA3B147E415C00F98B1E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DAB7AE421F3D466D00C856B1;
+			remoteInfo = "libjson-c";
+		};
 		DABFA071176E3FDF00E83589 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DAD9B5E1176299B9001835F9 /* MasterPassword-Mac-LoginHelper.xcodeproj */;
@@ -488,7 +533,7 @@
 		DA5E5CB51724A667003798D8 /* MPMacConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPMacConfig.h; sourceTree = "<group>"; };
 		DA5E5CB61724A667003798D8 /* MPMacConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPMacConfig.m; sourceTree = "<group>"; };
 		DA5E5CBA1724A667003798D8 /* MasterPassword-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "MasterPassword-Info.plist"; sourceTree = "<group>"; };
-		DA5E5CBF1724A667003798D8 /* MasterPassword.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = MasterPassword.entitlements; sourceTree = "<group>"; };
+		DA5E5CBF1724A667003798D8 /* MasterPassword.entitlements */ = {isa = PBXFileReference; fileEncoding = 1; lastKnownFileType = text.xml; path = MasterPassword.entitlements; sourceTree = "<group>"; };
 		DA5E5CC31724A667003798D8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		DA5E5CC51724A667003798D8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		DA5E5CC61724A667003798D8 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -929,6 +974,28 @@
 		DAADCC5019FB006500987B1D /* libKCOrderedAccessorFix.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libKCOrderedAccessorFix.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAADCC6619FB007F00987B1D /* NSManagedObjectModel+KCOrderedAccessorFix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObjectModel+KCOrderedAccessorFix.h"; sourceTree = "<group>"; };
 		DAADCC6719FB007F00987B1D /* NSManagedObjectModel+KCOrderedAccessorFix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObjectModel+KCOrderedAccessorFix.m"; sourceTree = "<group>"; };
+		DAB7AE591F3D74E700C856B1 /* libjson-c.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libjson-c.a"; path = "External/libjson-c/libjson-c-osx/lib/libjson-c.a"; sourceTree = "<group>"; };
+		DAB7AE7B1F3D757B00C856B1 /* arraylist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = arraylist.h; sourceTree = "<group>"; };
+		DAB7AE7C1F3D757B00C856B1 /* bits.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bits.h; sourceTree = "<group>"; };
+		DAB7AE7D1F3D757B00C856B1 /* debug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = debug.h; sourceTree = "<group>"; };
+		DAB7AE7E1F3D757B00C856B1 /* json.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json.h; sourceTree = "<group>"; };
+		DAB7AE7F1F3D757B00C856B1 /* json_c_version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json_c_version.h; sourceTree = "<group>"; };
+		DAB7AE801F3D757B00C856B1 /* json_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json_config.h; sourceTree = "<group>"; };
+		DAB7AE811F3D757B00C856B1 /* json_inttypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json_inttypes.h; sourceTree = "<group>"; };
+		DAB7AE821F3D757B00C856B1 /* json_object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json_object.h; sourceTree = "<group>"; };
+		DAB7AE831F3D757B00C856B1 /* json_object_iterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json_object_iterator.h; sourceTree = "<group>"; };
+		DAB7AE841F3D757B00C856B1 /* json_object_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json_object_private.h; sourceTree = "<group>"; };
+		DAB7AE851F3D757B00C856B1 /* json_pointer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json_pointer.h; sourceTree = "<group>"; };
+		DAB7AE861F3D757B00C856B1 /* json_tokener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json_tokener.h; sourceTree = "<group>"; };
+		DAB7AE871F3D757B00C856B1 /* json_util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json_util.h; sourceTree = "<group>"; };
+		DAB7AE881F3D757B00C856B1 /* json_visit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json_visit.h; sourceTree = "<group>"; };
+		DAB7AE891F3D757B00C856B1 /* linkhash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = linkhash.h; sourceTree = "<group>"; };
+		DAB7AE8A1F3D757B00C856B1 /* math_compat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = math_compat.h; sourceTree = "<group>"; };
+		DAB7AE8B1F3D757B00C856B1 /* printbuf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = printbuf.h; sourceTree = "<group>"; };
+		DAB7AE8C1F3D757B00C856B1 /* random_seed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = random_seed.h; sourceTree = "<group>"; };
+		DAB7AE8D1F3D757B00C856B1 /* strdup_compat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = strdup_compat.h; sourceTree = "<group>"; };
+		DAB7AE8E1F3D757B00C856B1 /* vasprintf_compat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vasprintf_compat.h; sourceTree = "<group>"; };
+		DAB7AE901F3D757B00C856B1 /* libjson-c.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libjson-c.a"; sourceTree = "<group>"; };
 		DABB981515100B4000B05417 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		DAC6326C148680650075AEA5 /* libjrswizzle.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libjrswizzle.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAC632871486D95D0075AEA5 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -977,7 +1044,7 @@
 		DACA268E1705DF81002C6C22 /* SourceCodePro-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceCodePro-ExtraLight.otf"; sourceTree = "<group>"; };
 		DACA268F1705DF81002C6C22 /* SourceCodePro-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceCodePro-Black.otf"; sourceTree = "<group>"; };
 		DACA29711705E1A8002C6C22 /* ciphers.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ciphers.plist; sourceTree = "<group>"; };
-		DACA29721705E1A8002C6C22 /* dictionary.lst */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dictionary.lst; sourceTree = "<group>"; };
+		DACA29721705E1A8002C6C22 /* dictionary.lst */ = {isa = PBXFileReference; fileEncoding = 1; lastKnownFileType = text; path = dictionary.lst; sourceTree = "<group>"; };
 		DACA29771705E2BD002C6C22 /* JRSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JRSwizzle.h; sourceTree = "<group>"; };
 		DACA298C1705E2BD002C6C22 /* JRSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JRSwizzle.m; sourceTree = "<group>"; };
 		DACBFCDB1C59B22E007EF90F /* NSMutableSet+Pearl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableSet+Pearl.h"; sourceTree = "<group>"; };
@@ -1030,8 +1097,8 @@
 		DAFE45F315039823003ABA7C /* PearlStrings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlStrings.m; sourceTree = "<group>"; };
 		DAFE45F415039823003ABA7C /* PearlStringUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlStringUtils.h; sourceTree = "<group>"; };
 		DAFE45F515039823003ABA7C /* PearlStringUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlStringUtils.m; sourceTree = "<group>"; };
-		DAFE45F815039823003ABA7C /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
-		DAFE45FB15039823003ABA7C /* en */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Pearl.strings; sourceTree = "<group>"; };
+		DAFE45F815039823003ABA7C /* README */ = {isa = PBXFileReference; fileEncoding = 1; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		DAFE45FB15039823003ABA7C /* en */ = {isa = PBXFileReference; fileEncoding = 2483028224; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Pearl.strings; sourceTree = "<group>"; };
 		DAFE45FD15039823003ABA7C /* Pearl-Crypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Pearl-Crypto.h"; sourceTree = "<group>"; };
 		DAFE45FE15039823003ABA7C /* PearlCryptUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlCryptUtils.h; sourceTree = "<group>"; };
 		DAFE45FF15039823003ABA7C /* PearlCryptUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlCryptUtils.m; sourceTree = "<group>"; };
@@ -1039,7 +1106,7 @@
 		DAFE460115039823003ABA7C /* PearlKeyChain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlKeyChain.m; sourceTree = "<group>"; };
 		DAFE460215039823003ABA7C /* PearlRSAKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlRSAKey.h; sourceTree = "<group>"; };
 		DAFE460315039823003ABA7C /* PearlRSAKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlRSAKey.m; sourceTree = "<group>"; };
-		DAFE460615039823003ABA7C /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		DAFE460615039823003ABA7C /* README */ = {isa = PBXFileReference; fileEncoding = 1; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		DAFE4A63150399FF003ABA85 /* NSObject+PearlKVO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+PearlKVO.m"; sourceTree = "<group>"; };
 		DAFE4A63150399FF003ABA87 /* NSObject+PearlKVO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+PearlKVO.h"; sourceTree = "<group>"; };
 		DAFE4A63150399FF003ABA91 /* NSDateFormatter+RFC3339.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDateFormatter+RFC3339.m"; sourceTree = "<group>"; };
@@ -1051,6 +1118,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DAB7AE5A1F3D74E700C856B1 /* libjson-c.a in Frameworks */,
 				DA1C7AAF1F1A8F24009A3551 /* libsodium.a in Frameworks */,
 				DA1C7AB01F1A8F24009A3551 /* libxml2.tbd in Frameworks */,
 			);
@@ -1069,9 +1137,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DAB7AE5B1F3D750B00C856B1 /* libjson-c.a in Frameworks */,
 				DA9261561BE1A89600369DE5 /* libz.tbd in Frameworks */,
 				DA9261541BE1A88900369DE5 /* libc++.tbd in Frameworks */,
 				DAADCC6A19FB00B500987B1D /* libKCOrderedAccessorFix.a in Frameworks */,
+				DAB7AE941F3D757B00C856B1 /* libjson-c.a in Frameworks */,
 				DADD5DFA1EA173B0005E7D96 /* libsodium.a in Frameworks */,
 				DA9261521BE1A86700369DE5 /* Fabric.framework in Frameworks */,
 				DA9261511BE1A86700369DE5 /* SystemConfiguration.framework in Frameworks */,
@@ -1284,6 +1354,7 @@
 		DA5BFA47147E415C00F98B1E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DAB7AE591F3D74E700C856B1 /* libjson-c.a */,
 				DA09745D1E99586600F0BFE8 /* libxml2.tbd */,
 				DA6701B716406A4100B61001 /* Accounts.framework */,
 				DA16B340170661DB000A0EAB /* Carbon.framework */,
@@ -1865,6 +1936,59 @@
 			path = KCOrderedAccessorFix;
 			sourceTree = "<group>";
 		};
+		DAB7AE781F3D757B00C856B1 /* libjson-c-osx */ = {
+			isa = PBXGroup;
+			children = (
+				DAB7AE791F3D757B00C856B1 /* include */,
+				DAB7AE8F1F3D757B00C856B1 /* lib */,
+			);
+			name = "libjson-c-osx";
+			path = "libjson-c/libjson-c-osx";
+			sourceTree = "<group>";
+		};
+		DAB7AE791F3D757B00C856B1 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				DAB7AE7A1F3D757B00C856B1 /* json-c */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		DAB7AE7A1F3D757B00C856B1 /* json-c */ = {
+			isa = PBXGroup;
+			children = (
+				DAB7AE7B1F3D757B00C856B1 /* arraylist.h */,
+				DAB7AE7C1F3D757B00C856B1 /* bits.h */,
+				DAB7AE7D1F3D757B00C856B1 /* debug.h */,
+				DAB7AE7E1F3D757B00C856B1 /* json.h */,
+				DAB7AE7F1F3D757B00C856B1 /* json_c_version.h */,
+				DAB7AE801F3D757B00C856B1 /* json_config.h */,
+				DAB7AE811F3D757B00C856B1 /* json_inttypes.h */,
+				DAB7AE821F3D757B00C856B1 /* json_object.h */,
+				DAB7AE831F3D757B00C856B1 /* json_object_iterator.h */,
+				DAB7AE841F3D757B00C856B1 /* json_object_private.h */,
+				DAB7AE851F3D757B00C856B1 /* json_pointer.h */,
+				DAB7AE861F3D757B00C856B1 /* json_tokener.h */,
+				DAB7AE871F3D757B00C856B1 /* json_util.h */,
+				DAB7AE881F3D757B00C856B1 /* json_visit.h */,
+				DAB7AE891F3D757B00C856B1 /* linkhash.h */,
+				DAB7AE8A1F3D757B00C856B1 /* math_compat.h */,
+				DAB7AE8B1F3D757B00C856B1 /* printbuf.h */,
+				DAB7AE8C1F3D757B00C856B1 /* random_seed.h */,
+				DAB7AE8D1F3D757B00C856B1 /* strdup_compat.h */,
+				DAB7AE8E1F3D757B00C856B1 /* vasprintf_compat.h */,
+			);
+			path = "json-c";
+			sourceTree = "<group>";
+		};
+		DAB7AE8F1F3D757B00C856B1 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				DAB7AE901F3D757B00C856B1 /* libjson-c.a */,
+			);
+			path = lib;
+			sourceTree = "<group>";
+		};
 		DAC77CAF148291A600BCF976 /* Pearl */ = {
 			isa = PBXGroup;
 			children = (
@@ -1879,6 +2003,7 @@
 		DACA22121705DDC5002C6C22 /* External */ = {
 			isa = PBXGroup;
 			children = (
+				DAB7AE781F3D757B00C856B1 /* libjson-c-osx */,
 				DA0979181E9A824700F0BFE8 /* libsodium-osx */,
 				DACA29751705E2BD002C6C22 /* jrswizzle */,
 				DAADCC6819FB007F00987B1D /* KCOrderedAccessorFix */,
@@ -2185,6 +2310,37 @@
 		};
 /* End PBXHeadersBuildPhase section */
 
+/* Begin PBXLegacyTarget section */
+		DA5B0B611F3D416500B663F0 /* libsodium-osx */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "$(ACTION)";
+			buildConfigurationList = DA5B0B621F3D416500B663F0 /* Build configuration list for PBXLegacyTarget "libsodium-osx" */;
+			buildPhases = (
+			);
+			buildToolPath = "Scripts/build_libsodium-osx";
+			buildWorkingDirectory = "";
+			dependencies = (
+			);
+			name = "libsodium-osx";
+			passBuildSettingsInEnvironment = 1;
+			productName = "libsodium-osx";
+		};
+		DAB7AE421F3D466D00C856B1 /* libjson-c-osx */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "$(ACTION)";
+			buildConfigurationList = DAB7AE431F3D466D00C856B1 /* Build configuration list for PBXLegacyTarget "libjson-c-osx" */;
+			buildPhases = (
+			);
+			buildToolPath = "Scripts/build_libjson-c-osx";
+			buildWorkingDirectory = "";
+			dependencies = (
+			);
+			name = "libjson-c-osx";
+			passBuildSettingsInEnvironment = 1;
+			productName = "libjson-c";
+		};
+/* End PBXLegacyTarget section */
+
 /* Begin PBXNativeTarget section */
 		DA1C7AA61F1A8F24009A3551 /* mpw-cli */ = {
 			isa = PBXNativeTarget;
@@ -2197,6 +2353,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				DAB7AE581F3D64A600C856B1 /* PBXTargetDependency */,
+				DAB7AE3B1F3D424700C856B1 /* PBXTargetDependency */,
 			);
 			name = "mpw-cli";
 			productName = "mpw-test";
@@ -2214,6 +2372,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				DAB7AE391F3D424200C856B1 /* PBXTargetDependency */,
 			);
 			name = "mpw-bench";
 			productName = "mpw-test";
@@ -2225,7 +2384,6 @@
 			buildConfigurationList = DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword" */;
 			buildPhases = (
 				DA4EF9CB19FD4B600032ECB5 /* Run Script: genassets */,
-				DA0E86A91E9BED9300F4D60E /* Run Script: libsodium/dist-build/osx.sh */,
 				DA5BFA40147E415C00F98B1E /* Sources */,
 				DA5BFA41147E415C00F98B1E /* Frameworks */,
 				DA5BFA42147E415C00F98B1E /* Resources */,
@@ -2236,6 +2394,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				DAB7AE521F3D649400C856B1 /* PBXTargetDependency */,
+				DAB7AE351F3D423600C856B1 /* PBXTargetDependency */,
 				DABFA072176E3FDF00E83589 /* PBXTargetDependency */,
 			);
 			name = MasterPassword;
@@ -2254,6 +2414,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				DAB7AE371F3D423D00C856B1 /* PBXTargetDependency */,
 			);
 			name = "mpw-test";
 			productName = "mpw-test";
@@ -2330,6 +2491,11 @@
 					DA1C7AC61F1A8FD8009A3551 = {
 						DevelopmentTeam = HL3Q45LX9N;
 					};
+					DA5B0B611F3D416500B663F0 = {
+						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = HL3Q45LX9N;
+						ProvisioningStyle = Automatic;
+					};
 					DA5BFA43147E415C00F98B1E = {
 						DevelopmentTeam = HL3Q45LX9N;
 						ProvisioningStyle = Automatic;
@@ -2346,6 +2512,11 @@
 					DAADCC4F19FB006500987B1D = {
 						CreatedOnToolsVersion = 6.0.1;
 						DevelopmentTeam = HL3Q45LX9N;
+					};
+					DAB7AE421F3D466D00C856B1 = {
+						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = HL3Q45LX9N;
+						ProvisioningStyle = Automatic;
 					};
 					DAC6326B148680650075AEA5 = {
 						DevelopmentTeam = HL3Q45LX9N;
@@ -2381,6 +2552,8 @@
 				DA67743A1A474A03004F356A /* mpw-test */,
 				DA1C7AC61F1A8FD8009A3551 /* mpw-bench */,
 				DA1C7AA61F1A8F24009A3551 /* mpw-cli */,
+				DA5B0B611F3D416500B663F0 /* libsodium-osx */,
+				DAB7AE421F3D466D00C856B1 /* libjson-c-osx */,
 			);
 		};
 /* End PBXProject section */
@@ -2468,21 +2641,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		DA0E86A91E9BED9300F4D60E /* Run Script: libsodium/dist-build/osx.sh */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Run Script: libsodium/dist-build/osx.sh";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = "/bin/sh -e";
-			shellScript = "cd External/libsodium\nif ! [[ -d libsodium-osx ]]; then\n    # Xcode misinterpretes autogen.sh's stderr output as errors so we try to silence it.\n    [[ -e configure ]] || { err=$(./autogen.sh 2>&1 >&3); } 3>&1 || { x=$?; echo >&2 \"$err\"; exit $x; }\n./dist-build/osx.sh\nfi\n\n# Xcode incorrectly links the dynamic libraries if they're present instead of linking the .a.\nrm -f libsodium-osx/lib/*.dylib";
-			showEnvVarsInLog = 0;
-		};
 		DA4EF9CB19FD4B600032ECB5 /* Run Script: genassets */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2677,6 +2835,36 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		DAB7AE351F3D423600C856B1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DA5B0B611F3D416500B663F0 /* libsodium-osx */;
+			targetProxy = DAB7AE341F3D423600C856B1 /* PBXContainerItemProxy */;
+		};
+		DAB7AE371F3D423D00C856B1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DA5B0B611F3D416500B663F0 /* libsodium-osx */;
+			targetProxy = DAB7AE361F3D423D00C856B1 /* PBXContainerItemProxy */;
+		};
+		DAB7AE391F3D424200C856B1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DA5B0B611F3D416500B663F0 /* libsodium-osx */;
+			targetProxy = DAB7AE381F3D424200C856B1 /* PBXContainerItemProxy */;
+		};
+		DAB7AE3B1F3D424700C856B1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DA5B0B611F3D416500B663F0 /* libsodium-osx */;
+			targetProxy = DAB7AE3A1F3D424700C856B1 /* PBXContainerItemProxy */;
+		};
+		DAB7AE521F3D649400C856B1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DAB7AE421F3D466D00C856B1 /* libjson-c-osx */;
+			targetProxy = DAB7AE511F3D649400C856B1 /* PBXContainerItemProxy */;
+		};
+		DAB7AE581F3D64A600C856B1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DAB7AE421F3D466D00C856B1 /* libjson-c-osx */;
+			targetProxy = DAB7AE571F3D64A600C856B1 /* PBXContainerItemProxy */;
+		};
 		DABFA072176E3FDF00E83589 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "MasterPassword-Mac-LoginHelper";
@@ -2792,6 +2980,7 @@
 				HEADER_SEARCH_PATHS = (
 					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/$(PLATFORM_NAME)/include\"",
 					"$(inherited)",
+					"$(PROJECT_DIR)/External/libjson-c/libjson-c-osx/include",
 				);
 				LD_DYLIB_INSTALL_NAME = "@rpath/$(EXECUTABLE_PATH)";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
@@ -2828,8 +3017,12 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/External/libsodium/libsodium-osx/lib",
+					"$(PROJECT_DIR)/External/libjson-c/libjson-c-osx/lib",
 				);
-				OTHER_CFLAGS = "-DHAS_SODIUM=1";
+				OTHER_CFLAGS = (
+					"-DHAS_SODIUM=1",
+					"-DHAS_CPERCIVA=0",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword.Mac;
 				SKIP_INSTALL = NO;
 				WRAPPER_NAME = "Master Password.${WRAPPER_EXTENSION}";
@@ -2875,18 +3068,17 @@
 			buildSettings = {
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				HEADER_SEARCH_PATHS = (
+					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/$(PLATFORM_NAME)/include\"",
+					"/usr/include//libxml2",
 					"$(inherited)",
-					/usr/include/libxml2,
-					/usr/local/include,
 				);
 				LIBRARY_SEARCH_PATHS = (
-					"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib",
-					/usr/local/lib,
 					"$(inherited)",
+					"$(PROJECT_DIR)/External/libsodium/libsodium-osx/lib",
 				);
 				OTHER_CFLAGS = (
-					"-DHAS_CPERCIVA=0",
 					"-DHAS_SODIUM=1",
+					"-DHAS_CPERCIVA=0",
 				);
 			};
 			name = Test;
@@ -2895,19 +3087,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/usr/include/libxml2,
-					/usr/local/include,
-				);
 				LIBRARY_SEARCH_PATHS = (
-					"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib",
-					/usr/local/lib,
 					"$(inherited)",
+					"$(PROJECT_DIR)/External/libsodium/libsodium-osx/lib",
+					"$(PROJECT_DIR)/External/libjson-c/libjson-c-osx/lib",
 				);
 				OTHER_CFLAGS = (
-					"-DHAS_CPERCIVA=0",
 					"-DHAS_SODIUM=1",
+					"-DHAS_CPERCIVA=0",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -2917,19 +3104,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/usr/include/libxml2,
-					/usr/local/include,
-				);
 				LIBRARY_SEARCH_PATHS = (
-					"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib",
-					/usr/local/lib,
 					"$(inherited)",
+					"$(PROJECT_DIR)/External/libsodium/libsodium-osx/lib",
+					"$(PROJECT_DIR)/External/libjson-c/libjson-c-osx/lib",
 				);
 				OTHER_CFLAGS = (
-					"-DHAS_CPERCIVA=0",
 					"-DHAS_SODIUM=1",
+					"-DHAS_CPERCIVA=0",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -2939,19 +3121,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/usr/include/libxml2,
-					/usr/local/include,
-				);
 				LIBRARY_SEARCH_PATHS = (
-					"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib",
-					/usr/local/lib,
 					"$(inherited)",
+					"$(PROJECT_DIR)/External/libsodium/libsodium-osx/lib",
+					"$(PROJECT_DIR)/External/libjson-c/libjson-c-osx/lib",
 				);
 				OTHER_CFLAGS = (
-					"-DHAS_CPERCIVA=0",
 					"-DHAS_SODIUM=1",
+					"-DHAS_CPERCIVA=0",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -2961,19 +3138,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/usr/include/libxml2,
-					/usr/local/include,
-				);
 				LIBRARY_SEARCH_PATHS = (
-					"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib",
-					/usr/local/lib,
 					"$(inherited)",
+					"$(PROJECT_DIR)/External/libsodium/libsodium-osx/lib",
 				);
 				OTHER_CFLAGS = (
-					"-DHAS_CPERCIVA=0",
 					"-DHAS_SODIUM=1",
+					"-DHAS_CPERCIVA=0",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -2983,19 +3154,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/usr/include/libxml2,
-					/usr/local/include,
-				);
 				LIBRARY_SEARCH_PATHS = (
-					"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib",
-					/usr/local/lib,
 					"$(inherited)",
+					"$(PROJECT_DIR)/External/libsodium/libsodium-osx/lib",
 				);
 				OTHER_CFLAGS = (
-					"-DHAS_CPERCIVA=0",
 					"-DHAS_SODIUM=1",
+					"-DHAS_CPERCIVA=0",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -3005,20 +3170,73 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/usr/include/libxml2,
-					/usr/local/include,
-				);
 				LIBRARY_SEARCH_PATHS = (
-					"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib",
-					/usr/local/lib,
 					"$(inherited)",
+					"$(PROJECT_DIR)/External/libsodium/libsodium-osx/lib",
 				);
 				OTHER_CFLAGS = (
-					"-DHAS_CPERCIVA=0",
 					"-DHAS_SODIUM=1",
+					"-DHAS_CPERCIVA=0",
 				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Test;
+		};
+		DA5B0B631F3D416500B663F0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				DEBUGGING_SYMBOLS = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		DA5B0B641F3D416500B663F0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		DA5B0B651F3D416500B663F0 /* Test */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Test;
@@ -3098,6 +3316,7 @@
 				HEADER_SEARCH_PATHS = (
 					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/$(PLATFORM_NAME)/include\"",
 					"$(inherited)",
+					"$(PROJECT_DIR)/External/libjson-c/libjson-c-osx/include",
 				);
 				LD_DYLIB_INSTALL_NAME = "@rpath/$(EXECUTABLE_PATH)";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
@@ -3189,6 +3408,7 @@
 				HEADER_SEARCH_PATHS = (
 					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/$(PLATFORM_NAME)/include\"",
 					"$(inherited)",
+					"$(PROJECT_DIR)/External/libjson-c/libjson-c-osx/include",
 				);
 				LD_DYLIB_INSTALL_NAME = "@rpath/$(EXECUTABLE_PATH)";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
@@ -3225,8 +3445,12 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/External/libsodium/libsodium-osx/lib",
+					"$(PROJECT_DIR)/External/libjson-c/libjson-c-osx/lib",
 				);
-				OTHER_CFLAGS = "-DHAS_SODIUM=1";
+				OTHER_CFLAGS = (
+					"-DHAS_SODIUM=1",
+					"-DHAS_CPERCIVA=0",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword.Mac;
 				SKIP_INSTALL = NO;
 				WRAPPER_NAME = "Master Password.${WRAPPER_EXTENSION}";
@@ -3253,8 +3477,12 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/External/libsodium/libsodium-osx/lib",
+					"$(PROJECT_DIR)/External/libjson-c/libjson-c-osx/lib",
 				);
-				OTHER_CFLAGS = "-DHAS_SODIUM=1";
+				OTHER_CFLAGS = (
+					"-DHAS_SODIUM=1",
+					"-DHAS_CPERCIVA=0",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword.Mac;
 				SKIP_INSTALL = NO;
 				WRAPPER_NAME = "Master Password.${WRAPPER_EXTENSION}";
@@ -3266,18 +3494,17 @@
 			buildSettings = {
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				HEADER_SEARCH_PATHS = (
+					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/$(PLATFORM_NAME)/include\"",
+					"/usr/include//libxml2",
 					"$(inherited)",
-					/usr/include/libxml2,
-					/usr/local/include,
 				);
 				LIBRARY_SEARCH_PATHS = (
-					"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib",
-					/usr/local/lib,
 					"$(inherited)",
+					"$(PROJECT_DIR)/External/libsodium/libsodium-osx/lib",
 				);
 				OTHER_CFLAGS = (
-					"-DHAS_CPERCIVA=0",
 					"-DHAS_SODIUM=1",
+					"-DHAS_CPERCIVA=0",
 				);
 			};
 			name = Debug;
@@ -3287,18 +3514,17 @@
 			buildSettings = {
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				HEADER_SEARCH_PATHS = (
+					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/$(PLATFORM_NAME)/include\"",
+					"/usr/include//libxml2",
 					"$(inherited)",
-					/usr/include/libxml2,
-					/usr/local/include,
 				);
 				LIBRARY_SEARCH_PATHS = (
-					"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib",
-					/usr/local/lib,
 					"$(inherited)",
+					"$(PROJECT_DIR)/External/libsodium/libsodium-osx/lib",
 				);
 				OTHER_CFLAGS = (
-					"-DHAS_CPERCIVA=0",
 					"-DHAS_SODIUM=1",
+					"-DHAS_CPERCIVA=0",
 				);
 			};
 			name = Release;
@@ -3318,6 +3544,65 @@
 				COMBINE_HIDPI_IMAGES = YES;
 			};
 			name = Release;
+		};
+		DAB7AE441F3D466D00C856B1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				DEBUGGING_SYMBOLS = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		DAB7AE451F3D466D00C856B1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		DAB7AE461F3D466D00C856B1 /* Test */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Test;
 		};
 		DAC63275148680650075AEA5 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -3394,6 +3679,16 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Test;
 		};
+		DA5B0B621F3D416500B663F0 /* Build configuration list for PBXLegacyTarget "libsodium-osx" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DA5B0B631F3D416500B663F0 /* Debug */,
+				DA5B0B641F3D416500B663F0 /* Release */,
+				DA5B0B651F3D416500B663F0 /* Test */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Test;
+		};
 		DA5BFA3E147E415C00F98B1E /* Build configuration list for PBXProject "MasterPassword-macOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -3433,6 +3728,15 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Test;
+		};
+		DAB7AE431F3D466D00C856B1 /* Build configuration list for PBXLegacyTarget "libjson-c-osx" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DAB7AE441F3D466D00C856B1 /* Debug */,
+				DAB7AE451F3D466D00C856B1 /* Release */,
+				DAB7AE461F3D466D00C856B1 /* Test */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		DAC63274148680650075AEA5 /* Build configuration list for PBXNativeTarget "jrswizzle" */ = {
 			isa = XCConfigurationList;

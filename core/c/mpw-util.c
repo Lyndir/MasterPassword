@@ -31,10 +31,6 @@
 #include <scrypt/sha256.h>
 #elif HAS_SODIUM
 #include "sodium.h"
-#ifdef SODIUM_LIBRARY_MINIMAL
-#include "crypto_stream_aes128ctr.h"
-#include "crypto_kdf_blake2b.h"
-#endif
 #endif
 
 #include "mpw-util.h"

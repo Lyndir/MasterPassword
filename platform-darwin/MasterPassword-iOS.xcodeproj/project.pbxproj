@@ -251,6 +251,8 @@
 		DAA1765419D8B82B0044227B /* choose_type.png in Resources */ = {isa = PBXBuildFile; fileRef = DAA1763E19D8B82B0044227B /* choose_type.png */; };
 		DAA449D21EEC4B5800E7BDD5 /* mpw-marshall.c in Sources */ = {isa = PBXBuildFile; fileRef = DAA449D01EEC4B5800E7BDD5 /* mpw-marshall.c */; };
 		DAADBFE01A68763B00F7A756 /* mpw-algorithm.c in Sources */ = {isa = PBXBuildFile; fileRef = 93D3969393A3A46BD27D7078 /* mpw-algorithm.c */; };
+		DAB7AE5D1F3D752900C856B1 /* libjson-c.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB7AE5C1F3D752900C856B1 /* libjson-c.a */; };
+		DAB7AE771F3D755B00C856B1 /* libjson-c.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB7AE761F3D755B00C856B1 /* libjson-c.a */; };
 		DABB981615100B4000B05417 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DABB981515100B4000B05417 /* SystemConfiguration.framework */; };
 		DABD39371711E29700CF925C /* avatar-0.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD366C1711E29400CF925C /* avatar-0.png */; };
 		DABD39381711E29700CF925C /* avatar-0@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD366D1711E29400CF925C /* avatar-0@2x.png */; };
@@ -451,6 +453,23 @@
 		DAFE4A63150399FF003ABA92 /* NSDateFormatter+RFC3339.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFE4A63150399FF003ABA91 /* NSDateFormatter+RFC3339.m */; };
 		DAFE4A63150399FF003ABA94 /* NSDateFormatter+RFC3339.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE4A63150399FF003ABA93 /* NSDateFormatter+RFC3339.h */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		DAB7AE4D1F3D618700C856B1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DA5BFA3B147E415C00F98B1E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DAB7AE471F3D468300C856B1;
+			remoteInfo = "libsodium-ios";
+		};
+		DAB7AE4F1F3D618700C856B1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DA5BFA3B147E415C00F98B1E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DAB7AE3D1F3D464A00C856B1;
+			remoteInfo = "libjson-c";
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		DA32D01E19D111C6004F3F0E /* CopyFiles */ = {
@@ -818,16 +837,16 @@
 		DAA1411D1922FF020032B392 /* PearlTween.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlTween.h; sourceTree = "<group>"; };
 		DAA1411F1922FF020032B392 /* map-macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "map-macro.h"; sourceTree = "<group>"; };
 		DAA1757D19D86BE70044227B /* libAttributedMarkdown.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAttributedMarkdown.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		DAA175B119D86C620044227B /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		DAA175B119D86C620044227B /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		DAA175B619D86C620044227B /* markdown_lib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = markdown_lib.h; sourceTree = "<group>"; };
 		DAA175B719D86C620044227B /* markdown_lib.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = markdown_lib.m; sourceTree = "<group>"; };
 		DAA175B819D86C620044227B /* markdown_output.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = markdown_output.m; sourceTree = "<group>"; };
-		DAA175B919D86C620044227B /* markdown_parser.leg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = markdown_parser.leg; sourceTree = "<group>"; };
+		DAA175B919D86C620044227B /* markdown_parser.leg */ = {isa = PBXFileReference; fileEncoding = 1; lastKnownFileType = text; path = markdown_parser.leg; sourceTree = "<group>"; };
 		DAA175BA19D86C620044227B /* markdown_parser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = markdown_parser.m; sourceTree = "<group>"; };
 		DAA175BB19D86C620044227B /* markdown_peg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = markdown_peg.h; sourceTree = "<group>"; };
 		DAA175EB19D86C620044227B /* parsing_functions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = parsing_functions.m; sourceTree = "<group>"; };
 		DAA175EC19D86C620044227B /* platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = platform.h; sourceTree = "<group>"; };
-		DAA175ED19D86C620044227B /* README.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.markdown; sourceTree = "<group>"; };
+		DAA175ED19D86C620044227B /* README.markdown */ = {isa = PBXFileReference; fileEncoding = 1; lastKnownFileType = net.daringfireball.markdown; path = README.markdown; sourceTree = "<group>"; };
 		DAA175EE19D86C620044227B /* README_PEG-MARKDWON.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = "README_PEG-MARKDWON.markdown"; sourceTree = "<group>"; };
 		DAA175EF19D86C620044227B /* utility_functions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = utility_functions.m; sourceTree = "<group>"; };
 		DAA1761C19D86E800044227B /* attributed-markdown.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "attributed-markdown.pch"; sourceTree = "<group>"; };
@@ -862,6 +881,28 @@
 		DAA449D01EEC4B5800E7BDD5 /* mpw-marshall.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-marshall.c"; sourceTree = "<group>"; };
 		DAA449D11EEC4B5800E7BDD5 /* mpw-marshall.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-marshall.h"; sourceTree = "<group>"; };
 		DAAC35DD156BD77D00C5FD93 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		DAB7AE5C1F3D752900C856B1 /* libjson-c.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libjson-c.a"; path = "External/libjson-c/libjson-c-ios/lib/libjson-c.a"; sourceTree = "<group>"; };
+		DAB7AE611F3D755B00C856B1 /* arraylist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = arraylist.h; sourceTree = "<group>"; };
+		DAB7AE621F3D755B00C856B1 /* bits.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bits.h; sourceTree = "<group>"; };
+		DAB7AE631F3D755B00C856B1 /* debug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = debug.h; sourceTree = "<group>"; };
+		DAB7AE641F3D755B00C856B1 /* json.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json.h; sourceTree = "<group>"; };
+		DAB7AE651F3D755B00C856B1 /* json_c_version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json_c_version.h; sourceTree = "<group>"; };
+		DAB7AE661F3D755B00C856B1 /* json_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json_config.h; sourceTree = "<group>"; };
+		DAB7AE671F3D755B00C856B1 /* json_inttypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json_inttypes.h; sourceTree = "<group>"; };
+		DAB7AE681F3D755B00C856B1 /* json_object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json_object.h; sourceTree = "<group>"; };
+		DAB7AE691F3D755B00C856B1 /* json_object_iterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json_object_iterator.h; sourceTree = "<group>"; };
+		DAB7AE6A1F3D755B00C856B1 /* json_object_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json_object_private.h; sourceTree = "<group>"; };
+		DAB7AE6B1F3D755B00C856B1 /* json_pointer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json_pointer.h; sourceTree = "<group>"; };
+		DAB7AE6C1F3D755B00C856B1 /* json_tokener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json_tokener.h; sourceTree = "<group>"; };
+		DAB7AE6D1F3D755B00C856B1 /* json_util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json_util.h; sourceTree = "<group>"; };
+		DAB7AE6E1F3D755B00C856B1 /* json_visit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json_visit.h; sourceTree = "<group>"; };
+		DAB7AE6F1F3D755B00C856B1 /* linkhash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = linkhash.h; sourceTree = "<group>"; };
+		DAB7AE701F3D755B00C856B1 /* math_compat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = math_compat.h; sourceTree = "<group>"; };
+		DAB7AE711F3D755B00C856B1 /* printbuf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = printbuf.h; sourceTree = "<group>"; };
+		DAB7AE721F3D755B00C856B1 /* random_seed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = random_seed.h; sourceTree = "<group>"; };
+		DAB7AE731F3D755B00C856B1 /* strdup_compat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = strdup_compat.h; sourceTree = "<group>"; };
+		DAB7AE741F3D755B00C856B1 /* vasprintf_compat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vasprintf_compat.h; sourceTree = "<group>"; };
+		DAB7AE761F3D755B00C856B1 /* libjson-c.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libjson-c.a"; sourceTree = "<group>"; };
 		DABB981515100B4000B05417 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		DABD360F1711E29400CF925C /* ui_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ui_background.png; sourceTree = "<group>"; };
 		DABD36101711E29400CF925C /* ui_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ui_background@2x.png"; sourceTree = "<group>"; };
@@ -1475,7 +1516,7 @@
 		DABD38C11711E29700CF925C /* tip_location_teal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tip_location_teal@2x.png"; sourceTree = "<group>"; };
 		DABD38C21711E29700CF925C /* tip_location_wood.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tip_location_wood.png; sourceTree = "<group>"; };
 		DABD38C31711E29700CF925C /* tip_location_wood@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tip_location_wood@2x.png"; sourceTree = "<group>"; };
-		DABD38C81711E29700CF925C /* jquery-1.6.1.min.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "jquery-1.6.1.min.js"; sourceTree = "<group>"; };
+		DABD38C81711E29700CF925C /* jquery-1.6.1.min.js */ = {isa = PBXFileReference; fileEncoding = 1; lastKnownFileType = sourcecode.javascript; path = "jquery-1.6.1.min.js"; sourceTree = "<group>"; };
 		DABD38C91711E29700CF925C /* keypad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = keypad.png; sourceTree = "<group>"; };
 		DABD38CA1711E29700CF925C /* logo-bare.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-bare.png"; sourceTree = "<group>"; };
 		DABD38CB1711E29700CF925C /* menu-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu-icon.png"; sourceTree = "<group>"; };
@@ -1514,7 +1555,7 @@
 		DABD3BF01711E2DC00CF925C /* MPiOSConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPiOSConfig.h; sourceTree = "<group>"; };
 		DABD3BF11711E2DC00CF925C /* MPiOSConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPiOSConfig.m; sourceTree = "<group>"; };
 		DABD3BF31711E2DC00CF925C /* MasterPassword-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "MasterPassword-Info.plist"; sourceTree = "<group>"; };
-		DABD3BF81711E2DC00CF925C /* MasterPassword.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = MasterPassword.entitlements; sourceTree = "<group>"; };
+		DABD3BF81711E2DC00CF925C /* MasterPassword.entitlements */ = {isa = PBXFileReference; fileEncoding = 1; lastKnownFileType = text.xml; path = MasterPassword.entitlements; sourceTree = "<group>"; };
 		DABD3BF91711E2DC00CF925C /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		DABD3BFB1711E2DC00CF925C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		DABD3BFC1711E2DC00CF925C /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -1528,7 +1569,7 @@
 		DAC77CAD148291A600BCF976 /* libPearl.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPearl.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAC77CB1148291A600BCF976 /* Pearl-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Pearl-Prefix.pch"; path = "../../Source/Pearl/Pearl-Prefix.pch"; sourceTree = "<group>"; };
 		DACA29711705E1A8002C6C22 /* ciphers.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ciphers.plist; sourceTree = "<group>"; };
-		DACA29721705E1A8002C6C22 /* dictionary.lst */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dictionary.lst; sourceTree = "<group>"; };
+		DACA29721705E1A8002C6C22 /* dictionary.lst */ = {isa = PBXFileReference; fileEncoding = 1; lastKnownFileType = text; path = dictionary.lst; sourceTree = "<group>"; };
 		DACA29771705E2BD002C6C22 /* JRSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JRSwizzle.h; sourceTree = "<group>"; };
 		DACA298C1705E2BD002C6C22 /* JRSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JRSwizzle.m; sourceTree = "<group>"; };
 		DACA29B51705E2DE002C6C22 /* UIColor+Expanded.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Expanded.h"; sourceTree = "<group>"; };
@@ -1584,8 +1625,8 @@
 		DAFE45F315039823003ABA7C /* PearlStrings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlStrings.m; sourceTree = "<group>"; };
 		DAFE45F415039823003ABA7C /* PearlStringUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlStringUtils.h; sourceTree = "<group>"; };
 		DAFE45F515039823003ABA7C /* PearlStringUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlStringUtils.m; sourceTree = "<group>"; };
-		DAFE45F815039823003ABA7C /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
-		DAFE45FB15039823003ABA7C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Pearl.strings; sourceTree = "<group>"; };
+		DAFE45F815039823003ABA7C /* README */ = {isa = PBXFileReference; fileEncoding = 1; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		DAFE45FB15039823003ABA7C /* en */ = {isa = PBXFileReference; fileEncoding = 2483028224; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Pearl.strings; sourceTree = "<group>"; };
 		DAFE45FD15039823003ABA7C /* Pearl-Crypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Pearl-Crypto.h"; sourceTree = "<group>"; };
 		DAFE45FE15039823003ABA7C /* PearlCryptUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlCryptUtils.h; sourceTree = "<group>"; };
 		DAFE45FF15039823003ABA7C /* PearlCryptUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlCryptUtils.m; sourceTree = "<group>"; };
@@ -1593,7 +1634,7 @@
 		DAFE460115039823003ABA7C /* PearlKeyChain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlKeyChain.m; sourceTree = "<group>"; };
 		DAFE460215039823003ABA7C /* PearlRSAKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlRSAKey.h; sourceTree = "<group>"; };
 		DAFE460315039823003ABA7C /* PearlRSAKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlRSAKey.m; sourceTree = "<group>"; };
-		DAFE460615039823003ABA7C /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		DAFE460615039823003ABA7C /* README */ = {isa = PBXFileReference; fileEncoding = 1; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		DAFE460815039823003ABA7C /* Pearl-UIKit-Dependencies.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Pearl-UIKit-Dependencies.h"; sourceTree = "<group>"; };
 		DAFE460915039823003ABA7C /* Pearl-UIKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Pearl-UIKit.h"; sourceTree = "<group>"; };
 		DAFE460A15039823003ABA7C /* PearlAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlAlert.h; sourceTree = "<group>"; };
@@ -1620,7 +1661,7 @@
 		DAFE461F15039823003ABA7C /* PearlUIUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlUIUtils.m; sourceTree = "<group>"; };
 		DAFE462015039823003ABA7C /* PearlValidatingTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlValidatingTextField.h; sourceTree = "<group>"; };
 		DAFE462115039823003ABA7C /* PearlValidatingTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlValidatingTextField.m; sourceTree = "<group>"; };
-		DAFE462415039823003ABA7C /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		DAFE462415039823003ABA7C /* README */ = {isa = PBXFileReference; fileEncoding = 1; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		DAFE4A1115039824003ABA7C /* UIImage+PearlScaling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+PearlScaling.h"; sourceTree = "<group>"; };
 		DAFE4A1215039824003ABA7C /* UIImage+PearlScaling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+PearlScaling.m"; sourceTree = "<group>"; };
 		DAFE4A60150399FF003ABA7C /* PearlAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlAppDelegate.m; sourceTree = "<group>"; };
@@ -1649,9 +1690,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DAB7AE5D1F3D752900C856B1 /* libjson-c.a in Frameworks */,
 				DA95B50C1C476B6A0067F5EF /* LocalAuthentication.framework in Frameworks */,
 				DA2C3D651BD9612F001137B3 /* libz.tbd in Frameworks */,
 				DA2C3D631BD96126001137B3 /* libc++.tbd in Frameworks */,
+				DAB7AE771F3D755B00C856B1 /* libjson-c.a in Frameworks */,
 				DAA1761B19D86D0D0044227B /* libAttributedMarkdown.a in Frameworks */,
 				DA0CC5421EB57BD4009A8ED9 /* Crashlytics.framework in Frameworks */,
 				DA32D03E19D11293004F3F0E /* libKCOrderedAccessorFix.a in Frameworks */,
@@ -2018,6 +2061,7 @@
 		DA5BFA47147E415C00F98B1E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DAB7AE5C1F3D752900C856B1 /* libjson-c.a */,
 				DA6701B716406A4100B61001 /* Accounts.framework */,
 				DA6701DF16406BB400B61001 /* AdSupport.framework */,
 				DA5BFA4E147E415C00F98B1E /* CoreData.framework */,
@@ -2095,6 +2139,59 @@
 				DAA175EF19D86C620044227B /* utility_functions.m */,
 			);
 			path = AttributedMarkdown;
+			sourceTree = "<group>";
+		};
+		DAB7AE5E1F3D755B00C856B1 /* libjson-c-ios */ = {
+			isa = PBXGroup;
+			children = (
+				DAB7AE5F1F3D755B00C856B1 /* include */,
+				DAB7AE751F3D755B00C856B1 /* lib */,
+			);
+			name = "libjson-c-ios";
+			path = "libjson-c/libjson-c-ios";
+			sourceTree = "<group>";
+		};
+		DAB7AE5F1F3D755B00C856B1 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				DAB7AE601F3D755B00C856B1 /* json-c */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		DAB7AE601F3D755B00C856B1 /* json-c */ = {
+			isa = PBXGroup;
+			children = (
+				DAB7AE611F3D755B00C856B1 /* arraylist.h */,
+				DAB7AE621F3D755B00C856B1 /* bits.h */,
+				DAB7AE631F3D755B00C856B1 /* debug.h */,
+				DAB7AE641F3D755B00C856B1 /* json.h */,
+				DAB7AE651F3D755B00C856B1 /* json_c_version.h */,
+				DAB7AE661F3D755B00C856B1 /* json_config.h */,
+				DAB7AE671F3D755B00C856B1 /* json_inttypes.h */,
+				DAB7AE681F3D755B00C856B1 /* json_object.h */,
+				DAB7AE691F3D755B00C856B1 /* json_object_iterator.h */,
+				DAB7AE6A1F3D755B00C856B1 /* json_object_private.h */,
+				DAB7AE6B1F3D755B00C856B1 /* json_pointer.h */,
+				DAB7AE6C1F3D755B00C856B1 /* json_tokener.h */,
+				DAB7AE6D1F3D755B00C856B1 /* json_util.h */,
+				DAB7AE6E1F3D755B00C856B1 /* json_visit.h */,
+				DAB7AE6F1F3D755B00C856B1 /* linkhash.h */,
+				DAB7AE701F3D755B00C856B1 /* math_compat.h */,
+				DAB7AE711F3D755B00C856B1 /* printbuf.h */,
+				DAB7AE721F3D755B00C856B1 /* random_seed.h */,
+				DAB7AE731F3D755B00C856B1 /* strdup_compat.h */,
+				DAB7AE741F3D755B00C856B1 /* vasprintf_compat.h */,
+			);
+			path = "json-c";
+			sourceTree = "<group>";
+		};
+		DAB7AE751F3D755B00C856B1 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				DAB7AE761F3D755B00C856B1 /* libjson-c.a */,
+			);
+			path = lib;
 			sourceTree = "<group>";
 		};
 		DABD360D1711E29400CF925C /* Media */ = {
@@ -2945,6 +3042,7 @@
 		DACA22121705DDC5002C6C22 /* External */ = {
 			isa = PBXGroup;
 			children = (
+				DAB7AE5E1F3D755B00C856B1 /* libjson-c-ios */,
 				DA0978D81E9A81EE00F0BFE8 /* libsodium-ios */,
 				DAA1759319D86C610044227B /* AttributedMarkdown */,
 				DAFC5662172C57EC00CB5CC5 /* InAppSettingsKit */,
@@ -3309,6 +3407,36 @@
 		};
 /* End PBXHeadersBuildPhase section */
 
+/* Begin PBXLegacyTarget section */
+		DAB7AE3D1F3D464A00C856B1 /* libjson-c-ios */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "$(ACTION)";
+			buildConfigurationList = DAB7AE411F3D464A00C856B1 /* Build configuration list for PBXLegacyTarget "libjson-c-ios" */;
+			buildPhases = (
+			);
+			buildToolPath = "Scripts/build_libjson-c-ios";
+			buildWorkingDirectory = "";
+			dependencies = (
+			);
+			name = "libjson-c-ios";
+			passBuildSettingsInEnvironment = 1;
+			productName = "libjson-c";
+		};
+		DAB7AE471F3D468300C856B1 /* libsodium-ios */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "$(ACTION)";
+			buildConfigurationList = DAB7AE481F3D468300C856B1 /* Build configuration list for PBXLegacyTarget "libsodium-ios" */;
+			buildPhases = (
+			);
+			buildToolPath = "Scripts/build_libsodium-ios";
+			dependencies = (
+			);
+			name = "libsodium-ios";
+			passBuildSettingsInEnvironment = 1;
+			productName = "libsodium-ios";
+		};
+/* End PBXLegacyTarget section */
+
 /* Begin PBXNativeTarget section */
 		DA32D01F19D111C6004F3F0E /* KCOrderedAccessorFix */ = {
 			isa = PBXNativeTarget;
@@ -3332,7 +3460,6 @@
 			buildConfigurationList = DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword" */;
 			buildPhases = (
 				DA8D88E019DA412A00B189D0 /* Run Script: genassets */,
-				DA0E86A81E9BED2C00F4D60E /* Run Script: libsodium/dist-build/ios.sh */,
 				DA5BFA40147E415C00F98B1E /* Sources */,
 				DA5BFA41147E415C00F98B1E /* Frameworks */,
 				DA5BFA42147E415C00F98B1E /* Resources */,
@@ -3342,6 +3469,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				DAB7AE4E1F3D618700C856B1 /* PBXTargetDependency */,
+				DAB7AE501F3D618700C856B1 /* PBXTargetDependency */,
 			);
 			name = MasterPassword;
 			productName = MasterPassword;
@@ -3403,6 +3532,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = DAC77CB7148291A600BCF976 /* Build configuration list for PBXNativeTarget "Pearl" */;
 			buildPhases = (
+				DAB7AE4C1F3D56AD00C856B1 /* ShellScript */,
 				DAC77CAB148291A600BCF976 /* Headers */,
 				DAC77CA9148291A600BCF976 /* Sources */,
 				DAC77CAA148291A600BCF976 /* Frameworks */,
@@ -3467,6 +3597,16 @@
 					DAA1757C19D86BE70044227B = {
 						CreatedOnToolsVersion = 6.0;
 						DevelopmentTeam = HL3Q45LX9N;
+					};
+					DAB7AE3D1F3D464A00C856B1 = {
+						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = HL3Q45LX9N;
+						ProvisioningStyle = Automatic;
+					};
+					DAB7AE471F3D468300C856B1 = {
+						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = HL3Q45LX9N;
+						ProvisioningStyle = Automatic;
 					};
 					DAC6325C1486805C0075AEA5 = {
 						DevelopmentTeam = HL3Q45LX9N;
@@ -3588,6 +3728,8 @@
 				DAFC5654172C573B00CB5CC5 /* InAppSettingsKit */,
 				DA32D01F19D111C6004F3F0E /* KCOrderedAccessorFix */,
 				DAA1757C19D86BE70044227B /* AttributedMarkdown */,
+				DAB7AE471F3D468300C856B1 /* libsodium-ios */,
+				DAB7AE3D1F3D464A00C856B1 /* libjson-c-ios */,
 			);
 		};
 /* End PBXProject section */
@@ -3783,21 +3925,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		DA0E86A81E9BED2C00F4D60E /* Run Script: libsodium/dist-build/ios.sh */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Run Script: libsodium/dist-build/ios.sh";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = "/bin/sh -e";
-			shellScript = "cd External/libsodium\n[[ -d libsodium-ios ]] && exit\n\n# Xcode misinterpretes autogen.sh's stderr output as errors so we try to silence it.\n[[ -e configure ]] || { err=$(./autogen.sh 2>&1 >&3); } 3>&1 || { x=$?; echo >&2 \"$err\"; exit $x; }\n./dist-build/ios.sh";
-			showEnvVarsInLog = 0;
-		};
 		DA6556E314D55F3000841C99 /* Run Script: GIT version -> Info.plist */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -3827,6 +3954,19 @@
 			shellPath = "/bin/sh -e";
 			shellScript = "exec Scripts/genassets";
 			showEnvVarsInLog = 0;
+		};
+		DAB7AE4C1F3D56AD00C856B1 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "";
 		};
 		DAD3125D155288AA00A3F9ED /* Run Script: Fabric */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4051,6 +4191,19 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		DAB7AE4E1F3D618700C856B1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DAB7AE471F3D468300C856B1 /* libsodium-ios */;
+			targetProxy = DAB7AE4D1F3D618700C856B1 /* PBXContainerItemProxy */;
+		};
+		DAB7AE501F3D618700C856B1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DAB7AE3D1F3D464A00C856B1 /* libjson-c-ios */;
+			targetProxy = DAB7AE4F1F3D618700C856B1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		DA0CC4F51EAB99BA009A8ED9 /* IASKLocalizable.strings */ = {
 			isa = PBXVariantGroup;
@@ -4212,6 +4365,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/External/libsodium/libsodium-ios/lib",
+					"$(PROJECT_DIR)/External/libjson-c/libjson-c-ios/lib",
 				);
 				OTHER_CFLAGS = "-DHAS_SODIUM=1";
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword;
@@ -4480,6 +4634,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/External/libsodium/libsodium-ios/lib",
+					"$(PROJECT_DIR)/External/libjson-c/libjson-c-ios/lib",
 				);
 				OTHER_CFLAGS = "-DHAS_SODIUM=1";
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword;
@@ -4510,6 +4665,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/External/libsodium/libsodium-ios/lib",
+					"$(PROJECT_DIR)/External/libjson-c/libjson-c-ios/lib",
 				);
 				OTHER_CFLAGS = "-DHAS_SODIUM=1";
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword;
@@ -4534,6 +4690,128 @@
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 			};
 			name = Release;
+		};
+		DAB7AE3E1F3D464A00C856B1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				DEBUGGING_SYMBOLS = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		DAB7AE3F1F3D464A00C856B1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		DAB7AE401F3D464A00C856B1 /* Test */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Test;
+		};
+		DAB7AE491F3D468300C856B1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				DEBUGGING_SYMBOLS = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		DAB7AE4A1F3D468300C856B1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		DAB7AE4B1F3D468300C856B1 /* Test */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Test;
 		};
 		DAC632661486805C0075AEA5 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -4649,6 +4927,24 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Test;
+		};
+		DAB7AE411F3D464A00C856B1 /* Build configuration list for PBXLegacyTarget "libjson-c-ios" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DAB7AE3E1F3D464A00C856B1 /* Debug */,
+				DAB7AE3F1F3D464A00C856B1 /* Release */,
+				DAB7AE401F3D464A00C856B1 /* Test */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		DAB7AE481F3D468300C856B1 /* Build configuration list for PBXLegacyTarget "libsodium-ios" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DAB7AE491F3D468300C856B1 /* Debug */,
+				DAB7AE4A1F3D468300C856B1 /* Release */,
+				DAB7AE4B1F3D468300C856B1 /* Test */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		DAC632651486805C0075AEA5 /* Build configuration list for PBXNativeTarget "uicolor-utilities" */ = {
 			isa = XCConfigurationList;
