@@ -78,7 +78,7 @@ const char *mpw_siteResult(
         const MPResultType resultType, const char *resultParam,
         const MPAlgorithmVersion algorithmVersion) {
 
-    MPSiteKey siteKey = mpw_siteKey_v0( masterKey, siteName, siteCounter, keyPurpose, keyContext );
+    MPSiteKey siteKey = mpw_siteKey( masterKey, siteName, siteCounter, keyPurpose, keyContext, algorithmVersion );
     if (!siteKey)
         return NULL;
 
