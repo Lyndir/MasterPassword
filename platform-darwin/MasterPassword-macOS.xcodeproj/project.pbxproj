@@ -3740,6 +3740,7 @@
 				DAB7AE461F3D466D00C856B1 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Test;
 		};
 		DAC63274148680650075AEA5 /* Build configuration list for PBXNativeTarget "jrswizzle" */ = {
 			isa = XCConfigurationList;

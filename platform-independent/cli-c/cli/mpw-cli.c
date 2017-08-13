@@ -303,8 +303,9 @@ int main(int argc, char *const argv[]) {
         fclose( sitesFile );
 
         // Parse file.
+        MPMarshallInfo *sitesInputInfo = mpw_marshall_read_info( sitesInputData );
+        MPMarshallFormat sitesInputFormat = sitesFormatArg? sitesFormat: sitesInputInfo->format;
         MPMarshallError marshallError = { .type = MPMarshallSuccess };
-        MPMarshallFormat sitesInputFormat = sitesFormatArg? sitesFormat: mpw_marshall_format_guess( sitesInputData );
         user = mpw_marshall_read( sitesInputData, sitesInputFormat, masterPassword, &marshallError );
         if (marshallError.type == MPMarshallErrorMasterPassword) {
             // Incorrect master password.
