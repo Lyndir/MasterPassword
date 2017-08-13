@@ -436,17 +436,15 @@
 
     [self exportSitesRevealPasswords:revealPasswords askExportPassword:^NSString *(NSString *userName) {
         return PearlAwait( ^(void (^setResult)(id)) {
-            [PearlAlert showAlertWithTitle:@"Import File's Master Password"
-                                   message:strf( @"%@'s export was done using a different master password.\n"
-                                           @"Enter that master password to unlock the exported data.", userName )
+            [PearlAlert showAlertWithTitle:strf( @"Master Password For:\n%@", userName )
+                                   message:@"Enter the user's master password to create an export file."
                                  viewStyle:UIAlertViewStyleSecureTextInput
                                  initAlert:nil tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
                         if (buttonIndex_ == [alert_ cancelButtonIndex])
                             setResult( nil );
                         else
                             setResult( [alert_ textFieldAtIndex:0].text );
-                    }
-                               cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Unlock Import", nil];
+                    }          cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Export", nil];
         } );
     }                         result:^(NSString *mpsites, NSError *error) {
         if (!mpsites || error) {

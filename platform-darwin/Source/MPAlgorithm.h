@@ -64,10 +64,10 @@ NSString *NSStringFromTimeToCrack(TimeToCrack timeToCrack);
 
 - (NSString *)mpwLoginForSiteNamed:(NSString *)name usingKey:(MPKey *)key;
 - (NSString *)mpwTemplateForSiteNamed:(NSString *)name ofType:(MPResultType)type
-                          withCounter:(NSUInteger)counter usingKey:(MPKey *)key;
+                          withCounter:(MPCounterValue)counter usingKey:(MPKey *)key;
 - (NSString *)mpwAnswerForSiteNamed:(NSString *)name onQuestion:(NSString *)question usingKey:(MPKey *)key;
 - (NSString *)mpwResultForSiteNamed:(NSString *)name ofType:(MPResultType)type parameter:(NSString *)parameter
-                        withCounter:(NSUInteger)counter variant:(MPKeyPurpose)purpose context:(NSString *)context usingKey:(MPKey *)key;
+                        withCounter:(MPCounterValue)counter variant:(MPKeyPurpose)purpose context:(NSString *)context usingKey:(MPKey *)key;
 
 - (BOOL)savePassword:(NSString *)clearPassword toSite:(MPSiteEntity *)site usingKey:(MPKey *)key;
 

@@ -49,13 +49,16 @@ __END_DECLS
     } \
     error; \
 })
+#else
+#define MPError(error_, message, ...) ({ \
+    NSError *error = error_; \
+    err( message @"%@%@", ##__VA_ARGS__, error? @"\n": @"", [error fullDescription]?: @"" ); \
+    error; \
+})
+#endif
+
 #define MPMakeError(message, ...) ({ \
      MPError( [NSError errorWithDomain:MPErrorDomain code:0 userInfo:@{ \
         NSLocalizedDescriptionKey: strf( message, ##__VA_ARGS__ ) \
      }], @"" ); \
 })
-#else
-#define MPError(error_, message, ...) ({ \
-    err( message @"%@%@", ##__VA_ARGS__, error_? @"\n": @"", [error_ fullDescription]?: @"" ); \
-})
-#endif

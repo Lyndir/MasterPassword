@@ -269,23 +269,22 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     [openPanel close];
 
     [[[NSURLSession sharedSession] dataTaskWithURL:url completionHandler:
-            ^(NSData *importedSitesData, NSURLResponse *response, NSError *error) {
-                if (error)
-                    MPError( error, @"While reading imported sites from %@.", url );
+            ^(NSData *importedSitesData, NSURLResponse *response, NSError *urlError) {
+                if (urlError)
+                    [[NSAlert alertWithError:MPError( urlError, @"While reading imported sites from %@.", url )] runModal];
                 if (!importedSitesData)
                     return;
 
                 NSString *importedSitesString = [[NSString alloc] initWithData:importedSitesData encoding:NSUTF8StringEncoding];
-                MPImportResult result = [self importSites:importedSitesString askImportPassword:^NSString *(NSString *userName) {
+                [self importSites:importedSitesString askImportPassword:^NSString *(NSString *userName) {
                     __block NSString *masterPassword = nil;
 
                     PearlMainQueueWait( ^{
                         NSAlert *alert = [NSAlert new];
                         [alert addButtonWithTitle:@"Unlock"];
                         [alert addButtonWithTitle:@"Cancel"];
-                        alert.messageText = @"Import File's Master Password";
-                        alert.informativeText = strf( @"%@'s export was done using a different master password.\n"
-                                @"Enter that master password to unlock the exported data.", userName );
+                        alert.messageText = strf( @"Importing Sites For\n%@", userName );
+                        alert.informativeText = @"Enter the master password used to create this export file.";
                         alert.accessoryView = [[NSSecureTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )];
                         [alert layout];
                         if ([alert runModal] == NSAlertFirstButtonReturn)
@@ -293,16 +292,15 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
                     } );
 
                     return masterPassword;
-                }                         askUserPassword:^NSString *(NSString *userName, NSUInteger importCount, NSUInteger deleteCount) {
+                } askUserPassword:^NSString *(NSString *userName) {
                     __block NSString *masterPassword = nil;
 
                     PearlMainQueueWait( ^{
                         NSAlert *alert = [NSAlert new];
                         [alert addButtonWithTitle:@"Import"];
                         [alert addButtonWithTitle:@"Cancel"];
-                        alert.messageText = strf( @"Master Password for\n%@", userName );
-                        alert.informativeText = strf( @"Imports %lu sites, overwriting %lu.",
-                                (unsigned long)importCount, (unsigned long)deleteCount );
+                        alert.messageText = strf( @"Master Password For\n%@", userName );
+                        alert.informativeText = @"Enter the current master password for this user.";
                         alert.accessoryView = [[NSSecureTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )];
                         [alert layout];
                         if ([alert runModal] == NSAlertFirstButtonReturn)
@@ -310,37 +308,12 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
                     } );
 
                     return masterPassword;
+                }          result:^(NSError *error) {
+                    [self updateUsers];
+
+                    if (error && !(error.domain == NSCocoaErrorDomain && error.code == NSUserCancelledError))
+                        [[NSAlert alertWithError:error] runModal];
                 }];
-
-                PearlMainQueue( ^{
-                    switch (result) {
-                        case MPImportResultSuccess: {
-                            [self updateUsers];
-
-                            NSAlert *alert = [NSAlert new];
-                            alert.messageText = @"Successfully imported sites.";
-                            [alert runModal];
-                            break;
-                        }
-                        case MPImportResultCancelled:
-                            break;
-                        case MPImportResultInternalError:
-                            [[NSAlert alertWithError:[NSError errorWithDomain:MPErrorDomain code:0 userInfo:@{
-                                    NSLocalizedDescriptionKey: @"Import failed because of an internal error."
-                            }]] runModal];
-                            break;
-                        case MPImportResultMalformedInput:
-                            [[NSAlert alertWithError:[NSError errorWithDomain:MPErrorDomain code:0 userInfo:@{
-                                    NSLocalizedDescriptionKey: @"The import doesn't look like a Master Password export."
-                            }]] runModal];
-                            break;
-                        case MPImportResultInvalidPassword:
-                            [[NSAlert alertWithError:[NSError errorWithDomain:MPErrorDomain code:0 userInfo:@{
-                                    NSLocalizedDescriptionKey: @"Incorrect master password for the import sites."
-                            }]] runModal];
-                            break;
-                    }
-                } );
             }] resume];
 }
 
@@ -509,25 +482,43 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     if ([savePanel runModal] == NSFileHandlingPanelCancelButton)
         return;
 
-    NSError *coordinateError = nil;
-    NSString *exportedSites = [self exportSitesRevealPasswords:revealPasswords];
-    [[[NSFileCoordinator alloc] initWithFilePresenter:nil] coordinateWritingItemAtURL:savePanel.URL options:0
-                                                                                error:&coordinateError byAccessor:
-                    ^(NSURL *newURL) {
-                        NSError *writeError = nil;
-                        if (![exportedSites writeToURL:newURL atomically:NO encoding:NSUTF8StringEncoding error:&writeError])
-                            MPError( writeError, @"Could not write to the export file." );
+    [self exportSitesRevealPasswords:revealPasswords
+                   askExportPassword:^NSString *(NSString *userName) {
+                       return PearlMainQueueAwait( ^id {
+                           NSAlert *alert = [NSAlert new];
+                           [alert addButtonWithTitle:@"Import"];
+                           [alert addButtonWithTitle:@"Cancel"];
+                           alert.messageText = strf( @"Master Password For\n%@", userName );
+                           alert.informativeText = @"Enter the current master password for this user.";
+                           alert.accessoryView = [[NSSecureTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )];
+                           [alert layout];
+                           if ([alert runModal] == NSAlertFirstButtonReturn)
+                               return ((NSTextField *)alert.accessoryView).stringValue;
+                           else
+                               return nil;
+                       } );
+                   } result:^(NSString *mpsites, NSError *error) {
+                if (!mpsites || error) {
+                    PearlMainQueue( ^{
+                        [[NSAlert alertWithError:MPError( error, @"Failed to export mpsites." )] runModal];
+                    } );
+                    return;
+                }
 
+                NSError *coordinateError = nil;
+                [[[NSFileCoordinator alloc] initWithFilePresenter:nil]
+                        coordinateWritingItemAtURL:savePanel.URL options:0 error:&coordinateError byAccessor:^(NSURL *newURL) {
+                    NSError *writeError = nil;
+                    if (![mpsites writeToURL:newURL atomically:NO encoding:NSUTF8StringEncoding error:&writeError])
                         PearlMainQueue( ^{
-                            [[NSAlert alertWithError:writeError] runModal];
+                            [[NSAlert alertWithError:MPError( writeError, @"Could not write to the export file." )] runModal];
                         } );
-                    }];
-    if (coordinateError) {
-        MPError( coordinateError, @"Write access to the export file could not be obtained." );
-        PearlMainQueue( ^{
-            [[NSAlert alertWithError:coordinateError] runModal];
-        } );
-    }
+                }];
+                if (coordinateError)
+                    PearlMainQueue( ^{
+                        [[NSAlert alertWithError:MPError( coordinateError, @"Could not gain access to the export file." )] runModal];
+                    } );
+            }];
 }
 
 - (void)updateUsers {

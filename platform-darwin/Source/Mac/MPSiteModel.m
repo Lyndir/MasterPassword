@@ -81,7 +81,7 @@
     self.type = entity.type;
     self.typeName = entity.typeName;
     self.uses = entity.uses_;
-    self.counter = [entity isKindOfClass:[MPGeneratedSiteEntity class]]? [(MPGeneratedSiteEntity *)entity counter]: 0;
+    self.counter = [entity isKindOfClass:[MPGeneratedSiteEntity class]]? [(MPGeneratedSiteEntity *)entity counter]: MPCounterValueInitial;
     self.loginGenerated = entity.loginGenerated;
 
     // Find all password types and the index of the current type amongst them.
@@ -104,7 +104,7 @@
     self.type = user.defaultType;
     self.typeName = [self.algorithm nameOfType:self.type];
     self.uses = @0;
-    self.counter = 1;
+    self.counter = MPCounterValueDefault;
 
     // Find all password types and the index of the current type amongst them.
     [self updateContent];
@@ -116,14 +116,14 @@
         return nil;
 
     NSError *error;
-    MPSiteEntity *entity = (MPSiteEntity *)[moc existingObjectWithID:self.entityOID error:&error];
+    MPSiteEntity *entity = [moc existingObjectWithID:self.entityOID error:&error];
     if (!entity)
         MPError( error, @"Couldn't retrieve active site." );
 
     return entity;
 }
 
-- (void)setCounter:(NSUInteger)counter {
+- (void)setCounter:(MPCounterValue)counter {
 
     if (self.counter == counter)
         return;
@@ -210,12 +210,12 @@
 
 - (BOOL)generated {
 
-    return self.type & MPSiteTypeClassGenerated;
+    return self.type & MPResultTypeClassTemplate;
 }
 
 - (BOOL)stored {
 
-    return self.type & MPSiteTypeClassStored;
+    return self.type & MPResultTypeClassStateful;
 }
 
 - (BOOL)transient {

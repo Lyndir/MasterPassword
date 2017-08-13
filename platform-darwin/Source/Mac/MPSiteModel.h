@@ -27,7 +27,7 @@
 
 @property(nonatomic) NSString *name;
 @property(nonatomic) NSAttributedString *displayedName;
-@property(nonatomic) MPSiteType type;
+@property(nonatomic) MPResultType type;
 @property(nonatomic) NSString *typeName;
 @property(nonatomic) NSString *content;
 @property(nonatomic) NSString *displayedContent;
@@ -36,7 +36,7 @@
 @property(nonatomic) NSString *loginName;
 @property(nonatomic) BOOL loginGenerated;
 @property(nonatomic) NSNumber *uses;
-@property(nonatomic) NSUInteger counter;
+@property(nonatomic) MPCounterValue counter;
 @property(nonatomic) NSDate *lastUsed;
 @property(nonatomic) id<MPAlgorithm> algorithm;
 @property(nonatomic) MPAlgorithmVersion algorithmVersion;

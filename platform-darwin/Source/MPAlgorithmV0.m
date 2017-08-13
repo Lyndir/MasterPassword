@@ -180,6 +180,9 @@ static NSOperationQueue *_mpwQueue = nil;
 
         case MPResultTypeStatefulDevice:
             return @"Device Private Password";
+
+        case MPResultTypeDeriveKey:
+            return @"Crypto Key";
     }
 
     Throw( @"Type not supported: %lu", (long)type );
@@ -220,6 +223,9 @@ static NSOperationQueue *_mpwQueue = nil;
 
         case MPResultTypeStatefulDevice:
             return @"Device";
+
+        case MPResultTypeDeriveKey:
+            return @"Key";
     }
 
     Throw( @"Type not supported: %lu", (long)type );
@@ -265,6 +271,9 @@ static NSOperationQueue *_mpwQueue = nil;
 
         case MPResultTypeStatefulDevice:
             return [MPStoredSiteEntity class];
+
+        case MPResultTypeDeriveKey:
+            break;
     }
 
     Throw( @"Type not supported: %lu", (long)type );
@@ -314,6 +323,8 @@ static NSOperationQueue *_mpwQueue = nil;
             return MPResultTypeStatefulDevice;
         case MPResultTypeStatefulDevice:
             return MPResultTypeTemplatePhrase;
+        case MPResultTypeDeriveKey:
+            break;
     }
 
     return [self defaultType];
@@ -330,12 +341,12 @@ static NSOperationQueue *_mpwQueue = nil;
 
 - (NSString *)mpwLoginForSiteNamed:(NSString *)name usingKey:(MPKey *)key {
 
-    return [self mpwResultForSiteNamed:name ofType:MPResultTypeTemplateName parameter:nil withCounter:1
+    return [self mpwResultForSiteNamed:name ofType:MPResultTypeTemplateName parameter:nil withCounter:MPCounterValueInitial
                                variant:MPKeyPurposeIdentification context:nil usingKey:key];
 }
 
 - (NSString *)mpwTemplateForSiteNamed:(NSString *)name ofType:(MPResultType)type
-                          withCounter:(NSUInteger)counter usingKey:(MPKey *)key {
+                          withCounter:(MPCounterValue)counter usingKey:(MPKey *)key {
 
     return [self mpwResultForSiteNamed:name ofType:type parameter:nil withCounter:counter
                                variant:MPKeyPurposeAuthentication context:nil usingKey:key];
@@ -343,17 +354,18 @@ static NSOperationQueue *_mpwQueue = nil;
 
 - (NSString *)mpwAnswerForSiteNamed:(NSString *)name onQuestion:(NSString *)question usingKey:(MPKey *)key {
 
-    return [self mpwResultForSiteNamed:name ofType:MPResultTypeTemplatePhrase parameter:nil withCounter:1
+    return [self mpwResultForSiteNamed:name ofType:MPResultTypeTemplatePhrase parameter:nil withCounter:MPCounterValueInitial
                                variant:MPKeyPurposeRecovery context:question usingKey:key];
 }
 
 - (NSString *)mpwResultForSiteNamed:(NSString *)name ofType:(MPResultType)type parameter:(NSString *)parameter
-                        withCounter:(NSUInteger)counter variant:(MPKeyPurpose)purpose context:(NSString *)context usingKey:(MPKey *)key {
+                        withCounter:(MPCounterValue)counter variant:(MPKeyPurpose)purpose context:(NSString *)context
+                           usingKey:(MPKey *)key {
 
     __block NSString *result = nil;
     [self mpw_perform:^{
         char const *resultBytes = mpw_siteResult( [key keyForAlgorithm:self],
-                name.UTF8String, (uint32_t)counter, purpose, context.UTF8String, type, parameter.UTF8String, [self version] );
+                name.UTF8String, counter, purpose, context.UTF8String, type, parameter.UTF8String, [self version] );
         if (resultBytes) {
             result = [NSString stringWithCString:resultBytes encoding:NSUTF8StringEncoding];
             mpw_free_string( resultBytes );
@@ -393,11 +405,11 @@ static NSOperationQueue *_mpwQueue = nil;
         [PearlKeyChain deleteItemForQuery:siteQuery];
     else
         [PearlKeyChain addOrUpdateItemForQuery:siteQuery withAttributes:@{
-                (__bridge id)kSecValueData     : state,
+                (__bridge id)kSecValueData: state,
 #if TARGET_OS_IPHONE
-                (__bridge id)kSecAttrAccessible:
-                site.type & MPSiteFeatureDevicePrivate? (__bridge id)kSecAttrAccessibleWhenUnlockedThisDeviceOnly
-                                                      : (__bridge id)kSecAttrAccessibleWhenUnlocked,
+        (__bridge id)kSecAttrAccessible:
+        site.type & MPSiteFeatureDevicePrivate? (__bridge id)kSecAttrAccessibleWhenUnlockedThisDeviceOnly
+                                              : (__bridge id)kSecAttrAccessibleWhenUnlocked,
 #endif
         }];
     ((MPStoredSiteEntity *)site).contentObject = nil;
@@ -490,7 +502,7 @@ static NSOperationQueue *_mpwQueue = nil;
                 break;
             }
 
-            NSUInteger counter = ((MPGeneratedSiteEntity *)site).counter;
+            MPCounterValue counter = ((MPGeneratedSiteEntity *)site).counter;
 
             PearlNotMainQueue( ^{
                 resultBlock( [algorithm mpwTemplateForSiteNamed:name ofType:type withCounter:counter usingKey:key] );
@@ -517,7 +529,12 @@ static NSOperationQueue *_mpwQueue = nil;
             } );
             break;
         }
+
+        case MPResultTypeDeriveKey:
+            break;
     }
+
+    Throw( @"Type not supported: %lu", (long)type );
 }
 
 - (void)resolveAnswerForSite:(MPSiteEntity *)site usingKey:(MPKey *)key result:(void ( ^ )(NSString *result))resultBlock {
@@ -563,8 +580,8 @@ static NSOperationQueue *_mpwQueue = nil;
     NSAssert( [[key keyIDForAlgorithm:site.user.algorithm] isEqualToData:site.user.keyID], @"Site does not belong to current user." );
     if (cipherText && cipherText.length && site.type & MPResultTypeClassStateful) {
         NSString *plainText = [self mpwResultForSiteNamed:site.name ofType:site.type parameter:cipherText
-                                                 withCounter:MPCounterValueInitial variant:MPKeyPurposeAuthentication context:nil
-                                                    usingKey:importKey];
+                                              withCounter:MPCounterValueInitial variant:MPKeyPurposeAuthentication context:nil
+                                                 usingKey:importKey];
         if (plainText)
             [self savePassword:plainText toSite:site usingKey:key];
     }

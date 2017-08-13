@@ -373,9 +373,9 @@
     NSArray *types = [site.algorithm allTypes];
     [self.passwordTypesMatrix renewRows:(NSInteger)[types count] columns:1];
     for (NSUInteger t = 0; t < [types count]; ++t) {
-        MPSiteType type = (MPSiteType)[types[t] unsignedIntegerValue];
+        MPResultType type = (MPResultType)[types[t] unsignedIntegerValue];
         NSString *title = [site.algorithm nameOfType:type];
-        if (type & MPSiteTypeClassGenerated)
+        if (type & MPResultTypeClassTemplate)
             title = strf( @"%@ – %@", [site.algorithm mpwTemplateForSiteNamed:site.name ofType:type withCounter:site.counter
                                                                      usingKey:[MPMacAppDelegate get].key], title );
 
@@ -397,7 +397,7 @@
         switch (returnCode) {
             case NSAlertFirstButtonReturn: {
                 // "Save" button.
-                MPSiteType type = (MPSiteType)[self.passwordTypesMatrix.selectedCell tag];
+                MPResultType type = (MPResultType)[self.passwordTypesMatrix.selectedCell tag];
                 [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
                     MPSiteEntity *entity = [[MPMacAppDelegate get] changeSite:[self.selectedSite entityInContext:context]
                                                                 saveInContext:context toType:type];

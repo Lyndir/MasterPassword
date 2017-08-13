@@ -23,11 +23,11 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-//#ifdef NS_ENUM
-//#define enum(_type, _name) NS_ENUM(_type, _name)
-//#else
+#ifdef NS_ENUM
+#define enum(_type, _name) NS_ENUM(_type, _name)
+#else
 #define enum(_type, _name) _type _name; enum
-//#endif
+#endif
 
 //// Types.
 
