@@ -138,8 +138,8 @@
 
     NSString *siteName = self.siteField.text;
     MPResultType siteType = [self siteType];
-    NSUInteger siteCounter = (NSUInteger)self.counterStepper.value;
-    self.counterLabel.text = strf( @"%lu", (unsigned long)siteCounter );
+    MPCounterValue siteCounter = (MPCounterValue)self.counterStepper.value;
+    self.counterLabel.text = strf( @"%u", siteCounter );
 
     [self.passwordButton setTitle:nil forState:UIControlStateNormal];
     [self.activity startAnimating];

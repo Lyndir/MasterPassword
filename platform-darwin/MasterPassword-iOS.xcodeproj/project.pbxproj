@@ -4333,8 +4333,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/$(PLATFORM_NAME)/include\"",
-					"\"$(PROJECT_DIR)/External/libsodium/libsodium-osx/include\"",
-					"\"$(PROJECT_DIR)/External/libjson-c/libjson-c-osx/include\"",
+					"\"$(PROJECT_DIR)/External/libsodium/libsodium-ios/include\"",
+					"\"$(PROJECT_DIR)/External/libjson-c/libjson-c-ios/include\"",
 					"$(inherited)",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -4518,8 +4518,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/$(PLATFORM_NAME)/include\"",
-					"\"$(PROJECT_DIR)/External/libsodium/libsodium-osx/include\"",
-					"\"$(PROJECT_DIR)/External/libjson-c/libjson-c-osx/include\"",
+					"\"$(PROJECT_DIR)/External/libsodium/libsodium-ios/include\"",
+					"\"$(PROJECT_DIR)/External/libjson-c/libjson-c-ios/include\"",
 					"$(inherited)",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -4608,8 +4608,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/$(PLATFORM_NAME)/include\"",
-					"\"$(PROJECT_DIR)/External/libsodium/libsodium-osx/include\"",
-					"\"$(PROJECT_DIR)/External/libjson-c/libjson-c-osx/include\"",
+					"\"$(PROJECT_DIR)/External/libsodium/libsodium-ios/include\"",
+					"\"$(PROJECT_DIR)/External/libjson-c/libjson-c-ios/include\"",
 					"$(inherited)",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -4948,6 +4948,7 @@
 				DAB7AE401F3D464A00C856B1 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Test;
 		};
 		DAB7AE481F3D468300C856B1 /* Build configuration list for PBXLegacyTarget "libsodium-ios" */ = {
 			isa = XCConfigurationList;
@@ -4957,6 +4958,7 @@
 				DAB7AE4B1F3D468300C856B1 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Test;
 		};
 		DAC632651486805C0075AEA5 /* Build configuration list for PBXNativeTarget "uicolor-utilities" */ = {
 			isa = XCConfigurationList;

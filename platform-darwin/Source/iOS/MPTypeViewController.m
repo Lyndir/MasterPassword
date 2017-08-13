@@ -83,7 +83,7 @@
         [(UITextField *)[cell viewWithTag:2] setText:@"..."];
 
         NSString *name = selectedSite.name;
-        NSUInteger counter = 0;
+        MPCounterValue counter = 0;
         if ([selectedSite isKindOfClass:[MPGeneratedSiteEntity class]])
             counter = ((MPGeneratedSiteEntity *)selectedSite).counter;
 
