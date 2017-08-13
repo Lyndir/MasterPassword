@@ -73,6 +73,7 @@ mkdir -p "$prefix/lib" \
 
 # Merge Binaries
 lipo -create \
+  "$prefix_i386/lib/libsodium.a" \
   "$prefix_x86_64/lib/libsodium.a" \
   "$prefix_armv7/lib/libsodium.a" \
   "$prefix_armv7s/lib/libsodium.a" \
