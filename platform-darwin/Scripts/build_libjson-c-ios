@@ -73,6 +73,7 @@ mkdir -p "$prefix/lib" \
 
 # Merge Binaries
 lipo -create \
+  "$prefix_i386/lib/libjson-c.a" \
   "$prefix_x86_64/lib/libjson-c.a" \
   "$prefix_armv7/lib/libjson-c.a" \
   "$prefix_armv7s/lib/libjson-c.a" \
