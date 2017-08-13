@@ -21,7 +21,7 @@
 #include "mpw-marshall-util.h"
 #include "mpw-util.h"
 
-char *mpw_get_token(char **in, char *eol, char *delim) {
+char *mpw_get_token(const char **in, const char *eol, char *delim) {
 
     // Skip leading spaces.
     for (; **in == ' '; ++*in);

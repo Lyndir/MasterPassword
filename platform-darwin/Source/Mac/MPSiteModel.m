@@ -233,14 +233,14 @@
     else
         PearlNotMainQueue( ^{
             [self updatePasswordWithResult:
-                    [self.algorithm generatePasswordForSiteNamed:self.name ofType:self.type withCounter:self.counter
-                                                        usingKey:[MPAppDelegate_Shared get].key]];
+                    [self.algorithm mpwTemplateForSiteNamed:self.name ofType:self.type withCounter:self.counter
+                                                   usingKey:[MPAppDelegate_Shared get].key]];
             [self updateLoginNameWithResult:
-                    [self.algorithm generateLoginForSiteNamed:self.name
-                                                     usingKey:[MPAppDelegate_Shared get].key]];
+                    [self.algorithm mpwLoginForSiteNamed:self.name
+                                                usingKey:[MPAppDelegate_Shared get].key]];
             [self updateAnswerWithResult:
-                    [self.algorithm generateAnswerForSiteNamed:self.name onQuestion:self.question
-                                                      usingKey:[MPAppDelegate_Shared get].key]];
+                    [self.algorithm mpwAnswerForSiteNamed:self.name onQuestion:self.question
+                                                 usingKey:[MPAppDelegate_Shared get].key]];
         } );
 }
 
@@ -252,8 +252,8 @@
     [entity resolveLoginUsingKey:[MPAppDelegate_Shared get].key result:^(NSString *result) {
         [self updateLoginNameWithResult:result];
     }];
-    [self updateAnswerWithResult:[self.algorithm generateAnswerForSiteNamed:self.name onQuestion:self.question
-                                                                   usingKey:[MPAppDelegate_Shared get].key]];
+    [self updateAnswerWithResult:[self.algorithm mpwAnswerForSiteNamed:self.name onQuestion:self.question
+                                                              usingKey:[MPAppDelegate_Shared get].key]];
 }
 
 - (void)updatePasswordWithResult:(NSString *)result {

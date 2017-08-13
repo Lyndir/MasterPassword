@@ -284,7 +284,7 @@
     [PearlSheet showSheetWithTitle:@"Change Password Type" viewStyle:UIActionSheetStyleAutomatic
                          initSheet:^(UIActionSheet *sheet) {
                              for (NSNumber *typeNumber in [mainSite.algorithm allTypes]) {
-                                 MPSiteType type = (MPSiteType)[typeNumber unsignedIntegerValue];
+                                 MPResultType type = (MPResultType)[typeNumber unsignedIntegerValue];
                                  NSString *typeName = [mainSite.algorithm nameOfType:type];
                                  if (type == mainSite.type)
                                      [sheet addButtonWithTitle:strf( @"● %@", typeName )];
@@ -295,7 +295,7 @@
                 if (buttonIndex == [sheet cancelButtonIndex])
                     return;
 
-                MPSiteType type = (MPSiteType)[[mainSite.algorithm allTypes][buttonIndex] unsignedIntegerValue]?:
+                MPResultType type = (MPResultType)[[mainSite.algorithm allTypes][buttonIndex] unsignedIntegerValue]?:
                                   mainSite.user.defaultType?: mainSite.algorithm.defaultType;
 
                 [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
@@ -311,7 +311,7 @@
     self.loginNameField.enabled = YES;
     self.passwordField.enabled = YES;
 
-    if ([self siteInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]].type & MPSiteTypeClassStored)
+    if ([self siteInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]].type & MPResultTypeClassStateful)
         [self.passwordField becomeFirstResponder];
     else
         [self.loginNameField becomeFirstResponder];
@@ -537,7 +537,7 @@
         self.loginNameContainer.visible = settingsMode || mainSite.loginGenerated || [mainSite.loginName length];
         self.modeButton.visible = !self.transientSite;
         self.modeButton.alpha = settingsMode? 0.5f: 0.1f;
-        self.counterLabel.visible = self.counterButton.visible = mainSite.type & MPSiteTypeClassGenerated;
+        self.counterLabel.visible = self.counterButton.visible = mainSite.type & MPResultTypeClassTemplate;
         self.modeButton.selected = settingsMode;
         self.strengthLabel.gone = !settingsMode;
         self.modeScrollView.scrollEnabled = !self.transientSite;
@@ -565,8 +565,8 @@
         // Site Password
         self.passwordField.secureTextEntry = [[MPiOSConfig get].hidePasswords boolValue];
         self.passwordField.attributedPlaceholder = stra(
-                mainSite.type & MPSiteTypeClassStored? strl( @"No password" ):
-                mainSite.type & MPSiteTypeClassGenerated? strl( @"..." ): @"", @{
+                mainSite.type & MPResultTypeClassStateful? strl( @"No password" ):
+                mainSite.type & MPResultTypeClassTemplate? strl( @"..." ): @"", @{
                         NSForegroundColorAttributeName: [UIColor whiteColor]
                 } );
 
@@ -585,10 +585,10 @@
 
             BOOL loginGenerated = site.loginGenerated;
             NSString *password = nil, *loginName = [site resolveLoginUsingKey:key];
-            MPSiteType transientType = [[MPiOSAppDelegate get] activeUserInContext:context].defaultType?: MPAlgorithmDefault.defaultType;
-            if (self.transientSite && transientType & MPSiteTypeClassGenerated)
-                password = [MPAlgorithmDefault generatePasswordForSiteNamed:self.transientSite ofType:transientType
-                                                                withCounter:1 usingKey:key];
+            MPResultType transientType = [[MPiOSAppDelegate get] activeUserInContext:context].defaultType?: MPAlgorithmDefault.defaultType;
+            if (self.transientSite && transientType & MPResultTypeClassTemplate)
+                password = [MPAlgorithmDefault mpwTemplateForSiteNamed:self.transientSite ofType:transientType
+                                                           withCounter:1 usingKey:key];
             else if (site)
                 password = [site resolvePasswordUsingKey:key];
 

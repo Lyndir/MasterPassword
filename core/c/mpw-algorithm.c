@@ -102,7 +102,7 @@ const char *mpw_siteResult(
                 return NULL;
         }
     }
-    else if (resultType & MPResultTypeClassState) {
+    else if (resultType & MPResultTypeClassStateful) {
         switch (algorithmVersion) {
             case MPAlgorithmVersion0:
                 return mpw_sitePasswordFromCrypt_v0( masterKey, siteKey, resultType, resultParam );

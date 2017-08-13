@@ -21,6 +21,7 @@
 #endif
 #define MP_ENV_fullName     "MP_FULLNAME"
 #define MP_ENV_algorithm    "MP_ALGORITHM"
+#define MP_ENV_format       "MP_FORMAT"
 
 static void usage() {
 
@@ -75,10 +76,11 @@ static void usage() {
             "  -f|F format  The mpsites format to use for reading/writing site parameters.\n"
             "               -F forces the use of the given format,\n"
             "               -f allows fallback/migration.\n"
-            "               Defaults to json, falls back to plain.\n"
+            "               Defaults to %s in env or json, falls back to plain.\n"
+            "                   n, none     | No file\n"
             "                   f, flat     | ~/.mpw.d/Full Name.%s\n"
             "                   j, json     | ~/.mpw.d/Full Name.%s\n\n",
-            mpw_marshall_format_extension( MPMarshallFormatFlat ), mpw_marshall_format_extension( MPMarshallFormatJSON ) );
+            MP_ENV_format, mpw_marshall_format_extension( MPMarshallFormatFlat ), mpw_marshall_format_extension( MPMarshallFormatJSON ) );
     inf( ""
             "  -R redacted  Whether to save the mpsites in redacted format or not.\n"
             "               Defaults to 1, redacted.\n\n" );
@@ -166,6 +168,7 @@ int main(int argc, char *const argv[]) {
     const char *keyPurposeArg = NULL, *keyContextArg = NULL, *sitesFormatArg = NULL, *sitesRedactedArg = NULL;
     fullNameArg = mpw_getenv( MP_ENV_fullName );
     algorithmVersionArg = mpw_getenv( MP_ENV_algorithm );
+    sitesFormatArg = mpw_getenv( MP_ENV_format );
 
     // Read the command-line options.
     for (int opt; (opt = getopt( argc, argv, "u:U:M:t:P:c:a:s:p:C:f:F:R:vqh" )) != EOF;)
@@ -269,13 +272,14 @@ int main(int argc, char *const argv[]) {
     char *sitesPath = mpw_path( fullName, mpw_marshall_format_extension( sitesFormat ) );
     if (!sitesPath || !(sitesFile = fopen( sitesPath, "r" ))) {
         dbg( "Couldn't open configuration file:\n  %s: %s\n", sitesPath, strerror( errno ) );
-        free( sitesPath );
 
         // Try to fall back to the flat format.
         if (!sitesFormatFixed) {
-            sitesFormat = MPMarshallFormatFlat;
-            sitesPath = mpw_path( fullName, mpw_marshall_format_extension( sitesFormat ) );
-            if (!sitesPath || !(sitesFile = fopen( sitesPath, "r" )))
+            free( sitesPath );
+            sitesPath = mpw_path( fullName, mpw_marshall_format_extension( MPMarshallFormatFlat ) );
+            if (sitesPath && (sitesFile = fopen( sitesPath, "r" )))
+                sitesFormat = MPMarshallFormatFlat;
+            else
                 dbg( "Couldn't open configuration file:\n  %s: %s\n", sitesPath, strerror( errno ) );
         }
     }
@@ -290,9 +294,9 @@ int main(int argc, char *const argv[]) {
     else {
         // Read file.
         size_t readAmount = 4096, bufSize = 0, bufOffset = 0, readSize = 0;
-        char *buf = NULL;
-        while ((mpw_realloc( &buf, &bufSize, readAmount )) &&
-               (bufOffset += (readSize = fread( buf + bufOffset, 1, readAmount, sitesFile ))) &&
+        char *sitesInputData = NULL;
+        while ((mpw_realloc( &sitesInputData, &bufSize, readAmount )) &&
+               (bufOffset += (readSize = fread( sitesInputData + bufOffset, 1, readAmount, sitesFile ))) &&
                (readSize == readAmount));
         if (ferror( sitesFile ))
             wrn( "Error while reading configuration file:\n  %s: %d\n", sitesPath, ferror( sitesFile ) );
@@ -300,13 +304,14 @@ int main(int argc, char *const argv[]) {
 
         // Parse file.
         MPMarshallError marshallError = { .type = MPMarshallSuccess };
-        user = mpw_marshall_read( buf, sitesFormat, masterPassword, &marshallError );
+        MPMarshallFormat sitesInputFormat = sitesFormatArg? sitesFormat: mpw_marshall_format_guess( sitesInputData );
+        user = mpw_marshall_read( sitesInputData, sitesInputFormat, masterPassword, &marshallError );
         if (marshallError.type == MPMarshallErrorMasterPassword) {
             // Incorrect master password.
             if (!allowPasswordUpdate) {
                 ftl( "Incorrect master password according to configuration:\n  %s: %s\n", sitesPath, marshallError.description );
                 mpw_marshal_free( user );
-                mpw_free( buf, bufSize );
+                mpw_free( sitesInputData, bufSize );
                 free( sitesPath );
                 return EX_DATAERR;
             }
@@ -321,14 +326,14 @@ int main(int argc, char *const argv[]) {
                     importMasterPassword = mpw_getpass( "Old master password: " );
 
                 mpw_marshal_free( user );
-                user = mpw_marshall_read( buf, sitesFormat, importMasterPassword, &marshallError );
+                user = mpw_marshall_read( sitesInputData, sitesInputFormat, importMasterPassword, &marshallError );
             }
             if (user) {
                 mpw_free_string( user->masterPassword );
                 user->masterPassword = strdup( masterPassword );
             }
         }
-        mpw_free( buf, bufSize );
+        mpw_free( sitesInputData, bufSize );
         if (!user || marshallError.type != MPMarshallSuccess) {
             err( "Couldn't parse configuration file:\n  %s: %s\n", sitesPath, marshallError.description );
             mpw_marshal_free( user );
@@ -471,7 +476,7 @@ int main(int argc, char *const argv[]) {
     if (keyPurpose == MPKeyPurposeIdentification && site && !site->loginGenerated && site->loginName)
         fprintf( stdout, "%s\n", site->loginName );
 
-    else if (resultParam && site && resultType & MPResultTypeClassState) {
+    else if (resultParam && site && resultType & MPResultTypeClassStateful) {
         mpw_free_string( site->content );
         if (!(site->content = mpw_siteState( masterKey, siteName, siteCounter,
                 keyPurpose, keyContext, resultType, resultParam, algorithmVersion ))) {
@@ -483,7 +488,7 @@ int main(int argc, char *const argv[]) {
         inf( "saved.\n" );
     }
     else {
-        if (!resultParam && site && site->content && resultType & MPResultTypeClassState)
+        if (!resultParam && site && site->content && resultType & MPResultTypeClassStateful)
             resultParam = strdup( site->content );
         const char *siteResult = mpw_siteResult( masterKey, siteName, siteCounter,
                 keyPurpose, keyContext, resultType, resultParam, algorithmVersion );

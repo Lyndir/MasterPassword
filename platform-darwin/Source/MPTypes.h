@@ -22,6 +22,7 @@
 __BEGIN_DECLS
 extern NSString *const MPErrorDomain;
 extern NSInteger const MPErrorHangCode;
+extern NSInteger const MPErrorMarshallCode;
 
 extern NSString *const MPSignedInNotification;
 extern NSString *const MPSignedOutNotification;
@@ -38,13 +39,20 @@ __END_DECLS
 
 #ifdef CRASHLYTICS
 #define MPError(error_, message, ...) ({ \
-    err( message @"%@%@", ##__VA_ARGS__, error_? @"\n": @"", [error_ fullDescription]?: @"" ); \
+    NSError *error = error_; \
+    err( message @"%@%@", ##__VA_ARGS__, error && [message length]? @"\n": @"", [error fullDescription]?: @"" ); \
     \
     if ([[MPConfig get].sendInfo boolValue]) { \
-        [[Crashlytics sharedInstance] recordError:error_ withAdditionalUserInfo:@{ \
+        [[Crashlytics sharedInstance] recordError:error withAdditionalUserInfo:@{ \
                 @"location": strf( @"%@:%d %@", @(basename((char *)__FILE__)), __LINE__, NSStringFromSelector(_cmd) ), \
         }]; \
     } \
+    error; \
+})
+#define MPMakeError(message, ...) ({ \
+     MPError( [NSError errorWithDomain:MPErrorDomain code:0 userInfo:@{ \
+        NSLocalizedDescriptionKey: strf( message, ##__VA_ARGS__ ) \
+     }], @"" ); \
 })
 #else
 #define MPError(error_, message, ...) ({ \

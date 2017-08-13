@@ -2979,8 +2979,9 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/$(PLATFORM_NAME)/include\"",
+					"\"$(PROJECT_DIR)/External/libsodium/libsodium-osx/include\"",
+					"\"$(PROJECT_DIR)/External/libjson-c/libjson-c-osx/include\"",
 					"$(inherited)",
-					"$(PROJECT_DIR)/External/libjson-c/libjson-c-osx/include",
 				);
 				LD_DYLIB_INSTALL_NAME = "@rpath/$(EXECUTABLE_PATH)";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
@@ -3315,8 +3316,9 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/$(PLATFORM_NAME)/include\"",
+					"\"$(PROJECT_DIR)/External/libsodium/libsodium-osx/include\"",
+					"\"$(PROJECT_DIR)/External/libjson-c/libjson-c-osx/include\"",
 					"$(inherited)",
-					"$(PROJECT_DIR)/External/libjson-c/libjson-c-osx/include",
 				);
 				LD_DYLIB_INSTALL_NAME = "@rpath/$(EXECUTABLE_PATH)";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
@@ -3407,8 +3409,9 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/$(PLATFORM_NAME)/include\"",
+					"\"$(PROJECT_DIR)/External/libsodium/libsodium-osx/include\"",
+					"\"$(PROJECT_DIR)/External/libjson-c/libjson-c-osx/include\"",
 					"$(inherited)",
-					"$(PROJECT_DIR)/External/libjson-c/libjson-c-osx/include",
 				);
 				LD_DYLIB_INSTALL_NAME = "@rpath/$(EXECUTABLE_PATH)";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";

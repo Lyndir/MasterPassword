@@ -60,15 +60,15 @@
     self.touchIDSwitch.on = activeUser.touchID;
     self.touchIDSwitch.enabled = self.savePasswordSwitch.on && [[MPiOSAppDelegate get] isFeatureUnlocked:MPProductTouchID];
 
-    MPSiteType defaultType = activeUser.defaultType;
+    MPResultType defaultType = activeUser.defaultType;
     self.generated1TypeControl.selectedSegmentIndex = [self generated1SegmentIndexForType:defaultType];
     self.generated2TypeControl.selectedSegmentIndex = [self generated2SegmentIndexForType:defaultType];
     self.storedTypeControl.selectedSegmentIndex = [self storedSegmentIndexForType:defaultType];
     PearlNotMainQueue( ^{
         NSString *examplePassword = nil;
-        if (defaultType & MPSiteTypeClassGenerated)
-            examplePassword = [MPAlgorithmDefault generatePasswordForSiteNamed:@"test" ofType:defaultType
-                                                                   withCounter:1 usingKey:[MPiOSAppDelegate get].key];
+        if (defaultType & MPResultTypeClassTemplate)
+            examplePassword = [MPAlgorithmDefault mpwTemplateForSiteNamed:@"test" ofType:defaultType
+                                                              withCounter:1 usingKey:[MPiOSAppDelegate get].key];
         PearlMainQueue( ^{
             self.typeSamplePassword.text = [examplePassword length]? [NSString stringWithFormat:@"eg. %@", examplePassword]: nil;
         } );
@@ -164,7 +164,7 @@
         if (sender != self.storedTypeControl)
             self.storedTypeControl.selectedSegmentIndex = -1;
 
-        MPSiteType defaultType = [self typeForSelectedSegment];
+        MPResultType defaultType = [self typeForSelectedSegment];
         [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
             [[MPiOSAppDelegate get] activeUserInContext:context].defaultType = defaultType;
             [context saveToStore];
@@ -242,7 +242,7 @@
     return nil;
 }
 
-- (MPSiteType)typeForSelectedSegment {
+- (MPResultType)typeForSelectedSegment {
 
     NSInteger selectedGenerated1Index = self.generated1TypeControl.selectedSegmentIndex;
     NSInteger selectedGenerated2Index = self.generated2TypeControl.selectedSegmentIndex;
@@ -250,30 +250,30 @@
 
     switch (selectedGenerated1Index) {
         case 0:
-            return MPSiteTypeGeneratedPhrase;
+            return MPResultTypeTemplatePhrase;
         case 1:
-            return MPSiteTypeGeneratedName;
+            return MPResultTypeTemplateName;
         default:
             switch (selectedGenerated2Index) {
                 case 0:
-                    return MPSiteTypeGeneratedMaximum;
+                    return MPResultTypeTemplateMaximum;
                 case 1:
-                    return MPSiteTypeGeneratedLong;
+                    return MPResultTypeTemplateLong;
                 case 2:
-                    return MPSiteTypeGeneratedMedium;
+                    return MPResultTypeTemplateMedium;
                 case 3:
-                    return MPSiteTypeGeneratedBasic;
+                    return MPResultTypeTemplateBasic;
                 case 4:
-                    return MPSiteTypeGeneratedShort;
+                    return MPResultTypeTemplateShort;
                 case 5:
-                    return MPSiteTypeGeneratedPIN;
+                    return MPResultTypeTemplatePIN;
                 default:
 
                     switch (selectedStoredIndex) {
                         case 0:
-                            return MPSiteTypeStoredPersonal;
+                            return MPResultTypeStatefulPersonal;
                         case 1:
-                            return MPSiteTypeStoredDevicePrivate;
+                            return MPResultTypeStatefulDevice;
                         default:
                             Throw( @"unsupported selected type index: generated1=%ld, generated2=%ld, stored=%ld",
                                     (long)selectedGenerated1Index, (long)selectedGenerated2Index, (long)selectedStoredIndex );
@@ -282,44 +282,44 @@
     }
 }
 
-- (NSInteger)generated1SegmentIndexForType:(MPSiteType)type {
+- (NSInteger)generated1SegmentIndexForType:(MPResultType)type {
 
     switch (type) {
-        case MPSiteTypeGeneratedPhrase:
+        case MPResultTypeTemplatePhrase:
             return 0;
-        case MPSiteTypeGeneratedName:
+        case MPResultTypeTemplateName:
             return 1;
         default:
             return -1;
     }
 }
 
-- (NSInteger)generated2SegmentIndexForType:(MPSiteType)type {
+- (NSInteger)generated2SegmentIndexForType:(MPResultType)type {
 
     switch (type) {
-        case MPSiteTypeGeneratedMaximum:
+        case MPResultTypeTemplateMaximum:
             return 0;
-        case MPSiteTypeGeneratedLong:
+        case MPResultTypeTemplateLong:
             return 1;
-        case MPSiteTypeGeneratedMedium:
+        case MPResultTypeTemplateMedium:
             return 2;
-        case MPSiteTypeGeneratedBasic:
+        case MPResultTypeTemplateBasic:
             return 3;
-        case MPSiteTypeGeneratedShort:
+        case MPResultTypeTemplateShort:
             return 4;
-        case MPSiteTypeGeneratedPIN:
+        case MPResultTypeTemplatePIN:
             return 5;
         default:
             return -1;
     }
 }
 
-- (NSInteger)storedSegmentIndexForType:(MPSiteType)type {
+- (NSInteger)storedSegmentIndexForType:(MPResultType)type {
 
     switch (type) {
-        case MPSiteTypeStoredPersonal:
+        case MPResultTypeStatefulPersonal:
             return 0;
-        case MPSiteTypeStoredDevicePrivate:
+        case MPResultTypeStatefulDevice:
             return 1;
         default:
             return -1;

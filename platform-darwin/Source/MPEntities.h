@@ -48,7 +48,7 @@
 @interface MPSiteEntity(MP)<MPFixable>
 
 @property(assign) BOOL loginGenerated;
-@property(assign) MPSiteType type;
+@property(assign) MPResultType type;
 @property(readonly) NSString *typeName;
 @property(readonly) NSString *typeShortName;
 @property(readonly) NSString *typeClassName;
@@ -71,7 +71,7 @@
 
 @interface MPGeneratedSiteEntity(MP)
 
-@property(assign) NSUInteger counter;
+@property(assign) MPCounterValue counter;
 
 @end
 
@@ -80,7 +80,7 @@
 @property(assign) NSUInteger avatar;
 @property(assign) BOOL saveKey;
 @property(assign) BOOL touchID;
-@property(assign) MPSiteType defaultType;
+@property(assign) MPResultType defaultType;
 @property(readonly) NSString *userID;
 @property(strong) id<MPAlgorithm> algorithm;
 

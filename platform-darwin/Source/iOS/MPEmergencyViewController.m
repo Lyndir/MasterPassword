@@ -137,7 +137,7 @@
 - (void)updatePassword {
 
     NSString *siteName = self.siteField.text;
-    MPSiteType siteType = [self siteType];
+    MPResultType siteType = [self siteType];
     NSUInteger siteCounter = (NSUInteger)self.counterStepper.value;
     self.counterLabel.text = strf( @"%lu", (unsigned long)siteCounter );
 
@@ -147,8 +147,8 @@
     [self.emergencyPasswordQueue addOperationWithBlock:^{
         NSString *sitePassword = nil;
         if (self.key && [siteName length])
-            sitePassword = [MPAlgorithmDefault generatePasswordForSiteNamed:siteName ofType:siteType withCounter:siteCounter
-                                                                   usingKey:self.key];
+            sitePassword = [MPAlgorithmDefault mpwTemplateForSiteNamed:siteName ofType:siteType withCounter:siteCounter
+                                                              usingKey:self.key];
 
         PearlMainQueue( ^{
             [self.activity stopAnimating];
@@ -157,21 +157,21 @@
     }];
 }
 
-- (enum MPSiteType)siteType {
+- (MPResultType)siteType {
 
     switch (self.typeControl.selectedSegmentIndex) {
         case 0:
-            return MPSiteTypeGeneratedMaximum;
+            return MPResultTypeTemplateMaximum;
         case 1:
-            return MPSiteTypeGeneratedLong;
+            return MPResultTypeTemplateLong;
         case 2:
-            return MPSiteTypeGeneratedMedium;
+            return MPResultTypeTemplateMedium;
         case 3:
-            return MPSiteTypeGeneratedBasic;
+            return MPResultTypeTemplateBasic;
         case 4:
-            return MPSiteTypeGeneratedShort;
+            return MPResultTypeTemplateShort;
         case 5:
-            return MPSiteTypeGeneratedPIN;
+            return MPResultTypeTemplatePIN;
         default:
             Throw( @"Unsupported type index: %ld", (long)self.typeControl.selectedSegmentIndex );
     }

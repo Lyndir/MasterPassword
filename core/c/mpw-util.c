@@ -35,7 +35,9 @@
 
 #include "mpw-util.h"
 
+#ifdef inf_level
 int mpw_verbosity = inf_level;
+#endif
 
 bool mpw_push_buf(uint8_t **const buffer, size_t *const bufferSize, const void *pushBuffer, const size_t pushSize) {
 

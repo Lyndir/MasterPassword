@@ -248,9 +248,9 @@
 #endif
 
     for (MPSiteEntity *site in user.sites) {
-        if (site.type & MPSiteTypeClassStored) {
+        if (site.type & MPResultTypeClassStateful) {
             NSString *content;
-            while (!(content = [site.algorithm storedPasswordForSite:(MPStoredSiteEntity *)site usingKey:recoverKey])) {
+            while (!(content = [site.algorithm resolvePasswordForSite:(MPStoredSiteEntity *)site usingKey:recoverKey])) {
                 // Failed to decrypt site with the current recoveryKey.  Ask user for a new one to use.
                 NSString *masterPassword = nil;
 

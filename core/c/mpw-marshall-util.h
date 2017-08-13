@@ -30,7 +30,7 @@
   * The input string reference is advanced beyond the token delimitor if one is found.
   * @return A new string containing the token or NULL if the delim wasn't found before eol. */
 char *mpw_get_token(
-        char **in, char *eol, char *delim);
+        const char **in, const char *eol, char *delim);
 /** Convert an RFC 3339 time string into epoch time. */
 time_t mpw_mktime(
         const char *time);

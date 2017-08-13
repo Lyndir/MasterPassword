@@ -89,6 +89,20 @@ MPMarshalledQuestion *mpw_marshal_question(
     return question;
 }
 
+bool mpw_marshal_info_free(
+        MPMarshallInfo *info) {
+
+    if (!info)
+        return true;
+
+    bool success = true;
+    success &= mpw_free_string( info->fullName );
+    success &= mpw_free_string( info->keyID );
+    success &= mpw_free( info, sizeof( MPMarshallInfo ) );
+
+    return success;
+}
+
 bool mpw_marshal_free(
         MPMarshalledUser *user) {
 
@@ -313,6 +327,9 @@ bool mpw_marshall_write(
         char **out, const MPMarshallFormat outFormat, const MPMarshalledUser *user, MPMarshallError *error) {
 
     switch (outFormat) {
+        case MPMarshallFormatNone:
+            *error = (MPMarshallError){ .type = MPMarshallSuccess };
+            return false;
         case MPMarshallFormatFlat:
             return mpw_marshall_write_flat( out, user, error );
         case MPMarshallFormatJSON:
@@ -323,10 +340,63 @@ bool mpw_marshall_write(
     }
 }
 
+static void mpw_marshall_read_flat_info(
+        const char *in, MPMarshallInfo *info) {
+
+    info->algorithm = MPAlgorithmVersionCurrent;
+
+    // Parse import data.
+    bool headerStarted = false;
+    for (const char *endOfLine, *positionInLine = in; (endOfLine = strstr( positionInLine, "\n" )); positionInLine = endOfLine + 1) {
+
+        // Comment or header
+        if (*positionInLine == '#') {
+            ++positionInLine;
+
+            if (!headerStarted) {
+                if (*positionInLine == '#')
+                    // ## starts header
+                    headerStarted = true;
+                // Comment before header
+                continue;
+            }
+            if (*positionInLine == '#')
+                // ## ends header
+                break;
+
+            // Header
+            char *headerName = mpw_get_token( &positionInLine, endOfLine, ":\n" );
+            char *headerValue = mpw_get_token( &positionInLine, endOfLine, "\n" );
+            if (!headerName || !headerValue)
+                continue;
+
+            if (strcmp( headerName, "Algorithm" ) == 0)
+                info->algorithm = (MPAlgorithmVersion)atoi( headerValue );
+            if (strcmp( headerName, "Full Name" ) == 0 || strcmp( headerName, "User Name" ) == 0)
+                info->fullName = strdup( headerValue );
+            if (strcmp( headerName, "Key ID" ) == 0)
+                info->keyID = strdup( headerValue );
+            if (strcmp( headerName, "Passwords" ) == 0)
+                info->redacted = strcmp( headerValue, "VISIBLE" ) != 0;
+            if (strcmp( headerName, "Date" ) == 0)
+                info->date = mpw_mktime( headerValue );
+
+            mpw_free_string( headerName );
+            mpw_free_string( headerValue );
+            continue;
+        }
+    }
+}
+
 static MPMarshalledUser *mpw_marshall_read_flat(
-        char *in, const char *masterPassword, MPMarshallError *error) {
+        const char *in, const char *masterPassword, MPMarshallError *error) {
 
     *error = (MPMarshallError){ MPMarshallErrorInternal, "Unexpected internal error." };
+    if (!in || !strlen( in )) {
+        error->type = MPMarshallErrorStructure;
+        error->description = mpw_str( "No input data." );
+        return NULL;
+    }
 
     // Parse import data.
     MPMasterKey masterKey = NULL;
@@ -336,7 +406,7 @@ static MPMarshalledUser *mpw_marshall_read_flat(
     MPAlgorithmVersion algorithm = MPAlgorithmVersionCurrent, masterKeyAlgorithm = (MPAlgorithmVersion)-1;
     MPResultType defaultType = MPResultTypeDefault;
     bool headerStarted = false, headerEnded = false, importRedacted = false;
-    for (char *endOfLine, *positionInLine = in; (endOfLine = strstr( positionInLine, "\n" )); positionInLine = endOfLine + 1) {
+    for (const char *endOfLine, *positionInLine = in; (endOfLine = strstr( positionInLine, "\n" )); positionInLine = endOfLine + 1) {
 
         // Comment or header
         if (*positionInLine == '#') {
@@ -541,10 +611,39 @@ static MPMarshalledUser *mpw_marshall_read_flat(
     return user;
 }
 
+static void mpw_marshall_read_json_info(
+        const char *in, MPMarshallInfo *info) {
+
+    // Parse JSON.
+    enum json_tokener_error json_error = json_tokener_success;
+    json_object *json_file = json_tokener_parse_verbose( in, &json_error );
+    if (!json_file || json_error != json_tokener_success)
+        return;
+
+    // Section: "export"
+    int64_t fileFormat = mpw_get_json_int( json_file, "export.format", 0 );
+    if (fileFormat < 1)
+        return;
+    info->redacted = mpw_get_json_boolean( json_file, "export.redacted", true );
+    info->date = mpw_mktime( mpw_get_json_string( json_file, "export.date", NULL ) );
+
+    // Section: "user"
+    info->algorithm = (MPAlgorithmVersion)mpw_get_json_int( json_file, "user.algorithm", MPAlgorithmVersionCurrent );
+    info->fullName = strdup( mpw_get_json_string( json_file, "user.full_name", NULL ) );
+    info->keyID = strdup( mpw_get_json_string( json_file, "user.key_id", NULL ) );
+
+    json_object_put( json_file );
+}
+
 static MPMarshalledUser *mpw_marshall_read_json(
-        char *in, const char *masterPassword, MPMarshallError *error) {
+        const char *in, const char *masterPassword, MPMarshallError *error) {
 
     *error = (MPMarshallError){ MPMarshallErrorInternal, "Unexpected internal error." };
+    if (!in || !strlen( in )) {
+        error->type = MPMarshallErrorStructure;
+        error->description = mpw_str( "No input data." );
+        return NULL;
+    }
 
     // Parse JSON.
     enum json_tokener_error json_error = json_tokener_success;
@@ -683,10 +782,33 @@ static MPMarshalledUser *mpw_marshall_read_json(
     return user;
 }
 
+MPMarshallInfo *mpw_marshall_read_info(
+        const char *in) {
+
+    MPMarshallInfo *info = malloc( sizeof( MPMarshallInfo ) );
+    *info = (MPMarshallInfo){ .format = MPMarshallFormatNone };
+
+    if (in && strlen( in )) {
+        if (in[0] == '#') {
+            *info = (MPMarshallInfo){ .format = MPMarshallFormatFlat };
+            mpw_marshall_read_flat_info( in, info );
+        }
+        else if (in[0] == '{') {
+            *info = (MPMarshallInfo){ .format = MPMarshallFormatJSON };
+            mpw_marshall_read_json_info( in, info );
+        }
+    }
+
+    return info;
+}
+
 MPMarshalledUser *mpw_marshall_read(
-        char *in, const MPMarshallFormat inFormat, const char *masterPassword, MPMarshallError *error) {
+        const char *in, const MPMarshallFormat inFormat, const char *masterPassword, MPMarshallError *error) {
 
     switch (inFormat) {
+        case MPMarshallFormatNone:
+            *error = (MPMarshallError){ .type = MPMarshallSuccess };
+            return false;
         case MPMarshallFormatFlat:
             return mpw_marshall_read_flat( in, masterPassword, error );
         case MPMarshallFormatJSON:
@@ -700,6 +822,9 @@ MPMarshalledUser *mpw_marshall_read(
 const MPMarshallFormat mpw_formatWithName(
         const char *formatName) {
 
+    if (!formatName || !strlen( formatName ))
+        return MPMarshallFormatNone;
+
     // Lower-case to standardize it.
     size_t stdFormatNameSize = strlen( formatName );
     char stdFormatName[stdFormatNameSize + 1];
@@ -707,6 +832,8 @@ const MPMarshallFormat mpw_formatWithName(
         stdFormatName[c] = (char)tolower( formatName[c] );
     stdFormatName[stdFormatNameSize] = '\0';
 
+    if (strncmp( mpw_nameForFormat( MPMarshallFormatNone ), stdFormatName, strlen( stdFormatName ) ) == 0)
+        return MPMarshallFormatNone;
     if (strncmp( mpw_nameForFormat( MPMarshallFormatFlat ), stdFormatName, strlen( stdFormatName ) ) == 0)
         return MPMarshallFormatFlat;
     if (strncmp( mpw_nameForFormat( MPMarshallFormatJSON ), stdFormatName, strlen( stdFormatName ) ) == 0)
@@ -720,6 +847,8 @@ const char *mpw_nameForFormat(
         const MPMarshallFormat format) {
 
     switch (format) {
+        case MPMarshallFormatNone:
+            return "none";
         case MPMarshallFormatFlat:
             return "flat";
         case MPMarshallFormatJSON:
@@ -735,6 +864,8 @@ const char *mpw_marshall_format_extension(
         const MPMarshallFormat format) {
 
     switch (format) {
+        case MPMarshallFormatNone:
+            return NULL;
         case MPMarshallFormatFlat:
             return "mpsites";
         case MPMarshallFormatJSON:

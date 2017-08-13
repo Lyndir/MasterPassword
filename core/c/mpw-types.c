@@ -48,9 +48,9 @@ const MPResultType mpw_typeWithName(const char *typeName) {
         if ('n' == typeName[0])
             return MPResultTypeTemplateName;
         if ('P' == typeName[0])
-            return MPResultTypeStatePersonal;
+            return MPResultTypeStatefulPersonal;
         if ('D' == typeName[0])
-            return MPResultTypeStateDevice;
+            return MPResultTypeStatefulDevice;
         if ('k' == typeName[0])
             return MPResultTypeDeriveKey;
     }
@@ -82,10 +82,10 @@ const MPResultType mpw_typeWithName(const char *typeName) {
         return MPResultTypeTemplateName;
     if (strncmp( mpw_nameForType( MPResultTypeTemplatePhrase ), stdTypeName, strlen( stdTypeName ) ) == 0)
         return MPResultTypeTemplatePhrase;
-    if (strncmp( mpw_nameForType( MPResultTypeStatePersonal ), stdTypeName, strlen( stdTypeName ) ) == 0)
-        return MPResultTypeStatePersonal;
-    if (strncmp( mpw_nameForType( MPResultTypeStateDevice ), stdTypeName, strlen( stdTypeName ) ) == 0)
-        return MPResultTypeStateDevice;
+    if (strncmp( mpw_nameForType( MPResultTypeStatefulPersonal ), stdTypeName, strlen( stdTypeName ) ) == 0)
+        return MPResultTypeStatefulPersonal;
+    if (strncmp( mpw_nameForType( MPResultTypeStatefulDevice ), stdTypeName, strlen( stdTypeName ) ) == 0)
+        return MPResultTypeStatefulDevice;
     if (strncmp( mpw_nameForType( MPResultTypeDeriveKey ), stdTypeName, strlen( stdTypeName ) ) == 0)
         return MPResultTypeDeriveKey;
 
@@ -112,9 +112,9 @@ const char *mpw_nameForType(MPResultType resultType) {
             return "name";
         case MPResultTypeTemplatePhrase:
             return "phrase";
-        case MPResultTypeStatePersonal:
+        case MPResultTypeStatefulPersonal:
             return "personal";
-        case MPResultTypeStateDevice:
+        case MPResultTypeStatefulDevice:
             return "device";
         case MPResultTypeDeriveKey:
             return "key";

@@ -51,7 +51,7 @@ typedef enum( uint16_t, MPResultTypeClass ) {
     /** Use the site key to generate a password from a template. */
             MPResultTypeClassTemplate = 1 << 4,
     /** Use the site key to encrypt and decrypt a stateful entity. */
-            MPResultTypeClassState = 1 << 5,
+            MPResultTypeClassStateful = 1 << 5,
     /** Use the site key to derive a site-specific object. */
             MPResultTypeClassDerive = 1 << 6,
 };
@@ -86,9 +86,9 @@ typedef enum( uint32_t, MPResultType ) {
             MPResultTypeTemplatePhrase = 0xF | MPResultTypeClassTemplate | 0x0,
 
     /** Custom saved password. */
-            MPResultTypeStatePersonal = 0x0 | MPResultTypeClassState | MPSiteFeatureExportContent,
+            MPResultTypeStatefulPersonal = 0x0 | MPResultTypeClassStateful | MPSiteFeatureExportContent,
     /** Custom saved password that should not be exported from the device. */
-            MPResultTypeStateDevice = 0x1 | MPResultTypeClassState | MPSiteFeatureDevicePrivate,
+            MPResultTypeStatefulDevice = 0x1 | MPResultTypeClassStateful | MPSiteFeatureDevicePrivate,
 
     /** Derive a unique binary key. */
             MPResultTypeDeriveKey = 0x0 | MPResultTypeClassDerive | MPSiteFeatureAlternative,

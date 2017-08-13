@@ -33,7 +33,7 @@
         return NO;
 
     if (!explicit) {
-        if (site.type & MPSiteTypeClassGenerated) {
+        if (site.type & MPResultTypeClassTemplate) {
             // This migration requires explicit permission for types of the generated class.
             site.requiresExplicitMigration = YES;
             return NO;

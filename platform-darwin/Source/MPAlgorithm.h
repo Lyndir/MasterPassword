@@ -52,49 +52,44 @@ NSString *NSStringFromTimeToCrack(TimeToCrack timeToCrack);
 - (NSData *)keyIDForKey:(MPMasterKey)masterKey;
 - (NSData *)keyDataForFullName:(NSString *)fullName withMasterPassword:(NSString *)masterPassword;
 
-- (NSString *)nameOfType:(MPSiteType)type;
-- (NSString *)shortNameOfType:(MPSiteType)type;
-- (NSString *)classNameOfType:(MPSiteType)type;
-- (Class)classOfType:(MPSiteType)type;
+- (NSString *)nameOfType:(MPResultType)type;
+- (NSString *)shortNameOfType:(MPResultType)type;
+- (NSString *)classNameOfType:(MPResultType)type;
+- (Class)classOfType:(MPResultType)type;
 - (NSArray *)allTypes;
-- (NSArray *)allTypesStartingWith:(MPSiteType)startingType;
-- (MPSiteType)defaultType;
-- (MPSiteType)nextType:(MPSiteType)type;
-- (MPSiteType)previousType:(MPSiteType)type;
+- (NSArray *)allTypesStartingWith:(MPResultType)startingType;
+- (MPResultType)defaultType;
+- (MPResultType)nextType:(MPResultType)type;
+- (MPResultType)previousType:(MPResultType)type;
 
-- (NSString *)generateLoginForSiteNamed:(NSString *)name usingKey:(MPKey *)key;
-- (NSString *)generatePasswordForSiteNamed:(NSString *)name ofType:(MPSiteType)type withCounter:(NSUInteger)counter
-                                  usingKey:(MPKey *)key;
-- (NSString *)generateAnswerForSiteNamed:(NSString *)name onQuestion:(NSString *)question usingKey:(MPKey *)key;
-- (NSString *)generateContentForSiteNamed:(NSString *)name ofType:(MPSiteType)type withCounter:(NSUInteger)counter
-                                  variant:(MPSiteVariant)variant context:(NSString *)context usingKey:(MPKey *)key;
+- (NSString *)mpwLoginForSiteNamed:(NSString *)name usingKey:(MPKey *)key;
+- (NSString *)mpwTemplateForSiteNamed:(NSString *)name ofType:(MPResultType)type
+                          withCounter:(NSUInteger)counter usingKey:(MPKey *)key;
+- (NSString *)mpwAnswerForSiteNamed:(NSString *)name onQuestion:(NSString *)question usingKey:(MPKey *)key;
+- (NSString *)mpwResultForSiteNamed:(NSString *)name ofType:(MPResultType)type parameter:(NSString *)parameter
+                        withCounter:(NSUInteger)counter variant:(MPKeyPurpose)purpose context:(NSString *)context usingKey:(MPKey *)key;
 
-- (NSString *)storedLoginForSite:(MPStoredSiteEntity *)site usingKey:(MPKey *)key;
-- (NSString *)storedPasswordForSite:(MPStoredSiteEntity *)site usingKey:(MPKey *)key;
+- (BOOL)savePassword:(NSString *)clearPassword toSite:(MPSiteEntity *)site usingKey:(MPKey *)key;
 
-- (BOOL)savePassword:(NSString *)clearPassword toSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey;
+- (NSString *)resolveLoginForSite:(MPSiteEntity *)site usingKey:(MPKey *)key;
+- (NSString *)resolvePasswordForSite:(MPSiteEntity *)site usingKey:(MPKey *)key;
+- (NSString *)resolveAnswerForSite:(MPSiteEntity *)site usingKey:(MPKey *)key;
+- (NSString *)resolveAnswerForQuestion:(MPSiteQuestionEntity *)question usingKey:(MPKey *)key;
 
-- (NSString *)resolveLoginForSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey;
-- (NSString *)resolvePasswordForSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey;
-- (NSString *)resolveAnswerForSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey;
-- (NSString *)resolveAnswerForQuestion:(MPSiteQuestionEntity *)question usingKey:(MPKey *)siteKey;
-
-- (void)resolveLoginForSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey
+- (void)resolveLoginForSite:(MPSiteEntity *)site usingKey:(MPKey *)key
                      result:(void ( ^ )(NSString *result))resultBlock;
-- (void)resolvePasswordForSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey
+- (void)resolvePasswordForSite:(MPSiteEntity *)site usingKey:(MPKey *)key
                         result:(void ( ^ )(NSString *result))resultBlock;
-- (void)resolveAnswerForSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey
+- (void)resolveAnswerForSite:(MPSiteEntity *)site usingKey:(MPKey *)key
                       result:(void ( ^ )(NSString *result))resultBlock;
-- (void)resolveAnswerForQuestion:(MPSiteQuestionEntity *)question usingKey:(MPKey *)siteKey
+- (void)resolveAnswerForQuestion:(MPSiteQuestionEntity *)question usingKey:(MPKey *)key
                           result:(void ( ^ )(NSString *result))resultBlock;
 
-- (void)importProtectedPassword:(NSString *)protectedPassword protectedByKey:(MPKey *)importKey
-                       intoSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey;
-- (void)importClearTextPassword:(NSString *)clearPassword intoSite:(MPSiteEntity *)site
-                       usingKey:(MPKey *)siteKey;
-- (NSString *)exportPasswordForSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey;
+- (void)importPassword:(NSString *)protectedPassword protectedByKey:(MPKey *)importKey
+              intoSite:(MPSiteEntity *)site usingKey:(MPKey *)key;
+- (NSString *)exportPasswordForSite:(MPSiteEntity *)site usingKey:(MPKey *)key;
 
-- (BOOL)timeToCrack:(out TimeToCrack *)timeToCrack passwordOfType:(MPSiteType)type byAttacker:(MPAttacker)attacker;
+- (BOOL)timeToCrack:(out TimeToCrack *)timeToCrack passwordOfType:(MPResultType)type byAttacker:(MPAttacker)attacker;
 - (BOOL)timeToCrack:(out TimeToCrack *)timeToCrack passwordString:(NSString *)password byAttacker:(MPAttacker)attacker;
 
 @end

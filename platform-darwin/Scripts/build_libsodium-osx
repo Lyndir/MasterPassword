@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 set -e
-echo "ARGS: $*"
 
 cd "${BASH_SOURCE%/*}/../External/libsodium"
 [[ -d libsodium-osx ]] && exit

@@ -18,6 +18,7 @@
 
 #import "MPAppDelegate_Store.h"
 #import "mpw-marshall.h"
+#import "mpw-util.h"
 
 #if TARGET_OS_IPHONE
 #define STORE_OPTIONS NSPersistentStoreFileProtectionKey : NSFileProtectionComplete,
@@ -489,7 +490,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
             return;
         }
 
-        MPSiteType type = activeUser.defaultType;
+        MPResultType type = activeUser.defaultType;
         id<MPAlgorithm> algorithm = MPAlgorithmDefault;
         Class entityType = [algorithm classOfType:type];
 
@@ -506,7 +507,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
     }];
 }
 
-- (MPSiteEntity *)changeSite:(MPSiteEntity *)site saveInContext:(NSManagedObjectContext *)context toType:(MPSiteType)type {
+- (MPSiteEntity *)changeSite:(MPSiteEntity *)site saveInContext:(NSManagedObjectContext *)context toType:(MPResultType)type {
 
     if (site.type == type)
         return site;
@@ -539,328 +540,214 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
     return site;
 }
 
-- (MPImportResult)importSites:(NSString *)importedSitesString
-            askImportPassword:(NSString *( ^ )(NSString *userName))importPassword
-              askUserPassword:(NSString *( ^ )(NSString *userName, NSUInteger importCount, NSUInteger deleteCount))userPassword {
+- (void)importSites:(NSString *)importData
+  askImportPassword:(NSString *( ^ )(NSString *userName))importPassword
+    askUserPassword:(NSString *( ^ )(NSString *userName))userPassword
+             result:(void ( ^ )(NSError *error))resultBlock {
 
     NSAssert( ![[NSThread currentThread] isMainThread], @"This method should not be invoked from the main thread." );
 
-    __block MPImportResult result = MPImportResultCancelled;
     do {
         if ([MPAppDelegate_Shared managedObjectContextPerformBlockAndWait:^(NSManagedObjectContext *context) {
-            result = [self importSites:importedSitesString askImportPassword:importPassword askUserPassword:userPassword
-                         saveInContext:context];
+            NSError *error = [self importSites:importData askImportPassword:importPassword askUserPassword:userPassword
+                                 saveInContext:context];
+            PearlMainQueue( ^{
+                resultBlock( error );
+            } );
         }])
             break;
         usleep( (useconds_t)(USEC_PER_SEC * 0.2) );
     } while (YES);
-
-    return result;
 }
 
-- (MPImportResult)importSites:(NSString *)importedSitesString
-            askImportPassword:(NSString *( ^ )(NSString *userName))askImportPassword
-              askUserPassword:(NSString *( ^ )(NSString *userName, NSUInteger importCount, NSUInteger deleteCount))askUserPassword
-                saveInContext:(NSManagedObjectContext *)context {
+- (NSError *)importSites:(NSString *)importData
+       askImportPassword:(NSString *( ^ )(NSString *userName))askImportPassword
+         askUserPassword:(NSString *( ^ )(NSString *userName))askUserPassword
+           saveInContext:(NSManagedObjectContext *)context {
 
-    // Compile patterns.
-    static NSRegularExpression *headerPattern;
-    static NSArray *sitePatterns;
-    NSError *error = nil;
-    if (!headerPattern) {
-        headerPattern = [[NSRegularExpression alloc]
-                initWithPattern:@"^#[[:space:]]*([^:]+): (.*)"
-                        options:(NSRegularExpressionOptions)0 error:&error];
-        if (error) {
-            MPError( error, @"Error loading the header pattern." );
-            return MPImportResultInternalError;
+    // Read metadata for the import file.
+    MPMarshallInfo *info = mpw_marshall_read_info( importData.UTF8String );
+    if (info->format == MPMarshallFormatNone)
+        return MPError( ([NSError errorWithDomain:MPErrorDomain code:MPErrorMarshallCode userInfo:@{
+                @"type"                  : @(MPMarshallErrorFormat),
+                NSLocalizedDescriptionKey: @"This is not a Master Password import file.",
+        }]), @"While importing sites." );
+
+    // Get master password for import file.
+    MPKey *importKey;
+    NSString *importMasterPassword;
+    do {
+        importMasterPassword = askImportPassword( @(info->fullName) );
+        if (!importMasterPassword) {
+            inf( @"Import cancelled." );
+            mpw_marshal_info_free( info );
+            return MPError( ([NSError errorWithDomain:NSCocoaErrorDomain code:NSUserCancelledError userInfo:nil]), @"" );
         }
-    }
-    if (!sitePatterns) {
-        sitePatterns = @[
-                [[NSRegularExpression alloc] // Format 0
-                        initWithPattern:@"^([^ ]+) +([[:digit:]]+) +([[:digit:]]+)(:[[:digit:]]+)? +([^\t]+)\t(.*)"
-                                options:(NSRegularExpressionOptions)0 error:&error],
-                [[NSRegularExpression alloc] // Format 1
-                        initWithPattern:@"^([^ ]+) +([[:digit:]]+) +([[:digit:]]+)(:[[:digit:]]+)?(:[[:digit:]]+)? +([^\t]*)\t *([^\t]+)\t(.*)"
-                                options:(NSRegularExpressionOptions)0 error:&error]
-        ];
-        if (error) {
-            MPError( error, @"Error loading the site patterns." );
-            return MPImportResultInternalError;
-        }
-    }
+
+        importKey = [[MPKey alloc] initForFullName:@(info->fullName) withMasterPassword:importMasterPassword];
+    } while ([[[importKey keyIDForAlgorithm:MPAlgorithmForVersion( info->algorithm )] encodeHex]
+                            caseInsensitiveCompare:@(info->keyID)] != NSOrderedSame);
 
     // Parse import data.
-    inf( @"Importing sites." );
-    NSUInteger importFormat = 0;
-    __block MPUserEntity *user = nil;
-    NSUInteger importAvatar = NSNotFound;
-    NSData *importKeyID = nil;
-    NSString *importBundleVersion = nil, *importUserName = nil;
-    id<MPAlgorithm> importAlgorithm = nil;
-    MPSiteType importDefaultType = (MPSiteType)0;
-    BOOL headerStarted = NO, headerEnded = NO, clearText = NO;
-    NSArray *importedSiteLines = [importedSitesString componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-    NSMutableSet *sitesToDelete = [NSMutableSet set];
-    NSMutableArray *importedSiteSites = [NSMutableArray arrayWithCapacity:[importedSiteLines count]];
-    NSFetchRequest *siteFetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPSiteEntity class] )];
-    for (NSString *importedSiteLine in importedSiteLines) {
-        if ([importedSiteLine hasPrefix:@"#"]) {
-            // Comment or header
-            if (!headerStarted) {
-                if ([importedSiteLine isEqualToString:@"##"])
-                    headerStarted = YES;
-                continue;
-            }
-            if (headerEnded)
-                continue;
-            if ([importedSiteLine isEqualToString:@"##"]) {
-                headerEnded = YES;
-                continue;
+    MPMarshallError importError = { .type = MPMarshallSuccess };
+    MPMarshalledUser *importUser = mpw_marshall_read( importData.UTF8String, info->format, importMasterPassword.UTF8String, &importError );
+    mpw_marshal_info_free( info );
+
+    @try {
+        if (!importUser || importError.type != MPMarshallSuccess)
+            return MPError( ([NSError errorWithDomain:MPErrorDomain code:MPErrorMarshallCode userInfo:@{
+                    @"type"                  : @(importError.type),
+                    NSLocalizedDescriptionKey: @(importError.description),
+            }]), @"While importing sites." );
+
+        // Find an existing user to update.
+        NSError *error = nil;
+        NSFetchRequest *userFetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPUserEntity class] )];
+        userFetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@", @(importUser->fullName)];
+        NSArray *users = [context executeFetchRequest:userFetchRequest error:&error];
+        if (!users)
+            return MPError( error, @"While looking for user: %@.", @(importUser->fullName) );
+        if ([users count] > 1)
+            return MPMakeError( @"While looking for user: %@, found more than one: %zu",
+                    @(importUser->fullName), (size_t)[users count] );
+
+        // Get master key for user.
+        MPUserEntity *user = [users lastObject];
+        MPKey *userKey = importKey;
+        while (user && ![[userKey keyIDForAlgorithm:user.algorithm] isEqualToData:user.keyID]) {
+            NSString *userMasterPassword = askUserPassword( user.name );
+            if (!userMasterPassword) {
+                inf( @"Import cancelled." );
+                return MPError( ([NSError errorWithDomain:NSCocoaErrorDomain code:NSUserCancelledError userInfo:nil]), @"" );
             }
 
-            // Header
-            if ([headerPattern numberOfMatchesInString:importedSiteLine options:(NSMatchingOptions)0
-                                                 range:NSMakeRange( 0, [importedSiteLine length] )] != 1) {
-                err( @"Invalid header format in line: %@", importedSiteLine );
-                return MPImportResultMalformedInput;
-            }
-            NSTextCheckingResult *headerSites = [[headerPattern matchesInString:importedSiteLine options:(NSMatchingOptions)0
-                                                                          range:NSMakeRange( 0, [importedSiteLine length] )] lastObject];
-            NSString *headerName = [importedSiteLine substringWithRange:[headerSites rangeAtIndex:1]];
-            NSString *headerValue = [importedSiteLine substringWithRange:[headerSites rangeAtIndex:2]];
-
-            if ([headerName isEqualToString:@"Format"]) {
-                importFormat = (NSUInteger)[headerValue integerValue];
-                if (importFormat >= [sitePatterns count]) {
-                    err( @"Unsupported import format: %lu", (unsigned long)importFormat );
-                    return MPImportResultInternalError;
-                }
-            }
-            if (([headerName isEqualToString:@"User Name"] || [headerName isEqualToString:@"Full Name"]) && !importUserName) {
-                importUserName = headerValue;
-
-                NSFetchRequest *userFetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPUserEntity class] )];
-                userFetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@", importUserName];
-                NSArray *users = [context executeFetchRequest:userFetchRequest error:&error];
-                if (!users) {
-                    MPError( error, @"While looking for user: %@.", importUserName );
-                    return MPImportResultInternalError;
-                }
-                if ([users count] > 1) {
-                    err( @"While looking for user: %@, found more than one: %lu", importUserName, (unsigned long)[users count] );
-                    return MPImportResultInternalError;
-                }
-
-                user = [users lastObject];
-                dbg( @"Existing user? %@", [user debugDescription] );
-            }
-            if ([headerName isEqualToString:@"Avatar"])
-                importAvatar = (NSUInteger)[headerValue integerValue];
-            if ([headerName isEqualToString:@"Key ID"])
-                importKeyID = [headerValue decodeHex];
-            if ([headerName isEqualToString:@"Version"]) {
-                importBundleVersion = headerValue;
-                importAlgorithm = MPAlgorithmDefaultForBundleVersion( importBundleVersion );
-            }
-            if ([headerName isEqualToString:@"Algorithm"])
-                importAlgorithm = MPAlgorithmForVersion( (MPAlgorithmVersion)[headerValue integerValue] );
-            if ([headerName isEqualToString:@"Default Type"])
-                importDefaultType = (MPSiteType)[headerValue integerValue];
-            if ([headerName isEqualToString:@"Passwords"]) {
-                if ([headerValue isEqualToString:@"VISIBLE"])
-                    clearText = YES;
-            }
-
-            continue;
-        }
-        if (!headerEnded)
-            continue;
-        if (![importUserName length])
-            return MPImportResultMalformedInput;
-        if (![importedSiteLine length])
-            continue;
-
-        // Site
-        NSRegularExpression *sitePattern = sitePatterns[importFormat];
-        if ([sitePattern numberOfMatchesInString:importedSiteLine options:(NSMatchingOptions)0
-                                           range:NSMakeRange( 0, [importedSiteLine length] )] != 1) {
-            err( @"Invalid site format in line: %@", importedSiteLine );
-            return MPImportResultMalformedInput;
-        }
-        NSTextCheckingResult *siteElements = [[sitePattern matchesInString:importedSiteLine options:(NSMatchingOptions)0
-                                                                     range:NSMakeRange( 0, [importedSiteLine length] )] lastObject];
-        NSString *lastUsed, *uses, *type, *version, *counter, *siteName, *loginName, *exportContent;
-        switch (importFormat) {
-            case 0:
-                lastUsed = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:1]];
-                uses = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:2]];
-                type = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:3]];
-                version = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:4]];
-                if ([version length])
-                    version = [version substringFromIndex:1]; // Strip the leading colon.
-                counter = @"";
-                loginName = @"";
-                siteName = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:5]];
-                exportContent = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:6]];
-                break;
-            case 1:
-                lastUsed = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:1]];
-                uses = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:2]];
-                type = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:3]];
-                version = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:4]];
-                if ([version length])
-                    version = [version substringFromIndex:1]; // Strip the leading colon.
-                counter = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:5]];
-                if ([counter length])
-                    counter = [counter substringFromIndex:1]; // Strip the leading colon.
-                loginName = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:6]];
-                siteName = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:7]];
-                exportContent = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:8]];
-                break;
-            default:
-                err( @"Unexpected import format: %lu", (unsigned long)importFormat );
-                return MPImportResultInternalError;
+            userKey = [[MPKey alloc] initForFullName:@(importUser->fullName) withMasterPassword:userMasterPassword];
         }
 
-        // Find existing site.
-        if (user) {
-            siteFetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@ AND user == %@", siteName, user];
-            NSArray *existingSites = [context executeFetchRequest:siteFetchRequest error:&error];
-            if (!existingSites) {
-                MPError( error, @"Lookup of existing sites failed for site: %@, user: %@.", siteName, user.userID );
-                return MPImportResultInternalError;
-            }
-            if ([existingSites count]) {
-                dbg( @"Existing sites: %@", existingSites );
-                [sitesToDelete addObjectsFromArray:existingSites];
-            }
+        // Update or create user.
+        if (!user) {
+            user = [MPUserEntity insertNewObjectInContext:context];
+            user.name = @(importUser->fullName);
         }
-        [importedSiteSites addObject:@[ lastUsed, uses, type, version, counter, loginName, siteName, exportContent ]];
-        dbg( @"Will import site: lastUsed=%@, uses=%@, type=%@, version=%@, counter=%@, loginName=%@, siteName=%@, exportContent=%@",
-                lastUsed, uses, type, version, counter, loginName, siteName, exportContent );
-    }
-
-    // Ask for confirmation to import these sites and the master password of the user.
-    inf( @"Importing %lu sites, deleting %lu sites, for user: %@", (unsigned long)[importedSiteSites count],
-            (unsigned long)[sitesToDelete count], [MPUserEntity idFor:importUserName] );
-    NSString *userMasterPassword = askUserPassword( user? user.name: importUserName, [importedSiteSites count],
-            [sitesToDelete count] );
-    if (!userMasterPassword) {
-        inf( @"Import cancelled." );
-        return MPImportResultCancelled;
-    }
-    MPKey *userKey = [[MPKey alloc] initForFullName:user? user.name: importUserName withMasterPassword:userMasterPassword];
-    if (user && ![[userKey keyIDForAlgorithm:user.algorithm] isEqualToData:user.keyID])
-        return MPImportResultInvalidPassword;
-    __block MPKey *importKey = userKey;
-    if (importKeyID && ![[importKey keyIDForAlgorithm:importAlgorithm] isEqualToData:importKeyID])
-        importKey = [[MPKey alloc] initForFullName:importUserName withMasterPassword:askImportPassword( importUserName )];
-    if (importKeyID && ![[importKey keyIDForAlgorithm:importAlgorithm] isEqualToData:importKeyID])
-        return MPImportResultInvalidPassword;
-
-    // Delete existing sites.
-    if (sitesToDelete.count)
-        [sitesToDelete enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
-            inf( @"Deleting site: %@, it will be replaced by an imported site.", [obj name] );
-            [context deleteObject:obj];
-        }];
-
-    // Make sure there is a user.
-    if (user) {
-        if (importAvatar != NSNotFound)
-            user.avatar = importAvatar;
-        if (importDefaultType)
-            user.defaultType = importDefaultType;
-        dbg( @"Updating User: %@", [user debugDescription] );
-    }
-    else {
-        user = [MPUserEntity insertNewObjectInContext:context];
-        user.name = importUserName;
-        user.algorithm = MPAlgorithmDefault;
+        user.algorithm = MPAlgorithmForVersion( importUser->algorithm );
         user.keyID = [userKey keyIDForAlgorithm:user.algorithm];
-        user.defaultType = importDefaultType?: user.algorithm.defaultType;
-        if (importAvatar != NSNotFound)
-            user.avatar = importAvatar;
-        dbg( @"Created User: %@", [user debugDescription] );
-    }
+        user.avatar = importUser->avatar;
+        user.defaultType = importUser->defaultType;
+        user.lastUsed = [NSDate dateWithTimeIntervalSince1970:MAX( user.lastUsed.timeIntervalSince1970, importUser->lastUsed )];
+        dbg( @"Importing user: %@", [user debugDescription] );
 
-    // Import new sites.
-    for (NSArray *siteElements in importedSiteSites) {
-        NSDate *lastUsed = [[NSDateFormatter rfc3339DateFormatter] dateFromString:siteElements[0]];
-        NSUInteger uses = (unsigned)[siteElements[1] integerValue];
-        MPSiteType type = (MPSiteType)[siteElements[2] integerValue];
-        MPAlgorithmVersion version = (MPAlgorithmVersion)[siteElements[3] integerValue];
-        NSUInteger counter = [siteElements[4] length]? (unsigned)[siteElements[4] integerValue]: NSNotFound;
-        NSString *loginName = [siteElements[5] length]? siteElements[5]: nil;
-        NSString *siteName = siteElements[6];
-        NSString *exportContent = siteElements[7];
+        // Update or create sites.
+        for (size_t s = 0; s < importUser->sites_count; ++s) {
+            MPMarshalledSite *importSite = &importUser->sites[s];
 
-        // Create new site.
-        id<MPAlgorithm> algorithm = MPAlgorithmForVersion( version );
-        Class entityType = [algorithm classOfType:type];
-        if (!entityType) {
-            err( @"Invalid site type in import file: %@ has type %lu", siteName, (long)type );
-            return MPImportResultInternalError;
+            // Find an existing site to update.
+            NSFetchRequest *siteFetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPSiteEntity class] )];
+            siteFetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@ AND user == %@", @(importSite->name), user];
+            NSArray *existingSites = [context executeFetchRequest:siteFetchRequest error:&error];
+            if (!existingSites)
+                return MPError( error, @"Lookup of existing sites failed for site: %@, user: %@", @(importSite->name), user.userID );
+            if ([existingSites count])
+                // Update existing site.
+                for (MPSiteEntity *site in existingSites) {
+                    [self importSite:importSite protectedByKey:importKey intoSite:site usingKey:userKey];
+                    dbg( @"Updated site: %@", [site debugDescription] );
+                }
+            else {
+                // Create new site.
+                id<MPAlgorithm> algorithm = MPAlgorithmForVersion( importSite->algorithm );
+                Class entityType = [algorithm classOfType:importSite->type];
+                if (!entityType)
+                    return MPMakeError( @"Invalid site type in import file: %@ has type %lu", @(importSite->name), (long)importSite->type );
+
+                MPSiteEntity *site = (MPSiteEntity *)[entityType insertNewObjectInContext:context];
+                site.user = user;
+
+                [self importSite:importSite protectedByKey:importKey intoSite:site usingKey:userKey];
+                dbg( @"Created site: %@", [site debugDescription] );
+            }
         }
-        MPSiteEntity *site = (MPSiteEntity *)[entityType insertNewObjectInContext:context];
-        site.name = siteName;
-        site.loginName = loginName;
-        site.user = user;
-        site.type = type;
-        site.uses = uses;
-        site.lastUsed = lastUsed;
-        site.algorithm = algorithm;
-        if ([exportContent length]) {
-            if (clearText)
-                [site.algorithm importClearTextPassword:exportContent intoSite:site usingKey:userKey];
-            else
-                [site.algorithm importProtectedPassword:exportContent protectedByKey:importKey intoSite:site usingKey:userKey];
-        }
-        if ([site isKindOfClass:[MPGeneratedSiteEntity class]] && counter != NSNotFound)
-            ((MPGeneratedSiteEntity *)site).counter = counter;
 
-        dbg( @"Created Site: %@", [site debugDescription] );
+        if (![context saveToStore])
+            return MPMakeError( @"Failed saving imported changes." );
+
+        inf( @"Import completed successfully." );
+        [[NSNotificationCenter defaultCenter] postNotificationName:MPSitesImportedNotification object:nil userInfo:@{
+                MPSitesImportedNotificationUserKey: user
+        }];
+        return nil;
     }
-
-    if (![context saveToStore])
-        return MPImportResultInternalError;
-
-    inf( @"Import completed successfully." );
-
-    [[NSNotificationCenter defaultCenter] postNotificationName:MPSitesImportedNotification object:nil userInfo:@{
-            MPSitesImportedNotificationUserKey: user
-    }];
-
-    return MPImportResultSuccess;
+    @finally {
+        mpw_marshal_free( importUser );
+    }
 }
 
-- (NSString *)exportSitesRevealPasswords:(BOOL)revealPasswords {
+- (void)importSite:(const MPMarshalledSite *)importSite protectedByKey:(MPKey *)importKey intoSite:(MPSiteEntity *)site
+          usingKey:(MPKey *)userKey {
 
-    MPUserEntity *activeUser = [self activeUserForMainThread];
-    inf( @"Exporting sites, %@, for user: %@", revealPasswords? @"revealing passwords": @"omitting passwords", activeUser.userID );
+    site.name = @(importSite->name);
+    if (importSite->content)
+        [site.algorithm importPassword:@(importSite->content) protectedByKey:importKey intoSite:site usingKey:userKey];
+    site.type = importSite->type;
+    if ([site isKindOfClass:[MPGeneratedSiteEntity class]])
+        ((MPGeneratedSiteEntity *)site).counter = importSite->counter;
+    site.algorithm = MPAlgorithmForVersion( importSite->algorithm );
+    site.loginName = importSite->loginName? @(importSite->loginName): nil;
+    site.loginGenerated = importSite->loginGenerated;
+    site.url = importSite->url? @(importSite->url): nil;
+    site.uses = importSite->uses;
+    site.lastUsed = [NSDate dateWithTimeIntervalSince1970:importSite->lastUsed];
+}
 
-    MPMarshalledUser exportUser = mpw_marshall_user( activeUser.name.UTF8String,
-            [self.key keyForAlgorithm:activeUser.algorithm], activeUser.algorithm.version );
-    exportUser.avatar = activeUser.avatar;
-    exportUser.defaultType = activeUser.defaultType;
-    exportUser.lastUsed = (time_t)activeUser.lastUsed.timeIntervalSince1970;
+- (void)exportSitesRevealPasswords:(BOOL)revealPasswords
+                 askExportPassword:(NSString *( ^ )(NSString *userName))askImportPassword
+                            result:(void ( ^ )(NSString *mpsites, NSError *error))resultBlock {
 
+    [MPAppDelegate_Shared managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+        MPUserEntity *user = [self activeUserInContext:context];
+        NSString *masterPassword = askImportPassword( user.name );
 
-    for (MPSiteEntity *site in activeUser.sites) {
-        MPMarshalledSite exportSite = mpw_marshall_site( &exportUser,
-                site.name.UTF8String, site.type, site.counter, site.algorithm.version );
-        exportSite.loginName = site.loginName.UTF8String;
-        exportSite.url = site.url.UTF8String;
-        exportSite.uses = site.uses;
-        exportSite.lastUsed = (time_t)site.lastUsed.timeIntervalSince1970;
+        inf( @"Exporting sites, %@, for user: %@", revealPasswords? @"revealing passwords": @"omitting passwords", user.userID );
+        MPMarshalledUser *exportUser = mpw_marshall_user( user.name.UTF8String, masterPassword.UTF8String, user.algorithm.version );
+        exportUser->redacted = !revealPasswords;
+        exportUser->avatar = (unsigned int)user.avatar;
+        exportUser->defaultType = user.defaultType;
+        exportUser->lastUsed = (time_t)user.lastUsed.timeIntervalSince1970;
 
-        for (MPSiteQuestionEntity *siteQuestion in site.questions)
-            mpw_marshal_question( &exportSite, siteQuestion.keyword.UTF8String );
-    }
+        for (MPSiteEntity *site in user.sites) {
+            MPCounterValue counter = MPCounterValueInitial;
+            if ([site isKindOfClass:[MPGeneratedSiteEntity class]])
+                counter = ((MPGeneratedSiteEntity *)site).counter;
+            NSString *content = revealPasswords
+                                ? [site.algorithm exportPasswordForSite:site usingKey:self.key]
+                                : [site.algorithm resolvePasswordForSite:site usingKey:self.key];
 
-    mpw_marshall_write( &export, MPMarshallFormatFlat, exportUser );
+            MPMarshalledSite *exportSite = mpw_marshall_site( exportUser,
+                    site.name.UTF8String, site.type, counter, site.algorithm.version );
+            exportSite->content = content.UTF8String;
+            exportSite->loginName = site.loginName.UTF8String;
+            exportSite->loginGenerated = site.loginGenerated;
+            exportSite->url = site.url.UTF8String;
+            exportSite->uses = (unsigned int)site.uses;
+            exportSite->lastUsed = (time_t)site.lastUsed.timeIntervalSince1970;
+
+            for (MPSiteQuestionEntity *siteQuestion in site.questions)
+                mpw_marshal_question( exportSite, siteQuestion.keyword.UTF8String );
+        }
+
+        char *export = NULL;
+        MPMarshallError exportError = (MPMarshallError){ .type= MPMarshallSuccess };
+        mpw_marshall_write( &export, MPMarshallFormatFlat, exportUser, &exportError );
+        NSString *mpsites = nil;
+        if (export && exportError.type == MPMarshallSuccess)
+            mpsites = [NSString stringWithCString:export encoding:NSUTF8StringEncoding];
+        mpw_free_string( export );
+
+        resultBlock( mpsites, exportError.type == MPMarshallSuccess? nil:
+                              [NSError errorWithDomain:MPErrorDomain code:MPErrorMarshallCode userInfo:@{
+                                      @"type"                  : @(exportError.type),
+                                      NSLocalizedDescriptionKey: @(exportError.description),
+                              }] );
+    }];
 }
 
 @end

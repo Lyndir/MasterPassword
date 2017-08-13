@@ -27,6 +27,8 @@
 
 typedef enum( unsigned int, MPMarshallFormat ) {
     /** Generate a key for authentication. */
+            MPMarshallFormatNone,
+    /** Generate a key for authentication. */
             MPMarshallFormatFlat,
     /** Generate a name for identification. */
             MPMarshallFormatJSON,
@@ -91,22 +93,42 @@ typedef struct MPMarshalledUser {
     MPMarshalledSite *sites;
 } MPMarshalledUser;
 
+typedef struct MPMarshallInfo {
+    MPMarshallFormat format;
+    MPAlgorithmVersion algorithm;
+    const char *fullName;
+    const char *keyID;
+    bool redacted;
+    time_t date;
+} MPMarshallInfo;
+
 //// Marshalling.
 
+/** Write the user and all associated data out to the given output buffer using the given marshalling format. */
 bool mpw_marshall_write(
         char **out, const MPMarshallFormat outFormat, const MPMarshalledUser *user, MPMarshallError *error);
+/** Try to read metadata on the sites in the input buffer. */
+MPMarshallInfo *mpw_marshall_read_info(
+        const char *in);
+/** Unmarshall sites in the given input buffer by parsing it using the given marshalling format. */
 MPMarshalledUser *mpw_marshall_read(
-        char *in, const MPMarshallFormat inFormat, const char *masterPassword, MPMarshallError *error);
+        const char *in, const MPMarshallFormat inFormat, const char *masterPassword, MPMarshallError *error);
 
 //// Utilities.
 
+/** Create a new user object ready for marshalling. */
 MPMarshalledUser *mpw_marshall_user(
         const char *fullName, const char *masterPassword, const MPAlgorithmVersion algorithmVersion);
+/** Create a new site attached to the given user object, ready for marshalling. */
 MPMarshalledSite *mpw_marshall_site(
         MPMarshalledUser *user,
         const char *siteName, const MPResultType resultType, const MPCounterValue siteCounter, const MPAlgorithmVersion algorithmVersion);
+/** Create a new question attached to the given site object, ready for marshalling. */
 MPMarshalledQuestion *mpw_marshal_question(
         MPMarshalledSite *site, const char *keyword);
+/** Free the given user object and all associated data. */
+bool mpw_marshal_info_free(
+        MPMarshallInfo *info);
 bool mpw_marshal_free(
         MPMarshalledUser *user);
 
@@ -122,6 +144,9 @@ const MPMarshallFormat mpw_formatWithName(
  */
 const char *mpw_nameForFormat(
         const MPMarshallFormat format);
+/**
+ * @return The file extension that's recommended for files that use the given marshalling format.
+ */
 const char *mpw_marshall_format_extension(
         const MPMarshallFormat format);
 

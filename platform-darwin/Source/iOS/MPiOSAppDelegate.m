@@ -20,6 +20,7 @@
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
 #import "MPStoreViewController.h"
+#import "mpw-marshall.h"
 
 @interface MPiOSAppDelegate()<UIDocumentInteractionControllerDelegate>
 
@@ -177,62 +178,46 @@
     return YES;
 }
 
-- (void)importSites:(NSString *)importedSitesString {
+- (void)importSites:(NSString *)importData {
 
     if ([NSThread isMainThread]) {
         PearlNotMainQueue( ^{
-            [self importSites:importedSitesString];
+            [self importSites:importData];
         } );
         return;
     }
 
     PearlOverlay *activityOverlay = [PearlOverlay showProgressOverlayWithTitle:@"Importing"];
-    MPImportResult result = [self importSites:importedSitesString askImportPassword:^NSString *(NSString *userName) {
+    [self importSites:importData askImportPassword:^NSString *(NSString *userName) {
         return PearlAwait( ^(void (^setResult)(id)) {
-            [PearlAlert showAlertWithTitle:@"Import File's Master Password"
-                                   message:strf( @"%@'s export was done using a different master password.\n"
-                                           @"Enter that master password to unlock the exported data.", userName )
+            [PearlAlert showAlertWithTitle:strf( @"Importing Sites For\n%@", userName )
+                                   message:@"Enter the master password used to create this export file."
                                  viewStyle:UIAlertViewStyleSecureTextInput
                                  initAlert:nil tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
                         if (buttonIndex_ == [alert_ cancelButtonIndex])
                             setResult( nil );
                         else
                             setResult( [alert_ textFieldAtIndex:0].text );
-                    }
-                               cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Unlock Import", nil];
+                    }          cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Import", nil];
         } );
-    }                         askUserPassword:^NSString *(NSString *userName, NSUInteger importCount, NSUInteger deleteCount) {
+    } askUserPassword:^NSString *(NSString *userName) {
         return PearlAwait( (id)^(void (^setResult)(id)) {
-            [PearlAlert showAlertWithTitle:strf( @"Master Password for\n%@", userName )
-                                   message:strf( @"Imports %lu sites, overwriting %lu.",
-                                           (unsigned long)importCount, (unsigned long)deleteCount )
+            [PearlAlert showAlertWithTitle:strf( @"Master Password For\n%@", userName )
+                                   message:@"Enter the current master password for this user."
                                  viewStyle:UIAlertViewStyleSecureTextInput
                                  initAlert:nil tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
                         if (buttonIndex_ == [alert_ cancelButtonIndex])
                             setResult( nil );
                         else
                             setResult( [alert_ textFieldAtIndex:0].text );
-                    }
-                               cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Import", nil];
+                    }          cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Import", nil];
         } );
+    }          result:^(NSError *error) {
+        [activityOverlay cancelOverlayAnimated:YES];
+
+        if (error && !(error.domain == NSCocoaErrorDomain && error.code == NSUserCancelledError))
+            [PearlAlert showError:error.localizedDescription];
     }];
-
-    switch (result) {
-        case MPImportResultSuccess:
-        case MPImportResultCancelled:
-            break;
-        case MPImportResultInternalError:
-            [PearlAlert showError:@"Import failed because of an internal error."];
-            break;
-        case MPImportResultMalformedInput:
-            [PearlAlert showError:@"The import doesn't look like a Master Password export."];
-            break;
-        case MPImportResultInvalidPassword:
-            [PearlAlert showError:@"Incorrect master password for the import sites."];
-            break;
-    }
-
-    [activityOverlay cancelOverlayAnimated:YES];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
@@ -250,10 +235,9 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:nil];
 
     PearlNotMainQueue( ^{
-        NSString *importHeader = @"# Master Password site export";
-        NSString *importedSitesString = [UIPasteboard generalPasteboard].string;
-        if ([importedSitesString length] > [importHeader length] &&
-            [[importedSitesString substringToIndex:[importHeader length]] isEqualToString:importHeader])
+        NSString *importData = [UIPasteboard generalPasteboard].string;
+        MPMarshallInfo *importInfo = mpw_marshall_read_info( importData.UTF8String );
+        if (importInfo->format != MPMarshallFormatNone)
             [PearlAlert showAlertWithTitle:@"Import Sites?" message:
                             @"We've detected Master Password import sites on your pasteboard, would you like to import them?"
                                  viewStyle:UIAlertViewStyleDefault initAlert:nil
@@ -261,9 +245,10 @@
                              if (buttonIndex == [alert cancelButtonIndex])
                                  return;
 
-                             [self importSites:importedSitesString];
+                             [self importSites:importData];
                              [UIPasteboard generalPasteboard].string = @"";
                          } cancelTitle:@"No" otherTitles:@"Import Sites", nil];
+        mpw_marshal_info_free( importInfo );
     } );
 
     [super applicationDidBecomeActive:application];
@@ -449,62 +434,86 @@
         return;
     }
 
-    NSString *exportedSites = [self exportSitesRevealPasswords:revealPasswords];
-    NSString *message;
+    [self exportSitesRevealPasswords:revealPasswords askExportPassword:^NSString *(NSString *userName) {
+        return PearlAwait( ^(void (^setResult)(id)) {
+            [PearlAlert showAlertWithTitle:@"Import File's Master Password"
+                                   message:strf( @"%@'s export was done using a different master password.\n"
+                                           @"Enter that master password to unlock the exported data.", userName )
+                                 viewStyle:UIAlertViewStyleSecureTextInput
+                                 initAlert:nil tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
+                        if (buttonIndex_ == [alert_ cancelButtonIndex])
+                            setResult( nil );
+                        else
+                            setResult( [alert_ textFieldAtIndex:0].text );
+                    }
+                               cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Unlock Import", nil];
+        } );
+    }                         result:^(NSString *mpsites, NSError *error) {
+        if (!mpsites || error) {
+            MPError( error, @"Failed to export mpsites." );
+            [PearlAlert showAlertWithTitle:@"Export Error"
+                                   message:error.localizedDescription
+                                 viewStyle:UIAlertViewStyleDefault
+                                 initAlert:nil tappedButtonBlock:nil cancelTitle:[PearlStrings get].commonButtonOkay
+                               otherTitles:nil];
+            return;
+        }
 
-    if (revealPasswords)
-        message = strf( @"Export of Master Password sites with passwords included.\n\n"
-                        @"REMINDER: Make sure nobody else sees this file!  Passwords are visible!\n\n\n"
-                        @"--\n"
-                        @"%@\n"
-                        @"Master Password %@, build %@",
-                [self activeUserForMainThread].name,
-                [PearlInfoPlist get].CFBundleShortVersionString,
-                [PearlInfoPlist get].CFBundleVersion );
-    else
-        message = strf( @"Backup of Master Password sites.\n\n\n"
-                        @"--\n"
-                        @"%@\n"
-                        @"Master Password %@, build %@",
-                [self activeUserForMainThread].name,
-                [PearlInfoPlist get].CFBundleShortVersionString,
-                [PearlInfoPlist get].CFBundleVersion );
+        [PearlSheet showSheetWithTitle:@"Export Destination" viewStyle:UIActionSheetStyleBlackTranslucent initSheet:nil
+                     tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
+                         if (buttonIndex == [sheet cancelButtonIndex])
+                             return;
 
-    NSDateFormatter *exportDateFormatter = [NSDateFormatter new];
-    [exportDateFormatter setDateFormat:@"yyyy'-'MM'-'dd"];
+                         NSDateFormatter *exportDateFormatter = [NSDateFormatter new];
+                         [exportDateFormatter setDateFormat:@"yyyy'-'MM'-'dd"];
+                         NSString *exportFileName = strf( @"%@ (%@).mpsites",
+                                 [self activeUserForMainThread].name, [exportDateFormatter stringFromDate:[NSDate date]] );
 
-    NSString *exportFileName = strf( @"%@ (%@).mpsites",
-            [self activeUserForMainThread].name, [exportDateFormatter stringFromDate:[NSDate date]] );
-    [PearlSheet showSheetWithTitle:@"Export Destination" viewStyle:UIActionSheetStyleBlackTranslucent initSheet:nil
-                 tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
-                     if (buttonIndex == [sheet cancelButtonIndex])
-                         return;
+                         if (buttonIndex == [sheet firstOtherButtonIndex]) {
+                             NSString *message;
+                             if (revealPasswords)
+                                 message = strf( @"Export of Master Password sites with passwords included.\n\n"
+                                                 @"REMINDER: Make sure nobody else sees this file!  Passwords are visible!\n\n\n"
+                                                 @"--\n"
+                                                 @"%@\n"
+                                                 @"Master Password %@, build %@",
+                                         [self activeUserForMainThread].name,
+                                         [PearlInfoPlist get].CFBundleShortVersionString,
+                                         [PearlInfoPlist get].CFBundleVersion );
+                             else
+                                 message = strf( @"Backup of Master Password sites.\n\n\n"
+                                                 @"--\n"
+                                                 @"%@\n"
+                                                 @"Master Password %@, build %@",
+                                         [self activeUserForMainThread].name,
+                                         [PearlInfoPlist get].CFBundleShortVersionString,
+                                         [PearlInfoPlist get].CFBundleVersion );
 
-                     if (buttonIndex == [sheet firstOtherButtonIndex]) {
-                         [PearlEMail sendEMailTo:nil fromVC:viewController subject:@"Master Password Export" body:message
-                                     attachments:[[PearlEMailAttachment alloc]
-                                                         initWithContent:[exportedSites dataUsingEncoding:NSUTF8StringEncoding]
-                                                                mimeType:@"text/plain" fileName:exportFileName],
-                                                 nil];
-                         return;
-                     }
+                             [PearlEMail sendEMailTo:nil fromVC:viewController subject:@"Master Password Export" body:message
+                                         attachments:[[PearlEMailAttachment alloc]
+                                                             initWithContent:[mpsites dataUsingEncoding:NSUTF8StringEncoding]
+                                                                    mimeType:@"text/plain" fileName:exportFileName],
+                                                     nil];
+                             return;
+                         }
 
-                     NSURL *applicationSupportURL = [[[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory
-                                                                                            inDomains:NSUserDomainMask] lastObject];
-                     NSURL *exportURL = [[applicationSupportURL
-                             URLByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier isDirectory:YES]
-                             URLByAppendingPathComponent:exportFileName isDirectory:NO];
-                     NSError *error = nil;
-                     if (![[exportedSites dataUsingEncoding:NSUTF8StringEncoding]
-                             writeToURL:exportURL options:NSDataWritingFileProtectionComplete error:&error])
-                         MPError( error, @"Failed to write export data to URL %@.", exportURL );
-                     else {
-                         self.interactionController = [UIDocumentInteractionController interactionControllerWithURL:exportURL];
-                         self.interactionController.UTI = @"com.lyndir.masterpassword.sites";
-                         self.interactionController.delegate = self;
-                         [self.interactionController presentOpenInMenuFromRect:CGRectZero inView:viewController.view animated:YES];
-                     }
-                 } cancelTitle:@"Cancel" destructiveTitle:nil otherTitles:@"Send As E-Mail", @"Share / Airdrop", nil];
+                         NSURL *applicationSupportURL = [[[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory
+                                                                                                inDomains:NSUserDomainMask] lastObject];
+                         NSURL *exportURL = [[applicationSupportURL
+                                 URLByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier isDirectory:YES]
+                                 URLByAppendingPathComponent:exportFileName isDirectory:NO];
+                         NSError *writeError = nil;
+                         if (![[mpsites dataUsingEncoding:NSUTF8StringEncoding]
+                                 writeToURL:exportURL options:NSDataWritingFileProtectionComplete error:&writeError])
+                             MPError( writeError, @"Failed to write export data to URL %@.", exportURL );
+                         else {
+                             self.interactionController = [UIDocumentInteractionController interactionControllerWithURL:exportURL];
+                             self.interactionController.UTI = @"com.lyndir.masterpassword.sites";
+                             self.interactionController.delegate = self;
+                             [self.interactionController presentOpenInMenuFromRect:CGRectZero inView:viewController.view animated:YES];
+                         }
+                     } cancelTitle:@"Cancel" destructiveTitle:nil otherTitles:@"Send As E-Mail", @"Share / Airdrop", nil];
+    }];
 }
 
 - (void)changeMasterPasswordFor:(MPUserEntity *)user saveInContext:(NSManagedObjectContext *)moc didResetBlock:(void ( ^ )(void))didReset {

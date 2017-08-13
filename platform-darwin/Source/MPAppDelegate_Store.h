@@ -20,14 +20,6 @@
 
 #import "MPFixable.h"
 
-typedef NS_ENUM( NSUInteger, MPImportResult ) {
-    MPImportResultSuccess,
-    MPImportResultCancelled,
-    MPImportResultInvalidPassword,
-    MPImportResultMalformedInput,
-    MPImportResultInternalError,
-};
-
 @interface MPAppDelegate_Shared(Store)
 
 + (NSManagedObjectContext *)managedObjectContextForMainThreadIfReady;
@@ -42,10 +34,13 @@ typedef NS_ENUM( NSUInteger, MPImportResult ) {
 
 /** @param completion The block to execute after adding the site, executed from the main thread with the new site in the main MOC. */
 - (void)addSiteNamed:(NSString *)siteName completion:(void ( ^ )(MPSiteEntity *site, NSManagedObjectContext *context))completion;
-- (MPSiteEntity *)changeSite:(MPSiteEntity *)site saveInContext:(NSManagedObjectContext *)context toType:(MPSiteType)type;
-- (MPImportResult)importSites:(NSString *)importedSitesString
+- (MPSiteEntity *)changeSite:(MPSiteEntity *)site saveInContext:(NSManagedObjectContext *)context toType:(MPResultType)type;
+- (void)importSites:(NSString *)importData
             askImportPassword:(NSString *( ^ )(NSString *userName))importPassword
-              askUserPassword:(NSString *( ^ )(NSString *userName, NSUInteger importCount, NSUInteger deleteCount))userPassword;
-- (NSString *)exportSitesRevealPasswords:(BOOL)revealPasswords;
+              askUserPassword:(NSString *( ^ )(NSString *userName))userPassword
+                       result:(void ( ^ )(NSError *error))resultBlock;
+- (void)exportSitesRevealPasswords:(BOOL)revealPasswords
+                 askExportPassword:(NSString *( ^ )(NSString *userName))askImportPassword
+                            result:(void ( ^ )(NSString *mpsites, NSError *error))resultBlock;
 
 @end

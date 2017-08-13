@@ -22,7 +22,7 @@
 
 @interface MPTypeViewController()
 
-- (MPSiteType)typeAtIndexPath:(NSIndexPath *)indexPath;
+- (MPResultType)typeAtIndexPath:(NSIndexPath *)indexPath;
 
 @end
 
@@ -75,11 +75,11 @@
     if ([self.delegate respondsToSelector:@selector( selectedSite )])
         selectedSite = [self.delegate selectedSite];
 
-    MPSiteType cellType = [self typeAtIndexPath:indexPath];
-    MPSiteType selectedType = selectedSite? selectedSite.type: [self.delegate selectedType];
+    MPResultType cellType = [self typeAtIndexPath:indexPath];
+    MPResultType selectedType = selectedSite? selectedSite.type: [self.delegate selectedType];
     cell.selected = (selectedType == cellType);
 
-    if (cellType != (MPSiteType)NSNotFound && cellType & MPSiteTypeClassGenerated) {
+    if (cellType != (MPResultType)NSNotFound && cellType & MPResultTypeClassTemplate) {
         [(UITextField *)[cell viewWithTag:2] setText:@"..."];
 
         NSString *name = selectedSite.name;
@@ -88,8 +88,8 @@
             counter = ((MPGeneratedSiteEntity *)selectedSite).counter;
 
         PearlNotMainQueue( ^{
-            NSString *typeContent = [MPAlgorithmDefault generatePasswordForSiteNamed:name ofType:cellType
-                                                                         withCounter:counter usingKey:[MPiOSAppDelegate get].key];
+            NSString *typeContent = [MPAlgorithmDefault mpwTemplateForSiteNamed:name ofType:cellType
+                                                                    withCounter:counter usingKey:[MPiOSAppDelegate get].key];
 
             PearlMainQueue( ^{
                 [(UITextField *)[[tableView cellForRowAtIndexPath:indexPath] viewWithTag:2] setText:typeContent];
@@ -104,8 +104,8 @@
 
     NSAssert( self.navigationController.topViewController == self, @"Not the currently active navigation item." );
 
-    MPSiteType type = [self typeAtIndexPath:indexPath];
-    if (type == (MPSiteType)NSNotFound)
+    MPResultType type = [self typeAtIndexPath:indexPath];
+    if (type == (MPResultType)NSNotFound)
         // Selected a non-type row.
         return;
 
@@ -113,28 +113,28 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (MPSiteType)typeAtIndexPath:(NSIndexPath *)indexPath {
+- (MPResultType)typeAtIndexPath:(NSIndexPath *)indexPath {
 
     switch (indexPath.section) {
         case 0: {
             // Generated
             switch (indexPath.row) {
                 case 0:
-                    return (MPSiteType)NSNotFound;
+                    return (MPResultType)NSNotFound;
                 case 1:
-                    return MPSiteTypeGeneratedMaximum;
+                    return MPResultTypeTemplateMaximum;
                 case 2:
-                    return MPSiteTypeGeneratedLong;
+                    return MPResultTypeTemplateLong;
                 case 3:
-                    return MPSiteTypeGeneratedMedium;
+                    return MPResultTypeTemplateMedium;
                 case 4:
-                    return MPSiteTypeGeneratedBasic;
+                    return MPResultTypeTemplateBasic;
                 case 5:
-                    return MPSiteTypeGeneratedShort;
+                    return MPResultTypeTemplateShort;
                 case 6:
-                    return MPSiteTypeGeneratedPIN;
+                    return MPResultTypeTemplatePIN;
                 case 7:
-                    return (MPSiteType)NSNotFound;
+                    return (MPResultType)NSNotFound;
 
                 default: {
                     Throw( @"Unsupported row: %ld, when selecting generated site type.", (long)indexPath.row );
@@ -146,13 +146,13 @@
             // Stored
             switch (indexPath.row) {
                 case 0:
-                    return (MPSiteType)NSNotFound;
+                    return (MPResultType)NSNotFound;
                 case 1:
-                    return MPSiteTypeStoredPersonal;
+                    return MPResultTypeStatefulPersonal;
                 case 2:
-                    return MPSiteTypeStoredDevicePrivate;
+                    return MPResultTypeStatefulDevice;
                 case 3:
-                    return (MPSiteType)NSNotFound;
+                    return (MPResultType)NSNotFound;
 
                 default: {
                     Throw( @"Unsupported row: %ld, when selecting stored site type.", (long)indexPath.row );

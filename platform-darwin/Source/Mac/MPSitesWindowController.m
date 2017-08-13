@@ -376,8 +376,8 @@
         MPSiteType type = (MPSiteType)[types[t] unsignedIntegerValue];
         NSString *title = [site.algorithm nameOfType:type];
         if (type & MPSiteTypeClassGenerated)
-            title = strf( @"%@ – %@", [site.algorithm generatePasswordForSiteNamed:site.name ofType:type withCounter:site.counter
-                                                                          usingKey:[MPMacAppDelegate get].key], title );
+            title = strf( @"%@ – %@", [site.algorithm mpwTemplateForSiteNamed:site.name ofType:type withCounter:site.counter
+                                                                     usingKey:[MPMacAppDelegate get].key], title );
 
         NSButtonCell *cell = [self.passwordTypesMatrix cellAtRow:(NSInteger)t column:0];
         cell.tag = type;

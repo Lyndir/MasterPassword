@@ -82,9 +82,9 @@
     return MPFixableResultNoProblems;
 }
 
-- (MPSiteType)type {
+- (MPResultType)type {
 
-    return (MPSiteType)[self.type_ unsignedIntegerValue];
+    return (MPResultType)[self.type_ unsignedIntegerValue];
 }
 
 - (void)setLoginGenerated:(BOOL)aLoginGenerated {
@@ -97,7 +97,7 @@
     return [self.loginGenerated_ boolValue];
 }
 
-- (void)setType:(MPSiteType)aType {
+- (void)setType:(MPResultType)aType {
 
     self.type_ = @(aType);
 }
@@ -251,7 +251,7 @@
 
     MPFixableResult result = [super findAndFixInconsistenciesInContext:context];
 
-    if (!self.type || self.type == (MPSiteType)NSNotFound || ![[self.algorithm allTypes] containsObject:self.type_])
+    if (!self.type || self.type == (MPResultType)NSNotFound || ![[self.algorithm allTypes] containsObject:self.type_])
         // Invalid self.type
         result = MPApplyFix( result, ^MPFixableResult {
             wrn( @"Invalid type for: %@ of %@, type: %ld.  Will use %ld instead.",
@@ -259,7 +259,7 @@
             self.type = self.user.defaultType;
             return MPFixableResultProblemsFixed;
         } );
-    if (!self.type || self.type == (MPSiteType)NSNotFound || ![[self.algorithm allTypes] containsObject:self.type_])
+    if (!self.type || self.type == (MPResultType)NSNotFound || ![[self.algorithm allTypes] containsObject:self.type_])
         // Invalid self.user.defaultType
         result = MPApplyFix( result, ^MPFixableResult {
             wrn( @"Invalid type for: %@ of %@, type: %ld.  Will use %ld instead.",
@@ -270,7 +270,7 @@
     if (![self isKindOfClass:[self.algorithm classOfType:self.type]])
         // Mismatch between self.type and self.class
         result = MPApplyFix( result, ^MPFixableResult {
-            for (MPSiteType newType = self.type; self.type != (newType = [self.algorithm nextType:newType]);)
+            for (MPResultType newType = self.type; self.type != (newType = [self.algorithm nextType:newType]);)
                 if ([self isKindOfClass:[self.algorithm classOfType:newType]]) {
                     wrn( @"Mismatching type for: %@ of %@, type: %lu, class: %@.  Will use %ld instead.",
                             self.name, self.user.name, (long)self.type, self.class, (long)newType );
@@ -286,12 +286,12 @@
     return result;
 }
 
-- (NSUInteger)counter {
+- (MPCounterValue)counter {
 
-    return [self.counter_ unsignedIntegerValue];
+    return (MPCounterValue)[self.counter_ unsignedIntegerValue];
 }
 
-- (void)setCounter:(NSUInteger)aCounter {
+- (void)setCounter:(MPCounterValue)aCounter {
 
     self.counter_ = @(aCounter);
 }
@@ -354,12 +354,12 @@
     self.touchID_ = @(aTouchID);
 }
 
-- (MPSiteType)defaultType {
+- (MPResultType)defaultType {
 
-    return (MPSiteType)[self.defaultType_ unsignedIntegerValue]?: self.algorithm.defaultType;
+    return (MPResultType)[self.defaultType_ unsignedIntegerValue]?: self.algorithm.defaultType;
 }
 
-- (void)setDefaultType:(MPSiteType)aDefaultType {
+- (void)setDefaultType:(MPResultType)aDefaultType {
 
     self.defaultType_ = @(aDefaultType);
 }

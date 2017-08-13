@@ -33,7 +33,7 @@
         return NO;
 
     if (!explicit) {
-        if (site.type & MPSiteTypeClassGenerated && site.name.length != [site.name dataUsingEncoding:NSUTF8StringEncoding].length) {
+        if (site.type & MPResultTypeClassTemplate && site.name.length != [site.name dataUsingEncoding:NSUTF8StringEncoding].length) {
             // This migration requires explicit permission for types of the generated class.
             site.requiresExplicitMigration = YES;
             return NO;

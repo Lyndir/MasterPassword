@@ -23,8 +23,8 @@
 @protocol MPTypeDelegate<NSObject>
 
 @required
-- (void)didSelectType:(MPSiteType)type;
-- (MPSiteType)selectedType;
+- (void)didSelectType:(MPResultType)type;
+- (MPResultType)selectedType;
 
 @optional
 - (MPSiteEntity *)selectedSite;
