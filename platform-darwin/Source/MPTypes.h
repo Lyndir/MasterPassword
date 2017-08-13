@@ -42,7 +42,7 @@ __END_DECLS
     NSError *__error = error_; \
     err( message @"%@%@", ##__VA_ARGS__, __error && [message length]? @"\n": @"", [__error fullDescription]?: @"" ); \
     \
-    if ([[MPConfig get].sendInfo boolValue]) { \
+    if (__error && [[MPConfig get].sendInfo boolValue]) { \
         [[Crashlytics sharedInstance] recordError:__error withAdditionalUserInfo:@{ \
                 @"location": strf( @"%@:%d %@", @(basename((char *)__FILE__)), __LINE__, NSStringFromSelector(_cmd) ), \
         }]; \
