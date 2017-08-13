@@ -39,21 +39,21 @@ __END_DECLS
 
 #ifdef CRASHLYTICS
 #define MPError(error_, message, ...) ({ \
-    NSError *error = error_; \
-    err( message @"%@%@", ##__VA_ARGS__, error && [message length]? @"\n": @"", [error fullDescription]?: @"" ); \
+    NSError *__error = error_; \
+    err( message @"%@%@", ##__VA_ARGS__, __error && [message length]? @"\n": @"", [__error fullDescription]?: @"" ); \
     \
     if ([[MPConfig get].sendInfo boolValue]) { \
-        [[Crashlytics sharedInstance] recordError:error withAdditionalUserInfo:@{ \
+        [[Crashlytics sharedInstance] recordError:__error withAdditionalUserInfo:@{ \
                 @"location": strf( @"%@:%d %@", @(basename((char *)__FILE__)), __LINE__, NSStringFromSelector(_cmd) ), \
         }]; \
     } \
-    error; \
+    __error; \
 })
 #else
 #define MPError(error_, message, ...) ({ \
-    NSError *error = error_; \
-    err( message @"%@%@", ##__VA_ARGS__, error? @"\n": @"", [error fullDescription]?: @"" ); \
-    error; \
+    NSError *__error = error_; \
+    err( message @"%@%@", ##__VA_ARGS__, __error? @"\n": @"", [__error fullDescription]?: @"" ); \
+    __error; \
 })
 #endif
 
