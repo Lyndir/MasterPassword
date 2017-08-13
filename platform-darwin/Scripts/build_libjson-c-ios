@@ -8,12 +8,24 @@ cd "${BASH_SOURCE%/*}/../External/libjson-c"
 autoreconf -Iautoconf-archive/m4 --verbose --install --symlink --force 2>&1 | sed 's/^\([^:]*\):[0-9]\{1,\}: /\1: /'
 rm -rf "${prefix=$PWD/libjson-c-ios}"
 mkdir -p "$prefix/lib" \
+    "${prefix_i386=$prefix/tmp/i386}" \
     "${prefix_x86_64=$prefix/tmp/x86_64}" \
     "${prefix_armv7=$prefix/tmp/armv7}" \
     "${prefix_armv7s=$prefix/tmp/armv7s}" \
     "${prefix_arm64=$prefix/tmp/arm64}"
 
 # Targets
+(
+    ## ARCH: i386
+    export SDKROOT="$(xcrun --show-sdk-path --sdk iphonesimulator)"
+    export PATH="$(xcrun --show-sdk-platform-path --sdk iphonesimulator)/usr/bin:$PATH"
+    export CFLAGS="-arch i386 -isysroot $SDKROOT -mios-simulator-version-min=${IPHONEOS_DEPLOYMENT_TARGET:-8.0} -O2 -g -flto $CFLAGS"
+    export LDFLAGS="-arch i386 -isysroot $SDKROOT -mios-simulator-version-min=${IPHONEOS_DEPLOYMENT_TARGET:-8.0} -flto $LDFLAGS"
+    export CPPFLAGS="$CFLAGS $CPPFLAGS"
+    [[ -e Makefile ]] && make -s clean
+    ./configure --host=i686-apple --disable-shared --prefix="$prefix_i386"
+    make -j3 install
+)
 (
     ## ARCH: x86_64
     export SDKROOT="$(xcrun --show-sdk-path --sdk iphonesimulator)"
