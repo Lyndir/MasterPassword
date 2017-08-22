@@ -37,6 +37,10 @@ static void usage() {
             "               -u checks the master password against the config,\n"
             "               -U allows updating to a new master password.\n"
             "               Defaults to %s in env or prompts.\n\n", MP_ENV_fullName );
+    trc( ""
+            "  -M master-pw Specify the master password of the user.\n"
+            "               This is not a safe method of passing the master password,\n"
+            "               only use it for non-secret passwords, such as for tests.\n\n" );
     inf( ""
             "  -t pw-type   Specify the password's template.\n"
             "               Defaults to 'long' (-p a), 'name' (-p i) or 'phrase' (-p r).\n"
@@ -51,15 +55,17 @@ static void usage() {
             "                   K, key      | encryption key (set key size -s bits).\n"
             "                   P, personal | saved personal password (save with -s pw).\n\n" );
     inf( ""
+            "  -P value     The parameter value.\n"
+            "                   -p i        | The login name for the site.\n"
+            "                   -t K        | The size of they key to generate, in bits (eg. 256).\n"
+            "                   -t P        | The personal password to encrypt.\n\n" );
+    inf( ""
             "  -c counter   The value of the counter.\n"
             "               Defaults to 1.\n\n" );
     inf( ""
             "  -a version   The algorithm version to use, %d - %d.\n"
             "               Defaults to %s in env or %d.\n\n",
             MPAlgorithmVersionFirst, MPAlgorithmVersionLast, MP_ENV_algorithm, MPAlgorithmVersionCurrent );
-    inf( ""
-            "  -s value     The value to save for -t P or -p i.\n"
-            "               The size of they key to generate for -t K, in bits (eg. 256).\n\n" );
     inf( ""
             "  -p purpose   The purpose of the generated token.\n"
             "               Defaults to 'auth'.\n"
@@ -171,7 +177,7 @@ int main(int argc, char *const argv[]) {
     sitesFormatArg = mpw_getenv( MP_ENV_format );
 
     // Read the command-line options.
-    for (int opt; (opt = getopt( argc, argv, "u:U:M:t:P:c:a:s:p:C:f:F:R:vqh" )) != EOF;)
+    for (int opt; (opt = getopt( argc, argv, "u:U:M:t:P:c:a:p:C:f:F:R:vqh" )) != EOF;)
         switch (opt) {
             case 'u':
                 fullNameArg = optarg && strlen( optarg )? strdup( optarg ): NULL;
@@ -363,7 +369,6 @@ int main(int argc, char *const argv[]) {
                     continue;
                 }
 
-                mpw_free_string( resultParam );
                 resultType = site->type;
                 siteCounter = site->counter;
                 algorithmVersion = site->algorithm;
@@ -474,8 +479,18 @@ int main(int argc, char *const argv[]) {
     }
 
     // Output the result.
-    if (keyPurpose == MPKeyPurposeIdentification && site && !site->loginGenerated && site->loginName)
+    if (keyPurpose == MPKeyPurposeIdentification && site && (resultParam || (!site->loginGenerated && site->loginName))) {
+        if (resultParam) {
+            mpw_free_string( site->loginName );
+            site->loginGenerated = false;
+            site->loginName = strdup( resultParam );
+        }
+        else if (resultTypeArg)
+            // TODO: We're not persisting the resultType of the generated login
+            site->loginGenerated = true;
+
         fprintf( stdout, "%s\n", site->loginName );
+    }
 
     else if (resultParam && site && resultType & MPResultTypeClassStateful) {
         mpw_free_string( site->content );
@@ -486,7 +501,7 @@ int main(int argc, char *const argv[]) {
             return EX_SOFTWARE;
         }
 
-        inf( "saved.\n" );
+        fprintf( stdout, "%s\n", site->content );
     }
     else {
         if (!resultParam && site && site->content && resultType & MPResultTypeClassStateful)
@@ -520,11 +535,6 @@ int main(int argc, char *const argv[]) {
                 site->counter = siteCounter;
                 site->algorithm = algorithmVersion;
             }
-        }
-        else if (keyPurpose == MPKeyPurposeIdentification && site) {
-            // TODO: We're not persisting the resultType of the generated login
-            if (resultType & MPResultTypeClassTemplate)
-                site->loginGenerated = true;
         }
         else if (keyPurpose == MPKeyPurposeRecovery && site && keyContext) {
             // TODO: We're not persisting the resultType of the recovery question
