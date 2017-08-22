@@ -135,7 +135,7 @@ bool mpw_free(
         const void *buffer, const size_t bufferSize);
 /** Free a string after zero'ing its contents. */
 bool mpw_free_string(
-        const char *string);
+        const char *strings, ...);
 
 //// Cryptographic functions.
 

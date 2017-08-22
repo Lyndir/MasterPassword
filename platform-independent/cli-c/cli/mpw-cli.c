@@ -160,8 +160,6 @@ static char *mpw_path(const char *prefix, const char *extension) {
 int main(int argc, char *const argv[]) {
 
     // CLI defaults.
-    MPMarshallFormat sitesFormat = MPMarshallFormatDefault;
-    const char *fullName = NULL, *masterPassword = NULL, *siteName = NULL;
     bool allowPasswordUpdate = false, sitesFormatFixed = false;
 
     // Read the environment.
@@ -248,9 +246,11 @@ int main(int argc, char *const argv[]) {
         siteNameArg = strdup( argv[optind] );
 
     // Determine fullName, siteName & masterPassword.
+    const char *fullName = NULL, *masterPassword = NULL, *siteName = NULL;
     if (!(fullNameArg && (fullName = strdup( fullNameArg ))) &&
         !(fullName = mpw_getline( "Your full name:" ))) {
         ftl( "Missing full name.\n" );
+        mpw_free_string( fullName, masterPassword, siteName );
         return EX_DATAERR;
     }
     if (!(masterPasswordArg && (masterPassword = strdup( masterPasswordArg ))))
@@ -259,12 +259,15 @@ int main(int argc, char *const argv[]) {
     if (!(siteNameArg && (siteName = strdup( siteNameArg ))) &&
         !(siteName = mpw_getline( "Site name:" ))) {
         ftl( "Missing site name.\n" );
+        mpw_free_string( fullName, masterPassword, siteName );
         return EX_DATAERR;
     }
+    MPMarshallFormat sitesFormat = MPMarshallFormatDefault;
     if (sitesFormatArg) {
         sitesFormat = mpw_formatWithName( sitesFormatArg );
         if (ERR == (int)sitesFormat) {
             ftl( "Invalid sites format: %s\n", sitesFormatArg );
+            mpw_free_string( fullName, masterPassword, siteName );
             return EX_USAGE;
         }
     }
@@ -317,7 +320,7 @@ int main(int argc, char *const argv[]) {
                 ftl( "Incorrect master password according to configuration:\n  %s: %s\n", sitesPath, marshallError.description );
                 mpw_marshal_free( user );
                 mpw_free( sitesInputData, bufSize );
-                mpw_free_string( sitesPath );
+                mpw_free_string( sitesPath, fullName, masterPassword, siteName );
                 return EX_DATAERR;
             }
 
@@ -350,8 +353,7 @@ int main(int argc, char *const argv[]) {
     }
     if (!user)
         user = mpw_marshall_user( fullName, masterPassword, MPAlgorithmVersionCurrent );
-    mpw_free_string( fullName );
-    mpw_free_string( masterPassword );
+    mpw_free_string( fullName, masterPassword );
 
     // Load the site object.
     for (size_t s = 0; s < user->sites_count; ++s) {
@@ -372,6 +374,8 @@ int main(int argc, char *const argv[]) {
         keyPurpose = mpw_purposeWithName( keyPurposeArg );
         if (ERR == (int)keyPurpose) {
             ftl( "Invalid purpose: %s\n", keyPurposeArg );
+            mpw_marshal_free( user );
+            mpw_free_string( sitesPath );
             return EX_USAGE;
         }
     }
@@ -436,6 +440,8 @@ int main(int argc, char *const argv[]) {
         resultType = mpw_typeWithName( resultTypeArg );
         if (ERR == (int)resultType) {
             ftl( "Invalid type: %s\n", resultTypeArg );
+            mpw_marshal_free( user );
+            mpw_free_string( sitesPath, resultState, keyContext );
             return EX_USAGE;
         }
 
@@ -457,6 +463,8 @@ int main(int argc, char *const argv[]) {
         long long int siteCounterInt = atoll( siteCounterArg );
         if (siteCounterInt < MPCounterValueFirst || siteCounterInt > MPCounterValueLast) {
             ftl( "Invalid site counter: %s\n", siteCounterArg );
+            mpw_marshal_free( user );
+            mpw_free_string( sitesPath, resultState, keyContext );
             return EX_USAGE;
         }
 
@@ -477,6 +485,8 @@ int main(int argc, char *const argv[]) {
         int algorithmVersionInt = atoi( algorithmVersionArg );
         if (algorithmVersionInt < MPAlgorithmVersionFirst || algorithmVersionInt > MPAlgorithmVersionLast) {
             ftl( "Invalid algorithm version: %s\n", algorithmVersionArg );
+            mpw_marshal_free( user );
+            mpw_free_string( sitesPath, resultState, keyContext, resultParam );
             return EX_USAGE;
         }
         site->algorithm = (MPAlgorithmVersion)algorithmVersionInt;
@@ -485,17 +495,9 @@ int main(int argc, char *const argv[]) {
         user->redacted = strcmp( sitesRedactedArg, "1" ) == 0;
     else if (!user->redacted)
         wrn( "Sites configuration is not redacted.  Use -R 1 to change this.\n" );
-    mpw_free_string( fullNameArg );
-    mpw_free_string( masterPasswordArg );
-    mpw_free_string( siteNameArg );
-    mpw_free_string( resultTypeArg );
-    mpw_free_string( resultParamArg );
-    mpw_free_string( siteCounterArg );
-    mpw_free_string( algorithmVersionArg );
-    mpw_free_string( keyPurposeArg );
-    mpw_free_string( keyContextArg );
-    mpw_free_string( sitesFormatArg );
-    mpw_free_string( sitesRedactedArg );
+    mpw_free_string( fullNameArg, masterPasswordArg, siteNameArg );
+    mpw_free_string( resultTypeArg, resultParamArg, siteCounterArg, algorithmVersionArg);
+    mpw_free_string( keyPurposeArg, keyContextArg, sitesFormatArg, sitesRedactedArg );
 
     // Operation summary.
     const char *identicon = mpw_identicon( user->fullName, user->masterPassword );
@@ -516,24 +518,27 @@ int main(int argc, char *const argv[]) {
     dbg( "algorithmVersion : %u\n", site->algorithm );
     dbg( "-----------------\n\n" );
     inf( "%s's %s for %s:\n[ %s ]: ", user->fullName, purposeResult, site->name, identicon );
-    mpw_free_string( identicon );
-    if (sitesPath)
-        mpw_free_string( sitesPath );
+    mpw_free_string( identicon, sitesPath );
 
     // Determine master key.
     MPMasterKey masterKey = mpw_masterKey(
             user->fullName, user->masterPassword, site->algorithm );
     if (!masterKey) {
         ftl( "Couldn't derive master key.\n" );
+        mpw_marshal_free( user );
+        mpw_free_string( resultState, keyContext, resultParam );
         return EX_SOFTWARE;
     }
 
     // Update state.
     if (resultParam && resultType & MPResultTypeClassStateful) {
+        mpw_free_string( resultState );
         if (!(resultState = mpw_siteState( masterKey, site->name, siteCounter,
                 keyPurpose, keyContext, resultType, resultParam, site->algorithm ))) {
             ftl( "Couldn't encrypt site result.\n" );
             mpw_free( masterKey, MPMasterKeySize );
+            mpw_marshal_free( user );
+            mpw_free_string( resultState, keyContext, resultParam );
             return EX_SOFTWARE;
         }
         inf( "(state) %s => ", resultState );
@@ -572,15 +577,16 @@ int main(int argc, char *const argv[]) {
             keyPurpose, keyContext, resultType, resultParam, site->algorithm );
     if (!result) {
         ftl( "Couldn't generate site result.\n" );
+        mpw_free( masterKey, MPMasterKeySize );
+        mpw_marshal_free( user );
+        mpw_free_string( resultState, keyContext, resultParam );
         return EX_SOFTWARE;
     }
     fprintf( stdout, "%s\n", result );
     if (site->url)
         inf( "See: %s\n", site->url );
     mpw_free( masterKey, MPMasterKeySize );
-    mpw_free_string( keyContext );
-    mpw_free_string( resultParam );
-    mpw_free_string( result );
+    mpw_free_string( keyContext, resultParam, result );
 
     // Update usage metadata.
     site->lastUsed = user->lastUsed = time( NULL );

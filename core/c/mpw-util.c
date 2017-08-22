@@ -117,9 +117,17 @@ bool mpw_free(const void *buffer, const size_t bufferSize) {
     return true;
 }
 
-bool mpw_free_string(const char *string) {
+bool mpw_free_string(const char *strings, ...) {
 
-    return string && mpw_free( string, strlen( string ) );
+    bool success = true;
+
+    va_list args;
+    va_start( args, strings );
+    const char *string = va_arg( args, const char * );
+    success &= string && mpw_free( string, strlen( string ) );
+    va_end( args );
+
+    return success;
 }
 
 uint8_t const *mpw_kdf_scrypt(const size_t keySize, const char *secret, const uint8_t *salt, const size_t saltSize,
