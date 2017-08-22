@@ -691,7 +691,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
     if ([site isKindOfClass:[MPGeneratedSiteEntity class]])
         ((MPGeneratedSiteEntity *)site).counter = importSite->counter;
     site.algorithm = MPAlgorithmForVersion( importSite->algorithm );
-    site.loginName = importSite->loginName? @(importSite->loginName): nil;
+    site.loginName = importSite->loginContent? @(importSite->loginContent): nil;
     site.loginGenerated = importSite->loginGenerated;
     site.url = importSite->url? @(importSite->url): nil;
     site.uses = importSite->uses;
@@ -724,7 +724,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
             MPMarshalledSite *exportSite = mpw_marshall_site( exportUser,
                     site.name.UTF8String, site.type, counter, site.algorithm.version );
             exportSite->content = content.UTF8String;
-            exportSite->loginName = site.loginName.UTF8String;
+            exportSite->loginContent = site.loginName.UTF8String;
             exportSite->loginGenerated = site.loginGenerated;
             exportSite->url = site.url.UTF8String;
             exportSite->uses = (unsigned int)site.uses;

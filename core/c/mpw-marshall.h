@@ -59,6 +59,8 @@ typedef struct MPMarshallError {
 
 typedef struct MPMarshalledQuestion {
     const char *keyword;
+    const char *content;
+    MPResultType type;
 } MPMarshalledQuestion;
 
 typedef struct MPMarshalledSite {
@@ -68,8 +70,8 @@ typedef struct MPMarshalledSite {
     MPCounterValue counter;
     MPAlgorithmVersion algorithm;
 
-    const char *loginName;
-    bool loginGenerated;
+    const char *loginContent;
+    MPResultType loginType;
 
     const char *url;
     unsigned int uses;

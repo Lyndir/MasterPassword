@@ -48,7 +48,8 @@ MPSiteKey mpw_siteKey(
         MPMasterKey masterKey, const char *siteName, const MPCounterValue siteCounter,
         const MPKeyPurpose keyPurpose, const char *keyContext, const MPAlgorithmVersion algorithmVersion);
 
-/** Encode a password for the site from the given site key.
+/** Generate a site result token from the given parameters.
+ * @param resultParam A parameter for the resultType.  For stateful result types, the output of mpw_siteState.
  * @return A newly allocated string or NULL if an error occurred. */
 const char *mpw_siteResult(
         MPMasterKey masterKey, const char *siteName, const MPCounterValue siteCounter,
@@ -56,12 +57,13 @@ const char *mpw_siteResult(
         const MPResultType resultType, const char *resultParam,
         const MPAlgorithmVersion algorithmVersion);
 
-/** Perform symmetric encryption on a secret token's plainText.
- * @return The newly allocated cipherText of the secret token encrypted by the masterKey. */
+/** Encrypt a stateful site token for persistence.
+ * @param resultParam A parameter for the resultType.  For stateful result types, the desired mpw_siteResult.
+ * @return A newly allocated string or NULL if an error occurred. */
 const char *mpw_siteState(
         MPMasterKey masterKey, const char *siteName, const MPCounterValue siteCounter,
         const MPKeyPurpose keyPurpose, const char *keyContext,
-        const MPResultType resultType, const char *state,
+        const MPResultType resultType, const char *resultParam,
         const MPAlgorithmVersion algorithmVersion);
 
 #endif // _MPW_ALGORITHM_H

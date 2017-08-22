@@ -24,9 +24,14 @@
 
 MPMasterKey mpw_masterKey(const char *fullName, const char *masterPassword, const MPAlgorithmVersion algorithmVersion) {
 
+    if (fullName && !strlen( fullName ))
+        fullName = NULL;
+    if (masterPassword && !strlen( masterPassword ))
+        masterPassword = NULL;
+
     trc( "-- mpw_masterKey (algorithm: %u)\n", algorithmVersion );
     trc( "fullName: %s\n", fullName );
-    trc( "masterPassword.id: %s\n", mpw_id_buf( masterPassword, strlen( masterPassword ) ) );
+    trc( "masterPassword.id: %s\n", masterPassword? mpw_id_buf( masterPassword, strlen( masterPassword ) ): NULL );
     if (!fullName || !masterPassword)
         return NULL;
 
@@ -48,6 +53,11 @@ MPMasterKey mpw_masterKey(const char *fullName, const char *masterPassword, cons
 MPSiteKey mpw_siteKey(
         MPMasterKey masterKey, const char *siteName, const MPCounterValue siteCounter,
         const MPKeyPurpose keyPurpose, const char *keyContext, const MPAlgorithmVersion algorithmVersion) {
+
+    if (siteName && !strlen( siteName ))
+        siteName = NULL;
+    if (keyContext && !strlen( keyContext ))
+        keyContext = NULL;
 
     trc( "-- mpw_siteKey (algorithm: %u)\n", algorithmVersion );
     trc( "siteName: %s\n", siteName );
@@ -77,6 +87,13 @@ const char *mpw_siteResult(
         const MPKeyPurpose keyPurpose, const char *keyContext,
         const MPResultType resultType, const char *resultParam,
         const MPAlgorithmVersion algorithmVersion) {
+
+    if (siteName && !strlen( siteName ))
+        siteName = NULL;
+    if (keyContext && !strlen( keyContext ))
+        keyContext = NULL;
+    if (resultParam && !strlen( resultParam ))
+        resultParam = NULL;
 
     MPSiteKey siteKey = mpw_siteKey( masterKey, siteName, siteCounter, keyPurpose, keyContext, algorithmVersion );
     if (!siteKey)
@@ -142,8 +159,15 @@ const char *mpw_siteResult(
 const char *mpw_siteState(
         MPMasterKey masterKey, const char *siteName, const MPCounterValue siteCounter,
         const MPKeyPurpose keyPurpose, const char *keyContext,
-        const MPResultType resultType, const char *state,
+        const MPResultType resultType, const char *resultParam,
         const MPAlgorithmVersion algorithmVersion) {
+
+    if (siteName && !strlen( siteName ))
+        siteName = NULL;
+    if (keyContext && !strlen( keyContext ))
+        keyContext = NULL;
+    if (resultParam && !strlen( resultParam ))
+        resultParam = NULL;
 
     MPSiteKey siteKey = mpw_siteKey_v0( masterKey, siteName, siteCounter, keyPurpose, keyContext );
     if (!siteKey)
@@ -151,19 +175,19 @@ const char *mpw_siteState(
 
     trc( "-- mpw_siteState (algorithm: %u)\n", algorithmVersion );
     trc( "resultType: %d (%s)\n", resultType, mpw_nameForType( resultType ) );
-    trc( "state: %s\n", state );
-    if (!masterKey || !state)
+    trc( "resultParam: %s\n", resultParam );
+    if (!masterKey || !resultParam)
         return NULL;
 
     switch (algorithmVersion) {
         case MPAlgorithmVersion0:
-            return mpw_siteState_v0( masterKey, siteKey, resultType, state );
+            return mpw_siteState_v0( masterKey, siteKey, resultType, resultParam );
         case MPAlgorithmVersion1:
-            return mpw_siteState_v1( masterKey, siteKey, resultType, state );
+            return mpw_siteState_v1( masterKey, siteKey, resultType, resultParam );
         case MPAlgorithmVersion2:
-            return mpw_siteState_v2( masterKey, siteKey, resultType, state );
+            return mpw_siteState_v2( masterKey, siteKey, resultType, resultParam );
         case MPAlgorithmVersion3:
-            return mpw_siteState_v3( masterKey, siteKey, resultType, state );
+            return mpw_siteState_v3( masterKey, siteKey, resultType, resultParam );
         default:
             err( "Unsupported version: %d\n", algorithmVersion );
             return NULL;
