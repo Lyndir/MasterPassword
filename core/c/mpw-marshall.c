@@ -109,7 +109,7 @@ bool mpw_marshal_info_free(
 bool mpw_marshal_free(
         MPMarshalledUser **user) {
 
-    if (!user)
+    if (!user || !*user)
         return true;
 
     bool success = true;

@@ -544,7 +544,6 @@ int main(int argc, char *const argv[]) {
             case MPKeyPurposeAuthentication: {
                 mpw_free_string( &site->content );
                 site->content = strdup( resultState );
-                dbg( "site->content: %p", (void *)site->content );
                 break;
             }
             case MPKeyPurposeIdentification: {
