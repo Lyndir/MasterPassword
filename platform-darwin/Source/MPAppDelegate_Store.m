@@ -580,7 +580,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
         importMasterPassword = askImportPassword( @(info->fullName) );
         if (!importMasterPassword) {
             inf( @"Import cancelled." );
-            mpw_marshal_info_free( info );
+            mpw_marshal_info_free( &info );
             return MPError( ([NSError errorWithDomain:NSCocoaErrorDomain code:NSUserCancelledError userInfo:nil]), @"" );
         }
 
@@ -591,7 +591,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
     // Parse import data.
     MPMarshallError importError = { .type = MPMarshallSuccess };
     MPMarshalledUser *importUser = mpw_marshall_read( importData.UTF8String, info->format, importMasterPassword.UTF8String, &importError );
-    mpw_marshal_info_free( info );
+    mpw_marshal_info_free( &info );
 
     @try {
         if (!importUser || importError.type != MPMarshallSuccess)
@@ -677,7 +677,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
         return nil;
     }
     @finally {
-        mpw_marshal_free( importUser );
+        mpw_marshal_free( &importUser );
     }
 }
 

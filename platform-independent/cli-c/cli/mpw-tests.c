@@ -56,7 +56,7 @@ int main(int argc, char *const argv[]) {
         // 2. calculate the site password.
         const char *sitePassword = mpw_siteResult(
                 masterKey, (char *)siteName, siteCounter, keyPurpose, (char *)keyContext, resultType, NULL, algorithm );
-        mpw_free( masterKey, MPMasterKeySize );
+        mpw_free( &masterKey, MPMasterKeySize );
         if (!sitePassword) {
             ftl( "Couldn't derive site password.\n" );
             continue;
@@ -72,7 +72,7 @@ int main(int argc, char *const argv[]) {
         }
 
         // Free test case.
-        mpw_free_string( sitePassword );
+        mpw_free_string( &sitePassword );
         xmlFree( id );
         xmlFree( fullName );
         xmlFree( masterPassword );

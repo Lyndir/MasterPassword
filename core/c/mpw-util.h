@@ -106,18 +106,18 @@ extern int mpw_verbosity;
 
 /** Push a buffer onto a buffer.  reallocs the given buffer and appends the given buffer. */
 bool mpw_push_buf(
-        uint8_t **const buffer, size_t *const bufferSize, const void *pushBuffer, const size_t pushSize);
+        uint8_t ** buffer, size_t *bufferSize, const void *pushBuffer, const size_t pushSize);
 /** Push a string onto a buffer.  reallocs the given buffer and appends the given string. */
 bool mpw_push_string(
-        uint8_t **buffer, size_t *const bufferSize, const char *pushString);
+        uint8_t **buffer, size_t *bufferSize, const char *pushString);
 /** Push a string onto another string.  reallocs the target string and appends the source string. */
 bool mpw_string_push(
-        char **const string, const char *pushString);
+        char **string, const char *pushString);
 bool mpw_string_pushf(
-        char **const string, const char *pushFormat, ...);
+        char **string, const char *pushFormat, ...);
 /** Push an integer onto a buffer.  reallocs the given buffer and appends the given integer. */
 bool mpw_push_int(
-        uint8_t **const buffer, size_t *const bufferSize, const uint32_t pushInt);
+        uint8_t **buffer, size_t *bufferSize, const uint32_t pushInt);
 /** Reallocate the given buffer from the given size by adding the delta size.
   * On success, the buffer size pointer will be updated to the buffer's new size
   * and the buffer pointer may be updated to a new memory address.
@@ -128,14 +128,23 @@ bool mpw_push_int(
   * @return true if successful, false if reallocation failed.
   */
 #define mpw_realloc(buffer, bufferSize, deltaSize) \
-        __mpw_realloc( (void **)buffer, bufferSize, deltaSize )
-bool __mpw_realloc(void **buffer, size_t *bufferSize, const size_t deltaSize);
-/** Free a buffer after zero'ing its contents. */
-bool mpw_free(
-        const void *buffer, const size_t bufferSize);
-/** Free a string after zero'ing its contents. */
-bool mpw_free_string(
-        const char *strings, ...);
+        ({ typeof(buffer) _b = buffer; const void *__b = *_b; __mpw_realloc( (const void **)_b, bufferSize, deltaSize ); })
+bool __mpw_realloc(const void **buffer, size_t *bufferSize, const size_t deltaSize);
+/** Free a buffer after zero'ing its contents, then set the reference to NULL. */
+#define mpw_free(buffer, bufferSize) \
+        ({ typeof(buffer) _b = buffer; const void *__b = *_b; __mpw_free((const void **)_b, bufferSize); })
+bool __mpw_free(
+        const void **buffer, const size_t bufferSize);
+/** Free a string after zero'ing its contents, then set the reference to NULL. */
+#define mpw_free_string(string) \
+        ({ typeof(string) _s = string; const char *__s = *_s; __mpw_free_string((const char **)_s); })
+bool __mpw_free_string(
+        const char **string);
+/** Free strings after zero'ing their contents, then set the references to NULL.  Terminate the va_list with NULL. */
+#define mpw_free_strings(strings, ...) \
+        ({ typeof(strings) _s = strings; const char *__s = *_s; __mpw_free_strings((const char **)strings, __VA_ARGS__); })
+bool __mpw_free_strings(
+        const char **strings, ...);
 
 //// Cryptographic functions.
 

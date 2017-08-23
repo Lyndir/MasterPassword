@@ -39,7 +39,7 @@
 int mpw_verbosity = inf_level;
 #endif
 
-bool mpw_push_buf(uint8_t **const buffer, size_t *const bufferSize, const void *pushBuffer, const size_t pushSize) {
+bool mpw_push_buf(uint8_t **buffer, size_t *bufferSize, const void *pushBuffer, const size_t pushSize) {
 
     if (!buffer || !bufferSize || !pushBuffer || !pushSize)
         return false;
@@ -49,9 +49,8 @@ bool mpw_push_buf(uint8_t **const buffer, size_t *const bufferSize, const void *
 
     if (!mpw_realloc( buffer, bufferSize, pushSize )) {
         // realloc failed, we can't push.  Mark the buffer as broken.
-        mpw_free( *buffer, *bufferSize );
+        mpw_free( buffer, *bufferSize );
         *bufferSize = (size_t)ERR;
-        *buffer = NULL;
         return false;
     }
 
@@ -60,12 +59,12 @@ bool mpw_push_buf(uint8_t **const buffer, size_t *const bufferSize, const void *
     return true;
 }
 
-bool mpw_push_string(uint8_t **const buffer, size_t *const bufferSize, const char *pushString) {
+bool mpw_push_string(uint8_t **buffer, size_t *bufferSize, const char *pushString) {
 
     return pushString && mpw_push_buf( buffer, bufferSize, pushString, strlen( pushString ) );
 }
 
-bool mpw_string_push(char **const string, const char *pushString) {
+bool mpw_string_push(char **string, const char *pushString) {
 
     if (!*string)
         *string = calloc( 1, sizeof( char ) );
@@ -74,29 +73,29 @@ bool mpw_string_push(char **const string, const char *pushString) {
     return pushString && mpw_push_buf( (uint8_t **const)string, &stringLength, pushString, strlen( pushString ) + 1 );
 }
 
-bool mpw_string_pushf(char **const string, const char *pushFormat, ...) {
+bool mpw_string_pushf(char **string, const char *pushFormat, ...) {
 
     va_list args;
     va_start( args, pushFormat );
     char *pushString = NULL;
     bool success = vasprintf( &pushString, pushFormat, args ) >= 0 && mpw_string_push( string, pushString );
     va_end( args );
-    mpw_free_string( pushString );
+    mpw_free_string( &pushString );
 
     return success;
 }
 
-bool mpw_push_int(uint8_t **const buffer, size_t *const bufferSize, const uint32_t pushInt) {
+bool mpw_push_int(uint8_t **buffer, size_t *bufferSize, const uint32_t pushInt) {
 
     return mpw_push_buf( buffer, bufferSize, &pushInt, sizeof( pushInt ) );
 }
 
-bool __mpw_realloc(void **buffer, size_t *bufferSize, const size_t deltaSize) {
+bool __mpw_realloc(const void **buffer, size_t *bufferSize, const size_t deltaSize) {
 
     if (!buffer)
         return false;
 
-    void *newBuffer = realloc( *buffer, (bufferSize? *bufferSize: 0) + deltaSize );
+    void *newBuffer = realloc( (void *)*buffer, (bufferSize? *bufferSize: 0) + deltaSize );
     if (!newBuffer)
         return false;
 
@@ -107,24 +106,31 @@ bool __mpw_realloc(void **buffer, size_t *bufferSize, const size_t deltaSize) {
     return true;
 }
 
-bool mpw_free(const void *buffer, const size_t bufferSize) {
+bool __mpw_free(const void **buffer, const size_t bufferSize) {
 
-    if (!buffer)
+    if (!buffer || !*buffer)
         return false;
 
-    memset( (void *)buffer, 0, bufferSize );
-    free( (void *)buffer );
+    memset( (void *)*buffer, 0, bufferSize );
+    free( (void *)*buffer );
+    *buffer = NULL;
+
     return true;
 }
 
-bool mpw_free_string(const char *strings, ...) {
+bool __mpw_free_string(const char **string) {
+
+    return *string && __mpw_free( (const void **)string, strlen( *string ) );
+}
+
+bool __mpw_free_strings(const char **strings, ...) {
 
     bool success = true;
 
     va_list args;
     va_start( args, strings );
-    const char *string = va_arg( args, const char * );
-    success &= string && mpw_free( string, strlen( string ) );
+    for (const char **string; (string = va_arg( args, const char ** ));)
+        success &= mpw_free_string( string );
     va_end( args );
 
     return success;
@@ -142,12 +148,12 @@ uint8_t const *mpw_kdf_scrypt(const size_t keySize, const char *secret, const ui
 
 #if HAS_CPERCIVA
     if (crypto_scrypt( (const uint8_t *)secret, strlen( secret ), salt, saltSize, N, r, p, key, keySize ) < 0) {
-        mpw_free( key, keySize );
+        mpw_free( &key, keySize );
         return NULL;
     }
 #elif HAS_SODIUM
     if (crypto_pwhash_scryptsalsa208sha256_ll( (const uint8_t *)secret, strlen( secret ), salt, saltSize, N, r, p, key, keySize ) != 0) {
-        mpw_free( key, keySize );
+        mpw_free( &key, keySize );
         return NULL;
     }
 #else
@@ -192,7 +198,7 @@ uint8_t const *mpw_kdf_blake2b(const size_t subkeySize, const uint8_t *key, cons
         memcpy( personalBuf, personal, strlen( personal ) );
 
     if (crypto_generichash_blake2b_salt_personal( subkey, subkeySize, context, contextSize, key, keySize, saltBuf, personalBuf ) != 0) {
-        mpw_free( subkey, subkeySize );
+        mpw_free( &subkey, subkeySize );
         return NULL;
     }
 #else
@@ -222,7 +228,7 @@ uint8_t const *mpw_hash_hmac_sha256(const uint8_t *key, const size_t keySize, co
     if (crypto_auth_hmacsha256_init( &state, key, keySize ) != 0 ||
         crypto_auth_hmacsha256_update( &state, message, messageSize ) != 0 ||
         crypto_auth_hmacsha256_final( &state, mac ) != 0) {
-        mpw_free( mac, crypto_auth_hmacsha256_BYTES );
+        mpw_free( &mac, crypto_auth_hmacsha256_BYTES );
         return NULL;
     }
 #else
@@ -248,7 +254,7 @@ static uint8_t const *mpw_aes(bool encrypt, const uint8_t *key, const size_t key
     if (encrypt) {
         uint8_t *const cipherBuf = malloc( bufSize );
         if (crypto_stream_aes128ctr_xor( cipherBuf, buf, bufSize, nonce, key ) != 0) {
-            mpw_free( cipherBuf, bufSize );
+            mpw_free( &cipherBuf, bufSize );
             return NULL;
         }
         return cipherBuf;
@@ -256,7 +262,7 @@ static uint8_t const *mpw_aes(bool encrypt, const uint8_t *key, const size_t key
     else {
         uint8_t *const plainBuf = malloc( bufSize );
         if (crypto_stream_aes128ctr( plainBuf, bufSize, nonce, key ) != 0) {
-            mpw_free( plainBuf, bufSize );
+            mpw_free( &plainBuf, bufSize );
             return NULL;
         }
         for (size_t c = 0; c < bufSize; ++c)
@@ -415,7 +421,7 @@ const char *mpw_identicon(const char *fullName, const char *masterPassword) {
             accessory[identiconSeed[3] % (sizeof( accessory ) / sizeof( accessory[0] ))],
             resetString );
 
-    mpw_free( identiconSeed, 32 );
+    mpw_free( &identiconSeed, 32 );
     free( colorString );
     free( resetString );
     return identicon;

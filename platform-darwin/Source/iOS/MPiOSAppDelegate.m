@@ -248,7 +248,7 @@
                              [self importSites:importData];
                              [UIPasteboard generalPasteboard].string = @"";
                          } cancelTitle:@"No" otherTitles:@"Import Sites", nil];
-        mpw_marshal_info_free( importInfo );
+        mpw_marshal_info_free( &importInfo );
     } );
 
     [super applicationDidBecomeActive:application];

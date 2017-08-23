@@ -100,10 +100,9 @@ bool mpw_update_masterKey(MPMasterKey *masterKey, MPAlgorithmVersion *masterKeyA
         const char *fullName, const char *masterPassword) {
 
     if (*masterKeyAlgorithm != targetKeyAlgorithm) {
-        mpw_free( *masterKey, MPMasterKeySize );
+        mpw_free( masterKey, MPMasterKeySize );
         *masterKeyAlgorithm = targetKeyAlgorithm;
-        *masterKey = mpw_masterKey(
-                fullName, masterPassword, *masterKeyAlgorithm );
+        *masterKey = mpw_masterKey( fullName, masterPassword, *masterKeyAlgorithm );
         if (!*masterKey) {
             err( "Couldn't derive master key for user %s, algorithm %d.\n", fullName, *masterKeyAlgorithm );
             return false;

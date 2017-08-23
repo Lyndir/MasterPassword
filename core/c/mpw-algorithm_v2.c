@@ -69,9 +69,8 @@ static MPSiteKey mpw_siteKey_v2(
         mpw_push_int( &siteSalt, &siteSaltSize, htonl( strlen( keyContext ) ) );
         mpw_push_string( &siteSalt, &siteSaltSize, keyContext );
     }
-    if (!siteSalt || !siteSaltSize) {
+    if (!siteSalt) {
         err( "Could not allocate site salt: %s\n", strerror( errno ) );
-        mpw_free( siteSalt, siteSaltSize );
         return NULL;
     }
     trc( "  => siteSalt.id: %s\n", mpw_id_buf( siteSalt, siteSaltSize ) );
@@ -79,7 +78,7 @@ static MPSiteKey mpw_siteKey_v2(
     trc( "siteKey: hmac-sha256( masterKey.id=%s, siteSalt )\n",
             mpw_id_buf( masterKey, MPMasterKeySize ) );
     MPSiteKey siteKey = mpw_hash_hmac_sha256( masterKey, MPMasterKeySize, siteSalt, siteSaltSize );
-    mpw_free( siteSalt, siteSaltSize );
+    mpw_free( &siteSalt, siteSaltSize );
     if (!siteKey) {
         err( "Could not allocate site key: %s\n", strerror( errno ) );
         return NULL;

@@ -18,7 +18,6 @@
 
 #include <string.h>
 #include <errno.h>
-#include <arpa/inet.h>
 
 #include "mpw-types.h"
 #include "mpw-util.h"
@@ -71,7 +70,7 @@ static MPMasterKey mpw_masterKey_v0(
     // Calculate the master key.
     trc( "masterKey: scrypt( masterPassword, masterKeySalt, N=%lu, r=%u, p=%u )\n", MP_N, MP_r, MP_p );
     MPMasterKey masterKey = mpw_kdf_scrypt( MPMasterKeySize, masterPassword, masterKeySalt, masterKeySaltSize, MP_N, MP_r, MP_p );
-    mpw_free( masterKeySalt, masterKeySaltSize );
+    mpw_free( &masterKeySalt, masterKeySaltSize );
     if (!masterKey) {
         err( "Could not allocate master key: %s\n", strerror( errno ) );
         return NULL;
@@ -104,9 +103,8 @@ static MPSiteKey mpw_siteKey_v0(
         mpw_push_int( &siteSalt, &siteSaltSize, htonl( mpw_utf8_strlen( keyContext ) ) );
         mpw_push_string( &siteSalt, &siteSaltSize, keyContext );
     }
-    if (!siteSalt || !siteSaltSize) {
+    if (!siteSalt) {
         err( "Could not allocate site salt: %s\n", strerror( errno ) );
-        mpw_free( siteSalt, siteSaltSize );
         return NULL;
     }
     trc( "  => siteSalt.id: %s\n", mpw_id_buf( siteSalt, siteSaltSize ) );
@@ -114,7 +112,7 @@ static MPSiteKey mpw_siteKey_v0(
     trc( "siteKey: hmac-sha256( masterKey.id=%s, siteSalt )\n",
             mpw_id_buf( masterKey, MPMasterKeySize ) );
     MPSiteKey siteKey = mpw_hash_hmac_sha256( masterKey, MPMasterKeySize, siteSalt, siteSaltSize );
-    mpw_free( siteSalt, siteSaltSize );
+    mpw_free( &siteSalt, siteSaltSize );
     if (!siteKey) {
         err( "Could not derive site key: %s\n", strerror( errno ) );
         return NULL;
@@ -163,19 +161,19 @@ static const char *mpw_sitePasswordFromCrypt_v0(
     size_t bufSize = (size_t)mpw_base64_decode( cipherBuf, cipherText );
     if ((int)bufSize < 0) {
         err( "Base64 decoding error." );
-        mpw_free( cipherBuf, mpw_base64_decode_max( cipherText ) );
+        mpw_free( &cipherBuf, mpw_base64_decode_max( cipherText ) );
         return NULL;
     }
     trc( "b64 decoded: %zu bytes = %s\n", bufSize, mpw_hex( cipherBuf, bufSize ) );
 
     // Decrypt
     const uint8_t *plainBytes = mpw_aes_decrypt( masterKey, MPMasterKeySize, cipherBuf, bufSize );
+    mpw_free( &cipherBuf, bufSize );
     const char *plainText = strndup( (char *)plainBytes, bufSize );
-    mpw_free( plainBytes, bufSize );
+    mpw_free( &plainBytes, bufSize );
     if (!plainText)
         err( "AES decryption error: %s\n", strerror( errno ) );
     trc( "decrypted -> plainText: %s = %s\n", plainText, mpw_hex( plainText, sizeof( plainText ) ) );
-    mpw_free( cipherBuf, bufSize );
 
     return plainText;
 }
@@ -206,15 +204,16 @@ static const char *mpw_sitePasswordFromDerive_v0(
 
             // Base64-encode
             size_t b64Max = mpw_base64_encode_max( keySize );
-            char *sitePassword = calloc( 1, b64Max + 1 );
-            if (mpw_base64_encode( sitePassword, resultKey, keySize ) < 0) {
+            char *b64Key = calloc( 1, b64Max + 1 );
+            if (mpw_base64_encode( b64Key, resultKey, keySize ) < 0) {
                 err( "Base64 encoding error." );
-                mpw_free_string( sitePassword );
-                sitePassword = NULL;
+                mpw_free_string( &b64Key );
             }
-            trc( "b64 encoded -> key.id: %s\n", mpw_id_buf( sitePassword, strlen( sitePassword ) ) );
+            else
+                trc( "b64 encoded -> key.id: %s\n", mpw_id_buf( b64Key, strlen( b64Key ) ) );
+            mpw_free( &resultKey, keySize );
 
-            return sitePassword;
+            return b64Key;
         }
         default:
             err( "Unsupported derived password type: %d\n", resultType );
@@ -239,11 +238,11 @@ static const char *mpw_siteState_v0(
     char *cipherText = calloc( 1, b64Max + 1 );
     if (mpw_base64_encode( cipherText, cipherBuf, bufSize ) < 0) {
         err( "Base64 encoding error." );
-        mpw_free_string( cipherText );
-        cipherText = NULL;
+        mpw_free_string( &cipherText );
     }
-    trc( "b64 encoded -> cipherText: %s = %s\n", cipherText, mpw_hex( cipherText, sizeof( cipherText ) ) );
-    mpw_free( cipherBuf, bufSize );
+    else
+        trc( "b64 encoded -> cipherText: %s = %s\n", cipherText, mpw_hex( cipherText, sizeof( cipherText ) ) );
+    mpw_free( &cipherBuf, bufSize );
 
     return cipherText;
 }

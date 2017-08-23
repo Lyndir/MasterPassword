@@ -130,9 +130,9 @@ MPMarshalledQuestion *mpw_marshal_question(
         MPMarshalledSite *site, const char *keyword);
 /** Free the given user object and all associated data. */
 bool mpw_marshal_info_free(
-        MPMarshallInfo *info);
+        MPMarshallInfo **info);
 bool mpw_marshal_free(
-        MPMarshalledUser *user);
+        MPMarshalledUser **user);
 
 //// Format.
 

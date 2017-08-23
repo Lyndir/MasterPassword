@@ -94,42 +94,39 @@ MPMarshalledQuestion *mpw_marshal_question(
 }
 
 bool mpw_marshal_info_free(
-        MPMarshallInfo *info) {
+        MPMarshallInfo **info) {
 
-    if (!info)
+    if (!info || !*info)
         return true;
 
     bool success = true;
-    success &= mpw_free_string( info->fullName );
-    success &= mpw_free_string( info->keyID );
+    success &= mpw_free_strings( &(*info)->fullName, &(*info)->keyID, NULL );
     success &= mpw_free( info, sizeof( MPMarshallInfo ) );
 
     return success;
 }
 
 bool mpw_marshal_free(
-        MPMarshalledUser *user) {
+        MPMarshalledUser **user) {
 
     if (!user)
         return true;
 
     bool success = true;
-    for (size_t s = 0; s < user->sites_count; ++s) {
-        MPMarshalledSite *site = &user->sites[s];
-        success &= mpw_free_string( site->name );
-        success &= mpw_free_string( site->content );
-        success &= mpw_free_string( site->loginContent );
-        success &= mpw_free_string( site->url );
+    success &= mpw_free_strings( &(*user)->fullName, &(*user)->masterPassword, NULL );
+
+    for (size_t s = 0; s < (*user)->sites_count; ++s) {
+        MPMarshalledSite *site = &(*user)->sites[s];
+        success &= mpw_free_strings( &site->name, &site->content, &site->loginContent, &site->url, NULL );
+
         for (size_t q = 0; q < site->questions_count; ++q) {
             MPMarshalledQuestion *question = &site->questions[q];
-            success &= mpw_free_string( question->keyword );
-            success &= mpw_free_string( question->content );
+            success &= mpw_free_strings( &question->keyword, &question->content, NULL );
         }
-        success &= mpw_free( site->questions, sizeof( MPMarshalledQuestion ) * site->questions_count );
+        success &= mpw_free( &site->questions, sizeof( MPMarshalledQuestion ) * site->questions_count );
     }
-    success &= mpw_free( user->sites, sizeof( MPMarshalledSite ) * user->sites_count );
-    success &= mpw_free_string( user->fullName );
-    success &= mpw_free_string( user->masterPassword );
+
+    success &= mpw_free( &(*user)->sites, sizeof( MPMarshalledSite ) * (*user)->sites_count );
     success &= mpw_free( user, sizeof( MPMarshalledUser ) );
 
     return success;
@@ -210,10 +207,9 @@ static bool mpw_marshall_write_flat(
             mpw_string_pushf( out, "%s  %8ld  %lu:%lu:%lu  %25s\t%25s\t%s\n",
                     dateString, (long)site->uses, (long)site->type, (long)site->algorithm, (long)site->counter,
                     loginContent?: "", site->name, content?: "" );
-        mpw_free_string( content );
-        mpw_free_string( loginContent );
+        mpw_free_strings( &content, &loginContent, NULL );
     }
-    mpw_free( masterKey, MPMasterKeySize );
+    mpw_free( &masterKey, MPMasterKeySize );
 
     *error = (MPMarshallError){ .type = MPMarshallSuccess };
     return true;
@@ -336,11 +332,11 @@ static bool mpw_marshall_write_json(
         if (site->url)
             json_object_object_add( json_site_mpw, "url", json_object_new_string( site->url ) );
 
-        mpw_free_string( content );
+        mpw_free_strings( &content, &loginContent );
     }
 
     mpw_string_pushf( out, "%s\n", json_object_to_json_string_ext( json_file, JSON_C_TO_STRING_PRETTY | JSON_C_TO_STRING_SPACED ) );
-    mpw_free( masterKey, MPMasterKeySize );
+    mpw_free( &masterKey, MPMasterKeySize );
     json_object_put( json_file );
 
     *error = (MPMarshallError){ .type = MPMarshallSuccess };
@@ -405,8 +401,7 @@ static void mpw_marshall_read_flat_info(
             if (strcmp( headerName, "Date" ) == 0)
                 info->date = mpw_mktime( headerValue );
 
-            mpw_free_string( headerName );
-            mpw_free_string( headerValue );
+            mpw_free_strings( &headerName, &headerValue, NULL );
             continue;
         }
     }
@@ -488,8 +483,7 @@ static MPMarshalledUser *mpw_marshall_read_flat(
             if (strcmp( headerName, "Passwords" ) == 0)
                 importRedacted = strcmp( headerValue, "VISIBLE" ) != 0;
 
-            mpw_free_string( headerName );
-            mpw_free_string( headerValue );
+            mpw_free_strings( &headerName, &headerValue, NULL );
             continue;
         }
         if (!headerEnded)
@@ -531,7 +525,7 @@ static MPMarshalledUser *mpw_marshall_read_flat(
                 if (typeAndVersion) {
                     str_type = strdup( strtok( typeAndVersion, ":" ) );
                     str_algorithm = strdup( strtok( NULL, "" ) );
-                    mpw_free_string( typeAndVersion );
+                    mpw_free_string( &typeAndVersion );
                 }
                 str_counter = strdup( "1" );
                 siteLoginName = NULL;
@@ -547,7 +541,7 @@ static MPMarshalledUser *mpw_marshall_read_flat(
                     str_type = strdup( strtok( typeAndVersionAndCounter, ":" ) );
                     str_algorithm = strdup( strtok( NULL, ":" ) );
                     str_counter = strdup( strtok( NULL, "" ) );
-                    mpw_free_string( typeAndVersionAndCounter );
+                    mpw_free_string( &typeAndVersionAndCounter );
                 }
                 siteLoginName = mpw_get_token( &positionInLine, endOfLine, "\t\n" );
                 siteName = mpw_get_token( &positionInLine, endOfLine, "\t\n" );
@@ -606,6 +600,7 @@ static MPMarshalledUser *mpw_marshall_read_flat(
                 if (siteLoginName && strlen( siteLoginName ))
                     site->loginContent = mpw_siteState( masterKey, site->name, MPCounterValueInitial,
                             MPKeyPurposeIdentification, NULL, site->loginType, siteLoginName, site->algorithm );
+                dbg( "site->content: %p\n", (void *)site->content );
             }
             else {
                 // Redacted
@@ -613,6 +608,7 @@ static MPMarshalledUser *mpw_marshall_read_flat(
                     site->content = strdup( siteContent );
                 if (siteLoginName && strlen( siteLoginName ))
                     site->loginContent = strdup( siteLoginName );
+                dbg( "site->content: %p\n", (void *)site->content );
             }
         }
         else {
@@ -623,18 +619,11 @@ static MPMarshalledUser *mpw_marshall_read_flat(
             return NULL;
         }
 
-        mpw_free_string( str_lastUsed );
-        mpw_free_string( str_uses );
-        mpw_free_string( str_type );
-        mpw_free_string( str_algorithm );
-        mpw_free_string( str_counter );
-        mpw_free_string( siteLoginName );
-        mpw_free_string( siteName );
-        mpw_free_string( siteContent );
+        mpw_free_strings( &str_lastUsed, &str_uses, &str_type, &str_algorithm, &str_counter, NULL );
+        mpw_free_strings( &siteLoginName, &siteName, &siteContent, NULL );
     }
-    mpw_free_string( fullName );
-    mpw_free_string( keyID );
-    mpw_free( masterKey, MPMasterKeySize );
+    mpw_free_strings( &fullName, &keyID, NULL );
+    mpw_free( &masterKey, MPMasterKeySize );
 
     *error = (MPMarshallError){ .type = MPMarshallSuccess };
     return user;
@@ -796,6 +785,7 @@ static MPMarshalledUser *mpw_marshall_read_json(
             if (siteLoginName && strlen( siteLoginName ))
                 site->loginContent = mpw_siteState( masterKey, site->name, MPCounterValueInitial,
                         MPKeyPurposeIdentification, NULL, site->loginType, siteLoginName, site->algorithm );
+            dbg( "site->content: %p\n", (void *)site->content );
         }
         else {
             // Redacted
@@ -803,6 +793,7 @@ static MPMarshalledUser *mpw_marshall_read_json(
                 site->content = strdup( siteContent );
             if (siteLoginName && strlen( siteLoginName ))
                 site->loginContent = strdup( siteLoginName );
+            dbg( "site->content: %p\n", (void *)site->content );
         }
 
         json_object_iter json_site_question;

@@ -64,7 +64,7 @@ static MPMasterKey mpw_masterKey_v3(
     // Calculate the master key.
     trc( "masterKey: scrypt( masterPassword, masterKeySalt, N=%lu, r=%u, p=%u )\n", MP_N, MP_r, MP_p );
     MPMasterKey masterKey = mpw_kdf_scrypt( MPMasterKeySize, masterPassword, masterKeySalt, masterKeySaltSize, MP_N, MP_r, MP_p );
-    mpw_free( masterKeySalt, masterKeySaltSize );
+    mpw_free( &masterKeySalt, masterKeySaltSize );
     if (!masterKey) {
         err( "Could not allocate master key: %s\n", strerror( errno ) );
         return NULL;
