@@ -332,7 +332,7 @@ static bool mpw_marshall_write_json(
         if (site->url)
             json_object_object_add( json_site_mpw, "url", json_object_new_string( site->url ) );
 
-        mpw_free_strings( &content, &loginContent );
+        mpw_free_strings( &content, &loginContent, NULL );
     }
 
     mpw_string_pushf( out, "%s\n", json_object_to_json_string_ext( json_file, JSON_C_TO_STRING_PRETTY | JSON_C_TO_STRING_SPACED ) );

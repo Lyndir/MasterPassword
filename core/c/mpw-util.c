@@ -129,6 +129,7 @@ bool __mpw_free_strings(const char **strings, ...) {
 
     va_list args;
     va_start( args, strings );
+    success &= mpw_free_string( strings );
     for (const char **string; (string = va_arg( args, const char ** ));)
         success &= mpw_free_string( string );
     va_end( args );

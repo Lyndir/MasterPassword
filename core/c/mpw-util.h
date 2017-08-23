@@ -132,17 +132,17 @@ bool mpw_push_int(
 bool __mpw_realloc(const void **buffer, size_t *bufferSize, const size_t deltaSize);
 /** Free a buffer after zero'ing its contents, then set the reference to NULL. */
 #define mpw_free(buffer, bufferSize) \
-        ({ typeof(buffer) _b = buffer; const void *__b = *_b; __mpw_free((const void **)_b, bufferSize); })
+        ({ typeof(buffer) _b = buffer; const void *__b = *_b; __mpw_free( (const void **)_b, bufferSize ); })
 bool __mpw_free(
         const void **buffer, const size_t bufferSize);
 /** Free a string after zero'ing its contents, then set the reference to NULL. */
 #define mpw_free_string(string) \
-        ({ typeof(string) _s = string; const char *__s = *_s; __mpw_free_string((const char **)_s); })
+        ({ typeof(string) _s = string; const char *__s = *_s; __mpw_free_string( (const char **)_s ); })
 bool __mpw_free_string(
         const char **string);
 /** Free strings after zero'ing their contents, then set the references to NULL.  Terminate the va_list with NULL. */
 #define mpw_free_strings(strings, ...) \
-        ({ typeof(strings) _s = strings; const char *__s = *_s; __mpw_free_strings((const char **)strings, __VA_ARGS__); })
+        ({ typeof(strings) _s = strings; const char *__s = *_s; __mpw_free_strings( (const char **)_s, __VA_ARGS__ ); })
 bool __mpw_free_strings(
         const char **strings, ...);
 

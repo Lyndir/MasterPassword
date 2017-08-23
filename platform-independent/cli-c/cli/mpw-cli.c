@@ -271,6 +271,17 @@ int main(int argc, char *const argv[]) {
             return EX_USAGE;
         }
     }
+    MPKeyPurpose keyPurpose = MPKeyPurposeAuthentication;
+    if (keyPurposeArg) {
+        keyPurpose = mpw_purposeWithName( keyPurposeArg );
+        if (ERR == (int)keyPurpose) {
+            ftl( "Invalid purpose: %s\n", keyPurposeArg );
+            return EX_USAGE;
+        }
+    }
+    const char *keyContext = NULL;
+    if (keyContextArg)
+        keyContext = strdup( keyContextArg );
 
     // Find the user's sites file.
     FILE *sitesFile = NULL;
@@ -355,52 +366,33 @@ int main(int argc, char *const argv[]) {
     // Load the site object.
     for (size_t s = 0; s < user->sites_count; ++s) {
         site = &user->sites[s];
-        if (strcmp( siteName, site->name ) != 0) {
-            site = NULL;
-            continue;
-        }
-        break;
+        if (strcmp( siteName, site->name ) == 0)
+            // Found.
+            break;
+        site = NULL;
     }
     if (!site)
         site = mpw_marshall_site( user, siteName, MPResultTypeDefault, MPCounterValueDefault, user->algorithm );
     mpw_free_string( &siteName );
 
-    // Load the purpose and context / question object.
-    MPKeyPurpose keyPurpose = MPKeyPurposeAuthentication;
-    if (keyPurposeArg) {
-        keyPurpose = mpw_purposeWithName( keyPurposeArg );
-        if (ERR == (int)keyPurpose) {
-            ftl( "Invalid purpose: %s\n", keyPurposeArg );
-            mpw_marshal_free( &user );
-            mpw_free_string( &sitesPath );
-            return EX_USAGE;
-        }
-    }
-    const char *keyContext = NULL;
-    if (keyContextArg) {
-        keyContext = strdup( keyContextArg );
-
-        switch (keyPurpose) {
-            case MPKeyPurposeAuthentication:
-                // NOTE: keyContext is not persisted.
-                break;
-            case MPKeyPurposeIdentification:
-                // NOTE: keyContext is not persisted.
-                break;
-            case MPKeyPurposeRecovery:
-                for (size_t q = 0; q < site->questions_count; ++q) {
-                    question = &site->questions[q];
-                    if (strcmp( keyContext, question->keyword ) != 0) {
-                        question = NULL;
-                        continue;
-                    }
+    // Load the question object.
+    switch (keyPurpose) {
+        case MPKeyPurposeAuthentication:
+        case MPKeyPurposeIdentification:
+            break;
+        case MPKeyPurposeRecovery:
+            for (size_t q = 0; q < site->questions_count; ++q) {
+                question = &site->questions[q];
+                if ((!keyContext && !strlen( question->keyword )) ||
+                    (keyContext && strcmp( keyContext, question->keyword ) != 0))
+                    // Found.
                     break;
-                }
-                break;
-        }
+                question = NULL;
+            }
+            if (!question)
+                question = mpw_marshal_question( site, keyContext );
+            break;
     }
-    if (!question)
-        question = mpw_marshal_question( site, keyContext );
 
     // Initialize purpose-specific operation parameters.
     MPResultType resultType = MPResultTypeDefault;
