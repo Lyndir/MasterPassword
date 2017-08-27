@@ -26,10 +26,10 @@
 #include <term.h>
 #endif
 
-#if HAS_CPERCIVA
+#if MPW_CPERCIVA
 #include <scrypt/crypto_scrypt.h>
 #include <scrypt/sha256.h>
-#elif HAS_SODIUM
+#elif MPW_SODIUM
 #include "sodium.h"
 #endif
 
@@ -175,12 +175,12 @@ uint8_t const *mpw_kdf_scrypt(const size_t keySize, const char *secret, const ui
     if (!key)
         return NULL;
 
-#if HAS_CPERCIVA
+#if MPW_CPERCIVA
     if (crypto_scrypt( (const uint8_t *)secret, strlen( secret ), salt, saltSize, N, r, p, key, keySize ) < 0) {
         mpw_free( &key, keySize );
         return NULL;
     }
-#elif HAS_SODIUM
+#elif MPW_SODIUM
     if (crypto_pwhash_scryptsalsa208sha256_ll( (const uint8_t *)secret, strlen( secret ), salt, saltSize, N, r, p, key, keySize ) != 0) {
         mpw_free( &key, keySize );
         return NULL;
@@ -204,7 +204,7 @@ uint8_t const *mpw_kdf_blake2b(const size_t subkeySize, const uint8_t *key, cons
     if (!subkey)
         return NULL;
 
-#if HAS_SODIUM
+#if MPW_SODIUM
     if (keySize < crypto_generichash_blake2b_KEYBYTES_MIN || keySize > crypto_generichash_blake2b_KEYBYTES_MAX ||
         subkeySize < crypto_generichash_blake2b_KEYBYTES_MIN || subkeySize > crypto_generichash_blake2b_KEYBYTES_MAX ||
         contextSize < crypto_generichash_blake2b_BYTES_MIN || contextSize > crypto_generichash_blake2b_BYTES_MAX ||
@@ -240,13 +240,13 @@ uint8_t const *mpw_hash_hmac_sha256(const uint8_t *key, const size_t keySize, co
     if (!key || !keySize || !message || !messageSize)
         return NULL;
 
-#if HAS_CPERCIVA
+#if MPW_CPERCIVA
     uint8_t *const mac = malloc( 32 );
     if (!mac)
         return NULL;
 
     HMAC_SHA256_Buf( key, keySize, message, messageSize, mac );
-#elif HAS_SODIUM
+#elif MPW_SODIUM
     uint8_t *const mac = malloc( crypto_auth_hmacsha256_BYTES );
     if (!mac)
         return NULL;
@@ -267,7 +267,7 @@ uint8_t const *mpw_hash_hmac_sha256(const uint8_t *key, const size_t keySize, co
 
 static uint8_t const *mpw_aes(bool encrypt, const uint8_t *key, const size_t keySize, const uint8_t *buf, const size_t bufSize) {
 
-#if HAS_SODIUM
+#if MPW_SODIUM
     if (!key || keySize < crypto_stream_KEYBYTES)
         return NULL;
 
@@ -318,10 +318,10 @@ MPKeyID mpw_id_buf(const void *buf, size_t length) {
     if (!buf)
         return "<unset>";
 
-#if HAS_CPERCIVA
+#if MPW_CPERCIVA
     uint8_t hash[32];
     SHA256_Buf( buf, length, hash );
-#elif HAS_SODIUM
+#elif MPW_SODIUM
     uint8_t hash[crypto_hash_sha256_BYTES];
     crypto_hash_sha256( hash, buf, length );
 #else
@@ -364,7 +364,7 @@ const char *mpw_vstr(const char *format, va_list args) {
         return NULL;
 
     do {
-        int len = vsnprintf( &str_str, str_str_max, format, args );
+        int len = vsnprintf( str_str, str_str_max, format, args );
         if (len < str_str_max)
             break;
 

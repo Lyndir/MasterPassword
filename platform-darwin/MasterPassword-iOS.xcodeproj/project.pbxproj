@@ -4375,7 +4375,10 @@
 					"$(PROJECT_DIR)/External/libsodium/libsodium-ios/lib",
 					"$(PROJECT_DIR)/External/libjson-c/libjson-c-ios/lib",
 				);
-				OTHER_CFLAGS = "-DHAS_SODIUM=1";
+				OTHER_CFLAGS = (
+					"-DMPW_SODIUM=1",
+					"-DMPW_CPERCIVA=0",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword;
 				SKIP_INSTALL = NO;
 				STRIP_INSTALLED_PRODUCT = YES;
@@ -4648,7 +4651,10 @@
 					"$(PROJECT_DIR)/External/libsodium/libsodium-ios/lib",
 					"$(PROJECT_DIR)/External/libjson-c/libjson-c-ios/lib",
 				);
-				OTHER_CFLAGS = "-DHAS_SODIUM=1";
+				OTHER_CFLAGS = (
+					"-DMPW_SODIUM=1",
+					"-DMPW_CPERCIVA=0",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword;
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -4679,7 +4685,10 @@
 					"$(PROJECT_DIR)/External/libsodium/libsodium-ios/lib",
 					"$(PROJECT_DIR)/External/libjson-c/libjson-c-ios/lib",
 				);
-				OTHER_CFLAGS = "-DHAS_SODIUM=1";
+				OTHER_CFLAGS = (
+					"-DMPW_SODIUM=1",
+					"-DMPW_CPERCIVA=0",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword;
 				SKIP_INSTALL = NO;
 				STRIP_INSTALLED_PRODUCT = YES;

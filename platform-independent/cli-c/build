@@ -1,13 +1,6 @@
 #!/usr/bin/env bash
 #
 # TROUBLESHOOTING
-#   - If you see 'undefined reference to `AES_encrypt'',
-#       make sure you have openssl installed.
-#       If libcrypto.a is in a non-standard directory, try ./build -L[your-lib-dir]
-#   - If you see 'undefined reference to `clock_gettime'',
-#       try ./build -lrt instead.
-#   - If you see 'x86.S:202: Error: junk at end of line, first unrecognized character is `,'',
-#       try commenting the line in lib/bcrypt/x86.S.
 #   - Take a look at the "Optional features" section.  Some features have dependencies,
 #       either make sure you have them or disable those features.
 #       eg. mpw_color=0 ./build
@@ -31,16 +24,17 @@ else
     # Default targets.
     # Modify here or override using targets='mpw mpw-bench' ./build
     targets=(
-        mpw                         # C CLI version of Master Password, requires libsodium or openssl-dev.
-       #mpw-bench                   # C CLI Master Password benchmark utility.
-       #mpw-tests                   # C Master Password algorithm test suite, requires libxml2.
+        mpw                         # C CLI version of Master Password (needs: mpw_sodium, optional: mpw_color, mpw_json).
+       #mpw-bench                   # C CLI Master Password benchmark utility (needs: mpw_sodium).
+       #mpw-tests                   # C Master Password algorithm test suite (needs: mpw_sodium, mpw_xml).
     )
 fi
 
 # Optional features.
-mpw_color=${mpw_color:-1}   # Colorized Identicon, requires libncurses-dev.
-mpw_sodium=${mpw_sodium:-1} # Use libsodium if available instead of cperciva's libscrypt.
-mpw_json=${mpw_json:-1}     # Support for JSON-based user configuration format.
+mpw_sodium=${mpw_sodium:-1} # Implement crypto functions with sodium (depends on libsodium).
+mpw_json=${mpw_json:-1}     # Support JSON-based user configuration format (depends on libjson-c).
+mpw_color=${mpw_color:-1}   # Colorized identicon (depends on libncurses).
+mpw_xml=${mpw_xml:-1}       # XML parsing (depends on libxml2).
 
 # Default build flags.
 cflags=( -O3 $CFLAGS )
@@ -50,7 +44,100 @@ ldflags=( $LDFLAGS )
 if { mpw_version=$(git describe --match '*-cli*' --long --dirty --broken) || mpw_version=$(<VERSION); } 2>/dev/null; then
     cflags+=( -D"MP_VERSION=$mpw_version" )
 fi
-echo 2>&1 "Building mpw version ${mpw_version:-<unknown>}..."
+echo 2>&1 "Current mpw source version ${mpw_version:-<unknown>}..."
+
+
+### TARGET: MPW
+mpw() {
+    # dependencies
+    use_mpw_sodium
+    use_mpw_color
+    use_mpw_json
+
+    # target
+    cflags=(
+        "${cflags[@]}"
+
+        # library paths
+        -I"lib/include"
+        # mpw paths
+        -I"core" -I"cli"
+    )
+    local ldflags=(
+        "${ldflags[@]}"
+    )
+
+    # build
+    cc "${cflags[@]}" "$@"                  -c core/base64.c            -o core/base64.o
+    cc "${cflags[@]}" "$@"                  -c core/mpw-algorithm.c     -o core/mpw-algorithm.o
+    cc "${cflags[@]}" "$@"                  -c core/mpw-types.c         -o core/mpw-types.o
+    cc "${cflags[@]}" "$@"                  -c core/mpw-util.c          -o core/mpw-util.o
+    cc "${cflags[@]}" "$@"                  -c core/mpw-marshall-util.c -o core/mpw-marshall-util.o
+    cc "${cflags[@]}" "$@"                  -c core/mpw-marshall.c      -o core/mpw-marshall.o
+    cc "${cflags[@]}" "$@" "core/base64.o" "core/mpw-algorithm.o" "core/mpw-types.o" "core/mpw-util.o" "core/mpw-marshall-util.o" "core/mpw-marshall.o" \
+       "${ldflags[@]}"     "cli/mpw-cli.c" -o "mpw"
+    echo "done!  Now run ./install or use ./$_"
+}
+
+
+### TARGET: MPW-BENCH
+mpw-bench() {
+    # dependencies
+    use_mpw_sodium
+
+    # target
+    cflags=(
+        "${cflags[@]}"
+
+        # library paths
+        -I"lib/include"
+        # mpw paths
+        -I"core" -I"cli"
+    )
+    local ldflags=(
+        "${ldflags[@]}"
+    )
+
+    # build
+    cc "${cflags[@]}" "$@"                  -c core/base64.c        -o core/base64.o
+    cc "${cflags[@]}" "$@"                  -c core/mpw-algorithm.c -o core/mpw-algorithm.o
+    cc "${cflags[@]}" "$@"                  -c core/mpw-types.c     -o core/mpw-types.o
+    cc "${cflags[@]}" "$@"                  -c core/mpw-util.c      -o core/mpw-util.o
+    cc "${cflags[@]}" "$@" "core/base64.o" "core/mpw-algorithm.o" "core/mpw-types.o" "core/mpw-util.o" \
+       "${ldflags[@]}"     "cli/mpw-bench.c" -o "mpw-bench"
+    echo "done!  Now use ./$_"
+}
+
+
+### TARGET: MPW-TESTS
+mpw-tests() {
+    # dependencies
+    use_mpw_xml
+    use_mpw_sodium
+
+    # target
+    cflags=(
+        "${cflags[@]}"
+
+        # library paths
+        -I"lib/include"
+        # mpw paths
+        -I"core" -I"cli"
+    )
+    local ldflags=(
+        "${ldflags[@]}"
+    )
+
+    # build
+    cc "${cflags[@]}" "$@"                  -c core/base64.c        -o core/base64.o
+    cc "${cflags[@]}" "$@"                  -c core/mpw-algorithm.c -o core/mpw-algorithm.o
+    cc "${cflags[@]}" "$@"                  -c core/mpw-types.c     -o core/mpw-types.o
+    cc "${cflags[@]}" "$@"                  -c core/mpw-util.c      -o core/mpw-util.o
+    cc "${cflags[@]}" "$@"                  -c cli/mpw-tests-util.c -o cli/mpw-tests-util.o
+    cc "${cflags[@]}" "$@" "core/base64.o" "core/mpw-algorithm.o" "core/mpw-types.o" "core/mpw-util.o" \
+       "${ldflags[@]}"     "cli/mpw-tests-util.o" "cli/mpw-tests.c" -o "mpw-tests"
+    echo "done!  Now use ./$_"
+}
 
 
 ### TOOLS
@@ -70,318 +157,58 @@ cc() {
     fi
 }
 
-digest() {
-    openssl sha -sha256 -binary < "$1" | od -t x1 -An -v | tr -d '[:space:]'
-}
-fetch() {
-    if hash wget 2>/dev/null; then
-        wget -O "${1##*/}" "$1"
-    elif hash curl 2>/dev/null; then
-        curl "$1" > "${1##*/}"
-    fi
-}
-unpack() {
-    printf 'Verifying package: %s, against digest: %s...' "$1" "$2"
-    [[ $(digest "$1") = $2 ]] || {
-        printf ' mismatch!\n'
-        echo 2>&1 "Downloaded package doesn't match digest."
-        exit 1
-    }
-    printf ' OK!\n'
 
-    if [[ $1 = *.tar.gz || $1 = *.tgz ]]; then
-        tar -xvzf "$1"
+### DEPENDENCIES
+use_mpw_sodium() {
+    ! (( mpw_sodium )) && return
 
-    elif [[ $1 = *.tar.bz2 || $1 = *.tbz2 ]]; then
-        tar -xvjf "$1"
-
-    elif [[ $1 = *.tar ]]; then
-        tar -xvf "$1"
+    if ! haslib sodium; then
+        echo >&2 "WARNING: mpw_sodium enabled but missing sodium library, will disable mpw_sodium."
 
     else
-        echo 2>&1 "Don't know how to unpack: $1"
-    fi
-
-    files=( * )
-    if [[ -d $files ]] && (( ${#files[@]} == 1 )); then
-        mv "$files"/* .
-        rmdir "$files"
+        echo >&2 "Enabled mpw_sodium (libsodium)."
+        cflags+=( -D"MPW_SODIUM=1" ) ldflags+=( -l"sodium" )
     fi
 }
+use_mpw_color() {
+    ! (( mpw_color )) && return
 
-fetchSource() (
-    local name=${PWD##*/}
-    source .source
-
-    if [[ -e .unpacked ]]; then
-        true
-
-    elif [[ $pkg && -e "${pkg##*/}" ]]; then
-        [[ -e src ]] || {
-            echo
-            echo "Unpacking: $name, using package..."
-            ( mkdir src && cd src && unpack "../${pkg##*/}" "$pkg_sha256" )
-            touch .unpacked
-        }
-
-    elif [[ $git ]] && hash git 2>/dev/null; then
-        [[ -e .git ]] || {
-            echo
-            echo "Fetching: $name, using git..."
-            git clone "$git" src
-            touch .unpacked
-        }
-
-    elif [[ $svn ]] && hash git 2>/dev/null && [[ -x "$(git --exec-path)/git-svn" ]]; then
-        [[ -e .git ]] || {
-            echo
-            echo "Fetching: $name, using git-svn..."
-            git svn clone --prefix=origin/ --stdlayout "$svn" src
-            touch .unpacked
-        }
-
-    elif [[ $svn ]] && hash svn 2>/dev/null; then
-        [[ -e .svn ]] || {
-            echo
-            echo "Fetching: $name, using svn..."
-            svn checkout "$svn/trunk" src
-            touch .unpacked
-        }
-
-    elif [[ $pkg ]]; then
-        [[ -e src ]] || {
-            echo
-            echo "Fetching: $name, using package..."
-            fetch "$pkg"
-            ( mkdir src && cd src && unpack "../${pkg##*/}" "$pkg_sha256" )
-            touch .unpacked
-        }
+    if ! haslib curses; then
+        echo >&2 "WARNING: mpw_color enabled but missing curses library, will disable mpw_color."
 
     else
-        echo >&2 "error: Missing git-svn or svn."
-        echo >&2 "error: Please install either or manually check out the sources"
-        echo >&2 "error: from: $home"
-        echo >&2 "error: into: $PWD/src"
-        exit 1
+        echo >&2 "Enabled mpw_color (libcurses)."
+        cflags+=( -D"MPW_COLOR=1" ) ldflags+=( -l"curses" )
     fi
+}
+use_mpw_json() {
+    ! (( mpw_json )) && return
 
-    if [[ ! -e .patched ]] && (( ${#patches[@]} )); then
-        pushd src
-        for patch in "${patches[@]}"; do
-            echo
-            echo "Patching: $name, for $patch..."
-            patch -p0 < "../$patch.patch"
-        done
-        popd
-        touch .patched
-    fi
-)
-depend() {
-    local name=$1
+    if ! haslib json-c; then
+        echo >&2 "WARNING: mpw_json enabled but missing json-c library, will disable mpw_json."
 
-    echo
-    echo "Checking dependency: $name..."
-    [[ -e "lib/include/$name" ]] && return
-
-    pushd "lib/$name"
-    fetchSource
-    pushd "src"
-
-    echo
-    echo "Configuring dependency: $name..."
-    if [[ -e configure.ac ]]; then
-        if [[ ! -e configure ]]; then
-            # create configure using autotools.
-            if ! hash autoreconf; then
-                echo >&2 "Need autoconf to build $name.  Please install autoconf."
-                exit 1
-            fi
-
-            autoreconf --verbose --install --symlink --force 2>&1 | sed 's/^\([^:]*\):[0-9]\{1,\}: /\1: /'
-        fi
-    fi
-
-    if [[ -e configure ]]; then
-        CFLAGS="$CFLAGS ${cflags[*]}" LDFLAGS="$LDFLAGS ${ldflags[*]}" ./configure
-    fi
-
-    echo
-    echo "Building dependency: $name..."
-    if [[ -e Makefile ]]; then
-        if ! hash make; then
-            echo >&2 "Need make to build $name.  Please install GNU make."
-            exit 1
-        fi
-
-        CFLAGS="$CFLAGS ${cflags[*]}" LDFLAGS="$LDFLAGS ${ldflags[*]}" make
-        install -d "../../include/$name/"
-        find . -name '*.h' -exec install -m 444 {} "../../include/$name/" \;
     else
-        echo >&2 "error: Don't know how to build: $name"
-        exit 1
+        echo >&2 "Enabled mpw_json (libjson-c)."
+        cflags+=( -D"MPW_JSON=1" ) ldflags+=( -l"json-c" )
     fi
-    popd
-    popd
 }
-depend_scrypt() {
-    if (( mpw_sodium )); then
-        if haslib sodium; then
-            cflags+=( -D"HAS_SODIUM=1" ) ldflags+=( -l"sodium" )
-            return
-        else
-            echo >&2 "mpw_sodium enabled but missing sodium library."
-        fi
+use_mpw_xml() {
+    ! (( mpw_xml )) && return
+
+    if ! haslib xml2; then
+        echo >&2 "WARNING: mpw_xml enabled but missing xml2 library, will disable mpw_xml."
+
+    else
+        echo >&2 "Enabled mpw_xml (libxml2)."
+        cflags+=( -D"MPW_XML=1" -I"/usr/include/libxml2" -I"/usr/local/include/libxml2" ) ldflags+=( -l"xml2" )
     fi
-
-    # Homebrew - openssl for scrypt
-    if hash brew 2>/dev/null; then
-        opensslPath=$(brew --prefix openssl)
-        cflags+=( -I"$opensslPath/include" )
-        ldflags+=( -L"$opensslPath/lib" )
-    fi
-
-    depend scrypt
-    cflags+=( -D"HAS_CPERCIVA=1" )
-    ldflags+=(
-        -L"lib/scrypt/src"
-
-        "lib/scrypt/src/libcperciva/"*/*.o
-        "lib/scrypt/src/lib/crypto/"*.o
-    )
 }
 
 
-### MPW
-mpw() {
-    # dependencies
-    depend_scrypt
-    if (( mpw_color )); then
-        if haslib curses; then
-            cflags+=( -D"MPW_COLOR=1" ) ldflags+=( -l"curses" )
-        else
-            echo >&2 "mpw_color enabled but missing curses library."
-        fi
-    fi
-    if (( mpw_json )); then
-        if haslib json-c; then
-            cflags+=( -D"MPW_JSON=1" ) ldflags+=( -l"json-c" )
-        else
-            echo >&2 "mpw_json enabled but missing json-c library."
-        fi
-    fi
-
-    # target
-    echo
-    echo "Building target: $target..."
-    local cflags=(
-        "${cflags[@]}"
-
-        # library paths
-        -I"lib/include"
-        # mpw paths
-        -I"core" -I"cli"
-    )
-    local ldflags=(
-        "${ldflags[@]}"
-
-        # link libraries
-        -l"crypto"
-    )
-
-    # build
-    cc "${cflags[@]}" "$@"                  -c core/base64.c            -o core/base64.o
-    cc "${cflags[@]}" "$@"                  -c core/mpw-algorithm.c     -o core/mpw-algorithm.o
-    cc "${cflags[@]}" "$@"                  -c core/mpw-types.c         -o core/mpw-types.o
-    cc "${cflags[@]}" "$@"                  -c core/mpw-util.c          -o core/mpw-util.o
-    cc "${cflags[@]}" "$@"                  -c core/mpw-marshall-util.c -o core/mpw-marshall-util.o
-    cc "${cflags[@]}" "$@"                  -c core/mpw-marshall.c      -o core/mpw-marshall.o
-    cc "${cflags[@]}" "$@" "core/base64.o" "core/mpw-algorithm.o" "core/mpw-types.o" "core/mpw-util.o" "core/mpw-marshall-util.o" "core/mpw-marshall.o" \
-       "${ldflags[@]}"     "cli/mpw-cli.c" -o "mpw"
-    echo "done!  Now run ./install or use ./$_"
-}
-
-
-### MPW-BENCH
-mpw-bench() {
-    # dependencies
-    depend_scrypt
-    depend bcrypt
-
-    # target
-    echo
-    echo "Building target: $target..."
-    local cflags=(
-        "${cflags[@]}"
-
-        # library paths
-        -I"lib/include"
-        # mpw paths
-        -I"core" -I"cli"
-    )
-    local ldflags=(
-        "${ldflags[@]}"
-
-        # bcrypt
-        "lib/bcrypt/src/crypt_blowfish.o"
-        "lib/bcrypt/src/crypt_gensalt.o"
-        "lib/bcrypt/src/wrapper.o"
-        "lib/bcrypt/src/x86.o"
-        # library paths
-        -L"lib/bcrypt/src"
-        # link libraries
-        -l"crypto"
-    )
-
-    # build
-    cc "${cflags[@]}" "$@"                  -c core/base64.c        -o core/base64.o
-    cc "${cflags[@]}" "$@"                  -c core/mpw-algorithm.c -o core/mpw-algorithm.o
-    cc "${cflags[@]}" "$@"                  -c core/mpw-types.c     -o core/mpw-types.o
-    cc "${cflags[@]}" "$@"                  -c core/mpw-util.c      -o core/mpw-util.o
-    cc "${cflags[@]}" "$@" "core/base64.o" "core/mpw-algorithm.o" "core/mpw-types.o" "core/mpw-util.o" \
-       "${ldflags[@]}"     "cli/mpw-bench.c" -o "mpw-bench"
-    echo "done!  Now use ./$_"
-}
-
-
-### MPW-TESTS
-mpw-tests() {
-    # dependencies
-    depend_scrypt
-
-    # target
-    echo
-    echo "Building target: $target..."
-    local cflags=(
-        "${cflags[@]}"
-
-        # library paths
-        -I"lib/include"
-        -I"/usr/include/libxml2"
-        -I"/usr/local/include/libxml2"
-        # mpw paths
-        -I"core" -I"cli"
-    )
-    local ldflags=(
-        "${ldflags[@]}"
-
-        # link libraries
-        -l"crypto" -l"xml2"
-    )
-
-    # build
-    cc "${cflags[@]}" "$@"                  -c core/base64.c        -o core/base64.o
-    cc "${cflags[@]}" "$@"                  -c core/mpw-algorithm.c -o core/mpw-algorithm.o
-    cc "${cflags[@]}" "$@"                  -c core/mpw-types.c     -o core/mpw-types.o
-    cc "${cflags[@]}" "$@"                  -c core/mpw-util.c      -o core/mpw-util.o
-    cc "${cflags[@]}" "$@"                  -c cli/mpw-tests-util.c -o cli/mpw-tests-util.o
-    cc "${cflags[@]}" "$@" "core/base64.o" "core/mpw-algorithm.o" "core/mpw-types.o" "core/mpw-util.o" \
-       "${ldflags[@]}"     "cli/mpw-tests-util.o" "cli/mpw-tests.c" -o "mpw-tests"
-    echo "done!  Now use ./$_"
-}
-
-
-### BUILD
+### BUILD TARGETS
 echo "Will build targets: ${targets[*]}..."
 for target in "${targets[@]}"; do
-    "$target" "$@"
+    echo
+    echo "Building target: $target..."
+    ( "$target" "$@" )
 done
