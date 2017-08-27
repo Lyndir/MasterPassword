@@ -357,15 +357,28 @@ const char *mpw_str(const char *format, ...) {
 const char *mpw_vstr(const char *format, va_list args) {
 
     // TODO: We should find a way to get rid of this shared storage medium.
-    // FIXME: Not thread-safe
+    // TODO: Not thread-safe
     static char *str_str;
-    return vasprintf( &str_str, format, args ) < 0? NULL: str_str;
+    static size_t str_str_max;
+    if (!str_str && !(str_str = calloc( str_str_max = 1, 1 )))
+        return NULL;
+
+    do {
+        int len = vsnprintf( &str_str, str_str_max, format, args );
+        if (len < str_str_max)
+            break;
+
+        if (!mpw_realloc( &str_str, &str_str_max, len - str_str_max + 1 ))
+            return NULL;
+    } while (true);
+
+    return str_str;
 }
 
 const char *mpw_hex(const void *buf, size_t length) {
 
     // TODO: We should find a way to get rid of this shared storage medium.
-    // FIXME: Not thread-safe
+    // TODO: Not thread-safe
     static char **mpw_hex_buf;
     static unsigned int mpw_hex_buf_i;
 
@@ -435,6 +448,7 @@ static char *mpw_tputs(const char *str, int affcnt) {
 
     return result;
 }
+
 #endif
 
 const char *mpw_identicon(const char *fullName, const char *masterPassword) {
