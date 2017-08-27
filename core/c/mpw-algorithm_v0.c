@@ -28,22 +28,22 @@
 #define MP_p                2U
 
 // Algorithm version helpers.
-static const char *mpw_templateForType_v0(MPResultType type, uint16_t seedByte) {
+static const char *mpw_templateForType_v0(MPResultType type, uint16_t templateIndex) {
 
     size_t count = 0;
     const char **templates = mpw_templatesForType( type, &count );
-    char const *template = templates && count? templates[seedByte % count]: NULL;
+    char const *template = templates && count? templates[templateIndex % count]: NULL;
     free( templates );
     return template;
 }
 
-static const char mpw_characterFromClass_v0(char characterClass, uint16_t seedByte) {
+static const char mpw_characterFromClass_v0(char characterClass, uint16_t classIndex) {
 
     const char *classCharacters = mpw_charactersInClass( characterClass );
     if (!classCharacters)
         return '\0';
 
-    return classCharacters[seedByte % strlen( classCharacters )];
+    return classCharacters[classIndex % strlen( classCharacters )];
 }
 
 // Algorithm version overrides.
@@ -55,11 +55,11 @@ static MPMasterKey mpw_masterKey_v0(
 
     // Calculate the master key salt.
     trc( "masterKeySalt: keyScope=%s | #fullName=%s | fullName=%s\n",
-            keyScope, mpw_hex_l( htonl( mpw_utf8_strlen( fullName ) ) ), fullName );
+            keyScope, mpw_hex_l( mpw_utf8_strlen( fullName ) ), fullName );
     size_t masterKeySaltSize = 0;
     uint8_t *masterKeySalt = NULL;
     mpw_push_string( &masterKeySalt, &masterKeySaltSize, keyScope );
-    mpw_push_int( &masterKeySalt, &masterKeySaltSize, htonl( mpw_utf8_strlen( fullName ) ) );
+    mpw_push_int( &masterKeySalt, &masterKeySaltSize, mpw_utf8_strlen( fullName ) );
     mpw_push_string( &masterKeySalt, &masterKeySaltSize, fullName );
     if (!masterKeySalt) {
         err( "Could not allocate master key salt: %s\n", strerror( errno ) );
@@ -91,16 +91,16 @@ static MPSiteKey mpw_siteKey_v0(
 
     // Calculate the site seed.
     trc( "siteSalt: keyScope=%s | #siteName=%s | siteName=%s | siteCounter=%s | #keyContext=%s | keyContext=%s\n",
-            keyScope, mpw_hex_l( htonl( mpw_utf8_strlen( siteName ) ) ), siteName, mpw_hex_l( htonl( siteCounter ) ),
-            keyContext? mpw_hex_l( htonl( mpw_utf8_strlen( keyContext ) ) ): NULL, keyContext );
+            keyScope, mpw_hex_l( mpw_utf8_strlen( siteName ) ), siteName, mpw_hex_l( siteCounter ),
+            keyContext? mpw_hex_l( mpw_utf8_strlen( keyContext ) ): NULL, keyContext );
     size_t siteSaltSize = 0;
     uint8_t *siteSalt = NULL;
     mpw_push_string( &siteSalt, &siteSaltSize, keyScope );
-    mpw_push_int( &siteSalt, &siteSaltSize, htonl( mpw_utf8_strlen( siteName ) ) );
+    mpw_push_int( &siteSalt, &siteSaltSize, mpw_utf8_strlen( siteName ) );
     mpw_push_string( &siteSalt, &siteSaltSize, siteName );
-    mpw_push_int( &siteSalt, &siteSaltSize, htonl( siteCounter ) );
+    mpw_push_int( &siteSalt, &siteSaltSize, siteCounter );
     if (keyContext) {
-        mpw_push_int( &siteSalt, &siteSaltSize, htonl( mpw_utf8_strlen( keyContext ) ) );
+        mpw_push_int( &siteSalt, &siteSaltSize, mpw_utf8_strlen( keyContext ) );
         mpw_push_string( &siteSalt, &siteSaltSize, keyContext );
     }
     if (!siteSalt) {
@@ -127,8 +127,10 @@ static const char *mpw_sitePasswordFromTemplate_v0(
 
     // Determine the template.
     const char *_siteKey = (const char *)siteKey;
-    const char *template = mpw_templateForType_v0( resultType, htons( _siteKey[0] ) );
-    trc( "template: %u => %s\n", htons( _siteKey[0] ), template );
+    uint16_t seedByte;
+    mpw_uint16( (uint16_t)_siteKey[0], (uint8_t *)&seedByte );
+    const char *template = mpw_templateForType_v0( resultType, seedByte );
+    trc( "template: %u => %s\n", seedByte, template );
     if (!template)
         return NULL;
     if (strlen( template ) > MPSiteKeySize) {
@@ -137,11 +139,12 @@ static const char *mpw_sitePasswordFromTemplate_v0(
     }
 
     // Encode the password from the seed using the template.
-    char *sitePassword = calloc( strlen( template ) + 1, sizeof( char ) );
+    char *const sitePassword = calloc( strlen( template ) + 1, sizeof( char ) );
     for (size_t c = 0; c < strlen( template ); ++c) {
-        sitePassword[c] = mpw_characterFromClass_v0( template[c], htons( _siteKey[c + 1] ) );
+        mpw_uint16( (uint16_t)_siteKey[c + 1], (uint8_t *)&seedByte );
+        sitePassword[c] = mpw_characterFromClass_v0( template[c], seedByte );
         trc( "  - class: %c, index: %5u (0x%02hX) => character: %c\n",
-                template[c], htons( _siteKey[c + 1] ), htons( _siteKey[c + 1] ), sitePassword[c] );
+                template[c], seedByte, seedByte, sitePassword[c] );
     }
     trc( "  => password: %s\n", sitePassword );
 

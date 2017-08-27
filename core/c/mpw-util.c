@@ -39,6 +39,32 @@
 int mpw_verbosity = inf_level;
 #endif
 
+void mpw_uint16(const uint16_t number, uint8_t buf[2]) {
+
+    buf[0] = (uint8_t)((number >> 8L) & UINT8_MAX);
+    buf[1] = (uint8_t)((number >> 0L) & UINT8_MAX);
+}
+
+void mpw_uint32(const uint32_t number, uint8_t buf[4]) {
+
+    buf[0] = (uint8_t)((number >> 24) & UINT8_MAX);
+    buf[1] = (uint8_t)((number >> 16) & UINT8_MAX);
+    buf[2] = (uint8_t)((number >> 8L) & UINT8_MAX);
+    buf[3] = (uint8_t)((number >> 0L) & UINT8_MAX);
+}
+
+void mpw_uint64(const uint64_t number, uint8_t buf[8]) {
+
+    buf[0] = (uint8_t)((number >> 56) & UINT8_MAX);
+    buf[1] = (uint8_t)((number >> 48) & UINT8_MAX);
+    buf[2] = (uint8_t)((number >> 40) & UINT8_MAX);
+    buf[3] = (uint8_t)((number >> 32) & UINT8_MAX);
+    buf[4] = (uint8_t)((number >> 24) & UINT8_MAX);
+    buf[5] = (uint8_t)((number >> 16) & UINT8_MAX);
+    buf[6] = (uint8_t)((number >> 8L) & UINT8_MAX);
+    buf[7] = (uint8_t)((number >> 0L) & UINT8_MAX);
+}
+
 bool mpw_push_buf(uint8_t **buffer, size_t *bufferSize, const void *pushBuffer, const size_t pushSize) {
 
     if (!buffer || !bufferSize || !pushBuffer || !pushSize)
@@ -87,7 +113,9 @@ bool mpw_string_pushf(char **string, const char *pushFormat, ...) {
 
 bool mpw_push_int(uint8_t **buffer, size_t *bufferSize, const uint32_t pushInt) {
 
-    return mpw_push_buf( buffer, bufferSize, &pushInt, sizeof( pushInt ) );
+    uint8_t pushBuf[4 /* 32 / 8 */];
+    mpw_uint32( pushInt, pushBuf );
+    return mpw_push_buf( buffer, bufferSize, &pushBuf, sizeof( pushBuf ) );
 }
 
 bool __mpw_realloc(const void **buffer, size_t *bufferSize, const size_t deltaSize) {
@@ -188,10 +216,8 @@ uint8_t const *mpw_kdf_blake2b(const size_t subkeySize, const uint8_t *key, cons
 
     uint8_t saltBuf[crypto_generichash_blake2b_SALTBYTES];
     bzero( saltBuf, sizeof saltBuf );
-    if (id) {
-        uint64_t id_n = htonll( id );
-        memcpy( saltBuf, &id_n, sizeof id_n );
-    }
+    if (id)
+        mpw_uint64( id, saltBuf );
 
     uint8_t personalBuf[crypto_generichash_blake2b_PERSONALBYTES];
     bzero( personalBuf, sizeof saltBuf );
@@ -349,7 +375,12 @@ const char *mpw_hex(const void *buf, size_t length) {
 
 const char *mpw_hex_l(uint32_t number) {
 
-    return mpw_hex( &number, sizeof( number ) );
+    uint8_t buf[4 /* 32 / 8 */];
+    buf[0] = (uint8_t)((number >> 24) & UINT8_MAX);
+    buf[1] = (uint8_t)((number >> 16) & UINT8_MAX);
+    buf[2] = (uint8_t)((number >> 8L) & UINT8_MAX);
+    buf[3] = (uint8_t)((number >> 0L) & UINT8_MAX);
+    return mpw_hex( &buf, sizeof( buf ) );
 }
 
 #ifdef COLOR

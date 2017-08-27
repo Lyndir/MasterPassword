@@ -142,7 +142,7 @@ const char **mpw_templatesForType(MPResultType type, size_t *count);
  * @return An internal string that contains the password encoding template of the given type
  *         for a seed that starts with the given byte.
  */
-const char *mpw_templateForType(MPResultType type, uint8_t seedByte);
+const char *mpw_templateForType(MPResultType type, uint8_t templateIndex);
 
 /**
  * @return An internal string that contains all the characters that occur in the given character class.

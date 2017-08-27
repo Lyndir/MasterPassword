@@ -170,11 +170,11 @@ const char **mpw_templatesForType(MPResultType type, size_t *count) {
     }
 }
 
-const char *mpw_templateForType(MPResultType type, uint8_t seedByte) {
+const char *mpw_templateForType(MPResultType type, uint8_t templateIndex) {
 
     size_t count = 0;
     const char **templates = mpw_templatesForType( type, &count );
-    char const *template = templates && count? templates[seedByte % count]: NULL;
+    char const *template = templates && count? templates[templateIndex % count]: NULL;
     free( templates );
 
     return template;

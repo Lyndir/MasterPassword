@@ -94,6 +94,11 @@ extern int mpw_verbosity;
 
 //// Buffers and memory.
 
+/** Write a number to a byte buffer using mpw's endianness (big/network endian). */
+void mpw_uint16(const uint16_t number, uint8_t buf[2]);
+void mpw_uint32(const uint32_t number, uint8_t buf[4]);
+void mpw_uint64(const uint64_t number, uint8_t buf[8]);
+
 /** Allocate a new array of _type, assign its element count to _count if not NULL and populate it with the varargs. */
 #define mpw_alloc_array(_count, _type, ...) ({ \
     _type stackElements[] = { __VA_ARGS__ }; \
