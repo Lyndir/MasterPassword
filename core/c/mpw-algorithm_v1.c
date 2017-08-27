@@ -17,9 +17,7 @@
 //==============================================================================
 
 #include <string.h>
-#include <errno.h>
 
-#include "mpw-types.h"
 #include "mpw-util.h"
 
 #define MP_N                32768LU

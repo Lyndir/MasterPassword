@@ -19,7 +19,6 @@
 #include <string.h>
 #include <errno.h>
 
-#include "mpw-types.h"
 #include "mpw-util.h"
 #include "base64.h"
 
@@ -55,11 +54,11 @@ static MPMasterKey mpw_masterKey_v0(
 
     // Calculate the master key salt.
     trc( "masterKeySalt: keyScope=%s | #fullName=%s | fullName=%s\n",
-            keyScope, mpw_hex_l( mpw_utf8_strlen( fullName ) ), fullName );
+            keyScope, mpw_hex_l( (uint32_t)mpw_utf8_strlen( fullName ) ), fullName );
     size_t masterKeySaltSize = 0;
     uint8_t *masterKeySalt = NULL;
     mpw_push_string( &masterKeySalt, &masterKeySaltSize, keyScope );
-    mpw_push_int( &masterKeySalt, &masterKeySaltSize, mpw_utf8_strlen( fullName ) );
+    mpw_push_int( &masterKeySalt, &masterKeySaltSize, (uint32_t)mpw_utf8_strlen( fullName ) );
     mpw_push_string( &masterKeySalt, &masterKeySaltSize, fullName );
     if (!masterKeySalt) {
         err( "Could not allocate master key salt: %s\n", strerror( errno ) );
@@ -91,16 +90,16 @@ static MPSiteKey mpw_siteKey_v0(
 
     // Calculate the site seed.
     trc( "siteSalt: keyScope=%s | #siteName=%s | siteName=%s | siteCounter=%s | #keyContext=%s | keyContext=%s\n",
-            keyScope, mpw_hex_l( mpw_utf8_strlen( siteName ) ), siteName, mpw_hex_l( siteCounter ),
-            keyContext? mpw_hex_l( mpw_utf8_strlen( keyContext ) ): NULL, keyContext );
+            keyScope, mpw_hex_l( (uint32_t)mpw_utf8_strlen( siteName ) ), siteName, mpw_hex_l( siteCounter ),
+            keyContext? mpw_hex_l( (uint32_t)mpw_utf8_strlen( keyContext ) ): NULL, keyContext );
     size_t siteSaltSize = 0;
     uint8_t *siteSalt = NULL;
     mpw_push_string( &siteSalt, &siteSaltSize, keyScope );
-    mpw_push_int( &siteSalt, &siteSaltSize, mpw_utf8_strlen( siteName ) );
+    mpw_push_int( &siteSalt, &siteSaltSize, (uint32_t)mpw_utf8_strlen( siteName ) );
     mpw_push_string( &siteSalt, &siteSaltSize, siteName );
     mpw_push_int( &siteSalt, &siteSaltSize, siteCounter );
     if (keyContext) {
-        mpw_push_int( &siteSalt, &siteSaltSize, mpw_utf8_strlen( keyContext ) );
+        mpw_push_int( &siteSalt, &siteSaltSize, (uint32_t)mpw_utf8_strlen( keyContext ) );
         mpw_push_string( &siteSalt, &siteSaltSize, keyContext );
     }
     if (!siteSalt) {

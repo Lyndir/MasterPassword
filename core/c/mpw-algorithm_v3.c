@@ -19,7 +19,6 @@
 #include <string.h>
 #include <errno.h>
 
-#include "mpw-types.h"
 #include "mpw-util.h"
 
 #define MP_N                32768LU
@@ -48,11 +47,11 @@ static MPMasterKey mpw_masterKey_v3(
 
     // Calculate the master key salt.
     trc( "masterKeySalt: keyScope=%s | #fullName=%s | fullName=%s\n",
-            keyScope, mpw_hex_l( strlen( fullName ) ), fullName );
+            keyScope, mpw_hex_l( (uint32_t)strlen( fullName ) ), fullName );
     size_t masterKeySaltSize = 0;
     uint8_t *masterKeySalt = NULL;
     mpw_push_string( &masterKeySalt, &masterKeySaltSize, keyScope );
-    mpw_push_int( &masterKeySalt, &masterKeySaltSize, strlen( fullName ) );
+    mpw_push_int( &masterKeySalt, &masterKeySaltSize, (uint32_t)strlen( fullName ) );
     mpw_push_string( &masterKeySalt, &masterKeySaltSize, fullName );
     if (!masterKeySalt) {
         err( "Could not allocate master key salt: %s\n", strerror( errno ) );

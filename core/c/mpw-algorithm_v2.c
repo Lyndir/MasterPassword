@@ -19,7 +19,6 @@
 #include <string.h>
 #include <errno.h>
 
-#include "mpw-types.h"
 #include "mpw-util.h"
 
 #define MP_N                32768LU
@@ -56,16 +55,16 @@ static MPSiteKey mpw_siteKey_v2(
 
     // Calculate the site seed.
     trc( "siteSalt: keyScope=%s | #siteName=%s | siteName=%s | siteCounter=%s | #keyContext=%s | keyContext=%s\n",
-            keyScope, mpw_hex_l( strlen( siteName ) ), siteName, mpw_hex_l( siteCounter ),
-            keyContext? mpw_hex_l( strlen( keyContext ) ): NULL, keyContext );
+            keyScope, mpw_hex_l( (uint32_t)strlen( siteName ) ), siteName, mpw_hex_l( siteCounter ),
+            keyContext? mpw_hex_l( (uint32_t)strlen( keyContext ) ): NULL, keyContext );
     size_t siteSaltSize = 0;
     uint8_t *siteSalt = NULL;
     mpw_push_string( &siteSalt, &siteSaltSize, keyScope );
-    mpw_push_int( &siteSalt, &siteSaltSize, strlen( siteName ) );
+    mpw_push_int( &siteSalt, &siteSaltSize, (uint32_t)strlen( siteName ) );
     mpw_push_string( &siteSalt, &siteSaltSize, siteName );
     mpw_push_int( &siteSalt, &siteSaltSize, siteCounter );
     if (keyContext) {
-        mpw_push_int( &siteSalt, &siteSaltSize, strlen( keyContext ) );
+        mpw_push_int( &siteSalt, &siteSaltSize, (uint32_t)strlen( keyContext ) );
         mpw_push_string( &siteSalt, &siteSaltSize, keyContext );
     }
     if (!siteSalt) {
