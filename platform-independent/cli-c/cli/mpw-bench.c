@@ -13,7 +13,7 @@
 #include <errno.h>
 #include <sys/time.h>
 
-#include <bcrypt/ow-crypt.h>
+#include "bcrypt.c"
 
 #include "mpw-algorithm.h"
 #include "mpw-util.h"
@@ -39,7 +39,7 @@ static const double mpw_showSpeed(struct timeval startTime, const unsigned int i
     const double speed = iterations / elapsed;
 
     fprintf( stderr, " done.  " );
-    fprintf( stdout, "%d %s iterations in %llds %lldµs -> %.2f/s\n", iterations, operation, (long long)dsec, (long long)dusec, speed );
+    fprintf( stdout, "%d %s iterations in %lus %uµs -> %.2f/s\n", iterations, operation, dsec, dusec, speed );
 
     return speed;
 }
@@ -61,7 +61,7 @@ int main(int argc, char *const argv[]) {
     // Start HMAC-SHA-256
     // Similar to phase-two of mpw
     uint8_t *sitePasswordInfo = malloc( 128 );
-    iterations = 3000000;
+    iterations = 4200000; /* tuned to ~10s on dev machine */
     masterKey = mpw_masterKey( fullName, masterPassword, MPAlgorithmVersionCurrent );
     if (!masterKey) {
         ftl( "Could not allocate master key: %s\n", strerror( errno ) );
@@ -79,20 +79,20 @@ int main(int argc, char *const argv[]) {
 
     // Start BCrypt
     // Similar to phase-one of mpw
-    int bcrypt_cost = 9;
-    iterations = 1000;
+    uint8_t bcrypt_rounds = 9;
+    iterations = 170; /* tuned to ~10s on dev machine */
     mpw_getTime( &startTime );
     for (int i = 1; i <= iterations; ++i) {
-        crypt( masterPassword, crypt_gensalt( "$2b$", bcrypt_cost, fullName, strlen( fullName ) ) );
+        bcrypt( masterPassword, bcrypt_gensalt( bcrypt_rounds ) );
 
         if (modff(100.f * i / iterations, &percent) == 0)
-            fprintf( stderr, "\rbcrypt (cost %d): iteration %d / %d (%.0f%%)..", bcrypt_cost, i, iterations, percent );
+            fprintf( stderr, "\rbcrypt (rounds 10^%d): iteration %d / %d (%.0f%%)..", bcrypt_rounds, i, iterations, percent );
     }
-    const double bcrypt9Speed = mpw_showSpeed( startTime, iterations, "bcrypt9" );
+    const double bcrypt9Speed = mpw_showSpeed( startTime, iterations, "bcrypt" );
 
     // Start SCrypt
     // Phase one of mpw
-    iterations = 50;
+    iterations = 50; /* tuned to ~10s on dev machine */
     mpw_getTime( &startTime );
     for (int i = 1; i <= iterations; ++i) {
         free( (void *)mpw_masterKey( fullName, masterPassword, MPAlgorithmVersionCurrent ) );
@@ -104,7 +104,7 @@ int main(int argc, char *const argv[]) {
 
     // Start MPW
     // Both phases of mpw
-    iterations = 50;
+    iterations = 50; /* tuned to ~10s on dev machine */
     mpw_getTime( &startTime );
     for (int i = 1; i <= iterations; ++i) {
         masterKey = mpw_masterKey( fullName, masterPassword, MPAlgorithmVersionCurrent );
@@ -124,9 +124,9 @@ int main(int argc, char *const argv[]) {
 
     // Summarize.
     fprintf( stdout, "\n== SUMMARY ==\nOn this machine,\n" );
-    fprintf( stdout, " - mpw is %f times slower than hmac-sha-256 (reference: 320000 on an MBP Late 2013).\n", hmacSha256Speed / mpwSpeed );
-    fprintf( stdout, " - mpw is %f times slower than bcrypt (cost 9) (reference: 22 on an MBP Late 2013).\n", bcrypt9Speed / mpwSpeed );
-    fprintf( stdout, " - scrypt is %f times slower than bcrypt (cost 9) (reference: 22 on an MBP Late 2013).\n", bcrypt9Speed / scryptSpeed );
+    fprintf( stdout, " - mpw is %f times slower than hmac-sha-256.\n", hmacSha256Speed / mpwSpeed );
+    fprintf( stdout, " - mpw is %f times slower than bcrypt (rounds 10^%d).\n", bcrypt9Speed / mpwSpeed, bcrypt_rounds );
+    fprintf( stdout, " - scrypt is %f times slower than bcrypt (rounds 10^%d).\n", bcrypt9Speed / scryptSpeed, bcrypt_rounds );
 
     return 0;
 }
