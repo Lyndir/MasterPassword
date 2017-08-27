@@ -3096,6 +3096,8 @@
 				OTHER_CFLAGS = (
 					"-DHAS_SODIUM=1",
 					"-DHAS_CPERCIVA=0",
+					"-DMPW_JSON=1",
+					"-DMPW_COLOR=1",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -3113,6 +3115,8 @@
 				OTHER_CFLAGS = (
 					"-DHAS_SODIUM=1",
 					"-DHAS_CPERCIVA=0",
+					"-DMPW_JSON=1",
+					"-DMPW_COLOR=1",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -3130,6 +3134,8 @@
 				OTHER_CFLAGS = (
 					"-DHAS_SODIUM=1",
 					"-DHAS_CPERCIVA=0",
+					"-DMPW_JSON=1",
+					"-DMPW_COLOR=1",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

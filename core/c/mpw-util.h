@@ -181,6 +181,7 @@ uint8_t const *mpw_aes_decrypt(
 /** Compose a formatted string.
   * @return A C-string in a reused buffer, do not free or store it. */
 const char *mpw_str(const char *format, ...);
+const char *mpw_vstr(const char *format, va_list args);
 /** Encode a buffer as a string of hexadecimal characters.
   * @return A C-string in a reused buffer, do not free or store it. */
 const char *mpw_hex(const void *buf, size_t length);

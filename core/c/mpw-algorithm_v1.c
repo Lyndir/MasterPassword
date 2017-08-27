@@ -18,7 +18,6 @@
 
 #include <string.h>
 #include <errno.h>
-#include <arpa/inet.h>
 
 #include "mpw-types.h"
 #include "mpw-util.h"
