@@ -422,10 +422,6 @@
 		DAFE4A4315039824003ABA7C /* PearlBoxView.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFE460F15039823003ABA7C /* PearlBoxView.m */; };
 		DAFE4A4415039824003ABA7C /* PearlGradientView.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE461015039823003ABA7C /* PearlGradientView.h */; };
 		DAFE4A4515039824003ABA7C /* PearlGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFE461115039823003ABA7C /* PearlGradientView.m */; };
-		DAFE4A4615039824003ABA7C /* PearlLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE461215039823003ABA7C /* PearlLayout.h */; };
-		DAFE4A4715039824003ABA7C /* PearlLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFE461315039823003ABA7C /* PearlLayout.m */; };
-		DAFE4A4815039824003ABA7C /* PearlLayoutView.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE461415039823003ABA7C /* PearlLayoutView.h */; };
-		DAFE4A4915039824003ABA7C /* PearlLayoutView.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFE461515039823003ABA7C /* PearlLayoutView.m */; };
 		DAFE4A4A15039824003ABA7C /* PearlMessageView.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE461615039823003ABA7C /* PearlMessageView.h */; };
 		DAFE4A4B15039824003ABA7C /* PearlMessageView.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFE461715039823003ABA7C /* PearlMessageView.m */; };
 		DAFE4A4C15039824003ABA7C /* PearlRootViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE461815039823003ABA7C /* PearlRootViewController.h */; };
@@ -1648,10 +1644,6 @@
 		DAFE460F15039823003ABA7C /* PearlBoxView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlBoxView.m; sourceTree = "<group>"; };
 		DAFE461015039823003ABA7C /* PearlGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlGradientView.h; sourceTree = "<group>"; };
 		DAFE461115039823003ABA7C /* PearlGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlGradientView.m; sourceTree = "<group>"; };
-		DAFE461215039823003ABA7C /* PearlLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlLayout.h; sourceTree = "<group>"; };
-		DAFE461315039823003ABA7C /* PearlLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlLayout.m; sourceTree = "<group>"; };
-		DAFE461415039823003ABA7C /* PearlLayoutView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlLayoutView.h; sourceTree = "<group>"; };
-		DAFE461515039823003ABA7C /* PearlLayoutView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlLayoutView.m; sourceTree = "<group>"; };
 		DAFE461615039823003ABA7C /* PearlMessageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlMessageView.h; sourceTree = "<group>"; };
 		DAFE461715039823003ABA7C /* PearlMessageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlMessageView.m; sourceTree = "<group>"; };
 		DAFE461815039823003ABA7C /* PearlRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlRootViewController.h; sourceTree = "<group>"; };
@@ -3231,10 +3223,6 @@
 				DA32D01819D046E1004F3F0E /* PearlFixedTableView.m */,
 				DAFE461015039823003ABA7C /* PearlGradientView.h */,
 				DAFE461115039823003ABA7C /* PearlGradientView.m */,
-				DAFE461215039823003ABA7C /* PearlLayout.h */,
-				DAFE461315039823003ABA7C /* PearlLayout.m */,
-				DAFE461415039823003ABA7C /* PearlLayoutView.h */,
-				DAFE461515039823003ABA7C /* PearlLayoutView.m */,
 				DAFE461615039823003ABA7C /* PearlMessageView.h */,
 				DAFE461715039823003ABA7C /* PearlMessageView.m */,
 				DACE2F6919BA6A2A0010F92E /* PearlMutableStaticTableViewController.h */,
@@ -3366,8 +3354,6 @@
 				DAFE4A4215039824003ABA7C /* PearlBoxView.h in Headers */,
 				DAEFB01F19BCBD9E00525079 /* UIView+LayoutGone.h in Headers */,
 				DAFE4A4415039824003ABA7C /* PearlGradientView.h in Headers */,
-				DAFE4A4615039824003ABA7C /* PearlLayout.h in Headers */,
-				DAFE4A4815039824003ABA7C /* PearlLayoutView.h in Headers */,
 				DAFE4A4A15039824003ABA7C /* PearlMessageView.h in Headers */,
 				DACE2F6619BA6A0A0010F92E /* PearlProfiler.h in Headers */,
 				DAFE4A4C15039824003ABA7C /* PearlRootViewController.h in Headers */,
@@ -4119,9 +4105,7 @@
 				DAFE4A4115039824003ABA7C /* PearlArrayTVC.m in Sources */,
 				DAFE4A4315039824003ABA7C /* PearlBoxView.m in Sources */,
 				DAFE4A4515039824003ABA7C /* PearlGradientView.m in Sources */,
-				DAFE4A4715039824003ABA7C /* PearlLayout.m in Sources */,
 				DA250A19195665A100AC23F1 /* UICollectionReusableView+PearlDequeue.m in Sources */,
-				DAFE4A4915039824003ABA7C /* PearlLayoutView.m in Sources */,
 				DAE2726319CE9CB3007C5262 /* UITableViewCell+PearlDeque.m in Sources */,
 				DAFE4A4B15039824003ABA7C /* PearlMessageView.m in Sources */,
 				DACE2F6519BA6A0A0010F92E /* PearlProfiler.m in Sources */,
