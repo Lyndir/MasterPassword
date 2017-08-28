@@ -139,34 +139,41 @@ static const char *mpw_getpass(const char *prompt) {
 static const char *mpw_path(const char *prefix, const char *extension) {
 
     // Resolve user's home directory.
-    const char *homedir = NULL;
-    if (!homedir)
-        homedir = getenv( "HOME" );
-    if (!homedir)
-        homedir = getenv( "USERPROFILE" );
-    if (!homedir) {
-        const char *homedrive = getenv( "HOMEDRIVE" ), *homepath = getenv( "HOMEPATH" );
-        if (homedrive && homepath)
-            homedir = mpw_str( "%s%s", homedrive, homepath );
+    char *homeDir = NULL;
+    if (!homeDir)
+        if ((homeDir = getenv( "HOME" )))
+            homeDir = strdup( homeDir );
+    if (!homeDir)
+        if ((homeDir = getenv( "USERPROFILE" )))
+            homeDir = strdup( homeDir );
+    if (!homeDir) {
+        const char *homeDrive = getenv( "HOMEDRIVE" ), *homePath = getenv( "HOMEPATH" );
+        if (homeDrive && homePath)
+            homeDir = strdup( mpw_str( "%s%s", homeDrive, homePath ) );
     }
-    if (!homedir) {
+    if (!homeDir) {
         struct passwd *passwd = getpwuid( getuid() );
         if (passwd)
-            homedir = passwd->pw_dir;
+            homeDir = strdup( passwd->pw_dir );
     }
-    if (!homedir)
-        homedir = getcwd( NULL, 0 );
+    if (!homeDir)
+        homeDir = getcwd( NULL, 0 );
 
     // Compose filename.
-    char *path = NULL;
-    asprintf( &path, "%s.%s", prefix, extension );
+    char *path = strdup( mpw_str( "%s.%s", prefix, extension ) );
 
     // This is a filename, remove all potential directory separators.
     for (char *slash; (slash = strstr( path, "/" )); *slash = '_');
 
     // Compose pathname.
-    if (homedir)
-        asprintf( &path, "%s/.mpw.d/%s", homedir, path );
+    if (homeDir) {
+        const char *homePath = mpw_str( "%s/.mpw.d/%s", homeDir, path );
+        free( homeDir );
+        free( path );
+
+        if (homePath)
+            path = strdup( homePath );
+    }
 
     return path;
 }
