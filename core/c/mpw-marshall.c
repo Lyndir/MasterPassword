@@ -600,7 +600,6 @@ static MPMarshalledUser *mpw_marshall_read_flat(
                 if (siteLoginName && strlen( siteLoginName ))
                     site->loginContent = mpw_siteState( masterKey, site->name, MPCounterValueInitial,
                             MPKeyPurposeIdentification, NULL, site->loginType, siteLoginName, site->algorithm );
-                dbg( "site->content: %p\n", (void *)site->content );
             }
             else {
                 // Redacted
@@ -608,7 +607,6 @@ static MPMarshalledUser *mpw_marshall_read_flat(
                     site->content = strdup( siteContent );
                 if (siteLoginName && strlen( siteLoginName ))
                     site->loginContent = strdup( siteLoginName );
-                dbg( "site->content: %p\n", (void *)site->content );
             }
         }
         else {
@@ -785,7 +783,6 @@ static MPMarshalledUser *mpw_marshall_read_json(
             if (siteLoginName && strlen( siteLoginName ))
                 site->loginContent = mpw_siteState( masterKey, site->name, MPCounterValueInitial,
                         MPKeyPurposeIdentification, NULL, site->loginType, siteLoginName, site->algorithm );
-            dbg( "site->content: %p\n", (void *)site->content );
         }
         else {
             // Redacted
@@ -793,7 +790,6 @@ static MPMarshalledUser *mpw_marshall_read_json(
                 site->content = strdup( siteContent );
             if (siteLoginName && strlen( siteLoginName ))
                 site->loginContent = strdup( siteLoginName );
-            dbg( "site->content: %p\n", (void *)site->content );
         }
 
         json_object_iter json_site_question;

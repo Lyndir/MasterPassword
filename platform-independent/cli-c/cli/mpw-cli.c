@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <unistd.h>
+#include <sys/stat.h>
 #include <pwd.h>
 #include <stdlib.h>
 #include <string.h>
@@ -135,29 +136,74 @@ static const char *mpw_getpass(const char *prompt) {
     return buf;
 }
 
-static char *mpw_path(const char *prefix, const char *extension) {
+static const char *mpw_path(const char *prefix, const char *extension) {
 
-    char *homedir = NULL;
-    struct passwd *passwd = getpwuid( getuid() );
-    if (passwd)
-        homedir = passwd->pw_dir;
+    // Resolve user's home directory.
+    const char *homedir = NULL;
     if (!homedir)
         homedir = getenv( "HOME" );
     if (!homedir)
+        homedir = getenv( "USERPROFILE" );
+    if (!homedir) {
+        const char *homedrive = getenv( "HOMEDRIVE" ), *homepath = getenv( "HOMEPATH" );
+        if (homedrive && homepath)
+            homedir = mpw_str( "%s%s", homedrive, homepath );
+    }
+    if (!homedir) {
+        struct passwd *passwd = getpwuid( getuid() );
+        if (passwd)
+            homedir = passwd->pw_dir;
+    }
+    if (!homedir)
         homedir = getcwd( NULL, 0 );
 
-    char *mpwPath = NULL;
-    asprintf( &mpwPath, "%s.%s", prefix, extension );
+    // Compose filename.
+    char *path = NULL;
+    asprintf( &path, "%s.%s", prefix, extension );
 
-    char *slash = strstr( mpwPath, "/" );
-    if (slash)
-        *slash = '\0';
+    // This is a filename, remove all potential directory separators.
+    for (char *slash; (slash = strstr( path, "/" )); *slash = '_');
 
-    asprintf( &mpwPath, "%s/.mpw.d/%s", homedir, mpwPath );
-    return mpwPath;
+    // Compose pathname.
+    if (homedir)
+        asprintf( &path, "%s/.mpw.d/%s", homedir, path );
+
+    return path;
 }
 
-int main(int argc, char *const argv[]) {
+static bool mpw_mkdirs(const char *filePath) {
+
+    if (!filePath)
+        return false;
+
+    char *pathEnd = strrchr( filePath, '/' );
+    char *path = pathEnd? strndup( filePath, pathEnd - filePath ): strdup( filePath );
+    if (!path)
+        return false;
+
+    // Save the cwd and for absolute paths, start at the root.
+    char *cwd = getcwd( NULL, 0 );
+    if (*filePath == '/')
+        chdir( "/" );
+
+    // Walk the path.
+    bool success = true;
+    for (char *dirName = strtok( path, "/" ); success && dirName; dirName = strtok( NULL, "/" )) {
+        if (!strlen( dirName ))
+            continue;
+
+        success &= (mkdir( dirName, 0700 ) != ERR || errno == EEXIST) && chdir( dirName ) != ERR;
+    }
+    free( path );
+
+    if (chdir( cwd ) == ERR)
+        wrn( "Could not restore cwd:\n  %s: %s\n", cwd, strerror( errno ) );
+    free( cwd );
+
+    return success;
+}
+
+int main(const int argc, char *const argv[]) {
 
     // CLI defaults.
     bool allowPasswordUpdate = false, sitesFormatFixed = false;
@@ -285,7 +331,7 @@ int main(int argc, char *const argv[]) {
 
     // Find the user's sites file.
     FILE *sitesFile = NULL;
-    char *sitesPath = mpw_path( fullName, mpw_marshall_format_extension( sitesFormat ) );
+    const char *sitesPath = mpw_path( fullName, mpw_marshall_format_extension( sitesFormat ) );
     if (!sitesPath || !(sitesFile = fopen( sitesPath, "r" ))) {
         dbg( "Couldn't open configuration file:\n  %s: %s\n", sitesPath, strerror( errno ) );
 
@@ -586,7 +632,7 @@ int main(int argc, char *const argv[]) {
         sitesPath = mpw_path( user->fullName, mpw_marshall_format_extension( sitesFormat ) );
 
         dbg( "Updating: %s (%s)\n", sitesPath, mpw_nameForFormat( sitesFormat ) );
-        if (!sitesPath || !(sitesFile = fopen( sitesPath, "w" )))
+        if (!sitesPath || !mpw_mkdirs( sitesPath ) || !(sitesFile = fopen( sitesPath, "w" )))
             wrn( "Couldn't create updated configuration file:\n  %s: %s\n", sitesPath, strerror( errno ) );
 
         else {
