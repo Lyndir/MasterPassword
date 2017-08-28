@@ -692,7 +692,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
         ((MPGeneratedSiteEntity *)site).counter = importSite->counter;
     site.algorithm = MPAlgorithmForVersion( importSite->algorithm );
     site.loginName = importSite->loginContent? @(importSite->loginContent): nil;
-    site.loginGenerated = importSite->loginGenerated;
+    site.loginGenerated = importSite->loginType & MPResultTypeClassTemplate;
     site.url = importSite->url? @(importSite->url): nil;
     site.uses = importSite->uses;
     site.lastUsed = [NSDate dateWithTimeIntervalSince1970:importSite->lastUsed];
@@ -725,7 +725,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
                     site.name.UTF8String, site.type, counter, site.algorithm.version );
             exportSite->content = content.UTF8String;
             exportSite->loginContent = site.loginName.UTF8String;
-            exportSite->loginGenerated = site.loginGenerated;
+            exportSite->loginType = site.loginGenerated? MPResultTypeTemplateName: MPResultTypeStatefulPersonal;
             exportSite->url = site.url.UTF8String;
             exportSite->uses = (unsigned int)site.uses;
             exportSite->lastUsed = (time_t)site.lastUsed.timeIntervalSince1970;
@@ -740,7 +740,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
         NSString *mpsites = nil;
         if (export && exportError.type == MPMarshallSuccess)
             mpsites = [NSString stringWithCString:export encoding:NSUTF8StringEncoding];
-        mpw_free_string( export );
+        mpw_free_string( &export );
 
         resultBlock( mpsites, exportError.type == MPMarshallSuccess? nil:
                               [NSError errorWithDomain:MPErrorDomain code:MPErrorMarshallCode userInfo:@{

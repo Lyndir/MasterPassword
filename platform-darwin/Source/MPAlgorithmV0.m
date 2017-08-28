@@ -133,7 +133,7 @@ static NSOperationQueue *_mpwQueue = nil;
             keyData = [NSData dataWithBytes:masterKey length:MPMasterKeySize];
             trc( @"User: %@, password: %@ derives to key ID: %@ (took %0.2fs)", //
                     fullName, masterPassword, [self keyIDForKey:masterKey], -[start timeIntervalSinceNow] );
-            mpw_free( masterKey, MPMasterKeySize );
+            mpw_free( &masterKey, MPMasterKeySize );
         }
     }];
 
@@ -368,7 +368,7 @@ static NSOperationQueue *_mpwQueue = nil;
                 name.UTF8String, counter, purpose, context.UTF8String, type, parameter.UTF8String, [self version] );
         if (resultBytes) {
             result = [NSString stringWithCString:resultBytes encoding:NSUTF8StringEncoding];
-            mpw_free_string( resultBytes );
+            mpw_free_string( &resultBytes );
         }
     }];
 
@@ -396,7 +396,7 @@ static NSOperationQueue *_mpwQueue = nil;
                     MPCounterValueInitial, MPKeyPurposeAuthentication, NULL, site.type, plainText.UTF8String, [self version] );
             if (stateBytes) {
                 state = [[NSString stringWithCString:stateBytes encoding:NSUTF8StringEncoding] decodeBase64];
-                mpw_free_string( stateBytes );
+                mpw_free_string( &stateBytes );
             }
         }];
 
