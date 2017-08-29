@@ -360,11 +360,15 @@ const char *mpw_vstr(const char *format, va_list args) {
     // TODO: Not thread-safe
     static char *str_str;
     static size_t str_str_max;
-    if (!str_str && !(str_str = calloc( str_str_max = 1, 1 )))
+    if (!str_str && !(str_str = calloc( str_str_max = 1, sizeof( char ) )))
         return NULL;
 
     do {
-        size_t len = (size_t)vsnprintf( str_str, str_str_max, format, args );
+        va_list args_attempt;
+        va_copy( args_attempt, args );
+        size_t len = (size_t)vsnprintf( str_str, str_str_max, format, args_attempt );
+        va_end( args_attempt );
+
         if ((int)len < 0)
             return NULL;
         if (len < str_str_max)
