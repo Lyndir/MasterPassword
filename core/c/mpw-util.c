@@ -364,7 +364,9 @@ const char *mpw_vstr(const char *format, va_list args) {
         return NULL;
 
     do {
-        int len = vsnprintf( str_str, str_str_max, format, args );
+        size_t len = (size_t)vsnprintf( str_str, str_str_max, format, args );
+        if ((int)len < 0)
+            return NULL;
         if (len < str_str_max)
             break;
 

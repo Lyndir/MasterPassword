@@ -78,8 +78,6 @@
 		DA3B8453190FC86F00246EEA /* NSManagedObject+Pearl.h in Headers */ = {isa = PBXBuildFile; fileRef = DA3B8451190FC86F00246EEA /* NSManagedObject+Pearl.h */; };
 		DA3B8456190FC89700246EEA /* MPFixable.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3B8454190FC89700246EEA /* MPFixable.m */; };
 		DA3BCFCD19BD09E0006B2681 /* SourceCodePro-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = DA3BCFCC19BD09E0006B2681 /* SourceCodePro-Regular.otf */; };
-		DA456CA11F53056000D54152 /* bcrypt.c in Sources */ = {isa = PBXBuildFile; fileRef = DA456CA01F53056000D54152 /* bcrypt.c */; };
-		DA456CA41F5307B700D54152 /* blowfish.c in Sources */ = {isa = PBXBuildFile; fileRef = DA456CA31F5307B700D54152 /* blowfish.c */; };
 		DA4DA1D91564471A00F6F596 /* libjrswizzle.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC6326C148680650075AEA5 /* libjrswizzle.a */; };
 		DA4DAE941A7D8117003E5423 /* MPAlgorithmV3.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4DAE921A7D8117003E5423 /* MPAlgorithmV3.m */; };
 		DA4DAE951A7D8117003E5423 /* MPTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4DAE931A7D8117003E5423 /* MPTypes.m */; };
@@ -2755,9 +2753,7 @@
 				DA5180CA19FF2F9200A587E9 /* MPAlgorithmV2.m in Sources */,
 				93D39F833DEC1C89B2F795AC /* MPSitesWindowController.m in Sources */,
 				DA67742F1A4746AF004F356A /* mpw-types.c in Sources */,
-				DA456CA41F5307B700D54152 /* blowfish.c in Sources */,
 				93D390C676DF52DA7E459F19 /* MPSitesWindow.m in Sources */,
-				DA456CA11F53056000D54152 /* bcrypt.c in Sources */,
 				DA26861D1EBFD7A40001E37E /* MPGeneratedSiteEntity+CoreDataClass.m in Sources */,
 				93D39784E725A34D1EE3FB3B /* MPInitialWindowController.m in Sources */,
 				93D394C4254EEB45FB335AFB /* MPSitesTableView.m in Sources */,
