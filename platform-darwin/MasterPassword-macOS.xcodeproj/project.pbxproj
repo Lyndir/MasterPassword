@@ -27,7 +27,6 @@
 		DA0979681E9A834C00F0BFE8 /* libsodium.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA0979571E9A824700F0BFE8 /* libsodium.a */; };
 		DA0CC53E1EB57B69009A8ED9 /* Fabric.plist in Resources */ = {isa = PBXBuildFile; fileRef = DA0CC53D1EB57B69009A8ED9 /* Fabric.plist */; };
 		DA0CC5591EB6AE45009A8ED9 /* MasterPassword.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DA0CC54F1EB6AE45009A8ED9 /* MasterPassword.xcdatamodeld */; };
-		DA1000801998A4C6002B873F /* openssl in Headers */ = {isa = PBXBuildFile; fileRef = DAE8E65719867AF500416A0F /* openssl */; settings = {ATTRIBUTES = (Public, ); }; };
 		DA16B341170661DB000A0EAB /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA16B340170661DB000A0EAB /* Carbon.framework */; };
 		DA16B342170661E0000A0EAB /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC632871486D95D0075AEA5 /* Security.framework */; };
 		DA16B344170661EE000A0EAB /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA16B343170661EE000A0EAB /* Cocoa.framework */; };
@@ -117,7 +116,6 @@
 		DA8ED895192906920099B726 /* PearlTween.m in Sources */ = {isa = PBXBuildFile; fileRef = DA8ED891192906920099B726 /* PearlTween.m */; };
 		DA8ED896192906920099B726 /* PearlTween.h in Headers */ = {isa = PBXBuildFile; fileRef = DA8ED892192906920099B726 /* PearlTween.h */; };
 		DA8ED897192906920099B726 /* map-macro.h in Headers */ = {isa = PBXBuildFile; fileRef = DA8ED894192906920099B726 /* map-macro.h */; };
-		DA92614B1BE1A4EA00369DE5 /* libopensslcrypto-osx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAE8E65319867ADA00416A0F /* libopensslcrypto-osx.a */; };
 		DA9261511BE1A86700369DE5 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA92614F1BE1A86700369DE5 /* SystemConfiguration.framework */; };
 		DA9261521BE1A86700369DE5 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA9261501BE1A86700369DE5 /* Fabric.framework */; };
 		DA9261541BE1A88900369DE5 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DA9261531BE1A88900369DE5 /* libc++.tbd */; };
@@ -219,12 +217,8 @@
 		DAFE4A2F15039824003ABA7C /* PearlStringUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE45F415039823003ABA7C /* PearlStringUtils.h */; };
 		DAFE4A3015039824003ABA7C /* PearlStringUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFE45F515039823003ABA7C /* PearlStringUtils.m */; };
 		DAFE4A3315039824003ABA7C /* Pearl-Crypto.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE45FD15039823003ABA7C /* Pearl-Crypto.h */; };
-		DAFE4A3415039824003ABA7C /* PearlCryptUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE45FE15039823003ABA7C /* PearlCryptUtils.h */; };
-		DAFE4A3515039824003ABA7C /* PearlCryptUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFE45FF15039823003ABA7C /* PearlCryptUtils.m */; };
 		DAFE4A3615039824003ABA7C /* PearlKeyChain.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE460015039823003ABA7C /* PearlKeyChain.h */; };
 		DAFE4A3715039824003ABA7C /* PearlKeyChain.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFE460115039823003ABA7C /* PearlKeyChain.m */; };
-		DAFE4A3815039824003ABA7C /* PearlRSAKey.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE460215039823003ABA7C /* PearlRSAKey.h */; };
-		DAFE4A3915039824003ABA7C /* PearlRSAKey.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFE460315039823003ABA7C /* PearlRSAKey.m */; };
 		DAFE4A5A1503982E003ABA7C /* Pearl.strings in Resources */ = {isa = PBXBuildFile; fileRef = DAFE45FA15039823003ABA7C /* Pearl.strings */; };
 		DAFE4A63150399FF003ABA86 /* NSObject+PearlKVO.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFE4A63150399FF003ABA85 /* NSObject+PearlKVO.m */; };
 		DAFE4A63150399FF003ABA88 /* NSObject+PearlKVO.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE4A63150399FF003ABA87 /* NSObject+PearlKVO.h */; };
@@ -498,9 +492,9 @@
 		DA3B8454190FC89700246EEA /* MPFixable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPFixable.m; sourceTree = "<group>"; };
 		DA3B8455190FC89700246EEA /* MPFixable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPFixable.h; sourceTree = "<group>"; };
 		DA3BCFCC19BD09E0006B2681 /* SourceCodePro-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceCodePro-Regular.otf"; sourceTree = "<group>"; };
-		DA456CA01F53056000D54152 /* bcrypt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = bcrypt.c; sourceTree = "<group>"; };
 		DA456CA21F5307B700D54152 /* blf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = blf.h; sourceTree = "<group>"; };
-		DA456CA31F5307B700D54152 /* blowfish.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = blowfish.c; sourceTree = "<group>"; };
+		DA4571171F552C9500D54152 /* bcrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bcrypt.h; sourceTree = "<group>"; };
+		DA4571181F552C9500D54152 /* blowfish.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = blowfish.h; sourceTree = "<group>"; };
 		DA4DAE911A7D8117003E5423 /* MPAlgorithmV3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAlgorithmV3.h; sourceTree = "<group>"; };
 		DA4DAE921A7D8117003E5423 /* MPAlgorithmV3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAlgorithmV3.m; sourceTree = "<group>"; };
 		DA4DAE931A7D8117003E5423 /* MPTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTypes.m; sourceTree = "<group>"; };
@@ -1065,8 +1059,6 @@
 		DAD0C60019FD6034009CB08D /* icon.sketch */ = {isa = PBXFileReference; lastKnownFileType = file; path = icon.sketch; sourceTree = "<group>"; };
 		DAD9B5E1176299B9001835F9 /* MasterPassword-Mac-LoginHelper.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "MasterPassword-Mac-LoginHelper.xcodeproj"; path = "MasterPassword-Mac-LoginHelper/MasterPassword-Mac-LoginHelper.xcodeproj"; sourceTree = "<group>"; };
 		DAD9B5EF1762CAA4001835F9 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
-		DAE8E65319867ADA00416A0F /* libopensslcrypto-osx.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libopensslcrypto-osx.a"; sourceTree = "<group>"; };
-		DAE8E65719867AF500416A0F /* openssl */ = {isa = PBXFileReference; lastKnownFileType = folder; path = openssl; sourceTree = "<group>"; };
 		DAEBC45214F6364500987BF6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		DAF4EF52190A828100023C90 /* Exo2.0-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo2.0-Thin.otf"; sourceTree = "<group>"; };
 		DAF4EF53190A828100023C90 /* Exo2.0-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo2.0-Regular.otf"; sourceTree = "<group>"; };
@@ -1103,12 +1095,8 @@
 		DAFE45F815039823003ABA7C /* README */ = {isa = PBXFileReference; fileEncoding = 1; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		DAFE45FB15039823003ABA7C /* en */ = {isa = PBXFileReference; fileEncoding = 2483028224; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Pearl.strings; sourceTree = "<group>"; };
 		DAFE45FD15039823003ABA7C /* Pearl-Crypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Pearl-Crypto.h"; sourceTree = "<group>"; };
-		DAFE45FE15039823003ABA7C /* PearlCryptUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlCryptUtils.h; sourceTree = "<group>"; };
-		DAFE45FF15039823003ABA7C /* PearlCryptUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlCryptUtils.m; sourceTree = "<group>"; };
 		DAFE460015039823003ABA7C /* PearlKeyChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlKeyChain.h; sourceTree = "<group>"; };
 		DAFE460115039823003ABA7C /* PearlKeyChain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlKeyChain.m; sourceTree = "<group>"; };
-		DAFE460215039823003ABA7C /* PearlRSAKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlRSAKey.h; sourceTree = "<group>"; };
-		DAFE460315039823003ABA7C /* PearlRSAKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlRSAKey.m; sourceTree = "<group>"; };
 		DAFE460615039823003ABA7C /* README */ = {isa = PBXFileReference; fileEncoding = 1; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		DAFE4A63150399FF003ABA85 /* NSObject+PearlKVO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+PearlKVO.m"; sourceTree = "<group>"; };
 		DAFE4A63150399FF003ABA87 /* NSObject+PearlKVO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+PearlKVO.h"; sourceTree = "<group>"; };
@@ -1189,7 +1177,6 @@
 				DAADCC4B19FB000C00987B1D /* QuartzCore.framework in Frameworks */,
 				DA4DA1D91564471A00F6F596 /* libjrswizzle.a in Frameworks */,
 				DAC77CAE148291A600BCF976 /* Foundation.framework in Frameworks */,
-				DA92614B1BE1A4EA00369DE5 /* libopensslcrypto-osx.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1298,9 +1285,9 @@
 		DA1C7AB71F1A8F6E009A3551 /* cli */ = {
 			isa = PBXGroup;
 			children = (
+				DA4571171F552C9500D54152 /* bcrypt.h */,
 				DA456CA21F5307B700D54152 /* blf.h */,
-				DA456CA31F5307B700D54152 /* blowfish.c */,
-				DA456CA01F53056000D54152 /* bcrypt.c */,
+				DA4571181F552C9500D54152 /* blowfish.h */,
 				DA1C7AB81F1A8F6E009A3551 /* mpw-bench.c */,
 				DA1C7AB91F1A8F6E009A3551 /* mpw-cli.c */,
 				DA1C7ABA1F1A8F6E009A3551 /* mpw-tests-util.c */,
@@ -1378,15 +1365,6 @@
 				DABB981515100B4000B05417 /* SystemConfiguration.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		DA5E5C7917248AA1003798D8 /* lib */ = {
-			isa = PBXGroup;
-			children = (
-				DAEB938518AB0FFD000490CC /* include */,
-				DAE8E65319867ADA00416A0F /* libopensslcrypto-osx.a */,
-			);
-			path = lib;
 			sourceTree = "<group>";
 		};
 		DA5E5C961724A667003798D8 /* Source */ = {
@@ -2158,14 +2136,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		DAEB938518AB0FFD000490CC /* include */ = {
-			isa = PBXGroup;
-			children = (
-				DAE8E65719867AF500416A0F /* openssl */,
-			);
-			path = include;
-			sourceTree = "<group>";
-		};
 		DAFE45D715039823003ABA7C /* Pearl */ = {
 			isa = PBXGroup;
 			children = (
@@ -2245,15 +2215,10 @@
 		DAFE45FC15039823003ABA7C /* Pearl-Crypto */ = {
 			isa = PBXGroup;
 			children = (
-				DA5E5C7917248AA1003798D8 /* lib */,
 				DAFE45FD15039823003ABA7C /* Pearl-Crypto.h */,
 				DA30E9D115722EE500A68B4C /* Pearl-Crypto.m */,
-				DAFE45FE15039823003ABA7C /* PearlCryptUtils.h */,
-				DAFE45FF15039823003ABA7C /* PearlCryptUtils.m */,
 				DAFE460015039823003ABA7C /* PearlKeyChain.h */,
 				DAFE460115039823003ABA7C /* PearlKeyChain.m */,
-				DAFE460215039823003ABA7C /* PearlRSAKey.h */,
-				DAFE460315039823003ABA7C /* PearlRSAKey.m */,
 				DAFE460615039823003ABA7C /* README */,
 			);
 			path = "Pearl-Crypto";
@@ -2275,7 +2240,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DA89D4EC1A51EABD00AC64D7 /* Pearl-Cocoa.h in Headers */,
-				DA1000801998A4C6002B873F /* openssl in Headers */,
 				DA2CA4F218D323D3007798F8 /* NSTimer+PearlBlock.h in Headers */,
 				DAFE4A1315039824003ABA7C /* NSObject+PearlExport.h in Headers */,
 				DAFE4A1515039824003ABA7C /* NSString+PearlNSArrayFormat.h in Headers */,
@@ -2297,9 +2261,7 @@
 				DAFE4A2D15039824003ABA7C /* PearlStrings.h in Headers */,
 				DAFE4A2F15039824003ABA7C /* PearlStringUtils.h in Headers */,
 				DAFE4A3315039824003ABA7C /* Pearl-Crypto.h in Headers */,
-				DAFE4A3415039824003ABA7C /* PearlCryptUtils.h in Headers */,
 				DAFE4A3615039824003ABA7C /* PearlKeyChain.h in Headers */,
-				DAFE4A3815039824003ABA7C /* PearlRSAKey.h in Headers */,
 				DA30E9D715723E6900A68B4C /* PearlLazy.h in Headers */,
 				DAADCC4719FAFFAD00987B1D /* NSNotificationCenter+PearlEasyCleanup.h in Headers */,
 				DAFE4A63150399FF003ABA88 /* NSObject+PearlKVO.h in Headers */,
@@ -2818,10 +2780,8 @@
 				DAFE4A2B15039824003ABA7C /* PearlObjectUtils.m in Sources */,
 				DAFE4A2E15039824003ABA7C /* PearlStrings.m in Sources */,
 				DAFE4A3015039824003ABA7C /* PearlStringUtils.m in Sources */,
-				DAFE4A3515039824003ABA7C /* PearlCryptUtils.m in Sources */,
 				DA89D4ED1A51EABD00AC64D7 /* Pearl-Cocoa.m in Sources */,
 				DAFE4A3715039824003ABA7C /* PearlKeyChain.m in Sources */,
-				DAFE4A3915039824003ABA7C /* PearlRSAKey.m in Sources */,
 				DA8ED895192906920099B726 /* PearlTween.m in Sources */,
 				DA2CA4F118D323D3007798F8 /* NSTimer+PearlBlock.m in Sources */,
 				DA3B8452190FC86F00246EEA /* NSManagedObject+Pearl.m in Sources */,

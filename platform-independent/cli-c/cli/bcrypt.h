@@ -41,7 +41,7 @@
 #include <time.h>
 
 #include "blf.h"
-#include "blowfish.c"
+#include "blowfish.h"
 
 /* This implementation is adaptable to current computing power.
  * You can have up to 2^31 rounds which should be enough for some
