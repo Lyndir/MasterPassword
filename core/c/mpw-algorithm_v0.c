@@ -18,6 +18,7 @@
 
 #include <string.h>
 #include <errno.h>
+#include <time.h>
 
 #include "mpw-util.h"
 #include "base64.h"
@@ -25,6 +26,7 @@
 #define MP_N                32768LU
 #define MP_r                8U
 #define MP_p                2U
+#define MP_otp_window       5 * 60 /* s */
 
 // Algorithm version helpers.
 static const char *mpw_templateForType_v0(MPResultType type, uint16_t templateIndex) {
@@ -86,7 +88,9 @@ static MPSiteKey mpw_siteKey_v0(
     const char *keyScope = mpw_scopeForPurpose( keyPurpose );
     trc( "keyScope: %s\n", keyScope );
 
-    // TODO: Implement MPCounterValueTOTP
+    // OTP counter value.
+    if (siteCounter == MPCounterValueTOTP)
+        siteCounter = ((uint32_t)time(NULL) / MP_otp_window) * MP_otp_window;
 
     // Calculate the site seed.
     trc( "siteSalt: keyScope=%s | #siteName=%s | siteName=%s | siteCounter=%s | #keyContext=%s | keyContext=%s\n",
