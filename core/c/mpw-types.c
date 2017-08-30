@@ -16,15 +16,8 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-#include <stdlib.h>
-#include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-
-#ifdef COLOR
-#include <curses.h>
-#include <term.h>
-#endif
 
 #include "mpw-types.h"
 #include "mpw-util.h"

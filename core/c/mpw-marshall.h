@@ -25,7 +25,7 @@
 
 //// Types.
 
-typedef enum( unsigned int, MPMarshallFormat ) {
+typedef mpw_enum( unsigned int, MPMarshallFormat ) {
     /** Generate a key for authentication. */
             MPMarshallFormatNone,
     /** Generate a key for authentication. */
@@ -36,7 +36,7 @@ typedef enum( unsigned int, MPMarshallFormat ) {
     MPMarshallFormatDefault = MPMarshallFormatJSON,
 };
 
-typedef enum( unsigned int, MPMarshallErrorType ) {
+typedef mpw_enum( unsigned int, MPMarshallErrorType ) {
     /** The marshalling operation completed successfully. */
             MPMarshallSuccess,
     /** An error in the structure of the marshall file interrupted marshalling. */

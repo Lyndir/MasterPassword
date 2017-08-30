@@ -82,8 +82,8 @@ static MPMasterKey mpw_masterKey_v0(
 }
 
 static MPSiteKey mpw_siteKey_v0(
-        MPMasterKey masterKey, const char *siteName, const MPCounterValue siteCounter,
-        const MPKeyPurpose keyPurpose, const char *keyContext) {
+        MPMasterKey masterKey, const char *siteName, MPCounterValue siteCounter,
+        MPKeyPurpose keyPurpose, const char *keyContext) {
 
     const char *keyScope = mpw_scopeForPurpose( keyPurpose );
     trc( "keyScope: %s\n", keyScope );
@@ -126,7 +126,7 @@ static MPSiteKey mpw_siteKey_v0(
 }
 
 static const char *mpw_sitePasswordFromTemplate_v0(
-        MPMasterKey masterKey, MPSiteKey siteKey, const MPResultType resultType, const char *resultParam) {
+        MPMasterKey  __unused masterKey, MPSiteKey siteKey, MPResultType resultType, const char __unused *resultParam) {
 
     // Determine the template.
     const char *_siteKey = (const char *)siteKey;
@@ -155,7 +155,7 @@ static const char *mpw_sitePasswordFromTemplate_v0(
 }
 
 static const char *mpw_sitePasswordFromCrypt_v0(
-        MPMasterKey masterKey, MPSiteKey siteKey, const MPResultType resultType, const char *cipherText) {
+        MPMasterKey masterKey, MPSiteKey __unused siteKey, MPResultType __unused resultType, const char *cipherText) {
 
     if (!cipherText) {
         err( "Missing encrypted state.\n" );
@@ -185,7 +185,7 @@ static const char *mpw_sitePasswordFromCrypt_v0(
 }
 
 static const char *mpw_sitePasswordFromDerive_v0(
-        MPMasterKey masterKey, MPSiteKey siteKey, const MPResultType resultType, const char *resultParam) {
+        MPMasterKey __unused masterKey, MPSiteKey siteKey, MPResultType resultType, const char *resultParam) {
 
     switch (resultType) {
         case MPResultTypeDeriveKey: {
@@ -228,7 +228,7 @@ static const char *mpw_sitePasswordFromDerive_v0(
 }
 
 static const char *mpw_siteState_v0(
-        MPMasterKey masterKey, MPSiteKey siteKey, const MPResultType resultType, const char *plainText) {
+        MPMasterKey masterKey, MPSiteKey __unused siteKey, MPResultType __unused resultType, const char *plainText) {
 
     // Encrypt
     size_t bufSize = strlen( plainText );

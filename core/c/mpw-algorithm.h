@@ -22,7 +22,7 @@
 #ifndef _MPW_ALGORITHM_H
 #define _MPW_ALGORITHM_H
 
-typedef enum( unsigned int, MPAlgorithmVersion ) {
+typedef mpw_enum( unsigned int, MPAlgorithmVersion ) {
     /** V0 did math with chars whose signedness was platform-dependent. */
             MPAlgorithmVersion0,
     /** V1 miscounted the byte-length of multi-byte site names. */

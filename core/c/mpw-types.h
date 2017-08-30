@@ -24,9 +24,9 @@
 #include <stdbool.h>
 
 #ifdef NS_ENUM
-#define enum(_type, _name) NS_ENUM(_type, _name)
+#define mpw_enum(_type, _name) NS_ENUM(_type, _name)
 #else
-#define enum(_type, _name) _type _name; enum
+#define mpw_enum(_type, _name) _type _name; enum
 #endif
 
 //// Types.
@@ -37,7 +37,7 @@ typedef const uint8_t *MPMasterKey;
 typedef const uint8_t *MPSiteKey;
 typedef const char *MPKeyID;
 
-typedef enum( uint8_t, MPKeyPurpose ) {
+typedef mpw_enum( uint8_t, MPKeyPurpose ) {
     /** Generate a key for authentication. */
             MPKeyPurposeAuthentication,
     /** Generate a name for identification. */
@@ -47,7 +47,7 @@ typedef enum( uint8_t, MPKeyPurpose ) {
 };
 
 // bit 4 - 9
-typedef enum( uint16_t, MPResultTypeClass ) {
+typedef mpw_enum( uint16_t, MPResultTypeClass ) {
     /** Use the site key to generate a password from a template. */
             MPResultTypeClassTemplate = 1 << 4,
     /** Use the site key to encrypt and decrypt a stateful entity. */
@@ -57,7 +57,7 @@ typedef enum( uint16_t, MPResultTypeClass ) {
 };
 
 // bit 10 - 15
-typedef enum( uint16_t, MPSiteFeature ) {
+typedef mpw_enum( uint16_t, MPSiteFeature ) {
     /** Export the key-protected content data. */
             MPSiteFeatureExportContent = 1 << 10,
     /** Never export content. */
@@ -67,7 +67,7 @@ typedef enum( uint16_t, MPSiteFeature ) {
 };
 
 // bit 0-3 | MPResultTypeClass | MPSiteFeature
-typedef enum( uint32_t, MPResultType ) {
+typedef mpw_enum( uint32_t, MPResultType ) {
     /** pg^VMAUBk5x3p%HP%i4= */
             MPResultTypeTemplateMaximum = 0x0 | MPResultTypeClassTemplate | 0x0,
     /** BiroYena8:Kixa */
@@ -96,7 +96,7 @@ typedef enum( uint32_t, MPResultType ) {
     MPResultTypeDefault = MPResultTypeTemplateLong,
 };
 
-typedef enum ( uint32_t, MPCounterValue ) {
+typedef mpw_enum ( uint32_t, MPCounterValue ) {
     /** Use a time-based counter value, resulting in a TOTP generator. */
             MPCounterValueTOTP = 0,
     /** The initial value for a site's counter. */
