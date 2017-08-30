@@ -1,0 +1,103 @@
+#!/usr/bin/env bash
+cd "${BASH_SOURCE%/*}"
+
+
+# Tooling
+errors=0
+mpw_expect() {
+    local expect=$1; shift
+
+    printf '.'
+    result=$(./mpw -q "$@") err=$?
+
+    if (( err )); then
+        printf >&2 "Error (exit %d) mpw%s\n" "$err" "$(printf ' %q' "$@")"
+        return $(( ++errors ))
+    fi
+    if [[ $result != $expect ]]; then
+        printf >&2 "Error (got: %s != expected: %s) mpw%s\n" "$result" "$expect" "$(printf ' %q' "$@")"
+        return $(( ++errors ))
+    fi
+}
+
+
+#   mpw_tests.xml
+##  V3
+mpw_expect 'Jejr5[RepuSosp'       -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling'                                                    'masterpasswordapp.com'
+mpw_expect 'Jejr5[RepuSosp'       -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling'                                      -C ''         'masterpasswordapp.com'
+mpw_expect 'Jejr5[RepuSosp'       -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling'                  -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'Jejr5[RepuSosp'       -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling'              -a3 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'Jejr5[RepuSosp'       -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling'          -c1 -a3 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'Jejr5[RepuSosp'       -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tlong   -c1 -a3 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'NopaDajh8=Fene'       -Fnone -u '⛄'                   -M 'banana colored duckling' -tlong   -c1 -a3 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'QesuHirv5-Xepl'       -Fnone -u 'Robert Lee Mitchell' -M '⛄'                       -tlong   -c1 -a3 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'LiheCuwhSerz6)'       -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tlong   -c1 -a3 -p 'authentication' -C ''         '⛄'
+mpw_expect 'wohzaqage'            -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling'                  -p 'identification'               'masterpasswordapp.com'
+mpw_expect 'wohzaqage'            -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tname   -c1 -a3 -p 'identification' -C ''         'masterpasswordapp.com'
+mpw_expect 'xin diyjiqoja hubu'   -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling'                  -p 'recovery'                     'masterpasswordapp.com'
+mpw_expect 'xin diyjiqoja hubu'   -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tphrase -c1 -a3 -p 'recovery'       -C ''         'masterpasswordapp.com'
+mpw_expect 'xogx tem cegyiva jab' -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tphrase -c1 -a3 -p 'recovery'       -C 'question' 'masterpasswordapp.com'
+mpw_expect 'W6@692^B1#&@gVdSdLZ@' -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tmax    -c1 -a3 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'Jej2$Quv'             -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tmed    -c1 -a3 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'WAo2xIg6'             -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tbasic  -c1 -a3 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'Jej2'                 -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tshort  -c1 -a3 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect '7662'                 -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tpin    -c1 -a3 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'jejraquvo'            -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tname   -c1 -a3 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'jejr quv cabsibu tam' -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tphrase -c1 -a3 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'XambHoqo6[Peni'       -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tlong   -c4294967295 -a3 -p 'authentication'      'masterpasswordapp.com'
+
+##  V2
+mpw_expect 'Jejr5[RepuSosp'       -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tlong   -c1 -a2 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'WaqoGuho2[Xaxw'       -Fnone -u '⛄'                   -M 'banana colored duckling' -tlong   -c1 -a2 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'QesuHirv5-Xepl'       -Fnone -u 'Robert Lee Mitchell' -M '⛄'                       -tlong   -c1 -a2 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'LiheCuwhSerz6)'       -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tlong   -c1 -a2 -p 'authentication' -C ''         '⛄'
+mpw_expect 'wohzaqage'            -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tname   -c1 -a2 -p 'identification' -C ''         'masterpasswordapp.com'
+mpw_expect 'xin diyjiqoja hubu'   -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tphrase -c1 -a2 -p 'recovery'       -C ''         'masterpasswordapp.com'
+mpw_expect 'xogx tem cegyiva jab' -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tphrase -c1 -a2 -p 'recovery'       -C 'question' 'masterpasswordapp.com'
+mpw_expect 'W6@692^B1#&@gVdSdLZ@' -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tmax    -c1 -a2 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'Jej2$Quv'             -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tmed    -c1 -a2 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'WAo2xIg6'             -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tbasic  -c1 -a2 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'Jej2'                 -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tshort  -c1 -a2 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect '7662'                 -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tpin    -c1 -a2 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'jejraquvo'            -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tname   -c1 -a2 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'jejr quv cabsibu tam' -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tphrase -c1 -a2 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'XambHoqo6[Peni'       -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tlong   -c4294967295 -a2 -p 'authentication'      'masterpasswordapp.com'
+
+##  V1
+mpw_expect 'Jejr5[RepuSosp'       -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tlong   -c1 -a1 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'WaqoGuho2[Xaxw'       -Fnone -u '⛄'                   -M 'banana colored duckling' -tlong   -c1 -a1 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'QesuHirv5-Xepl'       -Fnone -u 'Robert Lee Mitchell' -M '⛄'                       -tlong   -c1 -a1 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'WawiYarp2@Kodh'       -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tlong   -c1 -a1 -p 'authentication' -C ''         '⛄'
+mpw_expect 'wohzaqage'            -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tname   -c1 -a1 -p 'identification' -C ''         'masterpasswordapp.com'
+mpw_expect 'xin diyjiqoja hubu'   -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tphrase -c1 -a1 -p 'recovery'       -C ''         'masterpasswordapp.com'
+mpw_expect 'xogx tem cegyiva jab' -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tphrase -c1 -a1 -p 'recovery'       -C 'question' 'masterpasswordapp.com'
+mpw_expect 'W6@692^B1#&@gVdSdLZ@' -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tmax    -c1 -a1 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'Jej2$Quv'             -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tmed    -c1 -a1 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'WAo2xIg6'             -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tbasic  -c1 -a1 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'Jej2'                 -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tshort  -c1 -a1 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect '7662'                 -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tpin    -c1 -a1 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'jejraquvo'            -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tname   -c1 -a1 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'jejr quv cabsibu tam' -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tphrase -c1 -a1 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'XambHoqo6[Peni'       -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tlong   -c4294967295 -a1 -p 'authentication'      'masterpasswordapp.com'
+
+##  V0
+mpw_expect 'Feji5@ReduWosh'       -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tlong   -c1 -a0 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'HajrYudo7@Mamh'       -Fnone -u '⛄'                   -M 'banana colored duckling' -tlong   -c1 -a0 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'MewmDini0]Meho'       -Fnone -u 'Robert Lee Mitchell' -M '⛄'                       -tlong   -c1 -a0 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'HahiVana2@Nole'       -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tlong   -c1 -a0 -p 'authentication' -C ''         '⛄'
+mpw_expect 'lozwajave'            -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tname   -c1 -a0 -p 'identification' -C ''         'masterpasswordapp.com'
+mpw_expect 'miy lirfijoja dubu'   -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tphrase -c1 -a0 -p 'recovery'       -C ''         'masterpasswordapp.com'
+mpw_expect 'movm bex gevrica jaf' -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tphrase -c1 -a0 -p 'recovery'       -C 'question' 'masterpasswordapp.com'
+mpw_expect 'w1!3bA3icmRAc)SS@lwl' -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tmax    -c1 -a0 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'Fej7]Jug'             -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tmed    -c1 -a0 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'wvH7irC1'             -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tbasic  -c1 -a0 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'Fej7'                 -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tshort  -c1 -a0 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect '2117'                 -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tpin    -c1 -a0 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'fejrajugo'            -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tname   -c1 -a0 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'fejr jug gabsibu bax' -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tphrase -c1 -a0 -p 'authentication' -C ''         'masterpasswordapp.com'
+mpw_expect 'QateDojh1@Hecn'       -Fnone -u 'Robert Lee Mitchell' -M 'banana colored duckling' -tlong   -c4294967295 -a0 -p 'authentication'      'masterpasswordapp.com'
+
+
+# Finish
+printf 'Done!\n'
+exit "$errors"
