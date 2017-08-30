@@ -71,7 +71,7 @@ int main(int argc, char *const argv[]) {
     for (int i = 1; i <= iterations; ++i) {
         free( (void *)mpw_hash_hmac_sha256( masterKey, MPMasterKeySize, sitePasswordInfo, 128 ) );
 
-        if (modff(100.f * i / iterations, &percent) == 0)
+        if (modff( 100.f * i / iterations, &percent ) == 0)
             fprintf( stderr, "\rhmac-sha-256: iteration %d / %d (%.0f%%)..", i, iterations, percent );
     }
     const double hmacSha256Speed = mpw_showSpeed( startTime, iterations, "hmac-sha-256" );
@@ -85,7 +85,7 @@ int main(int argc, char *const argv[]) {
     for (int i = 1; i <= iterations; ++i) {
         bcrypt( masterPassword, bcrypt_gensalt( bcrypt_rounds ) );
 
-        if (modff(100.f * i / iterations, &percent) == 0)
+        if (modff( 100.f * i / iterations, &percent ) == 0)
             fprintf( stderr, "\rbcrypt (rounds 10^%d): iteration %d / %d (%.0f%%)..", bcrypt_rounds, i, iterations, percent );
     }
     const double bcrypt9Speed = mpw_showSpeed( startTime, iterations, "bcrypt" );
@@ -97,7 +97,7 @@ int main(int argc, char *const argv[]) {
     for (int i = 1; i <= iterations; ++i) {
         free( (void *)mpw_masterKey( fullName, masterPassword, MPAlgorithmVersionCurrent ) );
 
-        if (modff(100.f * i / iterations, &percent) == 0)
+        if (modff( 100.f * i / iterations, &percent ) == 0)
             fprintf( stderr, "\rscrypt_mpw: iteration %d / %d (%.0f%%)..", i, iterations, percent );
     }
     const double scryptSpeed = mpw_showSpeed( startTime, iterations, "scrypt_mpw" );
@@ -117,7 +117,7 @@ int main(int argc, char *const argv[]) {
                 masterKey, siteName, siteCounter, keyPurpose, keyContext, resultType, NULL, MPAlgorithmVersionCurrent ) );
         free( (void *)masterKey );
 
-        if (modff(100.f * i / iterations, &percent) == 0)
+        if (modff( 100.f * i / iterations, &percent ) == 0)
             fprintf( stderr, "\rmpw: iteration %d / %d (%.0f%%)..", i, iterations, percent );
     }
     const double mpwSpeed = mpw_showSpeed( startTime, iterations, "mpw" );

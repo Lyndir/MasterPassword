@@ -38,7 +38,7 @@ xmlNodePtr mpw_xmlTestCaseNode(xmlNodePtr testCaseNode, const char *nodeName) {
             return child;
 
     // Missing content, try to find parent case.
-    if (strcmp(nodeName, "parent") == 0)
+    if (strcmp( nodeName, "parent" ) == 0)
         // Was just searching for testCaseNode's parent, none found.
         return NULL;
     xmlChar *parentId = mpw_xmlTestCaseString( testCaseNode, "parent" );

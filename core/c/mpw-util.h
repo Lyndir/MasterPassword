@@ -111,7 +111,7 @@ void mpw_uint64(const uint64_t number, uint8_t buf[8]);
 
 /** Push a buffer onto a buffer.  reallocs the given buffer and appends the given buffer. */
 bool mpw_push_buf(
-        uint8_t ** buffer, size_t *bufferSize, const void *pushBuffer, const size_t pushSize);
+        uint8_t **buffer, size_t *bufferSize, const void *pushBuffer, const size_t pushSize);
 /** Push a string onto a buffer.  reallocs the given buffer and appends the given string. */
 bool mpw_push_string(
         uint8_t **buffer, size_t *bufferSize, const char *pushString);
