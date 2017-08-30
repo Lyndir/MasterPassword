@@ -24,6 +24,7 @@
 #define MP_N                32768LU
 #define MP_r                8U
 #define MP_p                2U
+#define MP_otp_window       5 * 60 /* s */
 
 // Inherited functions.
 MPSiteKey mpw_siteKey_v2(
@@ -64,7 +65,7 @@ static MPMasterKey mpw_masterKey_v3(
     MPMasterKey masterKey = mpw_kdf_scrypt( MPMasterKeySize, masterPassword, masterKeySalt, masterKeySaltSize, MP_N, MP_r, MP_p );
     mpw_free( &masterKeySalt, masterKeySaltSize );
     if (!masterKey) {
-        err( "Could not allocate master key: %s\n", strerror( errno ) );
+        err( "Could not derive master key: %s\n", strerror( errno ) );
         return NULL;
     }
     trc( "  => masterKey.id: %s\n", mpw_id_buf( masterKey, MPMasterKeySize ) );

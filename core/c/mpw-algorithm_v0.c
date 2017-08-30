@@ -73,7 +73,7 @@ static MPMasterKey mpw_masterKey_v0(
     MPMasterKey masterKey = mpw_kdf_scrypt( MPMasterKeySize, masterPassword, masterKeySalt, masterKeySaltSize, MP_N, MP_r, MP_p );
     mpw_free( &masterKeySalt, masterKeySaltSize );
     if (!masterKey) {
-        err( "Could not allocate master key: %s\n", strerror( errno ) );
+        err( "Could not derive master key: %s\n", strerror( errno ) );
         return NULL;
     }
     trc( "  => masterKey.id: %s\n", mpw_id_buf( masterKey, MPMasterKeySize ) );
@@ -90,7 +90,7 @@ static MPSiteKey mpw_siteKey_v0(
 
     // OTP counter value.
     if (siteCounter == MPCounterValueTOTP)
-        siteCounter = ((uint32_t)time(NULL) / MP_otp_window) * MP_otp_window;
+        siteCounter = ((uint32_t)time( NULL ) / MP_otp_window) * MP_otp_window;
 
     // Calculate the site seed.
     trc( "siteSalt: keyScope=%s | #siteName=%s | siteName=%s | siteCounter=%s | #keyContext=%s | keyContext=%s\n",
@@ -128,8 +128,9 @@ static MPSiteKey mpw_siteKey_v0(
 static const char *mpw_sitePasswordFromTemplate_v0(
         MPMasterKey  __unused masterKey, MPSiteKey siteKey, MPResultType resultType, const char __unused *resultParam) {
 
-    // Determine the template.
     const char *_siteKey = (const char *)siteKey;
+
+    // Determine the template.
     uint16_t seedByte;
     mpw_uint16( (uint16_t)_siteKey[0], (uint8_t *)&seedByte );
     const char *template = mpw_templateForType_v0( resultType, seedByte );

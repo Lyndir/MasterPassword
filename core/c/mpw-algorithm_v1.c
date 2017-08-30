@@ -23,6 +23,7 @@
 #define MP_N                32768LU
 #define MP_r                8U
 #define MP_p                2U
+#define MP_otp_window       5 * 60 /* s */
 
 // Inherited functions.
 MPMasterKey mpw_masterKey_v0(
@@ -55,8 +56,9 @@ static const char *mpw_sitePasswordFromTemplate_v1(
         MPMasterKey __unused masterKey, MPSiteKey siteKey, MPResultType resultType, const char __unused *resultParam) {
 
     // Determine the template.
-    const char *template = mpw_templateForType( resultType, siteKey[0] );
-    trc( "template: %u => %s\n", siteKey[0], template );
+    uint8_t seedByte = siteKey[0];
+    const char *template = mpw_templateForType( resultType, seedByte );
+    trc( "template: %u => %s\n", seedByte, template );
     if (!template)
         return NULL;
     if (strlen( template ) > MPSiteKeySize) {
@@ -67,9 +69,10 @@ static const char *mpw_sitePasswordFromTemplate_v1(
     // Encode the password from the seed using the template.
     char *const sitePassword = calloc( strlen( template ) + 1, sizeof( char ) );
     for (size_t c = 0; c < strlen( template ); ++c) {
-        sitePassword[c] = mpw_characterFromClass( template[c], siteKey[c + 1] );
+        seedByte = siteKey[c + 1];
+        sitePassword[c] = mpw_characterFromClass( template[c], seedByte );
         trc( "  - class: %c, index: %3u (0x%02hhX) => character: %c\n",
-                template[c], siteKey[c + 1], siteKey[c + 1], sitePassword[c] );
+                template[c], seedByte, seedByte, sitePassword[c] );
     }
     trc( "  => password: %s\n", sitePassword );
 

@@ -18,12 +18,14 @@
 
 #include <string.h>
 #include <errno.h>
+#include <time.h>
 
 #include "mpw-util.h"
 
 #define MP_N                32768LU
 #define MP_r                8U
 #define MP_p                2U
+#define MP_otp_window       5 * 60 /* s */
 
 // Inherited functions.
 MPMasterKey mpw_masterKey_v1(
@@ -51,7 +53,9 @@ static MPSiteKey mpw_siteKey_v2(
     const char *keyScope = mpw_scopeForPurpose( keyPurpose );
     trc( "keyScope: %s\n", keyScope );
 
-    // TODO: Implement MPCounterValueTOTP
+    // OTP counter value.
+    if (siteCounter == MPCounterValueTOTP)
+        siteCounter = ((uint32_t)time( NULL ) / MP_otp_window) * MP_otp_window;
 
     // Calculate the site seed.
     trc( "siteSalt: keyScope=%s | #siteName=%s | siteName=%s | siteCounter=%s | #keyContext=%s | keyContext=%s\n",
@@ -78,7 +82,7 @@ static MPSiteKey mpw_siteKey_v2(
     MPSiteKey siteKey = mpw_hash_hmac_sha256( masterKey, MPMasterKeySize, siteSalt, siteSaltSize );
     mpw_free( &siteSalt, siteSaltSize );
     if (!siteKey) {
-        err( "Could not allocate site key: %s\n", strerror( errno ) );
+        err( "Could not derive site key: %s\n", strerror( errno ) );
         return NULL;
     }
     trc( "  => siteKey.id: %s\n", mpw_id_buf( siteKey, MPSiteKeySize ) );
