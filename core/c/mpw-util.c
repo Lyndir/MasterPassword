@@ -313,6 +313,35 @@ uint8_t const *mpw_aes_decrypt(const uint8_t *key, const size_t keySize, const u
     return mpw_aes( false, key, keySize, cipherBuf, bufSize );
 }
 
+#if UNUSED
+const char *mpw_hotp(const uint8_t *key, size_t keySize, uint64_t movingFactor, uint8_t digits, uint8_t truncationOffset) {
+
+    // Hash the moving factor with the key.
+    uint8_t counter[8];
+    mpw_uint64( movingFactor, counter );
+    uint8_t hash[20];
+    hmac_sha1( key, keySize, counter, sizeof( counter ), hash );
+
+    // Determine the offset to select OTP bytes from.
+    int offset;
+    if ((truncationOffset >= 0) && (truncationOffset < (sizeof( hash ) - 4)))
+        offset = truncationOffset;
+    else
+        offset = hash[sizeof( hash ) - 1] & 0xf;
+
+    // Select four bytes from the truncation offset.
+    uint32_t otp = 0U
+            | ((hash[offset + 0] & 0x7f) << 24)
+            | ((hash[offset + 1] & 0xff) << 16)
+            | ((hash[offset + 2] & 0xff) << 8)
+            | ((hash[offset + 3] & 0xff) << 0);
+
+    // Render the OTP as `digits` decimal digits.
+    otp %= (int)pow(10, digits);
+    return strdup( mpw_str( "%0*d", digits, otp ) );
+}
+#endif
+
 MPKeyID mpw_id_buf(const void *buf, size_t length) {
 
     if (!buf)

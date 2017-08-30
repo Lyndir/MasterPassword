@@ -175,6 +175,12 @@ uint8_t const *mpw_aes_encrypt(
   * @return A new bufSize allocated buffer containing the plainBuf. */
 uint8_t const *mpw_aes_decrypt(
         const uint8_t *key, const size_t keySize, const uint8_t *cipherBuf, const size_t bufSize);
+/** Calculate an OTP using RFC-4226.
+  * @return A newly allocated string containing exactly `digits` decimal OTP digits. */
+#if UNUSED
+const char *mpw_hotp(
+        const uint8_t *key, size_t keySize, uint64_t movingFactor, uint8_t digits, uint8_t truncationOffset);
+#endif
 
 //// Visualizers.
 
