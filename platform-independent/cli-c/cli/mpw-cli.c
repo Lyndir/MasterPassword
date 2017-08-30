@@ -28,20 +28,25 @@ static void usage() {
 
     inf( ""
             "  Master Password v%s\n"
-            "    https://masterpasswordapp.com\n\n", stringify_def( MP_VERSION ) );
+            "--------------------------------------------------------------------------------\n"
+            "      https://masterpasswordapp.com\n\n", stringify_def( MP_VERSION ) );
     inf( ""
-            "Usage:\n"
-            "  mpw [-u|-U full-name] [-t pw-type] [-c counter] [-a algorithm] [-s value]\n"
-            "      [-p purpose] [-C context] [-f|-F format] [-R 0|1] [-v|-q] [-h] site-name\n\n" );
+            "USAGE\n"
+            "  mpw [-u|-U full-name] [-m fd] [-t pw-type] [-P value] [-c counter]\n"
+            "      [-a version] [-p purpose] [-C context] [-f|-F format] [-R 0|1]\n"
+            "      [-v|-q] [-h] site-name\n\n" );
     inf( ""
             "  -u full-name Specify the full name of the user.\n"
             "               -u checks the master password against the config,\n"
             "               -U allows updating to a new master password.\n"
             "               Defaults to %s in env or prompts.\n\n", MP_ENV_fullName );
-    trc( ""
+    dbg( ""
             "  -M master-pw Specify the master password of the user.\n"
-            "               This is not a safe method of passing the master password,\n"
-            "               only use it for non-secret passwords, such as for tests.\n\n" );
+            "               Passing secrets as arguments is unsafe, for use in testing only.\n" );
+    inf( ""
+            "  -m fd        Read the master password of the user from a file descriptor.\n"
+            "               Tip: don't send extra characters like newlines such as by using\n"
+            "               echo in a pipe.  Consider printf instead.\n\n" );
     inf( ""
             "  -t pw-type   Specify the password's template.\n"
             "               Defaults to 'long' (-p a), 'name' (-p i) or 'phrase' (-p r).\n"
@@ -58,7 +63,7 @@ static void usage() {
     inf( ""
             "  -P value     The parameter value.\n"
             "                   -p i        | The login name for the site.\n"
-            "                   -t K        | The size of they key to generate, in bits (eg. 256).\n"
+            "                   -t K        | The bit size of the key to generate (eg. 256).\n"
             "                   -t P        | The personal password to encrypt.\n\n" );
     inf( ""
             "  -c counter   The value of the counter.\n"
@@ -95,10 +100,11 @@ static void usage() {
             "  -v           Increase output verbosity (can be repeated).\n"
             "  -q           Decrease output verbosity (can be repeated).\n\n" );
     inf( ""
-            "  ENVIRONMENT\n\n"
-            "      %-14s | The full name of the user (see -u).\n"
-            "      %-14s | The default algorithm version (see -a).\n\n",
-            MP_ENV_fullName, MP_ENV_algorithm );
+            "ENVIRONMENT\n\n"
+            "  %-12s The full name of the user (see -u).\n"
+            "  %-12s The default algorithm version (see -a).\n"
+            "  %-12s The default mpsites format (see -f).\n\n",
+            MP_ENV_fullName, MP_ENV_algorithm, MP_ENV_format );
     exit( 0 );
 }
 
@@ -210,13 +216,24 @@ static bool mpw_mkdirs(const char *filePath) {
     return success;
 }
 
+static char *mpw_read_file(FILE *file) {
+
+    char *buf = NULL;
+    size_t blockSize = 4096, bufSize = 0, bufOffset = 0, readSize = 0;
+    while ((mpw_realloc( &buf, &bufSize, blockSize )) &&
+           (bufOffset += (readSize = fread( buf + bufOffset, 1, blockSize, file ))) &&
+           (readSize == blockSize));
+
+    return buf;
+}
+
 int main(const int argc, char *const argv[]) {
 
     // CLI defaults.
     bool allowPasswordUpdate = false, sitesFormatFixed = false;
 
     // Read the environment.
-    const char *fullNameArg = NULL, *masterPasswordArg = NULL, *siteNameArg = NULL;
+    const char *fullNameArg = NULL, *masterPasswordFDArg = NULL, *masterPasswordArg = NULL, *siteNameArg = NULL;
     const char *resultTypeArg = NULL, *resultParamArg = NULL, *siteCounterArg = NULL, *algorithmVersionArg = NULL;
     const char *keyPurposeArg = NULL, *keyContextArg = NULL, *sitesFormatArg = NULL, *sitesRedactedArg = NULL;
     fullNameArg = mpw_getenv( MP_ENV_fullName );
@@ -224,7 +241,7 @@ int main(const int argc, char *const argv[]) {
     sitesFormatArg = mpw_getenv( MP_ENV_format );
 
     // Read the command-line options.
-    for (int opt; (opt = getopt( argc, argv, "u:U:M:t:P:c:a:p:C:f:F:R:vqh" )) != EOF;)
+    for (int opt; (opt = getopt( argc, argv, "u:U:m:M:t:P:c:a:p:C:f:F:R:vqh" )) != EOF;)
         switch (opt) {
             case 'u':
                 fullNameArg = optarg && strlen( optarg )? strdup( optarg ): NULL;
@@ -233,6 +250,9 @@ int main(const int argc, char *const argv[]) {
             case 'U':
                 fullNameArg = optarg && strlen( optarg )? strdup( optarg ): NULL;
                 allowPasswordUpdate = true;
+                break;
+            case 'm':
+                masterPasswordFDArg = optarg && strlen( optarg )? strdup( optarg ): NULL;
                 break;
             case 'M':
                 // Passing your master password via the command-line is insecure.  Testing purposes only.
@@ -300,21 +320,28 @@ int main(const int argc, char *const argv[]) {
 
     // Determine fullName, siteName & masterPassword.
     const char *fullName = NULL, *masterPassword = NULL, *siteName = NULL;
-    if (!(fullNameArg && (fullName = strdup( fullNameArg ))) &&
-        !(fullName = mpw_getline( "Your full name:" ))) {
-        ftl( "Missing full name.\n" );
-        mpw_free_strings( &fullName, &masterPassword, &siteName, NULL );
-        return EX_DATAERR;
+    if ((!fullName || !strlen( fullName )) && fullNameArg)
+        fullName = strdup( fullNameArg );
+    while (!fullName || !strlen( fullName ))
+        fullName = mpw_getline( "Your full name:" );
+    if ((!masterPassword || !strlen( masterPassword )) && masterPasswordFDArg) {
+        FILE *masterPasswordFile = fdopen( atoi( masterPasswordFDArg ), "r" );
+        if (!masterPasswordFile)
+            wrn( "Error opening master password FD %s: %s\n", masterPasswordFDArg, strerror( errno ) );
+        else {
+            masterPassword = mpw_read_file( masterPasswordFile );
+            if (ferror( masterPasswordFile ))
+                wrn( "Error reading master password from %s: %d\n", masterPasswordFDArg, ferror( masterPasswordFile ) );
+        }
     }
-    if (!(masterPasswordArg && (masterPassword = strdup( masterPasswordArg ))))
-        while (!masterPassword || !strlen( masterPassword ))
-            masterPassword = mpw_getpass( "Your master password: " );
-    if (!(siteNameArg && (siteName = strdup( siteNameArg ))) &&
-        !(siteName = mpw_getline( "Site name:" ))) {
-        ftl( "Missing site name.\n" );
-        mpw_free_strings( &fullName, &masterPassword, &siteName, NULL );
-        return EX_DATAERR;
-    }
+    if ((!masterPassword || !strlen( masterPassword )) && masterPasswordArg)
+        masterPassword = strdup( masterPasswordArg );
+    while (!masterPassword || !strlen( masterPassword ))
+        masterPassword = mpw_getpass( "Your master password: " );
+    if ((!siteName || !strlen( siteName )) && siteNameArg)
+        siteName = strdup( siteNameArg );
+    while (!siteName || !strlen( siteName ))
+        siteName = mpw_getline( "Site name:" );
     MPMarshallFormat sitesFormat = MPMarshallFormatDefault;
     if (sitesFormatArg) {
         sitesFormat = mpw_formatWithName( sitesFormatArg );
@@ -362,11 +389,7 @@ int main(const int argc, char *const argv[]) {
 
     else {
         // Read file.
-        size_t blockSize = 4096, bufSize = 0, bufOffset = 0, readSize = 0;
-        char *sitesInputData = NULL;
-        while ((mpw_realloc( &sitesInputData, &bufSize, blockSize )) &&
-               (bufOffset += (readSize = fread( sitesInputData + bufOffset, 1, blockSize, sitesFile ))) &&
-               (readSize == blockSize));
+        char *sitesInputData = mpw_read_file( sitesFile );
         if (ferror( sitesFile ))
             wrn( "Error while reading configuration file:\n  %s: %d\n", sitesPath, ferror( sitesFile ) );
         fclose( sitesFile );
@@ -382,8 +405,7 @@ int main(const int argc, char *const argv[]) {
             if (!allowPasswordUpdate) {
                 ftl( "Incorrect master password according to configuration:\n  %s: %s\n", sitesPath, marshallError.description );
                 mpw_marshal_free( &user );
-                mpw_free( &sitesInputData, bufSize );
-                mpw_free_strings( &sitesPath, &fullName, &masterPassword, &siteName, NULL );
+                mpw_free_strings( &sitesInputData, &sitesPath, &fullName, &masterPassword, &siteName, NULL );
                 return EX_DATAERR;
             }
 
@@ -405,7 +427,8 @@ int main(const int argc, char *const argv[]) {
                 user->masterPassword = strdup( masterPassword );
             }
         }
-        mpw_free( &sitesInputData, bufSize );
+        mpw_free_string( &sitesInputData );
+
         if (!user || marshallError.type != MPMarshallSuccess) {
             err( "Couldn't parse configuration file:\n  %s: %s\n", sitesPath, marshallError.description );
             mpw_marshal_free( &user );
