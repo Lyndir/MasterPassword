@@ -126,7 +126,7 @@ static MPSiteKey mpw_siteKey_v0(
 }
 
 static const char *mpw_sitePasswordFromTemplate_v0(
-        MPMasterKey  __unused masterKey, MPSiteKey siteKey, MPResultType resultType, const char __unused *resultParam) {
+        MPMasterKey __unused masterKey, MPSiteKey siteKey, MPResultType resultType, const char __unused *resultParam) {
 
     const char *_siteKey = (const char *)siteKey;
 
