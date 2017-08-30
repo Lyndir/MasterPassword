@@ -1,9 +1,19 @@
 #!/usr/bin/env bash
 #
-# TROUBLESHOOTING
-#   - Take a look at the "Optional features" section.  Some features have dependencies,
-#       either make sure you have them or disable those features.
-#       eg. mpw_color=0 ./build
+# USAGE
+#   [targets='...'] [mpw_feature=0|1 ...] [CFLAGS='...'] [LDFLAGS='...'] ./build [cc arguments ...]
+#
+#   By default, you should only need to run ./build
+#
+#   You can customize the targets that are built using targets='...'. Use targets='all' to build all targets.
+#   By default, we only build the 'mpw' target.  
+#   See targets_all for all possible targets as well as the features they support and require.
+#
+#   Several features can be enabled or disabled using feature flags.
+#   See the Features section for an overview of the features, their default setting, their meaning and their dependencies.
+#   You will need to have each of the feature's dependencies installed for the build to succeed with that feature enabled.
+#
+#   Finally, the C compiler can be tuned using CFLAGS, LDFLAGS and compiler arguments passed to the script.
 #
 # BUGS
 #   masterpassword@lyndir.com
@@ -18,19 +28,14 @@ set -e
 
 ### CONFIGURATION
 # Targets to build.
-if [[ $targets ]]; then
-    read -ra targets <<< "$targets"
-else
-    # Default targets.
-    # Modify here or override using targets='mpw mpw-bench' ./build
-    targets=(
-        mpw                         # C CLI version of Master Password (needs: mpw_sodium, optional: mpw_color, mpw_json).
-       #mpw-bench                   # C CLI Master Password benchmark utility (needs: mpw_sodium).
-       #mpw-tests                   # C Master Password algorithm test suite (needs: mpw_sodium, mpw_xml).
-    )
-fi
+targets_all=(
+    mpw                     # C CLI version of Master Password (needs: mpw_sodium, optional: mpw_color, mpw_json).
+    mpw-bench               # C CLI Master Password benchmark utility (needs: mpw_sodium).
+    mpw-tests               # C Master Password algorithm test suite (needs: mpw_sodium, mpw_xml).
+)
+targets_default='mpw'       # Override with: targets='...' ./build
 
-# Optional features.
+# Features.
 mpw_sodium=${mpw_sodium:-1} # Implement crypto functions with sodium (depends on libsodium).
 mpw_json=${mpw_json:-1}     # Support JSON-based user configuration format (depends on libjson-c).
 mpw_color=${mpw_color:-1}   # Colorized identicon (depends on libncurses).
@@ -76,7 +81,7 @@ mpw() {
     cc "${cflags[@]}" "$@"                  -c core/mpw-marshall.c      -o core/mpw-marshall.o
     cc "${cflags[@]}" "$@" "core/base64.o" "core/mpw-algorithm.o" "core/mpw-types.o" "core/mpw-util.o" "core/mpw-marshall-util.o" "core/mpw-marshall.o" \
        "${ldflags[@]}"     "cli/mpw-cli.c" -o "mpw"
-    echo "done!  Now run ./install or use ./$_"
+    echo "done!  You can now run ./mpw-cli-tests, ./install or use ./$_"
 }
 
 
@@ -105,7 +110,7 @@ mpw-bench() {
     cc "${cflags[@]}" "$@"                  -c core/mpw-util.c      -o core/mpw-util.o
     cc "${cflags[@]}" "$@" "core/base64.o" "core/mpw-algorithm.o" "core/mpw-types.o" "core/mpw-util.o" \
        "${ldflags[@]}"     "cli/mpw-bench.c" -o "mpw-bench"
-    echo "done!  Now use ./$_"
+    echo "done!  You can now use ./$_"
 }
 
 
@@ -136,7 +141,7 @@ mpw-tests() {
     cc "${cflags[@]}" "$@"                  -c cli/mpw-tests-util.c -o cli/mpw-tests-util.o
     cc "${cflags[@]}" "$@" "core/base64.o" "core/mpw-algorithm.o" "core/mpw-types.o" "core/mpw-util.o" \
        "${ldflags[@]}"     "cli/mpw-tests-util.o" "cli/mpw-tests.c" -o "mpw-tests"
-    echo "done!  Now use ./$_"
+    echo "done!  You can now use ./$_"
 }
 
 
@@ -206,9 +211,10 @@ use_mpw_xml() {
 
 
 ### BUILD TARGETS
-echo "Will build targets: ${targets[*]}..."
-for target in "${targets[@]}"; do
-    echo
-    echo "Building target: $target..."
-    ( "$target" "$@" )
+for target in "${targets_all[@]}"; do
+    if [[ ${targets:-$targets_default} == 'all' || " $target " = *" ${targets:-$targets_default} "* ]]; then
+        echo
+        echo "Building target: $target..."
+        ( "$target" "$@" )
+    fi
 done

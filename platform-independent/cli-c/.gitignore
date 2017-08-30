@@ -1,0 +1,10 @@
+*.o
+*.dSYM
+
+mpw
+mpw-bench
+mpw-tests
+
+VERSION
+mpw-*.tar.gz
+mpw-*.tar.gz.sig
