@@ -175,6 +175,7 @@
 		DA45224A190628A1008F650A /* icon_wrench@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD386B1711E29700CF925C /* icon_wrench@2x.png */; };
 		DA45224B190628B2008F650A /* icon_gear.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD37821711E29500CF925C /* icon_gear.png */; };
 		DA45224C190628B2008F650A /* icon_gear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD37831711E29500CF925C /* icon_gear@2x.png */; };
+		DA45711D1F572F1E00D54152 /* PearlCryptUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DA45711B1F572F1E00D54152 /* PearlCryptUtils.m */; };
 		DA4DA1D91564471A00F6F596 /* libjrswizzle.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC6326C148680650075AEA5 /* libjrswizzle.a */; };
 		DA4DA1DA1564471F00F6F596 /* libuicolor-utilities.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC6325D1486805C0075AEA5 /* libuicolor-utilities.a */; };
 		DA5A09DF171A70E4005284AB /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = DA5A09DD171A70E4005284AB /* play.png */; };
@@ -792,6 +793,8 @@
 		DA38D6A218CCB5BF009AEB3E /* Storyboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Storyboard.storyboard; sourceTree = "<group>"; };
 		DA3B844D190FC5DF00246EEA /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = ../../../External/iOS/Crashlytics.framework; sourceTree = "<group>"; };
 		DA3BCFCA19BD09D5006B2681 /* SourceCodePro-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceCodePro-Regular.otf"; sourceTree = "<group>"; };
+		DA45711B1F572F1E00D54152 /* PearlCryptUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlCryptUtils.m; sourceTree = "<group>"; };
+		DA45711C1F572F1E00D54152 /* PearlCryptUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlCryptUtils.h; sourceTree = "<group>"; };
 		DA5A09DD171A70E4005284AB /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
 		DA5A09DE171A70E4005284AB /* play@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "play@2x.png"; sourceTree = "<group>"; };
 		DA5A09E8171BB0F7005284AB /* unlocked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unlocked.png; sourceTree = "<group>"; };
@@ -3159,6 +3162,8 @@
 			children = (
 				DAFE45FD15039823003ABA7C /* Pearl-Crypto.h */,
 				DA30E9D115722EE500A68B4C /* Pearl-Crypto.m */,
+				DA45711C1F572F1E00D54152 /* PearlCryptUtils.h */,
+				DA45711B1F572F1E00D54152 /* PearlCryptUtils.m */,
 				DAFE460015039823003ABA7C /* PearlKeyChain.h */,
 				DAFE460115039823003ABA7C /* PearlKeyChain.m */,
 				DAFE460615039823003ABA7C /* README */,
@@ -3998,6 +4003,7 @@
 				93D39D8F78978196D6ABDEDE /* MPNavigationController.m in Sources */,
 				93D3939661CE37180AF7CD6A /* MPStoreViewController.m in Sources */,
 				93D390C1B93F9D3AE37DD0A5 /* MPAnswersViewController.m in Sources */,
+				DA45711D1F572F1E00D54152 /* PearlCryptUtils.m in Sources */,
 				93D399D7E08A142776A74CB8 /* MPOverlayViewController.m in Sources */,
 				93D39A27F2506C6FEEF9C588 /* MPAlgorithmV2.m in Sources */,
 				93D39B429C67A62E29DC02DA /* MPRootSegue.m in Sources */,

@@ -77,6 +77,7 @@
 		DA3B8453190FC86F00246EEA /* NSManagedObject+Pearl.h in Headers */ = {isa = PBXBuildFile; fileRef = DA3B8451190FC86F00246EEA /* NSManagedObject+Pearl.h */; };
 		DA3B8456190FC89700246EEA /* MPFixable.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3B8454190FC89700246EEA /* MPFixable.m */; };
 		DA3BCFCD19BD09E0006B2681 /* SourceCodePro-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = DA3BCFCC19BD09E0006B2681 /* SourceCodePro-Regular.otf */; };
+		DA4571201F572F3200D54152 /* PearlCryptUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DA45711E1F572F3200D54152 /* PearlCryptUtils.m */; };
 		DA4DA1D91564471A00F6F596 /* libjrswizzle.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC6326C148680650075AEA5 /* libjrswizzle.a */; };
 		DA4DAE941A7D8117003E5423 /* MPAlgorithmV3.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4DAE921A7D8117003E5423 /* MPAlgorithmV3.m */; };
 		DA4DAE951A7D8117003E5423 /* MPTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4DAE931A7D8117003E5423 /* MPTypes.m */; };
@@ -495,6 +496,8 @@
 		DA456CA21F5307B700D54152 /* blf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = blf.h; sourceTree = "<group>"; };
 		DA4571171F552C9500D54152 /* bcrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bcrypt.h; sourceTree = "<group>"; };
 		DA4571181F552C9500D54152 /* blowfish.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = blowfish.h; sourceTree = "<group>"; };
+		DA45711E1F572F3200D54152 /* PearlCryptUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlCryptUtils.m; sourceTree = "<group>"; };
+		DA45711F1F572F3200D54152 /* PearlCryptUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlCryptUtils.h; sourceTree = "<group>"; };
 		DA4DAE911A7D8117003E5423 /* MPAlgorithmV3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAlgorithmV3.h; sourceTree = "<group>"; };
 		DA4DAE921A7D8117003E5423 /* MPAlgorithmV3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAlgorithmV3.m; sourceTree = "<group>"; };
 		DA4DAE931A7D8117003E5423 /* MPTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTypes.m; sourceTree = "<group>"; };
@@ -2217,6 +2220,8 @@
 			children = (
 				DAFE45FD15039823003ABA7C /* Pearl-Crypto.h */,
 				DA30E9D115722EE500A68B4C /* Pearl-Crypto.m */,
+				DA45711F1F572F3200D54152 /* PearlCryptUtils.h */,
+				DA45711E1F572F3200D54152 /* PearlCryptUtils.m */,
 				DAFE460015039823003ABA7C /* PearlKeyChain.h */,
 				DAFE460115039823003ABA7C /* PearlKeyChain.m */,
 				DAFE460615039823003ABA7C /* README */,
@@ -2695,6 +2700,7 @@
 				DA5E5CF81724A667003798D8 /* MPAlgorithmV1.m in Sources */,
 				DA2686231EBFD7A40001E37E /* MPStoredSiteEntity+CoreDataClass.m in Sources */,
 				DA2686221EBFD7A40001E37E /* MPSiteQuestionEntity+CoreDataProperties.m in Sources */,
+				DA4571201F572F3200D54152 /* PearlCryptUtils.m in Sources */,
 				DACBFCDF1C59B22E007EF90F /* NSMutableSet+Pearl.m in Sources */,
 				DA2686241EBFD7A40001E37E /* MPStoredSiteEntity+CoreDataProperties.m in Sources */,
 				DA6774311A4746AF004F356A /* mpw-util.c in Sources */,
