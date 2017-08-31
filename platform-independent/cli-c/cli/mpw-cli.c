@@ -20,9 +20,10 @@
 #ifndef MP_VERSION
 #define MP_VERSION ?
 #endif
-#define MP_ENV_fullName     "MP_FULLNAME"
-#define MP_ENV_algorithm    "MP_ALGORITHM"
-#define MP_ENV_format       "MP_FORMAT"
+#define MP_ENV_fullName     "MPW_FULLNAME"
+#define MP_ENV_algorithm    "MPW_ALGORITHM"
+#define MP_ENV_format       "MPW_FORMAT"
+#define MP_ENV_askpass      "MPW_ASKPASS"
 
 /** Output the program's usage documentation. */
 static void usage() {
@@ -104,8 +105,9 @@ static void usage() {
             "ENVIRONMENT\n\n"
             "  %-12s The full name of the user (see -u).\n"
             "  %-12s The default algorithm version (see -a).\n"
-            "  %-12s The default mpsites format (see -f).\n\n",
-            MP_ENV_fullName, MP_ENV_algorithm, MP_ENV_format );
+            "  %-12s The default mpsites format (see -f).\n"
+            "  %-12s The askpass program to use for prompting the user.\n\n",
+            MP_ENV_fullName, MP_ENV_algorithm, MP_ENV_format, MP_ENV_askpass );
     exit( 0 );
 }
 
@@ -124,7 +126,7 @@ char *mpw_read_file(FILE *file);
   * @return A newly allocated string or NULL if askpass is not supported or an error occurred. */
 static char *mpw_askpass(const char *prompt) {
 
-    const char *askpass = mpw_getenv( "MPW_ASKPASS" );
+    const char *askpass = mpw_getenv( MP_ENV_askpass );
     if (!askpass)
         return NULL;
 
@@ -146,7 +148,7 @@ static char *mpw_askpass(const char *prompt) {
         if (dup2( pipes[1], STDOUT_FILENO ) == ERR)
             ftl( "Couldn't connect pipe to process: %s\n", strerror( errno ) );
 
-        else if (execl( askpass, askpass, prompt, NULL ) == ERR)
+        else if (execlp( askpass, askpass, prompt, NULL ) == ERR)
             ftl( "Couldn't execute askpass:\n  %s: %s\n", askpass, strerror( errno ) );
 
         exit( EX_SOFTWARE );
