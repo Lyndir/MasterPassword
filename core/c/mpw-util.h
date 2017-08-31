@@ -31,42 +31,42 @@ extern int mpw_verbosity;
 #define trc_level 3
 /** Logging internal state. */
 #define trc(...) ({ \
-    if (mpw_verbosity >= 3) \
+    if (mpw_verbosity >= trc_level) \
         fprintf( stderr, __VA_ARGS__ ); })
 #endif
 #ifndef dbg
 #define dbg_level 2
 /** Logging state and events interesting when investigating issues. */
 #define dbg(...) ({ \
-    if (mpw_verbosity >= 2) \
+    if (mpw_verbosity >= dbg_level) \
         fprintf( stderr, __VA_ARGS__ ); })
 #endif
 #ifndef inf
 #define inf_level 1
 /** User messages. */
 #define inf(...) ({ \
-    if (mpw_verbosity >= 1) \
+    if (mpw_verbosity >= inf_level) \
         fprintf( stderr, __VA_ARGS__ ); })
 #endif
 #ifndef wrn
 #define wrn_level 0
 /** Recoverable issues and user suggestions. */
 #define wrn(...) ({ \
-    if (mpw_verbosity >= 0) \
+    if (mpw_verbosity >= wrn_level) \
         fprintf( stderr, __VA_ARGS__ ); })
 #endif
 #ifndef err
 #define err_level -1
 /** Unrecoverable issues. */
 #define err(...) ({ \
-    if (mpw_verbosity >= -1) \
+    if (mpw_verbosity >= err_level) \
         fprintf( stderr, __VA_ARGS__ ); })
 #endif
 #ifndef ftl
 #define ftl_level -2
 /** Issues that lead to abortion. */
 #define ftl(...) ({ \
-    if (mpw_verbosity >= -2) \
+    if (mpw_verbosity >= ftl_level) \
         fprintf( stderr, __VA_ARGS__ ); })
 #endif
 
@@ -84,6 +84,9 @@ extern int mpw_verbosity;
 #endif
 #ifndef ERR
 #define ERR -1
+#endif
+#ifndef OK
+#define OK 0
 #endif
 #ifndef stringify
 #define stringify(s) #s

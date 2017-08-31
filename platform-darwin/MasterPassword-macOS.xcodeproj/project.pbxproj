@@ -129,6 +129,7 @@
 		DAADCC4B19FB000C00987B1D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBC45214F6364500987BF6 /* QuartzCore.framework */; };
 		DAADCC6919FB007F00987B1D /* NSManagedObjectModel+KCOrderedAccessorFix.m in Sources */ = {isa = PBXBuildFile; fileRef = DAADCC6719FB007F00987B1D /* NSManagedObjectModel+KCOrderedAccessorFix.m */; };
 		DAADCC6A19FB00B500987B1D /* libKCOrderedAccessorFix.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAADCC5019FB006500987B1D /* libKCOrderedAccessorFix.a */; };
+		DAAF16651F5897EA0013B8AE /* mpw-cli-util.c in Sources */ = {isa = PBXBuildFile; fileRef = DAAF16631F5897EA0013B8AE /* mpw-cli-util.c */; };
 		DAB7AE5A1F3D74E700C856B1 /* libjson-c.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB7AE591F3D74E700C856B1 /* libjson-c.a */; };
 		DAB7AE5B1F3D750B00C856B1 /* libjson-c.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB7AE591F3D74E700C856B1 /* libjson-c.a */; };
 		DAB7AE941F3D757B00C856B1 /* libjson-c.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB7AE901F3D757B00C856B1 /* libjson-c.a */; };
@@ -974,6 +975,8 @@
 		DAADCC5019FB006500987B1D /* libKCOrderedAccessorFix.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libKCOrderedAccessorFix.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAADCC6619FB007F00987B1D /* NSManagedObjectModel+KCOrderedAccessorFix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObjectModel+KCOrderedAccessorFix.h"; sourceTree = "<group>"; };
 		DAADCC6719FB007F00987B1D /* NSManagedObjectModel+KCOrderedAccessorFix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObjectModel+KCOrderedAccessorFix.m"; sourceTree = "<group>"; };
+		DAAF16631F5897EA0013B8AE /* mpw-cli-util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-cli-util.c"; sourceTree = "<group>"; };
+		DAAF16641F5897EA0013B8AE /* mpw-cli-util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-cli-util.h"; sourceTree = "<group>"; };
 		DAB7AE591F3D74E700C856B1 /* libjson-c.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libjson-c.a"; path = "External/libjson-c/libjson-c-osx/lib/libjson-c.a"; sourceTree = "<group>"; };
 		DAB7AE7B1F3D757B00C856B1 /* arraylist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = arraylist.h; sourceTree = "<group>"; };
 		DAB7AE7C1F3D757B00C856B1 /* bits.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bits.h; sourceTree = "<group>"; };
@@ -1292,6 +1295,8 @@
 				DA456CA21F5307B700D54152 /* blf.h */,
 				DA4571181F552C9500D54152 /* blowfish.h */,
 				DA1C7AB81F1A8F6E009A3551 /* mpw-bench.c */,
+				DAAF16631F5897EA0013B8AE /* mpw-cli-util.c */,
+				DAAF16641F5897EA0013B8AE /* mpw-cli-util.h */,
 				DA1C7AB91F1A8F6E009A3551 /* mpw-cli.c */,
 				DA1C7ABA1F1A8F6E009A3551 /* mpw-tests-util.c */,
 				DA1C7ABB1F1A8F6E009A3551 /* mpw-tests-util.h */,
@@ -2734,6 +2739,7 @@
 				93D393A1646430FAAC73E7FE /* MPMacApplication.m in Sources */,
 				DA7471A61F2B71B9005F3468 /* mpw-marshall-util.c in Sources */,
 				93D398D1F5D8CD5A22AF6929 /* MPGradientView.m in Sources */,
+				DAAF16651F5897EA0013B8AE /* mpw-cli-util.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
