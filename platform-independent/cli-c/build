@@ -73,13 +73,7 @@ mpw() {
     )
 
     # build
-    cc "${cflags[@]}" "$@"                  -c core/base64.c            -o core/base64.o
-    cc "${cflags[@]}" "$@"                  -c core/mpw-algorithm.c     -o core/mpw-algorithm.o
-    cc "${cflags[@]}" "$@"                  -c core/mpw-types.c         -o core/mpw-types.o
-    cc "${cflags[@]}" "$@"                  -c core/mpw-util.c          -o core/mpw-util.o
-    cc "${cflags[@]}" "$@"                  -c core/mpw-marshall-util.c -o core/mpw-marshall-util.o
-    cc "${cflags[@]}" "$@"                  -c core/mpw-marshall.c      -o core/mpw-marshall.o
-    cc "${cflags[@]}" "$@" "core/base64.o" "core/mpw-algorithm.o" "core/mpw-types.o" "core/mpw-util.o" "core/mpw-marshall-util.o" "core/mpw-marshall.o" \
+    cc "${cflags[@]}" "$@" "core/base64.c" "core/mpw-algorithm.c" "core/mpw-types.c" "core/mpw-util.c" "core/mpw-marshall-util.c" "core/mpw-marshall.c" \
        "${ldflags[@]}"     "cli/mpw-cli.c" -o "mpw"
     echo "done!  You can now run ./mpw-cli-tests, ./install or use ./$_"
 }
@@ -104,11 +98,7 @@ mpw-bench() {
     )
 
     # build
-    cc "${cflags[@]}" "$@"                  -c core/base64.c        -o core/base64.o
-    cc "${cflags[@]}" "$@"                  -c core/mpw-algorithm.c -o core/mpw-algorithm.o
-    cc "${cflags[@]}" "$@"                  -c core/mpw-types.c     -o core/mpw-types.o
-    cc "${cflags[@]}" "$@"                  -c core/mpw-util.c      -o core/mpw-util.o
-    cc "${cflags[@]}" "$@" "core/base64.o" "core/mpw-algorithm.o" "core/mpw-types.o" "core/mpw-util.o" \
+    cc "${cflags[@]}" "$@" "core/base64.c" "core/mpw-algorithm.c" "core/mpw-types.c" "core/mpw-util.c" \
        "${ldflags[@]}"     "cli/mpw-bench.c" -o "mpw-bench"
     echo "done!  You can now use ./$_"
 }
@@ -134,13 +124,8 @@ mpw-tests() {
     )
 
     # build
-    cc "${cflags[@]}" "$@"                  -c core/base64.c        -o core/base64.o
-    cc "${cflags[@]}" "$@"                  -c core/mpw-algorithm.c -o core/mpw-algorithm.o
-    cc "${cflags[@]}" "$@"                  -c core/mpw-types.c     -o core/mpw-types.o
-    cc "${cflags[@]}" "$@"                  -c core/mpw-util.c      -o core/mpw-util.o
-    cc "${cflags[@]}" "$@"                  -c cli/mpw-tests-util.c -o cli/mpw-tests-util.o
-    cc "${cflags[@]}" "$@" "core/base64.o" "core/mpw-algorithm.o" "core/mpw-types.o" "core/mpw-util.o" \
-       "${ldflags[@]}"     "cli/mpw-tests-util.o" "cli/mpw-tests.c" -o "mpw-tests"
+    cc "${cflags[@]}" "$@" "core/base64.c" "core/mpw-algorithm.c" "core/mpw-types.c" "core/mpw-util.c" "cli/mpw-tests-util.c" \
+       "${ldflags[@]}"     "cli/mpw-tests.c" -o "mpw-tests"
     echo "done!  You can now use ./$_"
 }
 
