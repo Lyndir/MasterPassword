@@ -18,7 +18,7 @@ static void usage() {
             "--------------------------------------------------------------------------------\n"
             "      https://masterpasswordapp.com\n\n", stringify_def( MP_VERSION ) );
     inf( ""
-            "USAGE\n"
+            "\nUSAGE\n\n"
             "  mpw [-u|-U full-name] [-m fd] [-t pw-type] [-P value] [-c counter]\n"
             "      [-a version] [-p purpose] [-C context] [-f|-F format] [-R 0|1]\n"
             "      [-v|-q] [-h] site-name\n\n" );
@@ -87,7 +87,7 @@ static void usage() {
             "  -v           Increase output verbosity (can be repeated).\n"
             "  -q           Decrease output verbosity (can be repeated).\n\n" );
     inf( ""
-            "ENVIRONMENT\n\n"
+            "\nENVIRONMENT\n\n"
             "  %-12s The full name of the user (see -u).\n"
             "  %-12s The default algorithm version (see -a).\n"
             "  %-12s The default mpsites format (see -f).\n"
