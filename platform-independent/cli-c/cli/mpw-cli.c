@@ -24,6 +24,7 @@
 #define MP_ENV_algorithm    "MP_ALGORITHM"
 #define MP_ENV_format       "MP_FORMAT"
 
+/** Output the program's usage documentation. */
 static void usage() {
 
     inf( ""
@@ -108,12 +109,16 @@ static void usage() {
     exit( 0 );
 }
 
+/** Read the value of an environment variable.
+  * @return A newly allocated string or NULL if the variable doesn't exist. */
 static const char *mpw_getenv(const char *variableName) {
 
     char *envBuf = getenv( variableName );
     return envBuf? strdup( envBuf ): NULL;
 }
 
+/** Ask the user a question.
+  * @return A newly allocated string or NULL if an error occurred trying to read from the user. */
 static const char *mpw_getline(const char *prompt) {
 
     fprintf( stderr, "%s ", prompt );
@@ -131,6 +136,8 @@ static const char *mpw_getline(const char *prompt) {
     return buf;
 }
 
+/** Ask the user for a password.
+  * @return A newly allocated string or NULL if an error occurred trying to read from the user. */
 static const char *mpw_getpass(const char *prompt) {
 
     char *passBuf = getpass( prompt );
@@ -142,6 +149,10 @@ static const char *mpw_getpass(const char *prompt) {
     return buf;
 }
 
+/** Get the absolute path to the mpw configuration file with the given prefix name and file extension.
+  * Resolves the file <prefix.extension> as located in the <.mpw.d> directory inside the user's home directory
+  * or current directory if it couldn't be resolved.
+  * @return A newly allocated string. */
 static const char *mpw_path(const char *prefix, const char *extension) {
 
     // Resolve user's home directory.
@@ -184,13 +195,16 @@ static const char *mpw_path(const char *prefix, const char *extension) {
     return path;
 }
 
+/** mkdir all the directories up to the directory of the given file path.
+  * @return true if the file's path exists. */
 static bool mpw_mkdirs(const char *filePath) {
 
     if (!filePath)
         return false;
 
+    // The path to mkdir is the filePath without the last path component.
     char *pathEnd = strrchr( filePath, '/' );
-    char *path = pathEnd? strndup( filePath, pathEnd - filePath ): strdup( filePath );
+    char *path = pathEnd? strndup( filePath, (size_t)(pathEnd - filePath) ): NULL;
     if (!path)
         return false;
 
@@ -216,6 +230,8 @@ static bool mpw_mkdirs(const char *filePath) {
     return success;
 }
 
+/** Read the file contents of a given file.
+  * @return A newly allocated string or NULL the read buffer couldn't be allocated. */
 static char *mpw_read_file(FILE *file) {
 
     char *buf = NULL;
@@ -227,6 +243,8 @@ static char *mpw_read_file(FILE *file) {
     return buf;
 }
 
+/** ========================================================================
+ *  MAIN                                                                     */
 int main(const int argc, char *const argv[]) {
 
     // CLI defaults.
@@ -322,8 +340,15 @@ int main(const int argc, char *const argv[]) {
     const char *fullName = NULL, *masterPassword = NULL, *siteName = NULL;
     if ((!fullName || !strlen( fullName )) && fullNameArg)
         fullName = strdup( fullNameArg );
-    while (!fullName || !strlen( fullName ))
-        fullName = mpw_getline( "Your full name:" );
+    if (!fullName || !strlen( fullName ))
+        do {
+            fullName = mpw_getline( "Your full name:" );
+        } while (fullName && !strlen( fullName ));
+    if (!fullName || !strlen( fullName )) {
+        ftl( "Missing full name.\n" );
+        mpw_free_strings( &fullName, &masterPassword, &siteName, NULL );
+        return EX_DATAERR;
+    }
     if ((!masterPassword || !strlen( masterPassword )) && masterPasswordFDArg) {
         FILE *masterPasswordFile = fdopen( atoi( masterPasswordFDArg ), "r" );
         if (!masterPasswordFile)
@@ -336,12 +361,26 @@ int main(const int argc, char *const argv[]) {
     }
     if ((!masterPassword || !strlen( masterPassword )) && masterPasswordArg)
         masterPassword = strdup( masterPasswordArg );
-    while (!masterPassword || !strlen( masterPassword ))
-        masterPassword = mpw_getpass( "Your master password: " );
+    if (!masterPassword || !strlen( masterPassword ))
+        do {
+            masterPassword = mpw_getpass( "Your master password: " );
+        } while (masterPassword && !strlen( masterPassword ));
+    if (!masterPassword || !strlen( masterPassword )) {
+        ftl( "Missing master password.\n" );
+        mpw_free_strings( &fullName, &masterPassword, &siteName, NULL );
+        return EX_DATAERR;
+    }
     if ((!siteName || !strlen( siteName )) && siteNameArg)
         siteName = strdup( siteNameArg );
-    while (!siteName || !strlen( siteName ))
-        siteName = mpw_getline( "Site name:" );
+    if (!siteName || !strlen( siteName ))
+        do {
+            siteName = mpw_getline( "Site name:" );
+        } while (siteName && !strlen( siteName ));
+    if (!siteName || !strlen( siteName )) {
+        ftl( "Missing site name.\n" );
+        mpw_free_strings( &fullName, &masterPassword, &siteName, NULL );
+        return EX_DATAERR;
+    }
     MPMarshallFormat sitesFormat = MPMarshallFormatDefault;
     if (sitesFormatArg) {
         sitesFormat = mpw_formatWithName( sitesFormatArg );
