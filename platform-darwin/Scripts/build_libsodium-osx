@@ -6,18 +6,18 @@ cd "${BASH_SOURCE%/*}/../External/libsodium"
 
 # Inspired by libsodium/dist-build/osx.sh
 # Prepare
-autoreconf --verbose --install --symlink --force 2>&1 | sed 's/^\([^:]*\):[0-9]\{1,\}: /\1: /'
+autoreconf --verbose --install --symlink 2>&1 | sed 's/^\([^:]*\):[0-9]\{1,\}: /\1: /'
 rm -rf "${prefix=$PWD/libsodium-osx}"
 mkdir -p "$prefix"
 
-# SDK: macOS
-sdkPath="$(xcrun --show-sdk-path --sdk macosx)"
-platformPath="$(xcrun --show-sdk-platform-path --sdk macosx)"
+# Targets
 (
     ## ARCH: x86_64
-    export PATH="$platformPath/usr/bin:$platformPath/usr/sbin:$PATH"
-    export CFLAGS="-arch x86_64 -isysroot $sdkPath -mmacosx-version-min=${MACOSX_DEPLOYMENT_TARGET:-"10.8"} -O2 -g -flto $CFLAGS"
-    export LDFLAGS="-arch x86_64 -isysroot $sdkPath -mmacosx-version-min=${MACOSX_DEPLOYMENT_TARGET:-"10.8"} -flto $LDFLAGS"
+    export SDKROOT="$(xcrun --show-sdk-path --sdk macosx)"
+    export PATH="$(xcrun --show-sdk-platform-path --sdk macosx)/usr/bin:$PATH"
+    export CFLAGS="-arch x86_64 -isysroot $SDKROOT -mmacosx-version-min=${MACOSX_DEPLOYMENT_TARGET:-10.8} -O2 -g -flto $CFLAGS"
+    export LDFLAGS="-arch x86_64 -isysroot $SDKROOT -mmacosx-version-min=${MACOSX_DEPLOYMENT_TARGET:-10.8} -flto $LDFLAGS"
+    export CPPFLAGS="$CFLAGS $CPPFLAGS"
     [[ -e Makefile ]] && make -s distclean
     ./configure --disable-shared --prefix="$prefix"
     make -j3 check

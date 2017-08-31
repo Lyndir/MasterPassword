@@ -5,7 +5,7 @@ cd "${BASH_SOURCE%/*}/../External/libsodium"
 [[ -d libsodium-ios ]] && exit
 
 # Prepare
-autoreconf --verbose --install --symlink --force 2>&1 | sed 's/^\([^:]*\):[0-9]\{1,\}: /\1: /'
+autoreconf --verbose --install --symlink 2>&1 | sed 's/^\([^:]*\):[0-9]\{1,\}: /\1: /'
 rm -rf "${prefix=$PWD/libsodium-ios}"
 mkdir -p "$prefix/lib" \
     "${prefix_i386=$prefix/tmp/i386}" \
