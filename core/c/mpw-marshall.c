@@ -215,6 +215,7 @@ static bool mpw_marshall_write_flat(
     return true;
 }
 
+#if MPW_JSON
 static bool mpw_marshall_write_json(
         char **out, const MPMarshalledUser *user, MPMarshallError *error) {
 
@@ -342,6 +343,7 @@ static bool mpw_marshall_write_json(
     *error = (MPMarshallError){ .type = MPMarshallSuccess };
     return true;
 }
+#endif
 
 bool mpw_marshall_write(
         char **out, const MPMarshallFormat outFormat, const MPMarshalledUser *user, MPMarshallError *error) {
@@ -352,8 +354,10 @@ bool mpw_marshall_write(
             return false;
         case MPMarshallFormatFlat:
             return mpw_marshall_write_flat( out, user, error );
+#if MPW_JSON
         case MPMarshallFormatJSON:
             return mpw_marshall_write_json( out, user, error );
+#endif
         default:
             *error = (MPMarshallError){ MPMarshallErrorFormat, mpw_str( "Unsupported output format: %u", outFormat ) };
             return false;
@@ -627,6 +631,7 @@ static MPMarshalledUser *mpw_marshall_read_flat(
     return user;
 }
 
+#if MPW_JSON
 static void mpw_marshall_read_json_info(
         const char *in, MPMarshallInfo *info) {
 
@@ -817,6 +822,7 @@ static MPMarshalledUser *mpw_marshall_read_json(
     *error = (MPMarshallError){ .type = MPMarshallSuccess };
     return user;
 }
+#endif
 
 MPMarshallInfo *mpw_marshall_read_info(
         const char *in) {
@@ -831,7 +837,9 @@ MPMarshallInfo *mpw_marshall_read_info(
         }
         else if (in[0] == '{') {
             *info = (MPMarshallInfo){ .format = MPMarshallFormatJSON };
+#if MPW_JSON
             mpw_marshall_read_json_info( in, info );
+#endif
         }
     }
 
@@ -847,8 +855,10 @@ MPMarshalledUser *mpw_marshall_read(
             return false;
         case MPMarshallFormatFlat:
             return mpw_marshall_read_flat( in, masterPassword, error );
+#if MPW_JSON
         case MPMarshallFormatJSON:
             return mpw_marshall_read_json( in, masterPassword, error );
+#endif
         default:
             *error = (MPMarshallError){ MPMarshallErrorFormat, mpw_str( "Unsupported input format: %u", inFormat ) };
             return NULL;

@@ -50,6 +50,7 @@ time_t mpw_mktime(
     return false;
 }
 
+#if MPW_JSON
 json_object *mpw_get_json_section(
         json_object *obj, const char *section) {
 
@@ -95,6 +96,7 @@ bool mpw_get_json_boolean(
 
     return json_object_get_boolean( json_value ) == TRUE;
 }
+#endif
 
 bool mpw_update_masterKey(MPMasterKey *masterKey, MPAlgorithmVersion *masterKeyAlgorithm, MPAlgorithmVersion targetKeyAlgorithm,
         const char *fullName, const char *masterPassword) {
