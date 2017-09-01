@@ -2,7 +2,7 @@
 set -e
 
 cd "${BASH_SOURCE%/*}/../External/libjson-c"
-[[ -d libjson-c-osx ]] && exit
+[[ -e "${prefix=$PWD/libjson-c-osx}/lib/libjson-c.a" ]] && exit
 
 # Prepare
 autoreconf -Iautoconf-archive/m4 --verbose --install --symlink 2>&1 | sed 's/^\([^:]*\):[0-9]\{1,\}: /\1: /'

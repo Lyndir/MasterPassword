@@ -203,14 +203,9 @@ int main(const int argc, char *const argv[]) {
         return EX_DATAERR;
     }
     if ((!masterPassword || !strlen( masterPassword )) && masterPasswordFDArg) {
-        FILE *masterPasswordFile = fdopen( atoi( masterPasswordFDArg ), "r" );
-        if (!masterPasswordFile)
-            wrn( "Error opening master password FD %s: %s\n", masterPasswordFDArg, strerror( errno ) );
-        else {
-            masterPassword = mpw_read_file( masterPasswordFile );
-            if (ferror( masterPasswordFile ))
-                wrn( "Error reading master password from %s: %d\n", masterPasswordFDArg, ferror( masterPasswordFile ) );
-        }
+        masterPassword = mpw_read_fd( atoi( masterPasswordFDArg ) );
+        if (!masterPassword && errno)
+            wrn( "Error reading master password from FD %s: %s\n", masterPasswordFDArg, strerror( errno ) );
     }
     if ((!masterPassword || !strlen( masterPassword )) && masterPasswordArg)
         masterPassword = strdup( masterPasswordArg );

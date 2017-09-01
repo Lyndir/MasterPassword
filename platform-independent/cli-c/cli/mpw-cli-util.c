@@ -213,7 +213,7 @@ bool mpw_mkdirs(const char *filePath) {
 }
 
 /** Read until EOF from the given file descriptor.
-  * @return A newly allocated string or NULL the read buffer couldn't be allocated. */
+  * @return A newly allocated string or NULL if the read buffer couldn't be allocated or an error occurred. */
 char *mpw_read_fd(int fd) {
 
     char *buf = NULL;
@@ -222,13 +222,13 @@ char *mpw_read_fd(int fd) {
     while ((mpw_realloc( &buf, &bufSize, blockSize )) &&
            ((readSize = read( fd, buf + bufOffset, blockSize )) > 0));
     if (readSize == ERR)
-        dbg( "While reading: %s\n", strerror( errno ) );
+        mpw_free( &buf, bufSize );
 
     return buf;
 }
 
 /** Read the file contents of a given file.
-  * @return A newly allocated string or NULL the read buffer couldn't be allocated. */
+  * @return A newly allocated string or NULL if the read buffer couldn't be allocated. */
 char *mpw_read_file(FILE *file) {
 
     if (!file)

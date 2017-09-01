@@ -2,7 +2,7 @@
 set -e
 
 cd "${BASH_SOURCE%/*}/../External/libsodium"
-[[ -d libsodium-ios ]] && exit
+[[ -e "${prefix=$PWD/libsodium-ios}/lib/libsodium.a" ]] && exit
 
 # Prepare
 autoreconf --verbose --install --symlink 2>&1 | sed 's/^\([^:]*\):[0-9]\{1,\}: /\1: /'
@@ -72,6 +72,7 @@ mkdir -p "$prefix/lib" \
 )
 
 # Merge Binaries
+mv -f -- "$prefix_arm64/include" "$prefix/"
 lipo -create \
   "$prefix_i386/lib/libsodium.a" \
   "$prefix_x86_64/lib/libsodium.a" \
@@ -79,7 +80,6 @@ lipo -create \
   "$prefix_armv7s/lib/libsodium.a" \
   "$prefix_arm64/lib/libsodium.a" \
   -output "$prefix/lib/libsodium.a"
-mv -f -- "$prefix_arm64/include" "$prefix/"
 
 # Cleanup
 rm -rf -- "$prefix/tmp"

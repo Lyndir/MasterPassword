@@ -2,7 +2,7 @@
 set -e
 
 cd "${BASH_SOURCE%/*}/../External/libjson-c"
-[[ -d libjson-c-ios ]] && exit
+[[ -e "${prefix=$PWD/libjson-c-ios}/lib/libjson-c.a" ]] && exit
 
 # Prepare
 autoreconf -Iautoconf-archive/m4 --verbose --install --symlink 2>&1 | sed 's/^\([^:]*\):[0-9]\{1,\}: /\1: /'
@@ -72,6 +72,7 @@ mkdir -p "$prefix/lib" \
 )
 
 # Merge Binaries
+mv -f -- "$prefix_arm64/include" "$prefix/"
 lipo -create \
   "$prefix_i386/lib/libjson-c.a" \
   "$prefix_x86_64/lib/libjson-c.a" \
@@ -79,7 +80,6 @@ lipo -create \
   "$prefix_armv7s/lib/libjson-c.a" \
   "$prefix_arm64/lib/libjson-c.a" \
   -output "$prefix/lib/libjson-c.a"
-mv -f -- "$prefix_arm64/include" "$prefix/"
 
 # Cleanup
 rm -rf -- "$prefix/tmp"

@@ -2,7 +2,7 @@
 set -e
 
 cd "${BASH_SOURCE%/*}/../External/libsodium"
-[[ -d libsodium-osx ]] && exit
+[[ -e "${prefix=$PWD/libsodium-osx}/lib/libsodium.a" ]] && exit
 
 # Inspired by libsodium/dist-build/osx.sh
 # Prepare
