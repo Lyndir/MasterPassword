@@ -197,8 +197,6 @@ use_mpw_xml() {
 
 ### BUILD TARGETS
 for target in "${targets_all[@]}"; do
-    echo "target: $target in ' $targets '."
-
     if [[ ${targets:-$targets_default} == 'all' || " ${targets:-$targets_default} " = *" $target "*  ]]; then
         echo
         echo "Building target: $target..."
