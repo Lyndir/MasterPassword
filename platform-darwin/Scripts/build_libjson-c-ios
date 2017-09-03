@@ -22,7 +22,7 @@ mkdir -p "$prefix/lib" \
     export CFLAGS="-arch i386 -isysroot $SDKROOT -mios-simulator-version-min=${IPHONEOS_DEPLOYMENT_TARGET:-8.0} -O2 -g $CFLAGS"
     export LDFLAGS="-arch i386 -isysroot $SDKROOT -mios-simulator-version-min=${IPHONEOS_DEPLOYMENT_TARGET:-8.0} $LDFLAGS"
     export CPPFLAGS="$CFLAGS $CPPFLAGS"
-    [[ -e Makefile ]] && make -s really-clean
+    [[ -e Makefile ]] && make -s clean
     ./configure --host=i686-apple --disable-shared --prefix="$prefix_i386"
     make -j3 install
 )
@@ -33,7 +33,7 @@ mkdir -p "$prefix/lib" \
     export CFLAGS="-arch x86_64 -isysroot $SDKROOT -mios-simulator-version-min=${IPHONEOS_DEPLOYMENT_TARGET:-8.0} -O2 -g $CFLAGS"
     export LDFLAGS="-arch x86_64 -isysroot $SDKROOT -mios-simulator-version-min=${IPHONEOS_DEPLOYMENT_TARGET:-8.0} $LDFLAGS"
     export CPPFLAGS="$CFLAGS $CPPFLAGS"
-    [[ -e Makefile ]] && make -s really-clean
+    [[ -e Makefile ]] && make -s clean
     ./configure --host=x86_64-apple --disable-shared --prefix="$prefix_x86_64"
     make -j3 install
 )
@@ -44,7 +44,7 @@ mkdir -p "$prefix/lib" \
     export CFLAGS="-mthumb -arch armv7 -isysroot $SDKROOT -mios-version-min=${IPHONEOS_DEPLOYMENT_TARGET:-8.0} -O2 -g $CFLAGS"
     export LDFLAGS="-mthumb -arch armv7 -isysroot $SDKROOT -mios-version-min=${IPHONEOS_DEPLOYMENT_TARGET:-8.0} $LDFLAGS"
     export CPPFLAGS="$CFLAGS $CPPFLAGS"
-    [[ -e Makefile ]] && make -s really-clean
+    [[ -e Makefile ]] && make -s clean
     ./configure --host=x86_64-apple --target=arm-apple --disable-shared --prefix="$prefix_armv7"
     make -j3 install
 )
@@ -55,7 +55,7 @@ mkdir -p "$prefix/lib" \
     export CFLAGS="-mthumb -arch armv7s -isysroot $SDKROOT -mios-version-min=${IPHONEOS_DEPLOYMENT_TARGET:-8.0} -O2 -g $CFLAGS"
     export LDFLAGS="-mthumb -arch armv7s -isysroot $SDKROOT -mios-version-min=${IPHONEOS_DEPLOYMENT_TARGET:-8.0} $LDFLAGS"
     export CPPFLAGS="$CFLAGS $CPPFLAGS"
-    [[ -e Makefile ]] && make -s really-clean
+    [[ -e Makefile ]] && make -s clean
     ./configure --host=x86_64-apple --target=arm-apple --disable-shared --prefix="$prefix_armv7s"
     make -j3 install
 )
@@ -66,7 +66,7 @@ mkdir -p "$prefix/lib" \
     export CFLAGS="-mthumb -arch arm64 -isysroot $SDKROOT -mios-version-min=${IPHONEOS_DEPLOYMENT_TARGET:-8.0} -O2 -g $CFLAGS"
     export LDFLAGS="-mthumb -arch arm64 -isysroot $SDKROOT -mios-version-min=${IPHONEOS_DEPLOYMENT_TARGET:-8.0} $LDFLAGS"
     export CPPFLAGS="$CFLAGS $CPPFLAGS"
-    [[ -e Makefile ]] && make -s really-clean
+    [[ -e Makefile ]] && make -s clean
     ./configure --host=x86_64-apple --target=arm-apple --disable-shared --prefix="$prefix_arm64"
     make -j3 install
 )

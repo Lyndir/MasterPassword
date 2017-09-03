@@ -17,7 +17,7 @@ mkdir -p "$prefix"
     export CFLAGS="-arch x86_64 -isysroot $SDKROOT -mmacosx-version-min=${MACOSX_DEPLOYMENT_TARGET:-10.8} -O2 -g $CFLAGS" # -flto
     export LDFLAGS="-arch x86_64 -isysroot $SDKROOT -mmacosx-version-min=${MACOSX_DEPLOYMENT_TARGET:-10.8} $LDFLAGS" # -flto
     export CPPFLAGS="$CFLAGS $CPPFLAGS"
-    [[ -e Makefile ]] && make -s really-clean
+    [[ -e Makefile ]] && make -s clean
     ./configure --disable-shared --prefix="$prefix"
     make -j3 check
     make -j3 install
