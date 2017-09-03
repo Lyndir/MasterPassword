@@ -20,8 +20,8 @@ static void usage() {
     inf( ""
             "\nUSAGE\n\n"
             "  mpw [-u|-U full-name] [-m fd] [-t pw-type] [-P value] [-c counter]\n"
-            "      [-a version] [-p purpose] [-C context] [-f|-F format] [-R 0|1]\n"
-            "      [-v|-q] [-h] site-name\n\n" );
+            "      [-a version] [-p purpose] [-C context] [-f|F format] [-R 0|1]\n"
+            "      [-v|-q] [-h] [site-name]\n\n" );
     inf( ""
             "  -u full-name Specify the full name of the user.\n"
             "               -u checks the master password against the config,\n"
@@ -82,10 +82,14 @@ static void usage() {
             MP_ENV_format, mpw_marshall_format_extension( MPMarshallFormatFlat ), mpw_marshall_format_extension( MPMarshallFormatJSON ) );
     inf( ""
             "  -R redacted  Whether to save the mpsites in redacted format or not.\n"
+            "               Redaction omits or encrypts any secrets, making the file safe\n"
+            "               for saving on or transmitting via untrusted media.\n"
             "               Defaults to 1, redacted.\n\n" );
     inf( ""
             "  -v           Increase output verbosity (can be repeated).\n"
             "  -q           Decrease output verbosity (can be repeated).\n\n" );
+    inf( ""
+            "  -h           Show this help output instead of performing any operation.\n\n" );
     inf( ""
             "\nENVIRONMENT\n\n"
             "  %-12s The full name of the user (see -u).\n"
@@ -118,6 +122,7 @@ typedef struct {
     bool sitesFormatFixed;
     const char *fullName;
     const char *masterPassword;
+    const char *identicon;
     const char *siteName;
     MPMarshallFormat sitesFormat;
     MPKeyPurpose keyPurpose;
@@ -200,35 +205,32 @@ int main(const int argc, char *const argv[]) {
     cli_free( &args, NULL );
 
     // Operation summary.
-    const char *identicon = mpw_identicon( operation.user->fullName, operation.user->masterPassword );
-    if (!identicon)
-        wrn( "Couldn't determine identicon.\n" );
     dbg( "-----------------\n" );
-    dbg( "fullName         : %s\n", operation.user->fullName );
-    trc( "masterPassword   : %s\n", operation.user->masterPassword );
-    dbg( "identicon        : %s\n", identicon );
-    dbg( "sitesFormat      : %s%s\n", mpw_nameForFormat( operation.sitesFormat ), operation.sitesFormatFixed? " (fixed)": "" );
-    dbg( "sitesPath        : %s\n", operation.sitesPath );
-    dbg( "siteName         : %s\n", operation.site->name );
-    dbg( "siteCounter      : %u\n", operation.siteCounter );
-    dbg( "resultType       : %s (%u)\n", mpw_nameForType( operation.resultType ), operation.resultType );
-    dbg( "resultParam      : %s\n", operation.resultParam );
-    dbg( "keyPurpose       : %s (%u)\n", mpw_nameForPurpose( operation.keyPurpose ), operation.keyPurpose );
-    dbg( "keyContext       : %s\n", operation.keyContext );
-    dbg( "algorithmVersion : %u\n", operation.site->algorithm );
+    if (operation.user) {
+        dbg( "fullName         : %s\n", operation.user->fullName );
+        trc( "masterPassword   : %s\n", operation.user->masterPassword );
+        dbg( "identicon        : %s\n", operation.identicon );
+        dbg( "sitesFormat      : %s%s\n", mpw_nameForFormat( operation.sitesFormat ), operation.sitesFormatFixed? " (fixed)": "" );
+        dbg( "sitesPath        : %s\n", operation.sitesPath );
+    }
+    if (operation.site) {
+        dbg( "siteName         : %s\n", operation.site->name );
+        dbg( "siteCounter      : %u\n", operation.siteCounter );
+        dbg( "resultType       : %s (%u)\n", mpw_nameForType( operation.resultType ), operation.resultType );
+        dbg( "resultParam      : %s\n", operation.resultParam );
+        dbg( "keyPurpose       : %s (%u)\n", mpw_nameForPurpose( operation.keyPurpose ), operation.keyPurpose );
+        dbg( "keyContext       : %s\n", operation.keyContext );
+        dbg( "algorithmVersion : %u\n", operation.site->algorithm );
+    }
     dbg( "-----------------\n\n" );
-    inf( "%s's %s for %s:\n[ %s ]: ", operation.user->fullName, operation.purposeResult, operation.site->name, identicon );
-    mpw_free_strings( &identicon, &operation.sitesPath, NULL );
 
     // Finally ready to perform the actual operation.
     cli_mpw( &args, &operation );
 
-    // Update metadata and save state.
-    operation.site->lastUsed = operation.user->lastUsed = time( NULL );
-    operation.site->uses++;
+    // Save changes and clean up.
     cli_save( &args, &operation );
-
     cli_free( &args, &operation );
+
     return EX_OK;
 }
 
@@ -242,7 +244,8 @@ void cli_free(Arguments *args, Operation *operation) {
 
     if (operation) {
         mpw_free_strings( &operation->fullName, &operation->masterPassword, &operation->siteName, NULL );
-        mpw_free_strings( &operation->keyContext, &operation->sitesPath, &operation->resultState, &operation->resultParam, NULL );
+        mpw_free_strings( &operation->keyContext, &operation->resultState, &operation->resultParam, NULL );
+        mpw_free_strings( &operation->identicon, &operation->sitesPath, NULL );
         mpw_marshal_free( &operation->user );
         operation->site = NULL;
         operation->question = NULL;
@@ -325,6 +328,7 @@ void cli_args(Arguments *args, Operation *operation, const int argc, char *const
                 ftl( "Unexpected option: %c\n", opt );
                 exit( EX_USAGE );
         }
+
     if (optind < argc && argv[optind])
         args->siteName = strdup( argv[optind] );
 }
@@ -333,10 +337,12 @@ void cli_fullName(Arguments *args, Operation *operation) {
 
     if ((!operation->fullName || !strlen( operation->fullName )) && args->fullName)
         operation->fullName = strdup( args->fullName );
+
     if (!operation->fullName || !strlen( operation->fullName ))
         do {
             operation->fullName = mpw_getline( "Your full name:" );
         } while (operation->fullName && !strlen( operation->fullName ));
+
     if (!operation->fullName || !strlen( operation->fullName )) {
         ftl( "Missing full name.\n" );
         cli_free( args, operation );
@@ -351,12 +357,15 @@ void cli_masterPassword(Arguments *args, Operation *operation) {
         if (!operation->masterPassword && errno)
             wrn( "Error reading master password from FD %s: %s\n", args->masterPasswordFD, strerror( errno ) );
     }
+
     if ((!operation->masterPassword || !strlen( operation->masterPassword )) && args->masterPassword)
         operation->masterPassword = strdup( args->masterPassword );
+
     if (!operation->masterPassword || !strlen( operation->masterPassword ))
         do {
             operation->masterPassword = mpw_getpass( "Your master password: " );
         } while (operation->masterPassword && !strlen( operation->masterPassword ));
+
     if (!operation->masterPassword || !strlen( operation->masterPassword )) {
         ftl( "Missing master password.\n" );
         cli_free( args, operation );
@@ -382,32 +391,36 @@ void cli_siteName(Arguments *args, Operation *operation) {
 
 void cli_sitesFormat(Arguments *args, Operation *operation) {
 
-    if (args->sitesFormat) {
-        operation->sitesFormat = mpw_formatWithName( args->sitesFormat );
-        if (ERR == (int)operation->sitesFormat) {
-            ftl( "Invalid sites format: %s\n", args->sitesFormat );
-            cli_free( args, operation );
-            exit( EX_DATAERR );
-        }
+    if (!args->sitesFormat)
+        return;
+
+    operation->sitesFormat = mpw_formatWithName( args->sitesFormat );
+    if (ERR == (int)operation->sitesFormat) {
+        ftl( "Invalid sites format: %s\n", args->sitesFormat );
+        cli_free( args, operation );
+        exit( EX_DATAERR );
     }
 }
 
 void cli_keyPurpose(Arguments *args, Operation *operation) {
 
-    if (args->keyPurpose) {
-        operation->keyPurpose = mpw_purposeWithName( args->keyPurpose );
-        if (ERR == (int)operation->keyPurpose) {
-            ftl( "Invalid purpose: %s\n", args->keyPurpose );
-            cli_free( args, operation );
-            exit( EX_DATAERR );
-        }
+    if (!args->keyPurpose)
+        return;
+
+    operation->keyPurpose = mpw_purposeWithName( args->keyPurpose );
+    if (ERR == (int)operation->keyPurpose) {
+        ftl( "Invalid purpose: %s\n", args->keyPurpose );
+        cli_free( args, operation );
+        exit( EX_DATAERR );
     }
 }
 
 void cli_keyContext(Arguments *args, Operation *operation) {
 
-    if (args->keyContext)
-        operation->keyContext = strdup( args->keyContext );
+    if (!args->keyContext)
+        return;
+
+    operation->keyContext = strdup( args->keyContext );
 }
 
 void cli_user(Arguments *args, Operation *operation) {
@@ -491,6 +504,9 @@ void cli_user(Arguments *args, Operation *operation) {
 
 void cli_site(Arguments __unused *args, Operation *operation) {
 
+    if (!operation->siteName)
+        abort();
+
     // Load the site object from mpsites.
     for (size_t s = 0; !operation->site && s < operation->user->sites_count; ++s)
         if (strcmp( operation->siteName, (&operation->user->sites[s])->name ) == 0)
@@ -503,6 +519,9 @@ void cli_site(Arguments __unused *args, Operation *operation) {
 }
 
 void cli_question(Arguments __unused *args, Operation *operation) {
+
+    if (!operation->site)
+        abort();
 
     // Load the question object from mpsites.
     switch (operation->keyPurpose) {
@@ -523,6 +542,11 @@ void cli_question(Arguments __unused *args, Operation *operation) {
 }
 
 void cli_operation(Arguments __unused *args, Operation *operation) {
+
+    operation->identicon = mpw_identicon( operation->user->fullName, operation->user->masterPassword );
+
+    if (!operation->site)
+        abort();
 
     switch (operation->keyPurpose) {
         case MPKeyPurposeAuthentication: {
@@ -553,80 +577,98 @@ void cli_operation(Arguments __unused *args, Operation *operation) {
 
 void cli_resultType(Arguments *args, Operation *operation) {
 
-    if (args->resultType) {
-        operation->resultType = mpw_typeWithName( args->resultType );
-        if (ERR == (int)operation->resultType) {
-            ftl( "Invalid type: %s\n", args->resultType );
-            cli_free( args, operation );
-            exit( EX_USAGE );
-        }
+    if (!args->resultType)
+        return;
+    if (!operation->site)
+        abort();
 
-        if (!(operation->resultType & MPSiteFeatureAlternative)) {
-            switch (operation->keyPurpose) {
-                case MPKeyPurposeAuthentication:
-                    operation->site->type = operation->resultType;
-                    break;
-                case MPKeyPurposeIdentification:
-                    operation->site->loginType = operation->resultType;
-                    break;
-                case MPKeyPurposeRecovery:
-                    operation->question->type = operation->resultType;
-                    break;
-            }
+    operation->resultType = mpw_typeWithName( args->resultType );
+    if (ERR == (int)operation->resultType) {
+        ftl( "Invalid type: %s\n", args->resultType );
+        cli_free( args, operation );
+        exit( EX_USAGE );
+    }
+
+    if (!(operation->resultType & MPSiteFeatureAlternative)) {
+        switch (operation->keyPurpose) {
+            case MPKeyPurposeAuthentication:
+                operation->site->type = operation->resultType;
+                break;
+            case MPKeyPurposeIdentification:
+                operation->site->loginType = operation->resultType;
+                break;
+            case MPKeyPurposeRecovery:
+                operation->question->type = operation->resultType;
+                break;
         }
     }
 }
 
 void cli_siteCounter(Arguments *args, Operation *operation) {
 
-    if (args->siteCounter) {
-        long long int siteCounterInt = atoll( args->siteCounter );
-        if (siteCounterInt < MPCounterValueFirst || siteCounterInt > MPCounterValueLast) {
-            ftl( "Invalid site counter: %s\n", args->siteCounter );
-            cli_free( args, operation );
-            exit( EX_USAGE );
-        }
+    if (!args->siteCounter)
+        return;
+    if (!operation->site)
+        abort();
 
-        switch (operation->keyPurpose) {
-            case MPKeyPurposeAuthentication:
-                operation->siteCounter = operation->site->counter = (MPCounterValue)siteCounterInt;
-                break;
-            case MPKeyPurposeIdentification:
-            case MPKeyPurposeRecovery:
-                // NOTE: counter for login & question is not persisted.
-                break;
-        }
+    long long int siteCounterInt = atoll( args->siteCounter );
+    if (siteCounterInt < MPCounterValueFirst || siteCounterInt > MPCounterValueLast) {
+        ftl( "Invalid site counter: %s\n", args->siteCounter );
+        cli_free( args, operation );
+        exit( EX_USAGE );
+    }
+
+    switch (operation->keyPurpose) {
+        case MPKeyPurposeAuthentication:
+            operation->siteCounter = operation->site->counter = (MPCounterValue)siteCounterInt;
+            break;
+        case MPKeyPurposeIdentification:
+        case MPKeyPurposeRecovery:
+            // NOTE: counter for login & question is not persisted.
+            break;
     }
 }
 
 void cli_resultParam(Arguments *args, Operation *operation) {
 
-    if (args->resultParam)
-        operation->resultParam = strdup( args->resultParam );
+    if (!args->resultParam)
+        return;
+
+    operation->resultParam = strdup( args->resultParam );
 }
 
 void cli_algorithmVersion(Arguments *args, Operation *operation) {
 
-    if (args->algorithmVersion) {
-        int algorithmVersionInt = atoi( args->algorithmVersion );
-        if (algorithmVersionInt < MPAlgorithmVersionFirst || algorithmVersionInt > MPAlgorithmVersionLast) {
-            ftl( "Invalid algorithm version: %s\n", args->algorithmVersion );
-            cli_free( args, operation );
-            exit( EX_USAGE );
-        }
-        operation->site->algorithm = (MPAlgorithmVersion)algorithmVersionInt;
+    if (!args->algorithmVersion)
+        return;
+    if (!operation->site)
+        abort();
+
+    int algorithmVersionInt = atoi( args->algorithmVersion );
+    if (algorithmVersionInt < MPAlgorithmVersionFirst || algorithmVersionInt > MPAlgorithmVersionLast) {
+        ftl( "Invalid algorithm version: %s\n", args->algorithmVersion );
+        cli_free( args, operation );
+        exit( EX_USAGE );
     }
+    operation->site->algorithm = (MPAlgorithmVersion)algorithmVersionInt;
 }
 
 void cli_sitesRedacted(Arguments *args, Operation *operation) {
 
     if (args->sitesRedacted)
         operation->user->redacted = strcmp( args->sitesRedacted, "1" ) == 0;
+
     else if (!operation->user->redacted)
         wrn( "Sites configuration is not redacted.  Use -R 1 to change this.\n" );
 }
 
 void cli_mpw(Arguments *args, Operation *operation) {
+
+    if (!operation->site)
+        abort();
+
+    inf( "%s's %s for %s:\n[ %s ]: ", operation->user->fullName, operation->purposeResult, operation->site->name, operation->identicon );
+
     // Determine master key.
     MPMasterKey masterKey = mpw_masterKey(
             operation->user->fullName, operation->user->masterPassword, operation->site->algorithm );
@@ -640,7 +682,8 @@ void cli_mpw(Arguments *args, Operation *operation) {
     if (operation->resultParam && operation->resultType & MPResultTypeClassStateful) {
         mpw_free_string( &operation->resultState );
         if (!(operation->resultState = mpw_siteState( masterKey, operation->site->name, operation->siteCounter,
-                operation->keyPurpose, operation->keyContext, operation->resultType, operation->resultParam, operation->site->algorithm ))) {
+                operation->keyPurpose, operation->keyContext, operation->resultType, operation->resultParam,
+                operation->site->algorithm ))) {
             ftl( "Couldn't encrypt site result.\n" );
             mpw_free( &masterKey, MPMasterKeySize );
             cli_free( args, operation );
@@ -688,6 +731,10 @@ void cli_mpw(Arguments *args, Operation *operation) {
     if (operation->site->url)
         inf( "See: %s\n", operation->site->url );
     mpw_free_string( &result );
+
+    // Update usage metadata.
+    operation->site->lastUsed = operation->user->lastUsed = time( NULL );
+    operation->site->uses++;
 }
 
 void cli_save(Arguments __unused *args, Operation *operation) {
