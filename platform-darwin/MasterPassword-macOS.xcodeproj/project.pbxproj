@@ -129,7 +129,7 @@
 		DAADCC4B19FB000C00987B1D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBC45214F6364500987BF6 /* QuartzCore.framework */; };
 		DAADCC6919FB007F00987B1D /* NSManagedObjectModel+KCOrderedAccessorFix.m in Sources */ = {isa = PBXBuildFile; fileRef = DAADCC6719FB007F00987B1D /* NSManagedObjectModel+KCOrderedAccessorFix.m */; };
 		DAADCC6A19FB00B500987B1D /* libKCOrderedAccessorFix.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAADCC5019FB006500987B1D /* libKCOrderedAccessorFix.a */; };
-		DAAF16651F5897EA0013B8AE /* mpw-cli-util.c in Sources */ = {isa = PBXBuildFile; fileRef = DAAF16631F5897EA0013B8AE /* mpw-cli-util.c */; };
+		DAAF16661F5CA3240013B8AE /* mpw-cli-util.c in Sources */ = {isa = PBXBuildFile; fileRef = DAAF16631F5897EA0013B8AE /* mpw-cli-util.c */; };
 		DAB7AE5A1F3D74E700C856B1 /* libjson-c.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB7AE591F3D74E700C856B1 /* libjson-c.a */; };
 		DAB7AE5B1F3D750B00C856B1 /* libjson-c.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB7AE591F3D74E700C856B1 /* libjson-c.a */; };
 		DAB7AE941F3D757B00C856B1 /* libjson-c.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB7AE901F3D757B00C856B1 /* libjson-c.a */; };
@@ -2673,6 +2673,7 @@
 				DA1C7AAA1F1A8F24009A3551 /* mpw-marshall.c in Sources */,
 				DA1C7AAB1F1A8F24009A3551 /* mpw-types.c in Sources */,
 				DA5B0B3D1F36467900B663F0 /* base64.c in Sources */,
+				DAAF16661F5CA3240013B8AE /* mpw-cli-util.c in Sources */,
 				DA1C7AAC1F1A8F24009A3551 /* mpw-util.c in Sources */,
 				DA1C7AC31F1A8FBA009A3551 /* mpw-cli.c in Sources */,
 				DA7471A31F2B71AE005F3468 /* mpw-marshall-util.c in Sources */,
@@ -2739,7 +2740,6 @@
 				93D393A1646430FAAC73E7FE /* MPMacApplication.m in Sources */,
 				DA7471A61F2B71B9005F3468 /* mpw-marshall-util.c in Sources */,
 				93D398D1F5D8CD5A22AF6929 /* MPGradientView.m in Sources */,
-				DAAF16651F5897EA0013B8AE /* mpw-cli-util.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
