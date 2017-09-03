@@ -242,8 +242,7 @@ void cli_free(Arguments *args, Operation *operation) {
 
     if (operation) {
         mpw_free_strings( &operation->fullName, &operation->masterPassword, &operation->siteName, NULL );
-        mpw_free_strings( &operation->keyContext, &operation->sitesPath, &operation->purposeResult, NULL );
-        mpw_free_strings( &operation->resultState, &operation->resultParam, NULL );
+        mpw_free_strings( &operation->keyContext, &operation->sitesPath, &operation->resultState, &operation->resultParam, NULL );
         mpw_marshal_free( &operation->user );
         operation->site = NULL;
         operation->question = NULL;
