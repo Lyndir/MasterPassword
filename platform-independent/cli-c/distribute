@@ -15,7 +15,7 @@ echo "Cleaning .."
 
 echo "Creating archive $mpwArchive .."
 git show --show-signature --pretty=format:%H --quiet "$tag" > VERSION
-git ls-files -z . | xargs -0 tar -Lcvzf "$mpwArchive"
+{ git ls-files -z .; printf VERSION; } | xargs -0 tar -Lcvzf "$mpwArchive"
 
 echo "Creating archive signature $mpwArchive.sig .."
 gpg --detach-sign "$mpwArchive"
