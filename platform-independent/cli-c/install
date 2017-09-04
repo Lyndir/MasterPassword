@@ -45,9 +45,20 @@ fi
 echo
 
 inf "You can also save your user name in ~/.bashrc.  Leave blank to skip this step."
-if MP_FULLNAME=$(ask "Your full name:") && [[ $MP_FULLNAME ]] ; then
-    printf 'export MP_FULLNAME=%q\n' "$MP_FULLNAME" >> ~/.bashrc
+if MPW_FULLNAME=$(ask "Your full name:") && [[ $MPW_FULLNAME ]] ; then
+    printf 'export MPW_FULLNAME=%q\n' "$MPW_FULLNAME" >> ~/.bashrc
+fi
+inf "If you have an askpass program you'd like to use, you can specify it here."
+inf "An askpass program provides a graphical interface for entering things like your master password."
+inf "Leave blank to skip this step and enter passwords using the terminal."
+if [[ ! $MPW_ASKPASS ]] && hash ssh-askpass 2>/dev/null; then
+    MPW_ASKPASS=ssh-askpass
+fi
+if MPW_ASKPASS=$(ask +"$MPW_ASKPASS" "askpass program:") && [[ $MPW_ASKPASS ]] ; then
+    printf 'export MPW_ASKPASS=%q\n' "$MPW_ASKPASS" >> ~/.bashrc
 fi
 echo
 
-inf "To begin using Master Password, type: mpw [site name]"
+inf "Shell features installed."
+inf "To load these convenience features into your already running shell, type: source ~/.bashrc"
+inf "To begin using Master Password, type: mpw -h or mpw my-site-name"
