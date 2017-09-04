@@ -68,7 +68,7 @@ mpw() {
         # mpw paths
         -I"core" -I"cli"
     )
-    local ldflags=(
+    ldflags=(
         "${ldflags[@]}"
     )
 
@@ -93,7 +93,7 @@ mpw-bench() {
         # mpw paths
         -I"core" -I"cli"
     )
-    local ldflags=(
+    ldflags=(
         "${ldflags[@]}"
     )
 
@@ -119,7 +119,7 @@ mpw-tests() {
         # mpw paths
         -I"core" -I"cli"
     )
-    local ldflags=(
+    ldflags=(
         "${ldflags[@]}"
     )
 
