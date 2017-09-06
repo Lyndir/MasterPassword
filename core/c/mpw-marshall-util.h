@@ -20,7 +20,9 @@
 #define _MPW_MARSHALL_UTIL_H
 
 #include <time.h>
+#if MPW_JSON
 #include "json-c/json.h"
+#endif
 
 #include "mpw-algorithm.h"
 
@@ -37,6 +39,7 @@ time_t mpw_mktime(
 
 /// JSON parsing.
 
+#if MPW_JSON
 /** Search for a JSON child object in a JSON object tree.
   * @param section A dot-delimited list of JSON object keys to walk toward the child object.
   * @return A new JSON object or NULL if one of the section's object keys was not found in the source object's tree. */
@@ -57,6 +60,7 @@ int64_t mpw_get_json_int(
   * @return The boolean value or defaultValue if one of the section's object keys was not found in the source object's tree. */
 bool mpw_get_json_boolean(
         json_object *obj, const char *section, bool defaultValue);
+#endif
 
 /// mpw.
 

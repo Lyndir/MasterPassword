@@ -33,7 +33,11 @@ typedef mpw_enum( unsigned int, MPMarshallFormat ) {
     /** Generate a name for identification. */
             MPMarshallFormatJSON,
 
+#if MPW_JSON
     MPMarshallFormatDefault = MPMarshallFormatJSON,
+#else
+    MPMarshallFormatDefault = MPMarshallFormatFlat,
+#endif
 };
 
 typedef mpw_enum( unsigned int, MPMarshallErrorType ) {
