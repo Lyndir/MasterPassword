@@ -55,9 +55,9 @@ echo 2>&1 "Current mpw source version ${mpw_version:-<unknown>}..."
 ### TARGET: MPW
 mpw() {
     # dependencies
-    use_mpw_sodium
-    use_mpw_color
-    use_mpw_json
+    use_mpw_sodium required
+    use_mpw_color optional
+    use_mpw_json optional
 
     # target
     cflags=(
@@ -82,7 +82,7 @@ mpw() {
 ### TARGET: MPW-BENCH
 mpw-bench() {
     # dependencies
-    use_mpw_sodium
+    use_mpw_sodium required
 
     # target
     cflags=(
@@ -107,8 +107,8 @@ mpw-bench() {
 ### TARGET: MPW-TESTS
 mpw-tests() {
     # dependencies
-    use_mpw_xml
-    use_mpw_sodium
+    use_mpw_xml required
+    use_mpw_sodium required
 
     # target
     cflags=(
@@ -132,7 +132,7 @@ mpw-tests() {
 
 ### TOOLS
 haslib() {
-    cc -l"$1" -x c -o /dev/null - <<< 'int main() { return 0; }'
+    cc -x c "${ldflags[@]}" -l"$1" -o /dev/null - <<< 'int main() { return 0; }' &>/dev/null
 }
 cc() {
     if hash llvm-gcc 2>/dev/null; then
@@ -149,49 +149,40 @@ cc() {
 
 
 ### DEPENDENCIES
-use_mpw_sodium() {
-    ! (( mpw_sodium )) && return
+use() {
+    local option=$1 requisite=$2 lib=$3
+    local enabled=${!option}
 
-    if ! haslib sodium; then
-        echo >&2 "WARNING: mpw_sodium enabled but missing sodium library, will disable mpw_sodium."
-
+    if (( enabled )) && haslib "$lib"; then
+        echo >&2 "Enabled $option (lib$lib)."
+        ldflags+=( -l"$lib" )
+        return 0
+    elif [[ $requisite != required ]]; then
+        echo >&2 "WARNING: $option was enabled but is missing $lib library.  Will continue with $option disabled!"
+        return 1
+    elif (( enabled )); then
+        echo >&2 "ERROR: $option was enabled but is missing $lib library.  Please install this library before continuing."
+        exit 1
     else
-        echo >&2 "Enabled mpw_sodium (libsodium)."
-        cflags+=( -D"MPW_SODIUM=1" ) ldflags+=( -l"sodium" )
+        echo >&2 "ERROR: $option was required but is not enabled.  Please enable the option or remove this target before continuing."
+        exit 1
     fi
+}
+use_mpw_sodium() {
+    local requisite=$1
+    use mpw_sodium "$requisite" sodium && cflags+=( -D"MPW_SODIUM=1" ) ||:
 }
 use_mpw_color() {
-    ! (( mpw_color )) && return
-
-    if ! haslib curses; then
-        echo >&2 "WARNING: mpw_color enabled but missing curses library, will disable mpw_color."
-
-    else
-        echo >&2 "Enabled mpw_color (libcurses)."
-        cflags+=( -D"MPW_COLOR=1" ) ldflags+=( -l"curses" )
-    fi
+    local requisite=$1
+    use mpw_color "$requisite" curses && cflags+=( -D"MPW_COLOR=1" ) ||:
 }
 use_mpw_json() {
-    ! (( mpw_json )) && return
-
-    if ! haslib json-c; then
-        echo >&2 "WARNING: mpw_json enabled but missing json-c library, will disable mpw_json."
-
-    else
-        echo >&2 "Enabled mpw_json (libjson-c)."
-        cflags+=( -D"MPW_JSON=1" ) ldflags+=( -l"json-c" )
-    fi
+    local requisite=$1
+    use mpw_json "$requisite" json-c && cflags+=( -D"MPW_JSON=1" ) ||:
 }
 use_mpw_xml() {
-    ! (( mpw_xml )) && return
-
-    if ! haslib xml2; then
-        echo >&2 "WARNING: mpw_xml enabled but missing xml2 library, will disable mpw_xml."
-
-    else
-        echo >&2 "Enabled mpw_xml (libxml2)."
-        cflags+=( -D"MPW_XML=1" -I"/usr/include/libxml2" -I"/usr/local/include/libxml2" ) ldflags+=( -l"xml2" )
-    fi
+    local requisite=$1
+    use mpw_xml "$requisite" xml2 && cflags+=( -D"MPW_XML=1" -I"/usr/include/libxml2" -I"/usr/local/include/libxml2" ) ||:
 }
 
 
