@@ -31,11 +31,10 @@
  *
  */
 
-#include <sys/types.h>
 #include <ctype.h>
 #include <errno.h>
-#include <pwd.h>
 #include <stdio.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
@@ -196,75 +195,6 @@ bcrypt_hashpass(const char *key, const uint8_t *salt, char *encrypted,
     inval:
     errno = EINVAL;
     return -1;
-}
-
-/*
- * user friendly functions
- */
-static int
-bcrypt_newhash(const char *pass, int log_rounds, char *hash, size_t hashlen) {
-
-    uint8_t salt[BCRYPT_SALTSPACE];
-
-    if (bcrypt_initsalt( log_rounds, salt, sizeof( salt ) ) != 0)
-        return -1;
-
-    if (bcrypt_hashpass( pass, salt, hash, hashlen ) != 0)
-        return -1;
-
-    bzero( salt, sizeof( salt ) );
-    return 0;
-}
-
-static int __unused
-bcrypt_checkpass(const char *pass, const char *goodhash) {
-
-    char hash[BCRYPT_HASHSPACE];
-
-    if (bcrypt_hashpass( pass, (const uint8_t *)goodhash, hash, sizeof( hash ) ) != 0)
-        return -1;
-    if (strlen( hash ) != strlen( goodhash ) ||
-        timingsafe_bcmp( hash, goodhash, strlen( goodhash ) ) != 0) {
-        errno = EACCES;
-        return -1;
-    }
-
-    bzero( hash, sizeof( hash ) );
-    return 0;
-}
-
-/*
- * Measure this system's performance by measuring the time for 8 rounds.
- * We are aiming for something that takes around 0.1s, but not too much over.
- */
-static int __unused
-_bcrypt_autorounds(void) {
-
-    struct timespec before, after;
-    int r = 8;
-    char buf[_PASSWORD_LEN];
-    time_t duration;
-
-    clock_gettime( CLOCK_THREAD_CPUTIME_ID, &before );
-    bcrypt_newhash( "testpassword", r, buf, sizeof( buf ) );
-    clock_gettime( CLOCK_THREAD_CPUTIME_ID, &after );
-
-    duration = after.tv_sec - before.tv_sec;
-    duration *= 1000000;
-    duration += (after.tv_nsec - before.tv_nsec) / 1000;
-
-    /* too quick? slow it down. */
-    while (r < 16 && duration <= 60000) {
-        r += 1;
-        duration *= 2;
-    }
-    /* too slow? speed it up. */
-    while (r > 6 && duration > 120000) {
-        r -= 1;
-        duration /= 2;
-    }
-
-    return r;
 }
 
 /*

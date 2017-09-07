@@ -63,12 +63,12 @@
 #define BLFRND(s,p,i,j,n) (i ^= F(s,j) ^ (p)[n])
 
 void
-Blowfish_encipher(blf_ctx *c, u_int32_t *xl, u_int32_t *xr)
+Blowfish_encipher(blf_ctx *c, uint32_t *xl, uint32_t *xr)
 {
-	u_int32_t Xl;
-	u_int32_t Xr;
-	u_int32_t *s = c->S[0];
-	u_int32_t *p = c->P;
+	uint32_t Xl;
+	uint32_t Xr;
+	uint32_t *s = c->S[0];
+	uint32_t *p = c->P;
 
 	Xl = *xl;
 	Xr = *xr;
@@ -88,12 +88,12 @@ Blowfish_encipher(blf_ctx *c, u_int32_t *xl, u_int32_t *xr)
 }
 
 void
-Blowfish_decipher(blf_ctx *c, u_int32_t *xl, u_int32_t *xr)
+Blowfish_decipher(blf_ctx *c, uint32_t *xl, uint32_t *xr)
 {
-	u_int32_t Xl;
-	u_int32_t Xr;
-	u_int32_t *s = c->S[0];
-	u_int32_t *p = c->P;
+	uint32_t Xl;
+	uint32_t Xr;
+	uint32_t *s = c->S[0];
+	uint32_t *p = c->P;
 
 	Xl = *xl;
 	Xr = *xr;
@@ -391,13 +391,13 @@ Blowfish_initstate(blf_ctx *c)
 	*c = initstate;
 }
 
-u_int32_t
-Blowfish_stream2word(const u_int8_t *data, u_int16_t databytes,
-    u_int16_t *current)
+uint32_t
+Blowfish_stream2word(const uint8_t *data, uint16_t databytes,
+    uint16_t *current)
 {
-	u_int8_t i;
-	u_int16_t j;
-	u_int32_t temp;
+	uint8_t i;
+	uint16_t j;
+	uint32_t temp;
 
 	temp = 0x00000000;
 	j = *current;
@@ -413,14 +413,14 @@ Blowfish_stream2word(const u_int8_t *data, u_int16_t databytes,
 }
 
 void
-Blowfish_expand0state(blf_ctx *c, const u_int8_t *key, u_int16_t keybytes)
+Blowfish_expand0state(blf_ctx *c, const uint8_t *key, uint16_t keybytes)
 {
-	u_int16_t i;
-	u_int16_t j;
-	u_int16_t k;
-	u_int32_t temp;
-	u_int32_t datal;
-	u_int32_t datar;
+	uint16_t i;
+	uint16_t j;
+	uint16_t k;
+	uint32_t temp;
+	uint32_t datal;
+	uint32_t datar;
 
 	j = 0;
 	for (i = 0; i < BLF_N + 2; i++) {
@@ -451,15 +451,15 @@ Blowfish_expand0state(blf_ctx *c, const u_int8_t *key, u_int16_t keybytes)
 
 
 void
-Blowfish_expandstate(blf_ctx *c, const u_int8_t *data, u_int16_t databytes,
-    const u_int8_t *key, u_int16_t keybytes)
+Blowfish_expandstate(blf_ctx *c, const uint8_t *data, uint16_t databytes,
+    const uint8_t *key, uint16_t keybytes)
 {
-	u_int16_t i;
-	u_int16_t j;
-	u_int16_t k;
-	u_int32_t temp;
-	u_int32_t datal;
-	u_int32_t datar;
+	uint16_t i;
+	uint16_t j;
+	uint16_t k;
+	uint32_t temp;
+	uint32_t datal;
+	uint32_t datar;
 
 	j = 0;
 	for (i = 0; i < BLF_N + 2; i++) {
@@ -494,7 +494,7 @@ Blowfish_expandstate(blf_ctx *c, const u_int8_t *data, u_int16_t databytes,
 }
 
 void
-__unused blf_key(blf_ctx *c, const u_int8_t *k, u_int16_t len)
+__unused blf_key(blf_ctx *c, const uint8_t *k, uint16_t len)
 {
 	/* Initialize S-boxes and subkeys with Pi */
 	Blowfish_initstate(c);
@@ -504,10 +504,10 @@ __unused blf_key(blf_ctx *c, const u_int8_t *k, u_int16_t len)
 }
 
 void
-blf_enc(blf_ctx *c, u_int32_t *data, u_int16_t blocks)
+blf_enc(blf_ctx *c, uint32_t *data, uint16_t blocks)
 {
-	u_int32_t *d;
-	u_int16_t i;
+	uint32_t *d;
+	uint16_t i;
 
 	d = data;
 	for (i = 0; i < blocks; i++) {
@@ -517,10 +517,10 @@ blf_enc(blf_ctx *c, u_int32_t *data, u_int16_t blocks)
 }
 
 void
-__unused blf_dec(blf_ctx *c, u_int32_t *data, u_int16_t blocks)
+__unused blf_dec(blf_ctx *c, uint32_t *data, uint16_t blocks)
 {
-	u_int32_t *d;
-	u_int16_t i;
+	uint32_t *d;
+	uint16_t i;
 
 	d = data;
 	for (i = 0; i < blocks; i++) {
@@ -530,111 +530,111 @@ __unused blf_dec(blf_ctx *c, u_int32_t *data, u_int16_t blocks)
 }
 
 void
-__unused blf_ecb_encrypt(blf_ctx *c, u_int8_t *data, u_int32_t len)
+__unused blf_ecb_encrypt(blf_ctx *c, uint8_t *data, uint32_t len)
 {
-	u_int32_t l, r;
-	u_int32_t i;
+	uint32_t l, r;
+	uint32_t i;
 
 	for (i = 0; i < len; i += 8) {
-		l = (u_int32_t)data[0] << 24 | (u_int32_t)data[1] << 16 | (u_int32_t)data[2] << 8 | (u_int32_t)data[3];
-		r = (u_int32_t)data[4] << 24 | (u_int32_t)data[5] << 16 | (u_int32_t)data[6] << 8 | (u_int32_t)data[7];
+		l = (uint32_t)data[0] << 24 | (uint32_t)data[1] << 16 | (uint32_t)data[2] << 8 | (uint32_t)data[3];
+		r = (uint32_t)data[4] << 24 | (uint32_t)data[5] << 16 | (uint32_t)data[6] << 8 | (uint32_t)data[7];
 		Blowfish_encipher(c, &l, &r);
-		data[0] = (u_int8_t)(l >> 24 & 0xff);
-		data[1] = (u_int8_t)(l >> 16 & 0xff);
-		data[2] = (u_int8_t)(l >> 8 & 0xff);
-		data[3] = (u_int8_t)(l & 0xff);
-		data[4] = (u_int8_t)(r >> 24 & 0xff);
-		data[5] = (u_int8_t)(r >> 16 & 0xff);
-		data[6] = (u_int8_t)(r >> 8 & 0xff);
-		data[7] = (u_int8_t)(r & 0xff);
+		data[0] = (uint8_t)(l >> 24 & 0xff);
+		data[1] = (uint8_t)(l >> 16 & 0xff);
+		data[2] = (uint8_t)(l >> 8 & 0xff);
+		data[3] = (uint8_t)(l & 0xff);
+		data[4] = (uint8_t)(r >> 24 & 0xff);
+		data[5] = (uint8_t)(r >> 16 & 0xff);
+		data[6] = (uint8_t)(r >> 8 & 0xff);
+		data[7] = (uint8_t)(r & 0xff);
 		data += 8;
 	}
 }
 
 void
-__unused blf_ecb_decrypt(blf_ctx *c, u_int8_t *data, u_int32_t len)
+__unused blf_ecb_decrypt(blf_ctx *c, uint8_t *data, uint32_t len)
 {
-	u_int32_t l, r;
-	u_int32_t i;
+	uint32_t l, r;
+	uint32_t i;
 
 	for (i = 0; i < len; i += 8) {
-		l = (u_int32_t)data[0] << 24 | (u_int32_t)data[1] << 16 | (u_int32_t)data[2] << 8 | (u_int32_t)data[3];
-		r = (u_int32_t)data[4] << 24 | (u_int32_t)data[5] << 16 | (u_int32_t)data[6] << 8 | (u_int32_t)data[7];
+		l = (uint32_t)data[0] << 24 | (uint32_t)data[1] << 16 | (uint32_t)data[2] << 8 | (uint32_t)data[3];
+		r = (uint32_t)data[4] << 24 | (uint32_t)data[5] << 16 | (uint32_t)data[6] << 8 | (uint32_t)data[7];
 		Blowfish_decipher(c, &l, &r);
-		data[0] = (u_int8_t)(l >> 24 & 0xff);
-		data[1] = (u_int8_t)(l >> 16 & 0xff);
-		data[2] = (u_int8_t)(l >> 8 & 0xff);
-		data[3] = (u_int8_t)(l & 0xff);
-		data[4] = (u_int8_t)(r >> 24 & 0xff);
-		data[5] = (u_int8_t)(r >> 16 & 0xff);
-		data[6] = (u_int8_t)(r >> 8 & 0xff);
-		data[7] = (u_int8_t)(r & 0xff);
+		data[0] = (uint8_t)(l >> 24 & 0xff);
+		data[1] = (uint8_t)(l >> 16 & 0xff);
+		data[2] = (uint8_t)(l >> 8 & 0xff);
+		data[3] = (uint8_t)(l & 0xff);
+		data[4] = (uint8_t)(r >> 24 & 0xff);
+		data[5] = (uint8_t)(r >> 16 & 0xff);
+		data[6] = (uint8_t)(r >> 8 & 0xff);
+		data[7] = (uint8_t)(r & 0xff);
 		data += 8;
 	}
 }
 
 void
-__unused blf_cbc_encrypt(blf_ctx *c, u_int8_t *iv, u_int8_t *data, u_int32_t len)
+__unused blf_cbc_encrypt(blf_ctx *c, uint8_t *iv, uint8_t *data, uint32_t len)
 {
-	u_int32_t l, r;
-	u_int32_t i, j;
+	uint32_t l, r;
+	uint32_t i, j;
 
 	for (i = 0; i < len; i += 8) {
 		for (j = 0; j < 8; j++)
 			data[j] ^= iv[j];
-		l = (u_int32_t)data[0] << 24 | (u_int32_t)data[1] << 16 | (u_int32_t)data[2] << 8 | (u_int32_t)data[3];
-		r = (u_int32_t)data[4] << 24 | (u_int32_t)data[5] << 16 | (u_int32_t)data[6] << 8 | (u_int32_t)data[7];
+		l = (uint32_t)data[0] << 24 | (uint32_t)data[1] << 16 | (uint32_t)data[2] << 8 | (uint32_t)data[3];
+		r = (uint32_t)data[4] << 24 | (uint32_t)data[5] << 16 | (uint32_t)data[6] << 8 | (uint32_t)data[7];
 		Blowfish_encipher(c, &l, &r);
-		data[0] = (u_int8_t)(l >> 24 & 0xff);
-		data[1] = (u_int8_t)(l >> 16 & 0xff);
-		data[2] = (u_int8_t)(l >> 8 & 0xff);
-		data[3] = (u_int8_t)(l & 0xff);
-		data[4] = (u_int8_t)(r >> 24 & 0xff);
-		data[5] = (u_int8_t)(r >> 16 & 0xff);
-		data[6] = (u_int8_t)(r >> 8 & 0xff);
-		data[7] = (u_int8_t)(r & 0xff);
+		data[0] = (uint8_t)(l >> 24 & 0xff);
+		data[1] = (uint8_t)(l >> 16 & 0xff);
+		data[2] = (uint8_t)(l >> 8 & 0xff);
+		data[3] = (uint8_t)(l & 0xff);
+		data[4] = (uint8_t)(r >> 24 & 0xff);
+		data[5] = (uint8_t)(r >> 16 & 0xff);
+		data[6] = (uint8_t)(r >> 8 & 0xff);
+		data[7] = (uint8_t)(r & 0xff);
 		iv = data;
 		data += 8;
 	}
 }
 
 void
-__unused blf_cbc_decrypt(blf_ctx *c, u_int8_t *iva, u_int8_t *data, u_int32_t len)
+__unused blf_cbc_decrypt(blf_ctx *c, uint8_t *iva, uint8_t *data, uint32_t len)
 {
-	u_int32_t l, r;
-	u_int8_t *iv;
-	u_int32_t i, j;
+	uint32_t l, r;
+	uint8_t *iv;
+	uint32_t i, j;
 
 	iv = data + len - 16;
 	data = data + len - 8;
 	for (i = len - 8; i >= 8; i -= 8) {
-		l = (u_int32_t)data[0] << 24 | (u_int32_t)data[1] << 16 | (u_int32_t)data[2] << 8 | (u_int32_t)data[3];
-		r = (u_int32_t)data[4] << 24 | (u_int32_t)data[5] << 16 | (u_int32_t)data[6] << 8 | (u_int32_t)data[7];
+		l = (uint32_t)data[0] << 24 | (uint32_t)data[1] << 16 | (uint32_t)data[2] << 8 | (uint32_t)data[3];
+		r = (uint32_t)data[4] << 24 | (uint32_t)data[5] << 16 | (uint32_t)data[6] << 8 | (uint32_t)data[7];
 		Blowfish_decipher(c, &l, &r);
-		data[0] = (u_int8_t)(l >> 24 & 0xff);
-		data[1] = (u_int8_t)(l >> 16 & 0xff);
-		data[2] = (u_int8_t)(l >> 8 & 0xff);
-		data[3] = (u_int8_t)(l & 0xff);
-		data[4] = (u_int8_t)(r >> 24 & 0xff);
-		data[5] = (u_int8_t)(r >> 16 & 0xff);
-		data[6] = (u_int8_t)(r >> 8 & 0xff);
-		data[7] = (u_int8_t)(r & 0xff);
+		data[0] = (uint8_t)(l >> 24 & 0xff);
+		data[1] = (uint8_t)(l >> 16 & 0xff);
+		data[2] = (uint8_t)(l >> 8 & 0xff);
+		data[3] = (uint8_t)(l & 0xff);
+		data[4] = (uint8_t)(r >> 24 & 0xff);
+		data[5] = (uint8_t)(r >> 16 & 0xff);
+		data[6] = (uint8_t)(r >> 8 & 0xff);
+		data[7] = (uint8_t)(r & 0xff);
 		for (j = 0; j < 8; j++)
 			data[j] ^= iv[j];
 		iv -= 8;
 		data -= 8;
 	}
-	l = (u_int32_t)data[0] << 24 | (u_int32_t)data[1] << 16 | (u_int32_t)data[2] << 8 | (u_int32_t)data[3];
-	r = (u_int32_t)data[4] << 24 | (u_int32_t)data[5] << 16 | (u_int32_t)data[6] << 8 | (u_int32_t)data[7];
+	l = (uint32_t)data[0] << 24 | (uint32_t)data[1] << 16 | (uint32_t)data[2] << 8 | (uint32_t)data[3];
+	r = (uint32_t)data[4] << 24 | (uint32_t)data[5] << 16 | (uint32_t)data[6] << 8 | (uint32_t)data[7];
 	Blowfish_decipher(c, &l, &r);
-	data[0] = (u_int8_t)(l >> 24 & 0xff);
-	data[1] = (u_int8_t)(l >> 16 & 0xff);
-	data[2] = (u_int8_t)(l >> 8 & 0xff);
-	data[3] = (u_int8_t)(l & 0xff);
-	data[4] = (u_int8_t)(r >> 24 & 0xff);
-	data[5] = (u_int8_t)(r >> 16 & 0xff);
-	data[6] = (u_int8_t)(r >> 8 & 0xff);
-	data[7] = (u_int8_t)(r & 0xff);
+	data[0] = (uint8_t)(l >> 24 & 0xff);
+	data[1] = (uint8_t)(l >> 16 & 0xff);
+	data[2] = (uint8_t)(l >> 8 & 0xff);
+	data[3] = (uint8_t)(l & 0xff);
+	data[4] = (uint8_t)(r >> 24 & 0xff);
+	data[5] = (uint8_t)(r >> 16 & 0xff);
+	data[6] = (uint8_t)(r >> 8 & 0xff);
+	data[7] = (uint8_t)(r & 0xff);
 	for (j = 0; j < 8; j++)
 		data[j] ^= iva[j];
 }
