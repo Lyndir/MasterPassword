@@ -201,9 +201,9 @@ header {
     transition: height 0.3s;
 }
 header .container {
-    position: relative;
+    /*position: relative;*/
     width: 100%;
-    height: 100%;
+    /*height: 100%;*/
     z-index: 1;
 
     background: radial-gradient(center, ellipse cover,  rgba(0,0,0,0.3) 50%,rgba(0,0,0,0.8) 100%);
@@ -345,16 +345,17 @@ header .movie {
     height: 100%;
     padding-top: 40px;
 }
-header .movie::after {
+/*header .movie::before {
     display: block;
     content: " ";
     position: absolute;
+    z-index: -1;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
     background: url('../img/loading-spin.svg') no-repeat scroll center center transparent;
-}
+}*/
 header.play {
     height: auto !important;
     max-height: 94%;
@@ -363,10 +364,10 @@ header.play .movie {
     display: block;
 }
 header.play .movie video {
-    position: relative;
-    z-index: 3;
+    /*position: relative;
+    z-index: 3;*/
 }
-header.play h1, header.play h2, header.play .box {
+header.play .content, header.play .box {
     display: none;
 }
 header .moviecontrol {
@@ -396,7 +397,7 @@ header.play .moviecontrol {
 header.play .moviecontrol::before {
     content: "❙❙";
 }
-header .movie::before {
+/*header .movie::before {
     display: block;
     content: " ";
     position: absolute;
@@ -407,7 +408,7 @@ header .movie::before {
     bottom: 0;
     background: url('../img/video-pattern.png') repeat;
     background: url('../img/video-bg.png') no-repeat scroll 50% 100%/cover transparent;
-}
+}*/
 header .movie video {
     width: 100%;
     height: 100%;
