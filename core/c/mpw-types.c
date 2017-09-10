@@ -40,6 +40,8 @@ const MPResultType mpw_typeWithName(const char *typeName) {
             return MPResultTypeTemplatePIN;
         if ('n' == typeName[0])
             return MPResultTypeTemplateName;
+        if ('p' == typeName[0])
+            return MPResultTypeTemplatePhrase;
         if ('P' == typeName[0])
             return MPResultTypeStatefulPersonal;
         if ('D' == typeName[0])
