@@ -107,8 +107,8 @@ mpw-bench() {
 ### TARGET: MPW-TESTS
 mpw-tests() {
     # dependencies
-    use_mpw_xml required
     use_mpw_sodium required
+    use_mpw_xml required
 
     # target
     cflags=(
@@ -153,19 +153,29 @@ use() {
     local option=$1 requisite=$2 lib=$3
     local enabled=${!option}
 
-    if (( enabled )) && haslib "$lib"; then
-        echo >&2 "Enabled $option (lib$lib)."
-        ldflags+=( -l"$lib" )
-        return 0
-    elif [[ $requisite != required ]]; then
-        echo >&2 "WARNING: $option was enabled but is missing $lib library.  Will continue with $option disabled!"
-        return 1
-    elif (( enabled )); then
-        echo >&2 "ERROR: $option was enabled but is missing $lib library.  Please install this library before continuing."
+    if (( enabled )); then
+        if haslib "$lib"; then
+            echo >&2 "INFO:     Enabled $option (lib$lib)."
+            ldflags+=( -l"$lib" )
+            return 0
+
+        elif [[ $requisite == required ]]; then
+            echo >&2 "ERROR:    $option was enabled but is missing $lib library.  Please install this library before continuing."
+            exit 1
+
+        else
+            echo >&2 "WARNING:  $option was enabled but is missing $lib library.  Will continue with $option disabled!"
+            return 1
+
+        fi
+
+    elif [[ $requisite == required ]]; then
+        echo >&2 "ERROR:    $option was required but is not enabled.  Please enable the option or remove this target before continuing."
         exit 1
+
     else
-        echo >&2 "ERROR: $option was required but is not enabled.  Please enable the option or remove this target before continuing."
-        exit 1
+        echo >&2 "INFO:     $option is supported but not enabled."
+        return 1
     fi
 }
 use_mpw_sodium() {

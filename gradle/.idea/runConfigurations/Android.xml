@@ -6,20 +6,18 @@
     <option name="PM_INSTALL_OPTIONS" value="" />
     <option name="ACTIVITY_EXTRA_FLAGS" value="" />
     <option name="MODE" value="default_activity" />
-    <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
     <option name="PREFERRED_AVD" value="" />
     <option name="CLEAR_LOGCAT" value="false" />
     <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
     <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
     <option name="FORCE_STOP_RUNNING_APP" value="true" />
-    <option name="DEBUGGER_TYPE" value="Java" />
+    <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
     <option name="USE_LAST_SELECTED_DEVICE" value="false" />
     <option name="PREFERRED_AVD" value="" />
+    <option name="DEBUGGER_TYPE" value="Java" />
     <Java />
     <Profilers>
       <option name="ENABLE_ADVANCED_PROFILING" value="false" />
-      <option name="GAPID_ENABLED" value="false" />
-      <option name="GAPID_DISABLE_PCS" value="false" />
       <option name="SUPPORT_LIB_ENABLED" value="true" />
       <option name="INSTRUMENTATION_ENABLED" value="true" />
     </Profilers>

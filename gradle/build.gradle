@@ -22,7 +22,7 @@ buildscript {
     }
 
     dependencies {
-        classpath group: 'com.android.tools.build', name: 'gradle', version: '2.2.3'
+        classpath group: 'com.android.tools.build', name: 'gradle', version: '2.3.0'
     }
 }
 
