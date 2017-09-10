@@ -133,5 +133,3 @@ if( BUILD_MPW_TESTS )
     use_mpw_sodium( mpw_tests required )
     use_mpw_xml( mpw_tests required )
 endif()
-
-#FEATURE_SUMMARY( WHAT ALL )

@@ -15,7 +15,22 @@ Note that the build depends on your system having certain dependencies already i
 By default, you'll need to have at least `libsodium`, `libjson-c` and `libncurses` installed.
 
 
-### Details
+## Building with cmake
+
+There is also a cmake configuration you can use to build instead of using the `./build` script.  While `./build` depends on Bash and is geared toward POSIX systems, cmake is platform-independent.  You should use your platform's cmake tools to continue.  On POSIX systems, you can do this:
+
+    cmake . && make
+
+To get a list of options supported by the cmake configuration, use:
+
+    cmake -LH
+
+Options can be toggled like so:
+
+    cmake -DUSE_COLOR=OFF -DBUILD_MPW_TESTS=ON . && make
+
+
+## Details
 
 The build script comes with a default configuration which can be adjusted.  Full details on the build script are available by opening the build script file.
 
