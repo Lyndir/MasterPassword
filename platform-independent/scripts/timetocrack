@@ -1,0 +1,130 @@
+#!/usr/bin/env bash
+source bashlib
+calc() { python -c "import math; print $1"; }
+
+inf 'Calculate the maximum amount of time required to brute-force search for a password.'
+
+## CLASSES
+V="AEIOU"
+C="BCDFGHJKLMNPQRSTVWXYZ"
+v="aeiou"
+c="bcdfghjklmnpqrstvwxyz"
+A="$V$C"
+a="$V$v$C$c"
+n="0123456789"
+o="&@%?,=[]_:-+*\$#!'^~;()/."
+x="$a$n$o"
+w="@~/.dictionary"
+
+## METRICS
+# Last update: 2016-09
+# GTX Titan X can generate about 402.7M HMAC-SHA-256 hashes per second (5301.7M SHA1).  (ref. https://hashcat.net/forum/thread-4314.html)
+# GTX Titan X can be bought for about 950$ used. (ref. amazon.com)
+#hardwareName='GTX Titan X (SHA1)'                  hardwareSpeed='5302M'
+#hardwareName='GTX Titan X (SHA1 @ 5k$)'            hardwareSpeed='5302M * 5k / 950'
+#hardwareName='GTX Titan X (SHA1 @ 20k$)'           hardwareSpeed='5302M * 20k / 950'
+#hardwareName='GTX Titan X (SHA1 @ 20M$)'           hardwareSpeed='5302M * 20M / 950'
+#hardwareName='GTX Titan X (SHA1 @ 5B$)'            hardwareSpeed='5302M * 5B / 950'
+ hardwareName='GTX Titan X (HMAC-SHA-256 @ 950$)'   hardwareSpeed='403M'
+#hardwareName='GTX Titan X (HMAC-SHA-256 @ 5k$)'    hardwareSpeed='403M * 5k / 950'
+#hardwareName='GTX Titan X (HMAC-SHA-256 @ 20k$)'   hardwareSpeed='403M * 20k / 950'
+#hardwareName='GTX Titan X (HMAC-SHA-256 @ 20M$)'   hardwareSpeed='403M * 20M / 950'
+#hardwareName='GTX Titan X (HMAC-SHA-256 @ 5B$)'    hardwareSpeed='403M * 5B / 950'
+
+# mpw-bench
+#hardwareName='2.3 GHz i7, 8GB (MPW)'               hardwareSpeed=7.46
+
+# ASICs
+ hardwareName='AntMiner L3+ (scrypt)'               hardwareSpeed='1M'
+#hardwareName='AntMiner L3+ (scrypt @ 5k$)'         hardwareSpeed='1M * 5k / 2500'
+#hardwareName='AntMiner L3+ (scrypt @ 20k$)'        hardwareSpeed='1M * 20k / 2500'
+#hardwareName='AntMiner L3+ (scrypt @ 20M$)'        hardwareSpeed='1M * 20M / 2500'
+#hardwareName='AntMiner L3+ (scrypt @ 5B$)'         hardwareSpeed='1M * 5B / 2500'
+ hardwareName='AntMiner S9 (SHA256)'                hardwareSpeed='14T'
+#hardwareName='AntMiner S9 (SHA256 @ 5k$)'          hardwareSpeed='14T * 5k / 1288'
+#hardwareName='AntMiner S9 (SHA256 @ 20k$)'         hardwareSpeed='14T * 20k / 1288'
+#hardwareName='AntMiner S9 (SHA256 @ 20M$)'         hardwareSpeed='14T * 20M / 1288'
+#hardwareName='AntMiner S9 (SHA256 @ 5B$)'          hardwareSpeed='14T * 5B / 1288'
+
+second='1'
+secondsInHour='3600'
+secondsInDay='3600 * 24'
+secondsInMonth='3600 * 24 * 30'
+secondsInYear='3600 * 24 * 356'
+hardwareSpeed=${hardwareSpeed//k/000}
+hardwareSpeed=${hardwareSpeed//M/000000}
+hardwareSpeed=${hardwareSpeed//G/000000000}
+hardwareSpeed=${hardwareSpeed//T/000000000000}
+
+## SEARCH SPACE
+hr
+inf 'SEARCH SPACE'
+inf 'You can use the following variables:'
+for _c in V C v c A a n o x w; do
+    cc=${!_c}
+    if [[ $cc = @* ]]; then
+        file=${cc#@} file=${file/#~\//$HOME\/}
+        read cs < <(wc -l < "$file")
+    else
+        cs=${#cc}
+    fi
+
+    inf '%s: Class contains %d entities: %s' "$_c" "$cs" "$cc"
+done
+spaceString=${1:-$(ask -d "x ** 12" "Amount of space?")}
+case "$spaceString" in
+    -mp*) mpmode=${spaceString#-mp} mpmode=${mpmode:-long}
+        case "$mpmode" in
+            long|l) spaceString='(CvcvnoCvcvCvcv+CvcvCvcvnoCvcv+CvcvCvcvCvcvno+CvccnoCvcvCvcv+CvccCvcvnoCvcv+CvccCvcvCvcvno+CvcvnoCvccCvcv+CvcvCvccnoCvcv+CvcvCvccCvcvno+CvcvnoCvcvCvcc+CvcvCvcvnoCvcc+CvcvCvcvCvccno+CvccnoCvccCvcv+CvccCvccnoCvcv+CvccCvccCvcvno+CvcvnoCvccCvcc+CvcvCvccnoCvcc+CvcvCvccCvccno+CvccnoCvcvCvcc+CvccCvcvnoCvcc+CvccCvcvCvccno)' ;;
+            max|secure|x) spaceString='aonxxxxxxxxxxxxxxxxx+axxxxxxxxxxxxxxxxxon' ;;
+            med|m) spaceString='CvcnoCvc+CvcCvcno' ;;
+            basic|b) spaceString='aaanaaan+aannaaan+aaannaaa' ;;
+        esac ;;
+esac
+space=$spaceString
+for _c in V C v c A a n o x w; do
+    cc=${!_c}
+    if [[ $cc = @* ]]; then
+        file=${cc#@} file=${file/#~\//$HOME\/}
+        read cs < <(wc -l < "$file")
+    else
+        cs=${#cc}
+    fi
+
+    space=${space//$_c/ 0$cs }
+done
+# Replace sequences of numbers by multiplication of those numbers.  Then, pretty-print.
+space=$(sed -e 's/\([[:digit:]]\)  *\([[:digit:]]\)/\1 * \2/g' -e 's/ 00*\([1-9]\)/ \1/g' <<< "$space")
+space=$(tr -s ' ' <<< "$space") space=${space# } space=${space% }
+inf ''
+inf "Search space: %s = %s = %'.f possibilities to try (~%.1f bit)." "$spaceString" "$space" "$(calc "$space")" "$(bc -l <<< "l($(calc "$space")) / l(2)")"
+
+## CLUSTER SIZE
+hr
+inf 'CLUSTER SIZE'
+inf "Simulating %s at a rate of about %'.1f attempts per second." "$hardwareName" "$(calc "$hardwareSpeed")"
+cluster=$(ask -d 1 "Amount of GPUs?")
+
+
+## CALCULATE
+hr
+inf 'TIMING'
+inf "Time to search the entire space using %d GPUs of type %s (rate=%'.1f/s)" "$cluster" "$hardwareName" "$(calc "$hardwareSpeed")"
+timing() {
+    local title=$1 unit=$2 precision=$3 seconds=$4
+    time=$(calc "1.0 * ($space) / ($hardwareSpeed * $cluster) / ($seconds)")
+    percent=$(calc "100.0 * ($hardwareSpeed * $cluster) * ($seconds) / ($space)")
+    amount=$(calc "$percent / 100.0")
+    if [[ $amount = 0.* ]]; then
+        inf "%10s to crack: %'0.${precision}f (search rate is %0.0f%% / %s)" \
+            "$title" "$time" "$percent" "$unit"
+    else
+        inf "%10s to crack: %'0.${precision}f (completes %0.1fx / %s)" \
+            "$title" "$time" "$amount" "$unit"
+    fi
+}
+timing Seconds s 0 "$second"
+timing Hours h 2 "$secondsInHour"
+timing Days d 3 "$secondsInDay"
+timing Months m 4 "$secondsInMonth"
+timing Years y 4 "$secondsInYear"

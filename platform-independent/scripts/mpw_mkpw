@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+getword() {
+    local cat=$1 pop_limit=$2 words=()
+
+    while read pop word; do
+        (( pop_limit && pop > pop_limit )) && break
+        words+=( "$word" )
+    done < "words.txt.$cat"
+
+    (( ${#words[@]} )) || { echo '1 -'; return 1; }
+    echo "${#words[@]} ${words[RANDOM % ${#words[@]}]}"
+}
+
+declare -A categoryByCharacter=(
+    ['a']=adj
+    ['r']=adv
+    ['n']=noun
+    ['v']=verb
+)
+templates=(
+    nvan
+    anvr
+    anavan
+)
+permutations=1
+
+while getopts :t:p: arg; do
+    case $arg in
+        # The sentence template to use.
+        t) template=$OPTARG ;;
+        # Use only the top N most popular words.
+        p) pop_limit=$OPTARG ;;
+    esac
+done
+template=${template:-${templates[$((RANDOM % ${#templates[@]}))]}}
+
+
+printf 'sentence: '
+while read -n1 character && [[ $character ]]; do
+    category=${categoryByCharacter["$character"]}
+    read p word < <(getword "$category" "$pop_limit")
+    (( permutations *= p ))
+    printf '%s ' "$word"
+done <<< "$template"
+echo
+printf 'permutations: %s, entropy: ~%.1f bit\n' "$permutations" "$(bc -l <<< "l($permutations) / l(2)")"
+

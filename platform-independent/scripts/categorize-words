@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+categories=( adj adv noun verb )
+declare -A categoriesByWord=()
+
+echo "Parsing category lists.."
+for (( c = 0; c < ${#categories[@]}; ++c )); do
+    printf '\rCategory: %s..   ' "${categories[c]}"
+
+    while read -r word _; do
+        categoriesByWord["$word"]+="$c "
+    done < ~/.dictionary.d/"index.${categories[c]}"
+done
+echo
+
+echo "Processing words list.."
+{
+    fdByCategory=()
+    for (( c = 0; c < ${#categories[@]}; ++c )); do
+        exec {fdByCategory[c]}>"words.txt.${categories[c]}"
+    done
+
+    w=0
+    while IFS= read -r word _; do
+        let ++w
+
+        if (( ${#word} < 3 )) || [[ $word != *[aeiou]* ]]; then
+            continue
+        fi
+
+        wordCategories=${categoriesByWord["$word"]}
+
+        for c in $wordCategories; do
+            printf '%d %s\n' "$w" "$word" >&"${fdByCategory[c]}"
+        done
+    done < words.txt
+
+    for fd in "${fdByCategory[@]}"; do
+        exec {fd}>&-
+    done
+}
+echo
