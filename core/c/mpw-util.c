@@ -207,7 +207,6 @@ uint8_t const *mpw_kdf_blake2b(const size_t subkeySize, const uint8_t *key, cons
 #if MPW_SODIUM
     if (keySize < crypto_generichash_blake2b_KEYBYTES_MIN || keySize > crypto_generichash_blake2b_KEYBYTES_MAX ||
         subkeySize < crypto_generichash_blake2b_KEYBYTES_MIN || subkeySize > crypto_generichash_blake2b_KEYBYTES_MAX ||
-        contextSize < crypto_generichash_blake2b_BYTES_MIN || contextSize > crypto_generichash_blake2b_BYTES_MAX ||
         (personal && strlen( personal ) > crypto_generichash_blake2b_PERSONALBYTES)) {
         errno = EINVAL;
         free( subkey );

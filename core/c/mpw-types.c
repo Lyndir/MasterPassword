@@ -46,7 +46,7 @@ const MPResultType mpw_typeWithName(const char *typeName) {
             return MPResultTypeStatefulPersonal;
         if ('D' == typeName[0])
             return MPResultTypeStatefulDevice;
-        if ('k' == typeName[0])
+        if ('K' == typeName[0])
             return MPResultTypeDeriveKey;
     }
 
