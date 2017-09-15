@@ -63,8 +63,8 @@ static void usage() {
             "                   i, pin      | 4 numbers.\n"
             "                   n, name     | 9 letter name.\n"
             "                   p, phrase   | 20 character sentence.\n"
-            "                   K, key      | encryption key (set key size -s bits).\n"
-            "                   P, personal | saved personal password (save with -s pw).\n\n" );
+            "                   K, key      | encryption key (set key size -P bits).\n"
+            "                   P, personal | saved personal password (save with -P pw).\n\n" );
     inf( ""
             "  -P value     The parameter value.\n"
             "                   -p i        | The login name for the site.\n"
