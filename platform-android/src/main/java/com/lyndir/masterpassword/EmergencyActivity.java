@@ -52,10 +52,10 @@ public class EmergencyActivity extends Activity {
     private static final int      PASSWORD_NOTIFICATION = 0;
     public static final int CLIPBOARD_CLEAR_DELAY = 20 /* s */ * MPConstant.MS_PER_S;
 
-    private final Preferences                      preferences  = Preferences.get( this );
-    private final ListeningExecutorService         executor     = MoreExecutors.listeningDecorator( Executors.newSingleThreadExecutor() );
-    private final ImmutableList<MPSiteType>        allSiteTypes = ImmutableList.copyOf( MPSiteType.forClass( MPSiteTypeClass.Generated ) );
-    private final ImmutableList<MasterKey.Version> allVersions  = ImmutableList.copyOf( MasterKey.Version.values() );
+    private final Preferences                      preferences    = Preferences.get( this );
+    private final ListeningExecutorService         executor       = MoreExecutors.listeningDecorator( Executors.newSingleThreadExecutor() );
+    private final ImmutableList<MPResultType>      allResultTypes = ImmutableList.copyOf( MPResultType.forClass( MPResultTypeClass.Generated ) );
+    private final ImmutableList<MasterKey.Version> allVersions    = ImmutableList.copyOf( MasterKey.Version.values() );
 
     private ListenableFuture<MasterKey> masterKeyFuture;
 
@@ -71,8 +71,8 @@ public class EmergencyActivity extends Activity {
     @BindView(R.id.siteNameField)
     EditText siteNameField;
 
-    @BindView(R.id.siteTypeButton)
-    Button siteTypeButton;
+    @BindView(R.id.resultTypeButton)
+    Button resultTypeButton;
 
     @BindView(R.id.counterField)
     Button siteCounterButton;
@@ -131,15 +131,15 @@ public class EmergencyActivity extends Activity {
                 updateSitePassword();
             }
         } );
-        siteTypeButton.setOnClickListener( new View.OnClickListener() {
+        resultTypeButton.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 @SuppressWarnings("SuspiciousMethodCalls")
-                MPSiteType siteType =
-                        allSiteTypes.get( (allSiteTypes.indexOf( siteTypeButton.getTag() ) + 1) % allSiteTypes.size() );
-                preferences.setDefaultSiteType( siteType );
-                siteTypeButton.setTag( siteType );
-                siteTypeButton.setText( siteType.getShortName() );
+                MPResultType resultType =
+                        allResultTypes.get( (allResultTypes.indexOf( resultTypeButton.getTag() ) + 1) % allResultTypes.size() );
+                preferences.setDefaultResultType( resultType );
+                resultTypeButton.setTag( resultType );
+                resultTypeButton.setText( resultType.getShortName() );
                 updateSitePassword();
             }
         } );
@@ -220,9 +220,9 @@ public class EmergencyActivity extends Activity {
         forgetPasswordField.setChecked( preferences.isForgetPassword() );
         maskPasswordField.setChecked( preferences.isMaskPassword() );
         sitePasswordField.setTransformationMethod( preferences.isMaskPassword()? new PasswordTransformationMethod(): null );
-        MPSiteType defaultSiteType = preferences.getDefaultSiteType();
-        siteTypeButton.setTag( defaultSiteType );
-        siteTypeButton.setText( defaultSiteType.getShortName() );
+        MPResultType defaultResultType = preferences.getDefaultResultType();
+        resultTypeButton.setTag( defaultResultType );
+        resultTypeButton.setText( defaultResultType.getShortName() );
         MasterKey.Version defaultVersion = preferences.getDefaultVersion();
         siteVersionButton.setTag( defaultVersion );
         siteVersionButton.setText( defaultVersion.name() );
@@ -313,9 +313,9 @@ public class EmergencyActivity extends Activity {
     }
 
     private void updateSitePassword() {
-        final String siteName = siteNameField.getText().toString();
-        final MPSiteType type = (MPSiteType) siteTypeButton.getTag();
-        final UnsignedInteger counter = UnsignedInteger.valueOf( siteCounterButton.getText().toString() );
+        final String          siteName = siteNameField.getText().toString();
+        final MPResultType    type     = (MPResultType) resultTypeButton.getTag();
+        final UnsignedInteger counter  = UnsignedInteger.valueOf( siteCounterButton.getText().toString() );
 
         if ((masterKeyFuture == null) || siteName.isEmpty() || (type == null)) {
             sitePasswordField.setText( "" );
@@ -332,7 +332,7 @@ public class EmergencyActivity extends Activity {
             @Override
             public void run() {
                 try {
-                    sitePassword = masterKeyFuture.get().encode( siteName, type, counter, MPSiteVariant.Password, null );
+                    sitePassword = masterKeyFuture.get().siteResult( siteName, counter, MPKeyPurpose.Password, null, type, null );
 
                     runOnUiThread( new Runnable() {
                         @Override

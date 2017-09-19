@@ -32,10 +32,10 @@ public class PasswordFrame extends JFrame implements DocumentListener {
     private final Components.GradientPanel     root;
     private final JTextField                   siteNameField;
     private final JButton                      siteActionButton;
-    private final JComboBox<MPSiteType>        siteTypeField;
     private final JComboBox<MasterKey.Version> siteVersionField;
     private final JSpinner                     siteCounterField;
     private final UnsignedIntegerModel         siteCounterModel;
+    private final JComboBox<MPResultType>      resultTypeField;
     private final JPasswordField               passwordField;
     private final JLabel                       tipLabel;
     private final JCheckBox                    maskPasswordField;
@@ -118,17 +118,17 @@ public class PasswordFrame extends JFrame implements DocumentListener {
 
         // Site Type & Counter
         siteCounterModel = new UnsignedIntegerModel( UnsignedInteger.ONE, UnsignedInteger.ONE );
-        MPSiteType[] types = Iterables.toArray( MPSiteType.forClass( MPSiteTypeClass.Generated ), MPSiteType.class );
+        MPResultType[] types = Iterables.toArray( MPResultType.forClass( MPResultTypeClass.Generated ), MPResultType.class );
         JComponent siteSettings = Components.boxLayout( BoxLayout.LINE_AXIS,                                                  //
-                                                        siteTypeField = Components.comboBox( types ),                         //
+                                                        resultTypeField = Components.comboBox( types ),                         //
                                                         Components.stud(),                                                    //
                                                         siteVersionField = Components.comboBox( MasterKey.Version.values() ), //
                                                         Components.stud(),                                                    //
                                                         siteCounterField = Components.spinner( siteCounterModel ) );
         sitePanel.add( siteSettings );
-        siteTypeField.setFont( Res.valueFont().deriveFont( 12f ) );
-        siteTypeField.setSelectedItem( MPSiteType.GeneratedLong );
-        siteTypeField.addItemListener( new ItemListener() {
+        resultTypeField.setFont( Res.valueFont().deriveFont( 12f ) );
+        resultTypeField.setSelectedItem( MPResultType.GeneratedLong );
+        resultTypeField.addItemListener( new ItemListener() {
             @Override
             public void itemStateChanged(final ItemEvent e) {
                 updatePassword( true );
@@ -215,7 +215,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
             return Futures.immediateCancelledFuture();
         }
 
-        MPSiteType        siteType    = siteTypeField.getModel().getElementAt( siteTypeField.getSelectedIndex() );
+        MPResultType      resultType    = resultTypeField.getModel().getElementAt( resultTypeField.getSelectedIndex() );
         MasterKey.Version siteVersion = siteVersionField.getItemAt( siteVersionField.getSelectedIndex() );
         UnsignedInteger   siteCounter = siteCounterModel.getNumber();
 
@@ -228,9 +228,9 @@ public class PasswordFrame extends JFrame implements DocumentListener {
                 }
             } );
         final Site site = ifNotNullElse( Iterables.getFirst( siteResults, null ),
-                                         new IncognitoSite( siteNameQuery, siteType, siteCounter, siteVersion ) );
+                                         new IncognitoSite( siteNameQuery, siteCounter, resultType, siteVersion ) );
         if ((currentSite != null) && currentSite.getSiteName().equals( site.getSiteName() )) {
-            site.setSiteType( siteType );
+            site.setResultType( resultType );
             site.setAlgorithmVersion( siteVersion );
             site.setSiteCounter( siteCounter );
         }
@@ -240,7 +240,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
             public String call()
                     throws Exception {
                 return user.getKey( site.getAlgorithmVersion() )
-                           .encode( site.getSiteName(), site.getSiteType(), site.getSiteCounter(), MPSiteVariant.Password, null );
+                           .siteResult( site.getSiteName(), site.getSiteCounter(), MPKeyPurpose.Password, null, site.getResultType(), null );
             }
         } );
         Futures.addCallback( passwordFuture, new FutureCallback<String>() {
@@ -256,7 +256,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
                             siteActionButton.setText( "Delete Site" );
                         else
                             siteActionButton.setText( "Add Site" );
-                        siteTypeField.setSelectedItem( currentSite.getSiteType() );
+                        resultTypeField.setSelectedItem( currentSite.getResultType() );
                         siteVersionField.setSelectedItem( currentSite.getAlgorithmVersion() );
                         siteCounterField.setValue( currentSite.getSiteCounter() );
                         siteNameField.setText( currentSite.getSiteName() );

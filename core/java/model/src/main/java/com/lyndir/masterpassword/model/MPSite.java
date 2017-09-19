@@ -14,50 +14,50 @@ import org.joda.time.Instant;
  */
 public class MPSite {
 
-    public static final MPSiteType      DEFAULT_TYPE    = MPSiteType.GeneratedLong;
+    public static final MPResultType    DEFAULT_TYPE    = MPResultType.GeneratedLong;
     public static final UnsignedInteger DEFAULT_COUNTER = UnsignedInteger.valueOf( 1 );
 
     private final MPUser            user;
     private       MasterKey.Version algorithmVersion;
     private       Instant           lastUsed;
     private       String            siteName;
-    private       MPSiteType        siteType;
+    private       MPResultType      resultType;
     private       UnsignedInteger   siteCounter;
     private       int               uses;
     private       String            loginName;
 
     public MPSite(final MPUser user, final String siteName) {
-        this( user, siteName, DEFAULT_TYPE, DEFAULT_COUNTER );
+        this( user, siteName, DEFAULT_COUNTER, DEFAULT_TYPE );
     }
 
-    public MPSite(final MPUser user, final String siteName, final MPSiteType siteType, final UnsignedInteger siteCounter) {
+    public MPSite(final MPUser user, final String siteName, final UnsignedInteger siteCounter, final MPResultType resultType) {
         this.user = user;
         this.algorithmVersion = MasterKey.Version.CURRENT;
         this.lastUsed = new Instant();
         this.siteName = siteName;
-        this.siteType = siteType;
+        this.resultType = resultType;
         this.siteCounter = siteCounter;
     }
 
     protected MPSite(final MPUser user, final MasterKey.Version algorithmVersion, final Instant lastUsed, final String siteName,
-                     final MPSiteType siteType, final UnsignedInteger siteCounter, final int uses, @Nullable final String loginName,
+                     final MPResultType resultType, final UnsignedInteger siteCounter, final int uses, @Nullable final String loginName,
                      @Nullable final String importContent) {
         this.user = user;
         this.algorithmVersion = algorithmVersion;
         this.lastUsed = lastUsed;
         this.siteName = siteName;
-        this.siteType = siteType;
+        this.resultType = resultType;
         this.siteCounter = siteCounter;
         this.uses = uses;
         this.loginName = loginName;
     }
 
     public String resultFor(final MasterKey masterKey) {
-        return resultFor( masterKey, MPSiteVariant.Password, null );
+        return resultFor( masterKey, MPKeyPurpose.Password, null );
     }
 
-    public String resultFor(final MasterKey masterKey, final MPSiteVariant variant, @Nullable final String context) {
-        return masterKey.encode( siteName, siteType, siteCounter, variant, context );
+    public String resultFor(final MasterKey masterKey, final MPKeyPurpose purpose, @Nullable final String context) {
+        return masterKey.siteResult( siteName, siteCounter, purpose, context, resultType, null );
     }
 
     public MPUser getUser() {
@@ -94,12 +94,12 @@ public class MPSite {
         this.siteName = siteName;
     }
 
-    public MPSiteType getSiteType() {
-        return siteType;
+    public MPResultType getResultType() {
+        return resultType;
     }
 
-    public void setSiteType(final MPSiteType siteType) {
-        this.siteType = siteType;
+    public void setResultType(final MPResultType resultType) {
+        this.resultType = resultType;
     }
 
     public UnsignedInteger getSiteCounter() {

@@ -11,7 +11,7 @@ import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.ConversionUtils;
 import com.lyndir.lhunath.opal.system.util.NNOperation;
-import com.lyndir.masterpassword.MPSiteType;
+import com.lyndir.masterpassword.MPResultType;
 import com.lyndir.masterpassword.MasterKey;
 import java.io.*;
 import java.util.List;
@@ -54,13 +54,13 @@ public class MPSiteUnmarshaller {
 
     @Nonnull
     public static MPSiteUnmarshaller unmarshall(@Nonnull final List<String> lines) {
-        byte[] keyID = null;
-        String fullName = null;
-        int mpVersion = 0, importFormat = 0, avatar = 0;
-        boolean clearContent = false, headerStarted = false;
-        MPSiteType defaultType = MPSiteType.GeneratedLong;
-        MPSiteUnmarshaller marshaller = null;
-        final ImmutableList.Builder<MPSite> sites = ImmutableList.builder();
+        byte[]                              keyID        = null;
+        String                              fullName     = null;
+        int                                 mpVersion    = 0, importFormat = 0, avatar = 0;
+        boolean                             clearContent = false, headerStarted = false;
+        MPResultType                        defaultType  = MPResultType.GeneratedLong;
+        MPSiteUnmarshaller                  marshaller   = null;
+        final ImmutableList.Builder<MPSite> sites        = ImmutableList.builder();
 
         for (final String line : lines)
             // Header delimitor.
@@ -92,7 +92,7 @@ public class MPSiteUnmarshaller {
                         else if ("Passwords".equalsIgnoreCase( name ))
                             clearContent = "visible".equalsIgnoreCase( value );
                         else if ("Default Type".equalsIgnoreCase( name ))
-                            defaultType = MPSiteType.forType( ConversionUtils.toIntegerNN( value ) );
+                            defaultType = MPResultType.forType( ConversionUtils.toIntegerNN( value ) );
                     }
                 }
             }
@@ -110,7 +110,7 @@ public class MPSiteUnmarshaller {
     }
 
     protected MPSiteUnmarshaller(final int importFormat, final int mpVersion, final String fullName, final byte[] keyID, final int avatar,
-                                 final MPSiteType defaultType, final boolean clearContent) {
+                                 final MPResultType defaultType, final boolean clearContent) {
         this.importFormat = importFormat;
         this.mpVersion = mpVersion;
         this.clearContent = clearContent;
@@ -131,7 +131,7 @@ public class MPSiteUnmarshaller {
                                    MasterKey.Version.fromInt( ConversionUtils.toIntegerNN( siteMatcher.group( 4 ).replace( ":", "" ) ) ), //
                                    rfc3339.parseDateTime( siteMatcher.group( 1 ) ).toInstant(), //
                                    siteMatcher.group( 5 ), //
-                                   MPSiteType.forType( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ), MPSite.DEFAULT_COUNTER, //
+                                   MPResultType.forType( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ), MPSite.DEFAULT_COUNTER, //
                                    ConversionUtils.toIntegerNN( siteMatcher.group( 2 ) ), //
                                    null, //
                                    siteMatcher.group( 6 ) );
@@ -142,7 +142,7 @@ public class MPSiteUnmarshaller {
                                    MasterKey.Version.fromInt( ConversionUtils.toIntegerNN( siteMatcher.group( 4 ).replace( ":", "" ) ) ), //
                                    rfc3339.parseDateTime( siteMatcher.group( 1 ) ).toInstant(), //
                                    siteMatcher.group( 7 ), //
-                                   MPSiteType.forType( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ),
+                                   MPResultType.forType( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ),
                                    UnsignedInteger.valueOf( siteMatcher.group( 5 ).replace( ":", "" ) ), //
                                    ConversionUtils.toIntegerNN( siteMatcher.group( 2 ) ), //
                                    siteMatcher.group( 6 ), //

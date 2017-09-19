@@ -105,7 +105,7 @@
                         android:id="@id/sitePasswordField"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:nextFocusForward="@+id/siteTypeButton"
+                        android:nextFocusForward="@+id/resultTypeButton"
                         android:gravity="center"
                         android:background="@android:color/transparent"
                         android:textColor="#FFFFFF"
@@ -157,7 +157,7 @@
                     android:gravity="center">
 
                 <Button
-                        android:id="@id/siteTypeButton"
+                        android:id="@id/resultTypeButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
@@ -175,12 +175,12 @@
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:labelFor="@id/siteTypeButton"
+                        android:labelFor="@id/resultTypeButton"
                         android:gravity="center"
                         android:background="@android:color/transparent"
                         android:textSize="12sp"
                         android:textColor="@android:color/tertiary_text_dark"
-                        android:text="@string/siteType_hint" />
+                        android:text="@string/resultType_hint" />
 
             </LinearLayout>
 

@@ -38,7 +38,7 @@ public final class Preferences {
     private static final String PREF_FORGET_PASSWORD    = "forgetPassword";
     private static final String PREF_MASK_PASSWORD      = "maskPassword";
     private static final String PREF_FULL_NAME          = "fullName";
-    private static final String PREF_SITE_TYPE          = "siteType";
+    private static final String PREF_RESULT_TYPE        = "resultType";
     private static final String PREF_ALGORITHM_VERSION  = "algorithmVersion";
     private static Preferences instance;
 
@@ -138,20 +138,20 @@ public final class Preferences {
         return prefs().getString( PREF_FULL_NAME, "" );
     }
 
-    public boolean setDefaultSiteType(@Nonnull final MPSiteType value) {
-        if (getDefaultSiteType() == value)
+    public boolean setDefaultResultType(final MPResultType value) {
+        if (getDefaultResultType() == value)
             return false;
 
-        prefs().edit().putInt( PREF_SITE_TYPE, value.ordinal() ).apply();
+        prefs().edit().putInt( PREF_RESULT_TYPE, value.ordinal() ).apply();
         return true;
     }
 
     @Nonnull
-    public MPSiteType getDefaultSiteType() {
-        return MPSiteType.values()[prefs().getInt( PREF_SITE_TYPE, MPSiteType.GeneratedLong.ordinal() )];
+    public MPResultType getDefaultResultType() {
+        return MPResultType.values()[prefs().getInt( PREF_RESULT_TYPE, MPResultType.GeneratedLong.ordinal() )];
     }
 
-    public boolean setDefaultVersion(@Nonnull final MasterKey.Version value) {
+    public boolean setDefaultVersion(final MasterKey.Version value) {
         if (getDefaultVersion() == value)
             return false;
 

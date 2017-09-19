@@ -16,13 +16,24 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-/**
- *
- * @author lhunath, 15-02-04
- */
-
-
-@ParametersAreNonnullByDefault
 package com.lyndir.masterpassword;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+/**
+ * <i>07 04, 2012</i>
+ *
+ * @author lhunath
+ */
+public enum MPResultTypeClass {
+    Generated( 1 << 4 ),
+    Stored( 1 << 5 );
+
+    private final int mask;
+
+    MPResultTypeClass(final int mask) {
+        this.mask = mask;
+    }
+
+    public int getMask() {
+        return mask;
+    }
+}

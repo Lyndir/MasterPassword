@@ -18,6 +18,7 @@
 
 package com.lyndir.masterpassword;
 
+import com.google.common.base.Preconditions;
 import com.google.common.primitives.Bytes;
 import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.lhunath.opal.system.logging.Logger;
@@ -51,19 +52,37 @@ public class MasterKeyV3 extends MasterKeyV2 {
     @Nullable
     @Override
     protected byte[] deriveKey(final char[] masterPassword) {
-        byte[] fullNameBytes = getFullName().getBytes( MPConstant.mpw_charset );
+        Preconditions.checkArgument( masterPassword.length > 0 );
+
+        String fullName = getFullName();
+        byte[] fullNameBytes = fullName.getBytes( MasterKeyV0.mpw_charset );
         byte[] fullNameLengthBytes = bytesForInt( fullNameBytes.length );
+        ByteBuffer mpBytesBuf = MasterKeyV0.mpw_charset.encode( CharBuffer.wrap( masterPassword ) );
 
-        String mpKeyScope = MPSiteVariant.Password.getScope();
-        byte[] masterKeySalt = Bytes.concat( mpKeyScope.getBytes( MPConstant.mpw_charset ), fullNameLengthBytes, fullNameBytes );
-        logger.trc( "key scope: %s", mpKeyScope );
-        logger.trc( "masterKeySalt ID: %s", CodeUtils.encodeHex( idForBytes( masterKeySalt ) ) );
+        logger.trc( "-- mpw_masterKey (algorithm: %u)", getAlgorithmVersion().toInt() );
+        logger.trc( "fullName: %s", fullName );
+        logger.trc( "masterPassword.id: %s", (Object) idForBytes( mpBytesBuf.array() ) );
 
-        ByteBuffer mpBytesBuf = MPConstant.mpw_charset.encode( CharBuffer.wrap( masterPassword ) );
+        String keyScope = MPKeyPurpose.Password.getScope();
+        logger.trc( "keyScope: %s", keyScope );
+
+        // Calculate the master key salt.
+        logger.trc( "masterKeySalt: keyScope=%s | #fullName=%s | fullName=%s",
+                    keyScope, CodeUtils.encodeHex( fullNameLengthBytes ), fullName );
+        byte[] masterKeySalt = Bytes.concat( keyScope.getBytes( MasterKeyV0.mpw_charset ), fullNameLengthBytes, fullNameBytes );
+        logger.trc( "  => masterKeySalt.id: %s", CodeUtils.encodeHex( idForBytes( masterKeySalt ) ) );
+
+        // Calculate the master key.
+        logger.trc( "masterKey: scrypt( masterPassword, masterKeySalt, N=%lu, r=%u, p=%u )",
+                    MasterKeyV0.scrypt_N, MasterKeyV0.scrypt_r, MasterKeyV0.scrypt_p );
         byte[] mpBytes = new byte[mpBytesBuf.remaining()];
         mpBytesBuf.get( mpBytes, 0, mpBytes.length );
         Arrays.fill( mpBytesBuf.array(), (byte) 0 );
+        byte[] masterKey = scrypt( masterKeySalt, mpBytes ); // TODO: Why not mpBytesBuf.array()?
+        Arrays.fill( masterKeySalt, (byte) 0 );
+        Arrays.fill( mpBytes, (byte) 0 );
+        logger.trc( "  => masterKey.id: %s", (masterKey == null)? null: (Object) idForBytes( masterKey ) );
 
-        return scrypt( masterKeySalt, mpBytes );
+        return masterKey;
     }
 }

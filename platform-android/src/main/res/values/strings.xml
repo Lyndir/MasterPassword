@@ -8,7 +8,7 @@
     <string name="masterPassword_hint">Your master password</string>
     <string name="siteName_hint">eg. google.com</string>
     <string name="sitePassword_hint">Tap to copy</string>
-    <string name="siteType_hint">Type</string>
+    <string name="resultType_hint">Type</string>
     <string name="siteCounter_hint">Counter</string>
     <string name="siteVersion_hint">Algorithm</string>
     <string name="empty" />

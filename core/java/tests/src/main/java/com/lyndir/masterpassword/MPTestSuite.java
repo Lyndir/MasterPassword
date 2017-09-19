@@ -99,12 +99,12 @@ public class MPTestSuite implements Callable<Boolean> {
                         currentCase.siteName = text;
                     if ("siteCounter".equals( qName ))
                         currentCase.siteCounter = text.isEmpty()? null: UnsignedInteger.valueOf( text );
-                    if ("siteType".equals( qName ))
-                        currentCase.siteType = text;
-                    if ("siteVariant".equals( qName ))
-                        currentCase.siteVariant = text;
-                    if ("siteContext".equals( qName ))
-                        currentCase.siteContext = text;
+                    if ("resultType".equals( qName ))
+                        currentCase.resultType = text;
+                    if ("keyPurpose".equals( qName ))
+                        currentCase.keyPurpose = text;
+                    if ("keyContext".equals( qName ))
+                        currentCase.keyContext = text;
                     if ("result".equals( qName ))
                         currentCase.result = text;
                 }
@@ -173,8 +173,9 @@ public class MPTestSuite implements Callable<Boolean> {
             @Override
             public Boolean apply(@Nonnull final MPTests.Case testCase) {
                 MasterKey masterKey = MasterKey.create( testCase.getAlgorithm(), testCase.getFullName(), testCase.getMasterPassword() );
-                String sitePassword = masterKey.encode( testCase.getSiteName(), testCase.getSiteType(), testCase.getSiteCounter(),
-                                                        testCase.getSiteVariant(), testCase.getSiteContext() );
+                String sitePassword = masterKey.siteResult( testCase.getSiteName(), testCase.getSiteCounter(), testCase.getKeyPurpose(),
+                                                            testCase.getKeyContext(), testCase.getResultType(),
+                                                            null );
 
                 return testCase.getResult().equals( sitePassword );
             }

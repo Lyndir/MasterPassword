@@ -86,15 +86,60 @@ public abstract class MasterKey {
         allowNativeByDefault = allowNative;
     }
 
-    protected MasterKey(@Nonnull final String fullName) {
+    protected MasterKey(final String fullName) {
+        Preconditions.checkArgument( !fullName.isEmpty() );
 
         this.fullName = fullName;
         logger.trc( "fullName: %s", fullName );
     }
 
+    /**
+     * Derive the master key for a user based on their name and master password.
+     *
+     * @param masterPassword The user's master password.
+     */
     @Nullable
     @SuppressWarnings("MethodCanBeVariableArityMethod")
     protected abstract byte[] deriveKey(char[] masterPassword);
+
+    /**
+     * Derive the site key for a user's site from the given master key and site parameters.
+     *
+     * @param siteName    A site identifier.
+     * @param siteCounter The result identifier.
+     * @param keyPurpose  The intended purpose for this site key.
+     * @param keyContext  A site-scoped key modifier.
+     */
+    protected abstract byte[] siteKey(String siteName, UnsignedInteger siteCounter, MPKeyPurpose keyPurpose,
+                                      @Nullable String keyContext);
+
+    /**
+     * Generate a site result token.
+     *
+     * @param siteName    A site identifier.
+     * @param siteCounter The result identifier.
+     * @param keyPurpose  The intended purpose for this site result.
+     * @param keyContext  A site-scoped result modifier.
+     * @param resultType  The type of result to generate.
+     * @param resultParam A parameter for the resultType.  For stateful result types, the output of
+     *                    {@link #siteState(String, UnsignedInteger, MPKeyPurpose, String, MPResultType, String)}.
+     */
+    public abstract String siteResult(String siteName, UnsignedInteger siteCounter, MPKeyPurpose keyPurpose,
+                                      @Nullable String keyContext, MPResultType resultType, @Nullable String resultParam);
+
+    /**
+     * Encrypt a stateful site token for persistence.
+     *
+     * @param siteName    A site identifier.
+     * @param siteCounter The result identifier.
+     * @param keyPurpose  The intended purpose for the site token.
+     * @param keyContext  A site-scoped key modifier.
+     * @param resultType  The type of result token to encrypt.
+     * @param resultParam The result token desired from
+     *                    {@link #siteResult(String, UnsignedInteger, MPKeyPurpose, String, MPResultType, String)}.
+     */
+    public abstract String siteState(String siteName, UnsignedInteger siteCounter, MPKeyPurpose keyPurpose,
+                                     @Nullable String keyContext, MPResultType resultType, @Nullable String resultParam);
 
     public abstract Version getAlgorithmVersion();
 
@@ -125,9 +170,6 @@ public abstract class MasterKey {
         return idForBytes( getKey() );
     }
 
-    public abstract String encode(@Nonnull String siteName, MPSiteType siteType, @Nonnull UnsignedInteger siteCounter,
-                                  MPSiteVariant siteVariant, @Nullable String siteContext);
-
     public boolean isValid() {
         return masterKey != null;
     }
@@ -150,17 +192,17 @@ public abstract class MasterKey {
         masterKey = deriveKey( masterPassword );
 
         if (masterKey == null)
-            logger.dbg( "masterKey calculation failed after %.2fs.", (double)(System.currentTimeMillis() - start) / MPConstant.MS_PER_S );
+            logger.dbg( "masterKey calculation failed after %.2fs.", (double) (System.currentTimeMillis() - start) / MPConstant.MS_PER_S );
         else
             logger.trc( "masterKey ID: %s (derived in %.2fs)", CodeUtils.encodeHex( idForBytes( masterKey ) ),
-                        (double)(System.currentTimeMillis() - start) / MPConstant.MS_PER_S );
+                        (double) (System.currentTimeMillis() - start) / MPConstant.MS_PER_S );
 
         return this;
     }
 
     protected abstract byte[] bytesForInt(int number);
 
-    protected abstract byte[] bytesForInt(@Nonnull UnsignedInteger number);
+    protected abstract byte[] bytesForInt(UnsignedInteger number);
 
     protected abstract byte[] idForBytes(byte[] bytes);
 
@@ -168,19 +210,19 @@ public abstract class MasterKey {
         /**
          * bugs:
          * - does math with chars whose signedness was platform-dependent.
-         * - miscounted the byte-length fromInt multi-byte site names.
-         * - miscounted the byte-length fromInt multi-byte full names.
+         * - miscounted the byte-length for multi-byte site names.
+         * - miscounted the byte-length for multi-byte full names.
          */
         V0,
         /**
          * bugs:
-         * - miscounted the byte-length fromInt multi-byte site names.
-         * - miscounted the byte-length fromInt multi-byte full names.
+         * - miscounted the byte-length for multi-byte site names.
+         * - miscounted the byte-length for multi-byte full names.
          */
         V1,
         /**
          * bugs:
-         * - miscounted the byte-length fromInt multi-byte full names.
+         * - miscounted the byte-length for multi-byte full names.
          */
         V2,
         /**
@@ -199,21 +241,6 @@ public abstract class MasterKey {
         public int toInt() {
 
             return ordinal();
-        }
-
-        public String toBundleVersion() {
-            switch (this) {
-                case V0:
-                    return "1.0";
-                case V1:
-                    return "2.0";
-                case V2:
-                    return "2.1";
-                case V3:
-                    return "2.2";
-            }
-
-            throw new UnsupportedOperationException( strf( "Unsupported version: %s", this ) );
         }
     }
 }

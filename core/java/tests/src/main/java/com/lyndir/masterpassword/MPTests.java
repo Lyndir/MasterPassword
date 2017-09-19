@@ -66,18 +66,18 @@ public class MPTests {
 
     public static class Case {
 
-        String  identifier;
-        String  parent;
-        Integer algorithm;
-        String  fullName;
-        String  masterPassword;
-        String  keyID;
-        String  siteName;
+        String          identifier;
+        String          parent;
+        Integer         algorithm;
+        String          fullName;
+        String          masterPassword;
+        String          keyID;
+        String          siteName;
         UnsignedInteger siteCounter;
-        String  siteType;
-        String  siteVariant;
-        String  siteContext;
-        String  result;
+        String          resultType;
+        String          keyPurpose;
+        String          keyContext;
+        String          result;
 
         private transient Case parentCase;
 
@@ -130,25 +130,25 @@ public class MPTests {
                     return checkNotNull( parentCase.siteCounter );
                 }
             } );
-            siteType = ifNotNullElse( siteType, new NNSupplier<String>() {
+            resultType = ifNotNullElse( resultType, new NNSupplier<String>() {
                 @Nonnull
                 @Override
                 public String get() {
-                    return checkNotNull( parentCase.siteType );
+                    return checkNotNull( parentCase.resultType );
                 }
             } );
-            siteVariant = ifNotNullElse( siteVariant, new NNSupplier<String>() {
+            keyPurpose = ifNotNullElse( keyPurpose, new NNSupplier<String>() {
                 @Nonnull
                 @Override
                 public String get() {
-                    return checkNotNull( parentCase.siteVariant );
+                    return checkNotNull( parentCase.keyPurpose );
                 }
             } );
-            siteContext = ifNotNullElse( siteContext, new NNSupplier<String>() {
+            keyContext = ifNotNullElse( keyContext, new NNSupplier<String>() {
                 @Nonnull
                 @Override
                 public String get() {
-                    return (parentCase == null)? "": checkNotNull( parentCase.siteContext );
+                    return (parentCase == null)? "": checkNotNull( parentCase.keyContext );
                 }
             } );
             result = ifNotNullElse( result, new NNSupplier<String>() {
@@ -200,18 +200,18 @@ public class MPTests {
         }
 
         @Nonnull
-        public MPSiteType getSiteType() {
-            return MPSiteType.forName( checkNotNull( siteType ) );
+        public MPResultType getResultType() {
+            return MPResultType.forName( checkNotNull( resultType ) );
         }
 
         @Nonnull
-        public MPSiteVariant getSiteVariant() {
-            return MPSiteVariant.forName( checkNotNull( siteVariant ) );
+        public MPKeyPurpose getKeyPurpose() {
+            return MPKeyPurpose.forName( checkNotNull( keyPurpose ) );
         }
 
         @Nonnull
-        public String getSiteContext() {
-            return checkNotNull( siteContext );
+        public String getKeyContext() {
+            return checkNotNull( keyContext );
         }
 
         @Nonnull

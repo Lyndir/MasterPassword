@@ -55,8 +55,9 @@ public class MasterKeyTest {
                 MasterKey masterKey = MasterKey.create( testCase.getAlgorithm(), testCase.getFullName(), testCase.getMasterPassword() );
 
                 assertEquals(
-                        masterKey.encode( testCase.getSiteName(), testCase.getSiteType(), testCase.getSiteCounter(),
-                                          testCase.getSiteVariant(), testCase.getSiteContext() ),
+                        masterKey.siteResult( testCase.getSiteName(), testCase.getSiteCounter(), testCase.getKeyPurpose(),
+                                              testCase.getKeyContext(), testCase.getResultType(),
+                                              null ),
                         testCase.getResult(), "[testEncode] Failed test case: " + testCase );
 
                 return true;
@@ -101,8 +102,9 @@ public class MasterKeyTest {
 
             MasterKey masterKey = MasterKey.create( defaultCase.getFullName(), defaultCase.getMasterPassword() );
             masterKey.invalidate();
-            masterKey.encode( defaultCase.getSiteName(), defaultCase.getSiteType(), defaultCase.getSiteCounter(),
-                              defaultCase.getSiteVariant(), defaultCase.getSiteContext() );
+            masterKey.siteResult( defaultCase.getSiteName(), defaultCase.getSiteCounter(), defaultCase.getKeyPurpose(),
+                                  defaultCase.getKeyContext(), defaultCase.getResultType(),
+                                  null );
 
             fail( "[testInvalidate] Master key should have been invalidated, but was still usable." );
         }

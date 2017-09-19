@@ -1,7 +1,7 @@
 package com.lyndir.masterpassword.gui.model;
 
 import com.google.common.primitives.UnsignedInteger;
-import com.lyndir.masterpassword.MPSiteType;
+import com.lyndir.masterpassword.MPResultType;
 import com.lyndir.masterpassword.MasterKey;
 import com.lyndir.masterpassword.model.*;
 
@@ -33,14 +33,14 @@ public class ModelSite extends Site {
     }
 
     @Override
-    public MPSiteType getSiteType() {
-        return model.getSiteType();
+    public MPResultType getResultType() {
+        return model.getResultType();
     }
 
     @Override
-    public void setSiteType(final MPSiteType siteType) {
-        if (siteType != getSiteType()) {
-            model.setSiteType( siteType );
+    public void setResultType(final MPResultType resultType) {
+        if (resultType != getResultType()) {
+            model.setResultType( resultType );
             MPUserFileManager.get().save();
         }
     }

@@ -24,7 +24,6 @@ import com.lyndir.lhunath.opal.system.logging.Logger;
 import java.util.*;
 import javax.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NonNls;
 
 
 /**
@@ -32,15 +31,13 @@ import org.jetbrains.annotations.NonNls;
  *
  * @author lhunath
  */
-public enum MPSiteType {
+public enum MPResultType {
 
-    GeneratedMaximum( "Max", "20 characters, contains symbols.", //
-                      ImmutableList.of( "x", "max", "maximum" ), // NON-NLS
+    GeneratedMaximum( "Maximum", "20 characters, contains symbols.", //
                       ImmutableList.of( new MPTemplate( "anoxxxxxxxxxxxxxxxxx" ), new MPTemplate( "axxxxxxxxxxxxxxxxxno" ) ), //
-                      MPSiteTypeClass.Generated, 0x0 ),
+                      MPResultTypeClass.Generated, 0x0 ),
 
     GeneratedLong( "Long", "Copy-friendly, 14 characters, contains symbols.", //
-                   ImmutableList.of( "l", "long" ), // NON-NLS
                    ImmutableList.of( new MPTemplate( "CvcvnoCvcvCvcv" ), new MPTemplate( "CvcvCvcvnoCvcv" ),
                                      new MPTemplate( "CvcvCvcvCvcvno" ), new MPTemplate( "CvccnoCvcvCvcv" ),
                                      new MPTemplate( "CvccCvcvnoCvcv" ), new MPTemplate( "CvccCvcvCvcvno" ),
@@ -52,65 +49,55 @@ public enum MPSiteType {
                                      new MPTemplate( "CvcvCvccnoCvcc" ), new MPTemplate( "CvcvCvccCvccno" ),
                                      new MPTemplate( "CvccnoCvcvCvcc" ), new MPTemplate( "CvccCvcvnoCvcc" ),
                                      new MPTemplate( "CvccCvcvCvccno" ) ), //
-                   MPSiteTypeClass.Generated, 0x1 ),
+                   MPResultTypeClass.Generated, 0x1 ),
 
     GeneratedMedium( "Medium", "Copy-friendly, 8 characters, contains symbols.", //
-                     ImmutableList.of( "m", "med", "medium" ), // NON-NLS
                      ImmutableList.of( new MPTemplate( "CvcnoCvc" ), new MPTemplate( "CvcCvcno" ) ), //
-                     MPSiteTypeClass.Generated, 0x2 ),
+                     MPResultTypeClass.Generated, 0x2 ),
 
     GeneratedBasic( "Basic", "8 characters, no symbols.", //
-                    ImmutableList.of( "b", "basic" ), // NON-NLS
                     ImmutableList.of( new MPTemplate( "aaanaaan" ), new MPTemplate( "aannaaan" ), new MPTemplate( "aaannaaa" ) ), //
-                    MPSiteTypeClass.Generated, 0x3 ),
+                    MPResultTypeClass.Generated, 0x3 ),
 
     GeneratedShort( "Short", "Copy-friendly, 4 characters, no symbols.", //
-                    ImmutableList.of( "s", "short" ), // NON-NLS
                     ImmutableList.of( new MPTemplate( "Cvcn" ) ), //
-                    MPSiteTypeClass.Generated, 0x4 ),
+                    MPResultTypeClass.Generated, 0x4 ),
 
     GeneratedPIN( "PIN", "4 numbers.", //
-                  ImmutableList.of( "i", "pin" ), // NON-NLS
                   ImmutableList.of( new MPTemplate( "nnnn" ) ), //
-                  MPSiteTypeClass.Generated, 0x5 ),
+                  MPResultTypeClass.Generated, 0x5 ),
 
     GeneratedName( "Name", "9 letter name.", //
-                   ImmutableList.of( "n", "name" ), // NON-NLS
                    ImmutableList.of( new MPTemplate( "cvccvcvcv" ) ), //
-                   MPSiteTypeClass.Generated, 0xE ),
+                   MPResultTypeClass.Generated, 0xE ),
 
     GeneratedPhrase( "Phrase", "20 character sentence.", //
-                     ImmutableList.of( "p", "phrase" ), // NON-NLS
                      ImmutableList.of( new MPTemplate( "cvcc cvc cvccvcv cvc" ), new MPTemplate( "cvc cvccvcvcv cvcv" ),
                                        new MPTemplate( "cv cvccv cvc cvcvccv" ) ), //
-                     MPSiteTypeClass.Generated, 0xF ),
+                     MPResultTypeClass.Generated, 0xF ),
 
     StoredPersonal( "Personal", "AES-encrypted, exportable.", //
-                    ImmutableList.of( "personal" ), // NON-NLS
                     ImmutableList.<MPTemplate>of(), //
-                    MPSiteTypeClass.Stored, 0x0, MPSiteFeature.ExportContent ),
+                    MPResultTypeClass.Stored, 0x0, MPSiteFeature.ExportContent ),
 
     StoredDevicePrivate( "Device", "AES-encrypted, not exported.", //
-                         ImmutableList.of( "device" ), // NON-NLS
                          ImmutableList.<MPTemplate>of(), //
-                         MPSiteTypeClass.Stored, 0x1, MPSiteFeature.DevicePrivate );
+                         MPResultTypeClass.Stored, 0x1, MPSiteFeature.DevicePrivate );
 
-    static final Logger logger = Logger.get( MPSiteType.class );
+    static final Logger logger = Logger.get( MPResultType.class );
 
     private final String             shortName;
     private final String             description;
-    private final List<String>       options;
     private final List<MPTemplate>   templates;
-    private final MPSiteTypeClass    typeClass;
+    private final MPResultTypeClass  typeClass;
     private final int                typeIndex;
     private final Set<MPSiteFeature> typeFeatures;
 
-    MPSiteType(final String shortName, final String description, final List<String> options, final List<MPTemplate> templates,
-               final MPSiteTypeClass typeClass, final int typeIndex, final MPSiteFeature... typeFeatures) {
+    MPResultType(final String shortName, final String description, final List<MPTemplate> templates,
+                 final MPResultTypeClass typeClass, final int typeIndex, final MPSiteFeature... typeFeatures) {
 
         this.shortName = shortName;
         this.description = description;
-        this.options = options;
         this.templates = templates;
         this.typeClass = typeClass;
         this.typeIndex = typeIndex;
@@ -131,11 +118,7 @@ public enum MPSiteType {
         return description;
     }
 
-    public List<String> getOptions() {
-        return options;
-    }
-
-    public MPSiteTypeClass getTypeClass() {
+    public MPResultTypeClass getTypeClass() {
 
         return typeClass;
     }
@@ -154,35 +137,22 @@ public enum MPSiteType {
     }
 
     /**
-     * @param option The option to select a type with.  It is matched case insensitively.
-     *
-     * @return The type registered for the given option.
-     */
-    public static MPSiteType forOption(final String option) {
-
-        for (final MPSiteType type : values())
-            if (type.getOptions().contains( option.toLowerCase( Locale.ROOT ) ))
-                return type;
-
-        throw logger.bug( "No type for option: %s", option );
-    }
-
-    /**
-     * @param name The name fromInt the type to look up.  It is matched case insensitively.
+     * @param shortNamePrefix The name for the type to look up.  It is a case insensitive prefix of the type's short name.
      *
      * @return The type registered with the given name.
      */
+    @Nullable
     @Contract("!null -> !null")
-    public static MPSiteType forName(@Nullable final String name) {
+    public static MPResultType forName(@Nullable final String shortNamePrefix) {
 
-        if (name == null)
+        if (shortNamePrefix == null)
             return null;
 
-        for (final MPSiteType type : values())
-            if (type.name().equalsIgnoreCase( name ))
+        for (final MPResultType type : values())
+            if (type.getShortName().toLowerCase( Locale.ROOT ).startsWith( shortNamePrefix.toLowerCase( Locale.ROOT ) ))
                 return type;
 
-        throw logger.bug( "No type for name: %s", name );
+        throw logger.bug( "No type for name: %s", shortNamePrefix );
     }
 
     /**
@@ -190,10 +160,10 @@ public enum MPSiteType {
      *
      * @return All types that support the given class.
      */
-    public static ImmutableList<MPSiteType> forClass(final MPSiteTypeClass typeClass) {
+    public static ImmutableList<MPResultType> forClass(final MPResultTypeClass typeClass) {
 
-        ImmutableList.Builder<MPSiteType> types = ImmutableList.builder();
-        for (final MPSiteType type : values())
+        ImmutableList.Builder<MPResultType> types = ImmutableList.builder();
+        for (final MPResultType type : values())
             if (type.getTypeClass() == typeClass)
                 types.add( type );
 
@@ -205,11 +175,11 @@ public enum MPSiteType {
      *
      * @return The type registered with the given type.
      */
-    public static MPSiteType forType(final int type) {
+    public static MPResultType forType(final int type) {
 
-        for (final MPSiteType siteType : values())
-            if (siteType.getType() == type)
-                return siteType;
+        for (final MPResultType resultType : values())
+            if (resultType.getType() == type)
+                return resultType;
 
         throw logger.bug( "No type: %s", type );
     }
@@ -219,15 +189,25 @@ public enum MPSiteType {
      *
      * @return All types that support the given mask.
      */
-    public static ImmutableList<MPSiteType> forMask(final int mask) {
+    public static ImmutableList<MPResultType> forMask(final int mask) {
 
-        int typeMask = mask & ~0xF;
-        ImmutableList.Builder<MPSiteType> types = ImmutableList.builder();
-        for (final MPSiteType siteType : values())
-            if (((siteType.getType() & ~0xF) & typeMask) != 0)
-                types.add( siteType );
+        int                                 typeMask = mask & ~0xF;
+        ImmutableList.Builder<MPResultType> types    = ImmutableList.builder();
+        for (final MPResultType resultType : values())
+            if (((resultType.getType() & ~0xF) & typeMask) != 0)
+                types.add( resultType );
 
         return types.build();
+    }
+
+    public static MPResultType forInt(final int resultType) {
+
+        return values()[resultType];
+    }
+
+    public int toInt() {
+
+        return ordinal();
     }
 
     public MPTemplate getTemplateAtRollingIndex(final int templateIndex) {

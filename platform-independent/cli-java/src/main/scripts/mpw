@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-
-# Uncomment this to set your user name.  Master Password will no longer ask you for a user name.
-# export MP_USERNAME="Robert Lee Mitchell"
-# Uncomment this to hardcode your master password.  Make sure this file's permissions are tight.  Master Password will not ask you for your master password anymore.  This is probably not a good idea.
-# export MP_PASSWORD="banana colored duckling"
-
-cd "%SHAREPATH%"
-exec java -jar masterpassword-cli-GIT-SNAPSHOT.jar "$@"

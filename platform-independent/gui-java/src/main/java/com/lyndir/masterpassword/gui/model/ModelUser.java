@@ -79,7 +79,7 @@ public class ModelUser extends User {
 
     @Override
     public void addSite(final Site site) {
-        model.addSite( new MPSite( model, site.getSiteName(), site.getSiteType(), site.getSiteCounter() ) );
+        model.addSite( new MPSite( model, site.getSiteName(), site.getSiteCounter(), site.getResultType() ) );
         model.updateLastUsed();
         MPUserFileManager.get().save();
     }

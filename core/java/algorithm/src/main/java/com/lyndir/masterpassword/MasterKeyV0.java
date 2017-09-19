@@ -18,30 +18,68 @@
 
 package com.lyndir.masterpassword;
 
-import com.google.common.base.Preconditions;
+import com.google.common.base.*;
 import com.google.common.primitives.Bytes;
 import com.google.common.primitives.UnsignedInteger;
 import com.lambdaworks.crypto.SCrypt;
+import com.lyndir.lhunath.opal.crypto.CryptUtils;
 import com.lyndir.lhunath.opal.system.*;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import java.nio.*;
+import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.crypto.IllegalBlockSizeException;
 
 
 /**
  * bugs:
- * - V2: miscounted the byte-length fromInt multi-byte full names.
- * - V1: miscounted the byte-length fromInt multi-byte site names.
+ * - V2: miscounted the byte-length for multi-byte full names.
+ * - V1: miscounted the byte-length for multi-byte site names.
  * - V0: does math with chars whose signedness was platform-dependent.
  *
  * @author lhunath, 2014-08-30
  */
 public class MasterKeyV0 extends MasterKey {
 
-    private static final int                          MP_intLen    = 32;
+    /**
+     * mpw: validity for the time-based rolling counter.
+     */
+    protected static final int                          mpw_otp_window = 5 * 60 /* s */;
+    /**
+     * mpw: Key ID hash.
+     */
+    protected static final MessageDigests               mpw_hash       = MessageDigests.SHA256;
+    /**
+     * mpw: Site digest.
+     */
+    protected static final MessageAuthenticationDigests mpw_digest     = MessageAuthenticationDigests.HmacSHA256;
+    /**
+     * mpw: Platform-agnostic byte order.
+     */
+    protected static final ByteOrder                    mpw_byteOrder  = ByteOrder.BIG_ENDIAN;
+    /**
+     * mpw: Input character encoding.
+     */
+    protected static final Charset                      mpw_charset    = Charsets.UTF_8;
+    /**
+     * mpw: Master key size (byte).
+     */
+    protected static final int                          mpw_dkLen      = 64;
+    /**
+     * scrypt: Parallelization parameter.
+     */
+    protected static final int                          scrypt_p       = 2;
+    /**
+     * scrypt: Memory cost parameter.
+     */
+    protected static final int                          scrypt_r       = 8;
+    /**
+     * scrypt: CPU cost parameter.
+     */
+    protected static final int                          scrypt_N       = 32768;
+    private static final   int                          MP_intLen      = 32;
 
     @SuppressWarnings("UnusedDeclaration")
     private static final Logger logger = Logger.get( MasterKeyV0.class );
@@ -59,112 +97,171 @@ public class MasterKeyV0 extends MasterKey {
     @Nullable
     @Override
     protected byte[] deriveKey(final char[] masterPassword) {
+        Preconditions.checkArgument( masterPassword.length > 0 );
+
         String fullName = getFullName();
-        byte[] fullNameBytes = fullName.getBytes( MPConstant.mpw_charset );
+        byte[] fullNameBytes = fullName.getBytes( mpw_charset );
         byte[] fullNameLengthBytes = bytesForInt( fullName.length() );
+        ByteBuffer mpBytesBuf = mpw_charset.encode( CharBuffer.wrap( masterPassword ) );
 
-        String mpKeyScope = MPSiteVariant.Password.getScope();
-        byte[] masterKeySalt = Bytes.concat( mpKeyScope.getBytes( MPConstant.mpw_charset ), fullNameLengthBytes, fullNameBytes );
-        logger.trc( "key scope: %s", mpKeyScope );
-        logger.trc( "masterKeySalt ID: %s", CodeUtils.encodeHex( idForBytes( masterKeySalt ) ) );
+        logger.trc( "-- mpw_masterKey (algorithm: %u)", getAlgorithmVersion().toInt() );
+        logger.trc( "fullName: %s", fullName );
+        logger.trc( "masterPassword.id: %s", (Object) idForBytes( mpBytesBuf.array() ) );
 
-        ByteBuffer mpBytesBuf = MPConstant.mpw_charset.encode( CharBuffer.wrap( masterPassword ) );
+        String keyScope = MPKeyPurpose.Password.getScope();
+        logger.trc( "keyScope: %s", keyScope );
+
+        // Calculate the master key salt.
+        logger.trc( "masterKeySalt: keyScope=%s | #fullName=%s | fullName=%s",
+             keyScope, CodeUtils.encodeHex( fullNameLengthBytes ), fullName );
+        byte[] masterKeySalt = Bytes.concat( keyScope.getBytes( mpw_charset ), fullNameLengthBytes, fullNameBytes );
+        logger.trc( "  => masterKeySalt.id: %s", CodeUtils.encodeHex( idForBytes( masterKeySalt ) ) );
+
+        // Calculate the master key.
+        logger.trc( "masterKey: scrypt( masterPassword, masterKeySalt, N=%lu, r=%u, p=%u )",
+                    scrypt_N, scrypt_r, scrypt_p );
         byte[] mpBytes = new byte[mpBytesBuf.remaining()];
         mpBytesBuf.get( mpBytes, 0, mpBytes.length );
         Arrays.fill( mpBytesBuf.array(), (byte) 0 );
+        byte[] masterKey = scrypt( masterKeySalt, mpBytes ); // TODO: Why not mpBytesBuf.array()?
+        Arrays.fill( masterKeySalt, (byte) 0 );
+        Arrays.fill( mpBytes, (byte) 0 );
+        logger.trc( "  => masterKey.id: %s", (masterKey == null)? null: (Object) idForBytes( masterKey ) );
 
-        return scrypt( masterKeySalt, mpBytes );
+        return masterKey;
     }
 
     @Nullable
     protected byte[] scrypt(final byte[] masterKeySalt, final byte[] mpBytes) {
         try {
             if (isAllowNative())
-                return SCrypt.scrypt( mpBytes, masterKeySalt, MPConstant.scrypt_N, MPConstant.scrypt_r, MPConstant.scrypt_p, MPConstant.mpw_dkLen );
+                return SCrypt.scrypt( mpBytes, masterKeySalt, scrypt_N, scrypt_r, scrypt_p, mpw_dkLen );
             else
-                return SCrypt.scryptJ( mpBytes, masterKeySalt, MPConstant.scrypt_N, MPConstant.scrypt_r, MPConstant.scrypt_p, MPConstant.mpw_dkLen );
+                return SCrypt.scryptJ( mpBytes, masterKeySalt, scrypt_N, scrypt_r, scrypt_p, mpw_dkLen );
         }
         catch (final GeneralSecurityException e) {
             logger.bug( e );
             return null;
         }
-        finally {
-            Arrays.fill( mpBytes, (byte) 0 );
-        }
     }
 
     @Override
-    public String encode(@Nonnull final String siteName, final MPSiteType siteType, @Nonnull UnsignedInteger siteCounter,
-                         final MPSiteVariant siteVariant, @Nullable final String siteContext) {
-        Preconditions.checkArgument( siteType.getTypeClass() == MPSiteTypeClass.Generated );
+    protected byte[] siteKey(final String siteName, UnsignedInteger siteCounter, final MPKeyPurpose keyPurpose,
+                             @Nullable final String keyContext) {
         Preconditions.checkArgument( !siteName.isEmpty() );
 
+        logger.trc( "-- mpw_siteKey (algorithm: %u)", getAlgorithmVersion().toInt() );
         logger.trc( "siteName: %s", siteName );
-        logger.trc( "siteCounter: %d", siteCounter.longValue() );
-        logger.trc( "siteVariant: %d (%s)", siteVariant.ordinal(), siteVariant );
-        logger.trc( "siteType: %d (%s)", siteType.ordinal(), siteType );
+        logger.trc( "siteCounter: %d", siteCounter );
+        logger.trc( "keyPurpose: %d (%s)", keyPurpose.toInt(), keyPurpose.getShortName() );
+        logger.trc( "keyContext: %s", keyContext );
 
+        String keyScope = keyPurpose.getScope();
+        logger.trc( "keyScope: %s", keyScope );
+
+        // OTP counter value.
         if (siteCounter.longValue() == 0)
-            siteCounter = UnsignedInteger.valueOf( (System.currentTimeMillis() / (MPConstant.mpw_counter_timeout * 1000)) * MPConstant.mpw_counter_timeout );
+            siteCounter = UnsignedInteger.valueOf( (System.currentTimeMillis() / (mpw_otp_window * 1000)) * mpw_otp_window );
 
-        String siteScope = siteVariant.getScope();
-        byte[] siteNameBytes = siteName.getBytes( MPConstant.mpw_charset );
+        // Calculate the site seed.
+        byte[] siteNameBytes = siteName.getBytes( mpw_charset );
         byte[] siteNameLengthBytes = bytesForInt( siteName.length() );
         byte[] siteCounterBytes = bytesForInt( siteCounter );
-        byte[] siteContextBytes = ((siteContext == null) || siteContext.isEmpty())? null: siteContext.getBytes( MPConstant.mpw_charset );
-        byte[] siteContextLengthBytes = bytesForInt( (siteContextBytes == null)? 0: siteContextBytes.length );
-        logger.trc( "site scope: %s, context: %s", siteScope, (siteContextBytes == null)? "<empty>": siteContext );
-        logger.trc( "seed from: hmac-sha256(masterKey, %s | %s | %s | %s | %s | %s)", siteScope, CodeUtils.encodeHex( siteNameLengthBytes ),
-                    siteName, CodeUtils.encodeHex( siteCounterBytes ), CodeUtils.encodeHex( siteContextLengthBytes ),
-                    (siteContextBytes == null)? "(null)": siteContext );
+        byte[] keyContextBytes = ((keyContext == null) || keyContext.isEmpty())? null: keyContext.getBytes( mpw_charset );
+        byte[] keyContextLengthBytes = (keyContextBytes == null)? null: bytesForInt( keyContextBytes.length );
+        logger.trc( "siteSalt: keyScope=%s | #siteName=%s | siteName=%s | siteCounter=%s | #keyContext=%s | keyContext=%s",
+                    keyScope, CodeUtils.encodeHex( siteNameLengthBytes ), siteName, CodeUtils.encodeHex( siteCounterBytes ),
+                    (keyContextLengthBytes == null)? null: CodeUtils.encodeHex( keyContextLengthBytes ), keyContext );
 
-        byte[] sitePasswordInfo = Bytes.concat( siteScope.getBytes( MPConstant.mpw_charset ), siteNameLengthBytes, siteNameBytes, siteCounterBytes );
-        if (siteContextBytes != null)
-            sitePasswordInfo = Bytes.concat( sitePasswordInfo, siteContextLengthBytes, siteContextBytes );
-        logger.trc( "sitePasswordInfo ID: %s", CodeUtils.encodeHex( idForBytes( sitePasswordInfo ) ) );
+        byte[] sitePasswordInfo = Bytes.concat( keyScope.getBytes( mpw_charset ), siteNameLengthBytes, siteNameBytes, siteCounterBytes );
+        if (keyContextBytes != null)
+            sitePasswordInfo = Bytes.concat( sitePasswordInfo, keyContextLengthBytes, keyContextBytes );
+        logger.trc( "  => siteSalt.id: %s", CodeUtils.encodeHex( idForBytes( sitePasswordInfo ) ) );
 
-        byte[] sitePasswordSeedBytes = MPConstant.mpw_digest.of( getKey(), sitePasswordInfo );
-        int[] sitePasswordSeed = new int[sitePasswordSeedBytes.length];
-        for (int i = 0; i < sitePasswordSeedBytes.length; ++i) {
+        byte[] masterKey = getKey();
+        logger.trc( "siteKey: hmac-sha256( masterKey.id=%s, siteSalt )", (Object) idForBytes( masterKey ) );
+        byte[] sitePasswordSeedBytes = mpw_digest.of( masterKey, sitePasswordInfo );
+        logger.trc( "  => siteKey.id: %s", (Object) idForBytes( sitePasswordSeedBytes ) );
+
+        return sitePasswordSeedBytes;
+    }
+
+    @Override
+    public String siteResult(final String siteName, final UnsignedInteger siteCounter, final MPKeyPurpose keyPurpose,
+                             @Nullable final String keyContext, final MPResultType resultType, @Nullable final String resultParam) {
+
+        byte[] siteKey = siteKey( siteName, siteCounter, keyPurpose, keyContext );
+        int[] sitePasswordSeed = new int[siteKey.length];
+        for (int i = 0; i < siteKey.length; ++i) {
             ByteBuffer buf = ByteBuffer.allocate( Integer.SIZE / Byte.SIZE ).order( ByteOrder.BIG_ENDIAN );
-            Arrays.fill( buf.array(), (byte) ((sitePasswordSeedBytes[i] > 0)? 0x00: 0xFF) );
+            Arrays.fill( buf.array(), (byte) ((siteKey[i] > 0)? 0x00: 0xFF) );
             buf.position( 2 );
-            buf.put( sitePasswordSeedBytes[i] ).rewind();
+            buf.put( siteKey[i] ).rewind();
             sitePasswordSeed[i] = buf.getInt() & 0xFFFF;
         }
-        logger.trc( "sitePasswordSeed ID: %s", CodeUtils.encodeHex( idForBytes( sitePasswordSeedBytes ) ) );
 
+        logger.trc( "-- mpw_siteResult (algorithm: %u)", getAlgorithmVersion().toInt() );
+        logger.trc( "resultType: %d (%s)", resultType.toInt(), resultType.getShortName() );
+        logger.trc( "resultParam: %s", resultParam );
+
+        // Determine the template.
         Preconditions.checkState( sitePasswordSeed.length > 0 );
         int templateIndex = sitePasswordSeed[0];
-        MPTemplate template = siteType.getTemplateAtRollingIndex( templateIndex );
-        logger.trc( "type %s, template: %s", siteType, template.getTemplateString() );
+        MPTemplate template = resultType.getTemplateAtRollingIndex( templateIndex );
+        logger.trc( "template: %u => %s", templateIndex, template.getTemplateString() );
 
+        // Encode the password from the seed using the template.
         StringBuilder password = new StringBuilder( template.length() );
         for (int i = 0; i < template.length(); ++i) {
             int characterIndex = sitePasswordSeed[i + 1];
             MPTemplateCharacterClass characterClass = template.getCharacterClassAtIndex( i );
             char passwordCharacter = characterClass.getCharacterAtRollingIndex( characterIndex );
-            logger.trc( "class %c, index %d (0x%02X) -> character: %c", characterClass.getIdentifier(), characterIndex,
-                        sitePasswordSeed[i + 1], passwordCharacter );
+            logger.trc( "  - class: %c, index: %5u (0x%02hX) => character: %c",
+                        characterClass.getIdentifier(), characterIndex, sitePasswordSeed[i + 1], passwordCharacter );
 
             password.append( passwordCharacter );
         }
+        logger.trc( "  => password: %s", password );
 
         return password.toString();
     }
 
     @Override
-    protected byte[] bytesForInt(final int number) {
-        return ByteBuffer.allocate( MP_intLen / Byte.SIZE ).order( MPConstant.mpw_byteOrder ).putInt( number ).array();
+    public String siteState(final String siteName, final UnsignedInteger siteCounter, final MPKeyPurpose keyPurpose,
+                            @Nullable final String keyContext, final MPResultType resultType, @Nullable final String resultParam) {
+
+        Preconditions.checkNotNull( resultParam );
+        Preconditions.checkArgument( !resultParam.isEmpty() );
+
+        try {
+            // Encrypt
+            ByteBuffer plainText = mpw_charset.encode( CharBuffer.wrap( resultParam ) );
+            byte[] cipherBuf = CryptUtils.encrypt( plainText.array(), getKey(), true );
+            logger.trc( "cipherBuf: %zu bytes = %s", cipherBuf.length, CodeUtils.encodeHex( cipherBuf ) );
+
+            // Base64-encode
+            String cipherText = Verify.verifyNotNull( CryptUtils.encodeBase64( cipherBuf ) );
+            logger.trc( "b64 encoded -> cipherText: %s", cipherText );
+
+            return cipherText;
+        }
+        catch (final IllegalBlockSizeException e) {
+            throw logger.bug( e );
+        }
     }
 
     @Override
-    protected byte[] bytesForInt(@Nonnull final UnsignedInteger number) {
-        return ByteBuffer.allocate( MP_intLen / Byte.SIZE ).order( MPConstant.mpw_byteOrder ).putInt( number.intValue() ).array();
+    protected byte[] bytesForInt(final int number) {
+        return ByteBuffer.allocate( MP_intLen / Byte.SIZE ).order( mpw_byteOrder ).putInt( number ).array();
+    }
+
+    @Override
+    protected byte[] bytesForInt(final UnsignedInteger number) {
+        return ByteBuffer.allocate( MP_intLen / Byte.SIZE ).order( mpw_byteOrder ).putInt( number.intValue() ).array();
     }
 
     @Override
     protected byte[] idForBytes(final byte[] bytes) {
-        return MPConstant.mpw_hash.of( bytes );
+        return mpw_hash.of( bytes );
     }
 }

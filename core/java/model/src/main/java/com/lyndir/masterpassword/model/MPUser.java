@@ -5,7 +5,7 @@ import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 import com.lyndir.lhunath.opal.system.CodeUtils;
-import com.lyndir.masterpassword.MPSiteType;
+import com.lyndir.masterpassword.MPResultType;
 import com.lyndir.masterpassword.MasterKey;
 import java.util.*;
 import javax.annotation.Nonnull;
@@ -25,7 +25,7 @@ public class MPUser implements Comparable<MPUser> {
     private       byte[]            keyID;
     private final MasterKey.Version algorithmVersion;
     private       int               avatar;
-    private       MPSiteType        defaultType;
+    private       MPResultType      defaultType;
     private       ReadableInstant   lastUsed;
 
     public MPUser(final String fullName) {
@@ -33,11 +33,11 @@ public class MPUser implements Comparable<MPUser> {
     }
 
     public MPUser(final String fullName, @Nullable final byte[] keyID) {
-        this( fullName, keyID, MasterKey.Version.CURRENT, 0, MPSiteType.GeneratedLong, new DateTime() );
+        this( fullName, keyID, MasterKey.Version.CURRENT, 0, MPResultType.GeneratedLong, new DateTime() );
     }
 
     public MPUser(final String fullName, @Nullable final byte[] keyID, final MasterKey.Version algorithmVersion, final int avatar,
-                  final MPSiteType defaultType, final ReadableInstant lastUsed) {
+                  final MPResultType defaultType, final ReadableInstant lastUsed) {
         this.fullName = fullName;
         this.keyID = (keyID == null)? null: keyID.clone();
         this.algorithmVersion = algorithmVersion;
@@ -107,11 +107,11 @@ public class MPUser implements Comparable<MPUser> {
         this.avatar = avatar;
     }
 
-    public MPSiteType getDefaultType() {
+    public MPResultType getDefaultType() {
         return defaultType;
     }
 
-    public void setDefaultType(final MPSiteType defaultType) {
+    public void setDefaultType(final MPResultType defaultType) {
         this.defaultType = defaultType;
     }
 

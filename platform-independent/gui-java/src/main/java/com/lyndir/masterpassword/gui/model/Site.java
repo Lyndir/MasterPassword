@@ -3,7 +3,7 @@ package com.lyndir.masterpassword.gui.model;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
 
 import com.google.common.primitives.UnsignedInteger;
-import com.lyndir.masterpassword.MPSiteType;
+import com.lyndir.masterpassword.MPResultType;
 import com.lyndir.masterpassword.MasterKey;
 
 
@@ -16,9 +16,9 @@ public abstract class Site {
 
     public abstract void setSiteName(String siteName);
 
-    public abstract MPSiteType getSiteType();
+    public abstract MPResultType getResultType();
 
-    public abstract void setSiteType(MPSiteType siteType);
+    public abstract void setResultType(MPResultType resultType);
 
     public abstract MasterKey.Version getAlgorithmVersion();
 

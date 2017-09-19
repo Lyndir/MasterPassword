@@ -23,13 +23,12 @@ import com.google.common.primitives.Bytes;
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.lhunath.opal.system.logging.Logger;
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 
 /**
  * bugs:
- * - V2: miscounted the byte-length fromInt multi-byte full names.
+ * - V2: miscounted the byte-length for multi-byte full names.
  * 
  * @author lhunath, 2014-08-30
  */
@@ -49,54 +48,43 @@ public class MasterKeyV2 extends MasterKeyV1 {
     }
 
     @Override
-    public String encode(@Nonnull final String siteName, final MPSiteType siteType, @Nonnull UnsignedInteger siteCounter,
-                         final MPSiteVariant siteVariant, @Nullable final String siteContext) {
-        Preconditions.checkArgument( siteType.getTypeClass() == MPSiteTypeClass.Generated );
+    protected byte[] siteKey(final String siteName, UnsignedInteger siteCounter, final MPKeyPurpose keyPurpose,
+                             @Nullable final String keyContext) {
         Preconditions.checkArgument( !siteName.isEmpty() );
 
+        logger.trc( "-- mpw_siteKey (algorithm: %u)", getAlgorithmVersion().toInt() );
         logger.trc( "siteName: %s", siteName );
-        logger.trc( "siteCounter: %d", siteCounter.longValue() );
-        logger.trc( "siteVariant: %d (%s)", siteVariant.ordinal(), siteVariant );
-        logger.trc( "siteType: %d (%s)", siteType.ordinal(), siteType );
+        logger.trc( "siteCounter: %d", siteCounter );
+        logger.trc( "keyPurpose: %d (%s)", keyPurpose.toInt(), keyPurpose.getShortName() );
+        logger.trc( "keyContext: %s", keyContext );
 
+        String keyScope = keyPurpose.getScope();
+        logger.trc( "keyScope: %s", keyScope );
+
+        // OTP counter value.
         if (siteCounter.longValue() == 0)
-            siteCounter = UnsignedInteger.valueOf( (System.currentTimeMillis() / (MPConstant.mpw_counter_timeout * 1000)) * MPConstant.mpw_counter_timeout );
+            siteCounter = UnsignedInteger.valueOf( (System.currentTimeMillis() / (MasterKeyV0.mpw_otp_window * 1000)) * MasterKeyV0.mpw_otp_window );
 
-        String siteScope = siteVariant.getScope();
-        byte[] siteNameBytes = siteName.getBytes( MPConstant.mpw_charset );
+        // Calculate the site seed.
+        byte[] siteNameBytes = siteName.getBytes( MasterKeyV0.mpw_charset );
         byte[] siteNameLengthBytes = bytesForInt( siteNameBytes.length );
         byte[] siteCounterBytes = bytesForInt( siteCounter );
-        byte[] siteContextBytes = ((siteContext == null) || siteContext.isEmpty())? null: siteContext.getBytes( MPConstant.mpw_charset );
-        byte[] siteContextLengthBytes = bytesForInt( (siteContextBytes == null)? 0: siteContextBytes.length );
-        logger.trc( "site scope: %s, context: %s", siteScope, (siteContextBytes == null)? "<empty>": siteContext );
-        logger.trc( "seed from: hmac-sha256(masterKey, %s | %s | %s | %s | %s | %s)", siteScope, CodeUtils.encodeHex( siteNameLengthBytes ),
-                    siteName, CodeUtils.encodeHex( siteCounterBytes ), CodeUtils.encodeHex( siteContextLengthBytes ),
-                    (siteContextBytes == null)? "(null)": siteContext );
+        byte[] keyContextBytes = ((keyContext == null) || keyContext.isEmpty())? null: keyContext.getBytes( MasterKeyV0.mpw_charset );
+        byte[] keyContextLengthBytes = (keyContextBytes == null)? null: bytesForInt( keyContextBytes.length );
+        logger.trc( "siteSalt: keyScope=%s | #siteName=%s | siteName=%s | siteCounter=%s | #keyContext=%s | keyContext=%s",
+                    keyScope, CodeUtils.encodeHex( siteNameLengthBytes ), siteName, CodeUtils.encodeHex( siteCounterBytes ),
+                    (keyContextLengthBytes == null)? null: CodeUtils.encodeHex( keyContextLengthBytes ), keyContext );
 
-        byte[] sitePasswordInfo = Bytes.concat( siteScope.getBytes( MPConstant.mpw_charset ), siteNameLengthBytes, siteNameBytes, siteCounterBytes );
-        if (siteContextBytes != null)
-            sitePasswordInfo = Bytes.concat( sitePasswordInfo, siteContextLengthBytes, siteContextBytes );
-        logger.trc( "sitePasswordInfo ID: %s", CodeUtils.encodeHex( idForBytes( sitePasswordInfo ) ) );
+        byte[] sitePasswordInfo = Bytes.concat( keyScope.getBytes( MasterKeyV0.mpw_charset ), siteNameLengthBytes, siteNameBytes, siteCounterBytes );
+        if (keyContextBytes != null)
+            sitePasswordInfo = Bytes.concat( sitePasswordInfo, keyContextLengthBytes, keyContextBytes );
+        logger.trc( "  => siteSalt.id: %s", CodeUtils.encodeHex( idForBytes( sitePasswordInfo ) ) );
 
-        byte[] sitePasswordSeed = MPConstant.mpw_digest.of( getKey(), sitePasswordInfo );
-        logger.trc( "sitePasswordSeed ID: %s", CodeUtils.encodeHex( idForBytes( sitePasswordSeed ) ) );
+        byte[] masterKey = getKey();
+        logger.trc( "siteKey: hmac-sha256( masterKey.id=%s, siteSalt )", (Object) idForBytes( masterKey ) );
+        byte[] sitePasswordSeedBytes = MasterKeyV0.mpw_digest.of( masterKey, sitePasswordInfo );
+        logger.trc( "  => siteKey.id: %s", (Object) idForBytes( sitePasswordSeedBytes ) );
 
-        Preconditions.checkState( sitePasswordSeed.length > 0 );
-        int templateIndex = sitePasswordSeed[0] & 0xFF; // Mask the integer's sign.
-        MPTemplate template = siteType.getTemplateAtRollingIndex( templateIndex );
-        logger.trc( "type %s, template: %s", siteType, template.getTemplateString() );
-
-        StringBuilder password = new StringBuilder( template.length() );
-        for (int i = 0; i < template.length(); ++i) {
-            int characterIndex = sitePasswordSeed[i + 1] & 0xFF; // Mask the integer's sign.
-            MPTemplateCharacterClass characterClass = template.getCharacterClassAtIndex( i );
-            char passwordCharacter = characterClass.getCharacterAtRollingIndex( characterIndex );
-            logger.trc( "class %c, index %d (0x%02X) -> character: %c", characterClass.getIdentifier(), characterIndex,
-                        sitePasswordSeed[i + 1], passwordCharacter );
-
-            password.append( passwordCharacter );
-        }
-
-        return password.toString();
+        return sitePasswordSeedBytes;
     }
 }

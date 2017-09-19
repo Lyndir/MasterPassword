@@ -31,6 +31,11 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>com.lyndir.lhunath.opal</groupId>
+            <artifactId>opal-crypto</artifactId>
+            <version>1.6-p9</version>
+        </dependency>
 
         <!-- EXTERNAL DEPENDENCIES -->
         <dependency>

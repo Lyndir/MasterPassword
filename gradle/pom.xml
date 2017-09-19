@@ -22,7 +22,6 @@
         <module>masterpassword-tests</module>
         <module>masterpassword-algorithm</module>
         <module>masterpassword-model</module>
-        <module>masterpassword-cli</module>
         <module>masterpassword-gui</module>
     </modules>
 
