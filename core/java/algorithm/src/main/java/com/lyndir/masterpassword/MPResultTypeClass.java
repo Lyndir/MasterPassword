@@ -24,8 +24,20 @@ package com.lyndir.masterpassword;
  * @author lhunath
  */
 public enum MPResultTypeClass {
-    Generated( 1 << 4 ),
-    Stored( 1 << 5 );
+    // bit 4 - 9
+
+    /**
+     * Use the site key to generate a password from a template.
+     */
+    Template( 1 << 4 ),
+    /**
+     * Use the site key to encrypt and decrypt a stateful entity.
+     */
+    Stateful( 1 << 5 ),
+    /**
+     * Use the site key to derive a site-specific object.
+     */
+    Derive( 1 << 6 );
 
     private final int mask;
 

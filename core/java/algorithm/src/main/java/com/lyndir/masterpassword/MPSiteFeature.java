@@ -24,6 +24,7 @@ package com.lyndir.masterpassword;
  * @author lhunath
  */
 public enum MPSiteFeature {
+    // bit 10 - 15
 
     /**
      * Export the key-protected content data.
@@ -33,7 +34,12 @@ public enum MPSiteFeature {
     /**
      * Never export content.
      */
-    DevicePrivate( 1 << 11 );
+    DevicePrivate( 1 << 11 ),
+
+    /**
+     * Don't use this as the primary authentication result type.
+     */
+    Alternative( 1 << 12 );
 
     MPSiteFeature(final int mask) {
         this.mask = mask;

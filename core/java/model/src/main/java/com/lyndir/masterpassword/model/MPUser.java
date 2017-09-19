@@ -33,7 +33,7 @@ public class MPUser implements Comparable<MPUser> {
     }
 
     public MPUser(final String fullName, @Nullable final byte[] keyID) {
-        this( fullName, keyID, MasterKey.Version.CURRENT, 0, MPResultType.GeneratedLong, new DateTime() );
+        this( fullName, keyID, MasterKey.Version.CURRENT, 0, MPResultType.DEFAULT, new DateTime() );
     }
 
     public MPUser(final String fullName, @Nullable final byte[] keyID, final MasterKey.Version algorithmVersion, final int avatar,

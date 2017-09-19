@@ -127,6 +127,12 @@ public abstract class MasterKey {
     public abstract String siteResult(String siteName, UnsignedInteger siteCounter, MPKeyPurpose keyPurpose,
                                       @Nullable String keyContext, MPResultType resultType, @Nullable String resultParam);
 
+    protected abstract String sitePasswordFromTemplate(byte[] siteKey, MPResultType resultType, @Nullable String resultParam);
+
+    protected abstract String sitePasswordFromCrypt(byte[] siteKey, MPResultType resultType, @Nullable String resultParam);
+
+    protected abstract String sitePasswordFromDerive(byte[] siteKey, MPResultType resultType, @Nullable String resultParam);
+
     /**
      * Encrypt a stateful site token for persistence.
      *

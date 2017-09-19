@@ -54,7 +54,7 @@ public class EmergencyActivity extends Activity {
 
     private final Preferences                      preferences    = Preferences.get( this );
     private final ListeningExecutorService         executor       = MoreExecutors.listeningDecorator( Executors.newSingleThreadExecutor() );
-    private final ImmutableList<MPResultType>      allResultTypes = ImmutableList.copyOf( MPResultType.forClass( MPResultTypeClass.Generated ) );
+    private final ImmutableList<MPResultType>      allResultTypes = ImmutableList.copyOf( MPResultType.forClass( MPResultTypeClass.Template ) );
     private final ImmutableList<MasterKey.Version> allVersions    = ImmutableList.copyOf( MasterKey.Version.values() );
 
     private ListenableFuture<MasterKey> masterKeyFuture;
@@ -332,7 +332,7 @@ public class EmergencyActivity extends Activity {
             @Override
             public void run() {
                 try {
-                    sitePassword = masterKeyFuture.get().siteResult( siteName, counter, MPKeyPurpose.Password, null, type, null );
+                    sitePassword = masterKeyFuture.get().siteResult( siteName, counter, MPKeyPurpose.Authentication, null, type, null );
 
                     runOnUiThread( new Runnable() {
                         @Override

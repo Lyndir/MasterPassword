@@ -118,7 +118,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
 
         // Site Type & Counter
         siteCounterModel = new UnsignedIntegerModel( UnsignedInteger.ONE, UnsignedInteger.ONE );
-        MPResultType[] types = Iterables.toArray( MPResultType.forClass( MPResultTypeClass.Generated ), MPResultType.class );
+        MPResultType[] types = Iterables.toArray( MPResultType.forClass( MPResultTypeClass.Template ), MPResultType.class );
         JComponent siteSettings = Components.boxLayout( BoxLayout.LINE_AXIS,                                                  //
                                                         resultTypeField = Components.comboBox( types ),                         //
                                                         Components.stud(),                                                    //
@@ -127,7 +127,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
                                                         siteCounterField = Components.spinner( siteCounterModel ) );
         sitePanel.add( siteSettings );
         resultTypeField.setFont( Res.valueFont().deriveFont( 12f ) );
-        resultTypeField.setSelectedItem( MPResultType.GeneratedLong );
+        resultTypeField.setSelectedItem( MPResultType.DEFAULT );
         resultTypeField.addItemListener( new ItemListener() {
             @Override
             public void itemStateChanged(final ItemEvent e) {
@@ -240,7 +240,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
             public String call()
                     throws Exception {
                 return user.getKey( site.getAlgorithmVersion() )
-                           .siteResult( site.getSiteName(), site.getSiteCounter(), MPKeyPurpose.Password, null, site.getResultType(), null );
+                           .siteResult( site.getSiteName(), site.getSiteCounter(), MPKeyPurpose.Authentication, null, site.getResultType(), null );
             }
         } );
         Futures.addCallback( passwordFuture, new FutureCallback<String>() {

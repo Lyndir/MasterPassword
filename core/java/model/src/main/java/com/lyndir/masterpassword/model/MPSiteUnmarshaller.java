@@ -58,7 +58,7 @@ public class MPSiteUnmarshaller {
         String                              fullName     = null;
         int                                 mpVersion    = 0, importFormat = 0, avatar = 0;
         boolean                             clearContent = false, headerStarted = false;
-        MPResultType                        defaultType  = MPResultType.GeneratedLong;
+        MPResultType                        defaultType  = MPResultType.DEFAULT;
         MPSiteUnmarshaller                  marshaller   = null;
         final ImmutableList.Builder<MPSite> sites        = ImmutableList.builder();
 

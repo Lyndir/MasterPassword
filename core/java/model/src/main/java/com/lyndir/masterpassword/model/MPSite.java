@@ -14,7 +14,6 @@ import org.joda.time.Instant;
  */
 public class MPSite {
 
-    public static final MPResultType    DEFAULT_TYPE    = MPResultType.GeneratedLong;
     public static final UnsignedInteger DEFAULT_COUNTER = UnsignedInteger.valueOf( 1 );
 
     private final MPUser            user;
@@ -27,7 +26,7 @@ public class MPSite {
     private       String            loginName;
 
     public MPSite(final MPUser user, final String siteName) {
-        this( user, siteName, DEFAULT_COUNTER, DEFAULT_TYPE );
+        this( user, siteName, DEFAULT_COUNTER, MPResultType.DEFAULT );
     }
 
     public MPSite(final MPUser user, final String siteName, final UnsignedInteger siteCounter, final MPResultType resultType) {
@@ -53,7 +52,7 @@ public class MPSite {
     }
 
     public String resultFor(final MasterKey masterKey) {
-        return resultFor( masterKey, MPKeyPurpose.Password, null );
+        return resultFor( masterKey, MPKeyPurpose.Authentication, null );
     }
 
     public String resultFor(final MasterKey masterKey, final MPKeyPurpose purpose, @Nullable final String context) {

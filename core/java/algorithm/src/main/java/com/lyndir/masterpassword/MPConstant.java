@@ -18,12 +18,6 @@
 
 package com.lyndir.masterpassword;
 
-import com.google.common.base.Charsets;
-import com.lyndir.lhunath.opal.system.MessageAuthenticationDigests;
-import com.lyndir.lhunath.opal.system.MessageDigests;
-import java.nio.ByteOrder;
-import java.nio.charset.Charset;
-
 
 /**
  * @author lhunath, 2016-10-29

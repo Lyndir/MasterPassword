@@ -32,11 +32,19 @@ import org.jetbrains.annotations.Contract;
  * @author lhunath
  */
 public enum MPResultType {
+    // bit 0-3 | MPResultTypeClass | MPSiteFeature
 
+    /**
+     * pg^VMAUBk5x3p%HP%i4=
+     */
     GeneratedMaximum( "Maximum", "20 characters, contains symbols.", //
-                      ImmutableList.of( new MPTemplate( "anoxxxxxxxxxxxxxxxxx" ), new MPTemplate( "axxxxxxxxxxxxxxxxxno" ) ), //
-                      MPResultTypeClass.Generated, 0x0 ),
+                      ImmutableList.of( new MPTemplate( "anoxxxxxxxxxxxxxxxxx" ),
+                                        new MPTemplate( "axxxxxxxxxxxxxxxxxno" ) ), //
+                      MPResultTypeClass.Template, 0x0 ),
 
+    /**
+     * BiroYena8:Kixa
+     */
     GeneratedLong( "Long", "Copy-friendly, 14 characters, contains symbols.", //
                    ImmutableList.of( new MPTemplate( "CvcvnoCvcvCvcv" ), new MPTemplate( "CvcvCvcvnoCvcv" ),
                                      new MPTemplate( "CvcvCvcvCvcvno" ), new MPTemplate( "CvccnoCvcvCvcv" ),
@@ -49,40 +57,77 @@ public enum MPResultType {
                                      new MPTemplate( "CvcvCvccnoCvcc" ), new MPTemplate( "CvcvCvccCvccno" ),
                                      new MPTemplate( "CvccnoCvcvCvcc" ), new MPTemplate( "CvccCvcvnoCvcc" ),
                                      new MPTemplate( "CvccCvcvCvccno" ) ), //
-                   MPResultTypeClass.Generated, 0x1 ),
+                   MPResultTypeClass.Template, 0x1 ),
 
+    /**
+     * BirSuj0-
+     */
     GeneratedMedium( "Medium", "Copy-friendly, 8 characters, contains symbols.", //
-                     ImmutableList.of( new MPTemplate( "CvcnoCvc" ), new MPTemplate( "CvcCvcno" ) ), //
-                     MPResultTypeClass.Generated, 0x2 ),
+                     ImmutableList.of( new MPTemplate( "CvcnoCvc" ),
+                                       new MPTemplate( "CvcCvcno" ) ), //
+                     MPResultTypeClass.Template, 0x2 ),
 
+    /**
+     * pO98MoD0
+     */
     GeneratedBasic( "Basic", "8 characters, no symbols.", //
-                    ImmutableList.of( new MPTemplate( "aaanaaan" ), new MPTemplate( "aannaaan" ), new MPTemplate( "aaannaaa" ) ), //
-                    MPResultTypeClass.Generated, 0x3 ),
+                    ImmutableList.of( new MPTemplate( "aaanaaan" ),
+                                      new MPTemplate( "aannaaan" ),
+                                      new MPTemplate( "aaannaaa" ) ), //
+                    MPResultTypeClass.Template, 0x3 ),
 
+    /**
+     * Bir8
+     */
     GeneratedShort( "Short", "Copy-friendly, 4 characters, no symbols.", //
                     ImmutableList.of( new MPTemplate( "Cvcn" ) ), //
-                    MPResultTypeClass.Generated, 0x4 ),
+                    MPResultTypeClass.Template, 0x4 ),
 
+    /**
+     * 2798
+     */
     GeneratedPIN( "PIN", "4 numbers.", //
                   ImmutableList.of( new MPTemplate( "nnnn" ) ), //
-                  MPResultTypeClass.Generated, 0x5 ),
+                  MPResultTypeClass.Template, 0x5 ),
 
+    /**
+     * birsujano
+     */
     GeneratedName( "Name", "9 letter name.", //
                    ImmutableList.of( new MPTemplate( "cvccvcvcv" ) ), //
-                   MPResultTypeClass.Generated, 0xE ),
+                   MPResultTypeClass.Template, 0xE ),
 
+    /**
+     * bir yennoquce fefi
+     */
     GeneratedPhrase( "Phrase", "20 character sentence.", //
-                     ImmutableList.of( new MPTemplate( "cvcc cvc cvccvcv cvc" ), new MPTemplate( "cvc cvccvcvcv cvcv" ),
+                     ImmutableList.of( new MPTemplate( "cvcc cvc cvccvcv cvc" ),
+                                       new MPTemplate( "cvc cvccvcvcv cvcv" ),
                                        new MPTemplate( "cv cvccv cvc cvcvccv" ) ), //
-                     MPResultTypeClass.Generated, 0xF ),
+                     MPResultTypeClass.Template, 0xF ),
 
+    /**
+     * Custom saved password.
+     */
     StoredPersonal( "Personal", "AES-encrypted, exportable.", //
                     ImmutableList.<MPTemplate>of(), //
-                    MPResultTypeClass.Stored, 0x0, MPSiteFeature.ExportContent ),
+                    MPResultTypeClass.Stateful, 0x0, MPSiteFeature.ExportContent ),
 
+    /**
+     * Custom saved password that should not be exported from the device.
+     */
     StoredDevicePrivate( "Device", "AES-encrypted, not exported.", //
                          ImmutableList.<MPTemplate>of(), //
-                         MPResultTypeClass.Stored, 0x1, MPSiteFeature.DevicePrivate );
+                         MPResultTypeClass.Stateful, 0x1, MPSiteFeature.DevicePrivate ),
+
+    /**
+     * Derive a unique binary key.
+     */
+    DeriveKey( "Key", "Encryption key.", //
+                           ImmutableList.<MPTemplate>of(), //
+                           MPResultTypeClass.Derive, 0x0, MPSiteFeature.Alternative );
+
+    public static MPResultType DEFAULT = GeneratedLong;
 
     static final Logger logger = Logger.get( MPResultType.class );
 
@@ -185,14 +230,15 @@ public enum MPResultType {
     }
 
     /**
-     * @param mask The mask for which we look up types.
+     * @param mask The type mask for which we look up types.
      *
-     * @return All types that support the given mask.
+     * @return All types that support the given mask's class & features.
      */
     public static ImmutableList<MPResultType> forMask(final int mask) {
 
-        int                                 typeMask = mask & ~0xF;
-        ImmutableList.Builder<MPResultType> types    = ImmutableList.builder();
+        int typeMask = mask & ~0xF; // Ignore resultType bit 0-3
+
+        ImmutableList.Builder<MPResultType> types = ImmutableList.builder();
         for (final MPResultType resultType : values())
             if (((resultType.getType() & ~0xF) & typeMask) != 0)
                 types.add( resultType );

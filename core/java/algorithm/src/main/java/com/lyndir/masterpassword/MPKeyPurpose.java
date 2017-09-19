@@ -18,9 +18,7 @@
 
 package com.lyndir.masterpassword;
 
-import com.google.common.collect.ImmutableList;
 import com.lyndir.lhunath.opal.system.logging.Logger;
-import java.util.List;
 import java.util.Locale;
 import javax.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
@@ -31,9 +29,18 @@ import org.jetbrains.annotations.NonNls;
  * @author lhunath, 14-12-02
  */
 public enum MPKeyPurpose {
-    Password( "authentication", "Generate a key for authentication.", "com.lyndir.masterpassword" ),
-    Login( "identification", "Generate a name for identification.", "com.lyndir.masterpassword.login" ),
-    Answer( "recovery", "Generate an account recovery token.", "com.lyndir.masterpassword.answer" );
+    /**
+     * Generate a key for authentication.
+     */
+    Authentication( "authentication", "Generate a key for authentication.", "com.lyndir.masterpassword" ),
+    /**
+     * Generate a name for identification.
+     */
+    Identification( "identification", "Generate a name for identification.", "com.lyndir.masterpassword.login" ),
+    /**
+     * Generate a recovery token.
+     */
+    Recovery( "recovery", "Generate a recovery token.", "com.lyndir.masterpassword.answer" );
 
     static final Logger logger = Logger.get( MPResultType.class );
 

@@ -180,7 +180,7 @@ static const char *mpw_sitePasswordFromCrypt_v0(
     mpw_free( &plainBytes, bufSize );
     if (!plainText)
         err( "AES decryption error: %s\n", strerror( errno ) );
-    trc( "decrypted -> plainText: %s = %s\n", plainText, mpw_hex( plainText, sizeof( plainText ) ) );
+    trc( "decrypted -> plainText: %s\n", plainText );
 
     return plainText;
 }
@@ -217,7 +217,7 @@ static const char *mpw_sitePasswordFromDerive_v0(
                 mpw_free_string( &b64Key );
             }
             else
-                trc( "b64 encoded -> key.id: %s\n", mpw_id_buf( b64Key, strlen( b64Key ) ) );
+                trc( "b64 encoded -> key: %s\n", b64Key );
             mpw_free( &resultKey, keySize );
 
             return b64Key;
@@ -248,7 +248,7 @@ static const char *mpw_siteState_v0(
         mpw_free_string( &cipherText );
     }
     else
-        trc( "b64 encoded -> cipherText: %s = %s\n", cipherText, mpw_hex( cipherText, sizeof( cipherText ) ) );
+        trc( "b64 encoded -> cipherText: %s\n", cipherText );
     mpw_free( &cipherBuf, bufSize );
 
     return cipherText;

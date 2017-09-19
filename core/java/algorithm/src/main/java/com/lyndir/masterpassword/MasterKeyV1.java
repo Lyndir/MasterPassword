@@ -19,9 +19,7 @@
 package com.lyndir.masterpassword;
 
 import com.google.common.base.Preconditions;
-import com.google.common.primitives.Bytes;
 import com.google.common.primitives.UnsignedInteger;
-import com.lyndir.lhunath.opal.system.*;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import javax.annotation.Nullable;
 
@@ -49,29 +47,26 @@ public class MasterKeyV1 extends MasterKeyV0 {
     }
 
     @Override
-    public String siteResult(final String siteName, final UnsignedInteger siteCounter, final MPKeyPurpose keyPurpose,
-                             @Nullable final String keyContext, final MPResultType resultType, @Nullable final String resultParam) {
-
-        byte[] sitePasswordSeed = siteKey( siteName, siteCounter, keyPurpose, keyContext );
+    protected String sitePasswordFromTemplate(final byte[] siteKey, final MPResultType resultType, @Nullable final String resultParam) {
 
         logger.trc( "-- mpw_siteResult (algorithm: %u)", getAlgorithmVersion().toInt() );
         logger.trc( "resultType: %d (%s)", resultType.toInt(), resultType.getShortName() );
         logger.trc( "resultParam: %s", resultParam );
 
         // Determine the template.
-        Preconditions.checkState( sitePasswordSeed.length > 0 );
-        int templateIndex = sitePasswordSeed[0] & 0xFF; // Mask the integer's sign.
+        Preconditions.checkState( siteKey.length > 0 );
+        int templateIndex = siteKey[0] & 0xFF; // Convert to unsigned int.
         MPTemplate template = resultType.getTemplateAtRollingIndex( templateIndex );
         logger.trc( "template: %u => %s", templateIndex, template.getTemplateString() );
 
         // Encode the password from the seed using the template.
         StringBuilder password = new StringBuilder( template.length() );
         for (int i = 0; i < template.length(); ++i) {
-            int characterIndex = sitePasswordSeed[i + 1] & 0xFF; // Mask the integer's sign.
+            int characterIndex = siteKey[i + 1] & 0xFF; // Convert to unsigned int.
             MPTemplateCharacterClass characterClass = template.getCharacterClassAtIndex( i );
             char passwordCharacter = characterClass.getCharacterAtRollingIndex( characterIndex );
             logger.trc( "  - class: %c, index: %3u (0x%02hhX) => character: %c",
-                        characterClass.getIdentifier(), characterIndex, sitePasswordSeed[i + 1], passwordCharacter );
+                        characterClass.getIdentifier(), characterIndex, siteKey[i + 1], passwordCharacter );
 
             password.append( passwordCharacter );
         }

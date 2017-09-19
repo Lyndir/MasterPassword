@@ -25,11 +25,13 @@ import com.lambdaworks.crypto.SCrypt;
 import com.lyndir.lhunath.opal.crypto.CryptUtils;
 import com.lyndir.lhunath.opal.system.*;
 import com.lyndir.lhunath.opal.system.logging.Logger;
+import com.lyndir.lhunath.opal.system.util.ConversionUtils;
 import java.nio.*;
 import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import javax.annotation.Nullable;
+import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 
 
@@ -79,7 +81,6 @@ public class MasterKeyV0 extends MasterKey {
      * scrypt: CPU cost parameter.
      */
     protected static final int                          scrypt_N       = 32768;
-    private static final   int                          MP_intLen      = 32;
 
     @SuppressWarnings("UnusedDeclaration")
     private static final Logger logger = Logger.get( MasterKeyV0.class );
@@ -108,7 +109,7 @@ public class MasterKeyV0 extends MasterKey {
         logger.trc( "fullName: %s", fullName );
         logger.trc( "masterPassword.id: %s", (Object) idForBytes( mpBytesBuf.array() ) );
 
-        String keyScope = MPKeyPurpose.Password.getScope();
+        String keyScope = MPKeyPurpose.Authentication.getScope();
         logger.trc( "keyScope: %s", keyScope );
 
         // Calculate the master key salt.
@@ -191,39 +192,107 @@ public class MasterKeyV0 extends MasterKey {
                              @Nullable final String keyContext, final MPResultType resultType, @Nullable final String resultParam) {
 
         byte[] siteKey = siteKey( siteName, siteCounter, keyPurpose, keyContext );
-        int[] sitePasswordSeed = new int[siteKey.length];
-        for (int i = 0; i < siteKey.length; ++i) {
-            ByteBuffer buf = ByteBuffer.allocate( Integer.SIZE / Byte.SIZE ).order( ByteOrder.BIG_ENDIAN );
-            Arrays.fill( buf.array(), (byte) ((siteKey[i] > 0)? 0x00: 0xFF) );
-            buf.position( 2 );
-            buf.put( siteKey[i] ).rewind();
-            sitePasswordSeed[i] = buf.getInt() & 0xFFFF;
-        }
 
         logger.trc( "-- mpw_siteResult (algorithm: %u)", getAlgorithmVersion().toInt() );
         logger.trc( "resultType: %d (%s)", resultType.toInt(), resultType.getShortName() );
         logger.trc( "resultParam: %s", resultParam );
 
+        switch (resultType.getTypeClass()) {
+            case Template:
+                return sitePasswordFromTemplate( siteKey, resultType, resultParam );
+            case Stateful:
+                return sitePasswordFromCrypt( siteKey, resultType, resultParam );
+            case Derive:
+                return sitePasswordFromDerive( siteKey, resultType, resultParam );
+        }
+
+        throw logger.bug( "Unsupported result type class: %s", resultType.getTypeClass() );
+    }
+
+    @Override
+    protected String sitePasswordFromTemplate(final byte[] siteKey, final MPResultType resultType, @Nullable final String resultParam) {
+
+        int[] _siteKey = new int[siteKey.length];
+        for (int i = 0; i < siteKey.length; ++i) {
+            ByteBuffer buf = ByteBuffer.allocate( Integer.SIZE / Byte.SIZE ).order( mpw_byteOrder );
+            Arrays.fill( buf.array(), (byte) ((siteKey[i] > 0)? 0x00: 0xFF) );
+            buf.position( 2 );
+            buf.put( siteKey[i] ).rewind();
+            _siteKey[i] = buf.getInt() & 0xFFFF;
+        }
+
         // Determine the template.
-        Preconditions.checkState( sitePasswordSeed.length > 0 );
-        int templateIndex = sitePasswordSeed[0];
+        Preconditions.checkState( _siteKey.length > 0 );
+        int templateIndex = _siteKey[0];
         MPTemplate template = resultType.getTemplateAtRollingIndex( templateIndex );
         logger.trc( "template: %u => %s", templateIndex, template.getTemplateString() );
 
         // Encode the password from the seed using the template.
         StringBuilder password = new StringBuilder( template.length() );
         for (int i = 0; i < template.length(); ++i) {
-            int characterIndex = sitePasswordSeed[i + 1];
+            int characterIndex = _siteKey[i + 1];
             MPTemplateCharacterClass characterClass = template.getCharacterClassAtIndex( i );
             char passwordCharacter = characterClass.getCharacterAtRollingIndex( characterIndex );
             logger.trc( "  - class: %c, index: %5u (0x%02hX) => character: %c",
-                        characterClass.getIdentifier(), characterIndex, sitePasswordSeed[i + 1], passwordCharacter );
+                        characterClass.getIdentifier(), characterIndex, _siteKey[i + 1], passwordCharacter );
 
             password.append( passwordCharacter );
         }
         logger.trc( "  => password: %s", password );
 
         return password.toString();
+    }
+
+    @Override
+    protected String sitePasswordFromCrypt(final byte[] siteKey, final MPResultType resultType, @Nullable final String resultParam) {
+
+        Preconditions.checkNotNull( resultParam );
+        Preconditions.checkArgument( !resultParam.isEmpty() );
+
+        try {
+            // Base64-decode
+            byte[] cipherBuf = CryptUtils.decodeBase64( resultParam );
+            logger.trc( "b64 decoded: %zu bytes = %s", cipherBuf.length, CodeUtils.encodeHex( cipherBuf ) );
+
+            // Decrypt
+            byte[] plainBuf  = CryptUtils.decrypt( cipherBuf, getKey(), true );
+            String plainText = mpw_charset.decode( ByteBuffer.wrap( plainBuf ) ).toString();
+            logger.trc( "decrypted -> plainText: %s", plainText );
+
+            return plainText;
+        }
+        catch (final BadPaddingException e) {
+            throw Throwables.propagate( e );
+        }
+    }
+
+    @Override
+    protected String sitePasswordFromDerive(final byte[] siteKey, final MPResultType resultType, @Nullable final String resultParam) {
+
+        if (resultType == MPResultType.DeriveKey) {
+            Preconditions.checkNotNull( resultParam );
+            Preconditions.checkArgument( !resultParam.isEmpty() );
+
+            int resultParamInt = ConversionUtils.toIntegerNN( resultParam );
+            if ((resultParamInt < 128) || (resultParamInt > 512) || ((resultParamInt % 8) != 0))
+                throw logger.bug( "Parameter is not a valid key size (should be 128 - 512): %s", resultParam );
+            int keySize = resultParamInt / 8;
+            logger.trc( "keySize: %u", keySize );
+
+            // Derive key
+            byte[] resultKey = null; // TODO: mpw_kdf_blake2b( keySize, siteKey, MPSiteKeySize, NULL, 0, 0, NULL );
+            if (resultKey == null)
+                throw logger.bug( "Could not derive result key." );
+
+            // Base64-encode
+            String b64Key = Verify.verifyNotNull( CryptUtils.encodeBase64( resultKey ) );
+            logger.trc( "b64 encoded -> key: %s", b64Key );
+
+            return b64Key;
+        }
+
+        else
+            throw logger.bug( "Unsupported derived password type: %s", resultType );
     }
 
     @Override
@@ -252,12 +321,12 @@ public class MasterKeyV0 extends MasterKey {
 
     @Override
     protected byte[] bytesForInt(final int number) {
-        return ByteBuffer.allocate( MP_intLen / Byte.SIZE ).order( mpw_byteOrder ).putInt( number ).array();
+        return ByteBuffer.allocate( Integer.SIZE / Byte.SIZE ).order( mpw_byteOrder ).putInt( number ).array();
     }
 
     @Override
     protected byte[] bytesForInt(final UnsignedInteger number) {
-        return ByteBuffer.allocate( MP_intLen / Byte.SIZE ).order( mpw_byteOrder ).putInt( number.intValue() ).array();
+        return ByteBuffer.allocate( Integer.SIZE / Byte.SIZE ).order( mpw_byteOrder ).putInt( number.intValue() ).array();
     }
 
     @Override

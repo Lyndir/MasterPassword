@@ -63,7 +63,7 @@ public class MasterKeyV3 extends MasterKeyV2 {
         logger.trc( "fullName: %s", fullName );
         logger.trc( "masterPassword.id: %s", (Object) idForBytes( mpBytesBuf.array() ) );
 
-        String keyScope = MPKeyPurpose.Password.getScope();
+        String keyScope = MPKeyPurpose.Authentication.getScope();
         logger.trc( "keyScope: %s", keyScope );
 
         // Calculate the master key salt.
