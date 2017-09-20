@@ -25,41 +25,41 @@
 
 //// Types.
 
-typedef mpw_enum( unsigned int, MPMarshallFormat ) {
+typedef mpw_enum( unsigned int, MPMarshalFormat ) {
     /** Generate a key for authentication. */
-            MPMarshallFormatNone,
+            MPMarshalFormatNone,
     /** Generate a key for authentication. */
-            MPMarshallFormatFlat,
+            MPMarshalFormatFlat,
     /** Generate a name for identification. */
-            MPMarshallFormatJSON,
+            MPMarshalFormatJSON,
 
 #if MPW_JSON
-    MPMarshallFormatDefault = MPMarshallFormatJSON,
+    MPMarshalFormatDefault = MPMarshalFormatJSON,
 #else
-    MPMarshallFormatDefault = MPMarshallFormatFlat,
+    MPMarshalFormatDefault = MPMarshalFormatFlat,
 #endif
 };
 
-typedef mpw_enum( unsigned int, MPMarshallErrorType ) {
+typedef mpw_enum( unsigned int, MPMarshalErrorType ) {
     /** The marshalling operation completed successfully. */
-            MPMarshallSuccess,
+            MPMarshalSuccess,
     /** An error in the structure of the marshall file interrupted marshalling. */
-            MPMarshallErrorStructure,
+            MPMarshalErrorStructure,
     /** The marshall file uses an unsupported format version. */
-            MPMarshallErrorFormat,
+            MPMarshalErrorFormat,
     /** A required value is missing or not specified. */
-            MPMarshallErrorMissing,
+            MPMarshalErrorMissing,
     /** The given master password is not valid. */
-            MPMarshallErrorMasterPassword,
+            MPMarshalErrorMasterPassword,
     /** An illegal value was specified. */
-            MPMarshallErrorIllegal,
+            MPMarshalErrorIllegal,
     /** An internal system error interrupted marshalling. */
-            MPMarshallErrorInternal,
+            MPMarshalErrorInternal,
 };
-typedef struct MPMarshallError {
-    MPMarshallErrorType type;
+typedef struct MPMarshalError {
+    MPMarshalErrorType type;
     const char *description;
-} MPMarshallError;
+} MPMarshalError;
 
 typedef struct MPMarshalledQuestion {
     const char *keyword;
@@ -99,26 +99,26 @@ typedef struct MPMarshalledUser {
     MPMarshalledSite *sites;
 } MPMarshalledUser;
 
-typedef struct MPMarshallInfo {
-    MPMarshallFormat format;
+typedef struct MPMarshalInfo {
+    MPMarshalFormat format;
     MPAlgorithmVersion algorithm;
     const char *fullName;
     const char *keyID;
     bool redacted;
     time_t date;
-} MPMarshallInfo;
+} MPMarshalInfo;
 
 //// Marshalling.
 
 /** Write the user and all associated data out to the given output buffer using the given marshalling format. */
 bool mpw_marshall_write(
-        char **out, const MPMarshallFormat outFormat, const MPMarshalledUser *user, MPMarshallError *error);
+        char **out, const MPMarshalFormat outFormat, const MPMarshalledUser *user, MPMarshalError *error);
 /** Try to read metadata on the sites in the input buffer. */
-MPMarshallInfo *mpw_marshall_read_info(
+MPMarshalInfo *mpw_marshall_read_info(
         const char *in);
 /** Unmarshall sites in the given input buffer by parsing it using the given marshalling format. */
 MPMarshalledUser *mpw_marshall_read(
-        const char *in, const MPMarshallFormat inFormat, const char *masterPassword, MPMarshallError *error);
+        const char *in, const MPMarshalFormat inFormat, const char *masterPassword, MPMarshalError *error);
 
 //// Utilities.
 
@@ -134,7 +134,7 @@ MPMarshalledQuestion *mpw_marshal_question(
         MPMarshalledSite *site, const char *keyword);
 /** Free the given user object and all associated data. */
 bool mpw_marshal_info_free(
-        MPMarshallInfo **info);
+        MPMarshalInfo **info);
 bool mpw_marshal_free(
         MPMarshalledUser **user);
 
@@ -143,17 +143,17 @@ bool mpw_marshal_free(
 /**
  * @return The purpose represented by the given name.
  */
-const MPMarshallFormat mpw_formatWithName(
+const MPMarshalFormat mpw_formatWithName(
         const char *formatName);
 /**
  * @return The standard name for the given purpose.
  */
 const char *mpw_nameForFormat(
-        const MPMarshallFormat format);
+        const MPMarshalFormat format);
 /**
  * @return The file extension that's recommended for files that use the given marshalling format.
  */
 const char *mpw_marshall_format_extension(
-        const MPMarshallFormat format);
+        const MPMarshalFormat format);
 
 #endif // _MPW_MARSHALL_H

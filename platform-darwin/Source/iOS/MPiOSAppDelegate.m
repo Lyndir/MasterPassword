@@ -236,8 +236,8 @@
 
     PearlNotMainQueue( ^{
         NSString *importData = [UIPasteboard generalPasteboard].string;
-        MPMarshallInfo *importInfo = mpw_marshall_read_info( importData.UTF8String );
-        if (importInfo->format != MPMarshallFormatNone)
+        MPMarshalInfo *importInfo = mpw_marshall_read_info( importData.UTF8String );
+        if (importInfo->format != MPMarshalFormatNone)
             [PearlAlert showAlertWithTitle:@"Import Sites?" message:
                             @"We've detected Master Password import sites on your pasteboard, would you like to import them?"
                                  viewStyle:UIAlertViewStyleDefault initAlert:nil

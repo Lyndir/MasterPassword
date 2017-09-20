@@ -20,7 +20,7 @@
 
 NSString *const MPErrorDomain = @"MPErrorDomain";
 NSInteger const MPErrorHangCode = 1;
-NSInteger const MPErrorMarshallCode = 1;
+NSInteger const MPErrorMarshalCode = 1;
 
 NSString *const MPSignedInNotification = @"MPSignedInNotification";
 NSString *const MPSignedOutNotification = @"MPSignedOutNotification";

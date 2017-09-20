@@ -22,7 +22,7 @@
 __BEGIN_DECLS
 extern NSString *const MPErrorDomain;
 extern NSInteger const MPErrorHangCode;
-extern NSInteger const MPErrorMarshallCode;
+extern NSInteger const MPErrorMarshalCode;
 
 extern NSString *const MPSignedInNotification;
 extern NSString *const MPSignedOutNotification;

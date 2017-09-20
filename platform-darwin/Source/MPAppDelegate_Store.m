@@ -566,10 +566,10 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
            saveInContext:(NSManagedObjectContext *)context {
 
     // Read metadata for the import file.
-    MPMarshallInfo *info = mpw_marshall_read_info( importData.UTF8String );
-    if (info->format == MPMarshallFormatNone)
-        return MPError( ([NSError errorWithDomain:MPErrorDomain code:MPErrorMarshallCode userInfo:@{
-                @"type"                  : @(MPMarshallErrorFormat),
+    MPMarshalInfo *info = mpw_marshall_read_info( importData.UTF8String );
+    if (info->format == MPMarshalFormatNone)
+        return MPError( ([NSError errorWithDomain:MPErrorDomain code:MPErrorMarshalCode userInfo:@{
+                @"type"                  : @(MPMarshalErrorFormat),
                 NSLocalizedDescriptionKey: @"This is not a Master Password import file.",
         }]), @"While importing sites." );
 
@@ -589,13 +589,13 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
                             caseInsensitiveCompare:@(info->keyID)] != NSOrderedSame);
 
     // Parse import data.
-    MPMarshallError importError = { .type = MPMarshallSuccess };
+    MPMarshalError importError = { .type = MPMarshalSuccess };
     MPMarshalledUser *importUser = mpw_marshall_read( importData.UTF8String, info->format, importMasterPassword.UTF8String, &importError );
     mpw_marshal_info_free( &info );
 
     @try {
-        if (!importUser || importError.type != MPMarshallSuccess)
-            return MPError( ([NSError errorWithDomain:MPErrorDomain code:MPErrorMarshallCode userInfo:@{
+        if (!importUser || importError.type != MPMarshalSuccess)
+            return MPError( ([NSError errorWithDomain:MPErrorDomain code:MPErrorMarshalCode userInfo:@{
                     @"type"                  : @(importError.type),
                     NSLocalizedDescriptionKey: @(importError.description),
             }]), @"While importing sites." );
@@ -735,15 +735,15 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
         }
 
         char *export = NULL;
-        MPMarshallError exportError = (MPMarshallError){ .type= MPMarshallSuccess };
-        mpw_marshall_write( &export, MPMarshallFormatFlat, exportUser, &exportError );
+        MPMarshalError exportError = (MPMarshalError){ .type= MPMarshalSuccess };
+        mpw_marshall_write( &export, MPMarshalFormatFlat, exportUser, &exportError );
         NSString *mpsites = nil;
-        if (export && exportError.type == MPMarshallSuccess)
+        if (export && exportError.type == MPMarshalSuccess)
             mpsites = [NSString stringWithCString:export encoding:NSUTF8StringEncoding];
         mpw_free_string( &export );
 
-        resultBlock( mpsites, exportError.type == MPMarshallSuccess? nil:
-                              [NSError errorWithDomain:MPErrorDomain code:MPErrorMarshallCode userInfo:@{
+        resultBlock( mpsites, exportError.type == MPMarshalSuccess? nil:
+                              [NSError errorWithDomain:MPErrorDomain code:MPErrorMarshalCode userInfo:@{
                                       @"type"                  : @(exportError.type),
                                       NSLocalizedDescriptionKey: @(exportError.description),
                               }] );

@@ -17,11 +17,11 @@ import org.joda.time.format.ISODateTimeFormat;
  */
 public class MPSiteMarshaller {
 
-    private static final DateTimeFormatter rfc3339 = ISODateTimeFormat.dateTimeNoMillis();
+    protected static final DateTimeFormatter rfc3339 = ISODateTimeFormat.dateTimeNoMillis();
 
     private final StringBuilder export      = new StringBuilder();
-    private       ContentMode   contentMode = ContentMode.PROTECTED;
-    private MasterKey masterKey;
+    private   final    ContentMode   contentMode = ContentMode.PROTECTED;
+    private final MasterKey masterKey;
 
     public static MPSiteMarshaller marshallSafe(final MPUser user) {
         MPSiteMarshaller marshaller = new MPSiteMarshaller();
@@ -64,7 +64,6 @@ public class MPSiteMarshaller {
         header.append( "# Full Name: " ).append( user.getFullName() ).append( '\n' );
         header.append( "# Avatar: " ).append( user.getAvatar() ).append( '\n' );
         header.append( "# Key ID: " ).append( user.exportKeyID() ).append( '\n' );
-//        header.append( "# Version: " ).append( MasterKey.Version.CURRENT.toBundleVersion() ).append( '\n' );
         header.append( "# Algorithm: " ).append( MasterKey.Version.CURRENT.toInt() ).append( '\n' );
         header.append( "# Default Type: " ).append( user.getDefaultType().getType() ).append( '\n' );
         header.append( "# Passwords: " ).append( this.contentMode.name() ).append( '\n' );
