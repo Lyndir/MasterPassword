@@ -172,10 +172,10 @@ public class MPTestSuite implements Callable<Boolean> {
             @Nonnull
             @Override
             public Boolean apply(@Nonnull final MPTests.Case testCase) {
-                MasterKey masterKey = MasterKey.create( testCase.getAlgorithm(), testCase.getFullName(), testCase.getMasterPassword() );
+                MasterKey masterKey = new MasterKey( testCase.getFullName(), testCase.getMasterPassword() );
                 String sitePassword = masterKey.siteResult( testCase.getSiteName(), testCase.getSiteCounter(), testCase.getKeyPurpose(),
                                                             testCase.getKeyContext(), testCase.getResultType(),
-                                                            null );
+                                                            null, testCase.getAlgorithm() );
 
                 return testCase.getResult().equals( sitePassword );
             }

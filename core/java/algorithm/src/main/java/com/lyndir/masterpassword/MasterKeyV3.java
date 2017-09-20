@@ -18,14 +18,14 @@
 
 package com.lyndir.masterpassword;
 
+import static com.lyndir.masterpassword.MPUtils.idForBytes;
+
 import com.google.common.base.Preconditions;
 import com.google.common.primitives.Bytes;
 import com.lyndir.lhunath.opal.system.CodeUtils;
-import com.lyndir.lhunath.opal.system.logging.Logger;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.util.Arrays;
-import javax.annotation.Nullable;
 
 
 /**
@@ -36,27 +36,18 @@ import javax.annotation.Nullable;
  */
 public class MasterKeyV3 extends MasterKeyV2 {
 
-    @SuppressWarnings("UnusedDeclaration")
-    private static final Logger logger = Logger.get( MasterKeyV3.class );
+    @Override
+    public MasterKey.Version getAlgorithmVersion() {
 
-    public MasterKeyV3(final String fullName) {
-        super( fullName );
+        return MasterKey.Version.V3;
     }
 
     @Override
-    public Version getAlgorithmVersion() {
-
-        return Version.V3;
-    }
-
-    @Nullable
-    @Override
-    protected byte[] deriveKey(final char[] masterPassword) {
+    public byte[] deriveKey(final String fullName, final char[] masterPassword) {
         Preconditions.checkArgument( masterPassword.length > 0 );
 
-        String fullName = getFullName();
         byte[] fullNameBytes = fullName.getBytes( MasterKeyV0.mpw_charset );
-        byte[] fullNameLengthBytes = bytesForInt( fullNameBytes.length );
+        byte[] fullNameLengthBytes = MPUtils.bytesForInt( fullNameBytes.length );
         ByteBuffer mpBytesBuf = MasterKeyV0.mpw_charset.encode( CharBuffer.wrap( masterPassword ) );
 
         logger.trc( "-- mpw_masterKey (algorithm: %u)", getAlgorithmVersion().toInt() );
@@ -81,7 +72,7 @@ public class MasterKeyV3 extends MasterKeyV2 {
         byte[] masterKey = scrypt( masterKeySalt, mpBytes ); // TODO: Why not mpBytesBuf.array()?
         Arrays.fill( masterKeySalt, (byte) 0 );
         Arrays.fill( mpBytes, (byte) 0 );
-        logger.trc( "  => masterKey.id: %s", (masterKey == null)? null: (Object) idForBytes( masterKey ) );
+        logger.trc( "  => masterKey.id: %s", (Object) idForBytes( masterKey ) );
 
         return masterKey;
     }

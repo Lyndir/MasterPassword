@@ -19,7 +19,6 @@
 package com.lyndir.masterpassword.gui.model;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Maps;
 import com.lyndir.masterpassword.MasterKey;
 import com.lyndir.masterpassword.model.IncorrectMasterPasswordException;
 import java.util.*;
@@ -32,13 +31,10 @@ import javax.annotation.Nullable;
  */
 public abstract class User {
 
-    @Nonnull
-    private final Map<MasterKey.Version, MasterKey> keyByVersion = Maps.newEnumMap( MasterKey.Version.class  );
+    @Nullable
+    protected MasterKey key;
 
     public abstract String getFullName();
-
-    @Nullable
-    protected abstract char[] getMasterPassword();
 
     @SuppressWarnings("MethodCanBeVariableArityMethod")
     public abstract void authenticate(char[] masterPassword)
@@ -49,31 +45,12 @@ public abstract class User {
     }
 
     public boolean isKeyAvailable() {
-        return getMasterPassword() != null;
+        return key != null;
     }
 
     @Nonnull
-    public MasterKey getKey(final MasterKey.Version algorithmVersion) {
-        char[] masterPassword = Preconditions.checkNotNull( getMasterPassword(), "User is not authenticated: " + getFullName() );
-
-        MasterKey key = keyByVersion.get( algorithmVersion );
-        if (key == null)
-            putKey( key = MasterKey.create( algorithmVersion, getFullName(), masterPassword ) );
-        if (!key.isValid())
-            key.revalidate( masterPassword );
-
-        return key;
-    }
-
-    protected void putKey(final MasterKey masterKey) {
-        MasterKey oldKey = keyByVersion.put( masterKey.getAlgorithmVersion(), masterKey );
-        if (oldKey != null)
-            oldKey.invalidate();
-    }
-
-    public void reset() {
-        for (final MasterKey key : keyByVersion.values())
-            key.invalidate();
+    public MasterKey getKey() {
+        return Preconditions.checkNotNull( key, "User is not authenticated: " + getFullName() );
     }
 
     public abstract Iterable<Site> findSitesByName(String siteName);

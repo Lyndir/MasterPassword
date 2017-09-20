@@ -18,13 +18,11 @@
 
 package com.lyndir.masterpassword;
 
-import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
+import static com.lyndir.masterpassword.MPUtils.idForBytes;
 
 import com.google.common.base.Preconditions;
 import com.google.common.primitives.UnsignedInteger;
-import com.lyndir.lhunath.opal.system.*;
 import com.lyndir.lhunath.opal.system.logging.Logger;
-import java.util.Arrays;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -32,86 +30,25 @@ import javax.annotation.Nullable;
 /**
  * @author lhunath, 2014-08-30
  */
-public abstract class MasterKey {
+public class MasterKey {
 
     @SuppressWarnings("UnusedDeclaration")
-    private static final Logger  logger               = Logger.get( MasterKey.class );
-    private static       boolean allowNativeByDefault = true;
+    private static final Logger logger = Logger.get( MasterKey.class );
 
-    @Nonnull
     private final String fullName;
-    private boolean allowNative = allowNativeByDefault;
+    private final char[] masterPassword;
 
-    @Nullable
-    private byte[] masterKey;
-
-    @SuppressWarnings("MethodCanBeVariableArityMethod")
-    public static MasterKey create(final String fullName, final char[] masterPassword) {
-
-        return create( Version.CURRENT, fullName, masterPassword );
-    }
-
-    @Nonnull
-    @SuppressWarnings("MethodCanBeVariableArityMethod")
-    public static MasterKey create(final Version version, final String fullName, final char[] masterPassword) {
-
-        switch (version) {
-            case V0:
-                return new MasterKeyV0( fullName ).revalidate( masterPassword );
-            case V1:
-                return new MasterKeyV1( fullName ).revalidate( masterPassword );
-            case V2:
-                return new MasterKeyV2( fullName ).revalidate( masterPassword );
-            case V3:
-                return new MasterKeyV3( fullName ).revalidate( masterPassword );
-        }
-
-        throw new UnsupportedOperationException( strf( "Unsupported version: %s", version ) );
-    }
-
-    public static boolean isAllowNativeByDefault() {
-        return allowNativeByDefault;
-    }
-
-    /**
-     * Native libraries are useful for speeding up the performance of cryptographical functions.
-     * Sometimes, however, we may prefer to use Java-only code.
-     * For instance, for auditability / trust or because the native code doesn't work on our CPU/platform.
-     * <p/>
-     * This setter affects the default setting for any newly created {@link MasterKey}s.
-     *
-     * @param allowNative false to disallow the use of native libraries.
-     */
-    public static void setAllowNativeByDefault(final boolean allowNative) {
-        allowNativeByDefault = allowNative;
-    }
-
-    protected MasterKey(final String fullName) {
-        Preconditions.checkArgument( !fullName.isEmpty() );
+    @SuppressWarnings("AssignmentToCollectionOrArrayFieldFromParameter")
+    public MasterKey(final String fullName, final char[] masterPassword) {
 
         this.fullName = fullName;
-        logger.trc( "fullName: %s", fullName );
+        this.masterPassword = masterPassword;
     }
 
-    /**
-     * Derive the master key for a user based on their name and master password.
-     *
-     * @param masterPassword The user's master password.
-     */
-    @Nullable
-    @SuppressWarnings("MethodCanBeVariableArityMethod")
-    protected abstract byte[] deriveKey(char[] masterPassword);
-
-    /**
-     * Derive the site key for a user's site from the given master key and site parameters.
-     *
-     * @param siteName    A site identifier.
-     * @param siteCounter The result identifier.
-     * @param keyPurpose  The intended purpose for this site key.
-     * @param keyContext  A site-scoped key modifier.
-     */
-    protected abstract byte[] siteKey(String siteName, UnsignedInteger siteCounter, MPKeyPurpose keyPurpose,
-                                      @Nullable String keyContext);
+    private byte[] getKey(final Version algorithmVersion) {
+        // TODO: Cache keys.
+        return algorithmVersion.getAlgorithm().deriveKey( fullName, masterPassword );
+    }
 
     /**
      * Generate a site result token.
@@ -122,16 +59,14 @@ public abstract class MasterKey {
      * @param keyContext  A site-scoped result modifier.
      * @param resultType  The type of result to generate.
      * @param resultParam A parameter for the resultType.  For stateful result types, the output of
-     *                    {@link #siteState(String, UnsignedInteger, MPKeyPurpose, String, MPResultType, String)}.
+     *                    {@link #siteState(String, UnsignedInteger, MPKeyPurpose, String, MPResultType, String, Version)}.
      */
-    public abstract String siteResult(String siteName, UnsignedInteger siteCounter, MPKeyPurpose keyPurpose,
-                                      @Nullable String keyContext, MPResultType resultType, @Nullable String resultParam);
-
-    protected abstract String sitePasswordFromTemplate(byte[] siteKey, MPResultType resultType, @Nullable String resultParam);
-
-    protected abstract String sitePasswordFromCrypt(byte[] siteKey, MPResultType resultType, @Nullable String resultParam);
-
-    protected abstract String sitePasswordFromDerive(byte[] siteKey, MPResultType resultType, @Nullable String resultParam);
+    public String siteResult(final String siteName, final UnsignedInteger siteCounter, final MPKeyPurpose keyPurpose,
+                             @Nullable final String keyContext, final MPResultType resultType, @Nullable final String resultParam,
+                             final Version algorithmVersion) {
+        return algorithmVersion.getAlgorithm().siteResult(
+                getKey( algorithmVersion ), siteName, siteCounter, keyPurpose, keyContext, resultType, resultParam );
+    }
 
     /**
      * Encrypt a stateful site token for persistence.
@@ -142,12 +77,14 @@ public abstract class MasterKey {
      * @param keyContext  A site-scoped key modifier.
      * @param resultType  The type of result token to encrypt.
      * @param resultParam The result token desired from
-     *                    {@link #siteResult(String, UnsignedInteger, MPKeyPurpose, String, MPResultType, String)}.
+     *                    {@link #siteResult(String, UnsignedInteger, MPKeyPurpose, String, MPResultType, String, Version)}.
      */
-    public abstract String siteState(String siteName, UnsignedInteger siteCounter, MPKeyPurpose keyPurpose,
-                                     @Nullable String keyContext, MPResultType resultType, @Nullable String resultParam);
-
-    public abstract Version getAlgorithmVersion();
+    public String siteState(final String siteName, final UnsignedInteger siteCounter, final MPKeyPurpose keyPurpose,
+                            @Nullable final String keyContext, final MPResultType resultType, @Nullable final String resultParam,
+                            final Version algorithmVersion) {
+        return algorithmVersion.getAlgorithm().siteState(
+                getKey( algorithmVersion ), siteName, siteCounter, keyPurpose, keyContext, resultType, resultParam );
+    }
 
     @Nonnull
     public String getFullName() {
@@ -155,62 +92,10 @@ public abstract class MasterKey {
         return fullName;
     }
 
-    public boolean isAllowNative() {
-        return allowNative;
+    public byte[] getKeyID(final Version algorithmVersion) {
+
+        return idForBytes( getKey( algorithmVersion ) );
     }
-
-    public MasterKey setAllowNative(final boolean allowNative) {
-        this.allowNative = allowNative;
-        return this;
-    }
-
-    @Nonnull
-    protected byte[] getKey() {
-
-        Preconditions.checkState( isValid() );
-        return Preconditions.checkNotNull( masterKey );
-    }
-
-    public byte[] getKeyID() {
-
-        return idForBytes( getKey() );
-    }
-
-    public boolean isValid() {
-        return masterKey != null;
-    }
-
-    public void invalidate() {
-
-        if (masterKey != null) {
-            Arrays.fill( masterKey, (byte) 0 );
-            masterKey = null;
-        }
-    }
-
-    @SuppressWarnings("MethodCanBeVariableArityMethod")
-    public MasterKey revalidate(final char[] masterPassword) {
-        invalidate();
-
-        logger.trc( "masterPassword: %s", new String( masterPassword ) );
-
-        long start = System.currentTimeMillis();
-        masterKey = deriveKey( masterPassword );
-
-        if (masterKey == null)
-            logger.dbg( "masterKey calculation failed after %.2fs.", (double) (System.currentTimeMillis() - start) / MPConstant.MS_PER_S );
-        else
-            logger.trc( "masterKey ID: %s (derived in %.2fs)", CodeUtils.encodeHex( idForBytes( masterKey ) ),
-                        (double) (System.currentTimeMillis() - start) / MPConstant.MS_PER_S );
-
-        return this;
-    }
-
-    protected abstract byte[] bytesForInt(int number);
-
-    protected abstract byte[] bytesForInt(UnsignedInteger number);
-
-    protected abstract byte[] idForBytes(byte[] bytes);
 
     public enum Version {
         /**
@@ -219,25 +104,35 @@ public abstract class MasterKey {
          * - miscounted the byte-length for multi-byte site names.
          * - miscounted the byte-length for multi-byte full names.
          */
-        V0,
+        V0( new MasterKeyV0() ),
         /**
          * bugs:
          * - miscounted the byte-length for multi-byte site names.
          * - miscounted the byte-length for multi-byte full names.
          */
-        V1,
+        V1( new MasterKeyV1() ),
         /**
          * bugs:
          * - miscounted the byte-length for multi-byte full names.
          */
-        V2,
+        V2( new MasterKeyV2() ),
         /**
          * bugs:
          * - no known issues.
          */
-        V3;
+        V3( new MasterKeyV3() );
 
         public static final Version CURRENT = V3;
+
+        private final MasterKeyAlgorithm algorithm;
+
+        Version(final MasterKeyAlgorithm algorithm) {
+            this.algorithm = algorithm;
+        }
+
+        public MasterKeyAlgorithm getAlgorithm() {
+            return algorithm;
+        }
 
         public static Version fromInt(final int algorithmVersion) {
 

@@ -18,11 +18,12 @@
 
 package com.lyndir.masterpassword;
 
+import static com.lyndir.masterpassword.MPUtils.*;
+
 import com.google.common.base.Preconditions;
 import com.google.common.primitives.Bytes;
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.CodeUtils;
-import com.lyndir.lhunath.opal.system.logging.Logger;
 import javax.annotation.Nullable;
 
 
@@ -34,21 +35,14 @@ import javax.annotation.Nullable;
  */
 public class MasterKeyV2 extends MasterKeyV1 {
 
-    @SuppressWarnings("UnusedDeclaration")
-    private static final Logger logger = Logger.get( MasterKeyV2.class );
+    @Override
+    public MasterKey.Version getAlgorithmVersion() {
 
-    public MasterKeyV2(final String fullName) {
-        super( fullName );
+        return MasterKey.Version.V2;
     }
 
     @Override
-    public Version getAlgorithmVersion() {
-
-        return Version.V2;
-    }
-
-    @Override
-    protected byte[] siteKey(final String siteName, UnsignedInteger siteCounter, final MPKeyPurpose keyPurpose,
+    public byte[] siteKey(final byte[] masterKey, final String siteName, UnsignedInteger siteCounter, final MPKeyPurpose keyPurpose,
                              @Nullable final String keyContext) {
         Preconditions.checkArgument( !siteName.isEmpty() );
 
@@ -80,7 +74,6 @@ public class MasterKeyV2 extends MasterKeyV1 {
             sitePasswordInfo = Bytes.concat( sitePasswordInfo, keyContextLengthBytes, keyContextBytes );
         logger.trc( "  => siteSalt.id: %s", CodeUtils.encodeHex( idForBytes( sitePasswordInfo ) ) );
 
-        byte[] masterKey = getKey();
         logger.trc( "siteKey: hmac-sha256( masterKey.id=%s, siteSalt )", (Object) idForBytes( masterKey ) );
         byte[] sitePasswordSeedBytes = MasterKeyV0.mpw_digest.of( masterKey, sitePasswordInfo );
         logger.trc( "  => siteKey.id: %s", (Object) idForBytes( sitePasswordSeedBytes ) );

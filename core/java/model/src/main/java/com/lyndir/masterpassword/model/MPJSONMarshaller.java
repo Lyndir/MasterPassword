@@ -18,43 +18,17 @@
 
 package com.lyndir.masterpassword.model;
 
+import com.lyndir.masterpassword.MasterKey;
+
+
 /**
  * @author lhunath, 2017-09-20
  */
-public enum MPMarshalFormat {
-    /**
-     * Marshal using the line-based plain-text format.
-     */
-    Flat {
-        @Override
-        public MPMarshaller marshaller() {
-            return new MPFlatMarshaller();
-        }
+public class MPJSONMarshaller implements MPMarshaller {
 
-        @Override
-        public MPUnmarshaller unmarshaller() {
-            return new MPFlatUnmarshaller();
-        }
-    },
-
-    /**
-     * Marshal using the JSON structured format.
-     */
-    JSON {
-        @Override
-        public MPMarshaller marshaller() {
-            return new MPJSONMarshaller();
-        }
-
-        @Override
-        public MPUnmarshaller unmarshaller() {
-            return new MPJSONUnmarshaller();
-        }
-    };
-
-    public static final MPMarshalFormat DEFAULT = JSON;
-
-    public abstract MPMarshaller marshaller();
-
-    public abstract MPUnmarshaller unmarshaller();
+    @Override
+    public String marshall(final MPUser user, final MasterKey masterKey, final ContentMode contentMode) {
+        // TODO
+        return null;
+    }
 }

@@ -52,12 +52,12 @@ public class MasterKeyTest {
             @Nonnull
             @Override
             public Boolean apply(@Nonnull final MPTests.Case testCase) {
-                MasterKey masterKey = MasterKey.create( testCase.getAlgorithm(), testCase.getFullName(), testCase.getMasterPassword() );
+                MasterKey masterKey = new MasterKey( testCase.getFullName(), testCase.getMasterPassword() );
 
                 assertEquals(
                         masterKey.siteResult( testCase.getSiteName(), testCase.getSiteCounter(), testCase.getKeyPurpose(),
                                               testCase.getKeyContext(), testCase.getResultType(),
-                                              null ),
+                                              null, testCase.getAlgorithm() ),
                         testCase.getResult(), "[testEncode] Failed test case: " + testCase );
 
                 return true;
@@ -71,7 +71,7 @@ public class MasterKeyTest {
 
         MPTests.Case defaultCase = testSuite.getTests().getDefaultCase();
 
-        assertEquals( MasterKey.create( defaultCase.getFullName(), defaultCase.getMasterPassword() ).getFullName(),
+        assertEquals( new MasterKey( defaultCase.getFullName(), defaultCase.getMasterPassword() ).getFullName(),
                       defaultCase.getFullName(), "[testGetUserName] Failed test case: " + defaultCase );
     }
 
@@ -83,32 +83,13 @@ public class MasterKeyTest {
             @Nonnull
             @Override
             public Boolean apply(@Nonnull final MPTests.Case testCase) {
-                MasterKey masterKey = MasterKey.create( testCase.getFullName(), testCase.getMasterPassword() );
+                MasterKey masterKey = new MasterKey( testCase.getFullName(), testCase.getMasterPassword() );
 
-                assertEquals( CodeUtils.encodeHex( masterKey.getKeyID() ),
+                assertEquals( CodeUtils.encodeHex( masterKey.getKeyID( testCase.getAlgorithm() ) ),
                               testCase.getKeyID(), "[testGetKeyID] Failed test case: " + testCase );
 
                 return true;
             }
         } );
-    }
-
-    @Test
-    public void testInvalidate()
-            throws Exception {
-
-        try {
-            MPTests.Case defaultCase = testSuite.getTests().getDefaultCase();
-
-            MasterKey masterKey = MasterKey.create( defaultCase.getFullName(), defaultCase.getMasterPassword() );
-            masterKey.invalidate();
-            masterKey.siteResult( defaultCase.getSiteName(), defaultCase.getSiteCounter(), defaultCase.getKeyPurpose(),
-                                  defaultCase.getKeyContext(), defaultCase.getResultType(),
-                                  null );
-
-            fail( "[testInvalidate] Master key should have been invalidated, but was still usable." );
-        }
-        catch (final IllegalStateException ignored) {
-        }
     }
 }

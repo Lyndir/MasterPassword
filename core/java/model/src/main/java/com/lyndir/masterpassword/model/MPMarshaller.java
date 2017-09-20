@@ -18,43 +18,33 @@
 
 package com.lyndir.masterpassword.model;
 
+import com.lyndir.masterpassword.MasterKey;
+
+
 /**
- * @author lhunath, 2017-09-20
+ * @author lhunath, 14-12-07
  */
-public enum MPMarshalFormat {
-    /**
-     * Marshal using the line-based plain-text format.
-     */
-    Flat {
-        @Override
-        public MPMarshaller marshaller() {
-            return new MPFlatMarshaller();
+public interface MPMarshaller {
+
+    String marshall(MPUser user, MasterKey masterKey, ContentMode contentMode);
+
+    enum ContentMode {
+        PROTECTED( "Export of site names and stored passwords (unless device-private) encrypted with the master key." ),
+        VISIBLE( "Export of site names and passwords in clear-text." );
+
+        private final String description;
+        private boolean redacted;
+
+        ContentMode(final String description) {
+            this.description = description;
         }
 
-        @Override
-        public MPUnmarshaller unmarshaller() {
-            return new MPFlatUnmarshaller();
-        }
-    },
-
-    /**
-     * Marshal using the JSON structured format.
-     */
-    JSON {
-        @Override
-        public MPMarshaller marshaller() {
-            return new MPJSONMarshaller();
+        public String description() {
+            return description;
         }
 
-        @Override
-        public MPUnmarshaller unmarshaller() {
-            return new MPJSONUnmarshaller();
+        public boolean isRedacted() {
+            return redacted;
         }
-    };
-
-    public static final MPMarshalFormat DEFAULT = JSON;
-
-    public abstract MPMarshaller marshaller();
-
-    public abstract MPUnmarshaller unmarshaller();
+    }
 }

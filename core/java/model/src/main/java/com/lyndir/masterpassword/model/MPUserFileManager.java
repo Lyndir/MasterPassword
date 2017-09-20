@@ -75,7 +75,7 @@ public class MPUserFileManager extends MPUserManager {
             @Override
             public MPUser apply(@Nullable final File file) {
                 try {
-                    return MPSiteUnmarshaller.unmarshall( Preconditions.checkNotNull( file ) ).getUser();
+                    return new MPFlatUnmarshaller().unmarshall( Preconditions.checkNotNull( file ) );
                 }
                 catch (final IOException e) {
                     logger.err( e, "Couldn't read user from: %s", file );
@@ -120,7 +120,7 @@ public class MPUserFileManager extends MPUserManager {
                         File mpsitesFile = new File( userFilesDirectory, user.getFullName() + ".mpsites" );
                         return new OutputStreamWriter( new FileOutputStream( mpsitesFile ), Charsets.UTF_8 );
                     }
-                }.write( MPSiteMarshaller.marshallSafe( user ).getExport() );
+                }.write( new MPFlatMarshaller().marshall( user, null/*TODO: masterKey*/, MPMarshaller.ContentMode.PROTECTED ) );
             }
             catch (final IOException e) {
                 logger.err( e, "Unable to save sites for user: %s", user );

@@ -19,8 +19,6 @@
 package com.lyndir.masterpassword;
 
 import com.google.common.base.Preconditions;
-import com.google.common.primitives.UnsignedInteger;
-import com.lyndir.lhunath.opal.system.logging.Logger;
 import javax.annotation.Nullable;
 
 
@@ -33,21 +31,14 @@ import javax.annotation.Nullable;
  */
 public class MasterKeyV1 extends MasterKeyV0 {
 
-    @SuppressWarnings("UnusedDeclaration")
-    private static final Logger logger = Logger.get( MasterKeyV1.class );
+    @Override
+    public MasterKey.Version getAlgorithmVersion() {
 
-    public MasterKeyV1(final String fullName) {
-        super( fullName );
+        return MasterKey.Version.V1;
     }
 
     @Override
-    public Version getAlgorithmVersion() {
-
-        return Version.V1;
-    }
-
-    @Override
-    protected String sitePasswordFromTemplate(final byte[] siteKey, final MPResultType resultType, @Nullable final String resultParam) {
+    public String sitePasswordFromTemplate(final byte[] masterKey, final byte[] siteKey, final MPResultType resultType, @Nullable final String resultParam) {
 
         logger.trc( "-- mpw_siteResult (algorithm: %u)", getAlgorithmVersion().toInt() );
         logger.trc( "resultType: %d (%s)", resultType.toInt(), resultType.getShortName() );

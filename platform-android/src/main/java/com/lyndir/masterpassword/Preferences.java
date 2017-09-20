@@ -74,7 +74,7 @@ public final class Preferences {
     }
 
     public boolean isAllowNativeKDF() {
-        return prefs().getBoolean( PREF_NATIVE_KDF, MasterKey.isAllowNativeByDefault() );
+        return prefs().getBoolean( PREF_NATIVE_KDF, true );
     }
 
     public boolean setTestsPassed(final Set<String> value) {

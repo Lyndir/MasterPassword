@@ -257,8 +257,8 @@ public class PasswordFrame extends JFrame implements DocumentListener {
             @Override
             public String call()
                     throws Exception {
-                return user.getKey( site.getAlgorithmVersion() )
-                           .siteResult( site.getSiteName(), site.getSiteCounter(), MPKeyPurpose.Authentication, null, site.getResultType(), null );
+                return user.getKey()
+                           .siteResult( site.getSiteName(), site.getSiteCounter(), MPKeyPurpose.Authentication, null, site.getResultType(), null, site.getAlgorithmVersion() );
             }
         } );
         Futures.addCallback( passwordFuture, new FutureCallback<String>() {

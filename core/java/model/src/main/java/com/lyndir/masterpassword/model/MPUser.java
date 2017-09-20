@@ -40,18 +40,19 @@ public class MPUser implements Comparable<MPUser> {
     private final Collection<MPSite> sites = Sets.newHashSet();
 
     @Nullable
-    private       byte[]            keyID;
-    private final MasterKey.Version algorithmVersion;
-    private       int               avatar;
-    private       MPResultType      defaultType;
-    private       ReadableInstant   lastUsed;
+    private byte[]            keyID;
+    private MasterKey.Version algorithmVersion;
+
+    private int             avatar;
+    private MPResultType    defaultType;
+    private ReadableInstant lastUsed;
 
     public MPUser(final String fullName) {
-        this( fullName, null );
+        this( fullName, null, MasterKey.Version.CURRENT );
     }
 
-    public MPUser(final String fullName, @Nullable final byte[] keyID) {
-        this( fullName, keyID, MasterKey.Version.CURRENT, 0, MPResultType.DEFAULT, new DateTime() );
+    public MPUser(final String fullName, @Nullable final byte[] keyID, final MasterKey.Version algorithmVersion) {
+        this( fullName, keyID, algorithmVersion, 0, MPResultType.DEFAULT, new Instant() );
     }
 
     public MPUser(final String fullName, @Nullable final byte[] keyID, final MasterKey.Version algorithmVersion, final int avatar,
@@ -108,10 +109,10 @@ public class MPUser implements Comparable<MPUser> {
     @SuppressWarnings("MethodCanBeVariableArityMethod")
     public MasterKey authenticate(final char[] masterPassword)
             throws IncorrectMasterPasswordException {
-        MasterKey masterKey = MasterKey.create( algorithmVersion, getFullName(), masterPassword );
+        MasterKey masterKey = new MasterKey( getFullName(), masterPassword );
         if ((keyID == null) || (keyID.length == 0))
-            keyID = masterKey.getKeyID();
-        else if (!Arrays.equals( masterKey.getKeyID(), keyID ))
+            keyID = masterKey.getKeyID( algorithmVersion );
+        else if (!Arrays.equals( masterKey.getKeyID( algorithmVersion ), keyID ))
             throw new IncorrectMasterPasswordException( this );
 
         return masterKey;

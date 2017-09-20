@@ -18,6 +18,9 @@
 
 package com.lyndir.masterpassword;
 
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
+
 
 /**
  * @author lhunath, 2016-10-29
@@ -38,4 +41,6 @@ public final class MPConstant {
     /* Algorithm */
 
     public static final int MS_PER_S = 1000;
+
+    public static final DateTimeFormatter dateTimeFormatter = ISODateTimeFormat.dateTimeNoMillis();
 }

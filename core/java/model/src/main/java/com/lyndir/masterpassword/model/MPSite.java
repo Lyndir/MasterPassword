@@ -32,16 +32,25 @@ import org.joda.time.Instant;
  */
 public class MPSite {
 
-    public static final UnsignedInteger DEFAULT_COUNTER = UnsignedInteger.valueOf( 1 );
+    public static final UnsignedInteger DEFAULT_COUNTER = UnsignedInteger.ONE;
 
     private final MPUser            user;
-    private       MasterKey.Version algorithmVersion;
-    private       Instant           lastUsed;
     private       String            siteName;
-    private       MPResultType      resultType;
+    @Nullable
+    private       String            siteContent;
     private       UnsignedInteger   siteCounter;
-    private       int               uses;
-    private       String            loginName;
+    private       MPResultType      resultType;
+    private       MasterKey.Version algorithmVersion;
+
+    @Nullable
+    private String       loginContent;
+    @Nullable
+    private MPResultType loginType;
+
+    @Nullable
+    private String  url;
+    private int     uses;
+    private Instant lastUsed;
 
     public MPSite(final MPUser user, final String siteName) {
         this( user, siteName, DEFAULT_COUNTER, MPResultType.DEFAULT );
@@ -49,24 +58,28 @@ public class MPSite {
 
     public MPSite(final MPUser user, final String siteName, final UnsignedInteger siteCounter, final MPResultType resultType) {
         this.user = user;
+        this.siteName = siteName;
+        this.siteCounter = siteCounter;
+        this.resultType = resultType;
         this.algorithmVersion = MasterKey.Version.CURRENT;
         this.lastUsed = new Instant();
-        this.siteName = siteName;
-        this.resultType = resultType;
-        this.siteCounter = siteCounter;
     }
 
-    protected MPSite(final MPUser user, final MasterKey.Version algorithmVersion, final Instant lastUsed, final String siteName,
-                     final MPResultType resultType, final UnsignedInteger siteCounter, final int uses, @Nullable final String loginName,
-                     @Nullable final String importContent) {
+    protected MPSite(final MPUser user, final String siteName, @Nullable final String siteContent, final UnsignedInteger siteCounter,
+                     final MPResultType resultType, final MasterKey.Version algorithmVersion,
+                     @Nullable final String loginContent, @Nullable final MPResultType loginType,
+                     @Nullable final String url, final int uses, final Instant lastUsed) {
         this.user = user;
-        this.algorithmVersion = algorithmVersion;
-        this.lastUsed = lastUsed;
         this.siteName = siteName;
-        this.resultType = resultType;
+        this.siteContent = siteContent;
         this.siteCounter = siteCounter;
+        this.resultType = resultType;
+        this.algorithmVersion = algorithmVersion;
+        this.loginContent = loginContent;
+        this.loginType = loginType;
+        this.url = url;
         this.uses = uses;
-        this.loginName = loginName;
+        this.lastUsed = lastUsed;
     }
 
     public String resultFor(final MasterKey masterKey) {
@@ -74,7 +87,15 @@ public class MPSite {
     }
 
     public String resultFor(final MasterKey masterKey, final MPKeyPurpose purpose, @Nullable final String context) {
-        return masterKey.siteResult( siteName, siteCounter, purpose, context, resultType, null );
+        return masterKey.siteResult( siteName, siteCounter, purpose, context, resultType, siteContent, algorithmVersion );
+    }
+
+    public String loginFor(final MasterKey masterKey) {
+        if (loginType == null)
+            loginType = MPResultType.GeneratedName;
+
+        return masterKey.siteResult( siteName, DEFAULT_COUNTER, MPKeyPurpose.Identification, null, loginType, loginContent,
+                                     algorithmVersion );
     }
 
     public MPUser getUser() {
@@ -111,6 +132,11 @@ public class MPSite {
         this.siteName = siteName;
     }
 
+    @Nullable
+    public String getSiteContent() {
+        return siteContent;
+    }
+
     public MPResultType getResultType() {
         return resultType;
     }
@@ -135,26 +161,47 @@ public class MPSite {
         this.uses = uses;
     }
 
-    public String getLoginName() {
-        return loginName;
+    @Nullable
+    public MPResultType getLoginType() {
+        return loginType;
     }
 
-    public void setLoginName(final String loginName) {
-        this.loginName = loginName;
+    @Nullable
+    public String getLoginContent() {
+        return loginContent;
+    }
+
+    public void setLoginName(final MasterKey masterKey, @Nullable final MPResultType loginType, @Nullable final String result) {
+        this.loginType = loginType;
+        if (this.loginType != null)
+            if (result == null)
+                this.loginContent = null;
+            else
+                this.loginContent = masterKey.siteState(
+                        siteName, DEFAULT_COUNTER, MPKeyPurpose.Identification, null, this.loginType, result, algorithmVersion );
+    }
+
+    @Nullable
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(@Nullable final String url) {
+        this.url = url;
     }
 
     @Override
     public boolean equals(final Object obj) {
-        return (this == obj) || ((obj instanceof MPSite) && Objects.equals( siteName, ((MPSite) obj).siteName ));
+        return (this == obj) || ((obj instanceof MPSite) && Objects.equals( getSiteName(), ((MPSite) obj).getSiteName() ));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode( siteName );
+        return Objects.hashCode( getSiteName() );
     }
 
     @Override
     public String toString() {
-        return strf( "{MPSite: %s}", siteName );
+        return strf( "{MPSite: %s}", getSiteName() );
     }
 }

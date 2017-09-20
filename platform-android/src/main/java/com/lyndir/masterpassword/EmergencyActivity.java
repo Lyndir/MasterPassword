@@ -33,7 +33,6 @@ import android.view.WindowManager;
 import android.widget.*;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableList;
 import com.google.common.primitives.UnsignedInteger;
 import com.google.common.util.concurrent.*;
@@ -57,7 +56,7 @@ public class EmergencyActivity extends Activity {
     private final ImmutableList<MPResultType>      allResultTypes = ImmutableList.copyOf( MPResultType.forClass( MPResultTypeClass.Template ) );
     private final ImmutableList<MasterKey.Version> allVersions    = ImmutableList.copyOf( MasterKey.Version.values() );
 
-    private ListenableFuture<MasterKey> masterKeyFuture;
+    private MasterKey masterKey;
 
     @BindView(R.id.progressView)
     ProgressBar progressView;
@@ -97,7 +96,6 @@ public class EmergencyActivity extends Activity {
 
     private int    id_userName;
     private int    id_masterPassword;
-    private int    id_version;
     private String sitePassword;
 
     public static void start(final Context context) {
@@ -213,7 +211,7 @@ public class EmergencyActivity extends Activity {
     protected void onResume() {
         super.onResume();
 
-        MasterKey.setAllowNativeByDefault( preferences.isAllowNativeKDF() );
+// FIXME:       MasterKey.setAllowNativeByDefault( preferences.isAllowNativeKDF() );
 
         fullNameField.setText( preferences.getFullName() );
         rememberFullNameField.setChecked( preferences.isRememberFullName() );
@@ -241,10 +239,8 @@ public class EmergencyActivity extends Activity {
         if (preferences.isForgetPassword()) {
             synchronized (this) {
                 id_userName = id_masterPassword = 0;
-                if (masterKeyFuture != null) {
-                    masterKeyFuture.cancel( true );
-                    masterKeyFuture = null;
-                }
+                if (masterKey != null)
+                    masterKey = null;
 
                 masterPasswordField.setText( "" );
             }
@@ -260,22 +256,16 @@ public class EmergencyActivity extends Activity {
     private synchronized void updateMasterKey() {
         final String fullName = fullNameField.getText().toString();
         final char[] masterPassword = masterPasswordField.getText().toString().toCharArray();
-        final MasterKey.Version version = (MasterKey.Version) siteVersionButton.getTag();
         if ((id_userName == fullName.hashCode())
-            && (id_masterPassword == Arrays.hashCode( masterPassword ))
-            && (id_version == version.ordinal()))
-            if ((masterKeyFuture != null) && !masterKeyFuture.isCancelled())
+            && (id_masterPassword == Arrays.hashCode( masterPassword )))
+            if (masterKey != null)
                 return;
 
         id_userName = fullName.hashCode();
         id_masterPassword = Arrays.hashCode( masterPassword );
-        id_version = version.ordinal();
 
         if (preferences.isRememberFullName())
             preferences.setFullName( fullName );
-
-        if (masterKeyFuture != null)
-            masterKeyFuture.cancel( true );
 
         if (fullName.isEmpty() || (masterPassword.length == 0)) {
             sitePasswordField.setText( "" );
@@ -285,43 +275,21 @@ public class EmergencyActivity extends Activity {
 
         sitePasswordField.setText( "" );
         progressView.setVisibility( View.VISIBLE );
-        (masterKeyFuture = executor.submit( new Callable<MasterKey>() {
-            @Override
-            public MasterKey call()
-                    throws Exception {
-                try {
-                    return MasterKey.create( version, fullName, masterPassword );
-                }
-                catch (final Exception e) {
-                    sitePasswordField.setText( "" );
-                    progressView.setVisibility( View.INVISIBLE );
-                    logger.err( e, "While generating master key." );
-                    throw e;
-                }
-            }
-        } )).addListener( new Runnable() {
-            @Override
-            public void run() {
-                runOnUiThread( new Runnable() {
-                    @Override
-                    public void run() {
-                        updateSitePassword();
-                    }
-                } );
-            }
-        }, executor );
+        masterKey = new MasterKey( fullName, masterPassword );
+        updateSitePassword();
     }
 
     private void updateSitePassword() {
         final String          siteName = siteNameField.getText().toString();
         final MPResultType    type     = (MPResultType) resultTypeButton.getTag();
         final UnsignedInteger counter  = UnsignedInteger.valueOf( siteCounterButton.getText().toString() );
+        final MasterKey.Version version = (MasterKey.Version) siteVersionButton.getTag();
 
-        if ((masterKeyFuture == null) || siteName.isEmpty() || (type == null)) {
+        if ((masterKey == null) || siteName.isEmpty() || (type == null)) {
             sitePasswordField.setText( "" );
             progressView.setVisibility( View.INVISIBLE );
 
-            if (masterKeyFuture == null)
+            if (masterKey == null)
                 updateMasterKey();
             return;
         }
@@ -332,7 +300,7 @@ public class EmergencyActivity extends Activity {
             @Override
             public void run() {
                 try {
-                    sitePassword = masterKeyFuture.get().siteResult( siteName, counter, MPKeyPurpose.Authentication, null, type, null );
+                    sitePassword = masterKey.siteResult( siteName, counter, MPKeyPurpose.Authentication, null, type, null, version );
 
                     runOnUiThread( new Runnable() {
                         @Override
@@ -341,16 +309,6 @@ public class EmergencyActivity extends Activity {
                             progressView.setVisibility( View.INVISIBLE );
                         }
                     } );
-                }
-                catch (final InterruptedException ignored) {
-                    sitePasswordField.setText( "" );
-                    progressView.setVisibility( View.INVISIBLE );
-                }
-                catch (final ExecutionException e) {
-                    sitePasswordField.setText( "" );
-                    progressView.setVisibility( View.INVISIBLE );
-                    logger.err( e, "While generating site password." );
-                    throw Throwables.propagate( e );
                 }
                 catch (final RuntimeException e) {
                     sitePasswordField.setText( "" );
@@ -363,10 +321,9 @@ public class EmergencyActivity extends Activity {
     }
 
     public void integrityTests(final View view) {
-        if (masterKeyFuture != null) {
-            masterKeyFuture.cancel( true );
-            masterKeyFuture = null;
-        }
+        if (masterKey != null)
+            masterKey = null;
+
         TestActivity.startNoSkip( this );
     }
 

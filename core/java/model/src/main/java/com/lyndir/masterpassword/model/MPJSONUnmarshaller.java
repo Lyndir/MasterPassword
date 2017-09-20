@@ -18,43 +18,28 @@
 
 package com.lyndir.masterpassword.model;
 
+import java.io.File;
+import java.io.IOException;
+import javax.annotation.Nonnull;
+
+
 /**
  * @author lhunath, 2017-09-20
  */
-public enum MPMarshalFormat {
-    /**
-     * Marshal using the line-based plain-text format.
-     */
-    Flat {
-        @Override
-        public MPMarshaller marshaller() {
-            return new MPFlatMarshaller();
-        }
+public class MPJSONUnmarshaller implements MPUnmarshaller {
 
-        @Override
-        public MPUnmarshaller unmarshaller() {
-            return new MPFlatUnmarshaller();
-        }
-    },
+    @Nonnull
+    @Override
+    public MPUser unmarshall(@Nonnull final File file)
+            throws IOException {
+        // TODO
+        return null;
+    }
 
-    /**
-     * Marshal using the JSON structured format.
-     */
-    JSON {
-        @Override
-        public MPMarshaller marshaller() {
-            return new MPJSONMarshaller();
-        }
-
-        @Override
-        public MPUnmarshaller unmarshaller() {
-            return new MPJSONUnmarshaller();
-        }
-    };
-
-    public static final MPMarshalFormat DEFAULT = JSON;
-
-    public abstract MPMarshaller marshaller();
-
-    public abstract MPUnmarshaller unmarshaller();
+    @Nonnull
+    @Override
+    public MPUser unmarshall(@Nonnull final String content) {
+        // TODO
+        return null;
+    }
 }

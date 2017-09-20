@@ -34,9 +34,6 @@ public class ModelUser extends User {
 
     private final MPUser model;
 
-    @Nullable
-    private char[] masterPassword;
-
     public ModelUser(final MPUser model) {
         this.model = model;
     }
@@ -48,12 +45,6 @@ public class ModelUser extends User {
     @Override
     public String getFullName() {
         return model.getFullName();
-    }
-
-    @Nullable
-    @Override
-    protected char[] getMasterPassword() {
-        return masterPassword;
     }
 
     @Override
@@ -69,19 +60,8 @@ public class ModelUser extends User {
     @Override
     public void authenticate(final char[] masterPassword)
             throws IncorrectMasterPasswordException {
-        putKey( model.authenticate( masterPassword ) );
-        this.masterPassword = masterPassword.clone();
+        key = model.authenticate( masterPassword );
         MPUserFileManager.get().save();
-    }
-
-    @Override
-    public void reset() {
-        super.reset();
-
-        if (masterPassword != null) {
-            Arrays.fill( masterPassword, (char) 0 );
-            masterPassword = null;
-        }
     }
 
     @Override

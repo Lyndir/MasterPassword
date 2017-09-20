@@ -80,7 +80,7 @@ public class TestActivity extends Activity implements MPTestSuite.Listener {
             @Override
             public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
                 preferences.setNativeKDFEnabled( isChecked );
-                MasterKey.setAllowNativeByDefault( isChecked );
+                // TODO: MasterKey.setAllowNativeByDefault( isChecked );
             }
         } );
 
@@ -122,7 +122,7 @@ public class TestActivity extends Activity implements MPTestSuite.Listener {
         if (testFuture != null)
             testFuture.cancel( true );
 
-        MasterKey.setAllowNativeByDefault( preferences.isAllowNativeKDF() );
+        // TODO: MasterKey.setAllowNativeByDefault( preferences.isAllowNativeKDF() );
 
         setStatus( R.string.tests_testing, R.string.tests_btn_testing, null );
         Futures.addCallback( testFuture = backgroundExecutor.submit( testSuite ), new FutureCallback<Boolean>() {

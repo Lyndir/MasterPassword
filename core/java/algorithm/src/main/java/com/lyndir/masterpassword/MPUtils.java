@@ -16,45 +16,26 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-package com.lyndir.masterpassword.model;
+package com.lyndir.masterpassword;
+
+import com.google.common.primitives.UnsignedInteger;
+import java.nio.ByteBuffer;
+
 
 /**
  * @author lhunath, 2017-09-20
  */
-public enum MPMarshalFormat {
-    /**
-     * Marshal using the line-based plain-text format.
-     */
-    Flat {
-        @Override
-        public MPMarshaller marshaller() {
-            return new MPFlatMarshaller();
-        }
+public final class MPUtils {
 
-        @Override
-        public MPUnmarshaller unmarshaller() {
-            return new MPFlatUnmarshaller();
-        }
-    },
+    public static byte[] bytesForInt(final int number) {
+        return ByteBuffer.allocate( Integer.SIZE / Byte.SIZE ).order( MasterKeyV0.mpw_byteOrder ).putInt( number ).array();
+    }
 
-    /**
-     * Marshal using the JSON structured format.
-     */
-    JSON {
-        @Override
-        public MPMarshaller marshaller() {
-            return new MPJSONMarshaller();
-        }
+    public static byte[] bytesForInt(final UnsignedInteger number) {
+        return ByteBuffer.allocate( Integer.SIZE / Byte.SIZE ).order( MasterKeyV0.mpw_byteOrder ).putInt( number.intValue() ).array();
+    }
 
-        @Override
-        public MPUnmarshaller unmarshaller() {
-            return new MPJSONUnmarshaller();
-        }
-    };
-
-    public static final MPMarshalFormat DEFAULT = JSON;
-
-    public abstract MPMarshaller marshaller();
-
-    public abstract MPUnmarshaller unmarshaller();
+    public static byte[] idForBytes(final byte[] bytes) {
+        return MasterKeyV0.mpw_hash.of( bytes );
+    }
 }
