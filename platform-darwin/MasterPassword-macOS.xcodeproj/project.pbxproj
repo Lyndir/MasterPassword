@@ -31,7 +31,7 @@
 		DA16B342170661E0000A0EAB /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC632871486D95D0075AEA5 /* Security.framework */; };
 		DA16B344170661EE000A0EAB /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA16B343170661EE000A0EAB /* Cocoa.framework */; };
 		DA16B345170661F2000A0EAB /* libPearl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC77CAD148291A600BCF976 /* libPearl.a */; };
-		DA1C7AAA1F1A8F24009A3551 /* mpw-marshall.c in Sources */ = {isa = PBXBuildFile; fileRef = DAA449D31EEC4B6B00E7BDD5 /* mpw-marshall.c */; };
+		DA1C7AAA1F1A8F24009A3551 /* mpw-marshal.c in Sources */ = {isa = PBXBuildFile; fileRef = DAA449D31EEC4B6B00E7BDD5 /* mpw-marshal.c */; };
 		DA1C7AAB1F1A8F24009A3551 /* mpw-types.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773C21A4746AF004F356A /* mpw-types.c */; };
 		DA1C7AAC1F1A8F24009A3551 /* mpw-util.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773C51A4746AF004F356A /* mpw-util.c */; };
 		DA1C7AAD1F1A8F24009A3551 /* mpw-algorithm.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773BB1A4746AF004F356A /* mpw-algorithm.c */; };
@@ -121,7 +121,7 @@
 		DA9261521BE1A86700369DE5 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA9261501BE1A86700369DE5 /* Fabric.framework */; };
 		DA9261541BE1A88900369DE5 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DA9261531BE1A88900369DE5 /* libc++.tbd */; };
 		DA9261561BE1A89600369DE5 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DA9261551BE1A89600369DE5 /* libz.tbd */; };
-		DAA449D51EEC4B6B00E7BDD5 /* mpw-marshall.c in Sources */ = {isa = PBXBuildFile; fileRef = DAA449D31EEC4B6B00E7BDD5 /* mpw-marshall.c */; };
+		DAA449D51EEC4B6B00E7BDD5 /* mpw-marshal.c in Sources */ = {isa = PBXBuildFile; fileRef = DAA449D31EEC4B6B00E7BDD5 /* mpw-marshal.c */; };
 		DAAA81B0195A8D1300FA30D9 /* gradient.png in Resources */ = {isa = PBXBuildFile; fileRef = DAAA81AF195A8D1300FA30D9 /* gradient.png */; };
 		DAADCC4719FAFFAD00987B1D /* NSNotificationCenter+PearlEasyCleanup.h in Headers */ = {isa = PBXBuildFile; fileRef = DAADCC3E19FAFFAD00987B1D /* NSNotificationCenter+PearlEasyCleanup.h */; };
 		DAADCC4819FAFFAD00987B1D /* NSPersistentStore+PearlMigration.h in Headers */ = {isa = PBXBuildFile; fileRef = DAADCC3F19FAFFAD00987B1D /* NSPersistentStore+PearlMigration.h */; };
@@ -966,8 +966,8 @@
 		DA9261501BE1A86700369DE5 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		DA9261531BE1A88900369DE5 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		DA9261551BE1A89600369DE5 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
-		DAA449D31EEC4B6B00E7BDD5 /* mpw-marshall.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-marshall.c"; sourceTree = "<group>"; };
-		DAA449D41EEC4B6B00E7BDD5 /* mpw-marshall.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-marshall.h"; sourceTree = "<group>"; };
+		DAA449D31EEC4B6B00E7BDD5 /* mpw-marshal.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-marshal.c"; sourceTree = "<group>"; };
+		DAA449D41EEC4B6B00E7BDD5 /* mpw-marshal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-marshal.h"; sourceTree = "<group>"; };
 		DAAA81AF195A8D1300FA30D9 /* gradient.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gradient.png; sourceTree = "<group>"; };
 		DAADCC3E19FAFFAD00987B1D /* NSNotificationCenter+PearlEasyCleanup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNotificationCenter+PearlEasyCleanup.h"; sourceTree = "<group>"; };
 		DAADCC3F19FAFFAD00987B1D /* NSPersistentStore+PearlMigration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSPersistentStore+PearlMigration.h"; sourceTree = "<group>"; };
@@ -1889,8 +1889,8 @@
 				DA6773BC1A4746AF004F356A /* mpw-algorithm.h */,
 				DA7471A01F2B71A9005F3468 /* mpw-marshall-util.c */,
 				DA7471A11F2B71A9005F3468 /* mpw-marshall-util.h */,
-				DAA449D31EEC4B6B00E7BDD5 /* mpw-marshall.c */,
-				DAA449D41EEC4B6B00E7BDD5 /* mpw-marshall.h */,
+				DAA449D31EEC4B6B00E7BDD5 /* mpw-marshal.c */,
+				DAA449D41EEC4B6B00E7BDD5 /* mpw-marshal.h */,
 				DA6773C21A4746AF004F356A /* mpw-types.c */,
 				DA6773C31A4746AF004F356A /* mpw-types.h */,
 				DA6773C51A4746AF004F356A /* mpw-util.c */,
@@ -2670,7 +2670,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DA1C7AAA1F1A8F24009A3551 /* mpw-marshall.c in Sources */,
+				DA1C7AAA1F1A8F24009A3551 /* mpw-marshal.c in Sources */,
 				DA1C7AAB1F1A8F24009A3551 /* mpw-types.c in Sources */,
 				DA5B0B3D1F36467900B663F0 /* base64.c in Sources */,
 				DAAF16661F5CA3240013B8AE /* mpw-cli-util.c in Sources */,
@@ -2701,7 +2701,7 @@
 				DA5E5CF61724A667003798D8 /* MPAlgorithm.m in Sources */,
 				DA2686201EBFD7A40001E37E /* MPSiteEntity+CoreDataProperties.m in Sources */,
 				DA5E5CF71724A667003798D8 /* MPAlgorithmV0.m in Sources */,
-				DAA449D51EEC4B6B00E7BDD5 /* mpw-marshall.c in Sources */,
+				DAA449D51EEC4B6B00E7BDD5 /* mpw-marshal.c in Sources */,
 				DA26861E1EBFD7A40001E37E /* MPGeneratedSiteEntity+CoreDataProperties.m in Sources */,
 				DA5E5CF81724A667003798D8 /* MPAlgorithmV1.m in Sources */,
 				DA2686231EBFD7A40001E37E /* MPStoredSiteEntity+CoreDataClass.m in Sources */,
@@ -3048,7 +3048,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				HEADER_SEARCH_PATHS = (
 					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/$(PLATFORM_NAME)/include\"",
-					"/usr/include//libxml2",
+					/usr/include/libxml2,
 					"$(inherited)",
 				);
 				LIBRARY_SEARCH_PATHS = (
@@ -3482,7 +3482,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				HEADER_SEARCH_PATHS = (
 					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/$(PLATFORM_NAME)/include\"",
-					"/usr/include//libxml2",
+					/usr/include/libxml2,
 					"$(inherited)",
 				);
 				LIBRARY_SEARCH_PATHS = (
@@ -3502,7 +3502,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				HEADER_SEARCH_PATHS = (
 					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/$(PLATFORM_NAME)/include\"",
-					"/usr/include//libxml2",
+					/usr/include/libxml2,
 					"$(inherited)",
 				);
 				LIBRARY_SEARCH_PATHS = (

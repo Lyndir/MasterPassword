@@ -26,7 +26,7 @@
 #include "mpw-cli-util.h"
 #include "mpw-algorithm.h"
 #include "mpw-util.h"
-#include "mpw-marshall.h"
+#include "mpw-marshal.h"
 
 /** Output the program's usage documentation. */
 static void usage() {

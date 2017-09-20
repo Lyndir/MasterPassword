@@ -21,7 +21,7 @@
 #include <string.h>
 #include <ctype.h>
 
-#include "mpw-marshall.h"
+#include "mpw-marshal.h"
 #include "mpw-util.h"
 #include "mpw-marshall-util.h"
 

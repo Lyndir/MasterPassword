@@ -26,11 +26,11 @@
 //// Types.
 
 typedef mpw_enum( unsigned int, MPMarshalFormat ) {
-    /** Generate a key for authentication. */
+    /** Do not marshal. */
             MPMarshalFormatNone,
-    /** Generate a key for authentication. */
+    /** Marshal using the line-based plain-text format. */
             MPMarshalFormatFlat,
-    /** Generate a name for identification. */
+    /** Marshal using the JSON structured format. */
             MPMarshalFormatJSON,
 
 #if MPW_JSON
