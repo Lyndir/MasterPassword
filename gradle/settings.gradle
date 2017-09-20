@@ -1,5 +1,8 @@
 rootProject.name = 'masterpassword'
 
+def local = new Properties();
+local.load(file('local.properties').newDataInputStream())
+
 include 'masterpassword-algorithm'
 project(':masterpassword-algorithm').projectDir = new File( '../core/java/algorithm' )
 
@@ -12,5 +15,9 @@ project(':masterpassword-tests').projectDir = new File( '../core/java/tests' )
 include 'masterpassword-gui'
 project(':masterpassword-gui').projectDir = new File( '../platform-independent/gui-java' )
 
-include 'masterpassword-android'
-project(':masterpassword-android').projectDir = new File( '../platform-android' )
+if (local.containsKey('sdk.dir')) {
+    include 'masterpassword-android'
+    project(':masterpassword-android').projectDir = new File( '../platform-android' )
+} else {
+    logger.warn( "Skipping masterpassword-android since sdk.dir is not defined in local.properties." )
+}
