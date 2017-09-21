@@ -29,8 +29,7 @@ import java.util.Arrays;
 
 
 /**
- * bugs:
- * - no known issues.
+ * @see MasterKey.Version#V3
  *
  * @author lhunath, 2014-08-30
  */

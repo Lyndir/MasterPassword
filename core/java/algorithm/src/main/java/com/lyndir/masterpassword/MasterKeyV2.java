@@ -28,8 +28,7 @@ import javax.annotation.Nullable;
 
 
 /**
- * bugs:
- * - V2: miscounted the byte-length for multi-byte full names.
+ * @see MasterKey.Version#V2
  * 
  * @author lhunath, 2014-08-30
  */

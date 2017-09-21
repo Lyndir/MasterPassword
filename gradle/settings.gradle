@@ -1,7 +1,10 @@
 rootProject.name = 'masterpassword'
 
 def local = new Properties();
-local.load(file('local.properties').newDataInputStream())
+try {
+    local.load(file('local.properties').newDataInputStream())
+} catch (FileNotFoundException ignored) {
+}
 
 include 'masterpassword-algorithm'
 project(':masterpassword-algorithm').projectDir = new File( '../core/java/algorithm' )
