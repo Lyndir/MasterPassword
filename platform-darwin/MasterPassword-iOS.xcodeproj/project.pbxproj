@@ -253,7 +253,7 @@
 		DAADBFE01A68763B00F7A756 /* mpw-algorithm.c in Sources */ = {isa = PBXBuildFile; fileRef = 93D3969393A3A46BD27D7078 /* mpw-algorithm.c */; };
 		DAB7AE5D1F3D752900C856B1 /* libjson-c.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB7AE5C1F3D752900C856B1 /* libjson-c.a */; };
 		DAB7AE771F3D755B00C856B1 /* libjson-c.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB7AE761F3D755B00C856B1 /* libjson-c.a */; };
-		DAB7AE991F3DDEE000C856B1 /* mpw-marshall-util.c in Sources */ = {isa = PBXBuildFile; fileRef = DAB7AE981F3DDEE000C856B1 /* mpw-marshall-util.c */; };
+		DAB7AE991F3DDEE000C856B1 /* mpw-marshal-util.c in Sources */ = {isa = PBXBuildFile; fileRef = DAB7AE981F3DDEE000C856B1 /* mpw-marshal-util.c */; };
 		DABB981615100B4000B05417 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DABB981515100B4000B05417 /* SystemConfiguration.framework */; };
 		DABD39371711E29700CF925C /* avatar-0.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD366C1711E29400CF925C /* avatar-0.png */; };
 		DABD39381711E29700CF925C /* avatar-0@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD366D1711E29400CF925C /* avatar-0@2x.png */; };
@@ -896,8 +896,8 @@
 		DAB7AE731F3D755B00C856B1 /* strdup_compat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = strdup_compat.h; sourceTree = "<group>"; };
 		DAB7AE741F3D755B00C856B1 /* vasprintf_compat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vasprintf_compat.h; sourceTree = "<group>"; };
 		DAB7AE761F3D755B00C856B1 /* libjson-c.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libjson-c.a"; sourceTree = "<group>"; };
-		DAB7AE971F3DDEE000C856B1 /* mpw-marshall-util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-marshall-util.h"; sourceTree = "<group>"; };
-		DAB7AE981F3DDEE000C856B1 /* mpw-marshall-util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-marshall-util.c"; sourceTree = "<group>"; };
+		DAB7AE971F3DDEE000C856B1 /* mpw-marshal-util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-marshal-util.h"; sourceTree = "<group>"; };
+		DAB7AE981F3DDEE000C856B1 /* mpw-marshal-util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-marshal-util.c"; sourceTree = "<group>"; };
 		DABB981515100B4000B05417 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		DABD360F1711E29400CF925C /* ui_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ui_background.png; sourceTree = "<group>"; };
 		DABD36101711E29400CF925C /* ui_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ui_background@2x.png"; sourceTree = "<group>"; };
@@ -1759,8 +1759,8 @@
 				93D39D4E713564B7654341B0 /* mpw-algorithm_v3.c */,
 				93D3969393A3A46BD27D7078 /* mpw-algorithm.c */,
 				93D3990D850D76A94C6B7A4D /* mpw-algorithm.h */,
-				DAB7AE981F3DDEE000C856B1 /* mpw-marshall-util.c */,
-				DAB7AE971F3DDEE000C856B1 /* mpw-marshall-util.h */,
+				DAB7AE981F3DDEE000C856B1 /* mpw-marshal-util.c */,
+				DAB7AE971F3DDEE000C856B1 /* mpw-marshal-util.h */,
 				DAA449D01EEC4B5800E7BDD5 /* mpw-marshal.c */,
 				DAA449D11EEC4B5800E7BDD5 /* mpw-marshal.h */,
 				93D392C5A6572DB0EB5B82C8 /* mpw-types.c */,
@@ -3988,7 +3988,7 @@
 				DA0CC58E1EB6B030009A8ED9 /* MPSiteQuestionEntity+CoreDataClass.m in Sources */,
 				93D39A5FF670957C0AF8298D /* MPSiteCell.m in Sources */,
 				93D398ECD7D1A0DEDDADF516 /* MPEmergencyViewController.m in Sources */,
-				DAB7AE991F3DDEE000C856B1 /* mpw-marshall-util.c in Sources */,
+				DAB7AE991F3DDEE000C856B1 /* mpw-marshal-util.c in Sources */,
 				DA95B50F1C4776F00067F5EF /* NSMutableSet+Pearl.m in Sources */,
 				93D394B5036C882B33C71872 /* MPSitesSegue.m in Sources */,
 				DA0CC5911EB6B030009A8ED9 /* MPStoredSiteEntity+CoreDataProperties.m in Sources */,

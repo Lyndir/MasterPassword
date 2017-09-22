@@ -16,8 +16,8 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-#ifndef _MPW_MARSHALL_UTIL_H
-#define _MPW_MARSHALL_UTIL_H
+#ifndef _MPW_MARSHAL_UTIL_H
+#define _MPW_MARSHAL_UTIL_H
 
 #include <time.h>
 #if MPW_JSON
@@ -70,4 +70,4 @@ bool mpw_update_masterKey(
         MPMasterKey *masterKey, MPAlgorithmVersion *masterKeyAlgorithm, MPAlgorithmVersion targetKeyAlgorithm,
         const char *fullName, const char *masterPassword);
 
-#endif // _MPW_MARSHALL_UTIL_H
+#endif // _MPW_MARSHAL_UTIL_H

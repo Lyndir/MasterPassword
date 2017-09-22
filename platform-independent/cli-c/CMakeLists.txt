@@ -99,7 +99,7 @@ endfunction()
 ### TARGET: MPW
 if( BUILD_MPW )
     # target
-    add_executable( mpw "core/base64.c" "core/mpw-algorithm.c" "core/mpw-types.c" "core/mpw-util.c" "core/mpw-marshall-util.c" "core/mpw-marshall.c"
+    add_executable( mpw "core/base64.c" "core/mpw-algorithm.c" "core/mpw-types.c" "core/mpw-util.c" "core/mpw-marshal-util.c" "core/mpw-marshal.c"
                         "cli/mpw-cli-util.c" "cli/mpw-cli.c" )
     target_include_directories( mpw PUBLIC core cli )
 

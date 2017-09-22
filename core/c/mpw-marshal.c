@@ -23,9 +23,9 @@
 
 #include "mpw-marshal.h"
 #include "mpw-util.h"
-#include "mpw-marshall-util.h"
+#include "mpw-marshal-util.h"
 
-MPMarshalledUser *mpw_marshall_user(
+MPMarshalledUser *mpw_marshal_user(
         const char *fullName, const char *masterPassword, const MPAlgorithmVersion algorithmVersion) {
 
     MPMarshalledUser *user;
@@ -48,7 +48,7 @@ MPMarshalledUser *mpw_marshall_user(
     return user;
 };
 
-MPMarshalledSite *mpw_marshall_site(
+MPMarshalledSite *mpw_marshal_site(
         MPMarshalledUser *user, const char *siteName, const MPResultType resultType,
         const MPCounterValue siteCounter, const MPAlgorithmVersion algorithmVersion) {
 
@@ -132,7 +132,7 @@ bool mpw_marshal_free(
     return success;
 }
 
-static bool mpw_marshall_write_flat(
+static bool mpw_marshal_write_flat(
         char **out, const MPMarshalledUser *user, MPMarshalError *error) {
 
     *error = (MPMarshalError){ MPMarshalErrorInternal, "Unexpected internal error." };
@@ -216,7 +216,7 @@ static bool mpw_marshall_write_flat(
 }
 
 #if MPW_JSON
-static bool mpw_marshall_write_json(
+static bool mpw_marshal_write_json(
         char **out, const MPMarshalledUser *user, MPMarshalError *error) {
 
     *error = (MPMarshalError){ MPMarshalErrorInternal, "Unexpected internal error." };
@@ -345,7 +345,7 @@ static bool mpw_marshall_write_json(
 }
 #endif
 
-bool mpw_marshall_write(
+bool mpw_marshal_write(
         char **out, const MPMarshalFormat outFormat, const MPMarshalledUser *user, MPMarshalError *error) {
 
     switch (outFormat) {
@@ -353,10 +353,10 @@ bool mpw_marshall_write(
             *error = (MPMarshalError){ .type = MPMarshalSuccess };
             return false;
         case MPMarshalFormatFlat:
-            return mpw_marshall_write_flat( out, user, error );
+            return mpw_marshal_write_flat( out, user, error );
 #if MPW_JSON
         case MPMarshalFormatJSON:
-            return mpw_marshall_write_json( out, user, error );
+            return mpw_marshal_write_json( out, user, error );
 #endif
         default:
             *error = (MPMarshalError){ MPMarshalErrorFormat, mpw_str( "Unsupported output format: %u", outFormat ) };
@@ -364,7 +364,7 @@ bool mpw_marshall_write(
     }
 }
 
-static void mpw_marshall_read_flat_info(
+static void mpw_marshal_read_flat_info(
         const char *in, MPMarshalInfo *info) {
 
     info->algorithm = MPAlgorithmVersionCurrent;
@@ -411,7 +411,7 @@ static void mpw_marshall_read_flat_info(
     }
 }
 
-static MPMarshalledUser *mpw_marshall_read_flat(
+static MPMarshalledUser *mpw_marshal_read_flat(
         const char *in, const char *masterPassword, MPMarshalError *error) {
 
     *error = (MPMarshalError){ MPMarshalErrorInternal, "Unexpected internal error." };
@@ -508,7 +508,7 @@ static MPMarshalledUser *mpw_marshall_read_flat(
                 *error = (MPMarshalError){ MPMarshalErrorMasterPassword, "Master password doesn't match key ID." };
                 return NULL;
             }
-            if (!(user = mpw_marshall_user( fullName, masterPassword, algorithm ))) {
+            if (!(user = mpw_marshal_user( fullName, masterPassword, algorithm ))) {
                 *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't allocate a new user." };
                 return NULL;
             }
@@ -582,7 +582,7 @@ static MPMarshalledUser *mpw_marshall_read_flat(
                 return NULL;
             }
 
-            MPMarshalledSite *site = mpw_marshall_site(
+            MPMarshalledSite *site = mpw_marshal_site(
                     user, siteName, siteType, siteCounter, siteAlgorithm );
             if (!site) {
                 *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't allocate a new site." };
@@ -632,7 +632,7 @@ static MPMarshalledUser *mpw_marshall_read_flat(
 }
 
 #if MPW_JSON
-static void mpw_marshall_read_json_info(
+static void mpw_marshal_read_json_info(
         const char *in, MPMarshalInfo *info) {
 
     // Parse JSON.
@@ -656,7 +656,7 @@ static void mpw_marshall_read_json_info(
     json_object_put( json_file );
 }
 
-static MPMarshalledUser *mpw_marshall_read_json(
+static MPMarshalledUser *mpw_marshal_read_json(
         const char *in, const char *masterPassword, MPMarshalError *error) {
 
     *error = (MPMarshalError){ MPMarshalErrorInternal, "Unexpected internal error." };
@@ -720,7 +720,7 @@ static MPMarshalledUser *mpw_marshall_read_json(
         *error = (MPMarshalError){ MPMarshalErrorMasterPassword, "Master password doesn't match key ID." };
         return NULL;
     }
-    if (!(user = mpw_marshall_user( fullName, masterPassword, algorithm ))) {
+    if (!(user = mpw_marshal_user( fullName, masterPassword, algorithm ))) {
         *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't allocate a new user." };
         return NULL;
     }
@@ -765,7 +765,7 @@ static MPMarshalledUser *mpw_marshall_read_json(
         json_object *json_site_mpw = mpw_get_json_section( json_site.val, "_ext_mpw" );
         const char *siteURL = mpw_get_json_string( json_site_mpw, "url", NULL );
 
-        MPMarshalledSite *site = mpw_marshall_site( user, siteName, siteType, siteCounter, siteAlgorithm );
+        MPMarshalledSite *site = mpw_marshal_site( user, siteName, siteType, siteCounter, siteAlgorithm );
         if (!site) {
             *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't allocate a new site." };
             return NULL;
@@ -824,7 +824,7 @@ static MPMarshalledUser *mpw_marshall_read_json(
 }
 #endif
 
-MPMarshalInfo *mpw_marshall_read_info(
+MPMarshalInfo *mpw_marshal_read_info(
         const char *in) {
 
     MPMarshalInfo *info = malloc( sizeof( MPMarshalInfo ) );
@@ -833,12 +833,12 @@ MPMarshalInfo *mpw_marshall_read_info(
     if (in && strlen( in )) {
         if (in[0] == '#') {
             *info = (MPMarshalInfo){ .format = MPMarshalFormatFlat };
-            mpw_marshall_read_flat_info( in, info );
+            mpw_marshal_read_flat_info( in, info );
         }
         else if (in[0] == '{') {
             *info = (MPMarshalInfo){ .format = MPMarshalFormatJSON };
 #if MPW_JSON
-            mpw_marshall_read_json_info( in, info );
+            mpw_marshal_read_json_info( in, info );
 #endif
         }
     }
@@ -846,7 +846,7 @@ MPMarshalInfo *mpw_marshall_read_info(
     return info;
 }
 
-MPMarshalledUser *mpw_marshall_read(
+MPMarshalledUser *mpw_marshal_read(
         const char *in, const MPMarshalFormat inFormat, const char *masterPassword, MPMarshalError *error) {
 
     switch (inFormat) {
@@ -854,10 +854,10 @@ MPMarshalledUser *mpw_marshall_read(
             *error = (MPMarshalError){ .type = MPMarshalSuccess };
             return false;
         case MPMarshalFormatFlat:
-            return mpw_marshall_read_flat( in, masterPassword, error );
+            return mpw_marshal_read_flat( in, masterPassword, error );
 #if MPW_JSON
         case MPMarshalFormatJSON:
-            return mpw_marshall_read_json( in, masterPassword, error );
+            return mpw_marshal_read_json( in, masterPassword, error );
 #endif
         default:
             *error = (MPMarshalError){ MPMarshalErrorFormat, mpw_str( "Unsupported input format: %u", inFormat ) };
@@ -906,7 +906,7 @@ const char *mpw_nameForFormat(
     }
 }
 
-const char *mpw_marshall_format_extension(
+const char *mpw_marshal_format_extension(
         const MPMarshalFormat format) {
 
     switch (format) {

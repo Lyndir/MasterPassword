@@ -566,7 +566,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
            saveInContext:(NSManagedObjectContext *)context {
 
     // Read metadata for the import file.
-    MPMarshalInfo *info = mpw_marshall_read_info( importData.UTF8String );
+    MPMarshalInfo *info = mpw_marshal_read_info( importData.UTF8String );
     if (info->format == MPMarshalFormatNone)
         return MPError( ([NSError errorWithDomain:MPErrorDomain code:MPErrorMarshalCode userInfo:@{
                 @"type"                  : @(MPMarshalErrorFormat),
@@ -590,7 +590,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
 
     // Parse import data.
     MPMarshalError importError = { .type = MPMarshalSuccess };
-    MPMarshalledUser *importUser = mpw_marshall_read( importData.UTF8String, info->format, importMasterPassword.UTF8String, &importError );
+    MPMarshalledUser *importUser = mpw_marshal_read( importData.UTF8String, info->format, importMasterPassword.UTF8String, &importError );
     mpw_marshal_info_free( &info );
 
     @try {
@@ -707,7 +707,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
         NSString *masterPassword = askImportPassword( user.name );
 
         inf( @"Exporting sites, %@, for user: %@", revealPasswords? @"revealing passwords": @"omitting passwords", user.userID );
-        MPMarshalledUser *exportUser = mpw_marshall_user( user.name.UTF8String, masterPassword.UTF8String, user.algorithm.version );
+        MPMarshalledUser *exportUser = mpw_marshal_user( user.name.UTF8String, masterPassword.UTF8String, user.algorithm.version );
         exportUser->redacted = !revealPasswords;
         exportUser->avatar = (unsigned int)user.avatar;
         exportUser->defaultType = user.defaultType;
@@ -721,7 +721,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
                                 ? [site.algorithm exportPasswordForSite:site usingKey:self.key]
                                 : [site.algorithm resolvePasswordForSite:site usingKey:self.key];
 
-            MPMarshalledSite *exportSite = mpw_marshall_site( exportUser,
+            MPMarshalledSite *exportSite = mpw_marshal_site( exportUser,
                     site.name.UTF8String, site.type, counter, site.algorithm.version );
             exportSite->content = content.UTF8String;
             exportSite->loginContent = site.loginName.UTF8String;
@@ -736,7 +736,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
 
         char *export = NULL;
         MPMarshalError exportError = (MPMarshalError){ .type= MPMarshalSuccess };
-        mpw_marshall_write( &export, MPMarshalFormatFlat, exportUser, &exportError );
+        mpw_marshal_write( &export, MPMarshalFormatFlat, exportUser, &exportError );
         NSString *mpsites = nil;
         if (export && exportError.type == MPMarshalSuccess)
             mpsites = [NSString stringWithCString:export encoding:NSUTF8StringEncoding];

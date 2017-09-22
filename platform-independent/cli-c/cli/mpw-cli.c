@@ -97,7 +97,7 @@ static void usage() {
             "                   n, none     | No file\n"
             "                   f, flat     | ~/.mpw.d/Full Name.%s\n"
             "                   j, json     | ~/.mpw.d/Full Name.%s\n\n",
-            MP_ENV_format, mpw_marshall_format_extension( MPMarshalFormatFlat ), mpw_marshall_format_extension( MPMarshalFormatJSON ) );
+            MP_ENV_format, mpw_marshal_format_extension( MPMarshalFormatFlat ), mpw_marshal_format_extension( MPMarshalFormatJSON ) );
     inf( ""
             "  -R redacted  Whether to save the mpsites in redacted format or not.\n"
             "               Redaction omits or encrypts any secrets, making the file safe\n"
@@ -446,14 +446,14 @@ void cli_user(Arguments *args, Operation *operation) {
     // Find mpsites file from parameters.
     FILE *sitesFile = NULL;
     mpw_free_string( &operation->sitesPath );
-    operation->sitesPath = mpw_path( operation->fullName, mpw_marshall_format_extension( operation->sitesFormat ) );
+    operation->sitesPath = mpw_path( operation->fullName, mpw_marshal_format_extension( operation->sitesFormat ) );
     if (!operation->sitesPath || !(sitesFile = fopen( operation->sitesPath, "r" ))) {
         dbg( "Couldn't open configuration file:\n  %s: %s\n", operation->sitesPath, strerror( errno ) );
 
         // Try to fall back to the flat format.
         if (!operation->sitesFormatFixed) {
             mpw_free_string( &operation->sitesPath );
-            operation->sitesPath = mpw_path( operation->fullName, mpw_marshall_format_extension( MPMarshalFormatFlat ) );
+            operation->sitesPath = mpw_path( operation->fullName, mpw_marshal_format_extension( MPMarshalFormatFlat ) );
             if (operation->sitesPath && (sitesFile = fopen( operation->sitesPath, "r" )))
                 operation->sitesFormat = MPMarshalFormatFlat;
             else
@@ -473,14 +473,14 @@ void cli_user(Arguments *args, Operation *operation) {
         fclose( sitesFile );
 
         // Parse file.
-        MPMarshalInfo *sitesInputInfo = mpw_marshall_read_info( sitesInputData );
+        MPMarshalInfo *sitesInputInfo = mpw_marshal_read_info( sitesInputData );
         MPMarshalFormat sitesInputFormat = args->sitesFormat? operation->sitesFormat: sitesInputInfo->format;
-        MPMarshalError marshallError = { .type = MPMarshalSuccess };
+        MPMarshalError marshalError = { .type = MPMarshalSuccess };
         mpw_marshal_info_free( &sitesInputInfo );
-        operation->user = mpw_marshall_read( sitesInputData, sitesInputFormat, operation->masterPassword, &marshallError );
-        if (marshallError.type == MPMarshalErrorMasterPassword && operation->allowPasswordUpdate) {
+        operation->user = mpw_marshal_read( sitesInputData, sitesInputFormat, operation->masterPassword, &marshalError );
+        if (marshalError.type == MPMarshalErrorMasterPassword && operation->allowPasswordUpdate) {
             // Update master password in mpsites.
-            while (marshallError.type == MPMarshalErrorMasterPassword) {
+            while (marshalError.type == MPMarshalErrorMasterPassword) {
                 inf( "Given master password does not match configuration.\n" );
                 inf( "To update the configuration with this new master password, first confirm the old master password.\n" );
 
@@ -489,7 +489,7 @@ void cli_user(Arguments *args, Operation *operation) {
                     importMasterPassword = mpw_getpass( "Old master password: " );
 
                 mpw_marshal_free( &operation->user );
-                operation->user = mpw_marshall_read( sitesInputData, sitesInputFormat, importMasterPassword, &marshallError );
+                operation->user = mpw_marshal_read( sitesInputData, sitesInputFormat, importMasterPassword, &marshalError );
                 mpw_free_string( &importMasterPassword );
             }
             if (operation->user) {
@@ -500,15 +500,15 @@ void cli_user(Arguments *args, Operation *operation) {
         mpw_free_string( &sitesInputData );
 
         // Incorrect master password.
-        if (marshallError.type == MPMarshalErrorMasterPassword) {
-            ftl( "Incorrect master password according to configuration:\n  %s: %s\n", operation->sitesPath, marshallError.description );
+        if (marshalError.type == MPMarshalErrorMasterPassword) {
+            ftl( "Incorrect master password according to configuration:\n  %s: %s\n", operation->sitesPath, marshalError.description );
             cli_free( args, operation );
             exit( EX_DATAERR );
         }
 
         // Any other parse error.
-        if (!operation->user || marshallError.type != MPMarshalSuccess) {
-            err( "Couldn't parse configuration file:\n  %s: %s\n", operation->sitesPath, marshallError.description );
+        if (!operation->user || marshalError.type != MPMarshalSuccess) {
+            err( "Couldn't parse configuration file:\n  %s: %s\n", operation->sitesPath, marshalError.description );
             cli_free( args, operation );
             exit( EX_DATAERR );
         }
@@ -516,7 +516,7 @@ void cli_user(Arguments *args, Operation *operation) {
 
     // If no user from mpsites, create a new one.
     if (!operation->user)
-        operation->user = mpw_marshall_user(
+        operation->user = mpw_marshal_user(
                 operation->fullName, operation->masterPassword, MPAlgorithmVersionCurrent );
 }
 
@@ -532,7 +532,7 @@ void cli_site(Arguments __unused *args, Operation *operation) {
 
     // If no site from mpsites, create a new one.
     if (!operation->site)
-        operation->site = mpw_marshall_site(
+        operation->site = mpw_marshal_site(
                 operation->user, operation->siteName, MPResultTypeDefault, MPCounterValueDefault, operation->user->algorithm );
 }
 
@@ -762,7 +762,7 @@ void cli_save(Arguments __unused *args, Operation *operation) {
 
     if (!operation->sitesFormatFixed)
         operation->sitesFormat = MPMarshalFormatDefault;
-    operation->sitesPath = mpw_path( operation->user->fullName, mpw_marshall_format_extension( operation->sitesFormat ) );
+    operation->sitesPath = mpw_path( operation->user->fullName, mpw_marshal_format_extension( operation->sitesFormat ) );
     dbg( "Updating: %s (%s)\n", operation->sitesPath, mpw_nameForFormat( operation->sitesFormat ) );
 
     FILE *sitesFile = NULL;
@@ -772,9 +772,9 @@ void cli_save(Arguments __unused *args, Operation *operation) {
     }
 
     char *buf = NULL;
-    MPMarshalError marshallError = { .type = MPMarshalSuccess };
-    if (!mpw_marshall_write( &buf, operation->sitesFormat, operation->user, &marshallError ) || marshallError.type != MPMarshalSuccess)
-        wrn( "Couldn't encode updated configuration file:\n  %s: %s\n", operation->sitesPath, marshallError.description );
+    MPMarshalError marshalError = { .type = MPMarshalSuccess };
+    if (!mpw_marshal_write( &buf, operation->sitesFormat, operation->user, &marshalError ) || marshalError.type != MPMarshalSuccess)
+        wrn( "Couldn't encode updated configuration file:\n  %s: %s\n", operation->sitesPath, marshalError.description );
 
     else if (fwrite( buf, sizeof( char ), strlen( buf ), sitesFile ) != strlen( buf ))
         wrn( "Error while writing updated configuration file:\n  %s: %d\n", operation->sitesPath, ferror( sitesFile ) );

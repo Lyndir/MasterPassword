@@ -18,7 +18,7 @@
 
 #include <string.h>
 
-#include "mpw-marshall-util.h"
+#include "mpw-marshal-util.h"
 #include "mpw-util.h"
 
 char *mpw_get_token(const char **in, const char *eol, char *delim) {

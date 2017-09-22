@@ -16,8 +16,8 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-#ifndef _MPW_MARSHALL_H
-#define _MPW_MARSHALL_H
+#ifndef _MPW_MARSHAL_H
+#define _MPW_MARSHAL_H
 
 #include <time.h>
 
@@ -111,22 +111,22 @@ typedef struct MPMarshalInfo {
 //// Marshalling.
 
 /** Write the user and all associated data out to the given output buffer using the given marshalling format. */
-bool mpw_marshall_write(
+bool mpw_marshal_write(
         char **out, const MPMarshalFormat outFormat, const MPMarshalledUser *user, MPMarshalError *error);
 /** Try to read metadata on the sites in the input buffer. */
-MPMarshalInfo *mpw_marshall_read_info(
+MPMarshalInfo *mpw_marshal_read_info(
         const char *in);
 /** Unmarshall sites in the given input buffer by parsing it using the given marshalling format. */
-MPMarshalledUser *mpw_marshall_read(
+MPMarshalledUser *mpw_marshal_read(
         const char *in, const MPMarshalFormat inFormat, const char *masterPassword, MPMarshalError *error);
 
 //// Utilities.
 
 /** Create a new user object ready for marshalling. */
-MPMarshalledUser *mpw_marshall_user(
+MPMarshalledUser *mpw_marshal_user(
         const char *fullName, const char *masterPassword, const MPAlgorithmVersion algorithmVersion);
 /** Create a new site attached to the given user object, ready for marshalling. */
-MPMarshalledSite *mpw_marshall_site(
+MPMarshalledSite *mpw_marshal_site(
         MPMarshalledUser *user,
         const char *siteName, const MPResultType resultType, const MPCounterValue siteCounter, const MPAlgorithmVersion algorithmVersion);
 /** Create a new question attached to the given site object, ready for marshalling. */
@@ -153,7 +153,7 @@ const char *mpw_nameForFormat(
 /**
  * @return The file extension that's recommended for files that use the given marshalling format.
  */
-const char *mpw_marshall_format_extension(
+const char *mpw_marshal_format_extension(
         const MPMarshalFormat format);
 
-#endif // _MPW_MARSHALL_H
+#endif // _MPW_MARSHAL_H
