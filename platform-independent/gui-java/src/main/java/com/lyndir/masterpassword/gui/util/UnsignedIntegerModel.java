@@ -45,11 +45,11 @@ public class UnsignedIntegerModel extends SpinnerNumberModel {
 
     public UnsignedIntegerModel(final UnsignedInteger value, final UnsignedInteger minimum, final UnsignedInteger maximum,
                                 final UnsignedInteger stepSize) {
-        super( value, minimum, maximum, stepSize );
+        super( value.doubleValue(), minimum.doubleValue(), maximum.doubleValue(), stepSize.doubleValue() );
     }
 
     @Override
     public UnsignedInteger getNumber() {
-        return (UnsignedInteger) super.getNumber();
+        return UnsignedInteger.valueOf( super.getNumber().longValue() );
     }
 }
