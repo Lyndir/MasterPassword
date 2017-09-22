@@ -1,0 +1,279 @@
+<tests>
+    <!-- Default values for all parameters. -->
+    <case id="default">
+        <algorithm>-1</algorithm>
+        <fullName>Robert Lee Mitchell</fullName>
+        <masterPassword>banana colored duckling</masterPassword>
+        <keyID>98EEF4D1DF46D849574A82A03C3177056B15DFFCA29BB3899DE4628453675302</keyID>
+        <siteName>masterpasswordapp.com</siteName>
+        <siteCounter>1</siteCounter>
+        <resultType>Long</resultType>
+        <keyPurpose>Authentication</keyPurpose>
+        <result><!-- abstract --></result>
+    </case>
+
+    <!-- Algorithm 3 -->
+    <case id="v3" parent="default">
+        <algorithm>3</algorithm>
+        <result>Jejr5[RepuSosp</result>
+    </case>
+    <case id="v3_mb_fullName" parent="v3">
+        <fullName>⛄</fullName>
+        <keyID>1717AA1F9BF5BA56CD0965CDA3D78E6D2E6A1EA8C067A8EA621F3DDAD4A87EB8</keyID>
+        <result>NopaDajh8=Fene</result>
+    </case>
+    <case id="v3_mb_masterPassword" parent="v3">
+        <masterPassword>⛄</masterPassword>
+        <keyID>351432B8528A5ABECAB768CA95015097DE76FE14C41E10AF36C67DCFB8917E08</keyID>
+        <result>QesuHirv5-Xepl</result>
+    </case>
+    <case id="v3_mb_siteName" parent="v3">
+        <siteName>⛄</siteName>
+        <result>LiheCuwhSerz6)</result>
+    </case>
+    <case id="v3_loginName" parent="v3">
+        <keyPurpose>Identification</keyPurpose>
+        <resultType>Name</resultType>
+        <result>wohzaqage</result>
+    </case>
+    <case id="v3_securityAnswer" parent="v3">
+        <keyPurpose>Recovery</keyPurpose>
+        <resultType>Phrase</resultType>
+        <result>xin diyjiqoja hubu</result>
+    </case>
+    <case id="v3_securityAnswer_context" parent="v3_securityAnswer">
+        <keyContext>question</keyContext>
+        <result>xogx tem cegyiva jab</result>
+    </case>
+    <case id="v3_type_maximum" parent="v3">
+        <resultType>Maximum</resultType>
+        <result>W6@692^B1#&amp;@gVdSdLZ@</result>
+    </case>
+    <case id="v3_type_medium" parent="v3">
+        <resultType>Medium</resultType>
+        <result>Jej2$Quv</result>
+    </case>
+    <case id="v3_type_basic" parent="v3">
+        <resultType>Basic</resultType>
+        <result>WAo2xIg6</result>
+    </case>
+    <case id="v3_type_short" parent="v3">
+        <resultType>Short</resultType>
+        <result>Jej2</result>
+    </case>
+    <case id="v3_type_pin" parent="v3">
+        <resultType>PIN</resultType>
+        <result>7662</result>
+    </case>
+    <case id="v3_type_name" parent="v3">
+        <resultType>Name</resultType>
+        <result>jejraquvo</result>
+    </case>
+    <case id="v3_type_phrase" parent="v3">
+        <resultType>Phrase</resultType>
+        <result>jejr quv cabsibu tam</result>
+    </case>
+    <case id="v3_counter_ceiling" parent="v3">
+        <siteCounter>4294967295</siteCounter>
+        <result>XambHoqo6[Peni</result>
+    </case>
+
+    <!-- Algorithm 2 -->
+    <case id="v2" parent="default">
+        <algorithm>2</algorithm>
+        <result>Jejr5[RepuSosp</result>
+    </case>
+    <case id="v2_mb_fullName" parent="v2">
+        <fullName>⛄</fullName>
+        <keyID>4D5851D0B093D65DE0CF13D94877270468C0B65A6E42CA50D393AC9B99C457B5</keyID>
+        <result>WaqoGuho2[Xaxw</result>
+    </case>
+    <case id="v2_mb_masterPassword" parent="v2">
+        <masterPassword>⛄</masterPassword>
+        <keyID>351432B8528A5ABECAB768CA95015097DE76FE14C41E10AF36C67DCFB8917E08</keyID>
+        <result>QesuHirv5-Xepl</result>
+    </case>
+    <case id="v2_mb_siteName" parent="v2">
+        <siteName>⛄</siteName>
+        <result>LiheCuwhSerz6)</result>
+    </case>
+    <case id="v2_loginName" parent="v2">
+        <keyPurpose>Identification</keyPurpose>
+        <resultType>Name</resultType>
+        <result>wohzaqage</result>
+    </case>
+    <case id="v2_securityAnswer" parent="v2">
+        <keyPurpose>Recovery</keyPurpose>
+        <resultType>Phrase</resultType>
+        <result>xin diyjiqoja hubu</result>
+    </case>
+    <case id="v2_securityAnswer_context" parent="v2_securityAnswer">
+        <keyContext>question</keyContext>
+        <result>xogx tem cegyiva jab</result>
+    </case>
+    <case id="v2_type_maximum" parent="v2">
+        <resultType>Maximum</resultType>
+        <result>W6@692^B1#&amp;@gVdSdLZ@</result>
+    </case>
+    <case id="v2_type_medium" parent="v2">
+        <resultType>Medium</resultType>
+        <result>Jej2$Quv</result>
+    </case>
+    <case id="v2_type_basic" parent="v2">
+        <resultType>Basic</resultType>
+        <result>WAo2xIg6</result>
+    </case>
+    <case id="v2_type_short" parent="v2">
+        <resultType>Short</resultType>
+        <result>Jej2</result>
+    </case>
+    <case id="v2_type_pin" parent="v2">
+        <resultType>PIN</resultType>
+        <result>7662</result>
+    </case>
+    <case id="v2_type_name" parent="v2">
+        <resultType>Name</resultType>
+        <result>jejraquvo</result>
+    </case>
+    <case id="v2_type_phrase" parent="v2">
+        <resultType>Phrase</resultType>
+        <result>jejr quv cabsibu tam</result>
+    </case>
+    <case id="v2_counter_ceiling" parent="v2">
+        <siteCounter>4294967295</siteCounter>
+        <result>XambHoqo6[Peni</result>
+    </case>
+
+    <!-- Algorithm 1 -->
+    <case id="v1" parent="default">
+        <algorithm>1</algorithm>
+        <result>Jejr5[RepuSosp</result>
+    </case>
+    <case id="v1_mb_fullName" parent="v1">
+        <fullName>⛄</fullName>
+        <keyID>4D5851D0B093D65DE0CF13D94877270468C0B65A6E42CA50D393AC9B99C457B5</keyID>
+        <result>WaqoGuho2[Xaxw</result>
+    </case>
+    <case id="v1_mb_masterPassword" parent="v1">
+        <masterPassword>⛄</masterPassword>
+        <keyID>351432B8528A5ABECAB768CA95015097DE76FE14C41E10AF36C67DCFB8917E08</keyID>
+        <result>QesuHirv5-Xepl</result>
+    </case>
+    <case id="v1_mb_siteName" parent="v1">
+        <siteName>⛄</siteName>
+        <result>WawiYarp2@Kodh</result>
+    </case>
+    <case id="v1_loginName" parent="v1">
+        <keyPurpose>Identification</keyPurpose>
+        <resultType>Name</resultType>
+        <result>wohzaqage</result>
+    </case>
+    <case id="v1_securityAnswer" parent="v1">
+        <keyPurpose>Recovery</keyPurpose>
+        <resultType>Phrase</resultType>
+        <result>xin diyjiqoja hubu</result>
+    </case>
+    <case id="v1_securityAnswer_context" parent="v1_securityAnswer">
+        <keyContext>question</keyContext>
+        <result>xogx tem cegyiva jab</result>
+    </case>
+    <case id="v1_type_maximum" parent="v1">
+        <resultType>Maximum</resultType>
+        <result>W6@692^B1#&amp;@gVdSdLZ@</result>
+    </case>
+    <case id="v1_type_medium" parent="v1">
+        <resultType>Medium</resultType>
+        <result>Jej2$Quv</result>
+    </case>
+    <case id="v1_type_basic" parent="v1">
+        <resultType>Basic</resultType>
+        <result>WAo2xIg6</result>
+    </case>
+    <case id="v1_type_short" parent="v1">
+        <resultType>Short</resultType>
+        <result>Jej2</result>
+    </case>
+    <case id="v1_type_pin" parent="v1">
+        <resultType>PIN</resultType>
+        <result>7662</result>
+    </case>
+    <case id="v1_type_name" parent="v1">
+        <resultType>Name</resultType>
+        <result>jejraquvo</result>
+    </case>
+    <case id="v1_type_phrase" parent="v1">
+        <resultType>Phrase</resultType>
+        <result>jejr quv cabsibu tam</result>
+    </case>
+    <case id="v1_counter_ceiling" parent="v1">
+        <siteCounter>4294967295</siteCounter>
+        <result>XambHoqo6[Peni</result>
+    </case>
+
+    <!-- Algorithm 0 -->
+    <case id="v0" parent="default">
+        <algorithm>0</algorithm>
+        <result>Feji5@ReduWosh</result>
+    </case>
+    <case id="v0_mb_fullName" parent="v0">
+        <fullName>⛄</fullName>
+        <keyID>4D5851D0B093D65DE0CF13D94877270468C0B65A6E42CA50D393AC9B99C457B5</keyID>
+        <result>HajrYudo7@Mamh</result>
+    </case>
+    <case id="v0_mb_masterPassword" parent="v0">
+        <masterPassword>⛄</masterPassword>
+        <keyID>351432B8528A5ABECAB768CA95015097DE76FE14C41E10AF36C67DCFB8917E08</keyID>
+        <result>MewmDini0]Meho</result>
+    </case>
+    <case id="v0_mb_siteName" parent="v0">
+        <siteName>⛄</siteName>
+        <result>HahiVana2@Nole</result>
+    </case>
+    <case id="v0_loginName" parent="v0">
+        <keyPurpose>Identification</keyPurpose>
+        <resultType>Name</resultType>
+        <result>lozwajave</result>
+    </case>
+    <case id="v0_securityAnswer" parent="v0">
+        <keyPurpose>Recovery</keyPurpose>
+        <resultType>Phrase</resultType>
+        <result>miy lirfijoja dubu</result>
+    </case>
+    <case id="v0_securityAnswer_context" parent="v0_securityAnswer">
+        <keyContext>question</keyContext>
+        <result>movm bex gevrica jaf</result>
+    </case>
+    <case id="v0_type_maximum" parent="v0">
+        <resultType>Maximum</resultType>
+        <result>w1!3bA3icmRAc)SS@lwl</result>
+    </case>
+    <case id="v0_type_medium" parent="v0">
+        <resultType>Medium</resultType>
+        <result>Fej7]Jug</result>
+    </case>
+    <case id="v0_type_basic" parent="v0">
+        <resultType>Basic</resultType>
+        <result>wvH7irC1</result>
+    </case>
+    <case id="v0_type_short" parent="v0">
+        <resultType>Short</resultType>
+        <result>Fej7</result>
+    </case>
+    <case id="v0_type_pin" parent="v0">
+        <resultType>PIN</resultType>
+        <result>2117</result>
+    </case>
+    <case id="v0_type_name" parent="v0">
+        <resultType>Name</resultType>
+        <result>fejrajugo</result>
+    </case>
+    <case id="v0_type_phrase" parent="v0">
+        <resultType>Phrase</resultType>
+        <result>fejr jug gabsibu bax</result>
+    </case>
+    <case id="v0_counter_ceiling" parent="v0">
+        <siteCounter>4294967295</siteCounter>
+        <result>QateDojh1@Hecn</result>
+    </case>
+</tests>
+
