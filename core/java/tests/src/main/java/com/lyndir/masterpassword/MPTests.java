@@ -171,8 +171,8 @@ public class MPTests {
         }
 
         @Nonnull
-        public MasterKey.Version getAlgorithm() {
-            return MasterKey.Version.fromInt( checkNotNull( algorithm ) );
+        public MPMasterKey.Version getAlgorithm() {
+            return MPMasterKey.Version.fromInt( checkNotNull( algorithm ) );
         }
 
         @Nonnull

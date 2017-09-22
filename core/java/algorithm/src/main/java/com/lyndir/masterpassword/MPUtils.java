@@ -28,14 +28,14 @@ import java.nio.ByteBuffer;
 public final class MPUtils {
 
     public static byte[] bytesForInt(final int number) {
-        return ByteBuffer.allocate( Integer.SIZE / Byte.SIZE ).order( MasterKeyV0.mpw_byteOrder ).putInt( number ).array();
+        return ByteBuffer.allocate( Integer.SIZE / Byte.SIZE ).order( MPAlgorithmV0.mpw_byteOrder ).putInt( number ).array();
     }
 
     public static byte[] bytesForInt(final UnsignedInteger number) {
-        return ByteBuffer.allocate( Integer.SIZE / Byte.SIZE ).order( MasterKeyV0.mpw_byteOrder ).putInt( number.intValue() ).array();
+        return ByteBuffer.allocate( Integer.SIZE / Byte.SIZE ).order( MPAlgorithmV0.mpw_byteOrder ).putInt( number.intValue() ).array();
     }
 
     public static byte[] idForBytes(final byte[] bytes) {
-        return MasterKeyV0.mpw_hash.of( bytes );
+        return MPAlgorithmV0.mpw_hash.of( bytes );
     }
 }

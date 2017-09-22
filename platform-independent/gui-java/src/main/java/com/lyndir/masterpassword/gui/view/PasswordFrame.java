@@ -26,11 +26,12 @@ import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
 import com.google.common.primitives.UnsignedInteger;
 import com.google.common.util.concurrent.*;
+import com.lyndir.lhunath.opal.system.util.ObjectUtils;
 import com.lyndir.masterpassword.*;
 import com.lyndir.masterpassword.gui.Res;
-import com.lyndir.masterpassword.gui.model.*;
 import com.lyndir.masterpassword.gui.util.Components;
 import com.lyndir.masterpassword.gui.util.UnsignedIntegerModel;
+import com.lyndir.masterpassword.model.*;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.*;
@@ -44,28 +45,28 @@ import javax.swing.event.*;
 /**
  * @author lhunath, 2014-06-08
  */
-public class PasswordFrame extends JFrame implements DocumentListener {
+public abstract class PasswordFrame<U extends MPUser<S>, S extends MPSite> extends JFrame implements DocumentListener {
 
     @SuppressWarnings("FieldCanBeLocal")
-    private final Components.GradientPanel     root;
-    private final JTextField                   siteNameField;
-    private final JButton                      siteActionButton;
-    private final JComboBox<MasterKey.Version> siteVersionField;
-    private final JSpinner                     siteCounterField;
-    private final UnsignedIntegerModel         siteCounterModel;
-    private final JComboBox<MPResultType>      resultTypeField;
-    private final JPasswordField               passwordField;
-    private final JLabel                       tipLabel;
-    private final JCheckBox                    maskPasswordField;
-    private final char                         passwordEchoChar;
-    private final Font                         passwordEchoFont;
-    private final User                         user;
+    private final Components.GradientPanel       root;
+    private final JTextField                     siteNameField;
+    private final JButton                        siteActionButton;
+    private final JComboBox<MPMasterKey.Version> siteVersionField;
+    private final JSpinner                       siteCounterField;
+    private final UnsignedIntegerModel           siteCounterModel;
+    private final JComboBox<MPResultType>        resultTypeField;
+    private final JPasswordField                 passwordField;
+    private final JLabel                         tipLabel;
+    private final JCheckBox                      maskPasswordField;
+    private final char                           passwordEchoChar;
+    private final Font                           passwordEchoFont;
+    private final U                              user;
 
     @Nullable
-    private Site    currentSite;
+    private S       currentSite;
     private boolean updatingUI;
 
-    public PasswordFrame(final User user) {
+    public PasswordFrame(final U user) {
         super( "Master Password" );
         this.user = user;
 
@@ -122,7 +123,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
             public void actionPerformed(final ActionEvent e) {
                 if (currentSite == null)
                     return;
-                if (currentSite instanceof ModelSite)
+                if (currentSite instanceof MPFileSite)
                     PasswordFrame.this.user.deleteSite( currentSite );
                 else
                     PasswordFrame.this.user.addSite( currentSite );
@@ -140,7 +141,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         JComponent siteSettings = Components.boxLayout( BoxLayout.LINE_AXIS,                                                  //
                                                         resultTypeField = Components.comboBox( types ),                         //
                                                         Components.stud(),                                                    //
-                                                        siteVersionField = Components.comboBox( MasterKey.Version.values() ), //
+                                                        siteVersionField = Components.comboBox( MPMasterKey.Version.values() ), //
                                                         Components.stud(),                                                    //
                                                         siteCounterField = Components.spinner( siteCounterModel ) );
         sitePanel.add( siteSettings );
@@ -155,7 +156,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
 
         siteVersionField.setFont( Res.valueFont().deriveFont( 12f ) );
         siteVersionField.setAlignmentX( RIGHT_ALIGNMENT );
-        siteVersionField.setSelectedItem( MasterKey.Version.CURRENT );
+        siteVersionField.setSelectedItem( MPMasterKey.Version.CURRENT );
         siteVersionField.addItemListener( new ItemListener() {
             @Override
             public void itemStateChanged(final ItemEvent e) {
@@ -226,27 +227,27 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         final String siteNameQuery = siteNameField.getText();
         if (updatingUI)
             return Futures.immediateCancelledFuture();
-        if ((siteNameQuery == null) || siteNameQuery.isEmpty() || !user.isKeyAvailable()) {
+        if ((siteNameQuery == null) || siteNameQuery.isEmpty() || !user.isMasterKeyAvailable()) {
             siteActionButton.setVisible( false );
             tipLabel.setText( null );
             passwordField.setText( null );
             return Futures.immediateCancelledFuture();
         }
 
-        MPResultType      resultType    = resultTypeField.getModel().getElementAt( resultTypeField.getSelectedIndex() );
-        MasterKey.Version siteVersion = siteVersionField.getItemAt( siteVersionField.getSelectedIndex() );
-        UnsignedInteger   siteCounter = siteCounterModel.getNumber();
+        MPResultType        resultType  = resultTypeField.getModel().getElementAt( resultTypeField.getSelectedIndex() );
+        MPMasterKey.Version siteVersion = siteVersionField.getItemAt( siteVersionField.getSelectedIndex() );
+        UnsignedInteger     siteCounter = siteCounterModel.getNumber();
 
-        Iterable<Site> siteResults = user.findSitesByName( siteNameQuery );
+        Iterable<S> siteResults = user.findSites( siteNameQuery );
         if (!allowNameCompletion)
-            siteResults = FluentIterable.from( siteResults ).filter( new Predicate<Site>() {
+            siteResults = FluentIterable.from( siteResults ).filter( new Predicate<S>() {
                 @Override
-                public boolean apply(@Nullable final Site siteResult) {
+                public boolean apply(@Nullable final S siteResult) {
                     return (siteResult != null) && siteNameQuery.equals( siteResult.getSiteName() );
                 }
             } );
-        final Site site = ifNotNullElse( Iterables.getFirst( siteResults, null ),
-                                         new IncognitoSite( siteNameQuery, siteCounter, resultType, siteVersion ) );
+        final S site = ifNotNullElse( Iterables.getFirst( siteResults, null ),
+                                      createSite( user, siteNameQuery, siteCounter, resultType, siteVersion ) );
         if ((currentSite != null) && currentSite.getSiteName().equals( site.getSiteName() )) {
             site.setResultType( resultType );
             site.setAlgorithmVersion( siteVersion );
@@ -257,8 +258,9 @@ public class PasswordFrame extends JFrame implements DocumentListener {
             @Override
             public String call()
                     throws Exception {
-                return user.getKey()
-                           .siteResult( site.getSiteName(), site.getSiteCounter(), MPKeyPurpose.Authentication, null, site.getResultType(), null, site.getAlgorithmVersion() );
+                return user.getMasterKey()
+                           .siteResult( site.getSiteName(), site.getSiteCounter(), MPKeyPurpose.Authentication, null, site.getResultType(),
+                                        null, site.getAlgorithmVersion() );
             }
         } );
         Futures.addCallback( passwordFuture, new FutureCallback<String>() {
@@ -269,8 +271,8 @@ public class PasswordFrame extends JFrame implements DocumentListener {
                     public void run() {
                         updatingUI = true;
                         currentSite = site;
-                        siteActionButton.setVisible( user instanceof ModelUser );
-                        if (currentSite instanceof ModelSite)
+                        siteActionButton.setVisible( user instanceof MPFileUser );
+                        if (currentSite instanceof MPFileSite)
                             siteActionButton.setText( "Delete Site" );
                         else
                             siteActionButton.setText( "Add Site" );
@@ -295,6 +297,9 @@ public class PasswordFrame extends JFrame implements DocumentListener {
 
         return passwordFuture;
     }
+
+    protected abstract S createSite(U user, String siteName, UnsignedInteger siteCounter, MPResultType resultType,
+                                    MPMasterKey.Version algorithmVersion);
 
     @Override
     public void insertUpdate(final DocumentEvent e) {

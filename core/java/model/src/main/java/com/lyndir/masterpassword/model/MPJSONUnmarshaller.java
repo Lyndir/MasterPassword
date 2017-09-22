@@ -30,7 +30,7 @@ public class MPJSONUnmarshaller implements MPUnmarshaller {
 
     @Nonnull
     @Override
-    public MPUser unmarshall(@Nonnull final File file)
+    public MPFileUser unmarshall(@Nonnull final File file)
             throws IOException {
         // TODO
         return null;
@@ -38,7 +38,7 @@ public class MPJSONUnmarshaller implements MPUnmarshaller {
 
     @Nonnull
     @Override
-    public MPUser unmarshall(@Nonnull final String content) {
+    public MPFileUser unmarshall(@Nonnull final String content) {
         // TODO
         return null;
     }

@@ -23,16 +23,16 @@ import javax.annotation.Nullable;
 
 
 /**
- * @see MasterKey.Version#V1
+ * @see MPMasterKey.Version#V1
  *
  * @author lhunath, 2014-08-30
  */
-public class MasterKeyV1 extends MasterKeyV0 {
+public class MPAlgorithmV1 extends MPAlgorithmV0 {
 
     @Override
-    public MasterKey.Version getAlgorithmVersion() {
+    public MPMasterKey.Version getAlgorithmVersion() {
 
-        return MasterKey.Version.V1;
+        return MPMasterKey.Version.V1;
     }
 
     @Override

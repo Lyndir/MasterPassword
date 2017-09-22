@@ -18,7 +18,7 @@
 
 package com.lyndir.masterpassword.model;
 
-import com.lyndir.masterpassword.MasterKey;
+import com.lyndir.masterpassword.MPMasterKey;
 
 
 /**
@@ -27,7 +27,7 @@ import com.lyndir.masterpassword.MasterKey;
 public class MPJSONMarshaller implements MPMarshaller {
 
     @Override
-    public String marshall(final MPUser user, final MasterKey masterKey, final ContentMode contentMode) {
+    public String marshall(final MPFileUser user, final MPMasterKey masterKey, final ContentMode contentMode) {
         // TODO
         return null;
     }

@@ -24,20 +24,22 @@ import com.google.common.base.*;
 import com.google.common.collect.*;
 import com.google.common.io.CharSink;
 import com.lyndir.lhunath.opal.system.logging.Logger;
-import com.lyndir.masterpassword.MPConstant;
+import com.lyndir.masterpassword.*;
 import java.io.*;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 
 /**
  * Manages user data stored in user-specific {@code .mpsites} files under {@code .mpw.d}.
+ *
  * @author lhunath, 14-12-07
  */
-public class MPUserFileManager extends MPUserManager {
+public class MPFileUserManager extends MPUserManager {
 
     @SuppressWarnings("UnusedDeclaration")
-    private static final Logger logger = Logger.get( MPUserFileManager.class );
-    private static final MPUserFileManager instance;
+    private static final Logger logger = Logger.get( MPFileUserManager.class );
+    private static final MPFileUserManager instance;
 
     static {
         String rcDir = System.getenv( MPConstant.env_rcDir );
@@ -49,31 +51,31 @@ public class MPUserFileManager extends MPUserManager {
 
     private final File userFilesDirectory;
 
-    public static MPUserFileManager get() {
+    public static MPFileUserManager get() {
         MPUserManager.instance = instance;
         return instance;
     }
 
-    public static MPUserFileManager create(final File userFilesDirectory) {
-        return new MPUserFileManager( userFilesDirectory );
+    public static MPFileUserManager create(final File userFilesDirectory) {
+        return new MPFileUserManager( userFilesDirectory );
     }
 
-    protected MPUserFileManager(final File userFilesDirectory) {
+    protected MPFileUserManager(final File userFilesDirectory) {
 
         super( unmarshallUsers( userFilesDirectory ) );
         this.userFilesDirectory = userFilesDirectory;
     }
 
-    private static Iterable<MPUser> unmarshallUsers(final File userFilesDirectory) {
+    private static Iterable<MPFileUser> unmarshallUsers(final File userFilesDirectory) {
         if (!userFilesDirectory.mkdirs() && !userFilesDirectory.isDirectory()) {
             logger.err( "Couldn't create directory for user files: %s", userFilesDirectory );
             return ImmutableList.of();
         }
 
-        return FluentIterable.from( listUserFiles( userFilesDirectory ) ).transform( new Function<File, MPUser>() {
+        return FluentIterable.from( listUserFiles( userFilesDirectory ) ).transform( new Function<File, MPFileUser>() {
             @Nullable
             @Override
-            public MPUser apply(@Nullable final File file) {
+            public MPFileUser apply(@Nullable final File file) {
                 try {
                     return new MPFlatUnmarshaller().unmarshall( Preconditions.checkNotNull( file ) );
                 }
@@ -95,42 +97,37 @@ public class MPUserFileManager extends MPUserManager {
     }
 
     @Override
-    public void addUser(final MPUser user) {
-        super.addUser( user );
-        save();
-    }
-
-    @Override
-    public void deleteUser(final MPUser user) {
+    public void deleteUser(final MPFileUser user) {
         super.deleteUser( user );
-        save();
+
+        // Remove deleted users.
+        File userFile = getUserFile( user );
+        if (userFile.exists() && !userFile.delete())
+            logger.err( "Couldn't delete file: %s", userFile );
     }
 
     /**
      * Write the current user state to disk.
      */
-    public void save() {
-        // Save existing users.
-        for (final MPUser user : getUsers())
-            try {
-                new CharSink() {
-                    @Override
-                    public Writer openStream()
-                            throws IOException {
-                        File mpsitesFile = new File( userFilesDirectory, user.getFullName() + ".mpsites" );
-                        return new OutputStreamWriter( new FileOutputStream( mpsitesFile ), Charsets.UTF_8 );
-                    }
-                }.write( new MPFlatMarshaller().marshall( user, null/*TODO: masterKey*/, MPMarshaller.ContentMode.PROTECTED ) );
-            }
-            catch (final IOException e) {
-                logger.err( e, "Unable to save sites for user: %s", user );
-            }
+    public void save(final MPFileUser user, final MPMasterKey masterKey)
+            throws MPInvalidatedException {
+        try {
+            new CharSink() {
+                @Override
+                public Writer openStream()
+                        throws IOException {
+                    return new OutputStreamWriter( new FileOutputStream( getUserFile( user ) ), Charsets.UTF_8 );
+                }
+            }.write( new MPFlatMarshaller().marshall( user, masterKey, MPMarshaller.ContentMode.PROTECTED ) );
+        }
+        catch (final IOException e) {
+            logger.err( e, "Unable to save sites for user: %s", user );
+        }
+    }
 
-        // Remove deleted users.
-        for (final File userFile : listUserFiles( userFilesDirectory ))
-            if (getUserNamed( userFile.getName().replaceFirst( "\\.mpsites$", "" ) ) == null)
-                if (!userFile.delete())
-                    logger.err( "Couldn't delete file: %s", userFile );
+    @Nonnull
+    private File getUserFile(final MPFileUser user) {
+        return new File( userFilesDirectory, user.getFullName() + ".mpsites" );
     }
 
     /**

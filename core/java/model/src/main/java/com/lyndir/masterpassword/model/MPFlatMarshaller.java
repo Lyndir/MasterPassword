@@ -21,8 +21,7 @@ package com.lyndir.masterpassword.model;
 import static com.lyndir.lhunath.opal.system.util.ObjectUtils.ifNotNullElse;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
 
-import com.lyndir.masterpassword.MPConstant;
-import com.lyndir.masterpassword.MasterKey;
+import com.lyndir.masterpassword.*;
 import org.joda.time.Instant;
 
 
@@ -34,7 +33,8 @@ public class MPFlatMarshaller implements MPMarshaller {
     private static final int FORMAT = 1;
 
     @Override
-    public String marshall(final MPUser user, final MasterKey masterKey, final ContentMode contentMode) {
+    public String marshall(final MPFileUser user, final MPMasterKey masterKey, final ContentMode contentMode)
+            throws MPInvalidatedException {
         StringBuilder content = new StringBuilder();
         content.append( "# Master Password site export\n" );
         content.append( "#     " ).append( contentMode.description() ).append( '\n' );
@@ -46,7 +46,7 @@ public class MPFlatMarshaller implements MPMarshaller {
         content.append( "# Full Name: " ).append( user.getFullName() ).append( '\n' );
         content.append( "# Avatar: " ).append( user.getAvatar() ).append( '\n' );
         content.append( "# Key ID: " ).append( user.exportKeyID() ).append( '\n' );
-        content.append( "# Algorithm: " ).append( MasterKey.Version.CURRENT.toInt() ).append( '\n' );
+        content.append( "# Algorithm: " ).append( MPMasterKey.Version.CURRENT.toInt() ).append( '\n' );
         content.append( "# Default Type: " ).append( user.getDefaultType().getType() ).append( '\n' );
         content.append( "# Passwords: " ).append( contentMode.name() ).append( '\n' );
         content.append( "##\n" );
@@ -54,7 +54,7 @@ public class MPFlatMarshaller implements MPMarshaller {
         content.append( "#               Last     Times  Password                      Login\t                     Site\tSite\n" );
         content.append( "#               used      used      type                       name\t                     name\tpassword\n" );
 
-        for (final MPSite site : user.getSites()) {
+        for (final MPFileSite site : user.getSites()) {
             String loginName = site.getLoginContent();
             String password = site.getSiteContent();
             if (!contentMode.isRedacted()) {

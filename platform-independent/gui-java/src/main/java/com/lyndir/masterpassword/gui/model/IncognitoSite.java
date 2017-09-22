@@ -20,21 +20,22 @@ package com.lyndir.masterpassword.gui.model;
 
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.masterpassword.MPResultType;
-import com.lyndir.masterpassword.MasterKey;
+import com.lyndir.masterpassword.MPMasterKey;
+import com.lyndir.masterpassword.model.MPSite;
 
 
 /**
  * @author lhunath, 14-12-16
  */
-public class IncognitoSite extends Site {
+public class IncognitoSite extends MPSite {
 
-    private String            siteName;
-    private UnsignedInteger   siteCounter;
-    private MPResultType      resultType;
-    private MasterKey.Version algorithmVersion;
+    private String              siteName;
+    private UnsignedInteger     siteCounter;
+    private MPResultType        resultType;
+    private MPMasterKey.Version algorithmVersion;
 
     public IncognitoSite(final String siteName, final UnsignedInteger siteCounter, final MPResultType resultType,
-                         final MasterKey.Version algorithmVersion) {
+                         final MPMasterKey.Version algorithmVersion) {
         this.siteName = siteName;
         this.siteCounter = siteCounter;
         this.resultType = resultType;
@@ -62,12 +63,12 @@ public class IncognitoSite extends Site {
     }
 
     @Override
-    public MasterKey.Version getAlgorithmVersion() {
+    public MPMasterKey.Version getAlgorithmVersion() {
         return algorithmVersion;
     }
 
     @Override
-    public void setAlgorithmVersion(final MasterKey.Version algorithmVersion) {
+    public void setAlgorithmVersion(final MPMasterKey.Version algorithmVersion) {
         this.algorithmVersion = algorithmVersion;
     }
 

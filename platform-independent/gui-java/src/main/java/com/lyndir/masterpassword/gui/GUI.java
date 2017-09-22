@@ -24,7 +24,6 @@ import com.google.common.io.*;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.TypeUtils;
 
-import com.lyndir.masterpassword.gui.model.User;
 import com.lyndir.masterpassword.gui.view.PasswordFrame;
 import com.lyndir.masterpassword.gui.view.UnlockFrame;
 import java.io.*;
@@ -46,7 +45,7 @@ public class GUI implements UnlockFrame.SignInCallback {
     private static final Logger logger = Logger.get( GUI.class );
 
     private final UnlockFrame unlockFrame = new UnlockFrame( this );
-    private PasswordFrame passwordFrame;
+    private PasswordFrame<?, ?> passwordFrame;
 
     public static void main(final String... args) {
 
@@ -104,12 +103,8 @@ public class GUI implements UnlockFrame.SignInCallback {
     }
 
     @Override
-    public void signedIn(final User user) {
-        passwordFrame = newPasswordFrame( user );
+    public void signedIn(final PasswordFrame<?, ?> passwordFrame) {
+        this.passwordFrame = passwordFrame;
         open();
-    }
-
-    protected PasswordFrame newPasswordFrame(final User user) {
-        return new PasswordFrame( user );
     }
 }

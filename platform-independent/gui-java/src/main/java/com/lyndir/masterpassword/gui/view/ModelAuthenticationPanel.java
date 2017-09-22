@@ -20,19 +20,17 @@ package com.lyndir.masterpassword.gui.view;
 
 import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
 
-import com.google.common.base.Function;
-import com.google.common.base.Preconditions;
 import com.google.common.collect.*;
+import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.logging.Logger;
+import com.lyndir.masterpassword.MPMasterKey;
+import com.lyndir.masterpassword.MPResultType;
 import com.lyndir.masterpassword.gui.Res;
-import com.lyndir.masterpassword.gui.model.ModelUser;
-import com.lyndir.masterpassword.model.MPUser;
-import com.lyndir.masterpassword.model.MPUserFileManager;
+import com.lyndir.masterpassword.model.*;
 import com.lyndir.masterpassword.gui.util.Components;
 import java.awt.*;
 import java.awt.event.*;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -47,7 +45,7 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
     @SuppressWarnings("UnusedDeclaration")
     private static final Logger logger = Logger.get( ModelAuthenticationPanel.class );
 
-    private final JComboBox<ModelUser> userField;
+    private final JComboBox<MPFileUser> userField;
     private final JLabel               masterPasswordLabel;
     private final JPasswordField       masterPasswordField;
 
@@ -59,7 +57,7 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
         avatarLabel.addMouseListener( new MouseAdapter() {
             @Override
             public void mouseClicked(final MouseEvent e) {
-                ModelUser selectedUser = getSelectedUser();
+                MPFileUser selectedUser = getSelectedUser();
                 if (selectedUser != null) {
                     selectedUser.setAvatar( selectedUser.getAvatar() + 1 );
                     updateUser( false );
@@ -104,10 +102,10 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
 
     @Override
     protected void updateUser(boolean repack) {
-        ModelUser selectedUser = getSelectedUser();
+        MPFileUser selectedUser = getSelectedUser();
         if (selectedUser != null) {
             avatarLabel.setIcon( Res.avatar( selectedUser.getAvatar() ) );
-            boolean showPasswordField = !selectedUser.keySaved();
+            boolean showPasswordField = !selectedUser.isMasterKeyAvailable(); // TODO: is this the same as keySaved()?
             if (masterPasswordField.isVisible() != showPasswordField) {
                 masterPasswordLabel.setVisible( showPasswordField );
                 masterPasswordField.setVisible( showPasswordField );
@@ -119,7 +117,7 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
     }
 
     @Override
-    protected ModelUser getSelectedUser() {
+    protected MPFileUser getSelectedUser() {
         int selectedIndex = userField.getSelectedIndex();
         if (selectedIndex < 0)
             return null;
@@ -143,7 +141,7 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
                         String fullName = JOptionPane.showInputDialog( ModelAuthenticationPanel.this, //
                                                                        "Enter your full name, ensuring it is correctly spelled and capitalized:",
                                                                        "New User", JOptionPane.QUESTION_MESSAGE );
-                        MPUserFileManager.get().addUser( new MPUser( fullName ) );
+                        MPFileUserManager.get().addUser( new MPFileUser( fullName ) );
                         userField.setModel( new DefaultComboBoxModel<>( readConfigUsers() ) );
                         updateUser( true );
                     }
@@ -155,7 +153,7 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
                 addActionListener( new ActionListener() {
                     @Override
                     public void actionPerformed(final ActionEvent e) {
-                        ModelUser deleteUser = getSelectedUser();
+                        MPFileUser deleteUser = getSelectedUser();
                         if (deleteUser == null)
                             return;
 
@@ -165,7 +163,7 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
                                                        "Delete User", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE ) == JOptionPane.CANCEL_OPTION)
                             return;
 
-                        MPUserFileManager.get().deleteUser( deleteUser.getModel() );
+                        MPFileUserManager.get().deleteUser( deleteUser );
                         userField.setModel( new DefaultComboBoxModel<>( readConfigUsers() ) );
                         updateUser( true );
                     }
@@ -179,7 +177,7 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
                     public void actionPerformed(final ActionEvent e) {
                         JOptionPane.showMessageDialog( ModelAuthenticationPanel.this, //
                                                        strf( "Reads users and sites from the directory at:\n%s",
-                                                             MPUserFileManager.get().getPath().getAbsolutePath() ), //
+                                                             MPFileUserManager.get().getPath().getAbsolutePath() ), //
                                                        "Help", JOptionPane.INFORMATION_MESSAGE );
                     }
                 } );
@@ -193,14 +191,19 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
         masterPasswordField.setText( "" );
     }
 
-    private static ModelUser[] readConfigUsers() {
-        return FluentIterable.from( MPUserFileManager.get().getUsers() ).transform( new Function<MPUser, ModelUser>() {
-            @Nullable
+    @Override
+    public PasswordFrame<MPFileUser, MPFileSite> newPasswordFrame() {
+        return new PasswordFrame<MPFileUser, MPFileSite>(getSelectedUser()) {
             @Override
-            public ModelUser apply(@Nullable final MPUser model) {
-                return new ModelUser( Preconditions.checkNotNull( model ) );
+            protected MPFileSite createSite(final MPFileUser user, final String siteName, final UnsignedInteger siteCounter, final MPResultType resultType,
+                                            final MPMasterKey.Version algorithmVersion) {
+                return new MPFileSite( user, siteName, siteCounter, resultType, algorithmVersion );
             }
-        } ).toArray( ModelUser.class );
+        };
+    }
+
+    private static MPFileUser[] readConfigUsers() {
+        return MPFileUserManager.get().getUsers().toArray( new MPFileUser[0] );
     }
 
     @Override

@@ -22,17 +22,15 @@ import static org.testng.Assert.*;
 
 import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.lhunath.opal.system.logging.Logger;
-import com.lyndir.lhunath.opal.system.util.NNFunctionNN;
-import javax.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 
-public class MasterKeyTest {
+public class MPMasterKeyTest {
 
     @SuppressWarnings("UnusedDeclaration")
-    private static final Logger logger = Logger.get( MasterKeyTest.class );
+    private static final Logger logger = Logger.get( MPMasterKeyTest.class );
 
     @NonNls
     private MPTestSuite testSuite;
@@ -48,11 +46,11 @@ public class MasterKeyTest {
     public void testEncode()
             throws Exception {
 
-        testSuite.forEach( "testEncode", new NNFunctionNN<MPTests.Case, Boolean>() {
-            @Nonnull
+        testSuite.forEach( "testEncode", new MPTestSuite.TestCase() {
             @Override
-            public Boolean apply(@Nonnull final MPTests.Case testCase) {
-                MasterKey masterKey = new MasterKey( testCase.getFullName(), testCase.getMasterPassword() );
+            public boolean run(final MPTests.Case testCase)
+                    throws Exception {
+                MPMasterKey masterKey = new MPMasterKey( testCase.getFullName(), testCase.getMasterPassword() );
 
                 assertEquals(
                         masterKey.siteResult( testCase.getSiteName(), testCase.getSiteCounter(), testCase.getKeyPurpose(),
@@ -71,7 +69,7 @@ public class MasterKeyTest {
 
         MPTests.Case defaultCase = testSuite.getTests().getDefaultCase();
 
-        assertEquals( new MasterKey( defaultCase.getFullName(), defaultCase.getMasterPassword() ).getFullName(),
+        assertEquals( new MPMasterKey( defaultCase.getFullName(), defaultCase.getMasterPassword() ).getFullName(),
                       defaultCase.getFullName(), "[testGetUserName] Failed test case: " + defaultCase );
     }
 
@@ -79,11 +77,11 @@ public class MasterKeyTest {
     public void testGetKeyID()
             throws Exception {
 
-        testSuite.forEach( "testGetKeyID", new NNFunctionNN<MPTests.Case, Boolean>() {
-            @Nonnull
+        testSuite.forEach( "testGetKeyID", new MPTestSuite.TestCase() {
             @Override
-            public Boolean apply(@Nonnull final MPTests.Case testCase) {
-                MasterKey masterKey = new MasterKey( testCase.getFullName(), testCase.getMasterPassword() );
+            public boolean run(final MPTests.Case testCase)
+                    throws Exception {
+                MPMasterKey masterKey = new MPMasterKey( testCase.getFullName(), testCase.getMasterPassword() );
 
                 assertEquals( CodeUtils.encodeHex( masterKey.getKeyID( testCase.getAlgorithm() ) ),
                               testCase.getKeyID(), "[testGetKeyID] Failed test case: " + testCase );

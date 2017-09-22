@@ -18,155 +18,69 @@
 
 package com.lyndir.masterpassword.model;
 
-import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
+import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Sets;
+import com.google.common.base.Preconditions;
 import com.lyndir.lhunath.opal.system.CodeUtils;
-import com.lyndir.masterpassword.MPResultType;
-import com.lyndir.masterpassword.MasterKey;
+import com.lyndir.masterpassword.MPInvalidatedException;
+import com.lyndir.masterpassword.MPMasterKey;
 import java.util.*;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import org.joda.time.*;
 
 
 /**
- * @author lhunath, 14-12-07
+ * @author lhunath, 2014-06-08
  */
-public class MPUser implements Comparable<MPUser> {
-
-    private final String fullName;
-    private final Collection<MPSite> sites = Sets.newHashSet();
+public abstract class MPUser<S extends MPSite> {
 
     @Nullable
-    private byte[]            keyID;
-    private MasterKey.Version algorithmVersion;
+    protected MPMasterKey key;
 
-    private int             avatar;
-    private MPResultType    defaultType;
-    private ReadableInstant lastUsed;
+    public abstract String getFullName();
 
-    public MPUser(final String fullName) {
-        this( fullName, null, MasterKey.Version.CURRENT );
+    public boolean isMasterKeyAvailable() {
+        return key != null;
     }
 
-    public MPUser(final String fullName, @Nullable final byte[] keyID, final MasterKey.Version algorithmVersion) {
-        this( fullName, keyID, algorithmVersion, 0, MPResultType.DEFAULT, new Instant() );
-    }
-
-    public MPUser(final String fullName, @Nullable final byte[] keyID, final MasterKey.Version algorithmVersion, final int avatar,
-                  final MPResultType defaultType, final ReadableInstant lastUsed) {
-        this.fullName = fullName;
-        this.keyID = (keyID == null)? null: keyID.clone();
-        this.algorithmVersion = algorithmVersion;
-        this.avatar = avatar;
-        this.defaultType = defaultType;
-        this.lastUsed = lastUsed;
-    }
-
-    public Collection<MPSiteResult> findSitesByName(final String query) {
-        ImmutableList.Builder<MPSiteResult> results = ImmutableList.builder();
-        for (final MPSite site : getSites())
-            if (site.getSiteName().startsWith( query ))
-                results.add( new MPSiteResult( site ) );
-
-        return results.build();
-    }
-
-    public void addSite(final MPSite site) {
-        sites.add( site );
-    }
-
-    public void deleteSite(final MPSite site) {
-        sites.remove( site );
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public boolean hasKeyID() {
-        return keyID != null;
-    }
-
-    public String exportKeyID() {
-        return CodeUtils.encodeHex( keyID );
-    }
-
-    /**
-     * Performs an authentication attempt against the keyID for this user.
-     *
-     * Note: If this user doesn't have a keyID set yet, authentication will always succeed and the key ID will be set as a result.
-     *
-     * @param masterPassword The password to authenticate with.
-     *
-     * @return The master key for the user if authentication was successful.
-     *
-     * @throws IncorrectMasterPasswordException If authentication fails due to the given master password not matching the user's keyID.
-     */
     @Nonnull
-    @SuppressWarnings("MethodCanBeVariableArityMethod")
-    public MasterKey authenticate(final char[] masterPassword)
-            throws IncorrectMasterPasswordException {
-        MasterKey masterKey = new MasterKey( getFullName(), masterPassword );
-        if ((keyID == null) || (keyID.length == 0))
-            keyID = masterKey.getKeyID( algorithmVersion );
-        else if (!Arrays.equals( masterKey.getKeyID( algorithmVersion ), keyID ))
-            throw new IncorrectMasterPasswordException( this );
-
-        return masterKey;
+    public MPMasterKey getMasterKey() {
+        return Preconditions.checkNotNull( key, "User is not authenticated: " + getFullName() );
     }
+
+    public String exportKeyID()
+            throws MPInvalidatedException {
+        return CodeUtils.encodeHex( getMasterKey().getKeyID( getAlgorithmVersion() ) );
+    }
+
+    public abstract MPMasterKey.Version getAlgorithmVersion();
 
     public int getAvatar() {
-        return avatar;
+        return 0;
     }
 
-    public void setAvatar(final int avatar) {
-        this.avatar = avatar;
-    }
+    public abstract void addSite(S site);
 
-    public MPResultType getDefaultType() {
-        return defaultType;
-    }
+    public abstract void deleteSite(S site);
 
-    public void setDefaultType(final MPResultType defaultType) {
-        this.defaultType = defaultType;
-    }
+    public abstract Collection<S> findSites(String query);
 
-    public ReadableInstant getLastUsed() {
-        return lastUsed;
-    }
+    @Nonnull
+    public abstract MPMasterKey authenticate(char[] masterPassword)
+            throws MPIncorrectMasterPasswordException;
 
-    public void updateLastUsed() {
-        lastUsed = new Instant();
-    }
-
-    public Iterable<MPSite> getSites() {
-        return sites;
+    @Override
+    public int hashCode() {
+        return Objects.hashCode( getFullName() );
     }
 
     @Override
     public boolean equals(final Object obj) {
-        return (this == obj) || ((obj instanceof MPUser) && Objects.equals( fullName, ((MPUser) obj).fullName ));
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode( fullName );
+        return (this == obj) || ((obj instanceof MPUser) && Objects.equals( getFullName(), ((MPUser<?>) obj).getFullName() ));
     }
 
     @Override
     public String toString() {
-        return strf( "{MPUser: %s}", fullName );
-    }
-
-    @Override
-    public int compareTo(final MPUser o) {
-        int comparison = lastUsed.compareTo( o.lastUsed );
-        if (comparison == 0)
-            comparison = fullName.compareTo( o.fullName );
-
-        return comparison;
+        return strf( "{%s: %s}", getClass().getSimpleName(), getFullName() );
     }
 }

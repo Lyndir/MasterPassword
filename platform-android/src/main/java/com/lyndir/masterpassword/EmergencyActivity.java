@@ -51,12 +51,12 @@ public class EmergencyActivity extends Activity {
     private static final int      PASSWORD_NOTIFICATION = 0;
     public static final int CLIPBOARD_CLEAR_DELAY = 20 /* s */ * MPConstant.MS_PER_S;
 
-    private final Preferences                      preferences    = Preferences.get( this );
-    private final ListeningExecutorService         executor       = MoreExecutors.listeningDecorator( Executors.newSingleThreadExecutor() );
-    private final ImmutableList<MPResultType>      allResultTypes = ImmutableList.copyOf( MPResultType.forClass( MPResultTypeClass.Template ) );
-    private final ImmutableList<MasterKey.Version> allVersions    = ImmutableList.copyOf( MasterKey.Version.values() );
+    private final Preferences                        preferences    = Preferences.get( this );
+    private final ListeningExecutorService           executor       = MoreExecutors.listeningDecorator( Executors.newSingleThreadExecutor() );
+    private final ImmutableList<MPResultType>        allResultTypes = ImmutableList.copyOf( MPResultType.forClass( MPResultTypeClass.Template ) );
+    private final ImmutableList<MPMasterKey.Version> allVersions    = ImmutableList.copyOf( MPMasterKey.Version.values() );
 
-    private MasterKey masterKey;
+    private MPMasterKey masterKey;
 
     @BindView(R.id.progressView)
     ProgressBar progressView;
@@ -154,7 +154,7 @@ public class EmergencyActivity extends Activity {
             @Override
             public void onClick(final View v) {
                 @SuppressWarnings("SuspiciousMethodCalls")
-                MasterKey.Version siteVersion =
+                MPMasterKey.Version siteVersion =
                         allVersions.get( (allVersions.indexOf( siteVersionButton.getTag() ) + 1) % allVersions.size() );
                 preferences.setDefaultVersion( siteVersion );
                 siteVersionButton.setTag( siteVersion );
@@ -221,7 +221,7 @@ public class EmergencyActivity extends Activity {
         MPResultType defaultResultType = preferences.getDefaultResultType();
         resultTypeButton.setTag( defaultResultType );
         resultTypeButton.setText( defaultResultType.getShortName() );
-        MasterKey.Version defaultVersion = preferences.getDefaultVersion();
+        MPMasterKey.Version defaultVersion = preferences.getDefaultVersion();
         siteVersionButton.setTag( defaultVersion );
         siteVersionButton.setText( defaultVersion.name() );
         siteCounterButton.setText( MessageFormat.format( "{0}", 1 ) );
@@ -275,15 +275,15 @@ public class EmergencyActivity extends Activity {
 
         sitePasswordField.setText( "" );
         progressView.setVisibility( View.VISIBLE );
-        masterKey = new MasterKey( fullName, masterPassword );
+        masterKey = new MPMasterKey( fullName, masterPassword );
         updateSitePassword();
     }
 
     private void updateSitePassword() {
-        final String          siteName = siteNameField.getText().toString();
-        final MPResultType    type     = (MPResultType) resultTypeButton.getTag();
-        final UnsignedInteger counter  = UnsignedInteger.valueOf( siteCounterButton.getText().toString() );
-        final MasterKey.Version version = (MasterKey.Version) siteVersionButton.getTag();
+        final String              siteName = siteNameField.getText().toString();
+        final MPResultType        type     = (MPResultType) resultTypeButton.getTag();
+        final UnsignedInteger     counter  = UnsignedInteger.valueOf( siteCounterButton.getText().toString() );
+        final MPMasterKey.Version version  = (MPMasterKey.Version) siteVersionButton.getTag();
 
         if ((masterKey == null) || siteName.isEmpty() || (type == null)) {
             sitePasswordField.setText( "" );
@@ -309,6 +309,10 @@ public class EmergencyActivity extends Activity {
                             progressView.setVisibility( View.INVISIBLE );
                         }
                     } );
+                }
+                catch (final MPInvalidatedException ignored) {
+                    sitePasswordField.setText( "" );
+                    progressView.setVisibility( View.INVISIBLE );
                 }
                 catch (final RuntimeException e) {
                     sitePasswordField.setText( "" );

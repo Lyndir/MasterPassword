@@ -28,9 +28,9 @@ import javax.annotation.Nonnull;
 public interface MPUnmarshaller {
 
     @Nonnull
-    MPUser unmarshall(@Nonnull File file)
+    MPFileUser unmarshall(@Nonnull File file)
             throws IOException;
 
     @Nonnull
-    MPUser unmarshall(@Nonnull String content);
+    MPFileUser unmarshall(@Nonnull String content);
 }

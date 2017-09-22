@@ -21,7 +21,7 @@ package com.lyndir.masterpassword.gui.platform.mac;
 import com.apple.eawt.*;
 import com.lyndir.masterpassword.gui.GUI;
 import com.lyndir.masterpassword.gui.view.PasswordFrame;
-import com.lyndir.masterpassword.gui.model.User;
+import com.lyndir.masterpassword.model.MPUser;
 
 import javax.swing.*;
 
@@ -51,13 +51,5 @@ public class AppleGUI extends GUI {
                 open();
             }
         } );
-    }
-
-    @Override
-    protected PasswordFrame newPasswordFrame(final User user) {
-        PasswordFrame frame = super.newPasswordFrame( user );
-        frame.setDefaultCloseOperation( WindowConstants.HIDE_ON_CLOSE );
-
-        return frame;
     }
 }

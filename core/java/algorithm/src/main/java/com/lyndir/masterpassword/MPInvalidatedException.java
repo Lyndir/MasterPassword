@@ -16,22 +16,10 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-package com.lyndir.masterpassword.model;
+package com.lyndir.masterpassword;
 
 /**
- * @author lhunath, 14-12-17
+ * @author lhunath, 2017-09-21
  */
-public class IncorrectMasterPasswordException extends Exception {
-
-    private final MPUser user;
-
-    public IncorrectMasterPasswordException(final MPUser user) {
-        super( "Incorrect master password for user: " + user.getFullName() );
-
-        this.user = user;
-    }
-
-    public MPUser getUser() {
-        return user;
-    }
+public class MPInvalidatedException extends Exception {
 }

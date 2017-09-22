@@ -24,170 +24,44 @@ import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.masterpassword.*;
 import java.util.Objects;
 import javax.annotation.Nullable;
-import org.joda.time.Instant;
 
 
 /**
- * @author lhunath, 14-12-05
+ * @author lhunath, 14-12-16
  */
-public class MPSite {
+public abstract class MPSite {
 
     public static final UnsignedInteger DEFAULT_COUNTER = UnsignedInteger.ONE;
 
-    private final MPUser            user;
-    private       String            siteName;
-    @Nullable
-    private       String            siteContent;
-    private       UnsignedInteger   siteCounter;
-    private       MPResultType      resultType;
-    private       MasterKey.Version algorithmVersion;
+    public abstract String getSiteName();
 
-    @Nullable
-    private String       loginContent;
-    @Nullable
-    private MPResultType loginType;
+    public abstract void setSiteName(String siteName);
 
-    @Nullable
-    private String  url;
-    private int     uses;
-    private Instant lastUsed;
+    public abstract UnsignedInteger getSiteCounter();
 
-    public MPSite(final MPUser user, final String siteName) {
-        this( user, siteName, DEFAULT_COUNTER, MPResultType.DEFAULT );
+    public abstract void setSiteCounter(UnsignedInteger siteCounter);
+
+    public abstract MPResultType getResultType();
+
+    public abstract void setResultType(MPResultType resultType);
+
+    public abstract MPMasterKey.Version getAlgorithmVersion();
+
+    public abstract void setAlgorithmVersion(MPMasterKey.Version algorithmVersion);
+
+    public String resultFor(final MPMasterKey masterKey, final MPKeyPurpose keyPurpose, @Nullable final String keyContext,
+                            @Nullable final String siteContent)
+            throws MPInvalidatedException {
+
+        return masterKey.siteResult(
+                getSiteName(), getSiteCounter(), keyPurpose, keyContext, getResultType(), siteContent, getAlgorithmVersion() );
     }
 
-    public MPSite(final MPUser user, final String siteName, final UnsignedInteger siteCounter, final MPResultType resultType) {
-        this.user = user;
-        this.siteName = siteName;
-        this.siteCounter = siteCounter;
-        this.resultType = resultType;
-        this.algorithmVersion = MasterKey.Version.CURRENT;
-        this.lastUsed = new Instant();
-    }
+    public String loginFor(final MPMasterKey masterKey, final MPResultType loginType, @Nullable final String loginContent)
+            throws MPInvalidatedException {
 
-    protected MPSite(final MPUser user, final String siteName, @Nullable final String siteContent, final UnsignedInteger siteCounter,
-                     final MPResultType resultType, final MasterKey.Version algorithmVersion,
-                     @Nullable final String loginContent, @Nullable final MPResultType loginType,
-                     @Nullable final String url, final int uses, final Instant lastUsed) {
-        this.user = user;
-        this.siteName = siteName;
-        this.siteContent = siteContent;
-        this.siteCounter = siteCounter;
-        this.resultType = resultType;
-        this.algorithmVersion = algorithmVersion;
-        this.loginContent = loginContent;
-        this.loginType = loginType;
-        this.url = url;
-        this.uses = uses;
-        this.lastUsed = lastUsed;
-    }
-
-    public String resultFor(final MasterKey masterKey) {
-        return resultFor( masterKey, MPKeyPurpose.Authentication, null );
-    }
-
-    public String resultFor(final MasterKey masterKey, final MPKeyPurpose purpose, @Nullable final String context) {
-        return masterKey.siteResult( siteName, siteCounter, purpose, context, resultType, siteContent, algorithmVersion );
-    }
-
-    public String loginFor(final MasterKey masterKey) {
-        if (loginType == null)
-            loginType = MPResultType.GeneratedName;
-
-        return masterKey.siteResult( siteName, DEFAULT_COUNTER, MPKeyPurpose.Identification, null, loginType, loginContent,
-                                     algorithmVersion );
-    }
-
-    public MPUser getUser() {
-        return user;
-    }
-
-    @Nullable
-    protected String exportContent() {
-        return null;
-    }
-
-    public MasterKey.Version getAlgorithmVersion() {
-        return algorithmVersion;
-    }
-
-    public void setAlgorithmVersion(final MasterKey.Version mpVersion) {
-        this.algorithmVersion = mpVersion;
-    }
-
-    public Instant getLastUsed() {
-        return lastUsed;
-    }
-
-    public void updateLastUsed() {
-        lastUsed = new Instant();
-        user.updateLastUsed();
-    }
-
-    public String getSiteName() {
-        return siteName;
-    }
-
-    public void setSiteName(final String siteName) {
-        this.siteName = siteName;
-    }
-
-    @Nullable
-    public String getSiteContent() {
-        return siteContent;
-    }
-
-    public MPResultType getResultType() {
-        return resultType;
-    }
-
-    public void setResultType(final MPResultType resultType) {
-        this.resultType = resultType;
-    }
-
-    public UnsignedInteger getSiteCounter() {
-        return siteCounter;
-    }
-
-    public void setSiteCounter(final UnsignedInteger siteCounter) {
-        this.siteCounter = siteCounter;
-    }
-
-    public int getUses() {
-        return uses;
-    }
-
-    public void setUses(final int uses) {
-        this.uses = uses;
-    }
-
-    @Nullable
-    public MPResultType getLoginType() {
-        return loginType;
-    }
-
-    @Nullable
-    public String getLoginContent() {
-        return loginContent;
-    }
-
-    public void setLoginName(final MasterKey masterKey, @Nullable final MPResultType loginType, @Nullable final String result) {
-        this.loginType = loginType;
-        if (this.loginType != null)
-            if (result == null)
-                this.loginContent = null;
-            else
-                this.loginContent = masterKey.siteState(
-                        siteName, DEFAULT_COUNTER, MPKeyPurpose.Identification, null, this.loginType, result, algorithmVersion );
-    }
-
-    @Nullable
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(@Nullable final String url) {
-        this.url = url;
+        return masterKey.siteResult(
+                getSiteName(), DEFAULT_COUNTER, MPKeyPurpose.Identification, null, loginType, loginContent, getAlgorithmVersion() );
     }
 
     @Override
@@ -202,6 +76,6 @@ public class MPSite {
 
     @Override
     public String toString() {
-        return strf( "{MPSite: %s}", getSiteName() );
+        return strf( "{%s: %s}", getClass().getSimpleName(), getSiteName() );
     }
 }

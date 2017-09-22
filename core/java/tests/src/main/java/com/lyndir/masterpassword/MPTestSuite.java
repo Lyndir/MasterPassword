@@ -23,12 +23,10 @@ import com.google.common.collect.Lists;
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.ConversionUtils;
-import com.lyndir.lhunath.opal.system.util.NNFunctionNN;
 import java.io.IOException;
 import java.util.Deque;
 import java.util.List;
 import java.util.concurrent.Callable;
-import javax.annotation.Nonnull;
 import javax.xml.parsers.*;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -38,7 +36,7 @@ import org.xml.sax.ext.DefaultHandler2;
 /**
  * @author lhunath, 2015-12-22
  */
-@SuppressWarnings("HardCodedStringLiteral")
+@SuppressWarnings({ "HardCodedStringLiteral", "ProhibitedExceptionDeclared" })
 public class MPTestSuite implements Callable<Boolean> {
 
     @SuppressWarnings("UnusedDeclaration")
@@ -134,7 +132,8 @@ public class MPTestSuite implements Callable<Boolean> {
         return tests;
     }
 
-    public boolean forEach(final String testName, final NNFunctionNN<MPTests.Case, Boolean> testFunction) {
+    public boolean forEach(final String testName, final TestCase testFunction)
+            throws Exception {
         List<MPTests.Case> cases = tests.getCases();
         for (int c = 0; c < cases.size(); c++) {
             MPTests.Case testCase = cases.get( c );
@@ -144,7 +143,7 @@ public class MPTestSuite implements Callable<Boolean> {
             progress( Logger.Target.INFO, c, cases.size(), //
                       "[%s] on %s...", testName, testCase.getIdentifier() );
 
-            if (!testFunction.apply( testCase )) {
+            if (!testFunction.run( testCase )) {
                 progress( Logger.Target.ERROR, cases.size(), cases.size(), //
                           "[%s] on %s: FAILED!", testName, testCase.getIdentifier() );
 
@@ -168,11 +167,11 @@ public class MPTestSuite implements Callable<Boolean> {
     @Override
     public Boolean call()
             throws Exception {
-        return forEach( "mpw", new NNFunctionNN<MPTests.Case, Boolean>() {
-            @Nonnull
+        return forEach( "mpw", new TestCase() {
             @Override
-            public Boolean apply(@Nonnull final MPTests.Case testCase) {
-                MasterKey masterKey = new MasterKey( testCase.getFullName(), testCase.getMasterPassword() );
+            public boolean run(final MPTests.Case testCase)
+                    throws Exception {
+                MPMasterKey masterKey = new MPMasterKey( testCase.getFullName(), testCase.getMasterPassword() );
                 String sitePassword = masterKey.siteResult( testCase.getSiteName(), testCase.getSiteCounter(), testCase.getKeyPurpose(),
                                                             testCase.getKeyContext(), testCase.getResultType(),
                                                             null, testCase.getAlgorithm() );
@@ -195,5 +194,12 @@ public class MPTestSuite implements Callable<Boolean> {
     public interface Listener {
 
         void progress(int current, int max, String messageFormat, Object... args);
+    }
+
+
+    public interface TestCase {
+
+        boolean run(MPTests.Case testCase)
+                throws Exception;
     }
 }

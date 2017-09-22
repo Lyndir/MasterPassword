@@ -18,9 +18,12 @@
 
 package com.lyndir.masterpassword.gui.view;
 
+import com.google.common.primitives.UnsignedInteger;
+import com.lyndir.masterpassword.MPMasterKey;
+import com.lyndir.masterpassword.MPResultType;
 import com.lyndir.masterpassword.gui.Res;
+import com.lyndir.masterpassword.gui.model.IncognitoSite;
 import com.lyndir.masterpassword.gui.model.IncognitoUser;
-import com.lyndir.masterpassword.gui.model.User;
 import com.lyndir.masterpassword.gui.util.Components;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -34,7 +37,8 @@ import javax.swing.event.DocumentListener;
 /**
  * @author lhunath, 2014-06-11
  */
-public class IncognitoAuthenticationPanel extends AuthenticationPanel implements DocumentListener, ActionListener {
+@SuppressWarnings({ "serial", "MagicNumber" })
+public class IncognitoAuthenticationPanel extends AuthenticationPanel<IncognitoUser> implements DocumentListener, ActionListener {
 
     private final JTextField     fullNameField;
     private final JPasswordField masterPasswordField;
@@ -76,7 +80,19 @@ public class IncognitoAuthenticationPanel extends AuthenticationPanel implements
     }
 
     @Override
-    protected User getSelectedUser() {
+    public PasswordFrame<IncognitoUser, ?> newPasswordFrame() {
+        return new PasswordFrame<IncognitoUser, IncognitoSite>(getSelectedUser()) {
+            @Override
+            protected IncognitoSite createSite(final IncognitoUser user, final String siteName, final UnsignedInteger siteCounter,
+                                               final MPResultType resultType,
+                                               final MPMasterKey.Version algorithmVersion) {
+                return new IncognitoSite( siteName, siteCounter, resultType, algorithmVersion );
+            }
+        };
+    }
+
+    @Override
+    protected IncognitoUser getSelectedUser() {
         return new IncognitoUser( fullNameField.getText() );
     }
 

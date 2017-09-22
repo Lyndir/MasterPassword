@@ -19,6 +19,7 @@
 package com.lyndir.masterpassword.model;
 
 import com.google.common.collect.*;
+import com.lyndir.masterpassword.MPInvalidatedException;
 import java.util.*;
 
 
@@ -27,31 +28,31 @@ import java.util.*;
  */
 public abstract class MPUserManager {
 
-    private final Map<String, MPUser> usersByName = Maps.newHashMap();
+    private final Map<String, MPFileUser> usersByName = Maps.newHashMap();
     static MPUserManager instance;
 
     public static MPUserManager get() {
         return instance;
     }
 
-    protected MPUserManager(final Iterable<MPUser> users) {
-        for (final MPUser user : users)
+    protected MPUserManager(final Iterable<MPFileUser> users) {
+        for (final MPFileUser user : users)
             usersByName.put( user.getFullName(), user );
     }
 
-    public SortedSet<MPUser> getUsers() {
+    public SortedSet<MPFileUser> getUsers() {
         return FluentIterable.from( usersByName.values() ).toSortedSet( Ordering.natural() );
     }
 
-    public MPUser getUserNamed(final String fullName) {
+    public MPFileUser getUserNamed(final String fullName) {
         return usersByName.get( fullName );
     }
 
-    public void addUser(final MPUser user) {
+    public void addUser(final MPFileUser user) {
         usersByName.put( user.getFullName(), user );
     }
 
-    public void deleteUser(final MPUser user) {
+    public void deleteUser(final MPFileUser user) {
         usersByName.remove( user.getFullName() );
     }
 }

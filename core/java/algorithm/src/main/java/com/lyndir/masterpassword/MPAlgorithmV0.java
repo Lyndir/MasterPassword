@@ -38,11 +38,11 @@ import javax.crypto.IllegalBlockSizeException;
 
 
 /**
- * @see MasterKey.Version#V0
+ * @see MPMasterKey.Version#V0
  *
  * @author lhunath, 2014-08-30
  */
-public class MasterKeyV0 implements MasterKeyAlgorithm {
+public class MPAlgorithmV0 implements MPAlgorithm {
 
     /**
      * mpw: validity for the time-based rolling counter.
@@ -84,9 +84,9 @@ public class MasterKeyV0 implements MasterKeyAlgorithm {
     protected final Logger logger = Logger.get( getClass() );
 
     @Override
-    public MasterKey.Version getAlgorithmVersion() {
+    public MPMasterKey.Version getAlgorithmVersion() {
 
-        return MasterKey.Version.V0;
+        return MPMasterKey.Version.V0;
     }
 
     @Override

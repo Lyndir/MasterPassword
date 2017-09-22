@@ -44,7 +44,7 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
 
     @Nonnull
     @Override
-    public MPUser unmarshall(@Nonnull final File file)
+    public MPFileUser unmarshall(@Nonnull final File file)
             throws IOException {
         try (Reader reader = new InputStreamReader( new FileInputStream( file ), Charsets.UTF_8 )) {
             return unmarshall( CharStreams.toString( reader ) );
@@ -53,8 +53,8 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
 
     @Nonnull
     @Override
-    public MPUser unmarshall(@Nonnull final String content) {
-        MPUser       user         = null;
+    public MPFileUser unmarshall(@Nonnull final String content) {
+        MPFileUser   user         = null;
         byte[]       keyID        = null;
         String       fullName     = null;
         int          mpVersion    = 0, importFormat = 0, avatar = 0;
@@ -70,7 +70,7 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
                     headerStarted = true;
                 else
                     // Ends the header.
-                    user = new MPUser( fullName, keyID, MasterKey.Version.fromInt( mpVersion ), avatar, defaultType, new DateTime( 0 ) );
+                    user = new MPFileUser( fullName, keyID, MPMasterKey.Version.fromInt( mpVersion ), avatar, defaultType, new DateTime( 0 ) );
 
                 // Comment.
             else if (line.startsWith( "#" )) {
@@ -103,28 +103,28 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
                 if (!siteMatcher.matches())
                     return null;
 
-                MPSite site;
+                MPFileSite site;
                 switch (importFormat) {
                     case 0:
-                        site = new MPSite( user, //
-                                           siteMatcher.group( 5 ), siteMatcher.group( 6 ), MPSite.DEFAULT_COUNTER,
-                                           MPResultType.forType( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ),
-                                           MasterKey.Version.fromInt( ConversionUtils.toIntegerNN(
+                        site = new MPFileSite( user, //
+                                               siteMatcher.group( 5 ), siteMatcher.group( 6 ), MPFileSite.DEFAULT_COUNTER,
+                                               MPResultType.forType( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ),
+                                               MPMasterKey.Version.fromInt( ConversionUtils.toIntegerNN(
                                                    colon.matcher( siteMatcher.group( 4 ) ).replaceAll( "" ) ) ),
-                                           null, null, null, ConversionUtils.toIntegerNN( siteMatcher.group( 2 ) ),
-                                           MPConstant.dateTimeFormatter.parseDateTime( siteMatcher.group( 1 ) ).toInstant() );
+                                               null, null, null, ConversionUtils.toIntegerNN( siteMatcher.group( 2 ) ),
+                                               MPConstant.dateTimeFormatter.parseDateTime( siteMatcher.group( 1 ) ).toInstant() );
                         break;
 
                     case 1:
-                        site = new MPSite( user, //
-                                           siteMatcher.group( 7 ), siteMatcher.group( 8 ),
-                                           UnsignedInteger.valueOf( colon.matcher( siteMatcher.group( 5 ) ).replaceAll( "" ) ),
-                                           MPResultType.forType( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ),
-                                           MasterKey.Version.fromInt( ConversionUtils.toIntegerNN(
+                        site = new MPFileSite( user, //
+                                               siteMatcher.group( 7 ), siteMatcher.group( 8 ),
+                                               UnsignedInteger.valueOf( colon.matcher( siteMatcher.group( 5 ) ).replaceAll( "" ) ),
+                                               MPResultType.forType( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ),
+                                               MPMasterKey.Version.fromInt( ConversionUtils.toIntegerNN(
                                                    colon.matcher( siteMatcher.group( 4 ) ).replaceAll( "" ) ) ),
-                                           siteMatcher.group( 6 ), MPResultType.GeneratedName, null,
-                                           ConversionUtils.toIntegerNN( siteMatcher.group( 2 ) ),
-                                           MPConstant.dateTimeFormatter.parseDateTime( siteMatcher.group( 1 ) ).toInstant() );
+                                               siteMatcher.group( 6 ), MPResultType.GeneratedName, null,
+                                               ConversionUtils.toIntegerNN( siteMatcher.group( 2 ) ),
+                                               MPConstant.dateTimeFormatter.parseDateTime( siteMatcher.group( 1 ) ).toInstant() );
                         break;
 
                     default:

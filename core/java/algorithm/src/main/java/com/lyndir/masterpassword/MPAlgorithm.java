@@ -24,11 +24,11 @@ import javax.annotation.Nullable;
 
 
 /**
- * @see MasterKey.Version
+ * @see MPMasterKey.Version
  */
-public interface MasterKeyAlgorithm extends Serializable {
+public interface MPAlgorithm extends Serializable {
 
-    MasterKey.Version getAlgorithmVersion();
+    MPMasterKey.Version getAlgorithmVersion();
 
     byte[] deriveKey(String fullName, char[] masterPassword);
 

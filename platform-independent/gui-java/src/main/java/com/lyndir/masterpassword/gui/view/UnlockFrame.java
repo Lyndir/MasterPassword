@@ -22,9 +22,9 @@ import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 
 import com.lyndir.masterpassword.MPIdenticon;
 import com.lyndir.masterpassword.gui.*;
-import com.lyndir.masterpassword.gui.model.User;
+import com.lyndir.masterpassword.model.MPUser;
 import com.lyndir.masterpassword.gui.util.Components;
-import com.lyndir.masterpassword.model.IncorrectMasterPasswordException;
+import com.lyndir.masterpassword.model.MPIncorrectMasterPasswordException;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.concurrent.Future;
@@ -36,6 +36,7 @@ import javax.swing.*;
 /**
  * @author lhunath, 2014-06-08
  */
+@SuppressWarnings({ "MagicNumber", "serial" })
 public class UnlockFrame extends JFrame {
 
     private final SignInCallback           signInCallback;
@@ -43,10 +44,10 @@ public class UnlockFrame extends JFrame {
     private final JLabel                   identiconLabel;
     private final JButton                  signInButton;
     private final JPanel                   authenticationContainer;
-    private       AuthenticationPanel      authenticationPanel;
+    private       AuthenticationPanel<?>      authenticationPanel;
     private       Future<?>                identiconFuture;
     private       boolean                  incognito;
-    private       User                     user;
+    private       MPUser<?>                   user;
 
     public UnlockFrame(final SignInCallback signInCallback) {
         super( "Unlock Master Password" );
@@ -155,7 +156,7 @@ public class UnlockFrame extends JFrame {
         } );
     }
 
-    void updateUser(@Nullable final User user) {
+    void updateUser(@Nullable final MPUser<?> user) {
         this.user = user;
         checkSignIn();
     }
@@ -213,12 +214,12 @@ public class UnlockFrame extends JFrame {
                     SwingUtilities.invokeLater( new Runnable() {
                         @Override
                         public void run() {
-                            signInCallback.signedIn( user );
+                            signInCallback.signedIn( authenticationPanel.newPasswordFrame() );
                             dispose();
                         }
                     } );
                 }
-                catch (final IncorrectMasterPasswordException e) {
+                catch (final MPIncorrectMasterPasswordException e) {
                     SwingUtilities.invokeLater( new Runnable() {
                         @Override
                         public void run() {
@@ -237,6 +238,6 @@ public class UnlockFrame extends JFrame {
 
     public interface SignInCallback {
 
-        void signedIn(User user);
+        void signedIn(PasswordFrame<?, ?> passwordFrame);
     }
 }

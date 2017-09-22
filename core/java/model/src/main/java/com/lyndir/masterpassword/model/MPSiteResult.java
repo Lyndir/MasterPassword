@@ -28,13 +28,13 @@ import java.util.Objects;
  */
 public class MPSiteResult {
 
-    private final MPSite site;
+    private final MPFileSite site;
 
-    public MPSiteResult(final MPSite site) {
+    public MPSiteResult(final MPFileSite site) {
         this.site = site;
     }
 
-    public MPSite getSite() {
+    public MPFileSite getSite() {
         return site;
     }
 
