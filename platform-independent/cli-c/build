@@ -73,7 +73,7 @@ mpw() {
     )
 
     # build
-    cc "${cflags[@]}" "$@" "core/base64.c" "core/mpw-algorithm.c" "core/mpw-types.c" "core/mpw-util.c" "core/mpw-marshall-util.c" "core/mpw-marshall.c" "cli/mpw-cli-util.c" \
+    cc "${cflags[@]}" "$@" "core/base64.c" "core/mpw-algorithm.c" "core/mpw-types.c" "core/mpw-util.c" "core/mpw-marshal-util.c" "core/mpw-marshal.c" "cli/mpw-cli-util.c" \
        "${ldflags[@]}"     "cli/mpw-cli.c" -o "mpw"
     echo "done!  You can now run ./mpw-cli-tests, ./install or use ./$_"
 }
