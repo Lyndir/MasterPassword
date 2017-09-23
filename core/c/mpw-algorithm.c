@@ -169,7 +169,7 @@ const char *mpw_siteState(
     if (resultParam && !strlen( resultParam ))
         resultParam = NULL;
 
-    MPSiteKey siteKey = mpw_siteKey_v0( masterKey, siteName, siteCounter, keyPurpose, keyContext );
+    MPSiteKey siteKey = mpw_siteKey( masterKey, siteName, siteCounter, keyPurpose, keyContext, algorithmVersion );
     if (!siteKey)
         return NULL;
 
