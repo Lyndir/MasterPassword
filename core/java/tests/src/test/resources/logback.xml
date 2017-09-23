@@ -8,7 +8,7 @@
 
     <logger name="com.lyndir" level="${mp.log.level:-TRACE}" />
 
-    <root level="TRACE">
+    <root level="INFO">
         <appender-ref ref="stdout" />
     </root>
 
