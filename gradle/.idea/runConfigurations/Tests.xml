@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Tests" type="TestNG" factoryName="TestNG">
-    <module name="tests" />
+  <configuration default="false" name="Tests" type="TestNG" factoryName="TestNG" show_console_on_std_err="true">
+    <module name="" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
     <option name="ALTERNATIVE_JRE_PATH" />
     <option name="SUITE_NAME" value="" />
@@ -17,7 +17,7 @@
     <option name="ENV_VARIABLES" />
     <option name="PASS_PARENT_ENVS" value="true" />
     <option name="TEST_SEARCH_SCOPE">
-      <value defaultName="singleModule" />
+      <value defaultName="wholeProject" />
     </option>
     <option name="USE_DEFAULT_REPORTERS" value="false" />
     <option name="PROPERTIES_FILE" value="" />

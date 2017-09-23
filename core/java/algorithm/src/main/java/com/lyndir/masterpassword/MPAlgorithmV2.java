@@ -43,13 +43,6 @@ public class MPAlgorithmV2 extends MPAlgorithmV1 {
     @Override
     public byte[] siteKey(final byte[] masterKey, final String siteName, UnsignedInteger siteCounter, final MPKeyPurpose keyPurpose,
                              @Nullable final String keyContext) {
-        Preconditions.checkArgument( !siteName.isEmpty() );
-
-        logger.trc( "-- mpw_siteKey (algorithm: %u)", getAlgorithmVersion().toInt() );
-        logger.trc( "siteName: %s", siteName );
-        logger.trc( "siteCounter: %d", siteCounter );
-        logger.trc( "keyPurpose: %d (%s)", keyPurpose.toInt(), keyPurpose.getShortName() );
-        logger.trc( "keyContext: %s", keyContext );
 
         String keyScope = keyPurpose.getScope();
         logger.trc( "keyScope: %s", keyScope );
@@ -73,9 +66,9 @@ public class MPAlgorithmV2 extends MPAlgorithmV1 {
             sitePasswordInfo = Bytes.concat( sitePasswordInfo, keyContextLengthBytes, keyContextBytes );
         logger.trc( "  => siteSalt.id: %s", CodeUtils.encodeHex( idForBytes( sitePasswordInfo ) ) );
 
-        logger.trc( "siteKey: hmac-sha256( masterKey.id=%s, siteSalt )", (Object) idForBytes( masterKey ) );
+        logger.trc( "siteKey: hmac-sha256( masterKey.id=%s, siteSalt )", CodeUtils.encodeHex( idForBytes( masterKey ) ) );
         byte[] sitePasswordSeedBytes = MPAlgorithmV0.mpw_digest.of( masterKey, sitePasswordInfo );
-        logger.trc( "  => siteKey.id: %s", (Object) idForBytes( sitePasswordSeedBytes ) );
+        logger.trc( "  => siteKey.id: %s", CodeUtils.encodeHex( idForBytes( sitePasswordSeedBytes ) ) );
 
         return sitePasswordSeedBytes;
     }

@@ -18,7 +18,7 @@
 
 package com.lyndir.masterpassword;
 
-import static com.lyndir.masterpassword.MPUtils.idForBytes;
+import static com.lyndir.masterpassword.MPUtils.*;
 
 import com.google.common.base.Preconditions;
 import com.google.common.primitives.Bytes;
@@ -42,16 +42,10 @@ public class MPAlgorithmV3 extends MPAlgorithmV2 {
     }
 
     @Override
-    public byte[] deriveKey(final String fullName, final char[] masterPassword) {
-        Preconditions.checkArgument( masterPassword.length > 0 );
+    public byte[] masterKey(final String fullName, final char[] masterPassword) {
 
         byte[] fullNameBytes = fullName.getBytes( MPAlgorithmV0.mpw_charset );
         byte[] fullNameLengthBytes = MPUtils.bytesForInt( fullNameBytes.length );
-        ByteBuffer mpBytesBuf = MPAlgorithmV0.mpw_charset.encode( CharBuffer.wrap( masterPassword ) );
-
-        logger.trc( "-- mpw_masterKey (algorithm: %u)", getAlgorithmVersion().toInt() );
-        logger.trc( "fullName: %s", fullName );
-        logger.trc( "masterPassword.id: %s", (Object) idForBytes( mpBytesBuf.array() ) );
 
         String keyScope = MPKeyPurpose.Authentication.getScope();
         logger.trc( "keyScope: %s", keyScope );
@@ -63,15 +57,13 @@ public class MPAlgorithmV3 extends MPAlgorithmV2 {
         logger.trc( "  => masterKeySalt.id: %s", CodeUtils.encodeHex( idForBytes( masterKeySalt ) ) );
 
         // Calculate the master key.
-        logger.trc( "masterKey: scrypt( masterPassword, masterKeySalt, N=%lu, r=%u, p=%u )",
+        logger.trc( "masterKey: scrypt( masterPassword, masterKeySalt, N=%d, r=%d, p=%d )",
                     MPAlgorithmV0.scrypt_N, MPAlgorithmV0.scrypt_r, MPAlgorithmV0.scrypt_p );
-        byte[] mpBytes = new byte[mpBytesBuf.remaining()];
-        mpBytesBuf.get( mpBytes, 0, mpBytes.length );
-        Arrays.fill( mpBytesBuf.array(), (byte) 0 );
-        byte[] masterKey = scrypt( masterKeySalt, mpBytes ); // TODO: Why not mpBytesBuf.array()?
+        byte[] mpBytes = bytesForChars( masterPassword );
+        byte[] masterKey = scrypt( masterKeySalt, mpBytes );
         Arrays.fill( masterKeySalt, (byte) 0 );
         Arrays.fill( mpBytes, (byte) 0 );
-        logger.trc( "  => masterKey.id: %s", (Object) idForBytes( masterKey ) );
+        logger.trc( "  => masterKey.id: %s", CodeUtils.encodeHex( idForBytes( masterKey ) ) );
 
         return masterKey;
     }

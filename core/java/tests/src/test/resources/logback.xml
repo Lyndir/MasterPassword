@@ -6,9 +6,9 @@
         </encoder>
     </appender>
 
-    <logger name="com.lyndir" level="${mp.log.level:-INFO}" />
+    <logger name="com.lyndir" level="${mp.log.level:-TRACE}" />
 
-    <root level="INFO">
+    <root level="TRACE">
         <appender-ref ref="stdout" />
     </root>
 

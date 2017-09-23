@@ -23,7 +23,7 @@
         <dependency>
             <groupId>com.lyndir.lhunath.opal</groupId>
             <artifactId>opal-system</artifactId>
-            <version>1.6-p9</version>
+            <version>1.6-p11</version>
             <exclusions>
                 <exclusion>
                     <groupId>joda-time</groupId>
@@ -34,7 +34,7 @@
         <dependency>
             <groupId>com.lyndir.lhunath.opal</groupId>
             <artifactId>opal-crypto</artifactId>
-            <version>1.6-p9</version>
+            <version>1.6-p11</version>
         </dependency>
 
         <!-- EXTERNAL DEPENDENCIES -->

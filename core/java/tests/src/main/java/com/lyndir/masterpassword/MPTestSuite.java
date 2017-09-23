@@ -171,7 +171,7 @@ public class MPTestSuite implements Callable<Boolean> {
             @Override
             public boolean run(final MPTests.Case testCase)
                     throws Exception {
-                MPMasterKey masterKey = new MPMasterKey( testCase.getFullName(), testCase.getMasterPassword() );
+                MPMasterKey masterKey = new MPMasterKey( testCase.getFullName(), testCase.getMasterPassword().toCharArray() );
                 String sitePassword = masterKey.siteResult( testCase.getSiteName(), testCase.getSiteCounter(), testCase.getKeyPurpose(),
                                                             testCase.getKeyContext(), testCase.getResultType(),
                                                             null, testCase.getAlgorithm() );

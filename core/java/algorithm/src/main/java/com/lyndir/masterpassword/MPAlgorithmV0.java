@@ -90,16 +90,10 @@ public class MPAlgorithmV0 implements MPAlgorithm {
     }
 
     @Override
-    public byte[] deriveKey(final String fullName, final char[] masterPassword) {
-        Preconditions.checkArgument( masterPassword.length > 0 );
+    public byte[] masterKey(final String fullName, final char[] masterPassword) {
 
         byte[] fullNameBytes = fullName.getBytes( mpw_charset );
         byte[] fullNameLengthBytes = bytesForInt( fullName.length() );
-        ByteBuffer mpBytesBuf = mpw_charset.encode( CharBuffer.wrap( masterPassword ) );
-
-        logger.trc( "-- mpw_masterKey (algorithm: %u)", getAlgorithmVersion().toInt() );
-        logger.trc( "fullName: %s", fullName );
-        logger.trc( "masterPassword.id: %s", (Object) idForBytes( mpBytesBuf.array() ) );
 
         String keyScope = MPKeyPurpose.Authentication.getScope();
         logger.trc( "keyScope: %s", keyScope );
@@ -111,15 +105,13 @@ public class MPAlgorithmV0 implements MPAlgorithm {
         logger.trc( "  => masterKeySalt.id: %s", CodeUtils.encodeHex( idForBytes( masterKeySalt ) ) );
 
         // Calculate the master key.
-        logger.trc( "masterKey: scrypt( masterPassword, masterKeySalt, N=%lu, r=%u, p=%u )",
+        logger.trc( "masterKey: scrypt( masterPassword, masterKeySalt, N=%d, r=%d, p=%d )",
                     scrypt_N, scrypt_r, scrypt_p );
-        byte[] mpBytes = new byte[mpBytesBuf.remaining()];
-        mpBytesBuf.get( mpBytes, 0, mpBytes.length );
-        Arrays.fill( mpBytesBuf.array(), (byte) 0 );
-        byte[] masterKey = scrypt( masterKeySalt, mpBytes ); // TODO: Why not mpBytesBuf.array()?
+        byte[] masterPasswordBytes = bytesForChars( masterPassword );
+        byte[] masterKey = scrypt( masterKeySalt, masterPasswordBytes );
         Arrays.fill( masterKeySalt, (byte) 0 );
-        Arrays.fill( mpBytes, (byte) 0 );
-        logger.trc( "  => masterKey.id: %s", (Object) idForBytes( masterKey ) );
+        Arrays.fill( masterPasswordBytes, (byte) 0 );
+        logger.trc( "  => masterKey.id: %s", CodeUtils.encodeHex( idForBytes( masterKey ) ) );
 
         return masterKey;
     }
@@ -139,13 +131,6 @@ public class MPAlgorithmV0 implements MPAlgorithm {
     @Override
     public byte[] siteKey(final byte[] masterKey, final String siteName, UnsignedInteger siteCounter, final MPKeyPurpose keyPurpose,
                           @Nullable final String keyContext) {
-        Preconditions.checkArgument( !siteName.isEmpty() );
-
-        logger.trc( "-- mpw_siteKey (algorithm: %u)", getAlgorithmVersion().toInt() );
-        logger.trc( "siteName: %s", siteName );
-        logger.trc( "siteCounter: %d", siteCounter );
-        logger.trc( "keyPurpose: %d (%s)", keyPurpose.toInt(), keyPurpose.getShortName() );
-        logger.trc( "keyContext: %s", keyContext );
 
         String keyScope = keyPurpose.getScope();
         logger.trc( "keyScope: %s", keyScope );
@@ -169,22 +154,17 @@ public class MPAlgorithmV0 implements MPAlgorithm {
             sitePasswordInfo = Bytes.concat( sitePasswordInfo, keyContextLengthBytes, keyContextBytes );
         logger.trc( "  => siteSalt.id: %s", CodeUtils.encodeHex( idForBytes( sitePasswordInfo ) ) );
 
-        logger.trc( "siteKey: hmac-sha256( masterKey.id=%s, siteSalt )", (Object) idForBytes( masterKey ) );
+        logger.trc( "siteKey: hmac-sha256( masterKey.id=%s, siteSalt )", CodeUtils.encodeHex( idForBytes( masterKey ) ) );
         byte[] sitePasswordSeedBytes = mpw_digest.of( masterKey, sitePasswordInfo );
-        logger.trc( "  => siteKey.id: %s", (Object) idForBytes( sitePasswordSeedBytes ) );
+        logger.trc( "  => siteKey.id: %s", CodeUtils.encodeHex( idForBytes( sitePasswordSeedBytes ) ) );
 
         return sitePasswordSeedBytes;
     }
 
     @Override
-    public String siteResult(final byte[] masterKey, final String siteName, final UnsignedInteger siteCounter, final MPKeyPurpose keyPurpose,
+    public String siteResult(final byte[] masterKey, final byte[] siteKey, final String siteName, final UnsignedInteger siteCounter,
+                             final MPKeyPurpose keyPurpose,
                              @Nullable final String keyContext, final MPResultType resultType, @Nullable final String resultParam) {
-
-        byte[] siteKey = siteKey( masterKey, siteName, siteCounter, keyPurpose, keyContext );
-
-        logger.trc( "-- mpw_siteResult (algorithm: %u)", getAlgorithmVersion().toInt() );
-        logger.trc( "resultType: %d (%s)", resultType.toInt(), resultType.getShortName() );
-        logger.trc( "resultParam: %s", resultParam );
 
         switch (resultType.getTypeClass()) {
             case Template:
@@ -214,7 +194,7 @@ public class MPAlgorithmV0 implements MPAlgorithm {
         Preconditions.checkState( _siteKey.length > 0 );
         int templateIndex = _siteKey[0];
         MPTemplate template = resultType.getTemplateAtRollingIndex( templateIndex );
-        logger.trc( "template: %u => %s", templateIndex, template.getTemplateString() );
+        logger.trc( "template: %d => %s", templateIndex, template.getTemplateString() );
 
         // Encode the password from the seed using the template.
         StringBuilder password = new StringBuilder( template.length() );
@@ -222,7 +202,7 @@ public class MPAlgorithmV0 implements MPAlgorithm {
             int characterIndex = _siteKey[i + 1];
             MPTemplateCharacterClass characterClass = template.getCharacterClassAtIndex( i );
             char passwordCharacter = characterClass.getCharacterAtRollingIndex( characterIndex );
-            logger.trc( "  - class: %c, index: %5u (0x%02hX) => character: %c",
+            logger.trc( "  - class: %c, index: %5d (0x%2H) => character: %c",
                         characterClass.getIdentifier(), characterIndex, _siteKey[i + 1], passwordCharacter );
 
             password.append( passwordCharacter );
@@ -241,7 +221,7 @@ public class MPAlgorithmV0 implements MPAlgorithm {
         try {
             // Base64-decode
             byte[] cipherBuf = CryptUtils.decodeBase64( resultParam );
-            logger.trc( "b64 decoded: %zu bytes = %s", cipherBuf.length, CodeUtils.encodeHex( cipherBuf ) );
+            logger.trc( "b64 decoded: %d bytes = %s", cipherBuf.length, CodeUtils.encodeHex( cipherBuf ) );
 
             // Decrypt
             byte[] plainBuf  = CryptUtils.decrypt( cipherBuf, masterKey, true );
@@ -266,7 +246,7 @@ public class MPAlgorithmV0 implements MPAlgorithm {
             if ((resultParamInt < 128) || (resultParamInt > 512) || ((resultParamInt % 8) != 0))
                 throw logger.bug( "Parameter is not a valid key size (should be 128 - 512): %s", resultParam );
             int keySize = resultParamInt / 8;
-            logger.trc( "keySize: %u", keySize );
+            logger.trc( "keySize: %d", keySize );
 
             // Derive key
             byte[] resultKey = null; // TODO: mpw_kdf_blake2b( keySize, siteKey, MPSiteKeySize, NULL, 0, 0, NULL );
@@ -285,7 +265,8 @@ public class MPAlgorithmV0 implements MPAlgorithm {
     }
 
     @Override
-    public String siteState(final byte[] masterKey, final String siteName, final UnsignedInteger siteCounter, final MPKeyPurpose keyPurpose,
+    public String siteState(final byte[] masterKey, final byte[] siteKey, final String siteName, final UnsignedInteger siteCounter,
+                            final MPKeyPurpose keyPurpose,
                             @Nullable final String keyContext, final MPResultType resultType, @Nullable final String resultParam) {
 
         Preconditions.checkNotNull( resultParam );
@@ -293,9 +274,8 @@ public class MPAlgorithmV0 implements MPAlgorithm {
 
         try {
             // Encrypt
-            ByteBuffer plainText = mpw_charset.encode( CharBuffer.wrap( resultParam ) );
-            byte[] cipherBuf = CryptUtils.encrypt( plainText.array(), masterKey, true );
-            logger.trc( "cipherBuf: %zu bytes = %s", cipherBuf.length, CodeUtils.encodeHex( cipherBuf ) );
+            byte[] cipherBuf = CryptUtils.encrypt( resultParam.getBytes( mpw_charset ), masterKey, true );
+            logger.trc( "cipherBuf: %d bytes = %s", cipherBuf.length, CodeUtils.encodeHex( cipherBuf ) );
 
             // Base64-encode
             String cipherText = Verify.verifyNotNull( CryptUtils.encodeBase64( cipherBuf ) );

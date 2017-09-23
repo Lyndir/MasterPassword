@@ -181,8 +181,8 @@ public class MPTests {
         }
 
         @Nonnull
-        public char[] getMasterPassword() {
-            return checkNotNull( masterPassword ).toCharArray();
+        public String getMasterPassword() {
+            return checkNotNull( masterPassword );
         }
 
         @Nonnull

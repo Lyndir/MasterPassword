@@ -38,15 +38,11 @@ public class MPAlgorithmV1 extends MPAlgorithmV0 {
     @Override
     public String sitePasswordFromTemplate(final byte[] masterKey, final byte[] siteKey, final MPResultType resultType, @Nullable final String resultParam) {
 
-        logger.trc( "-- mpw_siteResult (algorithm: %u)", getAlgorithmVersion().toInt() );
-        logger.trc( "resultType: %d (%s)", resultType.toInt(), resultType.getShortName() );
-        logger.trc( "resultParam: %s", resultParam );
-
         // Determine the template.
         Preconditions.checkState( siteKey.length > 0 );
         int templateIndex = siteKey[0] & 0xFF; // Convert to unsigned int.
         MPTemplate template = resultType.getTemplateAtRollingIndex( templateIndex );
-        logger.trc( "template: %u => %s", templateIndex, template.getTemplateString() );
+        logger.trc( "template: %d => %s", templateIndex, template.getTemplateString() );
 
         // Encode the password from the seed using the template.
         StringBuilder password = new StringBuilder( template.length() );
@@ -54,7 +50,7 @@ public class MPAlgorithmV1 extends MPAlgorithmV0 {
             int characterIndex = siteKey[i + 1] & 0xFF; // Convert to unsigned int.
             MPTemplateCharacterClass characterClass = template.getCharacterClassAtIndex( i );
             char passwordCharacter = characterClass.getCharacterAtRollingIndex( characterIndex );
-            logger.trc( "  - class: %c, index: %3u (0x%02hhX) => character: %c",
+            logger.trc( "  - class: %c, index: %3d (0x%2H) => character: %c",
                         characterClass.getIdentifier(), characterIndex, siteKey[i + 1], passwordCharacter );
 
             password.append( passwordCharacter );

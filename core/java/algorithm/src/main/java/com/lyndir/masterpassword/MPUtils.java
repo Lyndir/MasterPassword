@@ -20,6 +20,8 @@ package com.lyndir.masterpassword;
 
 import com.google.common.primitives.UnsignedInteger;
 import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.util.Arrays;
 
 
 /**
@@ -33,6 +35,16 @@ public final class MPUtils {
 
     public static byte[] bytesForInt(final UnsignedInteger number) {
         return ByteBuffer.allocate( Integer.SIZE / Byte.SIZE ).order( MPAlgorithmV0.mpw_byteOrder ).putInt( number.intValue() ).array();
+    }
+
+    public static byte[] bytesForChars(final char[] characters) {
+        ByteBuffer byteBuffer = MPAlgorithmV0.mpw_charset.encode( CharBuffer.wrap( characters ) );
+
+        byte[] bytes = new byte[byteBuffer.remaining()];
+        byteBuffer.get( bytes );
+
+        Arrays.fill( byteBuffer.array(), (byte) 0 );
+        return bytes;
     }
 
     public static byte[] idForBytes(final byte[] bytes) {

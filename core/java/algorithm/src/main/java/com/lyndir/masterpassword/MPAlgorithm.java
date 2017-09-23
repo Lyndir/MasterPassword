@@ -30,12 +30,12 @@ public interface MPAlgorithm extends Serializable {
 
     MPMasterKey.Version getAlgorithmVersion();
 
-    byte[] deriveKey(String fullName, char[] masterPassword);
+    byte[] masterKey(String fullName, char[] masterPassword);
 
     byte[] siteKey(byte[] masterKey, String siteName, UnsignedInteger siteCounter, MPKeyPurpose keyPurpose,
                    @Nullable String keyContext);
 
-    String siteResult(byte[] masterKey, String siteName, UnsignedInteger siteCounter, MPKeyPurpose keyPurpose,
+    String siteResult(byte[] masterKey, final byte[] siteKey, String siteName, UnsignedInteger siteCounter, MPKeyPurpose keyPurpose,
                       @Nullable String keyContext, MPResultType resultType, @Nullable String resultParam);
 
     String sitePasswordFromTemplate(byte[] masterKey, byte[] siteKey, MPResultType resultType, @Nullable String resultParam);
@@ -44,6 +44,6 @@ public interface MPAlgorithm extends Serializable {
 
     String sitePasswordFromDerive(byte[] masterKey, byte[] siteKey, MPResultType resultType, @Nullable String resultParam);
 
-    String siteState(byte[] masterKey, String siteName, UnsignedInteger siteCounter, MPKeyPurpose keyPurpose,
+    String siteState(byte[] masterKey, final byte[] siteKey, String siteName, UnsignedInteger siteCounter, MPKeyPurpose keyPurpose,
                      @Nullable String keyContext, MPResultType resultType, @Nullable String resultParam);
 }
