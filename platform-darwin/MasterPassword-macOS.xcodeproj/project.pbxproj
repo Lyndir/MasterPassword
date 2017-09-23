@@ -177,7 +177,6 @@
 		DACA27381705DF81002C6C22 /* menu-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = DACA24581705DF7D002C6C22 /* menu-icon.png */; };
 		DACA29671705DF81002C6C22 /* SourceCodePro-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = DACA268E1705DF81002C6C22 /* SourceCodePro-ExtraLight.otf */; };
 		DACA29681705DF81002C6C22 /* SourceCodePro-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = DACA268F1705DF81002C6C22 /* SourceCodePro-Black.otf */; };
-		DACA29731705E1A8002C6C22 /* ciphers.plist in Resources */ = {isa = PBXBuildFile; fileRef = DACA29711705E1A8002C6C22 /* ciphers.plist */; };
 		DACA29741705E1A8002C6C22 /* dictionary.lst in Resources */ = {isa = PBXBuildFile; fileRef = DACA29721705E1A8002C6C22 /* dictionary.lst */; };
 		DACA298D1705E2BD002C6C22 /* JRSwizzle.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA29771705E2BD002C6C22 /* JRSwizzle.h */; };
 		DACA299A1705E2BD002C6C22 /* JRSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = DACA298C1705E2BD002C6C22 /* JRSwizzle.m */; };
@@ -1046,7 +1045,6 @@
 		DACA24581705DF7D002C6C22 /* menu-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu-icon.png"; sourceTree = "<group>"; };
 		DACA268E1705DF81002C6C22 /* SourceCodePro-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceCodePro-ExtraLight.otf"; sourceTree = "<group>"; };
 		DACA268F1705DF81002C6C22 /* SourceCodePro-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceCodePro-Black.otf"; sourceTree = "<group>"; };
-		DACA29711705E1A8002C6C22 /* ciphers.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ciphers.plist; sourceTree = "<group>"; };
 		DACA29721705E1A8002C6C22 /* dictionary.lst */ = {isa = PBXFileReference; fileEncoding = 1; lastKnownFileType = text; path = dictionary.lst; sourceTree = "<group>"; };
 		DACA29771705E2BD002C6C22 /* JRSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JRSwizzle.h; sourceTree = "<group>"; };
 		DACA298C1705E2BD002C6C22 /* JRSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JRSwizzle.m; sourceTree = "<group>"; };
@@ -2095,7 +2093,6 @@
 		DACA29701705E1A8002C6C22 /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				DACA29711705E1A8002C6C22 /* ciphers.plist */,
 				DACA29721705E1A8002C6C22 /* dictionary.lst */,
 			);
 			path = Data;
@@ -2606,7 +2603,6 @@
 				DACA27381705DF81002C6C22 /* menu-icon.png in Resources */,
 				DACA29671705DF81002C6C22 /* SourceCodePro-ExtraLight.otf in Resources */,
 				DACA29681705DF81002C6C22 /* SourceCodePro-Black.otf in Resources */,
-				DACA29731705E1A8002C6C22 /* ciphers.plist in Resources */,
 				DACA29741705E1A8002C6C22 /* dictionary.lst in Resources */,
 				DA5E5D081724A667003798D8 /* MasterPassword.entitlements in Resources */,
 				DA5E5D0A1724A667003798D8 /* InfoPlist.strings in Resources */,
