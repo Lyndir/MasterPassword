@@ -173,11 +173,11 @@ uint8_t const *mpw_hash_hmac_sha256(
 /** Encrypt a plainBuf with the given key using AES-128-CBC.
   * @return A new bufSize allocated buffer containing the cipherBuf. */
 uint8_t const *mpw_aes_encrypt(
-        const uint8_t *key, const size_t keySize, const uint8_t *plainBuf, const size_t bufSize);
+        const uint8_t *key, const size_t keySize, const uint8_t *plainBuf, size_t *bufSize);
 /** Decrypt a cipherBuf with the given key using AES-128-CBC.
   * @return A new bufSize allocated buffer containing the plainBuf. */
 uint8_t const *mpw_aes_decrypt(
-        const uint8_t *key, const size_t keySize, const uint8_t *cipherBuf, const size_t bufSize);
+        const uint8_t *key, const size_t keySize, const uint8_t *cipherBuf, size_t *bufSize);
 /** Calculate an OTP using RFC-4226.
   * @return A newly allocated string containing exactly `digits` decimal OTP digits. */
 #if UNUSED

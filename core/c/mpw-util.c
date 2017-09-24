@@ -267,33 +267,46 @@ uint8_t const *mpw_hash_hmac_sha256(const uint8_t *key, const size_t keySize, co
     return mac;
 }
 
-static uint8_t const *mpw_aes(bool encrypt, const uint8_t *key, const size_t keySize, const uint8_t *buf, const size_t bufSize) {
+static uint8_t const *mpw_aes(bool encrypt, const uint8_t *key, const size_t keySize, const uint8_t *buf, size_t *bufSize) {
 
     if (!key || keySize < 16)
         return NULL;
 
+    // IV = zero
     uint8_t iv[16];
     bzero( (void *)iv, sizeof( iv ) );
-    uint8_t aesBuf[bufSize];
-    memcpy( aesBuf, buf, bufSize );
-    uint8_t *resultBuf = malloc( bufSize );
+
+    // Add PKCS#7 padding
+    uint32_t aesSize = (uint32_t)*bufSize;
+    if (encrypt)
+        aesSize = (aesSize / 16) * 16 + 16;
+    uint8_t aesBuf[aesSize];
+    memcpy( aesBuf, buf, *bufSize );
+    memset( aesBuf + *bufSize, aesSize - *bufSize, aesSize - *bufSize );
+    uint8_t *resultBuf = malloc( aesSize );
 
     if (encrypt)
-        AES_CBC_encrypt_buffer( resultBuf, aesBuf, (uint32_t)bufSize, key, iv );
+        AES_CBC_encrypt_buffer( resultBuf, aesBuf, aesSize, key, iv );
     else
-        AES_CBC_decrypt_buffer( resultBuf, aesBuf, (uint32_t)bufSize, key, iv );
-    bzero( aesBuf, bufSize );
-    bzero( iv, bufSize );
+        AES_CBC_decrypt_buffer( resultBuf, aesBuf, aesSize, key, iv );
+    bzero( aesBuf, aesSize );
+    bzero( iv, 16 );
+
+    // Truncate PKCS#7 padding
+    if (encrypt)
+        *bufSize = aesSize;
+    else
+        *bufSize -= resultBuf[aesSize - 1];
 
     return resultBuf;
 }
 
-uint8_t const *mpw_aes_encrypt(const uint8_t *key, const size_t keySize, const uint8_t *plainBuf, const size_t bufSize) {
+uint8_t const *mpw_aes_encrypt(const uint8_t *key, const size_t keySize, const uint8_t *plainBuf, size_t *bufSize) {
 
     return mpw_aes( true, key, keySize, plainBuf, bufSize );
 }
 
-uint8_t const *mpw_aes_decrypt(const uint8_t *key, const size_t keySize, const uint8_t *cipherBuf, const size_t bufSize) {
+uint8_t const *mpw_aes_decrypt(const uint8_t *key, const size_t keySize, const uint8_t *cipherBuf, size_t *bufSize) {
 
     return mpw_aes( false, key, keySize, cipherBuf, bufSize );
 }

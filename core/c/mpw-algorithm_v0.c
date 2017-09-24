@@ -165,7 +165,7 @@ static const char *mpw_sitePasswordFromCrypt_v0(
 
     // Base64-decode
     uint8_t *cipherBuf = calloc( 1, mpw_base64_decode_max( cipherText ) );
-    size_t bufSize = (size_t)mpw_base64_decode( cipherBuf, cipherText );
+    size_t bufSize = (size_t)mpw_base64_decode( cipherBuf, cipherText ), cipherBufSize = bufSize;
     if ((int)bufSize < 0) {
         err( "Base64 decoding error." );
         mpw_free( &cipherBuf, mpw_base64_decode_max( cipherText ) );
@@ -174,13 +174,13 @@ static const char *mpw_sitePasswordFromCrypt_v0(
     trc( "b64 decoded: %zu bytes = %s\n", bufSize, mpw_hex( cipherBuf, bufSize ) );
 
     // Decrypt
-    const uint8_t *plainBytes = mpw_aes_decrypt( masterKey, MPMasterKeySize, cipherBuf, bufSize );
-    mpw_free( &cipherBuf, bufSize );
+    const uint8_t *plainBytes = mpw_aes_decrypt( masterKey, MPMasterKeySize, cipherBuf, &bufSize );
+    mpw_free( &cipherBuf, cipherBufSize );
     const char *plainText = strndup( (char *)plainBytes, bufSize );
     mpw_free( &plainBytes, bufSize );
     if (!plainText)
         err( "AES decryption error: %s\n", strerror( errno ) );
-    trc( "decrypted -> plainText: %zu bytes = %s = %s\n", sizeof( plainText ), plainText, mpw_hex( plainText, sizeof( plainText ) ) );
+    trc( "decrypted -> plainText: %zu bytes = %s = %s\n", strlen( plainText ), plainText, mpw_hex( plainText, strlen( plainText ) ) );
 
     return plainText;
 }
@@ -235,7 +235,7 @@ static const char *mpw_siteState_v0(
 
     // Encrypt
     size_t bufSize = strlen( plainText );
-    const uint8_t *cipherBuf = mpw_aes_encrypt( masterKey, MPMasterKeySize, (const uint8_t *)plainText, bufSize );
+    const uint8_t *cipherBuf = mpw_aes_encrypt( masterKey, MPMasterKeySize, (const uint8_t *)plainText, &bufSize );
     if (!cipherBuf) {
         err( "AES encryption error: %s\n", strerror( errno ) );
         return NULL;
