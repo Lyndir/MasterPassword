@@ -6,6 +6,6 @@ git:
 script:
   - "( brew install libsodium json-c )"
   - "( cd ./platform-independent/cli-c && ./clean && targets='mpw mpw-bench mpw-tests' ./build && ./mpw-tests && ./mpw-cli-tests )"
-  - "( cd ./gradle && ./gradlew --stacktrace clean test )"
+  - "( cd ./gradle && ./gradlew --info clean test )"
   - "( xcodebuild -workspace platform-darwin/MasterPassword.xcworkspace -configuration 'Test' -scheme 'MasterPassword iOS' -sdk iphonesimulator )"
   - "( xcodebuild -workspace platform-darwin/MasterPassword.xcworkspace -configuration 'Test' -scheme 'MasterPassword macOS' )"
