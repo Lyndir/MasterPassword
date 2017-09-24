@@ -1,1 +1,1 @@
-mpw-2.6-cli-2-0-g30fdb54e.tar.gz.sig
+mpw-2.6-cli-3-0-g0ff6c93a.tar.gz.sig
