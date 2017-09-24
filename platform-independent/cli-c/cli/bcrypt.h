@@ -186,10 +186,10 @@ bcrypt_hashpass(const char *key, const uint8_t *salt, char *encrypted,
     snprintf( encrypted, 8, "$2%c$%2.2u$", minor, logr );
     encode_base64( encrypted + 7, csalt, BCRYPT_MAXSALT );
     encode_base64( encrypted + 7 + 22, ciphertext, 4 * BCRYPT_WORDS - 1 );
-    bzero( &state, sizeof( state ) );
-    bzero( ciphertext, sizeof( ciphertext ) );
-    bzero( csalt, sizeof( csalt ) );
-    bzero( cdata, sizeof( cdata ) );
+    memset_s( &state, sizeof state, 0, sizeof state );
+    memset_s( ciphertext, sizeof ciphertext, 0, sizeof ciphertext );
+    memset_s( csalt, sizeof csalt, 0, sizeof csalt );
+    memset_s( cdata, sizeof cdata, 0, sizeof cdata );
     return 0;
 
     inval:

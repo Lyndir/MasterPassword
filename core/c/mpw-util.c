@@ -217,12 +217,12 @@ uint8_t const *mpw_kdf_blake2b(const size_t subkeySize, const uint8_t *key, cons
     }
 
     uint8_t saltBuf[crypto_generichash_blake2b_SALTBYTES];
-    bzero( saltBuf, sizeof saltBuf );
+    memset( saltBuf, 0, sizeof saltBuf );
     if (id)
         mpw_uint64( id, saltBuf );
 
     uint8_t personalBuf[crypto_generichash_blake2b_PERSONALBYTES];
-    bzero( personalBuf, sizeof saltBuf );
+    memset( personalBuf, 0, sizeof personalBuf );
     if (personal && strlen( personal ))
         memcpy( personalBuf, personal, strlen( personal ) );
 
@@ -274,7 +274,7 @@ static uint8_t const *mpw_aes(bool encrypt, const uint8_t *key, const size_t key
 
     // IV = zero
     uint8_t iv[16];
-    bzero( (void *)iv, sizeof( iv ) );
+    memset( iv, 0, sizeof iv );
 
     // Add PKCS#7 padding
     uint32_t aesSize = (uint32_t)*bufSize;
@@ -289,8 +289,8 @@ static uint8_t const *mpw_aes(bool encrypt, const uint8_t *key, const size_t key
         AES_CBC_encrypt_buffer( resultBuf, aesBuf, aesSize, key, iv );
     else
         AES_CBC_decrypt_buffer( resultBuf, aesBuf, aesSize, key, iv );
-    bzero( aesBuf, aesSize );
-    bzero( iv, 16 );
+    memset_s( aesBuf, aesSize, 0, aesSize );
+    memset_s( iv, 16, 0, 16 );
 
     // Truncate PKCS#7 padding
     if (encrypt)
