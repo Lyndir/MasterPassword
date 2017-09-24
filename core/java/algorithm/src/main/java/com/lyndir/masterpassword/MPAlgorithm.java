@@ -18,15 +18,65 @@
 
 package com.lyndir.masterpassword;
 
+import com.google.common.base.Charsets;
 import com.google.common.primitives.UnsignedInteger;
+import com.lyndir.lhunath.opal.system.MessageAuthenticationDigests;
+import com.lyndir.lhunath.opal.system.MessageDigests;
 import java.io.Serializable;
+import java.nio.ByteOrder;
+import java.nio.charset.Charset;
 import javax.annotation.Nullable;
 
 
 /**
  * @see MPMasterKey.Version
  */
-public interface MPAlgorithm extends Serializable {
+public interface MPAlgorithm {
+
+    /**
+     * mpw: validity for the time-based rolling counter.
+     */
+    int mpw_otp_window = 5 * 60 /* s */;
+
+    /**
+     * mpw: Key ID hash.
+     */
+    MessageDigests mpw_hash = MessageDigests.SHA256;
+
+    /**
+     * mpw: Site digest.
+     */
+    MessageAuthenticationDigests mpw_digest = MessageAuthenticationDigests.HmacSHA256;
+
+    /**
+     * mpw: Platform-agnostic byte order.
+     */
+    ByteOrder mpw_byteOrder = ByteOrder.BIG_ENDIAN;
+
+    /**
+     * mpw: Input character encoding.
+     */
+    Charset mpw_charset = Charsets.UTF_8;
+
+    /**
+     * mpw: Master key size (byte).
+     */
+    int mpw_dkLen = 64;
+
+    /**
+     * scrypt: Parallelization parameter.
+     */
+    int scrypt_p = 2;
+
+    /**
+     * scrypt: Memory cost parameter.
+     */
+    int scrypt_r = 8;
+
+    /**
+     * scrypt: CPU cost parameter.
+     */
+    int scrypt_N = 32768;
 
     MPMasterKey.Version getAlgorithmVersion();
 
@@ -45,5 +95,5 @@ public interface MPAlgorithm extends Serializable {
     String sitePasswordFromDerive(byte[] masterKey, byte[] siteKey, MPResultType resultType, @Nullable String resultParam);
 
     String siteState(byte[] masterKey, final byte[] siteKey, String siteName, UnsignedInteger siteCounter, MPKeyPurpose keyPurpose,
-                     @Nullable String keyContext, MPResultType resultType, @Nullable String resultParam);
+                     @Nullable String keyContext, MPResultType resultType, String resultParam);
 }

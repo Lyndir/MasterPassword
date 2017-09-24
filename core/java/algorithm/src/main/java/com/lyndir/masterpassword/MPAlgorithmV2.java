@@ -20,7 +20,6 @@ package com.lyndir.masterpassword;
 
 import static com.lyndir.masterpassword.MPUtils.*;
 
-import com.google.common.base.Preconditions;
 import com.google.common.primitives.Bytes;
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.CodeUtils;
@@ -49,25 +48,25 @@ public class MPAlgorithmV2 extends MPAlgorithmV1 {
 
         // OTP counter value.
         if (siteCounter.longValue() == 0)
-            siteCounter = UnsignedInteger.valueOf( (System.currentTimeMillis() / (MPAlgorithmV0.mpw_otp_window * 1000)) * MPAlgorithmV0.mpw_otp_window );
+            siteCounter = UnsignedInteger.valueOf( (System.currentTimeMillis() / (MPAlgorithm.mpw_otp_window * 1000)) * MPAlgorithm.mpw_otp_window );
 
         // Calculate the site seed.
-        byte[] siteNameBytes = siteName.getBytes( MPAlgorithmV0.mpw_charset );
+        byte[] siteNameBytes = siteName.getBytes( MPAlgorithm.mpw_charset );
         byte[] siteNameLengthBytes = bytesForInt( siteNameBytes.length );
         byte[] siteCounterBytes = bytesForInt( siteCounter );
-        byte[] keyContextBytes = ((keyContext == null) || keyContext.isEmpty())? null: keyContext.getBytes( MPAlgorithmV0.mpw_charset );
+        byte[] keyContextBytes = ((keyContext == null) || keyContext.isEmpty())? null: keyContext.getBytes( MPAlgorithm.mpw_charset );
         byte[] keyContextLengthBytes = (keyContextBytes == null)? null: bytesForInt( keyContextBytes.length );
         logger.trc( "siteSalt: keyScope=%s | #siteName=%s | siteName=%s | siteCounter=%s | #keyContext=%s | keyContext=%s",
                     keyScope, CodeUtils.encodeHex( siteNameLengthBytes ), siteName, CodeUtils.encodeHex( siteCounterBytes ),
                     (keyContextLengthBytes == null)? null: CodeUtils.encodeHex( keyContextLengthBytes ), keyContext );
 
-        byte[] sitePasswordInfo = Bytes.concat( keyScope.getBytes( MPAlgorithmV0.mpw_charset ), siteNameLengthBytes, siteNameBytes, siteCounterBytes );
+        byte[] sitePasswordInfo = Bytes.concat( keyScope.getBytes( MPAlgorithm.mpw_charset ), siteNameLengthBytes, siteNameBytes, siteCounterBytes );
         if (keyContextBytes != null)
             sitePasswordInfo = Bytes.concat( sitePasswordInfo, keyContextLengthBytes, keyContextBytes );
         logger.trc( "  => siteSalt.id: %s", CodeUtils.encodeHex( idForBytes( sitePasswordInfo ) ) );
 
         logger.trc( "siteKey: hmac-sha256( masterKey.id=%s, siteSalt )", CodeUtils.encodeHex( idForBytes( masterKey ) ) );
-        byte[] sitePasswordSeedBytes = MPAlgorithmV0.mpw_digest.of( masterKey, sitePasswordInfo );
+        byte[] sitePasswordSeedBytes = MPAlgorithm.mpw_digest.of( masterKey, sitePasswordInfo );
         logger.trc( "  => siteKey.id: %s", CodeUtils.encodeHex( idForBytes( sitePasswordSeedBytes ) ) );
 
         return sitePasswordSeedBytes;

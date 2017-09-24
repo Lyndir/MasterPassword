@@ -180,7 +180,7 @@ static const char *mpw_sitePasswordFromCrypt_v0(
     mpw_free( &plainBytes, bufSize );
     if (!plainText)
         err( "AES decryption error: %s\n", strerror( errno ) );
-    trc( "decrypted -> plainText: %s\n", plainText );
+    trc( "decrypted -> plainText: %zu bytes = %s = %s\n", sizeof( plainText ), plainText, mpw_hex( plainText, sizeof( plainText ) ) );
 
     return plainText;
 }
@@ -195,6 +195,8 @@ static const char *mpw_sitePasswordFromDerive_v0(
                 return NULL;
             }
             int resultParamInt = atoi( resultParam );
+            if (!resultParamInt)
+                resultParamInt = 512;
             if (resultParamInt < 128 || resultParamInt > 512 || resultParamInt % 8 != 0) {
                 err( "Parameter is not a valid key size (should be 128 - 512): %s\n", resultParam );
                 return NULL;

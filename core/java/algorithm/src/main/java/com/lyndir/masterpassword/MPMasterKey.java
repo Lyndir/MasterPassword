@@ -155,7 +155,7 @@ public class MPMasterKey {
 
         logger.trc( "-- mpw_siteState (algorithm: %d)", algorithmVersion.toInt() );
         logger.trc( "resultType: %d (%s)", resultType.getType(), resultType.getShortName() );
-        logger.trc( "resultParam: %s", resultParam );
+        logger.trc( "resultParam: %d bytes = %s", resultParam.getBytes( MPAlgorithm.mpw_charset ).length, resultParam );
 
         return algorithmVersion.getAlgorithm().siteState(
                 masterKey, siteKey, siteName, siteCounter, keyPurpose, keyContext, resultType, resultParam );

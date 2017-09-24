@@ -1,6 +1,8 @@
 language: objective-c
+os: osx
 osx_image: xcode8.3
 env: TERM=dumb SHLVL=0
+cache: false
 git:
   submodules: true
 script:

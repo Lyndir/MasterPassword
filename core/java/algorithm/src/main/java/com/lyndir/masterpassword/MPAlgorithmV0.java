@@ -29,7 +29,6 @@ import com.lyndir.lhunath.opal.system.*;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.ConversionUtils;
 import java.nio.*;
-import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import javax.annotation.Nullable;
@@ -38,48 +37,10 @@ import javax.crypto.IllegalBlockSizeException;
 
 
 /**
- * @see MPMasterKey.Version#V0
- *
  * @author lhunath, 2014-08-30
+ * @see MPMasterKey.Version#V0
  */
 public class MPAlgorithmV0 implements MPAlgorithm {
-
-    /**
-     * mpw: validity for the time-based rolling counter.
-     */
-    protected static final int                          mpw_otp_window = 5 * 60 /* s */;
-    /**
-     * mpw: Key ID hash.
-     */
-    protected static final MessageDigests               mpw_hash       = MessageDigests.SHA256;
-    /**
-     * mpw: Site digest.
-     */
-    protected static final MessageAuthenticationDigests mpw_digest     = MessageAuthenticationDigests.HmacSHA256;
-    /**
-     * mpw: Platform-agnostic byte order.
-     */
-    protected static final ByteOrder                    mpw_byteOrder  = ByteOrder.BIG_ENDIAN;
-    /**
-     * mpw: Input character encoding.
-     */
-    protected static final Charset                      mpw_charset    = Charsets.UTF_8;
-    /**
-     * mpw: Master key size (byte).
-     */
-    protected static final int                          mpw_dkLen      = 64;
-    /**
-     * scrypt: Parallelization parameter.
-     */
-    protected static final int                          scrypt_p       = 2;
-    /**
-     * scrypt: Memory cost parameter.
-     */
-    protected static final int                          scrypt_r       = 8;
-    /**
-     * scrypt: CPU cost parameter.
-     */
-    protected static final int                          scrypt_N       = 32768;
 
     protected final Logger logger = Logger.get( getClass() );
 
@@ -92,7 +53,7 @@ public class MPAlgorithmV0 implements MPAlgorithm {
     @Override
     public byte[] masterKey(final String fullName, final char[] masterPassword) {
 
-        byte[] fullNameBytes = fullName.getBytes( mpw_charset );
+        byte[] fullNameBytes       = fullName.getBytes( mpw_charset );
         byte[] fullNameLengthBytes = bytesForInt( fullName.length() );
 
         String keyScope = MPKeyPurpose.Authentication.getScope();
@@ -100,7 +61,7 @@ public class MPAlgorithmV0 implements MPAlgorithm {
 
         // Calculate the master key salt.
         logger.trc( "masterKeySalt: keyScope=%s | #fullName=%s | fullName=%s",
-             keyScope, CodeUtils.encodeHex( fullNameLengthBytes ), fullName );
+                    keyScope, CodeUtils.encodeHex( fullNameLengthBytes ), fullName );
         byte[] masterKeySalt = Bytes.concat( keyScope.getBytes( mpw_charset ), fullNameLengthBytes, fullNameBytes );
         logger.trc( "  => masterKeySalt.id: %s", CodeUtils.encodeHex( idForBytes( masterKeySalt ) ) );
 
@@ -108,7 +69,7 @@ public class MPAlgorithmV0 implements MPAlgorithm {
         logger.trc( "masterKey: scrypt( masterPassword, masterKeySalt, N=%d, r=%d, p=%d )",
                     scrypt_N, scrypt_r, scrypt_p );
         byte[] masterPasswordBytes = bytesForChars( masterPassword );
-        byte[] masterKey = scrypt( masterKeySalt, masterPasswordBytes );
+        byte[] masterKey           = scrypt( masterKeySalt, masterPasswordBytes );
         Arrays.fill( masterKeySalt, (byte) 0 );
         Arrays.fill( masterPasswordBytes, (byte) 0 );
         logger.trc( "  => masterKey.id: %s", CodeUtils.encodeHex( idForBytes( masterKey ) ) );
@@ -118,10 +79,10 @@ public class MPAlgorithmV0 implements MPAlgorithm {
 
     protected byte[] scrypt(final byte[] masterKeySalt, final byte[] mpBytes) {
         try {
-//            if (isAllowNative())
-                return SCrypt.scrypt( mpBytes, masterKeySalt, scrypt_N, scrypt_r, scrypt_p, mpw_dkLen );
-//            else
-//                return SCrypt.scryptJ( mpBytes, masterKeySalt, scrypt_N, scrypt_r, scrypt_p, mpw_dkLen );
+            //if (isAllowNative())
+            return SCrypt.scrypt( mpBytes, masterKeySalt, scrypt_N, scrypt_r, scrypt_p, mpw_dkLen );
+            //else
+            //    return SCrypt.scryptJ( mpBytes, masterKeySalt, scrypt_N, scrypt_r, scrypt_p, mpw_dkLen );
         }
         catch (final GeneralSecurityException e) {
             throw logger.bug( e );
@@ -140,10 +101,10 @@ public class MPAlgorithmV0 implements MPAlgorithm {
             siteCounter = UnsignedInteger.valueOf( (System.currentTimeMillis() / (mpw_otp_window * 1000)) * mpw_otp_window );
 
         // Calculate the site seed.
-        byte[] siteNameBytes = siteName.getBytes( mpw_charset );
-        byte[] siteNameLengthBytes = bytesForInt( siteName.length() );
-        byte[] siteCounterBytes = bytesForInt( siteCounter );
-        byte[] keyContextBytes = ((keyContext == null) || keyContext.isEmpty())? null: keyContext.getBytes( mpw_charset );
+        byte[] siteNameBytes         = siteName.getBytes( mpw_charset );
+        byte[] siteNameLengthBytes   = bytesForInt( siteName.length() );
+        byte[] siteCounterBytes      = bytesForInt( siteCounter );
+        byte[] keyContextBytes       = ((keyContext == null) || keyContext.isEmpty())? null: keyContext.getBytes( mpw_charset );
         byte[] keyContextLengthBytes = (keyContextBytes == null)? null: bytesForInt( keyContextBytes.length );
         logger.trc( "siteSalt: keyScope=%s | #siteName=%s | siteName=%s | siteCounter=%s | #keyContext=%s | keyContext=%s",
                     keyScope, CodeUtils.encodeHex( siteNameLengthBytes ), siteName, CodeUtils.encodeHex( siteCounterBytes ),
@@ -179,7 +140,8 @@ public class MPAlgorithmV0 implements MPAlgorithm {
     }
 
     @Override
-    public String sitePasswordFromTemplate(final byte[] masterKey, final byte[] siteKey, final MPResultType resultType, @Nullable final String resultParam) {
+    public String sitePasswordFromTemplate(final byte[] masterKey, final byte[] siteKey, final MPResultType resultType,
+                                           @Nullable final String resultParam) {
 
         int[] _siteKey = new int[siteKey.length];
         for (int i = 0; i < siteKey.length; ++i) {
@@ -192,16 +154,16 @@ public class MPAlgorithmV0 implements MPAlgorithm {
 
         // Determine the template.
         Preconditions.checkState( _siteKey.length > 0 );
-        int templateIndex = _siteKey[0];
-        MPTemplate template = resultType.getTemplateAtRollingIndex( templateIndex );
+        int        templateIndex = _siteKey[0];
+        MPTemplate template      = resultType.getTemplateAtRollingIndex( templateIndex );
         logger.trc( "template: %d => %s", templateIndex, template.getTemplateString() );
 
         // Encode the password from the seed using the template.
         StringBuilder password = new StringBuilder( template.length() );
         for (int i = 0; i < template.length(); ++i) {
-            int characterIndex = _siteKey[i + 1];
-            MPTemplateCharacterClass characterClass = template.getCharacterClassAtIndex( i );
-            char passwordCharacter = characterClass.getCharacterAtRollingIndex( characterIndex );
+            int                      characterIndex    = _siteKey[i + 1];
+            MPTemplateCharacterClass characterClass    = template.getCharacterClassAtIndex( i );
+            char                     passwordCharacter = characterClass.getCharacterAtRollingIndex( characterIndex );
             logger.trc( "  - class: %c, index: %5d (0x%2H) => character: %c",
                         characterClass.getIdentifier(), characterIndex, _siteKey[i + 1], passwordCharacter );
 
@@ -213,7 +175,8 @@ public class MPAlgorithmV0 implements MPAlgorithm {
     }
 
     @Override
-    public String sitePasswordFromCrypt(final byte[] masterKey, final byte[] siteKey, final MPResultType resultType, @Nullable final String resultParam) {
+    public String sitePasswordFromCrypt(final byte[] masterKey, final byte[] siteKey, final MPResultType resultType,
+                                        @Nullable final String resultParam) {
 
         Preconditions.checkNotNull( resultParam );
         Preconditions.checkArgument( !resultParam.isEmpty() );
@@ -226,7 +189,7 @@ public class MPAlgorithmV0 implements MPAlgorithm {
             // Decrypt
             byte[] plainBuf  = CryptUtils.decrypt( cipherBuf, masterKey, true );
             String plainText = mpw_charset.decode( ByteBuffer.wrap( plainBuf ) ).toString();
-            logger.trc( "decrypted -> plainText: %s", plainText );
+            logger.trc( "decrypted -> plainText: %d bytes = %s = %s", plainBuf.length, plainText, CodeUtils.encodeHex( plainBuf ) );
 
             return plainText;
         }
@@ -236,13 +199,13 @@ public class MPAlgorithmV0 implements MPAlgorithm {
     }
 
     @Override
-    public String sitePasswordFromDerive(final byte[] masterKey, final byte[] siteKey, final MPResultType resultType, @Nullable final String resultParam) {
+    public String sitePasswordFromDerive(final byte[] masterKey, final byte[] siteKey, final MPResultType resultType,
+                                         @Nullable final String resultParam) {
 
         if (resultType == MPResultType.DeriveKey) {
-            Preconditions.checkNotNull( resultParam );
-            Preconditions.checkArgument( !resultParam.isEmpty() );
-
             int resultParamInt = ConversionUtils.toIntegerNN( resultParam );
+            if (resultParamInt == 0)
+                resultParamInt = 512;
             if ((resultParamInt < 128) || (resultParamInt > 512) || ((resultParamInt % 8) != 0))
                 throw logger.bug( "Parameter is not a valid key size (should be 128 - 512): %s", resultParam );
             int keySize = resultParamInt / 8;
@@ -258,19 +221,14 @@ public class MPAlgorithmV0 implements MPAlgorithm {
             logger.trc( "b64 encoded -> key: %s", b64Key );
 
             return b64Key;
-        }
-
-        else
+        } else
             throw logger.bug( "Unsupported derived password type: %s", resultType );
     }
 
     @Override
     public String siteState(final byte[] masterKey, final byte[] siteKey, final String siteName, final UnsignedInteger siteCounter,
                             final MPKeyPurpose keyPurpose,
-                            @Nullable final String keyContext, final MPResultType resultType, @Nullable final String resultParam) {
-
-        Preconditions.checkNotNull( resultParam );
-        Preconditions.checkArgument( !resultParam.isEmpty() );
+                            @Nullable final String keyContext, final MPResultType resultType, final String resultParam) {
 
         try {
             // Encrypt

@@ -175,7 +175,7 @@ const char *mpw_siteState(
 
     trc( "-- mpw_siteState (algorithm: %u)\n", algorithmVersion );
     trc( "resultType: %d (%s)\n", resultType, mpw_nameForType( resultType ) );
-    trc( "resultParam: %s\n", resultParam );
+    trc( "resultParam: %zu bytes = %s\n", sizeof( resultParam ), resultParam );
     if (!masterKey || !resultParam)
         return NULL;
 

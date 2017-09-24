@@ -20,11 +20,8 @@ package com.lyndir.masterpassword;
 
 import static com.lyndir.masterpassword.MPUtils.*;
 
-import com.google.common.base.Preconditions;
 import com.google.common.primitives.Bytes;
 import com.lyndir.lhunath.opal.system.CodeUtils;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
 import java.util.Arrays;
 
 
@@ -44,7 +41,7 @@ public class MPAlgorithmV3 extends MPAlgorithmV2 {
     @Override
     public byte[] masterKey(final String fullName, final char[] masterPassword) {
 
-        byte[] fullNameBytes = fullName.getBytes( MPAlgorithmV0.mpw_charset );
+        byte[] fullNameBytes = fullName.getBytes( MPAlgorithm.mpw_charset );
         byte[] fullNameLengthBytes = MPUtils.bytesForInt( fullNameBytes.length );
 
         String keyScope = MPKeyPurpose.Authentication.getScope();
@@ -53,12 +50,12 @@ public class MPAlgorithmV3 extends MPAlgorithmV2 {
         // Calculate the master key salt.
         logger.trc( "masterKeySalt: keyScope=%s | #fullName=%s | fullName=%s",
                     keyScope, CodeUtils.encodeHex( fullNameLengthBytes ), fullName );
-        byte[] masterKeySalt = Bytes.concat( keyScope.getBytes( MPAlgorithmV0.mpw_charset ), fullNameLengthBytes, fullNameBytes );
+        byte[] masterKeySalt = Bytes.concat( keyScope.getBytes( MPAlgorithm.mpw_charset ), fullNameLengthBytes, fullNameBytes );
         logger.trc( "  => masterKeySalt.id: %s", CodeUtils.encodeHex( idForBytes( masterKeySalt ) ) );
 
         // Calculate the master key.
         logger.trc( "masterKey: scrypt( masterPassword, masterKeySalt, N=%d, r=%d, p=%d )",
-                    MPAlgorithmV0.scrypt_N, MPAlgorithmV0.scrypt_r, MPAlgorithmV0.scrypt_p );
+                    MPAlgorithm.scrypt_N, MPAlgorithm.scrypt_r, MPAlgorithm.scrypt_p );
         byte[] mpBytes = bytesForChars( masterPassword );
         byte[] masterKey = scrypt( masterKeySalt, mpBytes );
         Arrays.fill( masterKeySalt, (byte) 0 );

@@ -30,15 +30,15 @@ import java.util.Arrays;
 public final class MPUtils {
 
     public static byte[] bytesForInt(final int number) {
-        return ByteBuffer.allocate( Integer.SIZE / Byte.SIZE ).order( MPAlgorithmV0.mpw_byteOrder ).putInt( number ).array();
+        return ByteBuffer.allocate( Integer.SIZE / Byte.SIZE ).order( MPAlgorithm.mpw_byteOrder ).putInt( number ).array();
     }
 
     public static byte[] bytesForInt(final UnsignedInteger number) {
-        return ByteBuffer.allocate( Integer.SIZE / Byte.SIZE ).order( MPAlgorithmV0.mpw_byteOrder ).putInt( number.intValue() ).array();
+        return ByteBuffer.allocate( Integer.SIZE / Byte.SIZE ).order( MPAlgorithm.mpw_byteOrder ).putInt( number.intValue() ).array();
     }
 
     public static byte[] bytesForChars(final char[] characters) {
-        ByteBuffer byteBuffer = MPAlgorithmV0.mpw_charset.encode( CharBuffer.wrap( characters ) );
+        ByteBuffer byteBuffer = MPAlgorithm.mpw_charset.encode( CharBuffer.wrap( characters ) );
 
         byte[] bytes = new byte[byteBuffer.remaining()];
         byteBuffer.get( bytes );
@@ -48,6 +48,6 @@ public final class MPUtils {
     }
 
     public static byte[] idForBytes(final byte[] bytes) {
-        return MPAlgorithmV0.mpw_hash.of( bytes );
+        return MPAlgorithm.mpw_hash.of( bytes );
     }
 }

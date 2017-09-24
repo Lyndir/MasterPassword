@@ -486,6 +486,8 @@ void AES_ECB_encrypt(uint8_t *output, const uint8_t *input, const uint32_t lengt
 
   // The next function call encrypts the PlainText with the Key using AES algorithm.
   Cipher();
+
+  bzero( RoundKey, keyExpSize );
 }
 
 void AES_ECB_decrypt(uint8_t *output, const uint8_t *input, const uint32_t length, const uint8_t *key)
@@ -499,6 +501,8 @@ void AES_ECB_decrypt(uint8_t *output, const uint8_t *input, const uint32_t lengt
   KeyExpansion();
 
   InvCipher();
+
+  bzero( RoundKey, keyExpSize );
 }
 
 
@@ -555,6 +559,8 @@ void AES_CBC_encrypt_buffer(uint8_t* output, uint8_t* input, uint32_t length, co
     state = (state_t*)output;
     Cipher();
   }
+
+  bzero( RoundKey, keyExpSize );
 }
 
 void AES_CBC_decrypt_buffer(uint8_t* output, uint8_t* input, uint32_t length, const uint8_t* key, const uint8_t* iv)
@@ -592,6 +598,8 @@ void AES_CBC_decrypt_buffer(uint8_t* output, uint8_t* input, uint32_t length, co
     state = (state_t*)output;
     InvCipher();
   }
+
+  bzero( RoundKey, keyExpSize );
 }
 
 #endif // #if defined(AES_CBC) && (AES_CBC == 1)
