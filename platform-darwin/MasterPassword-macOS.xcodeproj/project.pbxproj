@@ -130,6 +130,10 @@
 		DAADCC6919FB007F00987B1D /* NSManagedObjectModel+KCOrderedAccessorFix.m in Sources */ = {isa = PBXBuildFile; fileRef = DAADCC6719FB007F00987B1D /* NSManagedObjectModel+KCOrderedAccessorFix.m */; };
 		DAADCC6A19FB00B500987B1D /* libKCOrderedAccessorFix.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAADCC5019FB006500987B1D /* libKCOrderedAccessorFix.a */; };
 		DAAF16661F5CA3240013B8AE /* mpw-cli-util.c in Sources */ = {isa = PBXBuildFile; fileRef = DAAF16631F5897EA0013B8AE /* mpw-cli-util.c */; };
+		DAB07CA01F7725D400CC6D43 /* aes.c in Sources */ = {isa = PBXBuildFile; fileRef = DAB07C9E1F7725D400CC6D43 /* aes.c */; };
+		DAB07CA31F77261400CC6D43 /* aes.c in Sources */ = {isa = PBXBuildFile; fileRef = DAB07C9E1F7725D400CC6D43 /* aes.c */; };
+		DAB07CA51F77261C00CC6D43 /* aes.c in Sources */ = {isa = PBXBuildFile; fileRef = DAB07C9E1F7725D400CC6D43 /* aes.c */; };
+		DAB07CA61F77262400CC6D43 /* aes.c in Sources */ = {isa = PBXBuildFile; fileRef = DAB07C9E1F7725D400CC6D43 /* aes.c */; };
 		DAB7AE5A1F3D74E700C856B1 /* libjson-c.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB7AE591F3D74E700C856B1 /* libjson-c.a */; };
 		DAB7AE5B1F3D750B00C856B1 /* libjson-c.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB7AE591F3D74E700C856B1 /* libjson-c.a */; };
 		DAB7AE941F3D757B00C856B1 /* libjson-c.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB7AE901F3D757B00C856B1 /* libjson-c.a */; };
@@ -976,6 +980,8 @@
 		DAADCC6719FB007F00987B1D /* NSManagedObjectModel+KCOrderedAccessorFix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObjectModel+KCOrderedAccessorFix.m"; sourceTree = "<group>"; };
 		DAAF16631F5897EA0013B8AE /* mpw-cli-util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-cli-util.c"; sourceTree = "<group>"; };
 		DAAF16641F5897EA0013B8AE /* mpw-cli-util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-cli-util.h"; sourceTree = "<group>"; };
+		DAB07C9E1F7725D400CC6D43 /* aes.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aes.c; sourceTree = "<group>"; };
+		DAB07C9F1F7725D400CC6D43 /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
 		DAB7AE591F3D74E700C856B1 /* libjson-c.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libjson-c.a"; path = "External/libjson-c/libjson-c-osx/lib/libjson-c.a"; sourceTree = "<group>"; };
 		DAB7AE7B1F3D757B00C856B1 /* arraylist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = arraylist.h; sourceTree = "<group>"; };
 		DAB7AE7C1F3D757B00C856B1 /* bits.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bits.h; sourceTree = "<group>"; };
@@ -1876,6 +1882,8 @@
 		DA6773291A4746AF004F356A /* C */ = {
 			isa = PBXGroup;
 			children = (
+				DAB07C9E1F7725D400CC6D43 /* aes.c */,
+				DAB07C9F1F7725D400CC6D43 /* aes.h */,
 				DA5B0B381F36467300B663F0 /* base64.c */,
 				DA5B0B391F36467300B663F0 /* base64.h */,
 				DA1C7AB71F1A8F6E009A3551 /* cli */,
@@ -2669,6 +2677,7 @@
 				DA1C7AAA1F1A8F24009A3551 /* mpw-marshal.c in Sources */,
 				DA1C7AAB1F1A8F24009A3551 /* mpw-types.c in Sources */,
 				DA5B0B3D1F36467900B663F0 /* base64.c in Sources */,
+				DAB07CA31F77261400CC6D43 /* aes.c in Sources */,
 				DAAF16661F5CA3240013B8AE /* mpw-cli-util.c in Sources */,
 				DA1C7AAC1F1A8F24009A3551 /* mpw-util.c in Sources */,
 				DA1C7AC31F1A8FBA009A3551 /* mpw-cli.c in Sources */,
@@ -2684,6 +2693,7 @@
 				DA5B0B3C1F36467900B663F0 /* base64.c in Sources */,
 				DA1C7ACA1F1A8FD8009A3551 /* mpw-types.c in Sources */,
 				DA1C7ACB1F1A8FD8009A3551 /* mpw-util.c in Sources */,
+				DAB07CA61F77262400CC6D43 /* aes.c in Sources */,
 				DA1C7AD71F1A8FE6009A3551 /* mpw-bench.c in Sources */,
 				DA1C7ACD1F1A8FD8009A3551 /* mpw-algorithm.c in Sources */,
 			);
@@ -2704,6 +2714,7 @@
 				DA2686221EBFD7A40001E37E /* MPSiteQuestionEntity+CoreDataProperties.m in Sources */,
 				DA4571201F572F3200D54152 /* PearlCryptUtils.m in Sources */,
 				DACBFCDF1C59B22E007EF90F /* NSMutableSet+Pearl.m in Sources */,
+				DAB07CA01F7725D400CC6D43 /* aes.c in Sources */,
 				DA2686241EBFD7A40001E37E /* MPStoredSiteEntity+CoreDataProperties.m in Sources */,
 				DA6774311A4746AF004F356A /* mpw-util.c in Sources */,
 				DA5E5CF91724A667003798D8 /* MPAppDelegate_Key.m in Sources */,
@@ -2745,6 +2756,7 @@
 			files = (
 				DA1C7AD81F1A8FF4009A3551 /* mpw-tests-util.c in Sources */,
 				DA6774451A474A3B004F356A /* mpw-types.c in Sources */,
+				DAB07CA51F77261C00CC6D43 /* aes.c in Sources */,
 				DA6774461A474A3B004F356A /* mpw-util.c in Sources */,
 				DA1C7AD91F1A8FF4009A3551 /* mpw-tests.c in Sources */,
 				DA5B0B3B1F36467800B663F0 /* base64.c in Sources */,

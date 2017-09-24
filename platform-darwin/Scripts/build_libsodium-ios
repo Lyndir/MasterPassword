@@ -23,7 +23,7 @@ mkdir -p "$prefix/lib" \
     export LDFLAGS="-arch i386 -isysroot $SDKROOT -mios-simulator-version-min=${IPHONEOS_DEPLOYMENT_TARGET:-8.0} -flto $LDFLAGS"
     export CPPFLAGS="$CFLAGS $CPPFLAGS"
     [[ -e Makefile ]] && make -s distclean
-    ./configure --host=i686-apple --disable-shared --prefix="$prefix_i386"
+    ./configure --host=i686-apple --disable-shared --enable-minimal --prefix="$prefix_i386"
     make -j3 install
 )
 (
@@ -34,7 +34,7 @@ mkdir -p "$prefix/lib" \
     export LDFLAGS="-arch x86_64 -isysroot $SDKROOT -mios-simulator-version-min=${IPHONEOS_DEPLOYMENT_TARGET:-8.0} -flto $LDFLAGS"
     export CPPFLAGS="$CFLAGS $CPPFLAGS"
     [[ -e Makefile ]] && make -s distclean
-    ./configure --host=x86_64-apple --disable-shared --prefix="$prefix_x86_64"
+    ./configure --host=x86_64-apple --disable-shared --enable-minimal --prefix="$prefix_x86_64"
     make -j3 install
 )
 (
@@ -45,7 +45,7 @@ mkdir -p "$prefix/lib" \
     export LDFLAGS="-mthumb -arch armv7 -isysroot $SDKROOT -mios-version-min=${IPHONEOS_DEPLOYMENT_TARGET:-8.0} -flto $LDFLAGS"
     export CPPFLAGS="$CFLAGS $CPPFLAGS"
     [[ -e Makefile ]] && make -s distclean
-    ./configure --host=x86_64-apple --target=arm-apple --disable-shared --prefix="$prefix_armv7"
+    ./configure --host=x86_64-apple --target=arm-apple --disable-shared --enable-minimal --prefix="$prefix_armv7"
     make -j3 install
 )
 (
@@ -56,7 +56,7 @@ mkdir -p "$prefix/lib" \
     export LDFLAGS="-mthumb -arch armv7s -isysroot $SDKROOT -mios-version-min=${IPHONEOS_DEPLOYMENT_TARGET:-8.0} -flto $LDFLAGS"
     export CPPFLAGS="$CFLAGS $CPPFLAGS"
     [[ -e Makefile ]] && make -s distclean
-    ./configure --host=x86_64-apple --target=arm-apple --disable-shared --prefix="$prefix_armv7s"
+    ./configure --host=x86_64-apple --target=arm-apple --disable-shared --enable-minimal --prefix="$prefix_armv7s"
     make -j3 install
 )
 (
@@ -67,7 +67,7 @@ mkdir -p "$prefix/lib" \
     export LDFLAGS="-mthumb -arch arm64 -isysroot $SDKROOT -mios-version-min=${IPHONEOS_DEPLOYMENT_TARGET:-8.0} -flto $LDFLAGS"
     export CPPFLAGS="$CFLAGS $CPPFLAGS"
     [[ -e Makefile ]] && make -s distclean
-    ./configure --host=x86_64-apple --target=arm-apple --disable-shared --prefix="$prefix_arm64"
+    ./configure --host=x86_64-apple --target=arm-apple --disable-shared --enable-minimal --prefix="$prefix_arm64"
     make -j3 install
 )
 

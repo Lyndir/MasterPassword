@@ -19,7 +19,7 @@ mkdir -p "$prefix"
     export LDFLAGS="-arch x86_64 -isysroot $SDKROOT -mmacosx-version-min=${MACOSX_DEPLOYMENT_TARGET:-10.8} -flto $LDFLAGS"
     export CPPFLAGS="$CFLAGS $CPPFLAGS"
     [[ -e Makefile ]] && make -s distclean
-    ./configure --disable-shared --prefix="$prefix"
+    ./configure --disable-shared --enable-minimal --prefix="$prefix"
     make -j3 check
     make -j3 install
 )

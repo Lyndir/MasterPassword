@@ -99,7 +99,7 @@ endfunction()
 ### TARGET: MPW
 if( BUILD_MPW )
     # target
-    add_executable( mpw "core/base64.c" "core/mpw-algorithm.c" "core/mpw-types.c" "core/mpw-util.c" "core/mpw-marshal-util.c" "core/mpw-marshal.c"
+    add_executable( mpw "core/base64.c" "core/aes.c" "core/mpw-algorithm.c" "core/mpw-types.c" "core/mpw-util.c" "core/mpw-marshal-util.c" "core/mpw-marshal.c"
                         "cli/mpw-cli-util.c" "cli/mpw-cli.c" )
     target_include_directories( mpw PUBLIC core cli )
 
@@ -113,7 +113,7 @@ endif()
 ### TARGET: MPW-BENCH
 if( BUILD_MPW_BENCH )
     # target
-    add_executable( mpw_bench "core/base64.c" "core/mpw-algorithm.c" "core/mpw-types.c" "core/mpw-util.c"
+    add_executable( mpw_bench "core/base64.c" "core/aes.c" "core/mpw-algorithm.c" "core/mpw-types.c" "core/mpw-util.c"
                         "cli/mpw-bench.c" )
     target_include_directories( mpw_bench PUBLIC core cli )
 
@@ -125,7 +125,7 @@ endif()
 ### TARGET: MPW-TESTS
 if( BUILD_MPW_TESTS )
     # target
-    add_executable( mpw_tests "core/base64.c" "core/mpw-algorithm.c" "core/mpw-types.c" "core/mpw-util.c"
+    add_executable( mpw_tests "core/base64.c" "core/aes.c" "core/mpw-algorithm.c" "core/mpw-types.c" "core/mpw-util.c"
                               "cli/mpw-tests-util.c" "cli/mpw-tests.c" )
     target_include_directories( mpw_tests PUBLIC core cli )
 

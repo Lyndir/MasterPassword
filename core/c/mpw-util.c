@@ -32,6 +32,9 @@
 #elif MPW_SODIUM
 #include "sodium.h"
 #endif
+#define AES_ECB 0
+#define AES_CBC 1
+#include "aes.h"
 
 #include "mpw-util.h"
 
@@ -266,40 +269,23 @@ uint8_t const *mpw_hash_hmac_sha256(const uint8_t *key, const size_t keySize, co
 
 static uint8_t const *mpw_aes(bool encrypt, const uint8_t *key, const size_t keySize, const uint8_t *buf, const size_t bufSize) {
 
-#if MPW_SODIUM
-    if (!key || keySize < crypto_stream_KEYBYTES)
+    if (!key || keySize < 16)
         return NULL;
 
-    uint8_t nonce[crypto_stream_NONCEBYTES];
-    bzero( (void *)nonce, sizeof( nonce ) );
+    uint8_t iv[16];
+    bzero( (void *)iv, sizeof( iv ) );
+    uint8_t aesBuf[bufSize];
+    memcpy( aesBuf, buf, bufSize );
+    uint8_t *resultBuf = malloc( bufSize );
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    if (encrypt) {
-        uint8_t *const cipherBuf = malloc( bufSize );
-        if (crypto_stream_aes128ctr_xor( cipherBuf, buf, bufSize, nonce, key ) != 0) {
-            mpw_free( &cipherBuf, bufSize );
-            return NULL;
-        }
-        return cipherBuf;
-    }
-    else {
-        uint8_t *const plainBuf = malloc( bufSize );
-        if (crypto_stream_aes128ctr( plainBuf, bufSize, nonce, key ) != 0) {
-            mpw_free( &plainBuf, bufSize );
-            return NULL;
-        }
-        for (size_t c = 0; c < bufSize; ++c)
-            plainBuf[c] = buf[c] ^ plainBuf[c];
-        return plainBuf;
-    }
-#pragma clang diagnostic pop
-#pragma GCC diagnostic pop
-#else
-#error No crypto support for mpw_aes.
-#endif
+    if (encrypt)
+        AES_CBC_encrypt_buffer( resultBuf, aesBuf, (uint32_t)bufSize, key, iv );
+    else
+        AES_CBC_decrypt_buffer( resultBuf, aesBuf, (uint32_t)bufSize, key, iv );
+    bzero( aesBuf, bufSize );
+    bzero( iv, bufSize );
+
+    return resultBuf;
 }
 
 uint8_t const *mpw_aes_encrypt(const uint8_t *key, const size_t keySize, const uint8_t *plainBuf, const size_t bufSize) {

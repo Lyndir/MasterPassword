@@ -251,6 +251,7 @@
 		DAA1765419D8B82B0044227B /* choose_type.png in Resources */ = {isa = PBXBuildFile; fileRef = DAA1763E19D8B82B0044227B /* choose_type.png */; };
 		DAA449D21EEC4B5800E7BDD5 /* mpw-marshal.c in Sources */ = {isa = PBXBuildFile; fileRef = DAA449D01EEC4B5800E7BDD5 /* mpw-marshal.c */; };
 		DAADBFE01A68763B00F7A756 /* mpw-algorithm.c in Sources */ = {isa = PBXBuildFile; fileRef = 93D3969393A3A46BD27D7078 /* mpw-algorithm.c */; };
+		DAB07C9D1F7725C500CC6D43 /* aes.c in Sources */ = {isa = PBXBuildFile; fileRef = DAB07C9B1F7725C500CC6D43 /* aes.c */; };
 		DAB7AE5D1F3D752900C856B1 /* libjson-c.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB7AE5C1F3D752900C856B1 /* libjson-c.a */; };
 		DAB7AE771F3D755B00C856B1 /* libjson-c.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB7AE761F3D755B00C856B1 /* libjson-c.a */; };
 		DAB7AE991F3DDEE000C856B1 /* mpw-marshal-util.c in Sources */ = {isa = PBXBuildFile; fileRef = DAB7AE981F3DDEE000C856B1 /* mpw-marshal-util.c */; };
@@ -873,6 +874,8 @@
 		DAA449D01EEC4B5800E7BDD5 /* mpw-marshal.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-marshal.c"; sourceTree = "<group>"; };
 		DAA449D11EEC4B5800E7BDD5 /* mpw-marshal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-marshal.h"; sourceTree = "<group>"; };
 		DAAC35DD156BD77D00C5FD93 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		DAB07C9B1F7725C500CC6D43 /* aes.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aes.c; sourceTree = "<group>"; };
+		DAB07C9C1F7725C500CC6D43 /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
 		DAB7AE5C1F3D752900C856B1 /* libjson-c.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libjson-c.a"; path = "External/libjson-c/libjson-c-ios/lib/libjson-c.a"; sourceTree = "<group>"; };
 		DAB7AE611F3D755B00C856B1 /* arraylist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = arraylist.h; sourceTree = "<group>"; };
 		DAB7AE621F3D755B00C856B1 /* bits.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bits.h; sourceTree = "<group>"; };
@@ -1749,6 +1752,8 @@
 		93D39A2239FFFE6BEC83E191 /* C */ = {
 			isa = PBXGroup;
 			children = (
+				DAB07C9B1F7725C500CC6D43 /* aes.c */,
+				DAB07C9C1F7725C500CC6D43 /* aes.h */,
 				DA5B0B3E1F36469400B663F0 /* base64.c */,
 				DA5B0B3F1F36469400B663F0 /* base64.h */,
 				93D390A99850139D0FF0211E /* mpw-algorithm_v0.c */,
@@ -3994,6 +3999,7 @@
 				93D396D8B67DA6522CDBA142 /* MPCoachmarkViewController.m in Sources */,
 				DAADBFE01A68763B00F7A756 /* mpw-algorithm.c in Sources */,
 				DA0CC54E1EB6AD0E009A8ED9 /* MasterPassword.xcdatamodeld in Sources */,
+				DAB07C9D1F7725C500CC6D43 /* aes.c in Sources */,
 				93D39EAA4D064193074D3021 /* MPFixable.m in Sources */,
 				93D394982CBD25D46692DD7C /* MPWebViewController.m in Sources */,
 				93D39D8F78978196D6ABDEDE /* MPNavigationController.m in Sources */,
