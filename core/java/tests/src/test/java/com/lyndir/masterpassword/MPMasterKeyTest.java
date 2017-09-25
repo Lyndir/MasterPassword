@@ -20,6 +20,7 @@ package com.lyndir.masterpassword;
 
 import static org.testng.Assert.*;
 
+import com.google.common.base.Charsets;
 import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import java.util.Random;
@@ -112,6 +113,7 @@ public class MPMasterKeyTest {
         StringBuilder password = new StringBuilder();
         for (int p = 0; p < 8; ++p)
             password.append( (char) (random.nextInt( Character.MAX_CODE_POINT - Character.MIN_CODE_POINT ) + Character.MIN_CODE_POINT) );
+        logger.dbg( "password: %s", CodeUtils.encodeHex( password.toString().getBytes( Charsets.UTF_8 ) ) );
 
         for (final MPMasterKey.Version version : MPMasterKey.Version.values()) {
             MPResultType resultType = MPResultType.StoredPersonal;
@@ -119,10 +121,12 @@ public class MPMasterKeyTest {
             // Test site state
             String state = masterKey.siteState( testCase.getSiteName(), testCase.getSiteCounter(), testCase.getKeyPurpose(),
                                                 testCase.getKeyContext(), resultType, password.toString(), version );
+            String result = masterKey.siteResult( testCase.getSiteName(), testCase.getSiteCounter(), testCase.getKeyPurpose(),
+                                                  testCase.getKeyContext(), resultType, state, version );
+            logger.dbg( "result: %s", CodeUtils.encodeHex( result.getBytes( Charsets.UTF_8 ) ) );
 
             assertEquals(
-                    masterKey.siteResult( testCase.getSiteName(), testCase.getSiteCounter(), testCase.getKeyPurpose(),
-                                          testCase.getKeyContext(), resultType, state, version ),
+                    result,
                     password.toString(),
                     "[testSiteState] state mismatch: " + testCase );
         }
