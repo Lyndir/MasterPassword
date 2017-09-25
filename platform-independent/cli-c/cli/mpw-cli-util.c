@@ -16,7 +16,8 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-#define _WITH_GETLINE
+#define _POSIX_C_SOURCE 200809L
+
 #include "mpw-cli-util.h"
 
 #include <unistd.h>
@@ -188,7 +189,7 @@ bool mpw_mkdirs(const char *filePath) {
 
     // The path to mkdir is the filePath without the last path component.
     char *pathEnd = strrchr( filePath, '/' );
-    char *path = pathEnd? strndup( filePath, (size_t)(pathEnd - filePath) ): NULL;
+    char *path = pathEnd? mpw_strndup( filePath, (size_t)(pathEnd - filePath) ): NULL;
     if (!path)
         return false;
 

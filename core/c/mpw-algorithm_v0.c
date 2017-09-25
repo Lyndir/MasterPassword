@@ -176,7 +176,7 @@ static const char *mpw_sitePasswordFromCrypt_v0(
     // Decrypt
     const uint8_t *plainBytes = mpw_aes_decrypt( masterKey, MPMasterKeySize, cipherBuf, &bufSize );
     mpw_free( &cipherBuf, cipherBufSize );
-    const char *plainText = strndup( (char *)plainBytes, bufSize );
+    const char *plainText = mpw_strndup( (char *)plainBytes, bufSize );
     mpw_free( &plainBytes, bufSize );
     if (!plainText)
         err( "AES decryption error: %s\n", strerror( errno ) );

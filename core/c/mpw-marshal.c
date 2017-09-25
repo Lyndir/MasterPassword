@@ -46,7 +46,7 @@ MPMarshalledUser *mpw_marshal_user(
             .sites = NULL,
     };
     return user;
-};
+}
 
 MPMarshalledSite *mpw_marshal_site(
         MPMarshalledUser *user, const char *siteName, const MPResultType resultType,
@@ -74,7 +74,7 @@ MPMarshalledSite *mpw_marshal_site(
             .questions = NULL,
     };
     return site;
-};
+}
 
 MPMarshalledQuestion *mpw_marshal_question(
         MPMarshalledSite *site, const char *keyword) {
@@ -456,7 +456,7 @@ static MPMarshalledUser *mpw_marshal_read_flat(
             char *headerValue = mpw_get_token( &positionInLine, endOfLine, "\n" );
             if (!headerName || !headerValue) {
                 error->type = MPMarshalErrorStructure;
-                error->description = mpw_str( "Invalid header: %s", strndup( positionInLine, (size_t)(endOfLine - positionInLine) ) );
+                error->description = mpw_str( "Invalid header: %s", mpw_strndup( positionInLine, (size_t)(endOfLine - positionInLine) ) );
                 return NULL;
             }
 

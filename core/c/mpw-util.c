@@ -482,7 +482,7 @@ static char *mpw_tputs(const char *str, int affcnt) {
     str_tputs = calloc( str_tputs_max, sizeof( char ) );
     str_tputs_cursor = -1;
 
-    char *result = tputs( str, affcnt, mpw_tputc ) == ERR? NULL: strndup( str_tputs, str_tputs_max );
+    char *result = tputs( str, affcnt, mpw_tputc ) == ERR? NULL: mpw_strndup( str_tputs, str_tputs_max );
     if (str_tputs)
         mpw_free( &str_tputs, str_tputs_max );
 
@@ -565,4 +565,15 @@ const size_t mpw_utf8_strlen(const char *utf8String) {
         ++charlen;
 
     return charlen;
+}
+
+char *mpw_strndup(const char *src, size_t max) {
+    size_t len = 0;
+    for (; len < max && src[len] != '\0'; ++len);
+
+    char *dst = malloc( len + 1 );
+    memcpy( dst, src, len );
+    dst[len] = '\0';
+
+    return dst;
 }
