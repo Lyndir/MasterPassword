@@ -35,7 +35,7 @@
 const char *mpw_getenv(const char *variableName) {
 
     char *envBuf = getenv( variableName );
-    return envBuf? strdup( envBuf ): NULL;
+    return envBuf? mpw_strdup( envBuf ): NULL;
 }
 
 /** Use the askpass program to prompt the user.
@@ -129,7 +129,7 @@ const char *mpw_getpass(const char *prompt) {
     if (!answer)
         return NULL;
 
-    password = strdup( answer );
+    password = mpw_strdup( answer );
     mpw_zero( answer, strlen( answer ) );
     return password;
 }
@@ -144,25 +144,25 @@ const char *mpw_path(const char *prefix, const char *extension) {
     char *homeDir = NULL;
     if (!homeDir)
         if ((homeDir = getenv( "HOME" )))
-            homeDir = strdup( homeDir );
+            homeDir = mpw_strdup( homeDir );
     if (!homeDir)
         if ((homeDir = getenv( "USERPROFILE" )))
-            homeDir = strdup( homeDir );
+            homeDir = mpw_strdup( homeDir );
     if (!homeDir) {
         const char *homeDrive = getenv( "HOMEDRIVE" ), *homePath = getenv( "HOMEPATH" );
         if (homeDrive && homePath)
-            homeDir = strdup( mpw_str( "%s%s", homeDrive, homePath ) );
+            homeDir = mpw_strdup( mpw_str( "%s%s", homeDrive, homePath ) );
     }
     if (!homeDir) {
         struct passwd *passwd = getpwuid( getuid() );
         if (passwd)
-            homeDir = strdup( passwd->pw_dir );
+            homeDir = mpw_strdup( passwd->pw_dir );
     }
     if (!homeDir)
         homeDir = getcwd( NULL, 0 );
 
     // Compose filename.
-    char *path = strdup( mpw_str( "%s.%s", prefix, extension ) );
+    char *path = mpw_strdup( mpw_str( "%s.%s", prefix, extension ) );
 
     // This is a filename, remove all potential directory separators.
     for (char *slash; (slash = strstr( path, "/" )); *slash = '_');
@@ -174,7 +174,7 @@ const char *mpw_path(const char *prefix, const char *extension) {
         free( path );
 
         if (homePath)
-            path = strdup( homePath );
+            path = mpw_strdup( homePath );
     }
 
     return path;

@@ -343,7 +343,7 @@ const char *mpw_hotp(const uint8_t *key, size_t keySize, uint64_t movingFactor, 
 
     // Render the OTP as `digits` decimal digits.
     otp %= (int)pow(10, digits);
-    return strdup( mpw_str( "%0*d", digits, otp ) );
+    return mpw_strdup( mpw_str( "%0*d", digits, otp ) );
 }
 #endif
 
@@ -565,6 +565,15 @@ const size_t mpw_utf8_strlen(const char *utf8String) {
         ++charlen;
 
     return charlen;
+}
+
+char *mpw_strdup(const char *src) {
+    size_t len = strlen( src );
+    char *dst = malloc( len + 1 );
+    memcpy( dst, src, len );
+    dst[len] = '\0';
+
+    return dst;
 }
 
 char *mpw_strndup(const char *src, size_t max) {

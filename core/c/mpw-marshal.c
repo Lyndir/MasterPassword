@@ -33,8 +33,8 @@ MPMarshalledUser *mpw_marshal_user(
         return NULL;
 
     *user = (MPMarshalledUser){
-            .fullName = strdup( fullName ),
-            .masterPassword = strdup( masterPassword ),
+            .fullName = mpw_strdup( fullName ),
+            .masterPassword = mpw_strdup( masterPassword ),
             .algorithm = algorithmVersion,
             .redacted = true,
 
@@ -57,7 +57,7 @@ MPMarshalledSite *mpw_marshal_site(
 
     MPMarshalledSite *site = &user->sites[user->sites_count - 1];
     *site = (MPMarshalledSite){
-            .name = strdup( siteName ),
+            .name = mpw_strdup( siteName ),
             .content = NULL,
             .type = resultType,
             .counter = siteCounter,
@@ -86,7 +86,7 @@ MPMarshalledQuestion *mpw_marshal_question(
 
     MPMarshalledQuestion *question = &site->questions[site->questions_count - 1];
     *question = (MPMarshalledQuestion){
-            .keyword = strdup( keyword ),
+            .keyword = mpw_strdup( keyword ),
             .content = NULL,
             .type = MPResultTypeTemplatePhrase,
     };
@@ -198,9 +198,9 @@ static bool mpw_marshal_write_flat(
         else {
             // Redacted
             if (site->type & MPSiteFeatureExportContent && site->content && strlen( site->content ))
-                content = strdup( site->content );
+                content = mpw_strdup( site->content );
             if (site->loginType & MPSiteFeatureExportContent && site->loginContent && strlen( site->loginContent ))
-                loginContent = strdup( site->loginContent );
+                loginContent = mpw_strdup( site->loginContent );
         }
 
         if (strftime( dateString, sizeof( dateString ), "%FT%TZ", gmtime( &site->lastUsed ) ))
@@ -284,9 +284,9 @@ static bool mpw_marshal_write_json(
         else {
             // Redacted
             if (site->type & MPSiteFeatureExportContent && site->content && strlen( site->content ))
-                content = strdup( site->content );
+                content = mpw_strdup( site->content );
             if (site->loginType & MPSiteFeatureExportContent && site->loginContent && strlen( site->loginContent ))
-                loginContent = strdup( site->loginContent );
+                loginContent = mpw_strdup( site->loginContent );
         }
 
         json_object *json_site = json_object_new_object();
@@ -397,9 +397,9 @@ static void mpw_marshal_read_flat_info(
             if (strcmp( headerName, "Algorithm" ) == 0)
                 info->algorithm = (MPAlgorithmVersion)atoi( headerValue );
             if (strcmp( headerName, "Full Name" ) == 0 || strcmp( headerName, "User Name" ) == 0)
-                info->fullName = strdup( headerValue );
+                info->fullName = mpw_strdup( headerValue );
             if (strcmp( headerName, "Key ID" ) == 0)
-                info->keyID = strdup( headerValue );
+                info->keyID = mpw_strdup( headerValue );
             if (strcmp( headerName, "Passwords" ) == 0)
                 info->redacted = strcmp( headerValue, "VISIBLE" ) != 0;
             if (strcmp( headerName, "Date" ) == 0)
@@ -463,11 +463,11 @@ static MPMarshalledUser *mpw_marshal_read_flat(
             if (strcmp( headerName, "Format" ) == 0)
                 format = (unsigned int)atoi( headerValue );
             if (strcmp( headerName, "Full Name" ) == 0 || strcmp( headerName, "User Name" ) == 0)
-                fullName = strdup( headerValue );
+                fullName = mpw_strdup( headerValue );
             if (strcmp( headerName, "Avatar" ) == 0)
                 avatar = (unsigned int)atoi( headerValue );
             if (strcmp( headerName, "Key ID" ) == 0)
-                keyID = strdup( headerValue );
+                keyID = mpw_strdup( headerValue );
             if (strcmp( headerName, "Algorithm" ) == 0) {
                 int value = atoi( headerValue );
                 if (value < MPAlgorithmVersionFirst || value > MPAlgorithmVersionLast) {
@@ -527,11 +527,11 @@ static MPMarshalledUser *mpw_marshal_read_flat(
                 str_uses = mpw_get_token( &positionInLine, endOfLine, " \t\n" );
                 char *typeAndVersion = mpw_get_token( &positionInLine, endOfLine, " \t\n" );
                 if (typeAndVersion) {
-                    str_type = strdup( strtok( typeAndVersion, ":" ) );
-                    str_algorithm = strdup( strtok( NULL, "" ) );
+                    str_type = mpw_strdup( strtok( typeAndVersion, ":" ) );
+                    str_algorithm = mpw_strdup( strtok( NULL, "" ) );
                     mpw_free_string( &typeAndVersion );
                 }
-                str_counter = strdup( "1" );
+                str_counter = mpw_strdup( "1" );
                 siteLoginName = NULL;
                 siteName = mpw_get_token( &positionInLine, endOfLine, "\t\n" );
                 siteContent = mpw_get_token( &positionInLine, endOfLine, "\n" );
@@ -542,9 +542,9 @@ static MPMarshalledUser *mpw_marshal_read_flat(
                 str_uses = mpw_get_token( &positionInLine, endOfLine, " \t\n" );
                 char *typeAndVersionAndCounter = mpw_get_token( &positionInLine, endOfLine, " \t\n" );
                 if (typeAndVersionAndCounter) {
-                    str_type = strdup( strtok( typeAndVersionAndCounter, ":" ) );
-                    str_algorithm = strdup( strtok( NULL, ":" ) );
-                    str_counter = strdup( strtok( NULL, "" ) );
+                    str_type = mpw_strdup( strtok( typeAndVersionAndCounter, ":" ) );
+                    str_algorithm = mpw_strdup( strtok( NULL, ":" ) );
+                    str_counter = mpw_strdup( strtok( NULL, "" ) );
                     mpw_free_string( &typeAndVersionAndCounter );
                 }
                 siteLoginName = mpw_get_token( &positionInLine, endOfLine, "\t\n" );
@@ -608,9 +608,9 @@ static MPMarshalledUser *mpw_marshal_read_flat(
             else {
                 // Redacted
                 if (siteContent && strlen( siteContent ))
-                    site->content = strdup( siteContent );
+                    site->content = mpw_strdup( siteContent );
                 if (siteLoginName && strlen( siteLoginName ))
-                    site->loginContent = strdup( siteLoginName );
+                    site->loginContent = mpw_strdup( siteLoginName );
             }
         }
         else {
@@ -650,8 +650,8 @@ static void mpw_marshal_read_json_info(
 
     // Section: "user"
     info->algorithm = (MPAlgorithmVersion)mpw_get_json_int( json_file, "user.algorithm", MPAlgorithmVersionCurrent );
-    info->fullName = strdup( mpw_get_json_string( json_file, "user.full_name", NULL ) );
-    info->keyID = strdup( mpw_get_json_string( json_file, "user.key_id", NULL ) );
+    info->fullName = mpw_strdup( mpw_get_json_string( json_file, "user.full_name", NULL ) );
+    info->keyID = mpw_strdup( mpw_get_json_string( json_file, "user.key_id", NULL ) );
 
     json_object_put( json_file );
 }
@@ -772,7 +772,7 @@ static MPMarshalledUser *mpw_marshal_read_json(
         }
 
         site->loginType = siteLoginType;
-        site->url = siteURL? strdup( siteURL ): NULL;
+        site->url = siteURL? mpw_strdup( siteURL ): NULL;
         site->uses = siteUses;
         site->lastUsed = siteLastUsed;
         if (!user->redacted) {
@@ -792,9 +792,9 @@ static MPMarshalledUser *mpw_marshal_read_json(
         else {
             // Redacted
             if (siteContent && strlen( siteContent ))
-                site->content = strdup( siteContent );
+                site->content = mpw_strdup( siteContent );
             if (siteLoginName && strlen( siteLoginName ))
-                site->loginContent = strdup( siteLoginName );
+                site->loginContent = mpw_strdup( siteLoginName );
         }
 
         json_object_iter json_site_question;
@@ -813,7 +813,7 @@ static MPMarshalledUser *mpw_marshal_read_json(
             else {
                 // Redacted
                 if (answerContent && strlen( answerContent ))
-                    question->content = strdup( answerContent );
+                    question->content = mpw_strdup( answerContent );
             }
         }
     }

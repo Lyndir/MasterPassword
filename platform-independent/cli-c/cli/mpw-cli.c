@@ -278,48 +278,48 @@ void cli_args(Arguments *args, Operation *operation, const int argc, char *const
          optarg? mpw_zero( optarg, strlen( optarg ) ): (void)0)
         switch (opt) {
             case 'u':
-                args->fullName = optarg && strlen( optarg )? strdup( optarg ): NULL;
+                args->fullName = optarg && strlen( optarg )? mpw_strdup( optarg ): NULL;
                 operation->allowPasswordUpdate = false;
                 break;
             case 'U':
-                args->fullName = optarg && strlen( optarg )? strdup( optarg ): NULL;
+                args->fullName = optarg && strlen( optarg )? mpw_strdup( optarg ): NULL;
                 operation->allowPasswordUpdate = true;
                 break;
             case 'm':
-                args->masterPasswordFD = optarg && strlen( optarg )? strdup( optarg ): NULL;
+                args->masterPasswordFD = optarg && strlen( optarg )? mpw_strdup( optarg ): NULL;
                 break;
             case 'M':
                 // Passing your master password via the command-line is insecure.  Testing purposes only.
-                args->masterPassword = optarg && strlen( optarg )? strdup( optarg ): NULL;
+                args->masterPassword = optarg && strlen( optarg )? mpw_strdup( optarg ): NULL;
                 break;
             case 't':
-                args->resultType = optarg && strlen( optarg )? strdup( optarg ): NULL;
+                args->resultType = optarg && strlen( optarg )? mpw_strdup( optarg ): NULL;
                 break;
             case 'P':
-                args->resultParam = optarg && strlen( optarg )? strdup( optarg ): NULL;
+                args->resultParam = optarg && strlen( optarg )? mpw_strdup( optarg ): NULL;
                 break;
             case 'c':
-                args->siteCounter = optarg && strlen( optarg )? strdup( optarg ): NULL;
+                args->siteCounter = optarg && strlen( optarg )? mpw_strdup( optarg ): NULL;
                 break;
             case 'a':
-                args->algorithmVersion = optarg && strlen( optarg )? strdup( optarg ): NULL;
+                args->algorithmVersion = optarg && strlen( optarg )? mpw_strdup( optarg ): NULL;
                 break;
             case 'p':
-                args->keyPurpose = optarg && strlen( optarg )? strdup( optarg ): NULL;
+                args->keyPurpose = optarg && strlen( optarg )? mpw_strdup( optarg ): NULL;
                 break;
             case 'C':
-                args->keyContext = optarg && strlen( optarg )? strdup( optarg ): NULL;
+                args->keyContext = optarg && strlen( optarg )? mpw_strdup( optarg ): NULL;
                 break;
             case 'f':
-                args->sitesFormat = optarg && strlen( optarg )? strdup( optarg ): NULL;
+                args->sitesFormat = optarg && strlen( optarg )? mpw_strdup( optarg ): NULL;
                 operation->sitesFormatFixed = false;
                 break;
             case 'F':
-                args->sitesFormat = optarg && strlen( optarg )? strdup( optarg ): NULL;
+                args->sitesFormat = optarg && strlen( optarg )? mpw_strdup( optarg ): NULL;
                 operation->sitesFormatFixed = true;
                 break;
             case 'R':
-                args->sitesRedacted = optarg && strlen( optarg )? strdup( optarg ): NULL;
+                args->sitesRedacted = optarg && strlen( optarg )? mpw_strdup( optarg ): NULL;
                 break;
             case 'v':
                 ++mpw_verbosity;
@@ -351,13 +351,13 @@ void cli_args(Arguments *args, Operation *operation, const int argc, char *const
         }
 
     if (optind < argc && argv[optind])
-        args->siteName = strdup( argv[optind] );
+        args->siteName = mpw_strdup( argv[optind] );
 }
 
 void cli_fullName(Arguments *args, Operation *operation) {
 
     if ((!operation->fullName || !strlen( operation->fullName )) && args->fullName)
-        operation->fullName = strdup( args->fullName );
+        operation->fullName = mpw_strdup( args->fullName );
 
     if (!operation->fullName || !strlen( operation->fullName ))
         do {
@@ -380,7 +380,7 @@ void cli_masterPassword(Arguments *args, Operation *operation) {
     }
 
     if ((!operation->masterPassword || !strlen( operation->masterPassword )) && args->masterPassword)
-        operation->masterPassword = strdup( args->masterPassword );
+        operation->masterPassword = mpw_strdup( args->masterPassword );
 
     if (!operation->masterPassword || !strlen( operation->masterPassword ))
         do {
@@ -397,7 +397,7 @@ void cli_masterPassword(Arguments *args, Operation *operation) {
 void cli_siteName(Arguments *args, Operation *operation) {
 
     if ((!operation->siteName || !strlen( operation->siteName )) && args->siteName)
-        operation->siteName = strdup( args->siteName );
+        operation->siteName = mpw_strdup( args->siteName );
     if (!operation->siteName || !strlen( operation->siteName ))
         do {
             operation->siteName = mpw_getline( "Site name:" );
@@ -441,7 +441,7 @@ void cli_keyContext(Arguments *args, Operation *operation) {
     if (!args->keyContext)
         return;
 
-    operation->keyContext = strdup( args->keyContext );
+    operation->keyContext = mpw_strdup( args->keyContext );
 }
 
 void cli_user(Arguments *args, Operation *operation) {
@@ -497,7 +497,7 @@ void cli_user(Arguments *args, Operation *operation) {
             }
             if (operation->user) {
                 mpw_free_string( &operation->user->masterPassword );
-                operation->user->masterPassword = strdup( operation->masterPassword );
+                operation->user->masterPassword = mpw_strdup( operation->masterPassword );
             }
         }
         mpw_free_string( &sitesInputData );
@@ -573,23 +573,23 @@ void cli_operation(Arguments __unused *args, Operation *operation) {
         case MPKeyPurposeAuthentication: {
             operation->purposeResult = "password";
             operation->resultType = operation->site->type;
-            operation->resultState = operation->site->content? strdup( operation->site->content ): NULL;
+            operation->resultState = operation->site->content? mpw_strdup( operation->site->content ): NULL;
             operation->siteCounter = operation->site->counter;
             break;
         }
         case MPKeyPurposeIdentification: {
             operation->purposeResult = "login";
             operation->resultType = operation->site->loginType;
-            operation->resultState = operation->site->loginContent? strdup( operation->site->loginContent ): NULL;
+            operation->resultState = operation->site->loginContent? mpw_strdup( operation->site->loginContent ): NULL;
             operation->siteCounter = MPCounterValueInitial;
             break;
         }
         case MPKeyPurposeRecovery: {
             mpw_free_string( &operation->keyContext );
             operation->purposeResult = "answer";
-            operation->keyContext = operation->question->keyword? strdup( operation->question->keyword ): NULL;
+            operation->keyContext = operation->question->keyword? mpw_strdup( operation->question->keyword ): NULL;
             operation->resultType = operation->question->type;
-            operation->resultState = operation->question->content? strdup( operation->question->content ): NULL;
+            operation->resultState = operation->question->content? mpw_strdup( operation->question->content ): NULL;
             operation->siteCounter = MPCounterValueInitial;
             break;
         }
@@ -655,7 +655,7 @@ void cli_resultParam(Arguments *args, Operation *operation) {
     if (!args->resultParam)
         return;
 
-    operation->resultParam = strdup( args->resultParam );
+    operation->resultParam = mpw_strdup( args->resultParam );
 }
 
 void cli_algorithmVersion(Arguments *args, Operation *operation) {
@@ -715,18 +715,18 @@ void cli_mpw(Arguments *args, Operation *operation) {
         switch (operation->keyPurpose) {
             case MPKeyPurposeAuthentication: {
                 mpw_free_string( &operation->site->content );
-                operation->site->content = strdup( operation->resultState );
+                operation->site->content = mpw_strdup( operation->resultState );
                 break;
             }
             case MPKeyPurposeIdentification: {
                 mpw_free_string( &operation->site->loginContent );
-                operation->site->loginContent = strdup( operation->resultState );
+                operation->site->loginContent = mpw_strdup( operation->resultState );
                 break;
             }
 
             case MPKeyPurposeRecovery: {
                 mpw_free_string( &operation->question->content );
-                operation->question->content = strdup( operation->resultState );
+                operation->question->content = mpw_strdup( operation->resultState );
                 break;
             }
         }
@@ -737,7 +737,7 @@ void cli_mpw(Arguments *args, Operation *operation) {
 
     // resultParam defaults to state.
     if (!operation->resultParam && operation->resultState)
-        operation->resultParam = strdup( operation->resultState );
+        operation->resultParam = mpw_strdup( operation->resultState );
 
     // Generate result.
     const char *result = mpw_siteResult( masterKey, operation->site->name, operation->siteCounter,
