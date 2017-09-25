@@ -16,6 +16,7 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
+#define _WITH_GETLINE
 #include "mpw-cli-util.h"
 
 #include <unistd.h>
