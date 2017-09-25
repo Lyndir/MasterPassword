@@ -137,31 +137,38 @@ bool __mpw_realloc(const void **buffer, size_t *bufferSize, const size_t deltaSi
     return true;
 }
 
-bool __mpw_free(const void **buffer, const size_t bufferSize) {
+void mpw_zero(void *buffer, size_t bufferSize) {
+
+    uint8_t *b = buffer;
+    for (; bufferSize > 0; --bufferSize)
+            *b++ = 0;
+}
+
+bool __mpw_free(void **buffer, const size_t bufferSize) {
 
     if (!buffer || !*buffer)
         return false;
 
-    memset( (void *)*buffer, 0, bufferSize );
-    free( (void *)*buffer );
+    mpw_zero( *buffer, bufferSize );
+    free( *buffer );
     *buffer = NULL;
 
     return true;
 }
 
-bool __mpw_free_string(const char **string) {
+bool __mpw_free_string(char **string) {
 
-    return *string && __mpw_free( (const void **)string, strlen( *string ) );
+    return *string && __mpw_free( (void **)string, strlen( *string ) );
 }
 
-bool __mpw_free_strings(const char **strings, ...) {
+bool __mpw_free_strings(char **strings, ...) {
 
     bool success = true;
 
     va_list args;
     va_start( args, strings );
     success &= mpw_free_string( strings );
-    for (const char **string; (string = va_arg( args, const char ** ));)
+    for (char **string; (string = va_arg( args, char ** ));)
         success &= mpw_free_string( string );
     va_end( args );
 
@@ -217,12 +224,12 @@ uint8_t const *mpw_kdf_blake2b(const size_t subkeySize, const uint8_t *key, cons
     }
 
     uint8_t saltBuf[crypto_generichash_blake2b_SALTBYTES];
-    memset( saltBuf, 0, sizeof saltBuf );
+    mpw_zero( saltBuf, sizeof saltBuf );
     if (id)
         mpw_uint64( id, saltBuf );
 
     uint8_t personalBuf[crypto_generichash_blake2b_PERSONALBYTES];
-    memset( personalBuf, 0, sizeof personalBuf );
+    mpw_zero( personalBuf, sizeof personalBuf );
     if (personal && strlen( personal ))
         memcpy( personalBuf, personal, strlen( personal ) );
 
@@ -274,7 +281,7 @@ static uint8_t const *mpw_aes(bool encrypt, const uint8_t *key, const size_t key
 
     // IV = zero
     uint8_t iv[16];
-    memset( iv, 0, sizeof iv );
+    mpw_zero( iv, sizeof iv );
 
     // Add PKCS#7 padding
     uint32_t aesSize = (uint32_t)*bufSize;
@@ -289,8 +296,8 @@ static uint8_t const *mpw_aes(bool encrypt, const uint8_t *key, const size_t key
         AES_CBC_encrypt_buffer( resultBuf, aesBuf, aesSize, key, iv );
     else
         AES_CBC_decrypt_buffer( resultBuf, aesBuf, aesSize, key, iv );
-    memset_s( aesBuf, aesSize, 0, aesSize );
-    memset_s( iv, 16, 0, 16 );
+    mpw_zero( aesBuf, aesSize );
+    mpw_zero( iv, 16 );
 
     // Truncate PKCS#7 padding
     if (encrypt)

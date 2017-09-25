@@ -128,7 +128,7 @@ const char *mpw_getpass(const char *prompt) {
         return NULL;
 
     password = strdup( answer );
-    memset_s( answer, strlen( answer ), 0, strlen( answer ) );
+    mpw_zero( answer, strlen( answer ) );
     return password;
 }
 

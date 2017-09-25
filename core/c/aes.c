@@ -39,6 +39,7 @@ NOTE:   String length must be evenly divisible by 16byte (str_len % 16 == 0)
 /*****************************************************************************/
 #include <string.h>
 #include "aes.h"
+#include "mpw-util.h"
 
 /*****************************************************************************/
 /* Defines:                                                                  */
@@ -487,7 +488,7 @@ void AES_ECB_encrypt(uint8_t *output, const uint8_t *input, const uint32_t lengt
   // The next function call encrypts the PlainText with the Key using AES algorithm.
   Cipher();
 
-  memset_s( RoundKey, keyExpSize, 0, keyExpSize );
+  mpw_zero( RoundKey, keyExpSize );
 }
 
 void AES_ECB_decrypt(uint8_t *output, const uint8_t *input, const uint32_t length, const uint8_t *key)
@@ -502,7 +503,7 @@ void AES_ECB_decrypt(uint8_t *output, const uint8_t *input, const uint32_t lengt
 
   InvCipher();
 
-  memset_s( RoundKey, keyExpSize, 0, keyExpSize );
+  mpw_zero( RoundKey, keyExpSize );
 }
 
 
@@ -560,7 +561,7 @@ void AES_CBC_encrypt_buffer(uint8_t* output, uint8_t* input, uint32_t length, co
     Cipher();
   }
 
-  memset_s( RoundKey, keyExpSize, 0, keyExpSize );
+  mpw_zero( RoundKey, keyExpSize );
 }
 
 void AES_CBC_decrypt_buffer(uint8_t* output, uint8_t* input, uint32_t length, const uint8_t* key, const uint8_t* iv)
@@ -599,7 +600,7 @@ void AES_CBC_decrypt_buffer(uint8_t* output, uint8_t* input, uint32_t length, co
     InvCipher();
   }
 
-  memset_s( RoundKey, keyExpSize, 0, keyExpSize );
+  mpw_zero( RoundKey, keyExpSize );
 }
 
 #endif // #if defined(AES_CBC) && (AES_CBC == 1)

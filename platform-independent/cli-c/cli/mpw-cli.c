@@ -273,7 +273,7 @@ void cli_free(Arguments *args, Operation *operation) {
 void cli_args(Arguments *args, Operation *operation, const int argc, char *const argv[]) {
 
     for (int opt; (opt = getopt( argc, argv, "u:U:m:M:t:P:c:a:p:C:f:F:R:vqh" )) != EOF;
-         optarg? memset_s( optarg, strlen( optarg ), 0, strlen( optarg ) ): 0)
+         optarg? mpw_zero( optarg, strlen( optarg ) ): NULL)
         switch (opt) {
             case 'u':
                 args->fullName = optarg && strlen( optarg )? strdup( optarg ): NULL;
