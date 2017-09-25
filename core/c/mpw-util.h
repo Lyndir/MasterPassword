@@ -203,17 +203,14 @@ MPKeyID mpw_id_buf(const void *buf, size_t length);
 /** Compare two fingerprints for equality.
   * @return true if the buffers represent identical fingerprints. */
 bool mpw_id_buf_equals(const char *id1, const char *id2);
-/** Encode a visual fingerprint for a user.
-  * @return A newly allocated string. */
-const char *mpw_identicon(const char *fullName, const char *masterPassword);
 
 //// String utilities.
 
 /** @return The amount of display characters in the given UTF-8 string. */
 const size_t mpw_utf8_strlen(const char *utf8String);
-/** Drop-in for non-standard strdup(3). */
+/** Drop-in for POSIX strdup(3). */
 char *mpw_strdup(const char *src);
-/** Drop-in for non-standard strndup(3). */
+/** Drop-in for POSIX strndup(3). */
 char *mpw_strndup(const char *src, size_t max);
 
 #endif // _MPW_UTIL_H

@@ -564,7 +564,7 @@ void cli_question(Arguments __unused *args, Operation *operation) {
 
 void cli_operation(Arguments __unused *args, Operation *operation) {
 
-    operation->identicon = mpw_identicon( operation->user->fullName, operation->user->masterPassword );
+    operation->identicon = mpw_identicon_str( mpw_identicon( operation->user->fullName, operation->user->masterPassword ) );
 
     if (!operation->site)
         abort();

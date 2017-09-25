@@ -20,12 +20,6 @@
 #include <ctype.h>
 #include <errno.h>
 
-#if MPW_COLOR
-#include <unistd.h>
-#include <curses.h>
-#include <term.h>
-#endif
-
 #if MPW_CPERCIVA
 #include <scrypt/crypto_scrypt.h>
 #include <scrypt/sha256.h>
@@ -141,7 +135,7 @@ void mpw_zero(void *buffer, size_t bufferSize) {
 
     uint8_t *b = buffer;
     for (; bufferSize > 0; --bufferSize)
-            *b++ = 0;
+        *b++ = 0;
 }
 
 bool __mpw_free(void **buffer, const size_t bufferSize) {
@@ -274,9 +268,10 @@ uint8_t const *mpw_hash_hmac_sha256(const uint8_t *key, const size_t keySize, co
     return mac;
 }
 
+// We do our best to not fail on odd buf's, eg. non-padded cipher texts.
 static uint8_t const *mpw_aes(bool encrypt, const uint8_t *key, const size_t keySize, const uint8_t *buf, size_t *bufSize) {
 
-    if (!key || keySize < 16)
+    if (!key || keySize < 16 || !*bufSize)
         return NULL;
 
     // IV = zero
@@ -284,9 +279,9 @@ static uint8_t const *mpw_aes(bool encrypt, const uint8_t *key, const size_t key
     mpw_zero( iv, sizeof iv );
 
     // Add PKCS#7 padding
-    uint32_t aesSize = (uint32_t)*bufSize;
-    if (encrypt)
-        aesSize = (aesSize / 16) * 16 + 16;
+    uint32_t aesSize = ((uint32_t)*bufSize + 15 / 16) * 16; // round up to block size.
+    if (encrypt && !(*bufSize % 16)) // add pad block if plain text fits block size.
+        encrypt += 16;
     uint8_t aesBuf[aesSize];
     memcpy( aesBuf, buf, *bufSize );
     memset( aesBuf + *bufSize, aesSize - *bufSize, aesSize - *bufSize );
@@ -302,7 +297,7 @@ static uint8_t const *mpw_aes(bool encrypt, const uint8_t *key, const size_t key
     // Truncate PKCS#7 padding
     if (encrypt)
         *bufSize = aesSize;
-    else
+    else if (*bufSize % 16 == 0 && resultBuf[aesSize - 1] < 16)
         *bufSize -= resultBuf[aesSize - 1];
 
     return resultBuf;
@@ -443,99 +438,6 @@ const char *mpw_hex_l(uint32_t number) {
     return mpw_hex( &buf, sizeof( buf ) );
 }
 
-#if MPW_COLOR
-static char *str_tputs;
-static int str_tputs_cursor;
-static const int str_tputs_max = 256;
-
-static bool mpw_setupterm() {
-
-    if (!isatty( STDERR_FILENO ))
-        return false;
-
-    static bool termsetup;
-    if (!termsetup) {
-        int errret;
-        if (!(termsetup = (setupterm( NULL, STDERR_FILENO, &errret ) == OK))) {
-            wrn( "Terminal doesn't support color (setupterm errret %d).\n", errret );
-            return false;
-        }
-    }
-
-    return true;
-}
-
-static int mpw_tputc(int c) {
-
-    if (++str_tputs_cursor < str_tputs_max) {
-        str_tputs[str_tputs_cursor] = (char)c;
-        return OK;
-    }
-
-    return ERR;
-}
-
-static char *mpw_tputs(const char *str, int affcnt) {
-
-    if (str_tputs)
-        mpw_free( &str_tputs, str_tputs_max );
-    str_tputs = calloc( str_tputs_max, sizeof( char ) );
-    str_tputs_cursor = -1;
-
-    char *result = tputs( str, affcnt, mpw_tputc ) == ERR? NULL: mpw_strndup( str_tputs, str_tputs_max );
-    if (str_tputs)
-        mpw_free( &str_tputs, str_tputs_max );
-
-    return result;
-}
-
-#endif
-
-const char *mpw_identicon(const char *fullName, const char *masterPassword) {
-
-    const char *leftArm[] = { "╔", "╚", "╰", "═" };
-    const char *rightArm[] = { "╗", "╝", "╯", "═" };
-    const char *body[] = { "█", "░", "▒", "▓", "☺", "☻" };
-    const char *accessory[] = {
-            "◈", "◎", "◐", "◑", "◒", "◓", "☀", "☁", "☂", "☃", "☄", "★", "☆", "☎", "☏", "⎈", "⌂", "☘", "☢", "☣",
-            "☕", "⌚", "⌛", "⏰", "⚡", "⛄", "⛅", "☔", "♔", "♕", "♖", "♗", "♘", "♙", "♚", "♛", "♜", "♝", "♞", "♟",
-            "♨", "♩", "♪", "♫", "⚐", "⚑", "⚔", "⚖", "⚙", "⚠", "⌘", "⏎", "✄", "✆", "✈", "✉", "✌"
-    };
-
-    const uint8_t *identiconSeed = mpw_hash_hmac_sha256(
-            (const uint8_t *)masterPassword, strlen( masterPassword ),
-            (const uint8_t *)fullName, strlen( fullName ) );
-    if (!identiconSeed)
-        return NULL;
-
-    char *colorString, *resetString;
-#ifdef MPW_COLOR
-    if (mpw_setupterm()) {
-        uint8_t colorIdentifier = (uint8_t)(identiconSeed[4] % 7 + 1);
-        colorString = mpw_tputs( tparm( tgetstr( "AF", NULL ), colorIdentifier ), 1 );
-        resetString = mpw_tputs( tgetstr( "me", NULL ), 1 );
-    }
-    else
-#endif
-    {
-        colorString = calloc( 1, sizeof( char ) );
-        resetString = calloc( 1, sizeof( char ) );
-    }
-
-    char *identicon = (char *)calloc( 256, sizeof( char ) );
-    snprintf( identicon, 256, "%s%s%s%s%s%s",
-            colorString,
-            leftArm[identiconSeed[0] % (sizeof( leftArm ) / sizeof( leftArm[0] ))],
-            body[identiconSeed[1] % (sizeof( body ) / sizeof( body[0] ))],
-            rightArm[identiconSeed[2] % (sizeof( rightArm ) / sizeof( rightArm[0] ))],
-            accessory[identiconSeed[3] % (sizeof( accessory ) / sizeof( accessory[0] ))],
-            resetString );
-
-    mpw_free( &identiconSeed, 32 );
-    mpw_free_strings( &colorString, &resetString, NULL );
-    return identicon;
-}
-
 /**
 * @return the amount of bytes used by UTF-8 to encode a single character that starts with the given byte.
 */
@@ -568,6 +470,10 @@ const size_t mpw_utf8_strlen(const char *utf8String) {
 }
 
 char *mpw_strdup(const char *src) {
+
+    if (!src)
+        return NULL;
+
     size_t len = strlen( src );
     char *dst = malloc( len + 1 );
     memcpy( dst, src, len );
@@ -577,6 +483,10 @@ char *mpw_strdup(const char *src) {
 }
 
 char *mpw_strndup(const char *src, size_t max) {
+
+    if (!src)
+        return NULL;
+
     size_t len = 0;
     for (; len < max && src[len] != '\0'; ++len);
 

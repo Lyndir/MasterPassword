@@ -111,6 +111,14 @@ typedef mpw_enum ( uint32_t, MPCounterValue ) {
     MPCounterValueLast = UINT32_MAX,
 };
 
+typedef struct {
+    const char *leftArm;
+    const char *body;
+    const char *rightArm;
+    const char *accessory;
+    uint8_t color;
+} MPIdenticon;
+
 //// Type utilities.
 
 /**
@@ -156,5 +164,8 @@ const char *mpw_charactersInClass(char characterClass);
  * @return A character from given character class that encodes the given byte.
  */
 const char mpw_characterFromClass(char characterClass, uint8_t seedByte);
+
+/** @return A fingerprint for a user. */
+MPIdenticon mpw_identicon(const char *fullName, const char *masterPassword);
 
 #endif // _MPW_TYPES_H

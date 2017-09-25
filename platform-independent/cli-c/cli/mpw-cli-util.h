@@ -19,6 +19,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include "mpw-types.h"
 
 #ifndef MP_VERSION
 #define MP_VERSION ?
@@ -62,3 +63,7 @@ char *mpw_read_fd(int fd);
 /** Read the file contents of a given file.
   * @return A newly allocated string or NULL the read buffer couldn't be allocated. */
 char *mpw_read_file(FILE *file);
+
+/** Encode a visual fingerprint for a user.
+  * @return A newly allocated string. */
+const char *mpw_identicon_str(MPIdenticon identicon);
