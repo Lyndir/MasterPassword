@@ -142,19 +142,19 @@ void mpw_zero(
         void *buffer, size_t bufferSize);
 /** Free a buffer after zero'ing its contents, then set the reference to NULL. */
 #define mpw_free(buffer, bufferSize) \
-        ({ __typeof__(buffer) _b = buffer; const void *__b = *_b; (void)__b; __mpw_free( (const void **)_b, bufferSize ); })
+        ({ __typeof__(buffer) _b = buffer; const void *__b = *_b; (void)__b; __mpw_free( (void **)_b, bufferSize ); })
 bool __mpw_free(
-        const void **buffer, const size_t bufferSize);
+        void **buffer, size_t bufferSize);
 /** Free a string after zero'ing its contents, then set the reference to NULL. */
 #define mpw_free_string(string) \
-        ({ __typeof__(string) _s = string; const char *__s = *_s; (void)__s; __mpw_free_string( (const char **)_s ); })
+        ({ __typeof__(string) _s = string; const char *__s = *_s; (void)__s; __mpw_free_string( (char **)_s ); })
 bool __mpw_free_string(
-        const char **string);
+        char **string);
 /** Free strings after zero'ing their contents, then set the references to NULL.  Terminate the va_list with NULL. */
 #define mpw_free_strings(strings, ...) \
-        ({ __typeof__(strings) _s = strings; const char *__s = *_s; (void)__s; __mpw_free_strings( (const char **)_s, __VA_ARGS__ ); })
+        ({ __typeof__(strings) _s = strings; const char *__s = *_s; (void)__s; __mpw_free_strings( (char **)_s, __VA_ARGS__ ); })
 bool __mpw_free_strings(
-        const char **strings, ...);
+        char **strings, ...);
 
 //// Cryptographic functions.
 
