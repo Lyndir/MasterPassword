@@ -220,16 +220,17 @@ bool mpw_mkdirs(const char *filePath) {
     if (!filePath)
         return false;
 
+    // Save the cwd and for absolute paths, start at the root.
+    char *cwd = getcwd( NULL, 0 );
+    if (*filePath == '/')
+        if (!chdir( "/" ))
+            return false;
+
     // The path to mkdir is the filePath without the last path component.
     char *pathEnd = strrchr( filePath, '/' );
     char *path = pathEnd? mpw_strndup( filePath, (size_t)(pathEnd - filePath) ): NULL;
     if (!path)
         return false;
-
-    // Save the cwd and for absolute paths, start at the root.
-    char *cwd = getcwd( NULL, 0 );
-    if (*filePath == '/')
-        chdir( "/" );
 
     // Walk the path.
     bool success = true;
