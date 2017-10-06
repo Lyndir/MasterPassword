@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+source bashlib
+cdsource
 
 getword() {
     local cat=$1 pop_limit=$2 words=()
@@ -19,9 +21,7 @@ declare -A categoryByCharacter=(
     ['v']=verb
 )
 templates=(
-    nvan
-    anvr
-    anavan
+    ran # ~32.0 bit
 )
 permutations=1
 

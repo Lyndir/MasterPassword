@@ -261,7 +261,10 @@ chr() {
 # Outputs the decimal ASCII value of the given character.
 #
 ord() {
-    printf '%d' "'$1"
+    local str=$1 s
+    for (( s=0; s < ${#str}; ++s )); do
+        printf '%d' "'${str:s:1}"
+    done
 } # _____________________________________________________________________
 
 
@@ -274,7 +277,10 @@ ord() {
 # Outputs the hexadecimal ASCII value of the given character.
 #
 hex() { 
-    printf '%x' "'$1"
+    local str=$1 s
+    for (( s=0; s < ${#str}; ++s )); do
+        printf '%02X' "'${str:s:1}"
+    done
 } # _____________________________________________________________________
 
 
@@ -287,7 +293,10 @@ hex() {
 # Outputs the character that has the given hexadecimal ASCII value.
 #
 unhex() {
-    printf "\\x$1"
+    local hex=$1 h
+    for (( h=0; h < ${#hex}; h+=2 )); do
+        printf "\\x${hex:h:2}"
+    done
 } # _____________________________________________________________________
 
 
@@ -1418,6 +1427,29 @@ shorten() {
     done
 
     printf "%s" "$path"
+} # _____________________________________________________________________
+
+
+
+#  ______________________________________________________________________
+# |__ CdSource ________________________________________________________________|
+#
+#       cdsource [file]
+#
+# Change the current directory into the directory where the file is located, resolving symlinks.
+#
+cdsource() {
+    local source=${1:-${BASH_SOURCE[1]}}
+
+    while [[ $source ]]; do
+        [[ $source = */* ]] && cd "${source%/*}"
+
+        if [[ -L ${source##*/} ]]; then
+            source=$(readlink "${source##*/}")
+        else
+            source=
+        fi
+    done
 } # _____________________________________________________________________
 
 
