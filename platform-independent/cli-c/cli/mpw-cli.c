@@ -552,7 +552,7 @@ void cli_question(Arguments __unused *args, Operation *operation) {
         case MPKeyPurposeRecovery:
             for (size_t q = 0; !operation->question && q < operation->site->questions_count; ++q)
                 if ((!operation->keyContext && !strlen( (&operation->site->questions[q])->keyword )) ||
-                    (operation->keyContext && strcmp( (&operation->site->questions[q])->keyword, operation->keyContext ) != 0))
+                    (operation->keyContext && strcmp( (&operation->site->questions[q])->keyword, operation->keyContext ) == 0))
                     operation->question = &operation->site->questions[q];
 
             // If no question from mpsites, create a new one.
