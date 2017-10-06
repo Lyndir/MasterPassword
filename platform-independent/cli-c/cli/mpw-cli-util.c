@@ -103,7 +103,7 @@ static const char *_mpw_getline(const char *prompt, bool silent) {
 
 #if MPW_COLOR
     // Initialize a curses screen.
-    initscr();
+    SCREEN *screen = newterm( NULL, stderr, stdin );
     start_color();
     init_pair( 1, COLOR_WHITE, COLOR_BLUE );
     init_pair( 2, COLOR_BLACK, COLOR_WHITE );
@@ -144,6 +144,7 @@ static const char *_mpw_getline(const char *prompt, bool silent) {
     }
     attrset( 0 );
     endwin();
+    delscreen( screen );
 
     return result == ERR? NULL: mpw_strndup( str, MPW_MAX_INPUT );
 #else
@@ -223,17 +224,17 @@ bool mpw_mkdirs(const char *filePath) {
     // Save the cwd and for absolute paths, start at the root.
     char *cwd = getcwd( NULL, 0 );
     if (*filePath == '/')
-        if (!chdir( "/" ))
+        if (chdir( "/" ) == ERR)
             return false;
 
     // The path to mkdir is the filePath without the last path component.
     char *pathEnd = strrchr( filePath, '/' );
-    char *path = pathEnd? mpw_strndup( filePath, (size_t)(pathEnd - filePath) ): NULL;
-    if (!path)
-        return false;
+    if (pathEnd)
+        return true;
 
     // Walk the path.
     bool success = true;
+    char *path = mpw_strndup( filePath, (size_t)(pathEnd - filePath) );
     for (char *dirName = strtok( path, "/" ); success && dirName; dirName = strtok( NULL, "/" )) {
         if (!strlen( dirName ))
             continue;
