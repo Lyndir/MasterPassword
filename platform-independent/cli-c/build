@@ -150,13 +150,15 @@ cc() {
 
 ### DEPENDENCIES
 use() {
-    local option=$1 requisite=$2 lib=$3
+    local option=$1 requisite=$2 lib=$3; shift 3
     local enabled=${!option}
 
     if (( enabled )); then
         if haslib "$lib"; then
             echo >&2 "INFO:     Enabled $option (lib$lib)."
-            ldflags+=( -l"$lib" )
+            for lib in "$lib" "$@"; do
+                ldflags+=( -l"$lib" )
+            done
             return 0
 
         elif [[ $requisite == required ]]; then
@@ -184,7 +186,7 @@ use_mpw_sodium() {
 }
 use_mpw_color() {
     local requisite=$1
-    use mpw_color "$requisite" curses && cflags+=( -D"MPW_COLOR=1" ) ||:
+    use mpw_color "$requisite" curses tinfo && cflags+=( -D"MPW_COLOR=1" ) ||:
 }
 use_mpw_json() {
     local requisite=$1
