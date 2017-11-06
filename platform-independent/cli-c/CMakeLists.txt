@@ -19,24 +19,31 @@ set( CMAKE_BUILD_TYPE           Release )
 set( CMAKE_C_FLAGS              "-O3" )
 
 # Version.
-if(EXISTS "VERSION")
+execute_process( COMMAND        git describe --match *-clo* --long --dirty --broken RESULT_VARIABLE status OUTPUT_VARIABLE mpw_version OUTPUT_STRIP_TRAILING_WHITESPACE )
+if( NOT status EQUAL 0 AND EXISTS "VERSION" )
     file( READ                  "VERSION" mpw_version )
+    string( STRIP               ${mpw_version} mpw_version )
+endif()
+if( mpw_version MATCHES "." )
     add_definitions(            -DMP_VERSION=${mpw_version} )
+    message( STATUS             "Current mpw source version ${mpw_version}..." )
+else()
+    message( STATUS             "Current mpw source version unknown..." )
 endif()
 
 
 ### DEPENDENCIES
 function( use_mpw_sodium t r )
     if( USE_SODIUM )
-        target_link_libraries( ${t} sodium )
+        target_link_libraries(  ${t} sodium )
         target_compile_definitions( ${t} PUBLIC -DMPW_SODIUM=1 )
-        message(STATUS      "${t}: USE_SODIUM is enabled.")
+        message( STATUS         "${t}: USE_SODIUM is enabled." )
 
     elseif( r STREQUAL "required" )
-        message(FATAL_ERROR "${t}: USE_SODIUM was required but is not enabled.  Please enable the option or remove this target.")
+        message( FATAL_ERROR    "${t}: USE_SODIUM was required but is not enabled.  Please enable the option or remove this target." )
 
     else()
-        message(STATUS      "${t}: USE_SODIUM is supported but not enabled.")
+        message( STATUS         "${t}: USE_SODIUM is supported but not enabled." )
 
     endif()
 endfunction()
@@ -48,36 +55,36 @@ function( use_mpw_color t )
             target_include_directories( ${t} PUBLIC ${CURSES_INCLUDE_DIR} )
             target_link_libraries( ${t} ${CURSES_LIBRARIES} )
             target_compile_definitions( ${t} PUBLIC -DMPW_COLOR=1 ${CURSES_DEFINITIONS} )
-            message(STATUS      "${t}: USE_COLOR is enabled.")
+            message( STATUS     "${t}: USE_COLOR is enabled." )
 
         elseif( r STREQUAL "required" )
-            message(FATAL_ERROR "${t}: USE_COLOR was enabled but is missing libcurses.  Please install this library before continuing.")
+            message( FATAL_ERROR "${t}: USE_COLOR was enabled but is missing libcurses.  Please install this library before continuing." )
 
         else()
-            message(WARNING     "${t}: USE_COLOR was enabled but is missing libcurses.  Will continue with USE_COLOR disabled!")
+            message( WARNING    "${t}: USE_COLOR was enabled but is missing libcurses.  Will continue with USE_COLOR disabled!" )
 
         endif()
 
     elseif( r STREQUAL "required" )
-        message(FATAL_ERROR "${t}: USE_COLOR was required but is not enabled.  Please enable the option or remove this target.")
+        message( FATAL_ERROR    "${t}: USE_COLOR was required but is not enabled.  Please enable the option or remove this target." )
 
     else()
-        message(STATUS      "${t}: USE_COLOR is supported but not enabled.")
+        message( STATUS         "${t}: USE_COLOR is supported but not enabled." )
 
     endif()
 endfunction()
 
 function( use_mpw_json t )
     if( USE_JSON )
-        target_link_libraries( ${t} json-c)
+        target_link_libraries(  ${t} json-c )
         target_compile_definitions( ${t} PUBLIC -DMPW_JSON=1 )
-        message(STATUS      "${t}: USE_JSON is enabled.")
+        message( STATUS         "${t}: USE_JSON is enabled." )
 
     elseif( r STREQUAL "required" )
-        message(FATAL_ERROR "${t}: USE_JSON was required but is not enabled.  Please enable the option or remove this target.")
+        message( FATAL_ERROR    "${t}: USE_JSON was required but is not enabled.  Please enable the option or remove this target." )
 
     else()
-        message(STATUS      "${t}: USE_JSON is supported but not enabled.")
+        message( STATUS         "${t}: USE_JSON is supported but not enabled." )
 
     endif()
 endfunction()
@@ -89,21 +96,21 @@ function( use_mpw_xml t r )
             target_include_directories( ${t} PUBLIC ${LIBXML2_INCLUDE_DIR} )
             target_link_libraries( ${t} ${LIBXML2_LIBRARIES} )
             target_compile_definitions( ${t} PUBLIC -DMPW_XML=1 ${LIBXML2_DEFINITIONS} )
-            message(STATUS      "${t}: USE_XML is enabled.")
+            message( STATUS     "${t}: USE_XML is enabled." )
 
         elseif( r STREQUAL "required" )
-            message(FATAL_ERROR "${t}: USE_XML was enabled but is missing libxml2.  Please install this library before continuing.")
+            message( FATAL_ERROR "${t}: USE_XML was enabled but is missing libxml2.  Please install this library before continuing." )
 
         else()
-            message(WARNING     "${t}: USE_XML was enabled but is missing libxml2.  Will continue with USE_XML disabled!")
+            message( WARNING    "${t}: USE_XML was enabled but is missing libxml2.  Will continue with USE_XML disabled!" )
 
         endif()
 
     elseif( r STREQUAL "required" )
-        message(FATAL_ERROR "${t}: USE_XML was required but is not enabled.  Please enable the option or remove this target.")
+        message( FATAL_ERROR    "${t}: USE_XML was required but is not enabled.  Please enable the option or remove this target." )
 
     else()
-        message(STATUS      "${t}: USE_XML is supported but not enabled.")
+        message( STATUS         "${t}: USE_XML is supported but not enabled." )
 
     endif()
 endfunction()
