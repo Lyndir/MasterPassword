@@ -19,8 +19,10 @@ set( CMAKE_BUILD_TYPE           Release )
 set( CMAKE_C_FLAGS              "-O3" )
 
 # Version.
-file( READ                      "VERSION" mpw_version )
-add_definitions(                -DMP_VERSION=${VERSION} )
+if(EXISTS "VERSION")
+    file( READ                  "VERSION" mpw_version )
+    add_definitions(            -DMP_VERSION=${mpw_version} )
+endif()
 
 
 ### DEPENDENCIES
