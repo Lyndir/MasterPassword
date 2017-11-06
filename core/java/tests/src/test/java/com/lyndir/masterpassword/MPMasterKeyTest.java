@@ -109,26 +109,37 @@ public class MPMasterKeyTest {
         char[]       masterPassword = testCase.getMasterPassword().toCharArray();
         MPMasterKey  masterKey      = new MPMasterKey( testCase.getFullName(), masterPassword );
 
-        Random        random   = new Random();
-        StringBuilder password = new StringBuilder();
-        for (int p = 0; p < 8; ++p)
-            password.append( (char) (random.nextInt( Character.MAX_CODE_POINT - Character.MIN_CODE_POINT ) + Character.MIN_CODE_POINT) );
-        logger.dbg( "password: %s", CodeUtils.encodeHex( password.toString().getBytes( Charsets.UTF_8 ) ) );
-
+        String password = randomString( 8 );
         for (final MPMasterKey.Version version : MPMasterKey.Version.values()) {
             MPResultType resultType = MPResultType.StoredPersonal;
 
             // Test site state
             String state = masterKey.siteState( testCase.getSiteName(), testCase.getSiteCounter(), testCase.getKeyPurpose(),
-                                                testCase.getKeyContext(), resultType, password.toString(), version );
+                                                testCase.getKeyContext(), resultType, password, version );
             String result = masterKey.siteResult( testCase.getSiteName(), testCase.getSiteCounter(), testCase.getKeyPurpose(),
                                                   testCase.getKeyContext(), resultType, state, version );
-            logger.dbg( "result: %s", CodeUtils.encodeHex( result.getBytes( Charsets.UTF_8 ) ) );
 
             assertEquals(
                     result,
-                    password.toString(),
+                    password,
                     "[testSiteState] state mismatch: " + testCase );
         }
+    }
+
+    public static String randomString(int length) {
+        Random        random  = new Random();
+        StringBuilder builder = new StringBuilder();
+
+        while (length > 0) {
+            int codePoint = random.nextInt( Character.MAX_CODE_POINT - Character.MIN_CODE_POINT ) + Character.MIN_CODE_POINT;
+            if (!Character.isDefined( codePoint ) || (Character.getType( codePoint ) == Character.PRIVATE_USE) || Character.isSurrogate(
+                    (char) codePoint ))
+                continue;
+
+            builder.appendCodePoint( codePoint );
+            length--;
+        }
+
+        return builder.toString();
     }
 }
