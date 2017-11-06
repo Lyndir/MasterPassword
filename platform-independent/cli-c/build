@@ -46,7 +46,7 @@ cflags=( -O3 $CFLAGS )
 ldflags=( $LDFLAGS )
 
 # Version.
-if { mpw_version=$(git describe --match '*-cli*' --long --dirty --broken) || mpw_version=$(<VERSION); } 2>/dev/null; then
+if { mpw_version=$(git describe --match '*-cli*' --long --dirty) || mpw_version=$(<VERSION); } 2>/dev/null; then
     cflags+=( -D"MP_VERSION=$mpw_version" )
 fi
 echo 2>&1 "Current mpw source version ${mpw_version:-<unknown>}..."

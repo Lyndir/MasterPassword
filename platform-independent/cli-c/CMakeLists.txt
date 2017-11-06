@@ -19,7 +19,7 @@ set( CMAKE_BUILD_TYPE           Release )
 set( CMAKE_C_FLAGS              "-O3" )
 
 # Version.
-execute_process( COMMAND        git describe --match *-clo* --long --dirty --broken RESULT_VARIABLE status OUTPUT_VARIABLE mpw_version OUTPUT_STRIP_TRAILING_WHITESPACE )
+execute_process( COMMAND        git describe --match *-clo* --long --dirty RESULT_VARIABLE status OUTPUT_VARIABLE mpw_version OUTPUT_STRIP_TRAILING_WHITESPACE )
 if( NOT status EQUAL 0 AND EXISTS "VERSION" )
     file( READ                  "VERSION" mpw_version )
     string( STRIP               ${mpw_version} mpw_version )
