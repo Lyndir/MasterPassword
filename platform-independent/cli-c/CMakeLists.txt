@@ -40,10 +40,21 @@ function( use_mpw_sodium t r )
 endfunction()
 
 function( use_mpw_color t )
+    find_package( CURSES )
     if( USE_COLOR )
-        target_link_libraries( ${t} curses)
-        target_compile_definitions( ${t} PUBLIC -DMPW_COLOR=1 )
-        message(STATUS      "${t}: USE_COLOR is enabled.")
+        if ( CURSES_FOUND )
+            target_include_directories( ${t} PUBLIC ${CURSES_INCLUDE_DIR} )
+            target_link_libraries( ${t} ${CURSES_LIBRARIES} )
+            target_compile_definitions( ${t} PUBLIC -DMPW_COLOR=1 ${CURSES_DEFINITIONS} )
+            message(STATUS      "${t}: USE_COLOR is enabled.")
+
+        elseif( r STREQUAL "required" )
+            message(FATAL_ERROR "${t}: USE_COLOR was enabled but is missing libcurses.  Please install this library before continuing.")
+
+        else()
+            message(WARNING     "${t}: USE_COLOR was enabled but is missing libcurses.  Will continue with USE_COLOR disabled!")
+
+        endif()
 
     elseif( r STREQUAL "required" )
         message(FATAL_ERROR "${t}: USE_COLOR was required but is not enabled.  Please enable the option or remove this target.")
