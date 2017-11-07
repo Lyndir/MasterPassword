@@ -155,10 +155,10 @@ use() {
 
     if (( enabled )); then
         if haslib "$lib"; then
-            echo >&2 "INFO:     Enabled $option (lib$lib)."
             for lib in "$lib" "$@"; do
-                ldflags+=( -l"$lib" )
+                haslib "$lib" && ldflags+=( -l"$lib" )
             done
+            echo >&2 "INFO:     Enabled $option (lib$lib)."
             return 0
 
         elif [[ $requisite == required ]]; then
