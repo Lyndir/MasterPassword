@@ -229,7 +229,7 @@ bool mpw_mkdirs(const char *filePath) {
 
     // The path to mkdir is the filePath without the last path component.
     char *pathEnd = strrchr( filePath, '/' );
-    if (pathEnd)
+    if (!pathEnd)
         return true;
 
     // Walk the path.
