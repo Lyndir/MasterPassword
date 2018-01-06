@@ -356,7 +356,9 @@ void cli_args(Arguments *args, Operation *operation, const int argc, char *const
 
 void cli_fullName(Arguments *args, Operation *operation) {
 
-    if ((!operation->fullName || !strlen( operation->fullName )) && args->fullName)
+    mpw_free_string( &operation->fullName );
+
+    if (args->fullName)
         operation->fullName = mpw_strdup( args->fullName );
 
     if (!operation->fullName || !strlen( operation->fullName ))
@@ -373,13 +375,15 @@ void cli_fullName(Arguments *args, Operation *operation) {
 
 void cli_masterPassword(Arguments *args, Operation *operation) {
 
-    if ((!operation->masterPassword || !strlen( operation->masterPassword )) && args->masterPasswordFD) {
+    mpw_free_string( &operation->masterPassword );
+
+    if (args->masterPasswordFD) {
         operation->masterPassword = mpw_read_fd( atoi( args->masterPasswordFD ) );
         if (!operation->masterPassword && errno)
             wrn( "Error reading master password from FD %s: %s\n", args->masterPasswordFD, strerror( errno ) );
     }
 
-    if ((!operation->masterPassword || !strlen( operation->masterPassword )) && args->masterPassword)
+    if (args->masterPassword && !operation->masterPassword)
         operation->masterPassword = mpw_strdup( args->masterPassword );
 
     if (!operation->masterPassword || !strlen( operation->masterPassword ))
@@ -396,14 +400,14 @@ void cli_masterPassword(Arguments *args, Operation *operation) {
 
 void cli_siteName(Arguments *args, Operation *operation) {
 
-    if ((!operation->siteName || !strlen( operation->siteName )) && args->siteName)
-        operation->siteName = mpw_strdup( args->siteName );
-    if (!operation->siteName || !strlen( operation->siteName ))
-        do {
-            operation->siteName = mpw_getline( "Site name:" );
-        } while (operation->siteName && !strlen( operation->siteName ));
+    mpw_free_string( &operation->siteName );
 
-    if (!operation->siteName || !strlen( operation->siteName )) {
+    if (args->siteName)
+        operation->siteName = mpw_strdup( args->siteName );
+    if (!operation->siteName)
+        operation->siteName = mpw_getline( "Site name:" );
+
+    if (!operation->siteName) {
         ftl( "Missing site name.\n" );
         cli_free( args, operation );
         exit( EX_DATAERR );
@@ -480,6 +484,7 @@ void cli_user(Arguments *args, Operation *operation) {
         MPMarshalFormat sitesInputFormat = args->sitesFormat? operation->sitesFormat: sitesInputInfo->format;
         MPMarshalError marshalError = { .type = MPMarshalSuccess };
         mpw_marshal_info_free( &sitesInputInfo );
+        mpw_marshal_free( &operation->user );
         operation->user = mpw_marshal_read( sitesInputData, sitesInputFormat, operation->masterPassword, &marshalError );
         if (marshalError.type == MPMarshalErrorMasterPassword && operation->allowPasswordUpdate) {
             // Update master password in mpsites.
@@ -564,6 +569,7 @@ void cli_question(Arguments __unused *args, Operation *operation) {
 
 void cli_operation(Arguments __unused *args, Operation *operation) {
 
+    mpw_free_string( &operation->identicon );
     operation->identicon = mpw_identicon_str( mpw_identicon( operation->user->fullName, operation->user->masterPassword ) );
 
     if (!operation->site)
@@ -655,6 +661,7 @@ void cli_resultParam(Arguments *args, Operation *operation) {
     if (!args->resultParam)
         return;
 
+    mpw_free_string( &operation->resultParam );
     operation->resultParam = mpw_strdup( args->resultParam );
 }
 
@@ -765,6 +772,8 @@ void cli_save(Arguments __unused *args, Operation *operation) {
 
     if (!operation->sitesFormatFixed)
         operation->sitesFormat = MPMarshalFormatDefault;
+
+    mpw_free_string( &operation->sitesPath );
     operation->sitesPath = mpw_path( operation->user->fullName, mpw_marshal_format_extension( operation->sitesFormat ) );
     dbg( "Updating: %s (%s)\n", operation->sitesPath, mpw_nameForFormat( operation->sitesFormat ) );
 

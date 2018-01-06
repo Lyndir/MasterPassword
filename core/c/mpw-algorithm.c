@@ -54,8 +54,6 @@ MPSiteKey mpw_siteKey(
         MPMasterKey masterKey, const char *siteName, const MPCounterValue siteCounter,
         const MPKeyPurpose keyPurpose, const char *keyContext, const MPAlgorithmVersion algorithmVersion) {
 
-    if (siteName && !strlen( siteName ))
-        siteName = NULL;
     if (keyContext && !strlen( keyContext ))
         keyContext = NULL;
 
@@ -88,8 +86,6 @@ const char *mpw_siteResult(
         const MPResultType resultType, const char *resultParam,
         const MPAlgorithmVersion algorithmVersion) {
 
-    if (siteName && !strlen( siteName ))
-        siteName = NULL;
     if (keyContext && !strlen( keyContext ))
         keyContext = NULL;
     if (resultParam && !strlen( resultParam ))
@@ -162,8 +158,6 @@ const char *mpw_siteState(
         const MPResultType resultType, const char *resultParam,
         const MPAlgorithmVersion algorithmVersion) {
 
-    if (siteName && !strlen( siteName ))
-        siteName = NULL;
     if (keyContext && !strlen( keyContext ))
         keyContext = NULL;
     if (resultParam && !strlen( resultParam ))
