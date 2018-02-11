@@ -92,7 +92,7 @@
         return;
 
     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-    if ([pasteboard respondsToSelector:@selector( setItems:options: )])
+    if (@available(iOS 10.0, *))
         [pasteboard setItems:@[ @{ UIPasteboardTypeAutomatic: sitePassword } ]
                      options:@{
                              UIPasteboardOptionLocalOnly     : @NO,

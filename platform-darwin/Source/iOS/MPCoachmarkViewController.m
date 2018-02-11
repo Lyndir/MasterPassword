@@ -55,20 +55,21 @@
         [self.views[self.nextView++] setVisible:YES];
     }];
 
-    self.viewTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 block:^(NSTimer *timer) {
-        self.viewProgress.progress += 1.0f / 50;
-
-        if (self.viewProgress.progress == 1)
-            [UIView animateWithDuration:0.3f animations:^{
-                self.viewProgress.progress = 0;
-                [self.views[self.nextView++] setVisible:YES];
-
-                if (self.nextView >= [self.views count]) {
-                    [self.viewTimer invalidate];
-                    self.viewProgress.visible = NO;
-                }
-            }];
-    }                                                repeats:YES];
+    if (@available(iOS 10.0, *))
+        self.viewTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 repeats:YES block:^(NSTimer *timer) {
+            self.viewProgress.progress += 1.0f / 50;
+            
+            if (self.viewProgress.progress == 1)
+                [UIView animateWithDuration:0.3f animations:^{
+                    self.viewProgress.progress = 0;
+                    [self.views[self.nextView++] setVisible:YES];
+                    
+                    if (self.nextView >= [self.views count]) {
+                        [self.viewTimer invalidate];
+                        self.viewProgress.visible = NO;
+                    }
+                }];
+        }];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {

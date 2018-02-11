@@ -83,7 +83,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 
     NSURL *pasteboardURL = nil;
     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-    if ([pasteboard respondsToSelector:@selector( hasURLs )])
+    if (@available(iOS 10.0, *))
         pasteboardURL = pasteboard.hasURLs? pasteboard.URL: nil;
     else
         pasteboardURL = [NSURL URLWithString:pasteboard.string];
@@ -352,7 +352,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
                 } );
             } );
 
-    [MPiOSAppDelegate managedObjectContextChanged:^(NSDictionary<NSManagedObjectID *, NSString *> *affectedObjects) {
+    [[MPiOSAppDelegate get] managedObjectContextChanged:^(NSDictionary<NSManagedObjectID *, NSString *> *affectedObjects) {
         [MPiOSAppDelegate managedObjectContextForMainThreadPerformBlock:^(NSManagedObjectContext *mainContext) {
             // TODO: either move this into the app delegate or remove the duplicate signOutAnimated: call from the app delegate.
             if (![[MPiOSAppDelegate get] activeUserInContext:mainContext])

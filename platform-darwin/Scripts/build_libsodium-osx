@@ -6,6 +6,7 @@ hash autoreconf || { echo >&2 "Missing autoconf."; exit 1; }
 hash libtool || hash glibtool || { echo >&2 "Missing libtool."; exit 1; }
 
 cd "${BASH_SOURCE%/*}/../External/libsodium"
+[[ $1 = clean ]] && { [[ ! -e Makefile ]] || make -s distclean; exit; }
 [[ -e "${prefix=$PWD/libsodium-osx}/lib/libsodium.a" ]] && exit
 
 # Inspired by libsodium/dist-build/osx.sh

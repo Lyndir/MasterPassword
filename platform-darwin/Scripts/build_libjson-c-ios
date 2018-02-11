@@ -6,6 +6,7 @@ hash autoreconf || { echo >&2 "Missing autoconf."; exit 1; }
 hash libtool || hash glibtool || { echo >&2 "Missing libtool."; exit 1; }
 
 cd "${BASH_SOURCE%/*}/../External/libjson-c"
+[[ $1 = clean ]] && { [[ ! -e Makefile ]] || make -s distclean; exit; }
 [[ -e "${prefix=$PWD/libjson-c-ios}/lib/libjson-c.a" ]] && exit
 
 # Prepare

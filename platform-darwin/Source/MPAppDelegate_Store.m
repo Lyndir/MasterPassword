@@ -133,12 +133,11 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
     return YES;
 }
 
-+ (id)managedObjectContextChanged:(void ( ^ )(NSDictionary<NSManagedObjectID *, NSString *> *affectedObjects))changedBlock {
+- (id)managedObjectContextChanged:(void ( ^ )(NSDictionary<NSManagedObjectID *, NSString *> *affectedObjects))changedBlock {
 
-    NSManagedObjectContext *privateManagedObjectContextIfReady = [[self get] privateManagedObjectContextIfReady];
+    NSManagedObjectContext *privateManagedObjectContextIfReady = [self privateManagedObjectContextIfReady];
     if (!privateManagedObjectContextIfReady)
         return nil;
-
     return PearlAddNotificationObserver( NSManagedObjectContextObjectsDidChangeNotification, privateManagedObjectContextIfReady, nil,
             ^(id host, NSNotification *note) {
                 NSMutableDictionary *affectedObjects = [NSMutableDictionary new];
@@ -217,7 +216,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
 
         self.mainManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
         self.mainManagedObjectContext.parentContext = self.privateManagedObjectContext;
-        if ([self.mainManagedObjectContext respondsToSelector:@selector( automaticallyMergesChangesFromParent )]) // iOS 10+
+        if (@available(iOS 10.0, *))
             self.mainManagedObjectContext.automaticallyMergesChangesFromParent = YES;
         else
             // When privateManagedObjectContext is saved, import the changes into mainManagedObjectContext.

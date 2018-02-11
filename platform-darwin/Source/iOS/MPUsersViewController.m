@@ -697,7 +697,7 @@ referenceSizeForFooterInSection:(NSInteger)section {
             } );
 
     if ((self.contextChangedObserver
-            = [MPiOSAppDelegate managedObjectContextChanged:^(NSDictionary<NSManagedObjectID *, NSString *> *affectedObjects) {
+            = [[MPiOSAppDelegate get] managedObjectContextChanged:^(NSDictionary<NSManagedObjectID *, NSString *> *affectedObjects) {
                 if ([[[affectedObjects allKeys] filteredArrayUsingPredicate:
                         [NSPredicate predicateWithBlock:^BOOL(NSManagedObjectID *objectID, NSDictionary *bindings) {
                             return [objectID.entity.name isEqualToString:NSStringFromClass( [MPUserEntity class] )];

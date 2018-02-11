@@ -677,7 +677,7 @@
         [self.window endEditing:YES];
 
         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-        if ([pasteboard respondsToSelector:@selector( setItems:options: )]) {
+        if (@available(iOS 10.0, *)) {
             [pasteboard setItems:@[ @{ UIPasteboardTypeAutomatic: password } ]
                          options:@{
                                  UIPasteboardOptionLocalOnly     : @NO,
