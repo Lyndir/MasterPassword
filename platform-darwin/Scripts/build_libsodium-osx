@@ -1,20 +1,24 @@
 #!/usr/bin/env bash
 set -e
 
+hash automake || { echo >&2 "Missing automake."; exit 1; }
+hash autoreconf || { echo >&2 "Missing autoconf."; exit 1; }
+hash libtool || hash glibtool || { echo >&2 "Missing libtool."; exit 1; }
+
 cd "${BASH_SOURCE%/*}/../External/libsodium"
 [[ -e "${prefix=$PWD/libsodium-osx}/lib/libsodium.a" ]] && exit
 
 # Inspired by libsodium/dist-build/osx.sh
 # Prepare
-autoreconf --verbose --install --symlink 2>&1 | sed 's/^\([^:]*\):[0-9]\{1,\}: /\1: /'
+autoreconf --verbose --install --symlink 2> >(sed 's/^\([^:]*\):[0-9]\{1,\}: /\1: /')
 rm -rf "${prefix=$PWD/libsodium-osx}"
 mkdir -p "$prefix"
 
 # Targets
 (
     ## ARCH: x86_64
-    export SDKROOT="$(xcrun --show-sdk-path --sdk macosx)"
-    export PATH="$(xcrun --show-sdk-platform-path --sdk macosx)/usr/bin:$PATH"
+    SDKROOT="$(xcrun --show-sdk-path --sdk macosx)"
+    PATH="$(xcrun --show-sdk-platform-path --sdk macosx)/usr/bin:$PATH"
     export CFLAGS="-arch x86_64 -isysroot $SDKROOT -mmacosx-version-min=${MACOSX_DEPLOYMENT_TARGET:-10.8} -O2 -g -flto $CFLAGS"
     export LDFLAGS="-arch x86_64 -isysroot $SDKROOT -mmacosx-version-min=${MACOSX_DEPLOYMENT_TARGET:-10.8} -flto $LDFLAGS"
     export CPPFLAGS="$CFLAGS $CPPFLAGS"

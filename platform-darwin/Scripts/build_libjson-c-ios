@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
 set -e
 
+hash automake || { echo >&2 "Missing automake."; exit 1; }
+hash autoreconf || { echo >&2 "Missing autoconf."; exit 1; }
+hash libtool || hash glibtool || { echo >&2 "Missing libtool."; exit 1; }
+
 cd "${BASH_SOURCE%/*}/../External/libjson-c"
 [[ -e "${prefix=$PWD/libjson-c-ios}/lib/libjson-c.a" ]] && exit
 
 # Prepare
-autoreconf -Iautoconf-archive/m4 --verbose --install --symlink 2>&1 | sed 's/^\([^:]*\):[0-9]\{1,\}: /\1: /'
+autoreconf -Iautoconf-archive/m4 --verbose --install --symlink 2> >(sed 's/^\([^:]*\):[0-9]\{1,\}: /\1: /')
 rm -rf "${prefix=$PWD/libjson-c-ios}"
 mkdir -p "$prefix/lib" \
     "${prefix_i386=$prefix/tmp/i386}" \
@@ -17,8 +21,8 @@ mkdir -p "$prefix/lib" \
 # Targets
 (
     ## ARCH: i386
-    export SDKROOT="$(xcrun --show-sdk-path --sdk iphonesimulator)"
-    export PATH="$(xcrun --show-sdk-platform-path --sdk iphonesimulator)/usr/bin:$PATH"
+    SDKROOT="$(xcrun --show-sdk-path --sdk iphonesimulator)"
+    PATH="$(xcrun --show-sdk-platform-path --sdk iphonesimulator)/usr/bin:$PATH"
     export CFLAGS="-arch i386 -isysroot $SDKROOT -mios-simulator-version-min=${IPHONEOS_DEPLOYMENT_TARGET:-8.0} -O2 -g $CFLAGS"
     export LDFLAGS="-arch i386 -isysroot $SDKROOT -mios-simulator-version-min=${IPHONEOS_DEPLOYMENT_TARGET:-8.0} $LDFLAGS"
     export CPPFLAGS="$CFLAGS $CPPFLAGS"
@@ -28,8 +32,8 @@ mkdir -p "$prefix/lib" \
 )
 (
     ## ARCH: x86_64
-    export SDKROOT="$(xcrun --show-sdk-path --sdk iphonesimulator)"
-    export PATH="$(xcrun --show-sdk-platform-path --sdk iphonesimulator)/usr/bin:$PATH"
+    SDKROOT="$(xcrun --show-sdk-path --sdk iphonesimulator)"
+    PATH="$(xcrun --show-sdk-platform-path --sdk iphonesimulator)/usr/bin:$PATH"
     export CFLAGS="-arch x86_64 -isysroot $SDKROOT -mios-simulator-version-min=${IPHONEOS_DEPLOYMENT_TARGET:-8.0} -O2 -g $CFLAGS"
     export LDFLAGS="-arch x86_64 -isysroot $SDKROOT -mios-simulator-version-min=${IPHONEOS_DEPLOYMENT_TARGET:-8.0} $LDFLAGS"
     export CPPFLAGS="$CFLAGS $CPPFLAGS"
@@ -39,8 +43,8 @@ mkdir -p "$prefix/lib" \
 )
 (
     ## ARCH: armv7
-    export SDKROOT="$(xcrun --show-sdk-path --sdk iphoneos)"
-    export PATH="$(xcrun --show-sdk-platform-path --sdk iphoneos)/usr/bin:$PATH"
+    SDKROOT="$(xcrun --show-sdk-path --sdk iphoneos)"
+    PATH="$(xcrun --show-sdk-platform-path --sdk iphoneos)/usr/bin:$PATH"
     export CFLAGS="-mthumb -arch armv7 -isysroot $SDKROOT -mios-version-min=${IPHONEOS_DEPLOYMENT_TARGET:-8.0} -O2 -g $CFLAGS"
     export LDFLAGS="-mthumb -arch armv7 -isysroot $SDKROOT -mios-version-min=${IPHONEOS_DEPLOYMENT_TARGET:-8.0} $LDFLAGS"
     export CPPFLAGS="$CFLAGS $CPPFLAGS"
@@ -50,8 +54,8 @@ mkdir -p "$prefix/lib" \
 )
 (
     ## ARCH: armv7s
-    export SDKROOT="$(xcrun --show-sdk-path --sdk iphoneos)"
-    export PATH="$(xcrun --show-sdk-platform-path --sdk iphoneos)/usr/bin:$PATH"
+    SDKROOT="$(xcrun --show-sdk-path --sdk iphoneos)"
+    PATH="$(xcrun --show-sdk-platform-path --sdk iphoneos)/usr/bin:$PATH"
     export CFLAGS="-mthumb -arch armv7s -isysroot $SDKROOT -mios-version-min=${IPHONEOS_DEPLOYMENT_TARGET:-8.0} -O2 -g $CFLAGS"
     export LDFLAGS="-mthumb -arch armv7s -isysroot $SDKROOT -mios-version-min=${IPHONEOS_DEPLOYMENT_TARGET:-8.0} $LDFLAGS"
     export CPPFLAGS="$CFLAGS $CPPFLAGS"
@@ -61,8 +65,8 @@ mkdir -p "$prefix/lib" \
 )
 (
     ## ARCH: arm64
-    export SDKROOT="$(xcrun --show-sdk-path --sdk iphoneos)"
-    export PATH="$(xcrun --show-sdk-platform-path --sdk iphoneos)/usr/bin:$PATH"
+    SDKROOT="$(xcrun --show-sdk-path --sdk iphoneos)"
+    PATH="$(xcrun --show-sdk-platform-path --sdk iphoneos)/usr/bin:$PATH"
     export CFLAGS="-mthumb -arch arm64 -isysroot $SDKROOT -mios-version-min=${IPHONEOS_DEPLOYMENT_TARGET:-8.0} -O2 -g $CFLAGS"
     export LDFLAGS="-mthumb -arch arm64 -isysroot $SDKROOT -mios-version-min=${IPHONEOS_DEPLOYMENT_TARGET:-8.0} $LDFLAGS"
     export CPPFLAGS="$CFLAGS $CPPFLAGS"
