@@ -216,7 +216,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
 
         self.mainManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
         self.mainManagedObjectContext.parentContext = self.privateManagedObjectContext;
-        if (@available(iOS 10.0, *))
+        if (@available(iOS 10.0, macOS 10.12, *))
             self.mainManagedObjectContext.automaticallyMergesChangesFromParent = YES;
         else
             // When privateManagedObjectContext is saved, import the changes into mainManagedObjectContext.

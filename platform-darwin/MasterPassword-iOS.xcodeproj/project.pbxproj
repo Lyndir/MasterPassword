@@ -259,7 +259,6 @@
 		DAB4FBD9202FDE48002768FB /* UIView+PearlSize.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB4FBD1202FDE48002768FB /* UIView+PearlSize.m */; };
 		DAB4FBDA202FDE48002768FB /* WTFViews.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB4FBD2202FDE48002768FB /* WTFViews.m */; };
 		DAB7AE5D1F3D752900C856B1 /* libjson-c.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB7AE5C1F3D752900C856B1 /* libjson-c.a */; };
-		DAB7AE771F3D755B00C856B1 /* libjson-c.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB7AE761F3D755B00C856B1 /* libjson-c.a */; };
 		DAB7AE991F3DDEE000C856B1 /* mpw-marshal-util.c in Sources */ = {isa = PBXBuildFile; fileRef = DAB7AE981F3DDEE000C856B1 /* mpw-marshal-util.c */; };
 		DABB981615100B4000B05417 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DABB981515100B4000B05417 /* SystemConfiguration.framework */; };
 		DABD39371711E29700CF925C /* avatar-0.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD366C1711E29400CF925C /* avatar-0.png */; };
@@ -1690,7 +1689,6 @@
 				DA95B50C1C476B6A0067F5EF /* LocalAuthentication.framework in Frameworks */,
 				DA2C3D651BD9612F001137B3 /* libz.tbd in Frameworks */,
 				DA2C3D631BD96126001137B3 /* libc++.tbd in Frameworks */,
-				DAB7AE771F3D755B00C856B1 /* libjson-c.a in Frameworks */,
 				DAA1761B19D86D0D0044227B /* libAttributedMarkdown.a in Frameworks */,
 				DA0CC5421EB57BD4009A8ED9 /* Crashlytics.framework in Frameworks */,
 				DA32D03E19D11293004F3F0E /* libKCOrderedAccessorFix.a in Frameworks */,
@@ -3546,7 +3544,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = MP;
-				LastUpgradeCheck = 0820;
+				LastUpgradeCheck = 0920;
 				ORGANIZATIONNAME = Lyndir;
 				TargetAttributes = {
 					DA32D01F19D111C6004F3F0E = {
@@ -4260,6 +4258,7 @@
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = NO;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
@@ -4466,6 +4465,7 @@
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = NO;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
@@ -4572,6 +4572,7 @@
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = NO;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
