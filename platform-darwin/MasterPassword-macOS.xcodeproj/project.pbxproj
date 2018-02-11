@@ -982,6 +982,7 @@
 		DAAF16641F5897EA0013B8AE /* mpw-cli-util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-cli-util.h"; sourceTree = "<group>"; };
 		DAB07C9E1F7725D400CC6D43 /* aes.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aes.c; sourceTree = "<group>"; };
 		DAB07C9F1F7725D400CC6D43 /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
+		DAB4FBB3202FD60A002768FB /* Pearl-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Pearl-Prefix.pch"; sourceTree = "<group>"; };
 		DAB7AE591F3D74E700C856B1 /* libjson-c.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libjson-c.a"; path = "External/libjson-c/libjson-c-osx/lib/libjson-c.a"; sourceTree = "<group>"; };
 		DAB7AE7B1F3D757B00C856B1 /* arraylist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = arraylist.h; sourceTree = "<group>"; };
 		DAB7AE7C1F3D757B00C856B1 /* bits.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bits.h; sourceTree = "<group>"; };
@@ -1008,7 +1009,6 @@
 		DAC6326C148680650075AEA5 /* libjrswizzle.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libjrswizzle.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAC632871486D95D0075AEA5 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		DAC77CAD148291A600BCF976 /* libPearl.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPearl.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		DAC77CB1148291A600BCF976 /* Pearl-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Pearl-Prefix.pch"; path = "../../Source/Pearl/Pearl-Prefix.pch"; sourceTree = "<group>"; };
 		DACA241C1705DF7D002C6C22 /* logo-bare.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-bare.png"; sourceTree = "<group>"; };
 		DACA24321705DF7D002C6C22 /* avatar-13@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar-13@2x.png"; sourceTree = "<group>"; };
 		DACA24331705DF7D002C6C22 /* avatar-3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar-3@2x.png"; sourceTree = "<group>"; };
@@ -1993,7 +1993,7 @@
 				DAFE45D715039823003ABA7C /* Pearl */,
 				DA89D4E51A51E53100AC64D7 /* Pearl-Cocoa */,
 				DAFE45FC15039823003ABA7C /* Pearl-Crypto */,
-				DAC77CB1148291A600BCF976 /* Pearl-Prefix.pch */,
+				DAB4FBB3202FD60A002768FB /* Pearl-Prefix.pch */,
 			);
 			path = Pearl;
 			sourceTree = "<group>";
@@ -3020,7 +3020,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
-				GCC_PREFIX_HEADER = "Source/Pearl/Pearl-Prefix.pch";
+				GCC_PREFIX_HEADER = "External/Pearl/Pearl-Prefix.pch";
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib\"",
@@ -3629,7 +3629,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
-				GCC_PREFIX_HEADER = "Source/Pearl/Pearl-Prefix.pch";
+				GCC_PREFIX_HEADER = "External/Pearl/Pearl-Prefix.pch";
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib\"",
@@ -3642,7 +3642,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
-				GCC_PREFIX_HEADER = "Source/Pearl/Pearl-Prefix.pch";
+				GCC_PREFIX_HEADER = "External/Pearl/Pearl-Prefix.pch";
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib\"",
