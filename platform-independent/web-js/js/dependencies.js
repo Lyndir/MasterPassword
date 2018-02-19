@@ -16,11 +16,12 @@ if ((!window.crypto || !window.crypto.subtle) && window.SubtleCrypto)
 
 // If Web Crypto API is not supported we include a JS crypto library
 // https://code.google.com/p/crypto-js/
+/* Disabled by default.  Enable manually if your browser requires this.
 if (!window.crypto || !window.crypto.subtle) {
     document.write("<script src=https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/hmac-sha256.js><\/script>");
     document.write("<script src=https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/pbkdf2.js><\/script>");
     document.write("<script src=https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/lib-typedarrays-min.js><\/script>");
-}
+}/**/
 
 if (!Number.MAX_SAFE_INTEGER)
     Number.MAX_SAFE_INTEGER = Math.pow(2, 53) - 1;
