@@ -541,7 +541,7 @@ void cli_site(Arguments __unused *args, Operation *operation) {
     // If no site from mpsites, create a new one.
     if (!operation->site)
         operation->site = mpw_marshal_site(
-                operation->user, operation->siteName, MPResultTypeDefault, MPCounterValueDefault, operation->user->algorithm );
+                operation->user, operation->siteName, operation->user->defaultType, MPCounterValueDefault, operation->user->algorithm );
 }
 
 void cli_question(Arguments __unused *args, Operation *operation) {

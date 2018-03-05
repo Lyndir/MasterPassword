@@ -72,30 +72,30 @@ typedef mpw_enum( uint16_t, MPSiteFeature ) {
 
 // bit 0-3 | MPResultTypeClass | MPSiteFeature
 typedef mpw_enum( uint32_t, MPResultType ) {
-    /** pg^VMAUBk5x3p%HP%i4= */
+    /** 16: pg^VMAUBk5x3p%HP%i4= */
             MPResultTypeTemplateMaximum = 0x0 | MPResultTypeClassTemplate | 0x0,
-    /** BiroYena8:Kixa */
+    /** 17: BiroYena8:Kixa */
             MPResultTypeTemplateLong = 0x1 | MPResultTypeClassTemplate | 0x0,
-    /** BirSuj0- */
+    /** 18: BirSuj0- */
             MPResultTypeTemplateMedium = 0x2 | MPResultTypeClassTemplate | 0x0,
-    /** pO98MoD0 */
-            MPResultTypeTemplateBasic = 0x4 | MPResultTypeClassTemplate | 0x0,
-    /** Bir8 */
+    /** 19: Bir8 */
             MPResultTypeTemplateShort = 0x3 | MPResultTypeClassTemplate | 0x0,
-    /** 2798 */
+    /** 20: pO98MoD0 */
+            MPResultTypeTemplateBasic = 0x4 | MPResultTypeClassTemplate | 0x0,
+    /** 21: 2798 */
             MPResultTypeTemplatePIN = 0x5 | MPResultTypeClassTemplate | 0x0,
-    /** birsujano */
+    /** 30: birsujano */
             MPResultTypeTemplateName = 0xE | MPResultTypeClassTemplate | 0x0,
-    /** bir yennoquce fefi */
+    /** 31: bir yennoquce fefi */
             MPResultTypeTemplatePhrase = 0xF | MPResultTypeClassTemplate | 0x0,
 
-    /** Custom saved password. */
-            MPResultTypeStatefulPersonal = 0x0 | MPResultTypeClassStateful | MPSiteFeatureExportContent,
-    /** Custom saved password that should not be exported from the device. */
-            MPResultTypeStatefulDevice = 0x1 | MPResultTypeClassStateful | MPSiteFeatureDevicePrivate,
+    /** 1056: Custom saved password. */
+    MPResultTypeStatefulPersonal = 0x0 | MPResultTypeClassStateful | MPSiteFeatureExportContent,
+    /** 2081: Custom saved password that should not be exported from the device. */
+    MPResultTypeStatefulDevice = 0x1 | MPResultTypeClassStateful | MPSiteFeatureDevicePrivate,
 
-    /** Derive a unique binary key. */
-            MPResultTypeDeriveKey = 0x0 | MPResultTypeClassDerive | MPSiteFeatureAlternative,
+    /** 4160: Derive a unique binary key. */
+    MPResultTypeDeriveKey = 0x0 | MPResultTypeClassDerive | MPSiteFeatureAlternative,
 
     MPResultTypeDefault = MPResultTypeTemplateLong,
 };
