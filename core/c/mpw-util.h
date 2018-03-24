@@ -26,36 +26,41 @@
 
 //// Logging.
 
-#ifndef log
+#ifndef mpw_log_do
+#define mpw_log_do(level, format, ...) \
+    fprintf( stderr, format "\n", ##__VA_ARGS__ )
+#endif
+
+#ifndef mpw_log
 extern int mpw_verbosity;
-#define log(level, format, ...) ({ \
+#define mpw_log(level, ...) ({ \
     if (mpw_verbosity >= level) { \
-        fprintf( stderr, format "\n", ##__VA_ARGS__ ); \
-     }; })
+        mpw_log_do( level, ##__VA_ARGS__ ); \
+    }; })
 
 /** Logging internal state. */
 #define trc_level 3
-#define trc(...) log( trc_level, ##__VA_ARGS__ )
+#define trc(...) mpw_log( trc_level, ##__VA_ARGS__ )
 
 /** Logging state and events interesting when investigating issues. */
 #define dbg_level 2
-#define dbg(...) log( dbg_level, ##__VA_ARGS__ )
+#define dbg(...) mpw_log( dbg_level, ##__VA_ARGS__ )
 
 /** User messages. */
 #define inf_level 1
-#define inf(...) log( inf_level, ##__VA_ARGS__ )
+#define inf(...) mpw_log( inf_level, ##__VA_ARGS__ )
 
 /** Recoverable issues and user suggestions. */
 #define wrn_level 0
-#define wrn(...) log( wrn_level, ##__VA_ARGS__ )
+#define wrn(...) mpw_log( wrn_level, ##__VA_ARGS__ )
 
 /** Unrecoverable issues. */
 #define err_level -1
-#define err(...) log( err_level, ##__VA_ARGS__ )
+#define err(...) mpw_log( err_level, ##__VA_ARGS__ )
 
 /** Issues that lead to abortion. */
 #define ftl_level -2
-#define ftl(...) log( ftl_level, ##__VA_ARGS__ )
+#define ftl(...) mpw_log( ftl_level, ##__VA_ARGS__ )
 #endif
 
 #ifndef min

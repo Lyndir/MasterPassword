@@ -19,7 +19,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define ftl(...) do { fprintf( stderr, __VA_ARGS__ ); exit(2); } while (0)
+#ifndef mpw_log_do
+#define mpw_log_do(level, format, ...) ({ \
+    fprintf( stderr, format "\n", ##__VA_ARGS__ ); \
+    if (level == ftl_level) \
+        abort(); \
+})
+#endif
 
 #include "mpw-algorithm.h"
 #include "mpw-util.h"
