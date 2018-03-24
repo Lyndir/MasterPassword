@@ -66,4 +66,7 @@ const char *mpw_siteState(
         const MPResultType resultType, const char *resultParam,
         const MPAlgorithmVersion algorithmVersion);
 
+/** @return A fingerprint for a user. */
+MPIdenticon mpw_identicon(const char *fullName, const char *masterPassword);
+
 #endif // _MPW_ALGORITHM_H

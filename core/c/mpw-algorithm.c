@@ -187,3 +187,40 @@ const char *mpw_siteState(
             return NULL;
     }
 }
+
+MPIdenticon mpw_identicon(const char *fullName, const char *masterPassword) {
+
+    const char *leftArm[] = { "╔", "╚", "╰", "═" };
+    const char *rightArm[] = { "╗", "╝", "╯", "═" };
+    const char *body[] = { "█", "░", "▒", "▓", "☺", "☻" };
+    const char *accessory[] = {
+            "◈", "◎", "◐", "◑", "◒", "◓", "☀", "☁", "☂", "☃", "", "★", "☆", "☎", "☏", "⎈", "⌂", "☘", "☢", "☣",
+            "☕", "⌚", "⌛", "⏰", "⚡", "⛄", "⛅", "☔", "♔", "♕", "♖", "♗", "♘", "♙", "♚", "♛", "♜", "♝", "♞", "♟",
+            "♨", "♩", "♪", "♫", "⚐", "⚑", "⚔", "⚖", "⚙", "⚠", "⌘", "⏎", "✄", "✆", "✈", "✉", "✌"
+    };
+
+    const uint8_t *identiconSeed = NULL;
+    if (fullName && strlen( fullName ) && masterPassword && strlen( masterPassword ))
+        identiconSeed = mpw_hash_hmac_sha256(
+                (const uint8_t *)masterPassword, strlen( masterPassword ),
+                (const uint8_t *)fullName, strlen( fullName ) );
+    if (!identiconSeed)
+        return (MPIdenticon){
+                .leftArm = "",
+                .body = "",
+                .rightArm = "",
+                .accessory = "",
+                .color=0,
+        };
+
+    MPIdenticon identicon = {
+            .leftArm = leftArm[identiconSeed[0] % (sizeof( leftArm ) / sizeof( leftArm[0] ))],
+            .body = body[identiconSeed[1] % (sizeof( body ) / sizeof( body[0] ))],
+            .rightArm = rightArm[identiconSeed[2] % (sizeof( rightArm ) / sizeof( rightArm[0] ))],
+            .accessory = accessory[identiconSeed[3] % (sizeof( accessory ) / sizeof( accessory[0] ))],
+            .color = (uint8_t)(identiconSeed[4] % (MPIdenticonColorLast - MPIdenticonColorFirst + 1) + MPIdenticonColorFirst),
+    };
+    mpw_free( &identiconSeed, 32 );
+
+    return identicon;
+}
