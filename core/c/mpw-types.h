@@ -35,10 +35,8 @@
 
 //// Types.
 
-#define MPMasterKeySize 64 /* bytes */
-typedef const uint8_t *MPMasterKey;
-#define MPSiteKeySize (256 / 8) /* bytes */ // Size of HMAC-SHA-256
-typedef const uint8_t *MPSiteKey;
+extern const size_t MPMasterKeySize, MPSiteKeySize; /* bytes */
+typedef const uint8_t *MPMasterKey, *MPSiteKey;
 typedef const char *MPKeyID;
 
 typedef mpw_enum( uint8_t, MPKeyPurpose ) {

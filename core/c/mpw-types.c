@@ -22,6 +22,9 @@
 #include "mpw-types.h"
 #include "mpw-util.h"
 
+const size_t MPMasterKeySize = 64;
+const size_t MPSiteKeySize = 256 / 8; // Size of HMAC-SHA-256
+
 const MPResultType mpw_typeWithName(const char *typeName) {
 
     // Find what password type is represented by the type letter.
