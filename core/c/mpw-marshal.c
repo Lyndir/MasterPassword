@@ -885,7 +885,7 @@ const MPMarshalFormat mpw_formatWithName(
     if (strncmp( mpw_nameForFormat( MPMarshalFormatJSON ), stdFormatName, strlen( stdFormatName ) ) == 0)
         return MPMarshalFormatJSON;
 
-    dbg( "Not a format name: %s\n", stdFormatName );
+    dbg( "Not a format name: %s", stdFormatName );
     return (MPMarshalFormat)ERR;
 }
 
@@ -900,7 +900,7 @@ const char *mpw_nameForFormat(
         case MPMarshalFormatJSON:
             return "json";
         default: {
-            dbg( "Unknown format: %d\n", format );
+            dbg( "Unknown format: %d", format );
             return NULL;
         }
     }
@@ -917,7 +917,7 @@ const char *mpw_marshal_format_extension(
         case MPMarshalFormatJSON:
             return "mpsites.json";
         default: {
-            dbg( "Unknown format: %d\n", format );
+            dbg( "Unknown format: %d", format );
             return NULL;
         }
     }

@@ -58,7 +58,7 @@ json_object *mpw_get_json_section(
     char *sectionTokenizer = mpw_strdup( section ), *sectionToken = sectionTokenizer;
     for (sectionToken = strtok( sectionToken, "." ); sectionToken; sectionToken = strtok( NULL, "." ))
         if (!json_object_object_get_ex( json_value, sectionToken, &json_value ) || !json_value) {
-            trc( "While resolving: %s: Missing value for: %s\n", section, sectionToken );
+            trc( "While resolving: %s: Missing value for: %s", section, sectionToken );
             json_value = NULL;
             break;
         }
@@ -106,7 +106,7 @@ bool mpw_update_masterKey(MPMasterKey *masterKey, MPAlgorithmVersion *masterKeyA
         *masterKeyAlgorithm = targetKeyAlgorithm;
         *masterKey = mpw_masterKey( fullName, masterPassword, *masterKeyAlgorithm );
         if (!*masterKey) {
-            err( "Couldn't derive master key for user %s, algorithm %d.\n", fullName, *masterKeyAlgorithm );
+            err( "Couldn't derive master key for user %s, algorithm %d.", fullName, *masterKeyAlgorithm );
             return false;
         }
     }

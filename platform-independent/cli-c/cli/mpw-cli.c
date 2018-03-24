@@ -36,24 +36,24 @@ static void usage() {
     inf( ""
             "  Master Password v%s\n"
             "--------------------------------------------------------------------------------\n"
-            "      https://masterpasswordapp.com\n\n", stringify_def( MP_VERSION ) );
+            "      https://masterpasswordapp.com\n", stringify_def( MP_VERSION ) );
     inf( ""
             "\nUSAGE\n\n"
             "  mpw [-u|-U full-name] [-m fd] [-t pw-type] [-P value] [-c counter]\n"
             "      [-a version] [-p purpose] [-C context] [-f|F format] [-R 0|1]\n"
-            "      [-v|-q] [-h] [site-name]\n\n" );
+            "      [-v|-q] [-h] [site-name]\n" );
     inf( ""
             "  -u full-name Specify the full name of the user.\n"
             "               -u checks the master password against the config,\n"
             "               -U allows updating to a new master password.\n"
-            "               Defaults to %s in env or prompts.\n\n", MP_ENV_fullName );
+            "               Defaults to %s in env or prompts.\n", MP_ENV_fullName );
     dbg( ""
             "  -M master-pw Specify the master password of the user.\n"
-            "               Passing secrets as arguments is unsafe, for use in testing only.\n" );
+            "               Passing secrets as arguments is unsafe, for use in testing only." );
     inf( ""
             "  -m fd        Read the master password of the user from a file descriptor.\n"
             "               Tip: don't send extra characters like newlines such as by using\n"
-            "               echo in a pipe.  Consider printf instead.\n\n" );
+            "               echo in a pipe.  Consider printf instead.\n" );
     inf( ""
             "  -t pw-type   Specify the password's template.\n"
             "               Defaults to 'long' (-p a), 'name' (-p i) or 'phrase' (-p r).\n"
@@ -66,31 +66,31 @@ static void usage() {
             "                   n, name     | 9 letter name.\n"
             "                   p, phrase   | 20 character sentence.\n"
             "                   K, key      | encryption key (512 bit or -P bits).\n"
-            "                   P, personal | saved personal password (save with -P pw).\n\n" );
+            "                   P, personal | saved personal password (save with -P pw).\n" );
     inf( ""
             "  -P value     The parameter value.\n"
             "                   -p i        | The login name for the site.\n"
             "                   -t K        | The bit size of the key to generate (eg. 256).\n"
-            "                   -t P        | The personal password to encrypt.\n\n" );
+            "                   -t P        | The personal password to encrypt.\n" );
     inf( ""
             "  -c counter   The value of the counter.\n"
-            "               Defaults to 1.\n\n" );
+            "               Defaults to 1.\n" );
     inf( ""
             "  -a version   The algorithm version to use, %d - %d.\n"
-            "               Defaults to %s in env or %d.\n\n",
+            "               Defaults to %s in env or %d.\n",
             MPAlgorithmVersionFirst, MPAlgorithmVersionLast, MP_ENV_algorithm, MPAlgorithmVersionCurrent );
     inf( ""
             "  -p purpose   The purpose of the generated token.\n"
             "               Defaults to 'auth'.\n"
             "                   a, auth     | An authentication token such as a password.\n"
             "                   i, ident    | An identification token such as a username.\n"
-            "                   r, rec      | A recovery token such as a security answer.\n\n" );
+            "                   r, rec      | A recovery token such as a security answer.\n" );
     inf( ""
             "  -C context   A purpose-specific context.\n"
             "               Defaults to empty.\n"
             "                   -p a        | -\n"
             "                   -p i        | -\n"
-            "                   -p r        | Most significant word in security question.\n\n" );
+            "                   -p r        | Most significant word in security question.\n" );
     inf( ""
             "  -f|F format  The mpsites format to use for reading/writing site parameters.\n"
             "               -F forces the use of the given format,\n"
@@ -98,24 +98,24 @@ static void usage() {
             "               Defaults to %s in env or json, falls back to plain.\n"
             "                   n, none     | No file\n"
             "                   f, flat     | ~/.mpw.d/Full Name.%s\n"
-            "                   j, json     | ~/.mpw.d/Full Name.%s\n\n",
+            "                   j, json     | ~/.mpw.d/Full Name.%s\n",
             MP_ENV_format, mpw_marshal_format_extension( MPMarshalFormatFlat ), mpw_marshal_format_extension( MPMarshalFormatJSON ) );
     inf( ""
             "  -R redacted  Whether to save the mpsites in redacted format or not.\n"
             "               Redaction omits or encrypts any secrets, making the file safe\n"
             "               for saving on or transmitting via untrusted media.\n"
-            "               Defaults to 1, redacted.\n\n" );
+            "               Defaults to 1, redacted.\n" );
     inf( ""
             "  -v           Increase output verbosity (can be repeated).\n"
-            "  -q           Decrease output verbosity (can be repeated).\n\n" );
+            "  -q           Decrease output verbosity (can be repeated).\n" );
     inf( ""
-            "  -h           Show this help output instead of performing any operation.\n\n" );
+            "  -h           Show this help output instead of performing any operation.\n" );
     inf( ""
             "\nENVIRONMENT\n\n"
             "  %-12s The full name of the user (see -u).\n"
             "  %-12s The default algorithm version (see -a).\n"
             "  %-12s The default mpsites format (see -f).\n"
-            "  %-12s The askpass program to use for prompting the user.\n\n",
+            "  %-12s The askpass program to use for prompting the user.\n",
             MP_ENV_fullName, MP_ENV_algorithm, MP_ENV_format, MP_ENV_askpass );
     exit( EX_OK );
 }
@@ -225,24 +225,24 @@ int main(const int argc, char *const argv[]) {
     cli_free( &args, NULL );
 
     // Operation summary.
-    dbg( "-----------------\n" );
+    dbg( "-----------------" );
     if (operation.user) {
-        dbg( "fullName         : %s\n", operation.user->fullName );
-        trc( "masterPassword   : %s\n", operation.user->masterPassword );
-        dbg( "identicon        : %s\n", operation.identicon );
-        dbg( "sitesFormat      : %s%s\n", mpw_nameForFormat( operation.sitesFormat ), operation.sitesFormatFixed? " (fixed)": "" );
-        dbg( "sitesPath        : %s\n", operation.sitesPath );
+        dbg( "fullName         : %s", operation.user->fullName );
+        trc( "masterPassword   : %s", operation.user->masterPassword );
+        dbg( "identicon        : %s", operation.identicon );
+        dbg( "sitesFormat      : %s%s", mpw_nameForFormat( operation.sitesFormat ), operation.sitesFormatFixed? " (fixed)": "" );
+        dbg( "sitesPath        : %s", operation.sitesPath );
     }
     if (operation.site) {
-        dbg( "siteName         : %s\n", operation.site->name );
-        dbg( "siteCounter      : %u\n", operation.siteCounter );
-        dbg( "resultType       : %s (%u)\n", mpw_nameForType( operation.resultType ), operation.resultType );
-        dbg( "resultParam      : %s\n", operation.resultParam );
-        dbg( "keyPurpose       : %s (%u)\n", mpw_nameForPurpose( operation.keyPurpose ), operation.keyPurpose );
-        dbg( "keyContext       : %s\n", operation.keyContext );
-        dbg( "algorithmVersion : %u\n", operation.site->algorithm );
+        dbg( "siteName         : %s", operation.site->name );
+        dbg( "siteCounter      : %u", operation.siteCounter );
+        dbg( "resultType       : %s (%u)", mpw_nameForType( operation.resultType ), operation.resultType );
+        dbg( "resultParam      : %s", operation.resultParam );
+        dbg( "keyPurpose       : %s (%u)", mpw_nameForPurpose( operation.keyPurpose ), operation.keyPurpose );
+        dbg( "keyContext       : %s", operation.keyContext );
+        dbg( "algorithmVersion : %u", operation.site->algorithm );
     }
-    dbg( "-----------------\n\n" );
+    dbg( "-----------------" );
 
     // Finally ready to perform the actual operation.
     cli_mpw( &args, &operation );
@@ -333,20 +333,20 @@ void cli_args(Arguments *args, Operation *operation, const int argc, char *const
             case '?':
                 switch (optopt) {
                     case 'u':
-                        ftl( "Missing full name to option: -%c\n", optopt );
+                        ftl( "Missing full name to option: -%c", optopt );
                         exit( EX_USAGE );
                     case 't':
-                        ftl( "Missing type name to option: -%c\n", optopt );
+                        ftl( "Missing type name to option: -%c", optopt );
                         exit( EX_USAGE );
                     case 'c':
-                        ftl( "Missing counter value to option: -%c\n", optopt );
+                        ftl( "Missing counter value to option: -%c", optopt );
                         exit( EX_USAGE );
                     default:
-                        ftl( "Unknown option: -%c\n", optopt );
+                        ftl( "Unknown option: -%c", optopt );
                         exit( EX_USAGE );
                 }
             default:
-                ftl( "Unexpected option: %c\n", opt );
+                ftl( "Unexpected option: %c", opt );
                 exit( EX_USAGE );
         }
 
@@ -367,7 +367,7 @@ void cli_fullName(Arguments *args, Operation *operation) {
         } while (operation->fullName && !strlen( operation->fullName ));
 
     if (!operation->fullName || !strlen( operation->fullName )) {
-        ftl( "Missing full name.\n" );
+        ftl( "Missing full name." );
         cli_free( args, operation );
         exit( EX_DATAERR );
     }
@@ -380,7 +380,7 @@ void cli_masterPassword(Arguments *args, Operation *operation) {
     if (args->masterPasswordFD) {
         operation->masterPassword = mpw_read_fd( atoi( args->masterPasswordFD ) );
         if (!operation->masterPassword && errno)
-            wrn( "Error reading master password from FD %s: %s\n", args->masterPasswordFD, strerror( errno ) );
+            wrn( "Error reading master password from FD %s: %s", args->masterPasswordFD, strerror( errno ) );
     }
 
     if (args->masterPassword && !operation->masterPassword)
@@ -392,7 +392,7 @@ void cli_masterPassword(Arguments *args, Operation *operation) {
         } while (operation->masterPassword && !strlen( operation->masterPassword ));
 
     if (!operation->masterPassword || !strlen( operation->masterPassword )) {
-        ftl( "Missing master password.\n" );
+        ftl( "Missing master password." );
         cli_free( args, operation );
         exit( EX_DATAERR );
     }
@@ -408,7 +408,7 @@ void cli_siteName(Arguments *args, Operation *operation) {
         operation->siteName = mpw_getline( "Site name:" );
 
     if (!operation->siteName) {
-        ftl( "Missing site name.\n" );
+        ftl( "Missing site name." );
         cli_free( args, operation );
         exit( EX_DATAERR );
     }
@@ -421,7 +421,7 @@ void cli_sitesFormat(Arguments *args, Operation *operation) {
 
     operation->sitesFormat = mpw_formatWithName( args->sitesFormat );
     if (ERR == (int)operation->sitesFormat) {
-        ftl( "Invalid sites format: %s\n", args->sitesFormat );
+        ftl( "Invalid sites format: %s", args->sitesFormat );
         cli_free( args, operation );
         exit( EX_DATAERR );
     }
@@ -434,7 +434,7 @@ void cli_keyPurpose(Arguments *args, Operation *operation) {
 
     operation->keyPurpose = mpw_purposeWithName( args->keyPurpose );
     if (ERR == (int)operation->keyPurpose) {
-        ftl( "Invalid purpose: %s\n", args->keyPurpose );
+        ftl( "Invalid purpose: %s", args->keyPurpose );
         cli_free( args, operation );
         exit( EX_DATAERR );
     }
@@ -455,7 +455,7 @@ void cli_user(Arguments *args, Operation *operation) {
     mpw_free_string( &operation->sitesPath );
     operation->sitesPath = mpw_path( operation->fullName, mpw_marshal_format_extension( operation->sitesFormat ) );
     if (!operation->sitesPath || !(sitesFile = fopen( operation->sitesPath, "r" ))) {
-        dbg( "Couldn't open configuration file:\n  %s: %s\n", operation->sitesPath, strerror( errno ) );
+        dbg( "Couldn't open configuration file:\n  %s: %s", operation->sitesPath, strerror( errno ) );
 
         // Try to fall back to the flat format.
         if (!operation->sitesFormatFixed) {
@@ -464,7 +464,7 @@ void cli_user(Arguments *args, Operation *operation) {
             if (operation->sitesPath && (sitesFile = fopen( operation->sitesPath, "r" )))
                 operation->sitesFormat = MPMarshalFormatFlat;
             else
-                dbg( "Couldn't open configuration file:\n  %s: %s\n", operation->sitesPath, strerror( errno ) );
+                dbg( "Couldn't open configuration file:\n  %s: %s", operation->sitesPath, strerror( errno ) );
         }
     }
 
@@ -476,7 +476,7 @@ void cli_user(Arguments *args, Operation *operation) {
         // Read file.
         char *sitesInputData = mpw_read_file( sitesFile );
         if (ferror( sitesFile ))
-            wrn( "Error while reading configuration file:\n  %s: %d\n", operation->sitesPath, ferror( sitesFile ) );
+            wrn( "Error while reading configuration file:\n  %s: %d", operation->sitesPath, ferror( sitesFile ) );
         fclose( sitesFile );
 
         // Parse file.
@@ -489,8 +489,8 @@ void cli_user(Arguments *args, Operation *operation) {
         if (marshalError.type == MPMarshalErrorMasterPassword && operation->allowPasswordUpdate) {
             // Update master password in mpsites.
             while (marshalError.type == MPMarshalErrorMasterPassword) {
-                inf( "Given master password does not match configuration.\n" );
-                inf( "To update the configuration with this new master password, first confirm the old master password.\n" );
+                inf( "Given master password does not match configuration." );
+                inf( "To update the configuration with this new master password, first confirm the old master password." );
 
                 const char *importMasterPassword = NULL;
                 while (!importMasterPassword || !strlen( importMasterPassword ))
@@ -509,14 +509,14 @@ void cli_user(Arguments *args, Operation *operation) {
 
         // Incorrect master password.
         if (marshalError.type == MPMarshalErrorMasterPassword) {
-            ftl( "Incorrect master password according to configuration:\n  %s: %s\n", operation->sitesPath, marshalError.description );
+            ftl( "Incorrect master password according to configuration:\n  %s: %s", operation->sitesPath, marshalError.description );
             cli_free( args, operation );
             exit( EX_DATAERR );
         }
 
         // Any other parse error.
         if (!operation->user || marshalError.type != MPMarshalSuccess) {
-            err( "Couldn't parse configuration file:\n  %s: %s\n", operation->sitesPath, marshalError.description );
+            err( "Couldn't parse configuration file:\n  %s: %s", operation->sitesPath, marshalError.description );
             cli_free( args, operation );
             exit( EX_DATAERR );
         }
@@ -611,7 +611,7 @@ void cli_resultType(Arguments *args, Operation *operation) {
 
     operation->resultType = mpw_typeWithName( args->resultType );
     if (ERR == (int)operation->resultType) {
-        ftl( "Invalid type: %s\n", args->resultType );
+        ftl( "Invalid type: %s", args->resultType );
         cli_free( args, operation );
         exit( EX_USAGE );
     }
@@ -640,7 +640,7 @@ void cli_siteCounter(Arguments *args, Operation *operation) {
 
     long long int siteCounterInt = atoll( args->siteCounter );
     if (siteCounterInt < MPCounterValueFirst || siteCounterInt > MPCounterValueLast) {
-        ftl( "Invalid site counter: %s\n", args->siteCounter );
+        ftl( "Invalid site counter: %s", args->siteCounter );
         cli_free( args, operation );
         exit( EX_USAGE );
     }
@@ -674,7 +674,7 @@ void cli_algorithmVersion(Arguments *args, Operation *operation) {
 
     int algorithmVersionInt = atoi( args->algorithmVersion );
     if (algorithmVersionInt < MPAlgorithmVersionFirst || algorithmVersionInt > MPAlgorithmVersionLast) {
-        ftl( "Invalid algorithm version: %s\n", args->algorithmVersion );
+        ftl( "Invalid algorithm version: %s", args->algorithmVersion );
         cli_free( args, operation );
         exit( EX_USAGE );
     }
@@ -687,7 +687,7 @@ void cli_sitesRedacted(Arguments *args, Operation *operation) {
         operation->user->redacted = strcmp( args->sitesRedacted, "1" ) == 0;
 
     else if (!operation->user->redacted)
-        wrn( "Sites configuration is not redacted.  Use -R 1 to change this.\n" );
+        wrn( "Sites configuration is not redacted.  Use -R 1 to change this." );
 }
 
 void cli_mpw(Arguments *args, Operation *operation) {
@@ -701,7 +701,7 @@ void cli_mpw(Arguments *args, Operation *operation) {
     MPMasterKey masterKey = mpw_masterKey(
             operation->user->fullName, operation->user->masterPassword, operation->site->algorithm );
     if (!masterKey) {
-        ftl( "Couldn't derive master key.\n" );
+        ftl( "Couldn't derive master key." );
         cli_free( args, operation );
         exit( EX_SOFTWARE );
     }
@@ -712,7 +712,7 @@ void cli_mpw(Arguments *args, Operation *operation) {
         if (!(operation->resultState = mpw_siteState( masterKey, operation->site->name, operation->siteCounter,
                 operation->keyPurpose, operation->keyContext, operation->resultType, operation->resultParam,
                 operation->site->algorithm ))) {
-            ftl( "Couldn't encrypt site result.\n" );
+            ftl( "Couldn't encrypt site result." );
             mpw_free( &masterKey, MPMasterKeySize );
             cli_free( args, operation );
             exit( EX_SOFTWARE );
@@ -751,13 +751,13 @@ void cli_mpw(Arguments *args, Operation *operation) {
             operation->keyPurpose, operation->keyContext, operation->resultType, operation->resultParam, operation->site->algorithm );
     mpw_free( &masterKey, MPMasterKeySize );
     if (!result) {
-        ftl( "Couldn't generate site result.\n" );
+        ftl( "Couldn't generate site result." );
         cli_free( args, operation );
         exit( EX_SOFTWARE );
     }
     fprintf( stdout, "%s\n", result );
     if (operation->site->url)
-        inf( "See: %s\n", operation->site->url );
+        inf( "See: %s", operation->site->url );
     mpw_free_string( &result );
 
     // Update usage metadata.
@@ -775,21 +775,21 @@ void cli_save(Arguments __unused *args, Operation *operation) {
 
     mpw_free_string( &operation->sitesPath );
     operation->sitesPath = mpw_path( operation->user->fullName, mpw_marshal_format_extension( operation->sitesFormat ) );
-    dbg( "Updating: %s (%s)\n", operation->sitesPath, mpw_nameForFormat( operation->sitesFormat ) );
+    dbg( "Updating: %s (%s)", operation->sitesPath, mpw_nameForFormat( operation->sitesFormat ) );
 
     FILE *sitesFile = NULL;
     if (!operation->sitesPath || !mpw_mkdirs( operation->sitesPath ) || !(sitesFile = fopen( operation->sitesPath, "w" ))) {
-        wrn( "Couldn't create updated configuration file:\n  %s: %s\n", operation->sitesPath, strerror( errno ) );
+        wrn( "Couldn't create updated configuration file:\n  %s: %s", operation->sitesPath, strerror( errno ) );
         return;
     }
 
     char *buf = NULL;
     MPMarshalError marshalError = { .type = MPMarshalSuccess };
     if (!mpw_marshal_write( &buf, operation->sitesFormat, operation->user, &marshalError ) || marshalError.type != MPMarshalSuccess)
-        wrn( "Couldn't encode updated configuration file:\n  %s: %s\n", operation->sitesPath, marshalError.description );
+        wrn( "Couldn't encode updated configuration file:\n  %s: %s", operation->sitesPath, marshalError.description );
 
     else if (fwrite( buf, sizeof( char ), strlen( buf ), sitesFile ) != strlen( buf ))
-        wrn( "Error while writing updated configuration file:\n  %s: %d\n", operation->sitesPath, ferror( sitesFile ) );
+        wrn( "Error while writing updated configuration file:\n  %s: %d", operation->sitesPath, ferror( sitesFile ) );
 
     mpw_free_string( &buf );
     fclose( sitesFile );

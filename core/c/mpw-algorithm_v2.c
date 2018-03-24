@@ -51,14 +51,14 @@ static MPSiteKey mpw_siteKey_v2(
         MPKeyPurpose keyPurpose, const char *keyContext) {
 
     const char *keyScope = mpw_scopeForPurpose( keyPurpose );
-    trc( "keyScope: %s\n", keyScope );
+    trc( "keyScope: %s", keyScope );
 
     // OTP counter value.
     if (siteCounter == MPCounterValueTOTP)
         siteCounter = ((uint32_t)time( NULL ) / MP_otp_window) * MP_otp_window;
 
     // Calculate the site seed.
-    trc( "siteSalt: keyScope=%s | #siteName=%s | siteName=%s | siteCounter=%s | #keyContext=%s | keyContext=%s\n",
+    trc( "siteSalt: keyScope=%s | #siteName=%s | siteName=%s | siteCounter=%s | #keyContext=%s | keyContext=%s",
             keyScope, mpw_hex_l( (uint32_t)strlen( siteName ) ), siteName, mpw_hex_l( siteCounter ),
             keyContext? mpw_hex_l( (uint32_t)strlen( keyContext ) ): NULL, keyContext );
     size_t siteSaltSize = 0;
@@ -72,20 +72,20 @@ static MPSiteKey mpw_siteKey_v2(
         mpw_push_string( &siteSalt, &siteSaltSize, keyContext );
     }
     if (!siteSalt) {
-        err( "Could not allocate site salt: %s\n", strerror( errno ) );
+        err( "Could not allocate site salt: %s", strerror( errno ) );
         return NULL;
     }
-    trc( "  => siteSalt.id: %s\n", mpw_id_buf( siteSalt, siteSaltSize ) );
+    trc( "  => siteSalt.id: %s", mpw_id_buf( siteSalt, siteSaltSize ) );
 
-    trc( "siteKey: hmac-sha256( masterKey.id=%s, siteSalt )\n",
+    trc( "siteKey: hmac-sha256( masterKey.id=%s, siteSalt )",
             mpw_id_buf( masterKey, MPMasterKeySize ) );
     MPSiteKey siteKey = mpw_hash_hmac_sha256( masterKey, MPMasterKeySize, siteSalt, siteSaltSize );
     mpw_free( &siteSalt, siteSaltSize );
     if (!siteKey) {
-        err( "Could not derive site key: %s\n", strerror( errno ) );
+        err( "Could not derive site key: %s", strerror( errno ) );
         return NULL;
     }
-    trc( "  => siteKey.id: %s\n", mpw_id_buf( siteKey, MPSiteKeySize ) );
+    trc( "  => siteKey.id: %s", mpw_id_buf( siteKey, MPSiteKeySize ) );
 
     return siteKey;
 }

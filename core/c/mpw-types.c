@@ -84,7 +84,7 @@ const MPResultType mpw_typeWithName(const char *typeName) {
     if (strncmp( mpw_nameForType( MPResultTypeDeriveKey ), stdTypeName, strlen( stdTypeName ) ) == 0)
         return MPResultTypeDeriveKey;
 
-    dbg( "Not a generated type name: %s\n", stdTypeName );
+    dbg( "Not a generated type name: %s", stdTypeName );
     return (MPResultType)ERR;
 }
 
@@ -114,7 +114,7 @@ const char *mpw_nameForType(MPResultType resultType) {
         case MPResultTypeDeriveKey:
             return "key";
         default: {
-            dbg( "Unknown password type: %d\n", resultType );
+            dbg( "Unknown password type: %d", resultType );
             return NULL;
         }
     }
@@ -123,7 +123,7 @@ const char *mpw_nameForType(MPResultType resultType) {
 const char **mpw_templatesForType(MPResultType type, size_t *count) {
 
     if (!(type & MPResultTypeClassTemplate)) {
-        dbg( "Not a generated type: %d\n", type );
+        dbg( "Not a generated type: %d", type );
         return NULL;
     }
 
@@ -159,7 +159,7 @@ const char **mpw_templatesForType(MPResultType type, size_t *count) {
             return mpw_alloc_array( count, const char *,
                     "cvcc cvc cvccvcv cvc", "cvc cvccvcvcv cvcv", "cv cvccv cvc cvcvccv" );
         default: {
-            dbg( "Unknown generated type: %d\n", type );
+            dbg( "Unknown generated type: %d", type );
             return NULL;
         }
     }
@@ -191,7 +191,7 @@ const MPKeyPurpose mpw_purposeWithName(const char *purposeName) {
     if (strncmp( mpw_nameForPurpose( MPKeyPurposeRecovery ), stdPurposeName, strlen( stdPurposeName ) ) == 0)
         return MPKeyPurposeRecovery;
 
-    dbg( "Not a purpose name: %s\n", stdPurposeName );
+    dbg( "Not a purpose name: %s", stdPurposeName );
     return (MPKeyPurpose)ERR;
 }
 
@@ -205,7 +205,7 @@ const char *mpw_nameForPurpose(MPKeyPurpose purpose) {
         case MPKeyPurposeRecovery:
             return "recovery";
         default: {
-            dbg( "Unknown purpose: %d\n", purpose );
+            dbg( "Unknown purpose: %d", purpose );
             return NULL;
         }
     }
@@ -221,7 +221,7 @@ const char *mpw_scopeForPurpose(MPKeyPurpose purpose) {
         case MPKeyPurposeRecovery:
             return "com.lyndir.masterpassword.answer";
         default: {
-            dbg( "Unknown purpose: %d\n", purpose );
+            dbg( "Unknown purpose: %d", purpose );
             return NULL;
         }
     }
@@ -251,7 +251,7 @@ const char *mpw_charactersInClass(char characterClass) {
         case ' ':
             return " ";
         default: {
-            dbg( "Unknown character class: %c\n", characterClass );
+            dbg( "Unknown character class: %c", characterClass );
             return NULL;
         }
     }

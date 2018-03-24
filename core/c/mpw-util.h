@@ -26,48 +26,36 @@
 
 //// Logging.
 
-#ifndef trc
+#ifndef log
 extern int mpw_verbosity;
-#define trc_level 3
+#define log(level, format, ...) ({ \
+    if (mpw_verbosity >= level) { \
+        fprintf( stderr, format "\n", ##__VA_ARGS__ ); \
+     }; })
+
 /** Logging internal state. */
-#define trc(...) ({ \
-    if (mpw_verbosity >= trc_level) \
-        fprintf( stderr, __VA_ARGS__ ); })
-#endif
-#ifndef dbg
-#define dbg_level 2
+#define trc_level 3
+#define trc(...) log( trc_level, ##__VA_ARGS__ )
+
 /** Logging state and events interesting when investigating issues. */
-#define dbg(...) ({ \
-    if (mpw_verbosity >= dbg_level) \
-        fprintf( stderr, __VA_ARGS__ ); })
-#endif
-#ifndef inf
-#define inf_level 1
+#define dbg_level 2
+#define dbg(...) log( dbg_level, ##__VA_ARGS__ )
+
 /** User messages. */
-#define inf(...) ({ \
-    if (mpw_verbosity >= inf_level) \
-        fprintf( stderr, __VA_ARGS__ ); })
-#endif
-#ifndef wrn
-#define wrn_level 0
+#define inf_level 1
+#define inf(...) log( inf_level, ##__VA_ARGS__ )
+
 /** Recoverable issues and user suggestions. */
-#define wrn(...) ({ \
-    if (mpw_verbosity >= wrn_level) \
-        fprintf( stderr, __VA_ARGS__ ); })
-#endif
-#ifndef err
-#define err_level -1
+#define wrn_level 0
+#define wrn(...) log( wrn_level, ##__VA_ARGS__ )
+
 /** Unrecoverable issues. */
-#define err(...) ({ \
-    if (mpw_verbosity >= err_level) \
-        fprintf( stderr, __VA_ARGS__ ); })
-#endif
-#ifndef ftl
-#define ftl_level -2
+#define err_level -1
+#define err(...) log( err_level, ##__VA_ARGS__ )
+
 /** Issues that lead to abortion. */
-#define ftl(...) ({ \
-    if (mpw_verbosity >= ftl_level) \
-        fprintf( stderr, __VA_ARGS__ ); })
+#define ftl_level -2
+#define ftl(...) log( ftl_level, ##__VA_ARGS__ )
 #endif
 
 #ifndef min

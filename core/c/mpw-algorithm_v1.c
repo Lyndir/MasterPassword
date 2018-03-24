@@ -58,11 +58,11 @@ static const char *mpw_sitePasswordFromTemplate_v1(
     // Determine the template.
     uint8_t seedByte = siteKey[0];
     const char *template = mpw_templateForType( resultType, seedByte );
-    trc( "template: %u => %s\n", seedByte, template );
+    trc( "template: %u => %s", seedByte, template );
     if (!template)
         return NULL;
     if (strlen( template ) > MPSiteKeySize) {
-        err( "Template too long for password seed: %zu\n", strlen( template ) );
+        err( "Template too long for password seed: %zu", strlen( template ) );
         return NULL;
     }
 
@@ -71,10 +71,10 @@ static const char *mpw_sitePasswordFromTemplate_v1(
     for (size_t c = 0; c < strlen( template ); ++c) {
         seedByte = siteKey[c + 1];
         sitePassword[c] = mpw_characterFromClass( template[c], seedByte );
-        trc( "  - class: %c, index: %3u (0x%02hhX) => character: %c\n",
+        trc( "  - class: %c, index: %3u (0x%02hhX) => character: %c",
                 template[c], seedByte, seedByte, sitePassword[c] );
     }
-    trc( "  => password: %s\n", sitePassword );
+    trc( "  => password: %s", sitePassword );
 
     return sitePassword;
 }

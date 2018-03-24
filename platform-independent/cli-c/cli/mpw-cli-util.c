@@ -51,13 +51,13 @@ char *mpw_askpass(const char *prompt) {
 
     int pipes[2];
     if (pipe( pipes ) == ERR) {
-        wrn( "Couldn't pipe: %s\n", strerror( errno ) );
+        wrn( "Couldn't pipe: %s", strerror( errno ) );
         return NULL;
     }
 
     pid_t pid = fork();
     if (pid == ERR) {
-        wrn( "Couldn't fork for askpass:\n  %s: %s\n", askpass, strerror( errno ) );
+        wrn( "Couldn't fork for askpass:\n  %s: %s", askpass, strerror( errno ) );
         return NULL;
     }
 
@@ -65,10 +65,10 @@ char *mpw_askpass(const char *prompt) {
         // askpass fork
         close( pipes[0] );
         if (dup2( pipes[1], STDOUT_FILENO ) == ERR)
-            ftl( "Couldn't connect pipe to process: %s\n", strerror( errno ) );
+            ftl( "Couldn't connect pipe to process: %s", strerror( errno ) );
 
         else if (execlp( askpass, askpass, prompt, NULL ) == ERR)
-            ftl( "Couldn't execute askpass:\n  %s: %s\n", askpass, strerror( errno ) );
+            ftl( "Couldn't execute askpass:\n  %s: %s", askpass, strerror( errno ) );
 
         exit( EX_SOFTWARE );
     }
@@ -78,7 +78,7 @@ char *mpw_askpass(const char *prompt) {
     close( pipes[0] );
     int status;
     if (waitpid( pid, &status, 0 ) == ERR) {
-        wrn( "Couldn't wait for askpass: %s\n", strerror( errno ) );
+        wrn( "Couldn't wait for askpass: %s", strerror( errno ) );
         mpw_free_string( &answer );
         return NULL;
     }
@@ -244,7 +244,7 @@ bool mpw_mkdirs(const char *filePath) {
     free( path );
 
     if (chdir( cwd ) == ERR)
-        wrn( "Could not restore cwd:\n  %s: %s\n", cwd, strerror( errno ) );
+        wrn( "Could not restore cwd:\n  %s: %s", cwd, strerror( errno ) );
     free( cwd );
 
     return success;
@@ -291,7 +291,7 @@ static bool mpw_setupterm() {
     if (!termsetup) {
         int errret;
         if (!(termsetup = (setupterm( NULL, STDERR_FILENO, &errret ) == OK))) {
-            wrn( "Terminal doesn't support color (setupterm errret %d).\n", errret );
+            wrn( "Terminal doesn't support color (setupterm errret %d).", errret );
             return false;
         }
     }

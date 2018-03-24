@@ -44,10 +44,10 @@ static MPMasterKey mpw_masterKey_v3(
         const char *fullName, const char *masterPassword) {
 
     const char *keyScope = mpw_scopeForPurpose( MPKeyPurposeAuthentication );
-    trc( "keyScope: %s\n", keyScope );
+    trc( "keyScope: %s", keyScope );
 
     // Calculate the master key salt.
-    trc( "masterKeySalt: keyScope=%s | #fullName=%s | fullName=%s\n",
+    trc( "masterKeySalt: keyScope=%s | #fullName=%s | fullName=%s",
             keyScope, mpw_hex_l( (uint32_t)strlen( fullName ) ), fullName );
     size_t masterKeySaltSize = 0;
     uint8_t *masterKeySalt = NULL;
@@ -55,20 +55,20 @@ static MPMasterKey mpw_masterKey_v3(
     mpw_push_int( &masterKeySalt, &masterKeySaltSize, (uint32_t)strlen( fullName ) );
     mpw_push_string( &masterKeySalt, &masterKeySaltSize, fullName );
     if (!masterKeySalt) {
-        err( "Could not allocate master key salt: %s\n", strerror( errno ) );
+        err( "Could not allocate master key salt: %s", strerror( errno ) );
         return NULL;
     }
-    trc( "  => masterKeySalt.id: %s\n", mpw_id_buf( masterKeySalt, masterKeySaltSize ) );
+    trc( "  => masterKeySalt.id: %s", mpw_id_buf( masterKeySalt, masterKeySaltSize ) );
 
     // Calculate the master key.
-    trc( "masterKey: scrypt( masterPassword, masterKeySalt, N=%lu, r=%u, p=%u )\n", MP_N, MP_r, MP_p );
+    trc( "masterKey: scrypt( masterPassword, masterKeySalt, N=%lu, r=%u, p=%u )", MP_N, MP_r, MP_p );
     MPMasterKey masterKey = mpw_kdf_scrypt( MPMasterKeySize, masterPassword, masterKeySalt, masterKeySaltSize, MP_N, MP_r, MP_p );
     mpw_free( &masterKeySalt, masterKeySaltSize );
     if (!masterKey) {
-        err( "Could not derive master key: %s\n", strerror( errno ) );
+        err( "Could not derive master key: %s", strerror( errno ) );
         return NULL;
     }
-    trc( "  => masterKey.id: %s\n", mpw_id_buf( masterKey, MPMasterKeySize ) );
+    trc( "  => masterKey.id: %s", mpw_id_buf( masterKey, MPMasterKeySize ) );
 
     return masterKey;
 }

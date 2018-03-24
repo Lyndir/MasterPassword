@@ -29,9 +29,9 @@ MPMasterKey mpw_masterKey(const char *fullName, const char *masterPassword, cons
     if (masterPassword && !strlen( masterPassword ))
         masterPassword = NULL;
 
-    trc( "-- mpw_masterKey (algorithm: %u)\n", algorithmVersion );
-    trc( "fullName: %s\n", fullName );
-    trc( "masterPassword.id: %s\n", masterPassword? mpw_id_buf( masterPassword, strlen( masterPassword ) ): NULL );
+    trc( "-- mpw_masterKey (algorithm: %u)", algorithmVersion );
+    trc( "fullName: %s", fullName );
+    trc( "masterPassword.id: %s", masterPassword? mpw_id_buf( masterPassword, strlen( masterPassword ) ): NULL );
     if (!fullName || !masterPassword)
         return NULL;
 
@@ -45,7 +45,7 @@ MPMasterKey mpw_masterKey(const char *fullName, const char *masterPassword, cons
         case MPAlgorithmVersion3:
             return mpw_masterKey_v3( fullName, masterPassword );
         default:
-            err( "Unsupported version: %d\n", algorithmVersion );
+            err( "Unsupported version: %d", algorithmVersion );
             return NULL;
     }
 }
@@ -57,11 +57,11 @@ MPSiteKey mpw_siteKey(
     if (keyContext && !strlen( keyContext ))
         keyContext = NULL;
 
-    trc( "-- mpw_siteKey (algorithm: %u)\n", algorithmVersion );
-    trc( "siteName: %s\n", siteName );
-    trc( "siteCounter: %d\n", siteCounter );
-    trc( "keyPurpose: %d (%s)\n", keyPurpose, mpw_nameForPurpose( keyPurpose ) );
-    trc( "keyContext: %s\n", keyContext );
+    trc( "-- mpw_siteKey (algorithm: %u)", algorithmVersion );
+    trc( "siteName: %s", siteName );
+    trc( "siteCounter: %d", siteCounter );
+    trc( "keyPurpose: %d (%s)", keyPurpose, mpw_nameForPurpose( keyPurpose ) );
+    trc( "keyContext: %s", keyContext );
     if (!masterKey || !siteName)
         return NULL;
 
@@ -75,7 +75,7 @@ MPSiteKey mpw_siteKey(
         case MPAlgorithmVersion3:
             return mpw_siteKey_v3( masterKey, siteName, siteCounter, keyPurpose, keyContext );
         default:
-            err( "Unsupported version: %d\n", algorithmVersion );
+            err( "Unsupported version: %d", algorithmVersion );
             return NULL;
     }
 }
@@ -95,9 +95,9 @@ const char *mpw_siteResult(
     if (!siteKey)
         return NULL;
 
-    trc( "-- mpw_siteResult (algorithm: %u)\n", algorithmVersion );
-    trc( "resultType: %d (%s)\n", resultType, mpw_nameForType( resultType ) );
-    trc( "resultParam: %s\n", resultParam );
+    trc( "-- mpw_siteResult (algorithm: %u)", algorithmVersion );
+    trc( "resultType: %d (%s)", resultType, mpw_nameForType( resultType ) );
+    trc( "resultParam: %s", resultParam );
 
     char *sitePassword = NULL;
     if (resultType & MPResultTypeClassTemplate) {
@@ -111,7 +111,7 @@ const char *mpw_siteResult(
             case MPAlgorithmVersion3:
                 return mpw_sitePasswordFromTemplate_v3( masterKey, siteKey, resultType, resultParam );
             default:
-                err( "Unsupported version: %d\n", algorithmVersion );
+                err( "Unsupported version: %d", algorithmVersion );
                 return NULL;
         }
     }
@@ -126,7 +126,7 @@ const char *mpw_siteResult(
             case MPAlgorithmVersion3:
                 return mpw_sitePasswordFromCrypt_v3( masterKey, siteKey, resultType, resultParam );
             default:
-                err( "Unsupported version: %d\n", algorithmVersion );
+                err( "Unsupported version: %d", algorithmVersion );
                 return NULL;
         }
     }
@@ -141,12 +141,12 @@ const char *mpw_siteResult(
             case MPAlgorithmVersion3:
                 return mpw_sitePasswordFromDerive_v3( masterKey, siteKey, resultType, resultParam );
             default:
-                err( "Unsupported version: %d\n", algorithmVersion );
+                err( "Unsupported version: %d", algorithmVersion );
                 return NULL;
         }
     }
     else {
-        err( "Unsupported password type: %d\n", resultType );
+        err( "Unsupported password type: %d", resultType );
     }
 
     return sitePassword;
@@ -167,9 +167,9 @@ const char *mpw_siteState(
     if (!siteKey)
         return NULL;
 
-    trc( "-- mpw_siteState (algorithm: %u)\n", algorithmVersion );
-    trc( "resultType: %d (%s)\n", resultType, mpw_nameForType( resultType ) );
-    trc( "resultParam: %zu bytes = %s\n", sizeof( resultParam ), resultParam );
+    trc( "-- mpw_siteState (algorithm: %u)", algorithmVersion );
+    trc( "resultType: %d (%s)", resultType, mpw_nameForType( resultType ) );
+    trc( "resultParam: %zu bytes = %s", sizeof( resultParam ), resultParam );
     if (!masterKey || !resultParam)
         return NULL;
 
@@ -183,7 +183,7 @@ const char *mpw_siteState(
         case MPAlgorithmVersion3:
             return mpw_siteState_v3( masterKey, siteKey, resultType, resultParam );
         default:
-            err( "Unsupported version: %d\n", algorithmVersion );
+            err( "Unsupported version: %d", algorithmVersion );
             return NULL;
     }
 }

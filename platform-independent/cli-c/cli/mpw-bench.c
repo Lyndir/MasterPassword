@@ -43,7 +43,7 @@
 static void mpw_getTime(struct timeval *time) {
 
     if (gettimeofday( time, NULL ) != 0)
-        ftl( "Could not get time: %s\n", strerror( errno ) );
+        ftl( "Could not get time: %s", strerror( errno ) );
 }
 
 static const double mpw_showSpeed(struct timeval startTime, const unsigned int iterations, const char *operation) {
@@ -82,7 +82,7 @@ int main(int argc, char *const argv[]) {
     iterations = 4200000; /* tuned to ~10s on dev machine */
     masterKey = mpw_masterKey( fullName, masterPassword, MPAlgorithmVersionCurrent );
     if (!masterKey) {
-        ftl( "Could not allocate master key: %s\n", strerror( errno ) );
+        ftl( "Could not allocate master key: %s", strerror( errno ) );
         abort();
     }
     mpw_getTime( &startTime );
@@ -127,7 +127,7 @@ int main(int argc, char *const argv[]) {
     for (int i = 1; i <= iterations; ++i) {
         masterKey = mpw_masterKey( fullName, masterPassword, MPAlgorithmVersionCurrent );
         if (!masterKey) {
-            ftl( "Could not allocate master key: %s\n", strerror( errno ) );
+            ftl( "Could not allocate master key: %s", strerror( errno ) );
             break;
         }
 

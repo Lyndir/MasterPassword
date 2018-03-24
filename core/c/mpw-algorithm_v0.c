@@ -52,10 +52,10 @@ static MPMasterKey mpw_masterKey_v0(
         const char *fullName, const char *masterPassword) {
 
     const char *keyScope = mpw_scopeForPurpose( MPKeyPurposeAuthentication );
-    trc( "keyScope: %s\n", keyScope );
+    trc( "keyScope: %s", keyScope );
 
     // Calculate the master key salt.
-    trc( "masterKeySalt: keyScope=%s | #fullName=%s | fullName=%s\n",
+    trc( "masterKeySalt: keyScope=%s | #fullName=%s | fullName=%s",
             keyScope, mpw_hex_l( (uint32_t)mpw_utf8_strlen( fullName ) ), fullName );
     size_t masterKeySaltSize = 0;
     uint8_t *masterKeySalt = NULL;
@@ -63,20 +63,20 @@ static MPMasterKey mpw_masterKey_v0(
     mpw_push_int( &masterKeySalt, &masterKeySaltSize, (uint32_t)mpw_utf8_strlen( fullName ) );
     mpw_push_string( &masterKeySalt, &masterKeySaltSize, fullName );
     if (!masterKeySalt) {
-        err( "Could not allocate master key salt: %s\n", strerror( errno ) );
+        err( "Could not allocate master key salt: %s", strerror( errno ) );
         return NULL;
     }
-    trc( "  => masterKeySalt.id: %s\n", mpw_id_buf( masterKeySalt, masterKeySaltSize ) );
+    trc( "  => masterKeySalt.id: %s", mpw_id_buf( masterKeySalt, masterKeySaltSize ) );
 
     // Calculate the master key.
-    trc( "masterKey: scrypt( masterPassword, masterKeySalt, N=%lu, r=%u, p=%u )\n", MP_N, MP_r, MP_p );
+    trc( "masterKey: scrypt( masterPassword, masterKeySalt, N=%lu, r=%u, p=%u )", MP_N, MP_r, MP_p );
     MPMasterKey masterKey = mpw_kdf_scrypt( MPMasterKeySize, masterPassword, masterKeySalt, masterKeySaltSize, MP_N, MP_r, MP_p );
     mpw_free( &masterKeySalt, masterKeySaltSize );
     if (!masterKey) {
-        err( "Could not derive master key: %s\n", strerror( errno ) );
+        err( "Could not derive master key: %s", strerror( errno ) );
         return NULL;
     }
-    trc( "  => masterKey.id: %s\n", mpw_id_buf( masterKey, MPMasterKeySize ) );
+    trc( "  => masterKey.id: %s", mpw_id_buf( masterKey, MPMasterKeySize ) );
 
     return masterKey;
 }
@@ -86,14 +86,14 @@ static MPSiteKey mpw_siteKey_v0(
         MPKeyPurpose keyPurpose, const char *keyContext) {
 
     const char *keyScope = mpw_scopeForPurpose( keyPurpose );
-    trc( "keyScope: %s\n", keyScope );
+    trc( "keyScope: %s", keyScope );
 
     // OTP counter value.
     if (siteCounter == MPCounterValueTOTP)
         siteCounter = ((uint32_t)time( NULL ) / MP_otp_window) * MP_otp_window;
 
     // Calculate the site seed.
-    trc( "siteSalt: keyScope=%s | #siteName=%s | siteName=%s | siteCounter=%s | #keyContext=%s | keyContext=%s\n",
+    trc( "siteSalt: keyScope=%s | #siteName=%s | siteName=%s | siteCounter=%s | #keyContext=%s | keyContext=%s",
             keyScope, mpw_hex_l( (uint32_t)mpw_utf8_strlen( siteName ) ), siteName, mpw_hex_l( siteCounter ),
             keyContext? mpw_hex_l( (uint32_t)mpw_utf8_strlen( keyContext ) ): NULL, keyContext );
     size_t siteSaltSize = 0;
@@ -107,20 +107,20 @@ static MPSiteKey mpw_siteKey_v0(
         mpw_push_string( &siteSalt, &siteSaltSize, keyContext );
     }
     if (!siteSalt) {
-        err( "Could not allocate site salt: %s\n", strerror( errno ) );
+        err( "Could not allocate site salt: %s", strerror( errno ) );
         return NULL;
     }
-    trc( "  => siteSalt.id: %s\n", mpw_id_buf( siteSalt, siteSaltSize ) );
+    trc( "  => siteSalt.id: %s", mpw_id_buf( siteSalt, siteSaltSize ) );
 
-    trc( "siteKey: hmac-sha256( masterKey.id=%s, siteSalt )\n",
+    trc( "siteKey: hmac-sha256( masterKey.id=%s, siteSalt )",
             mpw_id_buf( masterKey, MPMasterKeySize ) );
     MPSiteKey siteKey = mpw_hash_hmac_sha256( masterKey, MPMasterKeySize, siteSalt, siteSaltSize );
     mpw_free( &siteSalt, siteSaltSize );
     if (!siteKey) {
-        err( "Could not derive site key: %s\n", strerror( errno ) );
+        err( "Could not derive site key: %s", strerror( errno ) );
         return NULL;
     }
-    trc( "  => siteKey.id: %s\n", mpw_id_buf( siteKey, MPSiteKeySize ) );
+    trc( "  => siteKey.id: %s", mpw_id_buf( siteKey, MPSiteKeySize ) );
 
     return siteKey;
 }
@@ -134,11 +134,11 @@ static const char *mpw_sitePasswordFromTemplate_v0(
     uint16_t seedByte;
     mpw_uint16( (uint16_t)_siteKey[0], (uint8_t *)&seedByte );
     const char *template = mpw_templateForType_v0( resultType, seedByte );
-    trc( "template: %u => %s\n", seedByte, template );
+    trc( "template: %u => %s", seedByte, template );
     if (!template)
         return NULL;
     if (strlen( template ) > MPSiteKeySize) {
-        err( "Template too long for password seed: %zu\n", strlen( template ) );
+        err( "Template too long for password seed: %zu", strlen( template ) );
         return NULL;
     }
 
@@ -147,10 +147,10 @@ static const char *mpw_sitePasswordFromTemplate_v0(
     for (size_t c = 0; c < strlen( template ); ++c) {
         mpw_uint16( (uint16_t)_siteKey[c + 1], (uint8_t *)&seedByte );
         sitePassword[c] = mpw_characterFromClass_v0( template[c], seedByte );
-        trc( "  - class: %c, index: %5u (0x%02hX) => character: %c\n",
+        trc( "  - class: %c, index: %5u (0x%02hX) => character: %c",
                 template[c], seedByte, seedByte, sitePassword[c] );
     }
-    trc( "  => password: %s\n", sitePassword );
+    trc( "  => password: %s", sitePassword );
 
     return sitePassword;
 }
@@ -159,7 +159,7 @@ static const char *mpw_sitePasswordFromCrypt_v0(
         MPMasterKey masterKey, MPSiteKey __unused siteKey, MPResultType __unused resultType, const char *cipherText) {
 
     if (!cipherText) {
-        err( "Missing encrypted state.\n" );
+        err( "Missing encrypted state." );
         return NULL;
     }
 
@@ -171,7 +171,7 @@ static const char *mpw_sitePasswordFromCrypt_v0(
         mpw_free( &cipherBuf, mpw_base64_decode_max( cipherText ) );
         return NULL;
     }
-    trc( "b64 decoded: %zu bytes = %s\n", bufSize, mpw_hex( cipherBuf, bufSize ) );
+    trc( "b64 decoded: %zu bytes = %s", bufSize, mpw_hex( cipherBuf, bufSize ) );
 
     // Decrypt
     const uint8_t *plainBytes = mpw_aes_decrypt( masterKey, MPMasterKeySize, cipherBuf, &bufSize );
@@ -179,8 +179,8 @@ static const char *mpw_sitePasswordFromCrypt_v0(
     const char *plainText = mpw_strndup( (char *)plainBytes, bufSize );
     mpw_free( &plainBytes, bufSize );
     if (!plainText)
-        err( "AES decryption error: %s\n", strerror( errno ) );
-    trc( "decrypted -> plainText: %zu bytes = %s = %s\n", strlen( plainText ), plainText, mpw_hex( plainText, strlen( plainText ) ) );
+        err( "AES decryption error: %s", strerror( errno ) );
+    trc( "decrypted -> plainText: %zu bytes = %s = %s", strlen( plainText ), plainText, mpw_hex( plainText, strlen( plainText ) ) );
 
     return plainText;
 }
@@ -191,23 +191,23 @@ static const char *mpw_sitePasswordFromDerive_v0(
     switch (resultType) {
         case MPResultTypeDeriveKey: {
             if (!resultParam) {
-                err( "Missing key size parameter.\n" );
+                err( "Missing key size parameter." );
                 return NULL;
             }
             int resultParamInt = atoi( resultParam );
             if (!resultParamInt)
                 resultParamInt = 512;
             if (resultParamInt < 128 || resultParamInt > 512 || resultParamInt % 8 != 0) {
-                err( "Parameter is not a valid key size (should be 128 - 512): %s\n", resultParam );
+                err( "Parameter is not a valid key size (should be 128 - 512): %s", resultParam );
                 return NULL;
             }
             uint16_t keySize = (uint16_t)(resultParamInt / 8);
-            trc( "keySize: %u\n", keySize );
+            trc( "keySize: %u", keySize );
 
             // Derive key
             const uint8_t *resultKey = mpw_kdf_blake2b( keySize, siteKey, MPSiteKeySize, NULL, 0, 0, NULL );
             if (!resultKey) {
-                err( "Could not derive result key: %s\n", strerror( errno ) );
+                err( "Could not derive result key: %s", strerror( errno ) );
                 return NULL;
             }
 
@@ -219,13 +219,13 @@ static const char *mpw_sitePasswordFromDerive_v0(
                 mpw_free_string( &b64Key );
             }
             else
-                trc( "b64 encoded -> key: %s\n", b64Key );
+                trc( "b64 encoded -> key: %s", b64Key );
             mpw_free( &resultKey, keySize );
 
             return b64Key;
         }
         default:
-            err( "Unsupported derived password type: %d\n", resultType );
+            err( "Unsupported derived password type: %d", resultType );
             return NULL;
     }
 }
@@ -237,10 +237,10 @@ static const char *mpw_siteState_v0(
     size_t bufSize = strlen( plainText );
     const uint8_t *cipherBuf = mpw_aes_encrypt( masterKey, MPMasterKeySize, (const uint8_t *)plainText, &bufSize );
     if (!cipherBuf) {
-        err( "AES encryption error: %s\n", strerror( errno ) );
+        err( "AES encryption error: %s", strerror( errno ) );
         return NULL;
     }
-    trc( "cipherBuf: %zu bytes = %s\n", bufSize, mpw_hex( cipherBuf, bufSize ) );
+    trc( "cipherBuf: %zu bytes = %s", bufSize, mpw_hex( cipherBuf, bufSize ) );
 
     // Base64-encode
     size_t b64Max = mpw_base64_encode_max( bufSize );
@@ -250,7 +250,7 @@ static const char *mpw_siteState_v0(
         mpw_free_string( &cipherText );
     }
     else
-        trc( "b64 encoded -> cipherText: %s\n", cipherText );
+        trc( "b64 encoded -> cipherText: %s", cipherText );
     mpw_free( &cipherBuf, bufSize );
 
     return cipherText;
