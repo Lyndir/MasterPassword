@@ -25,6 +25,7 @@
 #include "mpw-types.h"
 
 //// Logging.
+extern int mpw_verbosity;
 
 #ifndef mpw_log_do
 #define mpw_log_do(level, format, ...) \
@@ -32,12 +33,13 @@
 #endif
 
 #ifndef mpw_log
-extern int mpw_verbosity;
 #define mpw_log(level, ...) ({ \
     if (mpw_verbosity >= level) { \
         mpw_log_do( level, ##__VA_ARGS__ ); \
     }; })
+#endif
 
+#ifndef trc
 /** Logging internal state. */
 #define trc_level 3
 #define trc(...) mpw_log( trc_level, ##__VA_ARGS__ )
