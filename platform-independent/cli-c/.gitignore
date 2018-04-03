@@ -9,3 +9,8 @@ TAG
 VERSION
 mpw-*.tar.gz
 mpw-*.tar.gz.sig
+
+CMakeCache.txt
+CMakeFiles
+Makefile
+cmake_install.cmake
