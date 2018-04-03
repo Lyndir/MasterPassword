@@ -695,7 +695,9 @@ void cli_mpw(Arguments *args, Operation *operation) {
     if (!operation->site)
         abort();
 
-    inf( "%s's %s for %s:\n[ %s ]: ", operation->user->fullName, operation->purposeResult, operation->site->name, operation->identicon );
+    if (mpw_verbosity >= inf_level)
+        fprintf( stderr, "%s's %s for %s:\n[ %s ]: ",
+                operation->user->fullName, operation->purposeResult, operation->site->name, operation->identicon );
 
     // Determine master key.
     MPMasterKey masterKey = mpw_masterKey(
@@ -755,6 +757,7 @@ void cli_mpw(Arguments *args, Operation *operation) {
         cli_free( args, operation );
         exit( EX_SOFTWARE );
     }
+    fflush( NULL );
     fprintf( stdout, "%s\n", result );
     if (operation->site->url)
         inf( "See: %s", operation->site->url );
