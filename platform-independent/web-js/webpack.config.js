@@ -2,9 +2,12 @@ const webpack = require('webpack');
 const path = require('path');
 
 module.exports = {
-  entry: ["babel-polyfill", './src/main.js'],
+  entry: {
+    polyfill: 'babel-polyfill',
+    main: './src/main.js'
+  },
   output: {
-    filename: 'bundle.js',
+    filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist')
   },
   module: {
@@ -12,18 +15,18 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: "babel-loader"
+        loader: 'babel-loader'
       },
     ]
   },
   plugins: [
     new webpack.ProvidePlugin({
-      $: "jquery",
-      jQuery: "jquery"
+      $: 'jquery',
+      jQuery: 'jquery'
     })
   ],
   devServer: {
-    contentBase: path.join(__dirname, "dist"),
+    contentBase: path.join(__dirname, 'dist'),
     port: 8080
   }
 };
