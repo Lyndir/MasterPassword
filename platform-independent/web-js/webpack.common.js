@@ -1,6 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -29,9 +29,5 @@ module.exports = {
       template: 'index.html',
       inject: 'body'
     })
-  ],
-  devServer: {
-    contentBase: path.join(__dirname, 'dist'),
-    port: 8080
-  }
+  ]
 };
