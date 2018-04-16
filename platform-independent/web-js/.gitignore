@@ -1,1 +1,2 @@
-js/es5
+node_modules/
+dist/bundle.js
