@@ -171,7 +171,7 @@ Go into `platform-darwin` and open `MasterPassword.xcworkspace` in Xcode.  Selec
 
 Make sure you have all relevant submodules checked out.
 
-Go into `platform-independent/web-js` and open `index.html` in your browser.  You should be able to run this locally, there is no need for hosting or an application server.
+Go into `platform-independent/web-js`, install the relevant dependencies using `npm install` and then build the project using `npm run build`. You can then open `index.html` in your browser.  You should be able to run this locally, there is no need for hosting or an application server.
 
 
 ### Java

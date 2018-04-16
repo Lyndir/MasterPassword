@@ -1,3 +1,9 @@
+// import mpw-js
+// TODO: don't attach functions to window object
+import "./mpw-js/scrypt.js"
+import "./mpw-js/pbkdf2.js"
+import MPW from "exports-loader?MPW!./mpw-js/mpw.js"
+
 var mpw, error;
 
 function updateMPW() {
