@@ -188,6 +188,19 @@ section {
 
     font-size:              1.2em;
 }
+footer {
+    display:                flex;
+    padding:                2em 100px;
+
+    background:             rgba(240, 240, 240, 1);
+
+    div {
+        flex:               1;
+        ul {
+            list-style:     none;
+        }
+    }
+}
 input {
     margin:                 0 0.3ex;
 
