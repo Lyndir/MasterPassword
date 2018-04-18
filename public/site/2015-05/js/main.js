@@ -8,41 +8,44 @@ $(function() {
         });
     });
 
-    var lhs = null;
-    var operator = null;
-    function calculator_apply() {
-        var display = $("#calculator input[type=text]");
-        if (lhs && operator == '-')
-            display.val(parseInt(lhs) - parseInt(display.val()));
-        else if (lhs && operator == '+')
-            display.val(parseInt(lhs) + parseInt(display.val()));
-    }
-    $("#calculator input[type=button]").click(function() {
-        var display = $("#calculator input[type=text]");
-        var value = $(this).val();
+    $.each($(".widget_calculator"), function(i, calculator) {
+        calculator = $(calculator);
+        var display = calculator.find("input[type=text]");
+        var lhs = null, operator = null;
 
-        if (value == '-' || value == '+') {
-            if (operator == value && !display.val())
+        function calculator_apply() {
+            if (lhs && operator == '-')
+                display.val(parseInt(lhs) - parseInt(display.val()));
+            else if (lhs && operator == '+')
+                display.val(parseInt(lhs) + parseInt(display.val()));
+        }
+
+        calculator.find("input[type=button]").click(function() {
+            var value = $(this).val();
+
+            if (value == '-' || value == '+') {
+                if (operator == value && !display.val())
+                    operator = null;
+
+                else {
+                    calculator_apply();
+                    operator = value;
+                    lhs = display.val();
+                    display.val('');
+                }
+            } else if (value == 'C') {
                 operator = null;
-
-            else {
-                calculator_apply();
-                operator = value;
-                lhs = display.val();
+                lhs = null;
                 display.val('');
-            }
-        } else if (value == 'C') {
-            operator = null;
-            lhs = null;
-            display.val('');
-        } else if (value == '=')
-            calculator_apply();
-        else
-            display.val(display.val() + '' + value);
+            } else if (value == '=')
+                calculator_apply();
+            else
+                display.val(display.val() + '' + value);
 
-        $("#calculator input").removeClass('selected');
-        if (operator)
-            $("#calculator input[value='" + operator + "']").addClass('selected');
+            calculator.find("input").removeClass('selected');
+            if (operator)
+                calculator.find("input[value='" + operator + "']").addClass('selected');
+        });
     });
 });
 

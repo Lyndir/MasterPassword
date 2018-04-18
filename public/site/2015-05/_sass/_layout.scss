@@ -21,7 +21,7 @@ h1 {
     margin:                 0;
 
     font-family:            'Rubik Mono One', sans-serif;
-    font-size:              2.5em;
+    font-size:              2em;
     text-align:             center;
 }
 h2 {
@@ -92,42 +92,43 @@ header {
 
     &::before, &::after {
         position:           absolute;
-    background-size:        cover !important;
-    opacity: 0;
-    transition: 0.3s opacity;
-        z-index: -1;
-        width: 100%;
-        height: 100%;
-        content: " ";
+        background-color:   black;
+        background-size:    cover !important;
+        opacity:            0;
+        transition:         0.3s opacity;
+        z-index:            -1;
+        width:              100%;
+        height:             100%;
+        content:            '';
     }
     &::after {
-        z-index: -2;
-        background:             url('../img/hero_main.jpg') center top;
-        opacity: 1;
+        z-index:            -2;
+        background:         url('../img/hero_main.jpg') center top;
+        opacity:            1;
     }
     &.hero_ios::before {
-        background:   url('../img/hero_ios.jpg') center top;
-        opacity: 1;
+        background:         url('../img/hero_ios.jpg') center center;
+        opacity:            1;
     }
     &.hero_android::before {
-        background:   url('../img/hero_android.jpg') center center;
-        opacity: 1;
+        background:         url('../img/hero_android.jpg') center center;
+        opacity:            1;
     }
     &.hero_mac::before {
-        background:   url('../img/hero_mac.jpg') center center;
-        opacity: 1;
+        background:         url('../img/hero_mac.jpg') center top;
+        opacity:            1;
     }
     &.hero_desktop::before {
-        background:   url('../img/hero_desktop.jpg') center bottom;
-        opacity: 1;
+        background:         url('../img/hero_desktop.jpg') center bottom;
+        opacity:            1;
     }
     &.hero_cli::before {
-        background:   url('../img/hero_cli.jpg') center center;
-        opacity: 1;
+        background:         url('../img/hero_cli.jpg') center bottom;
+        opacity:            1;
     }
     &.hero_web::before {
-        background:   url('../img/hero_web.jpg') center center;
-        opacity: 1;
+        background:         url('../img/hero_web.jpg') center center;
+        opacity:            1;
     }
     h1 {
         height:             1em;
@@ -183,7 +184,7 @@ header.large, section {
 }
 section {
     box-sizing:             border-box;
-    padding:                3em 100px;
+    padding:                2em 100px;
 
     font-size:              1.2em;
 }
@@ -199,6 +200,9 @@ input {
 }
 input:hover {
     background:             rgba(200, 200, 200, 1);
+}
+input[type=button] {
+                cursor:             pointer;
 }
 input[type=checkbox] {
     display:                none;
@@ -218,7 +222,7 @@ input[type=checkbox] {
         background:         black;
     }
 }
-#calculator table {
+.widget_calculator table {
     height:                 200px;
     padding:                4px;
     margin:                 1em auto;
@@ -243,26 +247,85 @@ input[type=checkbox] {
         }
     }
 }
-.flex-auto {
-    flex:                   auto;
+.widget_gallery {
+    box-shadow:                 0 0 1px black;
+    border-radius:              4px;
+
+    & > ul {
+        display:                flex;
+        list-style:             none;
+        justify-content:        space-around;
+
+        li {
+            height:                 100px;
+
+            label {
+                display:            block;
+                box-sizing:         border-box;
+                width:              100%;
+                height:             100%;
+                padding:            1em;
+
+                background:         rgba(240, 240, 240, 1);
+                box-shadow:         0 0 2px black;
+                border-radius:      4px;
+
+                cursor:             pointer;
+
+                &:hover {
+                    background:     rgba(200, 200, 200, 1);
+                }
+
+                img {
+                    display:        block;
+                    width:          100%;
+                    height:         100%;
+                    margin:         0;
+                    box-shadow:     none;
+                }
+            }
+        }
+    }
+    input[type=radio] {
+        display: none;
+
+        & + div {
+            display:none;
+            margin: 1px;
+            padding:                2em;
+            background:         rgba(240, 240, 240, 1);
+        }
+        &:checked + div {
+            display:block;
+        }
+    }
 }
-.item_toggler {
-    font-size:              1.2em;
-    font-weight:            400;
+.widget_test ul {
     list-style:             none;
 
-    border-left:            4px solid rgba(200, 200, 200, 1);
-
-    .toggle_item {
-        display:            none;
-        margin:             1ex 0;
-        padding:            1ex 2em;
-        background:         rgba(240, 240, 240, 1);
-
-        font-size:          0.83em;
-        font-weight:        100;
+    li {
+        border-left:            4px solid rgba(200, 200, 200, 1);
     }
-    input:checked ~ .toggle_item {
-        display:            block;
+
+    label {
+        font-size:              1.2em;
+        font-weight:            400;
     }
+
+    input[type=checkbox] {
+        & + label + div {
+            display:none;
+            margin:             1ex 0;
+            padding:            1ex 2em;
+            background:         rgba(240, 240, 240, 1);
+
+            font-weight:        100;
+        }
+        &:checked + label + div {
+            display:block;
+        }
+    }
+}
+.flex-auto {
+    flex:                   auto;
 }
