@@ -84,51 +84,97 @@ header {
     display:                flex;
     position:               relative;
     overflow:               hidden;
-    min-height:             30%;
+    min-height:             40%;
 
     flex-direction:         column;
     justify-content:        stretch;
     align-items:            stretch;
 
-    &::before, &::after {
-        position:           absolute;
+//    .hero {
+//        position: absolute;
+//        z-index: -2;
+//        left: 0;
+//        right: 0;
+//        top: 0;
+//        bottom: 0;
+//
+//        .img {
+//            position: absolute;
+//            top: 0;
+//            left: 0;
+//            bottom: 0;
+//            right: 0;
+//            margin: 0;
+//
+//            background-color:   black;
+//            background-size:    cover !important;
+//            background:         url('../img/hero_main.jpg') center top;
+//        }
+//    }
+//    &[data-hero=ios] .img {
+//                background:         url('../img/hero_ios.jpg') center center;
+//            }
+//    &[data-hero=android] .img {
+//                background:         url('../img/hero_android.jpg') center center;
+//            }
+//    &[data-hero=mac] .img {
+//                background:         url('../img/hero_mac.jpg') center top;
+//            }
+//    &[data-hero=desktop] .img {
+//                background:         url('../img/hero_desktop.jpg') center bottom;
+//            }
+//    &[data-hero=cli] .img {
+//                background:         url('../img/hero_cli.jpg') center bottom;
+//            }
+//    &[data-hero=web] .img {
+//                background:         url('../img/hero_web.jpg') center center;
+//            }
+//    .hero img.main {
+//        display: block;
+//        z-index: -1;
+//    }
+//    &[data-hero=ios] .hero img.ios {
+//        display: block;
+//    }
+//    &[data-hero=android] .hero img.android {
+//        display: block;
+//    }
+//    &[data-hero=mac] .hero img.mac {
+//        display: block;
+//    }
+//    &[data-hero=desktop] .hero img.desktop {
+//        top: auto;
+//        bottom: -90px;
+//        display: block;
+//    }
+//    &[data-hero=cli] .hero img.cli {
+//        display: block;
+//    }
+//    &[data-hero=web] .hero img.web {
+//        display: block;
+//    }
+
+
         background-color:   black;
         background-size:    cover !important;
-        opacity:            0;
-        transition:         0.3s opacity;
-        z-index:            -1;
-        width:              100%;
-        height:             100%;
-        content:            '';
-    }
-    &::after {
-        z-index:            -2;
         background:         url('../img/hero_main.jpg') center top;
-        opacity:            1;
-    }
-    &.hero_ios::before {
+    &[data-hero=ios] {
         background:         url('../img/hero_ios.jpg') center center;
-        opacity:            1;
     }
-    &.hero_android::before {
+    &[data-hero=android] {
         background:         url('../img/hero_android.jpg') center center;
-        opacity:            1;
     }
-    &.hero_mac::before {
+    &[data-hero=mac] {
         background:         url('../img/hero_mac.jpg') center top;
-        opacity:            1;
     }
-    &.hero_desktop::before {
+    &[data-hero=desktop] {
         background:         url('../img/hero_desktop.jpg') center bottom;
-        opacity:            1;
     }
-    &.hero_cli::before {
+    &[data-hero=cli] {
         background:         url('../img/hero_cli.jpg') center bottom;
-        opacity:            1;
     }
-    &.hero_web::before {
+    &[data-hero=web] {
         background:         url('../img/hero_web.jpg') center center;
-        opacity:            1;
     }
     h1 {
         height:             1em;
@@ -189,16 +235,25 @@ section {
     font-size:              1.2em;
 }
 footer {
-    display:                flex;
     padding:                2em 100px;
 
     background:             rgba(240, 240, 240, 1);
 
-    div {
-        flex:               1;
-        ul {
-            list-style:     none;
+    & > div {
+        display:                flex;
+
+        & > div {
+            flex:               1;
+
+            ul {
+                list-style:     none;
+            }
         }
+    }
+
+    p {
+        font-size:          smaller;
+        color:             rgba(180, 180, 180, 1);
     }
 }
 input {

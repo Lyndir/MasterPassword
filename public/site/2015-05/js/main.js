@@ -1,13 +1,13 @@
 $(function() {
-    $("*[data-hero]").hover(function() {
-        let active = this;
-        $(this).parents("header").addClass( "hero_" + $(this).attr("data-hero") );
-        $("*[data-hero]").each(function() {
-            if (this != active)
-                $(this).parents("header").removeClass( "hero_" + $(this).attr("data-hero") );
-        });
+    /* Hero */
+    $("header nav *[data-hero]").hover(function() {
+        $(this).parents("header").attr( "data-hero", $(this).attr("data-hero") );
     });
 
+    /* Paroller */
+    $("*[data-paroller-factor]").paroller();
+
+    /* Widget: Calculator */
     $.each($(".widget_calculator"), function(i, calculator) {
         calculator = $(calculator);
         var display = calculator.find("input[type=text]");
