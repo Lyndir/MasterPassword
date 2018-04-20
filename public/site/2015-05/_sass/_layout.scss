@@ -90,99 +90,34 @@ header {
     justify-content:        stretch;
     align-items:            stretch;
 
-//    .hero {
-//        position: absolute;
-//        z-index: -2;
-//        left: 0;
-//        right: 0;
-//        top: 0;
-//        bottom: 0;
-//
-//        .img {
-//            position: absolute;
-//            top: 0;
-//            left: 0;
-//            bottom: 0;
-//            right: 0;
-//            margin: 0;
-//
-//            background-color:   black;
-//            background-size:    cover !important;
-//            background:         url('../img/hero_main.jpg') center top;
-//        }
-//    }
-//    &[data-hero=ios] .img {
-//                background:         url('../img/hero_ios.jpg') center center;
-//            }
-//    &[data-hero=android] .img {
-//                background:         url('../img/hero_android.jpg') center center;
-//            }
-//    &[data-hero=mac] .img {
-//                background:         url('../img/hero_mac.jpg') center top;
-//            }
-//    &[data-hero=desktop] .img {
-//                background:         url('../img/hero_desktop.jpg') center bottom;
-//            }
-//    &[data-hero=cli] .img {
-//                background:         url('../img/hero_cli.jpg') center bottom;
-//            }
-//    &[data-hero=web] .img {
-//                background:         url('../img/hero_web.jpg') center center;
-//            }
-//    .hero img.main {
-//        display: block;
-//        z-index: -1;
-//    }
-//    &[data-hero=ios] .hero img.ios {
-//        display: block;
-//    }
-//    &[data-hero=android] .hero img.android {
-//        display: block;
-//    }
-//    &[data-hero=mac] .hero img.mac {
-//        display: block;
-//    }
-//    &[data-hero=desktop] .hero img.desktop {
-//        top: auto;
-//        bottom: -90px;
-//        display: block;
-//    }
-//    &[data-hero=cli] .hero img.cli {
-//        display: block;
-//    }
-//    &[data-hero=web] .hero img.web {
-//        display: block;
-//    }
-
-
     .hero {
-        position: absolute;
-        z-index: -2;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: -70px; /* This is to deal with some kind of weird paroller bug that gives us blank space at the bottom otherwise. */
+        position:           absolute;
+        z-index:            -2;
+        left:               0;
+        right:              0;
+        top:                0;
+        bottom:             -70px; /* This is to deal with some kind of weird paroller bug that gives us blank space at the bottom otherwise. */
 
         background:         black url('../img/hero_main.jpg') center center no-repeat;
         background-size:    cover;
     }
     &[data-hero=ios] .hero {
-        background-image:         url('../img/hero_ios.jpg');
+        background-image:   url('../img/hero_ios.jpg');
     }
     &[data-hero=android] .hero {
-        background-image:         url('../img/hero_android.jpg');
+        background-image:   url('../img/hero_android.jpg');
     }
     &[data-hero=mac] .hero {
-        background-image:         url('../img/hero_mac.jpg');
+        background-image:   url('../img/hero_mac.jpg');
     }
     &[data-hero=desktop] .hero {
-        background-image:         url('../img/hero_desktop.jpg');
+        background-image:   url('../img/hero_desktop.jpg');
     }
     &[data-hero=cli] .hero {
-        background-image:         url('../img/hero_cli.jpg');
+        background-image:   url('../img/hero_cli.jpg');
     }
     &[data-hero=web] .hero {
-        background-image:         url('../img/hero_web.jpg');
+        background-image:   url('../img/hero_web.jpg');
     }
     h1 {
         height:             1em;
