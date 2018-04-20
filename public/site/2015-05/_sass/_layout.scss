@@ -155,26 +155,34 @@ header {
 //    }
 
 
-        background-color:   black;
-        background-size:    cover !important;
-        background:         url('../img/hero_main.jpg') center top;
-    &[data-hero=ios] {
-        background:         url('../img/hero_ios.jpg') center center;
+    .hero {
+        position: absolute;
+        z-index: -2;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: -70px; /* This is to deal with some kind of weird paroller bug that gives us blank space at the bottom otherwise. */
+
+        background:         black url('../img/hero_main.jpg') center center no-repeat;
+        background-size:    cover;
     }
-    &[data-hero=android] {
-        background:         url('../img/hero_android.jpg') center center;
+    &[data-hero=ios] .hero {
+        background-image:         url('../img/hero_ios.jpg');
     }
-    &[data-hero=mac] {
-        background:         url('../img/hero_mac.jpg') center top;
+    &[data-hero=android] .hero {
+        background-image:         url('../img/hero_android.jpg');
     }
-    &[data-hero=desktop] {
-        background:         url('../img/hero_desktop.jpg') center bottom;
+    &[data-hero=mac] .hero {
+        background-image:         url('../img/hero_mac.jpg');
     }
-    &[data-hero=cli] {
-        background:         url('../img/hero_cli.jpg') center bottom;
+    &[data-hero=desktop] .hero {
+        background-image:         url('../img/hero_desktop.jpg');
     }
-    &[data-hero=web] {
-        background:         url('../img/hero_web.jpg') center center;
+    &[data-hero=cli] .hero {
+        background-image:         url('../img/hero_cli.jpg');
+    }
+    &[data-hero=web] .hero {
+        background-image:         url('../img/hero_web.jpg');
     }
     h1 {
         height:             1em;
