@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-set -e
-
-cd "${BASH_SOURCE[0]%/*}"
-s3cmd sync . s3://masterpassword.lyndir.com/
-s3cmd sync . s3://www.masterpasswordapp.com/
-nice rsync --partial --progress --delete --sparse --archive --no-owner --no-perms --no-group --chmod=ugo=rwX \
-    --exclude rate-limit \
-    . satura.lyndir.com:/usr/local/www/masterpassword.lyndir.com/htdocs/
