@@ -11,11 +11,14 @@ html, body {
 body * {
     /*outline: 1px solid rgba(255, 0, 0, 0.5);/**/
 }
-img {
+img, video {
     margin:                 1ex 1em;
 
     border-radius:          4px;
     box-shadow:             0 1px 3px rgba(0, 0, 0, 0.6);
+    object-fit: contain;
+    box-sizing:             border-box;
+    max-width: 100%;
 }
 h1 {
     margin:                 0;
@@ -92,7 +95,7 @@ header {
 
     .hero {
         position:           absolute;
-        z-index:            -2;
+        z-index:            -1;
         left:               0;
         right:              0;
         top:                0;
