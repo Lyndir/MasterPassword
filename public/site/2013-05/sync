@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-set -e
-
-cd "${BASH_SOURCE[0]%/*}"
-s3cmd sync --continue-put --stats --follow-symlinks --exclude '.git/**' --human-readable-sizes --no-preserve --acl-public --reduced-redundancy "${@:-.}" s3://masterpasswordapp.com/
-rsync -rvPLc --no-group "${@:-.}" satura.lyndir.com:/usr/local/www/masterpasswordapp.com/htdocs-secure/
