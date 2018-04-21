@@ -1,10 +1,13 @@
 ---
-layout: default
+title: Home
 header: large
+
+order: 0
+layout: default
 ---
 
 <section id="intro">
-    <h2><img src="{{ site.baseurl }}/img/password_forgot_882804.svg" title="https://thenounproject.com/term/forget/882804/" />
+    <h2><img src="{% link img/password_forgot_882804.svg %}" title="https://thenounproject.com/term/forget/882804/" />
         What's your <input type="password" value="password" size="5">?</h2>
     <p>Passwords are regarded as a "necessary evil" to having accounts online.  We accept them as <q>the way things are done online</q> and try to adapt.<br>
     But upon reflection, we find that we've adapted quite poorly.<br>
@@ -12,16 +15,16 @@ header: large
     <p>Sites everywhere expect us to come up with a secure and unique password for them.  But we're not security professionals. We do our best to compensate for this unrealistic demand: to keep track of passwords, we reach for notebooks, our computers, apps, or we simplify them so we won't forget.<br>
     <b>We've become symptomatic</b>.</p>
 
-    <h2><img src="{{ site.baseurl }}/img/thinking_882797.svg" title="https://thenounproject.com/term/thinking/882797/" />
+    <h2><img src="{% link img/thinking_882797.svg %}" title="https://thenounproject.com/term/thinking/882797/" />
         The real issue.</h2>
     <p>Humans are no good at remembering lots of passwords.  But writing them down or saving them is dangerous, too.</p>
     <p>Master Password avoids all the pitfalls: a cryptographic algorithm calculates your site's password for you, only when you need it.<br>
     When you're done, it erases the password from the device, so it can't be stolen.</p>
 
     <video controls>
-        <source src="vid/about.webm" type="video/webm; codecs=vp8,vorbis">
-        <source src="vid/about.mp4" type="video/mp4">
-        <source src="vid/about.ogv" type="video/ogg; codecs=theora,vorbis">
+        <source src="{% link vid/about.webm %}" type="video/webm; codecs=vp8,vorbis">
+        <source src="{% link vid/about.mp4 %}" type="video/mp4">
+        <source src="{% link vid/about.ogv %}" type="video/ogg; codecs=theora,vorbis">
     </video>
 
     <p>Master Password's unique approach makes you safer from loss, theft, problems with backups, sync, confiscation, snooping, and more.</p>

@@ -1,6 +1,6 @@
 <header class="{{ page.header }}">
     <nav>
-        <a href="{{ site.baseurl }}" data-hero="main">Master Password</a>
+        <a href="{% link index.html %}" data-hero="main">Master Password</a>
         <div class="flex-auto">
             <a href="https://itunes.apple.com/app/id510296984" data-hero="ios">iOS.</a>
             <a href="https://ssl.masterpasswordapp.com/masterpassword-android.apk" data-hero="android">Android.</a>
@@ -17,8 +17,11 @@
     <div class="flex-auto"></div>
 
     <nav>
-        <a href="{{ site.baseurl }}/why.html"{% if page.nav == "why" %} class="active"{% endif %}>Why</a>
-        <a href="{{ site.baseurl }}/what.html"{% if page.nav == "what" %} class="active"{% endif %}>What</a>
-        <a href="{{ site.baseurl }}/how.html"{% if page.nav == "how" %} class="active"{% endif %}>How</a>
+        {% assign pages = site.pages | sort: 'order' %}
+        {% for aPage in pages %}
+        {% if aPage.nav %}
+        <a href="{{ aPage.url }}"{% if page.url == aPage.url %} class="active"{% endif %}>{{ aPage.nav }}</a>
+        {% endif %}
+        {% endfor %}
     </nav>
 </header>

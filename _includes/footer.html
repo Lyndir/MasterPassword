@@ -4,10 +4,12 @@
         <div>
             <h4>Navigation</h4>
             <ul>
-                <li><a href="{{ site.baseurl }}">Home</a></li>
-                <li><a href="{{ site.baseurl }}/why.html">Why do I need it?</a></li>
-                <li><a href="{{ site.baseurl }}/what.html">What does it do?</a></li>
-                <li><a href="{{ site.baseurl }}/how.html">How do I use it?</a></li>
+                {% assign pages = site.pages | sort: 'order' %}
+                {% for aPage in pages %}
+                {% if aPage.order %}
+                <li><a href="{{ aPage.url }}">{{ aPage.title }}</a></li>
+                {% endif %}
+                {% endfor %}
             </ul>
         </div>
 
@@ -29,21 +31,21 @@
                 <li><a href="http://help.masterpasswordapp.com/">Support</a></li>
                 <li><a href="https://github.com/Lyndir/MasterPassword/">Source Code</a></li>
                 <li><a href="https://github.com/Lyndir/MasterPassword/issues">Report an Issue</a></li>
-                <li><a href="masterpassword-algorithm.pdf">Master Password: An Algorithm For Freedom (PDF)</a></li>
-                <li><a href="masterpassword-primer.pdf">A Primer on Passwords (PDF)</a></li>
+                <li><a href="{% link masterpassword-algorithm.pdf %}">Master Password: An Algorithm For Freedom (PDF)</a></li>
+                <li><a href="{% link masterpassword-primer.pdf %}">A Primer on Passwords (PDF)</a></li>
             </ul>
         </div>
     </div>
 
     <p>
         Master Password is a security product and algorithm by <a href="http://www.lhunath.com/">Maarten Billemont</a>, Lyndir (&copy; 2011-2018).<br>
-        Usage implies agreement with our <a href="{{ site.baseurl }}/privacy.html">privacy policy and disclaimer</a>.
+        Usage implies agreement with our <a href="{% link privacy.html %}">privacy policy and disclaimer</a>.
     </p>
     <p><a href="http://guide.bash.academy/">The Bash Guide</a> ● <a href="http://gorillas.lyndir.com">Gorillas</a> ● <a href="https://github.com/Lyndir">GitHub</a> ● <a href="http://thanks.lhunath.com">Send Thanks</a></p>
 
 </footer>
 
-<script src="{{ site.baseurl }}/js/jquery-3.3.1.min.js"></script>
-<script src="{{ site.baseurl }}/js/jquery.paroller.min.js"></script>
-<script src="{{ site.baseurl }}/js/main.js"></script>
+<script src="{% link js/jquery-3.3.1.min.js %}"></script>
+<script src="{% link js/jquery.paroller.min.js %}"></script>
+<script src="{% link js/main.js %}"></script>
 

@@ -1,12 +1,15 @@
 ---
+nav: How
+title: How do I use it?
+
+order: 3
 layout: default
-nav: how
 ---
 
 <section id="how">
-    <h1>How do I use it?</h1>
+    <h1>{{ page.title }}</h1>
 
-    <h2><img src="{{ site.baseurl }}/img/password_offer_944292.svg" title="https://thenounproject.com/term/key-delivery/944292/" />
+    <h2><img src="{% link img/password_offer_944292.svg %}" title="https://thenounproject.com/term/key-delivery/944292/" />
         One, two, enter.</h2>
 
     <p>Good security depends on ease of use.</p>
@@ -19,7 +22,7 @@ nav: how
     <hr>
     <p>Most browsers will then ask you to "save" the site's password. If you're comfortable with that, it's a good way of skipping the above steps and logging in even faster next time.</p>
 
-    <h2><img src="{{ site.baseurl }}/img/getting_started_162761.svg" title="https://thenounproject.com/term/rocket/162761/" />
+    <h2><img src="{% link img/getting_started_162761.svg %}" title="https://thenounproject.com/term/rocket/162761/" />
         Getting started.</h2>
 
     <p>As explained, Master Password is not a password manager or a vault.  It is not made to hold your existing site passwords &mdash; that would violate the principles it stands for and break the advantages it offers over ordinary password managers.</p>
@@ -30,28 +33,28 @@ nav: how
 
     <p>All right. Here's Robert on his iPhone:</p>
 
-    <img src="{{ site.baseurl }}/img/howto-twitter-signup.png" />
+    <img src="{% link img/howto-twitter-signup.png %}" />
 
     <p>He wants to sign up for Twitter. Robert filled in all the fields, except for password. Not wanting to worry about what his twitter secret is going to be, he switches to Master Password.</p>
 
-    <img src="{{ site.baseurl }}/img/howto-mp-login.png" />
+    <img src="{% link img/howto-mp-login.png %}" />
 
     <p>Of course, he begins by unlocking his user with his master password. Robert can skip this step by going into Master Password's preferences and setting it to either save his master key or remember his login, but he choses not to.</p>
 
-    <img src="{{ site.baseurl }}/img/howto-mp-create.png" />
-    <img src="{{ site.baseurl }}/img/howto-mp-create-confirm.png" />
+    <img src="{% link img/howto-mp-create.png %}" />
+    <img src="{% link img/howto-mp-create-confirm.png %}" />
 
     <p>He creates a password for Twitter by using its bare domain name: twitter.com. He knows not to use mobile.twitter.com or Twitter or anything non-standard, because that would be very difficult to remember correctly on a later date. If he has multiple twitter accounts, he could prefix the name with a user name and an @: rmitchell@twitter.com, superbob@twitter.com.</p>
 
-    <img src="{{ site.baseurl }}/img/howto-mp-type-change.png" />
-    <img src="{{ site.baseurl }}/img/howto-mp-type-basic.png" />
+    <img src="{% link img/howto-mp-type-change.png %}" />
+    <img src="{% link img/howto-mp-type-basic.png %}" />
 
     <p>If the account Robert's signing up for is with a website that prohibits symbols for some daft reason, Robert can change the type to Basic or something similar instead. Robert can also bump up the complexity to get an even more secure password if he wants.</p>
 
-    <img src="{{ site.baseurl }}/img/howto-twitter-paste.png" />
-    <img src="{{ site.baseurl }}/img/howto-twitter-done.png" />
+    <img src="{% link img/howto-twitter-paste.png %}" />
+    <img src="{% link img/howto-twitter-done.png %}" />
 
     <p>When Robert created the site in Master Password, it copied the password to his pasteboard. Now, Robert just switches back to Safari and pastes his brand-new password he doesn't care to remember in twitter's password field. All done!</p>
 
-    <h2><img src="{{ site.baseurl }}/img/thumb-iphone-types.png"></h2>
+    <h2><img src="{% link img/thumb-iphone-types.png %}"></h2>
 </section>

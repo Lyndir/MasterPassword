@@ -1,12 +1,15 @@
 ---
+nav: Why
+title: Why do I need it?
+
+order: 1
 layout: default
-nav: why
 ---
 
 <section id="intro">
-    <h1>Why do I need it?</h1>
+    <h1>{{ page.title }}</h1>
 
-    <h2><img src="{{ site.baseurl }}/img/frustrated_625996.svg" title="https://thenounproject.com/term/professor/625996/" />
+    <h2><img src="{% link img/frustrated_625996.svg %}" title="https://thenounproject.com/term/professor/625996/" />
         Passwords are frustrating.</h2>
 
     <p>We all struggle so hard, trying to keep our accounts secure.</p>
@@ -19,9 +22,9 @@ nav: why
     <div class="widget_gallery">
         <h2>Where do <i>you</i> keep your passwords?</h2>
         <ul>
-            <li><label for="mp_keep_head"><img src="{{ site.baseurl }}/img/password_head_336886.svg" title="https://thenounproject.com/term/password/336886/"></label></li>
-            <li><label for="mp_keep_notebook"><img src="{{ site.baseurl }}/img/password_notebook_4740.svg" title="https://thenounproject.com/term/password/4740/"></label></li>
-            <li><label for="mp_keep_app"><img src="{{ site.baseurl }}/img/password_app_667404.svg" title="https://thenounproject.com/term/password/667404/"></label></li>
+            <li><label for="mp_keep_head"><img src="{% link img/password_head_336886.svg %}" title="https://thenounproject.com/term/password/336886/"></label></li>
+            <li><label for="mp_keep_notebook"><img src="{% link img/password_notebook_4740.svg %}" title="https://thenounproject.com/term/password/4740/"></label></li>
+            <li><label for="mp_keep_app"><img src="{% link img/password_app_667404.svg %}" title="https://thenounproject.com/term/password/667404/"></label></li>
         </ul>
 
         <input type="radio" name="mp_keep" checked>
@@ -32,7 +35,7 @@ nav: why
 
         <input type="radio" name="mp_keep" id="mp_keep_notebook">
         <div>
-            <h2><img src="{{ site.baseurl }}/img/password_notebook_4740.svg" title="https://thenounproject.com/term/password/4740/">
+            <h2><img src="{% link img/password_notebook_4740.svg %}" title="https://thenounproject.com/term/password/4740/">
                 The password notebook.</h2>
 
             <p>Have you considered?
@@ -50,7 +53,7 @@ nav: why
 
         <input type="radio" name="mp_keep" id="mp_keep_app">
         <div>
-            <h2><img src="{{ site.baseurl }}/img/password_app_667404.svg" title="https://thenounproject.com/term/password/667404/">
+            <h2><img src="{% link img/password_app_667404.svg %}" title="https://thenounproject.com/term/password/667404/">
                 The vault in an app.</h2>
 
             <p>Have you considered?
@@ -69,7 +72,7 @@ nav: why
 
         <input type="radio" name="mp_keep" id="mp_keep_head">
         <div>
-            <h2><img src="{{ site.baseurl }}/img/password_head_336886.svg" title="https://thenounproject.com/term/password/336886/">
+            <h2><img src="{% link img/password_head_336886.svg %}" title="https://thenounproject.com/term/password/336886/">
                 The privacy of memory.</h2>
 
             <p>Have you considered?
@@ -86,7 +89,7 @@ nav: why
         </div>
     </div>
 
-    <h2><img src="{{ site.baseurl }}/img/head_key_336882.svg" title="https://thenounproject.com/term/password/336882/" />
+    <h2><img src="{% link img/head_key_336882.svg %}" title="https://thenounproject.com/term/password/336882/" />
         A password is something you know,<br>
         not something you have.</h2>
 
@@ -100,5 +103,5 @@ nav: why
     <p>But this is a panicked reaction to a problem we simply don't know how to handle:<br>
     <b>The problem of passwords for everything</b>.</p>
 
-    <h2><img src="{{ site.baseurl }}/img/thumb-iphone-types.png"></h2>
+    <h2><img src="{% link img/thumb-iphone-broken.png %}"></h2>
 </section>
