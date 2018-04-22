@@ -19,12 +19,12 @@ git show --show-signature --pretty=format:%H --quiet "$tag" > TAG
 { git ls-files -z .; printf '%s\0' VERSION TAG; } | xargs -0 tar -Lcvzf "$mpwArchive"
 
 echo "Creating archive signature $mpwArchive.sig .."
-gpg --detach-sign "$mpwArchive"
+gpg --detach-sign --local-user 5C2D1D61853F20F2FCDDCCB70EF21226F43EA6BC "$mpwArchive"
 
-echo "Installing archive and signature in current site .."
-cd ../../public/site/current
-mv "../../../platform-independent/cli-c/$mpwArchive" .; [[ -e $_ ]]
-mv "../../../platform-independent/cli-c/$mpwArchive.sig" .; [[ -e $_ ]]
+echo "Installing archive and signature in site .."
+cd ../../public/site
+mv "$OLDPWD/$mpwArchive" .; [[ -e $_ ]]
+mv "$OLDPWD/$mpwArchive.sig" .; [[ -e $_ ]]
 ln -sf "$mpwArchive" "masterpassword-cli.tar.gz"; [[ -e $_ ]]
 ln -sf "$mpwArchive.sig" "masterpassword-cli.tar.gz.sig"; [[ -e $_ ]]
 
