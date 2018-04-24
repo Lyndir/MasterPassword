@@ -196,6 +196,13 @@ Go into the `platform-independent/cli-c` directory and run `./build`.  The nativ
 
 For detailed instructions, see [the native CLI instructions](platform-independent/cli-c/README.md).
 
+### Docker
+
+Using [Docker](https://hub.docker.com/r/ellioseven/mpw/), run with:
+
+```
+docker run -ti --rm ellioseven/mpw /usr/bin/mpw
+```
 
 ## Support
 
