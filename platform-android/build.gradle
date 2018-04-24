@@ -13,8 +13,8 @@ android {
         applicationId 'com.lyndir.masterpassword'
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 20401
-        versionName '2.4.1'
+        versionCode 20501
+        versionName '2.5.1'
     }
 
     // release with: STORE_PW=$(mpw masterpassword.keystore) KEY_PW=$(mpw masterpassword-android) gradle assembleRelease
