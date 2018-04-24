@@ -143,12 +143,12 @@ const char **mpw_templatesForType(MPResultType type, size_t *count) {
         case MPResultTypeTemplateMedium:
             return mpw_alloc_array( count, const char *,
                     "CvcnoCvc", "CvcCvcno" );
-        case MPResultTypeTemplateBasic:
-            return mpw_alloc_array( count, const char *,
-                    "aaanaaan", "aannaaan", "aaannaaa" );
         case MPResultTypeTemplateShort:
             return mpw_alloc_array( count, const char *,
                     "Cvcn" );
+        case MPResultTypeTemplateBasic:
+            return mpw_alloc_array( count, const char *,
+                    "aaanaaan", "aannaaan", "aaannaaa" );
         case MPResultTypeTemplatePIN:
             return mpw_alloc_array( count, const char *,
                     "nnnn" );
