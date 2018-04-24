@@ -39,11 +39,11 @@ window.TextEncoder || document.write("<script src=js/encoding-polyfill.js><\/scr
 window.Promise || document.write("<script src=js/promise-polyfill.js><\/script>");
 
 // If setImmediate is not implemented we include the polyfill
-window.setImmediate || document.write("<script src=js/" + esdir + "setImmediate-polyfill.js><\/script>");
+window.setImmediate || document.write("<script src=js/setImmediate-polyfill.js><\/script>");
 
 // Include the scrypt implementation
-document.write("<script src=js/" + esdir + "mpw-js/pbkdf2.js><\/script>");
-document.write("<script src=js/" + esdir + "mpw-js/scrypt.js?1><\/script>");
+document.write("<script src=js/mpw-js/pbkdf2.js><\/script>");
+document.write("<script src=js/mpw-js/scrypt.js?1><\/script>");
 
 // Include the MPW class
-document.write("<script src=js/" + esdir + "mpw-js/mpw.js?1><\/script>");
+document.write("<script src=js/mpw-js/mpw.js?1><\/script>");
