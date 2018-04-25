@@ -12,13 +12,13 @@ body * {
     /*outline: 1px solid rgba(255, 0, 0, 0.5);/**/
 }
 img, video {
-    margin:                 1ex 1em;
+    margin:                 1ex 2%;
+    width:                  96%;
 
     border-radius:          4px;
     box-shadow:             0 1px 3px rgba(0, 0, 0, 0.6);
     object-fit: contain;
     box-sizing:             border-box;
-    max-width: 100%;
 }
 h1 {
     margin:                 0;
@@ -66,9 +66,12 @@ q {
 nav {
     display:                flex;
 
-    font-size:              1.8em;
     font-weight:            400;
     text-align:             center;
+
+    @media screen and (min-width: 1024px) {
+        font-size:          1.8em;
+    }
 
     &>* {
         flex:               1;
@@ -130,13 +133,17 @@ header {
     }
     nav:first-child {
         position:           fixed;
-        padding:            0 2em;
+        padding:            0 20px;
         margin:             0;
         left:               0;
         right:              0;
 
         background:         rgba(0, 0, 0, 0.8);
         color:              white;
+
+        @media screen and (min-width: 1024px) {
+            padding:        0 100px;
+        }
 
         &>*:first-child {
             text-align:     left;
@@ -176,14 +183,22 @@ header.large, section {
 }
 section {
     box-sizing:             border-box;
-    padding:                2em 100px;
+    padding:                2em 20px;
 
     font-size:              1.2em;
+
+    @media screen and (min-width: 1024px) {
+        padding:            2em 100px;
+    }
 }
 footer {
-    padding:                2em 100px;
+    padding:                2em 20px;
 
     background:             rgba(240, 240, 240, 1);
+
+    @media screen and (min-width: 1024px) {
+        padding:            2em 100px;
+    }
 
     & > div {
         display:                flex;
@@ -315,6 +330,8 @@ input[type=checkbox] {
     }
 }
 .widget_test ul {
+    margin:         0 8px;
+
     list-style:             none;
 
     li {
@@ -329,11 +346,16 @@ input[type=checkbox] {
     input[type=checkbox] {
         & + label + div {
             display:none;
-            margin:             1ex 0;
-            padding:            1ex 2em;
+            margin:         1ex 0;
+            padding:        1ex;
+
             background:         rgba(240, 240, 240, 1);
 
             font-weight:        100;
+
+            @media screen and (min-width: 1024px) {
+                padding:        1ex 2em;
+            }
         }
         &:checked + label + div {
             display:block;
