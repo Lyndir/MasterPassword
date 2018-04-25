@@ -90,7 +90,7 @@ Master Password is *not* a password manager.  It does not store your website pas
 
 ## How does it work?
 
-The details of how Master Password works [are available here](http://masterpasswordapp.com/algorithm.html).
+The details of how Master Password works [are available here](https://masterpasswordapp.com/masterpassword-algorithm.pdf).
 
 In short:
 
@@ -136,7 +136,7 @@ Please don't hesitate to [get in touch](#support), we're more than happy to answ
 
 # Source Code
 
-Master Password's algorithm is [documented](http://masterpasswordapp.com/algorithm.html) and its implementation is Free Software (GPLv3).
+Master Password's algorithm is [documented](https://masterpasswordapp.com/masterpassword-algorithm.pdf) and its implementation is [Free Software (GPLv3)](LICENSE).
 
 
 
