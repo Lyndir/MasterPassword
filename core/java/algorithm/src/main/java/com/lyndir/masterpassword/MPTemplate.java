@@ -18,7 +18,7 @@
 
 package com.lyndir.masterpassword;
 
-import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
+import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import com.google.common.collect.ImmutableList;
 import com.lyndir.lhunath.opal.system.util.MetaObject;

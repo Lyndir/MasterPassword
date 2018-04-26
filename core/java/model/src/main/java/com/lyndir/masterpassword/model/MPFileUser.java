@@ -18,13 +18,16 @@
 
 package com.lyndir.masterpassword.model;
 
-import com.google.common.collect.*;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Sets;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.masterpassword.*;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import org.joda.time.*;
+import org.joda.time.Instant;
+import org.joda.time.ReadableInstant;
 
 
 /**

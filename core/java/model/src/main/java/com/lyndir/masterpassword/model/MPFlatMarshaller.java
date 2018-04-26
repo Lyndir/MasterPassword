@@ -18,8 +18,8 @@
 
 package com.lyndir.masterpassword.model;
 
-import static com.lyndir.lhunath.opal.system.util.ObjectUtils.ifNotNullElse;
-import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
+import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
+import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import com.lyndir.masterpassword.*;
 import javax.annotation.Nonnull;

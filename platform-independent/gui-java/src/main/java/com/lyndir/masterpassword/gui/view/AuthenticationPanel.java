@@ -20,8 +20,8 @@ package com.lyndir.masterpassword.gui.view;
 
 import com.google.common.collect.ImmutableList;
 import com.lyndir.masterpassword.gui.Res;
-import com.lyndir.masterpassword.model.MPUser;
 import com.lyndir.masterpassword.gui.util.Components;
+import com.lyndir.masterpassword.model.MPUser;
 import java.awt.*;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

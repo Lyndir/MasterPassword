@@ -22,8 +22,7 @@ import com.google.common.base.Charsets;
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.MessageAuthenticationDigests;
 import com.lyndir.lhunath.opal.system.MessageDigests;
-import java.io.Serializable;
-import java.nio.*;
+import java.nio.ByteOrder;
 import java.nio.charset.Charset;
 import javax.annotation.Nullable;
 

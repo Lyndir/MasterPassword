@@ -18,21 +18,23 @@
 
 package com.lyndir.masterpassword;
 
-import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
+import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
-import android.app.*;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.*;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.google.common.base.*;
-import com.google.common.collect.*;
+import com.google.common.base.Function;
+import com.google.common.base.Predicates;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.util.concurrent.*;
 import com.lyndir.lhunath.opal.system.logging.Logger;
-import java.util.concurrent.*;
+import java.util.concurrent.Executors;
 import javax.annotation.Nullable;
 
 

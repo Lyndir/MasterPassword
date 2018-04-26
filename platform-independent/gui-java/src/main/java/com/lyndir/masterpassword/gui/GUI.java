@@ -18,14 +18,16 @@
 
 package com.lyndir.masterpassword.gui;
 
-import com.google.common.base.*;
-import com.google.common.io.*;
+import com.google.common.base.Charsets;
+import com.google.common.base.Optional;
+import com.google.common.io.CharSource;
+import com.google.common.io.Resources;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.TypeUtils;
-
 import com.lyndir.masterpassword.gui.view.PasswordFrame;
 import com.lyndir.masterpassword.gui.view.UnlockFrame;
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URL;

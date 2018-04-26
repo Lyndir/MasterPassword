@@ -18,13 +18,13 @@
 
 package com.lyndir.masterpassword;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
-import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
+import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.logging.Logger;
-import com.lyndir.lhunath.opal.system.util.*;
+import com.lyndir.lhunath.opal.system.util.NNSupplier;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

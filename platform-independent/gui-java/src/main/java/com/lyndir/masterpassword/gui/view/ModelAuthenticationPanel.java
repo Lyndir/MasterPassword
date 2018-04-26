@@ -18,16 +18,16 @@
 
 package com.lyndir.masterpassword.gui.view;
 
-import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
+import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
-import com.google.common.collect.*;
+import com.google.common.collect.ImmutableList;
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.masterpassword.MPMasterKey;
 import com.lyndir.masterpassword.MPResultType;
 import com.lyndir.masterpassword.gui.Res;
-import com.lyndir.masterpassword.model.*;
 import com.lyndir.masterpassword.gui.util.Components;
+import com.lyndir.masterpassword.model.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.annotation.Nonnull;

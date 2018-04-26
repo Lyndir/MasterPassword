@@ -18,13 +18,14 @@
 
 package com.lyndir.masterpassword.model;
 
-import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
+import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import com.google.common.base.Preconditions;
 import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.masterpassword.MPInvalidatedException;
 import com.lyndir.masterpassword.MPMasterKey;
-import java.util.*;
+import java.util.Collection;
+import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 

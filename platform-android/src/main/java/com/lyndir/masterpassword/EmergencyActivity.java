@@ -18,7 +18,7 @@
 
 package com.lyndir.masterpassword;
 
-import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
+import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import android.app.*;
 import android.content.*;
@@ -35,11 +35,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.google.common.collect.ImmutableList;
 import com.google.common.primitives.UnsignedInteger;
-import com.google.common.util.concurrent.*;
+import com.google.common.util.concurrent.ListeningExecutorService;
+import com.google.common.util.concurrent.MoreExecutors;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import java.text.MessageFormat;
 import java.util.*;
-import java.util.concurrent.*;
+import java.util.concurrent.Executors;
 import javax.annotation.Nullable;
 
 

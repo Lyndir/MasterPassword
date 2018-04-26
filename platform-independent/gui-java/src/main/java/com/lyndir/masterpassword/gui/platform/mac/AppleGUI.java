@@ -20,10 +20,6 @@ package com.lyndir.masterpassword.gui.platform.mac;
 
 import com.apple.eawt.*;
 import com.lyndir.masterpassword.gui.GUI;
-import com.lyndir.masterpassword.gui.view.PasswordFrame;
-import com.lyndir.masterpassword.model.MPUser;
-
-import javax.swing.*;
 
 
 /**

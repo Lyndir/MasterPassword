@@ -20,7 +20,6 @@ package com.lyndir.masterpassword;
 
 import static org.testng.Assert.*;
 
-import com.google.common.base.Charsets;
 import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import java.util.Random;

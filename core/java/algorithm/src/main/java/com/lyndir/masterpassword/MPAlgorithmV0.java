@@ -18,15 +18,17 @@
 
 package com.lyndir.masterpassword;
 
-import com.google.common.base.*;
+import com.google.common.base.Preconditions;
+import com.google.common.base.Throwables;
 import com.google.common.primitives.Bytes;
 import com.google.common.primitives.UnsignedInteger;
 import com.lambdaworks.crypto.SCrypt;
 import com.lyndir.lhunath.opal.crypto.CryptUtils;
-import com.lyndir.lhunath.opal.system.*;
+import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.ConversionUtils;
-import java.nio.*;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import javax.annotation.Nullable;

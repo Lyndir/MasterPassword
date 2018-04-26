@@ -19,8 +19,8 @@
 package com.lyndir.masterpassword.model;
 
 import com.google.common.collect.*;
-import com.lyndir.masterpassword.MPInvalidatedException;
-import java.util.*;
+import java.util.Map;
+import java.util.SortedSet;
 
 
 /**

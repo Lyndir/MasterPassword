@@ -18,7 +18,7 @@
 
 package com.lyndir.masterpassword.gui.view;
 
-import static com.lyndir.lhunath.opal.system.util.ObjectUtils.ifNotNullElse;
+import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import com.google.common.base.Predicate;

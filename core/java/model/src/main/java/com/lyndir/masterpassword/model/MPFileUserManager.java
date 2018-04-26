@@ -20,8 +20,8 @@ package com.lyndir.masterpassword.model;
 
 import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 
-import com.google.common.base.*;
-import com.google.common.collect.*;
+import com.google.common.base.Charsets;
+import com.google.common.collect.ImmutableList;
 import com.google.common.io.CharSink;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.masterpassword.*;
@@ -29,7 +29,6 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 
 /**
