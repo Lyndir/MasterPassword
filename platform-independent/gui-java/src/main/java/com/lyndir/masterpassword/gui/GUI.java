@@ -71,14 +71,14 @@ public class GUI implements UnlockFrame.SignInCallback {
                     continue;
 
                 String manifestRevision = attributes.getValue( Attributes.Name.IMPLEMENTATION_VERSION );
-                String upstreamRevisionURL = "http://masterpasswordapp.com/masterpassword-gui.jar.rev";
+                String upstreamRevisionURL = "https://masterpasswordapp.com/masterpassword-gui.jar.rev";
                 CharSource upstream = Resources.asCharSource( URI.create( upstreamRevisionURL ).toURL(), Charsets.UTF_8 );
                 String upstreamRevision = upstream.readFirstLine();
-                logger.inf( "Local Revision:    <%s>", manifestRevision );
-                logger.inf( "Upstream Revision: <%s>", upstreamRevision );
-                if ((manifestRevision != null) && !manifestRevision.equalsIgnoreCase( upstreamRevision )) {
+                if ((manifestRevision != null) && (upstreamRevision != null) && !manifestRevision.equalsIgnoreCase( upstreamRevision )) {
+                    logger.inf( "Local Revision:    <%s>", manifestRevision );
+                    logger.inf( "Upstream Revision: <%s>", upstreamRevision );
                     logger.wrn( "You are not running the current official version.  Please update from:\n"
-                                + "http://masterpasswordapp.com/masterpassword-gui.jar" );
+                                + "https://masterpasswordapp.com/masterpassword-gui.jar" );
                     JOptionPane.showMessageDialog( null, "A new version of Master Password is available.\n"
                                                          + "Please download the latest version from http://masterpasswordapp.com",
                                                    "Update Available", JOptionPane.WARNING_MESSAGE );
