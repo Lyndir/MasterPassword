@@ -48,7 +48,7 @@ public class MPFileSite extends MPSite {
     private Instant lastUsed;
 
     public MPFileSite(final MPFileUser user, final String siteName) {
-        this( user, siteName, DEFAULT_COUNTER, MPResultType.DEFAULT, MPMasterKey.Version.CURRENT );
+        this( user, siteName, DEFAULT_COUNTER, user.getAlgorithmVersion().getAlgorithm().mpw_default_type, user.getAlgorithmVersion() );
     }
 
     public MPFileSite(final MPFileUser user, final String siteName, final UnsignedInteger siteCounter, final MPResultType resultType,

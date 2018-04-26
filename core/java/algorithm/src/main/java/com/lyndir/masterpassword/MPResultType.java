@@ -127,8 +127,6 @@ public enum MPResultType {
                            ImmutableList.<MPTemplate>of(), //
                            MPResultTypeClass.Derive, 0x0, MPSiteFeature.Alternative );
 
-    public static final MPResultType DEFAULT = GeneratedLong;
-
     static final Logger logger = Logger.get( MPResultType.class );
 
     private final String             shortName;

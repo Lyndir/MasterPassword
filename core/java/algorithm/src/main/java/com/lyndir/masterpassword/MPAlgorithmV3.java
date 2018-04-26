@@ -18,8 +18,6 @@
 
 package com.lyndir.masterpassword;
 
-import static com.lyndir.masterpassword.MPUtils.*;
-
 import com.google.common.primitives.Bytes;
 import com.lyndir.lhunath.opal.system.CodeUtils;
 import java.util.Arrays;
@@ -41,8 +39,8 @@ public class MPAlgorithmV3 extends MPAlgorithmV2 {
     @Override
     public byte[] masterKey(final String fullName, final char[] masterPassword) {
 
-        byte[] fullNameBytes = fullName.getBytes( MPAlgorithm.mpw_charset );
-        byte[] fullNameLengthBytes = MPUtils.bytesForInt( fullNameBytes.length );
+        byte[] fullNameBytes = fullName.getBytes( mpw_charset );
+        byte[] fullNameLengthBytes = toBytes( fullNameBytes.length );
 
         String keyScope = MPKeyPurpose.Authentication.getScope();
         logger.trc( "keyScope: %s", keyScope );
@@ -50,17 +48,17 @@ public class MPAlgorithmV3 extends MPAlgorithmV2 {
         // Calculate the master key salt.
         logger.trc( "masterKeySalt: keyScope=%s | #fullName=%s | fullName=%s",
                     keyScope, CodeUtils.encodeHex( fullNameLengthBytes ), fullName );
-        byte[] masterKeySalt = Bytes.concat( keyScope.getBytes( MPAlgorithm.mpw_charset ), fullNameLengthBytes, fullNameBytes );
-        logger.trc( "  => masterKeySalt.id: %s", CodeUtils.encodeHex( idForBytes( masterKeySalt ) ) );
+        byte[] masterKeySalt = Bytes.concat( keyScope.getBytes( mpw_charset ), fullNameLengthBytes, fullNameBytes );
+        logger.trc( "  => masterKeySalt.id: %s", CodeUtils.encodeHex( toID( masterKeySalt ) ) );
 
         // Calculate the master key.
         logger.trc( "masterKey: scrypt( masterPassword, masterKeySalt, N=%d, r=%d, p=%d )",
-                    MPAlgorithm.scrypt_N, MPAlgorithm.scrypt_r, MPAlgorithm.scrypt_p );
-        byte[] mpBytes = bytesForChars( masterPassword );
+                    scrypt_N, scrypt_r, scrypt_p );
+        byte[] mpBytes = toBytes( masterPassword );
         byte[] masterKey = scrypt( masterKeySalt, mpBytes );
         Arrays.fill( masterKeySalt, (byte) 0 );
         Arrays.fill( mpBytes, (byte) 0 );
-        logger.trc( "  => masterKey.id: %s", CodeUtils.encodeHex( idForBytes( masterKey ) ) );
+        logger.trc( "  => masterKey.id: %s", CodeUtils.encodeHex( toID( masterKey ) ) );
 
         return masterKey;
     }

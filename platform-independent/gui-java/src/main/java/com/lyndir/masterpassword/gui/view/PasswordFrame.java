@@ -26,7 +26,6 @@ import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
 import com.google.common.primitives.UnsignedInteger;
 import com.google.common.util.concurrent.*;
-import com.lyndir.lhunath.opal.system.util.ObjectUtils;
 import com.lyndir.masterpassword.*;
 import com.lyndir.masterpassword.gui.Res;
 import com.lyndir.masterpassword.gui.util.Components;
@@ -146,7 +145,7 @@ public abstract class PasswordFrame<U extends MPUser<S>, S extends MPSite> exten
                                                         siteCounterField = Components.spinner( siteCounterModel ) );
         sitePanel.add( siteSettings );
         resultTypeField.setFont( Res.valueFont().deriveFont( 12f ) );
-        resultTypeField.setSelectedItem( MPResultType.DEFAULT );
+        resultTypeField.setSelectedItem( MPAlgorithm.mpw_default_type );
         resultTypeField.addItemListener( new ItemListener() {
             @Override
             public void itemStateChanged(final ItemEvent e) {
@@ -156,7 +155,7 @@ public abstract class PasswordFrame<U extends MPUser<S>, S extends MPSite> exten
 
         siteVersionField.setFont( Res.valueFont().deriveFont( 12f ) );
         siteVersionField.setAlignmentX( RIGHT_ALIGNMENT );
-        siteVersionField.setSelectedItem( MPMasterKey.Version.CURRENT );
+        siteVersionField.setSelectedItem( user.getAlgorithmVersion() );
         siteVersionField.addItemListener( new ItemListener() {
             @Override
             public void itemStateChanged(final ItemEvent e) {

@@ -23,7 +23,7 @@ import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.MessageAuthenticationDigests;
 import com.lyndir.lhunath.opal.system.MessageDigests;
 import java.io.Serializable;
-import java.nio.ByteOrder;
+import java.nio.*;
 import java.nio.charset.Charset;
 import javax.annotation.Nullable;
 
@@ -32,6 +32,11 @@ import javax.annotation.Nullable;
  * @see MPMasterKey.Version
  */
 public interface MPAlgorithm {
+
+    /**
+     * mpw: defaults: Password result type.
+     */
+    MPResultType mpw_default_type = MPResultType.GeneratedLong;
 
     /**
      * mpw: validity for the time-based rolling counter.
@@ -85,7 +90,7 @@ public interface MPAlgorithm {
     byte[] siteKey(byte[] masterKey, String siteName, UnsignedInteger siteCounter, MPKeyPurpose keyPurpose,
                    @Nullable String keyContext);
 
-    String siteResult(byte[] masterKey, final byte[] siteKey, String siteName, UnsignedInteger siteCounter, MPKeyPurpose keyPurpose,
+    String siteResult(byte[] masterKey, byte[] siteKey, String siteName, UnsignedInteger siteCounter, MPKeyPurpose keyPurpose,
                       @Nullable String keyContext, MPResultType resultType, @Nullable String resultParam);
 
     String sitePasswordFromTemplate(byte[] masterKey, byte[] siteKey, MPResultType resultType, @Nullable String resultParam);
@@ -94,6 +99,16 @@ public interface MPAlgorithm {
 
     String sitePasswordFromDerive(byte[] masterKey, byte[] siteKey, MPResultType resultType, @Nullable String resultParam);
 
-    String siteState(byte[] masterKey, final byte[] siteKey, String siteName, UnsignedInteger siteCounter, MPKeyPurpose keyPurpose,
+    String siteState(byte[] masterKey, byte[] siteKey, String siteName, UnsignedInteger siteCounter, MPKeyPurpose keyPurpose,
                      @Nullable String keyContext, MPResultType resultType, String resultParam);
+
+    // Utilities
+
+    byte[] toBytes(int number);
+
+    byte[] toBytes(UnsignedInteger number);
+
+    byte[] toBytes(char[] characters);
+
+    byte[] toID(byte[] bytes);
 }

@@ -18,8 +18,6 @@
 
 package com.lyndir.masterpassword;
 
-import static com.lyndir.masterpassword.MPUtils.*;
-
 import com.google.common.base.*;
 import com.google.common.primitives.Bytes;
 import com.google.common.primitives.UnsignedInteger;
@@ -54,7 +52,7 @@ public class MPAlgorithmV0 implements MPAlgorithm {
     public byte[] masterKey(final String fullName, final char[] masterPassword) {
 
         byte[] fullNameBytes       = fullName.getBytes( mpw_charset );
-        byte[] fullNameLengthBytes = bytesForInt( fullName.length() );
+        byte[] fullNameLengthBytes = toBytes( fullName.length() );
 
         String keyScope = MPKeyPurpose.Authentication.getScope();
         logger.trc( "keyScope: %s", keyScope );
@@ -63,26 +61,23 @@ public class MPAlgorithmV0 implements MPAlgorithm {
         logger.trc( "masterKeySalt: keyScope=%s | #fullName=%s | fullName=%s",
                     keyScope, CodeUtils.encodeHex( fullNameLengthBytes ), fullName );
         byte[] masterKeySalt = Bytes.concat( keyScope.getBytes( mpw_charset ), fullNameLengthBytes, fullNameBytes );
-        logger.trc( "  => masterKeySalt.id: %s", CodeUtils.encodeHex( idForBytes( masterKeySalt ) ) );
+        logger.trc( "  => masterKeySalt.id: %s", CodeUtils.encodeHex( toID( masterKeySalt ) ) );
 
         // Calculate the master key.
         logger.trc( "masterKey: scrypt( masterPassword, masterKeySalt, N=%d, r=%d, p=%d )",
                     scrypt_N, scrypt_r, scrypt_p );
-        byte[] masterPasswordBytes = bytesForChars( masterPassword );
+        byte[] masterPasswordBytes = toBytes( masterPassword );
         byte[] masterKey           = scrypt( masterKeySalt, masterPasswordBytes );
         Arrays.fill( masterKeySalt, (byte) 0 );
         Arrays.fill( masterPasswordBytes, (byte) 0 );
-        logger.trc( "  => masterKey.id: %s", CodeUtils.encodeHex( idForBytes( masterKey ) ) );
+        logger.trc( "  => masterKey.id: %s", CodeUtils.encodeHex( toID( masterKey ) ) );
 
         return masterKey;
     }
 
     protected byte[] scrypt(final byte[] masterKeySalt, final byte[] mpBytes) {
         try {
-            //if (isAllowNative())
             return SCrypt.scrypt( mpBytes, masterKeySalt, scrypt_N, scrypt_r, scrypt_p, mpw_dkLen );
-            //else
-            //    return SCrypt.scryptJ( mpBytes, masterKeySalt, scrypt_N, scrypt_r, scrypt_p, mpw_dkLen );
         }
         catch (final GeneralSecurityException e) {
             throw logger.bug( e );
@@ -102,10 +97,10 @@ public class MPAlgorithmV0 implements MPAlgorithm {
 
         // Calculate the site seed.
         byte[] siteNameBytes         = siteName.getBytes( mpw_charset );
-        byte[] siteNameLengthBytes   = bytesForInt( siteName.length() );
-        byte[] siteCounterBytes      = bytesForInt( siteCounter );
+        byte[] siteNameLengthBytes   = toBytes( siteName.length() );
+        byte[] siteCounterBytes      = toBytes( siteCounter );
         byte[] keyContextBytes       = ((keyContext == null) || keyContext.isEmpty())? null: keyContext.getBytes( mpw_charset );
-        byte[] keyContextLengthBytes = (keyContextBytes == null)? null: bytesForInt( keyContextBytes.length );
+        byte[] keyContextLengthBytes = (keyContextBytes == null)? null: toBytes( keyContextBytes.length );
         logger.trc( "siteSalt: keyScope=%s | #siteName=%s | siteName=%s | siteCounter=%s | #keyContext=%s | keyContext=%s",
                     keyScope, CodeUtils.encodeHex( siteNameLengthBytes ), siteName, CodeUtils.encodeHex( siteCounterBytes ),
                     (keyContextLengthBytes == null)? null: CodeUtils.encodeHex( keyContextLengthBytes ), keyContext );
@@ -113,11 +108,11 @@ public class MPAlgorithmV0 implements MPAlgorithm {
         byte[] sitePasswordInfo = Bytes.concat( keyScope.getBytes( mpw_charset ), siteNameLengthBytes, siteNameBytes, siteCounterBytes );
         if (keyContextBytes != null)
             sitePasswordInfo = Bytes.concat( sitePasswordInfo, keyContextLengthBytes, keyContextBytes );
-        logger.trc( "  => siteSalt.id: %s", CodeUtils.encodeHex( idForBytes( sitePasswordInfo ) ) );
+        logger.trc( "  => siteSalt.id: %s", CodeUtils.encodeHex( toID( sitePasswordInfo ) ) );
 
-        logger.trc( "siteKey: hmac-sha256( masterKey.id=%s, siteSalt )", CodeUtils.encodeHex( idForBytes( masterKey ) ) );
+        logger.trc( "siteKey: hmac-sha256( masterKey.id=%s, siteSalt )", CodeUtils.encodeHex( toID( masterKey ) ) );
         byte[] sitePasswordSeedBytes = mpw_digest.of( masterKey, sitePasswordInfo );
-        logger.trc( "  => siteKey.id: %s", CodeUtils.encodeHex( idForBytes( sitePasswordSeedBytes ) ) );
+        logger.trc( "  => siteKey.id: %s", CodeUtils.encodeHex( toID( sitePasswordSeedBytes ) ) );
 
         return sitePasswordSeedBytes;
     }
@@ -217,7 +212,7 @@ public class MPAlgorithmV0 implements MPAlgorithm {
                 throw logger.bug( "Could not derive result key." );
 
             // Base64-encode
-            String b64Key = Verify.verifyNotNull( CryptUtils.encodeBase64( resultKey ) );
+            String b64Key = Preconditions.checkNotNull( CryptUtils.encodeBase64( resultKey ) );
             logger.trc( "b64 encoded -> key: %s", b64Key );
 
             return b64Key;
@@ -236,7 +231,7 @@ public class MPAlgorithmV0 implements MPAlgorithm {
             logger.trc( "cipherBuf: %d bytes = %s", cipherBuf.length, CodeUtils.encodeHex( cipherBuf ) );
 
             // Base64-encode
-            String cipherText = Verify.verifyNotNull( CryptUtils.encodeBase64( cipherBuf ) );
+            String cipherText = Preconditions.checkNotNull( CryptUtils.encodeBase64( cipherBuf ) );
             logger.trc( "b64 encoded -> cipherText: %s", cipherText );
 
             return cipherText;
@@ -244,5 +239,33 @@ public class MPAlgorithmV0 implements MPAlgorithm {
         catch (final IllegalBlockSizeException e) {
             throw logger.bug( e );
         }
+    }
+
+    // Utilities
+
+    @Override
+    public byte[] toBytes(final int number) {
+        return ByteBuffer.allocate( Integer.SIZE / Byte.SIZE ).order( mpw_byteOrder ).putInt( number ).array();
+    }
+
+    @Override
+    public byte[] toBytes(final UnsignedInteger number) {
+        return ByteBuffer.allocate( Integer.SIZE / Byte.SIZE ).order( mpw_byteOrder ).putInt( number.intValue() ).array();
+    }
+
+    @Override
+    public byte[] toBytes(final char[] characters) {
+        ByteBuffer byteBuffer = mpw_charset.encode( CharBuffer.wrap( characters ) );
+
+        byte[] bytes = new byte[byteBuffer.remaining()];
+        byteBuffer.get( bytes );
+
+        Arrays.fill( byteBuffer.array(), (byte) 0 );
+        return bytes;
+    }
+
+    @Override
+    public byte[] toID(final byte[] bytes) {
+        return mpw_hash.of( bytes );
     }
 }

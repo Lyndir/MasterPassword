@@ -59,7 +59,7 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
         String       fullName     = null;
         int          mpVersion    = 0, importFormat = 0, avatar = 0;
         boolean      clearContent = false, headerStarted = false;
-        MPResultType defaultType  = MPResultType.DEFAULT;
+        MPResultType defaultType  = MPAlgorithm.mpw_default_type;
 
         //noinspection HardcodedLineSeparator
         for (final String line : Splitter.on( CharMatcher.anyOf( "\r\n" ) ).omitEmptyStrings().split( content ))

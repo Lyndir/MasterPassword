@@ -18,8 +18,6 @@
 
 package com.lyndir.masterpassword;
 
-import static com.lyndir.masterpassword.MPUtils.*;
-
 import com.google.common.base.Preconditions;
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.CodeUtils;
@@ -71,7 +69,8 @@ public class MPMasterKey {
         if (key == null) {
             logger.trc( "-- mpw_masterKey (algorithm: %d)", algorithmVersion.toInt() );
             logger.trc( "fullName: %s", fullName );
-            logger.trc( "masterPassword.id: %s", CodeUtils.encodeHex( idForBytes( bytesForChars( masterPassword ) ) ) );
+            logger.trc( "masterPassword.id: %s", CodeUtils.encodeHex(
+                    algorithmVersion.getAlgorithm().toID( algorithmVersion.getAlgorithm().toBytes( masterPassword ) ) ) );
 
             keyByVersion.put( algorithmVersion, key = algorithmVersion.getAlgorithm().masterKey( fullName, masterPassword ) );
         }
@@ -175,7 +174,7 @@ public class MPMasterKey {
     public byte[] getKeyID(final Version algorithmVersion)
             throws MPInvalidatedException {
 
-        return idForBytes( masterKey( algorithmVersion ) );
+        return algorithmVersion.getAlgorithm().toID( masterKey( algorithmVersion ) );
     }
 
     /**

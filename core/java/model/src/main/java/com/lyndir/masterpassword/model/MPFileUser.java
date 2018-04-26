@@ -51,7 +51,7 @@ public class MPFileUser extends MPUser<MPFileSite> implements Comparable<MPFileU
     }
 
     public MPFileUser(final String fullName, @Nullable final byte[] keyID, final MPMasterKey.Version algorithmVersion) {
-        this( fullName, keyID, algorithmVersion, 0, MPResultType.DEFAULT, new Instant() );
+        this( fullName, keyID, algorithmVersion, 0, MPAlgorithm.mpw_default_type, new Instant() );
     }
 
     public MPFileUser(final String fullName, @Nullable final byte[] keyID, final MPMasterKey.Version algorithmVersion, final int avatar,
