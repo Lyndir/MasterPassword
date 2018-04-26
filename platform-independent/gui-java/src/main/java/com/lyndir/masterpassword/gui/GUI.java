@@ -19,7 +19,7 @@
 
 package com.lyndir.masterpassword.gui;
 
-import com.google.common.base.Charsets;
+import com.google.common.base.*;
 import com.google.common.io.*;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.TypeUtils;
@@ -27,6 +27,7 @@ import com.lyndir.lhunath.opal.system.util.TypeUtils;
 import com.lyndir.masterpassword.gui.view.PasswordFrame;
 import com.lyndir.masterpassword.gui.view.UnlockFrame;
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URL;
 import java.util.Enumeration;
@@ -48,17 +49,27 @@ public class GUI implements UnlockFrame.SignInCallback {
     private PasswordFrame<?, ?> passwordFrame;
 
     public static void main(final String... args) {
-
         if (Config.get().checkForUpdates())
             checkUpdate();
 
+        // Try and set the system look & feel, if available.
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         }
         catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException ignored) {
         }
 
-        TypeUtils.<GUI>newInstance( "com.lyndir.masterpassword.gui.platform.mac.AppleGUI" ).or( new GUI() ).open();
+        try {
+            // AppleGUI adds support for macOS features.
+            Optional<Class<GUI>> appleGUI = TypeUtils.loadClass( "com.lyndir.masterpassword.gui.platform.mac.AppleGUI" );
+            if (appleGUI.isPresent())
+                appleGUI.get().getConstructor().newInstance().open();
+
+            else // No special platform handling.
+                new GUI().open();
+        } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
+            throw logger.bug( e );
+        }
     }
 
     private static void checkUpdate() {
