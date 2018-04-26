@@ -40,10 +40,11 @@ import javax.swing.plaf.metal.MetalComboBoxEditor;
 /**
  * @author lhunath, 2014-06-11
  */
-public class ModelAuthenticationPanel extends AuthenticationPanel implements ItemListener, ActionListener, DocumentListener {
+public class ModelAuthenticationPanel extends AuthenticationPanel<MPFileUser> implements ItemListener, ActionListener, DocumentListener {
 
     @SuppressWarnings("UnusedDeclaration")
     private static final Logger logger = Logger.get( ModelAuthenticationPanel.class );
+    private static final long serialVersionUID = 1L;
 
     private final JComboBox<MPFileUser> userField;
     private final JLabel               masterPasswordLabel;
@@ -73,6 +74,17 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
         userField.setFont( Res.valueFont().deriveFont( 12f ) );
         userField.addItemListener( this );
         userField.addActionListener( this );
+        userField.setRenderer( new DefaultListCellRenderer() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            @SuppressWarnings("unchecked")
+            public Component getListCellRendererComponent(final JList<?> list, final Object value, final int index,
+                                                          final boolean isSelected, final boolean cellHasFocus) {
+                String userValue = ((MPUser<MPFileSite>) value).getFullName();
+                return super.getListCellRendererComponent( list, userValue, index, isSelected, cellHasFocus );
+            }
+        } );
         userField.setEditor( new MetalComboBoxEditor() {
             @Override
             protected JTextField createEditorComponent() {
