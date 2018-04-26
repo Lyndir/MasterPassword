@@ -44,10 +44,10 @@ public class UnlockFrame extends JFrame {
     private final JLabel                   identiconLabel;
     private final JButton                  signInButton;
     private final JPanel                   authenticationContainer;
-    private       AuthenticationPanel<?>      authenticationPanel;
+    private       AuthenticationPanel<?>   authenticationPanel;
     private       Future<?>                identiconFuture;
     private       boolean                  incognito;
-    private       MPUser<?>                   user;
+    private       MPUser<?>                user;
 
     public UnlockFrame(final SignInCallback signInCallback) {
         super( "Unlock Master Password" );
@@ -170,7 +170,7 @@ public class UnlockFrame extends JFrame {
                 SwingUtilities.invokeLater( new Runnable() {
                     @Override
                     public void run() {
-                        String fullName = (user == null)? "": user.getFullName();
+                        String fullName       = (user == null)? "": user.getFullName();
                         char[] masterPassword = authenticationPanel.getMasterPassword();
 
                         if (fullName.isEmpty() || (masterPassword.length == 0)) {
@@ -187,9 +187,9 @@ public class UnlockFrame extends JFrame {
             }
         }, 300, TimeUnit.MILLISECONDS );
 
-        String fullName = (user == null)? "": user.getFullName();
-        char[] masterPassword = authenticationPanel.getMasterPassword();
-        boolean enabled = !fullName.isEmpty() && (masterPassword.length > 0);
+        String  fullName       = (user == null)? "": user.getFullName();
+        char[]  masterPassword = authenticationPanel.getMasterPassword();
+        boolean enabled        = !fullName.isEmpty() && (masterPassword.length > 0);
         signInButton.setEnabled( enabled );
 
         return enabled;

@@ -36,7 +36,7 @@ public class MPTemplate extends MetaObject implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final String templateString;
+    private final String                         templateString;
     private final List<MPTemplateCharacterClass> template;
 
     MPTemplate(@NonNls final String templateString) {

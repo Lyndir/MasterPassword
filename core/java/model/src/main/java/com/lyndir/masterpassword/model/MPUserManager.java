@@ -29,7 +29,7 @@ import java.util.*;
 public abstract class MPUserManager {
 
     private final Map<String, MPFileUser> usersByName = Maps.newHashMap();
-    static MPUserManager instance;
+    static        MPUserManager           instance;
 
     public static MPUserManager get() {
         return instance;

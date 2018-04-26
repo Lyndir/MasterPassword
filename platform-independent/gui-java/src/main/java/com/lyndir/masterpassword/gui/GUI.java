@@ -16,7 +16,6 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-
 package com.lyndir.masterpassword.gui;
 
 import com.google.common.base.*;
@@ -45,8 +44,8 @@ public class GUI implements UnlockFrame.SignInCallback {
     @SuppressWarnings("UnusedDeclaration")
     private static final Logger logger = Logger.get( GUI.class );
 
-    private final UnlockFrame unlockFrame = new UnlockFrame( this );
-    private PasswordFrame<?, ?> passwordFrame;
+    private final UnlockFrame         unlockFrame = new UnlockFrame( this );
+    private       PasswordFrame<?, ?> passwordFrame;
 
     public static void main(final String... args) {
         if (Config.get().checkForUpdates())
@@ -54,7 +53,7 @@ public class GUI implements UnlockFrame.SignInCallback {
 
         // Try and set the system look & feel, if available.
         try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            UIManager.setLookAndFeel( UIManager.getSystemLookAndFeelClassName() );
         }
         catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException ignored) {
         }
@@ -67,7 +66,8 @@ public class GUI implements UnlockFrame.SignInCallback {
 
             else // No special platform handling.
                 new GUI().open();
-        } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
+        }
+        catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
             throw logger.bug( e );
         }
     }
@@ -77,14 +77,14 @@ public class GUI implements UnlockFrame.SignInCallback {
             Enumeration<URL> manifestURLs = Thread.currentThread().getContextClassLoader().getResources( JarFile.MANIFEST_NAME );
             while (manifestURLs.hasMoreElements()) {
                 InputStream manifestStream = manifestURLs.nextElement().openStream();
-                Attributes attributes = new Manifest( manifestStream ).getMainAttributes();
+                Attributes  attributes     = new Manifest( manifestStream ).getMainAttributes();
                 if (!GUI.class.getCanonicalName().equals( attributes.getValue( Attributes.Name.MAIN_CLASS ) ))
                     continue;
 
-                String manifestRevision = attributes.getValue( Attributes.Name.IMPLEMENTATION_VERSION );
-                String upstreamRevisionURL = "https://masterpasswordapp.com/masterpassword-gui.jar.rev";
-                CharSource upstream = Resources.asCharSource( URI.create( upstreamRevisionURL ).toURL(), Charsets.UTF_8 );
-                String upstreamRevision = upstream.readFirstLine();
+                String     manifestRevision    = attributes.getValue( Attributes.Name.IMPLEMENTATION_VERSION );
+                String     upstreamRevisionURL = "https://masterpasswordapp.com/masterpassword-gui.jar.rev";
+                CharSource upstream            = Resources.asCharSource( URI.create( upstreamRevisionURL ).toURL(), Charsets.UTF_8 );
+                String     upstreamRevision    = upstream.readFirstLine();
                 if ((manifestRevision != null) && (upstreamRevision != null) && !manifestRevision.equalsIgnoreCase( upstreamRevision )) {
                     logger.inf( "Local Revision:    <%s>", manifestRevision );
                     logger.inf( "Upstream Revision: <%s>", upstreamRevision );

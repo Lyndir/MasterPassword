@@ -49,11 +49,13 @@ public class EmergencyActivity extends Activity {
     private static final Logger   logger                = Logger.get( EmergencyActivity.class );
     private static final ClipData EMPTY_CLIP            = new ClipData( new ClipDescription( "", new String[0] ), new ClipData.Item( "" ) );
     private static final int      PASSWORD_NOTIFICATION = 0;
-    public static final int CLIPBOARD_CLEAR_DELAY = 20 /* s */ * MPConstant.MS_PER_S;
+    public static final  int      CLIPBOARD_CLEAR_DELAY = 20 /* s */ * MPConstant.MS_PER_S;
 
     private final Preferences                        preferences    = Preferences.get( this );
-    private final ListeningExecutorService           executor       = MoreExecutors.listeningDecorator( Executors.newSingleThreadExecutor() );
-    private final ImmutableList<MPResultType>        allResultTypes = ImmutableList.copyOf( MPResultType.forClass( MPResultTypeClass.Template ) );
+    private final ListeningExecutorService           executor       = MoreExecutors.listeningDecorator(
+            Executors.newSingleThreadExecutor() );
+    private final ImmutableList<MPResultType>        allResultTypes = ImmutableList.copyOf(
+            MPResultType.forClass( MPResultTypeClass.Template ) );
     private final ImmutableList<MPMasterKey.Version> allVersions    = ImmutableList.copyOf( MPMasterKey.Version.values() );
 
     private MPMasterKey masterKey;
@@ -211,7 +213,7 @@ public class EmergencyActivity extends Activity {
     protected void onResume() {
         super.onResume();
 
-// FIXME:       MasterKey.setAllowNativeByDefault( preferences.isAllowNativeKDF() );
+        // FIXME:       MasterKey.setAllowNativeByDefault( preferences.isAllowNativeKDF() );
 
         fullNameField.setText( preferences.getFullName() );
         rememberFullNameField.setChecked( preferences.isRememberFullName() );
@@ -254,7 +256,7 @@ public class EmergencyActivity extends Activity {
     }
 
     private synchronized void updateMasterKey() {
-        final String fullName = fullNameField.getText().toString();
+        final String fullName       = fullNameField.getText().toString();
         final char[] masterPassword = masterPasswordField.getText().toString().toCharArray();
         if ((id_userName == fullName.hashCode())
             && (id_masterPassword == Arrays.hashCode( masterPassword )))
@@ -336,10 +338,10 @@ public class EmergencyActivity extends Activity {
         if (TextUtils.isEmpty( currentSitePassword ))
             return;
 
-        final ClipboardManager clipboardManager = (ClipboardManager) getSystemService( CLIPBOARD_SERVICE );
+        final ClipboardManager    clipboardManager    = (ClipboardManager) getSystemService( CLIPBOARD_SERVICE );
         final NotificationManager notificationManager = (NotificationManager) getSystemService( Context.NOTIFICATION_SERVICE );
 
-        String title = strf( "Password for %s", siteNameField.getText() );
+        String          title       = strf( "Password for %s", siteNameField.getText() );
         ClipDescription description = new ClipDescription( title, new String[]{ ClipDescription.MIMETYPE_TEXT_PLAIN } );
         clipboardManager.setPrimaryClip( new ClipData( description, new ClipData.Item( currentSitePassword ) ) );
 

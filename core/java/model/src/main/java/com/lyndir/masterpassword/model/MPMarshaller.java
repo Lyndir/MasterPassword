@@ -36,8 +36,8 @@ public interface MPMarshaller {
         PROTECTED( "Export of site names and stored passwords (unless device-private) encrypted with the master key." ),
         VISIBLE( "Export of site names and passwords in clear-text." );
 
-        private final String description;
-        private boolean redacted;
+        private final String  description;
+        private       boolean redacted;
 
         ContentMode(final String description) {
             this.description = description;

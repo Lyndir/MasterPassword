@@ -124,8 +124,8 @@ public enum MPResultType {
      * Derive a unique binary key.
      */
     DeriveKey( "key", "Encryption key.", //
-                           ImmutableList.<MPTemplate>of(), //
-                           MPResultTypeClass.Derive, 0x0, MPSiteFeature.Alternative );
+               ImmutableList.<MPTemplate>of(), //
+               MPResultTypeClass.Derive, 0x0, MPSiteFeature.Alternative );
 
     static final Logger logger = Logger.get( MPResultType.class );
 

@@ -180,7 +180,8 @@ public class MPFileSite extends MPSite {
                 this.loginContent = null;
             else
                 this.loginContent = masterKey.siteState(
-                        siteName, MPAlgorithm.mpw_default_counter, MPKeyPurpose.Identification, null, this.loginType, result, algorithmVersion );
+                        siteName, MPAlgorithm.mpw_default_counter, MPKeyPurpose.Identification, null, this.loginType, result,
+                        algorithmVersion );
     }
 
     @Nullable

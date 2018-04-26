@@ -5,7 +5,7 @@ plugins {
 description = 'Master Password Algorithm Implementation'
 
 dependencies {
-    compile (group: 'com.lyndir.lhunath.opal', name: 'opal-system', version: '1.6-p11') {
+    compile( group: 'com.lyndir.lhunath.opal', name: 'opal-system', version: '1.6-p11' ) {
         exclude( module: 'joda-time' )
     }
     compile group: 'com.lyndir.lhunath.opal', name: 'opal-crypto', version: '1.6-p11'

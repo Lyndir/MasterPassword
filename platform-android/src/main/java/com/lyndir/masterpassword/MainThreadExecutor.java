@@ -33,7 +33,7 @@ public class MainThreadExecutor extends AbstractExecutorService {
 
     private final Handler       mHandler = new Handler( Looper.getMainLooper() );
     private final Set<Runnable> commands = Sets.newLinkedHashSet();
-    private boolean shutdown;
+    private       boolean       shutdown;
 
     @Override
     public void execute(final Runnable command) {

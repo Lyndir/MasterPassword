@@ -25,9 +25,8 @@ import javax.annotation.Nullable;
 
 
 /**
- * @see MPMasterKey.Version#V2
- * 
  * @author lhunath, 2014-08-30
+ * @see MPMasterKey.Version#V2
  */
 public class MPAlgorithmV2 extends MPAlgorithmV1 {
 
@@ -39,7 +38,7 @@ public class MPAlgorithmV2 extends MPAlgorithmV1 {
 
     @Override
     public byte[] siteKey(final byte[] masterKey, final String siteName, UnsignedInteger siteCounter, final MPKeyPurpose keyPurpose,
-                             @Nullable final String keyContext) {
+                          @Nullable final String keyContext) {
 
         String keyScope = keyPurpose.getScope();
         logger.trc( "keyScope: %s", keyScope );
@@ -49,10 +48,10 @@ public class MPAlgorithmV2 extends MPAlgorithmV1 {
             siteCounter = UnsignedInteger.valueOf( (System.currentTimeMillis() / (mpw_otp_window * 1000)) * mpw_otp_window );
 
         // Calculate the site seed.
-        byte[] siteNameBytes = siteName.getBytes( mpw_charset );
-        byte[] siteNameLengthBytes = toBytes( siteNameBytes.length );
-        byte[] siteCounterBytes = toBytes( siteCounter );
-        byte[] keyContextBytes = ((keyContext == null) || keyContext.isEmpty())? null: keyContext.getBytes( mpw_charset );
+        byte[] siteNameBytes         = siteName.getBytes( mpw_charset );
+        byte[] siteNameLengthBytes   = toBytes( siteNameBytes.length );
+        byte[] siteCounterBytes      = toBytes( siteCounter );
+        byte[] keyContextBytes       = ((keyContext == null) || keyContext.isEmpty())? null: keyContext.getBytes( mpw_charset );
         byte[] keyContextLengthBytes = (keyContextBytes == null)? null: toBytes( keyContextBytes.length );
         logger.trc( "siteSalt: keyScope=%s | #siteName=%s | siteName=%s | siteCounter=%s | #keyContext=%s | keyContext=%s",
                     keyScope, CodeUtils.encodeHex( siteNameLengthBytes ), siteName, CodeUtils.encodeHex( siteCounterBytes ),

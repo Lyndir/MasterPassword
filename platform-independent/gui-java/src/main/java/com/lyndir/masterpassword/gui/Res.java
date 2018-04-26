@@ -50,10 +50,10 @@ import org.jetbrains.annotations.NonNls;
 @SuppressWarnings("HardcodedFileSeparator")
 public abstract class Res {
 
-    private static final int AVATAR_COUNT = 19;
+    private static final int                                   AVATAR_COUNT     = 19;
     private static final Map<Window, ScheduledExecutorService> executorByWindow = new WeakHashMap<>();
-    private static final Logger                                        logger           = Logger.get( Res.class );
-    private static final Colors                                        colors           = new Colors();
+    private static final Logger                                logger           = Logger.get( Res.class );
+    private static final Colors                                colors           = new Colors();
 
     public static Future<?> execute(final Window host, final Runnable job) {
         return schedule( host, job, 0, TimeUnit.MILLISECONDS );
@@ -203,8 +203,8 @@ public abstract class Res {
 
     private static Font font(@NonNls final String fontResourceName) {
         Map<String, SoftReference<Font>> fontsByResourceName = Maps.newHashMap();
-        SoftReference<Font> fontRef = fontsByResourceName.get( fontResourceName );
-        Font font = (fontRef == null)? null: fontRef.get();
+        SoftReference<Font>              fontRef             = fontsByResourceName.get( fontResourceName );
+        Font                             font                = (fontRef == null)? null: fontRef.get();
         if (font == null)
             try {
                 fontsByResourceName.put( fontResourceName, new SoftReference<>(
@@ -223,8 +223,8 @@ public abstract class Res {
 
     private static final class RetinaIcon extends ImageIcon {
 
-        private static final Pattern scalePattern = Pattern.compile( ".*@(\\d+)x.[^.]+$" );
-        private static final long serialVersionUID = 1L;
+        private static final Pattern scalePattern     = Pattern.compile( ".*@(\\d+)x.[^.]+$" );
+        private static final long    serialVersionUID = 1L;
 
         private final float scale;
 
@@ -265,10 +265,10 @@ public abstract class Res {
         public synchronized void paintIcon(final Component c, final Graphics g, final int x, final int y) {
             ImageObserver observer = ifNotNullElse( getImageObserver(), c );
 
-            Image image = getImage();
-            int width = image.getWidth( observer );
-            int height = image.getHeight( observer );
-            Graphics2D g2d = (Graphics2D) g.create( x, y, width, height );
+            Image      image  = getImage();
+            int        width  = image.getWidth( observer );
+            int        height = image.getHeight( observer );
+            Graphics2D g2d    = (Graphics2D) g.create( x, y, width, height );
 
             g2d.scale( 1 / scale, 1 / scale );
             g2d.drawImage( image, 0, 0, observer );

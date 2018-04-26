@@ -32,15 +32,15 @@ import javax.annotation.Nullable;
  */
 public final class Preferences {
 
-    private static final String PREF_TESTS_PASSED       = "integrityTestsPassed";
-    private static final String PREF_NATIVE_KDF         = "nativeKDF";
-    private static final String PREF_REMEMBER_FULL_NAME = "rememberFullName";
-    private static final String PREF_FORGET_PASSWORD    = "forgetPassword";
-    private static final String PREF_MASK_PASSWORD      = "maskPassword";
-    private static final String PREF_FULL_NAME          = "fullName";
-    private static final String PREF_RESULT_TYPE        = "resultType";
-    private static final String PREF_ALGORITHM_VERSION  = "algorithmVersion";
-    private static Preferences instance;
+    private static final String      PREF_TESTS_PASSED       = "integrityTestsPassed";
+    private static final String      PREF_NATIVE_KDF         = "nativeKDF";
+    private static final String      PREF_REMEMBER_FULL_NAME = "rememberFullName";
+    private static final String      PREF_FORGET_PASSWORD    = "forgetPassword";
+    private static final String      PREF_MASK_PASSWORD      = "maskPassword";
+    private static final String      PREF_FULL_NAME          = "fullName";
+    private static final String      PREF_RESULT_TYPE        = "resultType";
+    private static final String      PREF_ALGORITHM_VERSION  = "algorithmVersion";
+    private static       Preferences instance;
 
     private Context           context;
     @Nullable

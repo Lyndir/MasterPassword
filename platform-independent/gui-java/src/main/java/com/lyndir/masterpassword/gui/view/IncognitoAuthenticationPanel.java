@@ -81,7 +81,7 @@ public class IncognitoAuthenticationPanel extends AuthenticationPanel<IncognitoU
 
     @Override
     public PasswordFrame<IncognitoUser, ?> newPasswordFrame() {
-        return new PasswordFrame<IncognitoUser, IncognitoSite>(getSelectedUser()) {
+        return new PasswordFrame<IncognitoUser, IncognitoSite>( getSelectedUser() ) {
             @Override
             protected IncognitoSite createSite(final IncognitoUser user, final String siteName, final UnsignedInteger siteCounter,
                                                final MPResultType resultType,

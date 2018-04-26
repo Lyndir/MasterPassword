@@ -38,7 +38,7 @@ public class MPJSONUnmarshaller implements MPUnmarshaller {
     @Nonnull
     @Override
     public MPFileUser unmarshall(@Nonnull final String content)
-            throws MPMarshalException{
+            throws MPMarshalException {
         throw new MPMarshalException( "Not yet implemented" );
     }
 }

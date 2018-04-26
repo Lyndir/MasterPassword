@@ -37,7 +37,7 @@ import org.joda.time.DateTime;
  */
 public class MPFlatUnmarshaller implements MPUnmarshaller {
 
-    private static final Logger logger = Logger.get( MPFlatUnmarshaller.class );
+    private static final Logger    logger            = Logger.get( MPFlatUnmarshaller.class );
     private static final Pattern[] unmarshallFormats = {
             Pattern.compile( "^([^ ]+) +(\\d+) +(\\d+)(:\\d+)? +([^\t]+)\t(.*)" ),
             Pattern.compile( "^([^ ]+) +(\\d+) +(\\d+)(:\\d+)?(:\\d+)? +([^\t]*)\t *([^\t]+)\t(.*)" ) };
@@ -73,7 +73,8 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
                     headerStarted = true;
                 else
                     // Ends the header.
-                    user = new MPFileUser( fullName, keyID, MPMasterKey.Version.fromInt( mpVersion ), avatar, defaultType, new DateTime( 0 ), MPMarshalFormat.Flat );
+                    user = new MPFileUser( fullName, keyID, MPMasterKey.Version.fromInt( mpVersion ), avatar, defaultType,
+                                           new DateTime( 0 ), MPMarshalFormat.Flat );
 
                 // Comment.
             else if (line.startsWith( "#" )) {
@@ -116,7 +117,7 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
                                                user.getAlgorithmVersion().getAlgorithm().mpw_default_counter,
                                                MPResultType.forType( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ),
                                                MPMasterKey.Version.fromInt( ConversionUtils.toIntegerNN(
-                                                   colon.matcher( siteMatcher.group( 4 ) ).replaceAll( "" ) ) ),
+                                                       colon.matcher( siteMatcher.group( 4 ) ).replaceAll( "" ) ) ),
                                                null, null, null, ConversionUtils.toIntegerNN( siteMatcher.group( 2 ) ),
                                                MPConstant.dateTimeFormatter.parseDateTime( siteMatcher.group( 1 ) ).toInstant() );
                         break;
@@ -127,7 +128,7 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
                                                UnsignedInteger.valueOf( colon.matcher( siteMatcher.group( 5 ) ).replaceAll( "" ) ),
                                                MPResultType.forType( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ),
                                                MPMasterKey.Version.fromInt( ConversionUtils.toIntegerNN(
-                                                   colon.matcher( siteMatcher.group( 4 ) ).replaceAll( "" ) ) ),
+                                                       colon.matcher( siteMatcher.group( 4 ) ).replaceAll( "" ) ) ),
                                                siteMatcher.group( 6 ), MPResultType.GeneratedName, null,
                                                ConversionUtils.toIntegerNN( siteMatcher.group( 2 ) ),
                                                MPConstant.dateTimeFormatter.parseDateTime( siteMatcher.group( 1 ) ).toInstant() );

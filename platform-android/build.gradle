@@ -36,11 +36,11 @@ android {
 }
 
 dependencies {
-    compile             project( ':masterpassword-algorithm' )
-    compile             project( ':masterpassword-tests' )
+    compile project( ':masterpassword-algorithm' )
+    compile project( ':masterpassword-tests' )
 
-    compile             group: 'org.slf4j', name: 'slf4j-android', version:'1.7.13-underscore'
-    compile             group: 'com.jakewharton', name: 'butterknife', version:'8.5.1'
-    annotationProcessor group: 'com.jakewharton', name: 'butterknife-compiler', version:'8.5.1'
-    compile             files( 'libs/scrypt-1.4.0-native.jar' )
+    compile group: 'org.slf4j', name: 'slf4j-android', version: '1.7.13-underscore'
+    compile group: 'com.jakewharton', name: 'butterknife', version: '8.5.1'
+    annotationProcessor group: 'com.jakewharton', name: 'butterknife-compiler', version: '8.5.1'
+    compile files( 'libs/scrypt-1.4.0-native.jar' )
 }

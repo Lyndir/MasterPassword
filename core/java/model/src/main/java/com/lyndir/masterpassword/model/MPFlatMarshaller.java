@@ -58,7 +58,7 @@ public class MPFlatMarshaller implements MPMarshaller {
 
         for (final MPFileSite site : user.getSites()) {
             String loginName = site.getLoginContent();
-            String password = site.getSiteContent();
+            String password  = site.getSiteContent();
             if (!contentMode.isRedacted()) {
                 loginName = site.loginFor( masterKey );
                 password = site.resultFor( masterKey );

@@ -37,8 +37,8 @@ public class MPMasterKey {
     private static final Logger logger = Logger.get( MPMasterKey.class );
 
     private final EnumMap<Version, byte[]> keyByVersion = new EnumMap<>( Version.class );
-    private final String fullName;
-    private final char[] masterPassword;
+    private final String                   fullName;
+    private final char[]                   masterPassword;
 
     private boolean invalidated;
 
@@ -118,7 +118,7 @@ public class MPMasterKey {
             throws MPInvalidatedException {
 
         byte[] masterKey = masterKey( algorithmVersion );
-        byte[] siteKey = siteKey( siteName, siteCounter, keyPurpose, keyContext, algorithmVersion );
+        byte[] siteKey   = siteKey( siteName, siteCounter, keyPurpose, keyContext, algorithmVersion );
 
         logger.trc( "-- mpw_siteResult (algorithm: %d)", algorithmVersion.toInt() );
         logger.trc( "resultType: %d (%s)", resultType.getType(), resultType.getShortName() );
@@ -150,7 +150,7 @@ public class MPMasterKey {
         Preconditions.checkArgument( !resultParam.isEmpty() );
 
         byte[] masterKey = masterKey( algorithmVersion );
-        byte[] siteKey = siteKey( siteName, siteCounter, keyPurpose, keyContext, algorithmVersion );
+        byte[] siteKey   = siteKey( siteName, siteCounter, keyPurpose, keyContext, algorithmVersion );
 
         logger.trc( "-- mpw_siteState (algorithm: %d)", algorithmVersion.toInt() );
         logger.trc( "resultType: %d (%s)", resultType.getType(), resultType.getShortName() );

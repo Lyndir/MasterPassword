@@ -59,7 +59,8 @@ public abstract class MPSite {
             throws MPInvalidatedException {
 
         return masterKey.siteResult(
-                getSiteName(), MPAlgorithm.mpw_default_counter, MPKeyPurpose.Identification, null, loginType, loginContent, getAlgorithmVersion() );
+                getSiteName(), MPAlgorithm.mpw_default_counter, MPKeyPurpose.Identification, null, loginType, loginContent,
+                getAlgorithmVersion() );
     }
 
     @Override

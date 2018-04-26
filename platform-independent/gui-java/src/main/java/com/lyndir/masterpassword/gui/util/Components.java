@@ -117,8 +117,8 @@ public abstract class Components {
     }
 
     public static Component stud() {
-        Dimension studDimension = new Dimension( 8, 8 );
-        Box.Filler rigidArea = new Box.Filler( studDimension, studDimension, studDimension );
+        Dimension  studDimension = new Dimension( 8, 8 );
+        Box.Filler rigidArea     = new Box.Filler( studDimension, studDimension, studDimension );
         rigidArea.setAlignmentX( Component.LEFT_ALIGNMENT );
         rigidArea.setAlignmentY( Component.BOTTOM_ALIGNMENT );
         rigidArea.setBackground( Color.red );

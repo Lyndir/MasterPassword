@@ -43,12 +43,12 @@ import javax.swing.plaf.metal.MetalComboBoxEditor;
 public class ModelAuthenticationPanel extends AuthenticationPanel<MPFileUser> implements ItemListener, ActionListener, DocumentListener {
 
     @SuppressWarnings("UnusedDeclaration")
-    private static final Logger logger = Logger.get( ModelAuthenticationPanel.class );
-    private static final long serialVersionUID = 1L;
+    private static final Logger logger           = Logger.get( ModelAuthenticationPanel.class );
+    private static final long   serialVersionUID = 1L;
 
     private final JComboBox<MPFileUser> userField;
-    private final JLabel               masterPasswordLabel;
-    private final JPasswordField       masterPasswordField;
+    private final JLabel                masterPasswordLabel;
+    private final JPasswordField        masterPasswordField;
 
     public ModelAuthenticationPanel(final UnlockFrame unlockFrame) {
         super( unlockFrame );
@@ -170,9 +170,10 @@ public class ModelAuthenticationPanel extends AuthenticationPanel<MPFileUser> im
                             return;
 
                         if (JOptionPane.showConfirmDialog( ModelAuthenticationPanel.this, //
-                                                       strf( "Are you sure you want to delete the user and sites remembered for:\n%s.",
-                                                             deleteUser.getFullName() ), //
-                                                       "Delete User", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE ) == JOptionPane.CANCEL_OPTION)
+                                                           strf( "Are you sure you want to delete the user and sites remembered for:\n%s.",
+                                                                 deleteUser.getFullName() ), //
+                                                           "Delete User", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE )
+                            == JOptionPane.CANCEL_OPTION)
                             return;
 
                         MPFileUserManager.get().deleteUser( deleteUser );
@@ -205,9 +206,10 @@ public class ModelAuthenticationPanel extends AuthenticationPanel<MPFileUser> im
 
     @Override
     public PasswordFrame<MPFileUser, MPFileSite> newPasswordFrame() {
-        return new PasswordFrame<MPFileUser, MPFileSite>(getSelectedUser()) {
+        return new PasswordFrame<MPFileUser, MPFileSite>( getSelectedUser() ) {
             @Override
-            protected MPFileSite createSite(final MPFileUser user, final String siteName, final UnsignedInteger siteCounter, final MPResultType resultType,
+            protected MPFileSite createSite(final MPFileUser user, final String siteName, final UnsignedInteger siteCounter,
+                                            final MPResultType resultType,
                                             final MPMasterKey.Version algorithmVersion) {
                 return new MPFileSite( user, siteName, siteCounter, resultType, algorithmVersion );
             }

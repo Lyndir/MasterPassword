@@ -24,9 +24,8 @@ import java.util.Arrays;
 
 
 /**
- * @see MPMasterKey.Version#V3
- *
  * @author lhunath, 2014-08-30
+ * @see MPMasterKey.Version#V3
  */
 public class MPAlgorithmV3 extends MPAlgorithmV2 {
 
@@ -39,7 +38,7 @@ public class MPAlgorithmV3 extends MPAlgorithmV2 {
     @Override
     public byte[] masterKey(final String fullName, final char[] masterPassword) {
 
-        byte[] fullNameBytes = fullName.getBytes( mpw_charset );
+        byte[] fullNameBytes       = fullName.getBytes( mpw_charset );
         byte[] fullNameLengthBytes = toBytes( fullNameBytes.length );
 
         String keyScope = MPKeyPurpose.Authentication.getScope();
@@ -54,7 +53,7 @@ public class MPAlgorithmV3 extends MPAlgorithmV2 {
         // Calculate the master key.
         logger.trc( "masterKey: scrypt( masterPassword, masterKeySalt, N=%d, r=%d, p=%d )",
                     scrypt_N, scrypt_r, scrypt_p );
-        byte[] mpBytes = toBytes( masterPassword );
+        byte[] mpBytes   = toBytes( masterPassword );
         byte[] masterKey = scrypt( masterKeySalt, mpBytes );
         Arrays.fill( masterKeySalt, (byte) 0 );
         Arrays.fill( mpBytes, (byte) 0 );
