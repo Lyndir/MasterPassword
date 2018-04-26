@@ -29,8 +29,9 @@ public interface MPUnmarshaller {
 
     @Nonnull
     MPFileUser unmarshall(@Nonnull File file)
-            throws IOException;
+            throws IOException, MPMarshalException;
 
     @Nonnull
-    MPFileUser unmarshall(@Nonnull String content);
+    MPFileUser unmarshall(@Nonnull String content)
+            throws MPMarshalException;
 }

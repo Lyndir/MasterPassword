@@ -19,6 +19,7 @@
 package com.lyndir.masterpassword.model;
 
 import com.lyndir.masterpassword.MPMasterKey;
+import javax.annotation.Nonnull;
 
 
 /**
@@ -26,6 +27,7 @@ import com.lyndir.masterpassword.MPMasterKey;
  */
 public class MPJSONMarshaller implements MPMarshaller {
 
+    @Nonnull
     @Override
     public String marshall(final MPFileUser user, final MPMasterKey masterKey, final ContentMode contentMode) {
         // TODO

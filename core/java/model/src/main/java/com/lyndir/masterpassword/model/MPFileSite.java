@@ -48,7 +48,10 @@ public class MPFileSite extends MPSite {
     private Instant lastUsed;
 
     public MPFileSite(final MPFileUser user, final String siteName) {
-        this( user, siteName, DEFAULT_COUNTER, user.getAlgorithmVersion().getAlgorithm().mpw_default_type, user.getAlgorithmVersion() );
+        this( user, siteName,
+              user.getAlgorithmVersion().getAlgorithm().mpw_default_counter,
+              user.getAlgorithmVersion().getAlgorithm().mpw_default_type,
+              user.getAlgorithmVersion() );
     }
 
     public MPFileSite(final MPFileUser user, final String siteName, final UnsignedInteger siteCounter, final MPResultType resultType,
@@ -177,7 +180,7 @@ public class MPFileSite extends MPSite {
                 this.loginContent = null;
             else
                 this.loginContent = masterKey.siteState(
-                        siteName, DEFAULT_COUNTER, MPKeyPurpose.Identification, null, this.loginType, result, algorithmVersion );
+                        siteName, MPAlgorithm.mpw_default_counter, MPKeyPurpose.Identification, null, this.loginType, result, algorithmVersion );
     }
 
     @Nullable

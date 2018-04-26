@@ -35,12 +35,13 @@ public class MPFileUser extends MPUser<MPFileSite> implements Comparable<MPFileU
     @SuppressWarnings("UnusedDeclaration")
     private static final Logger logger = Logger.get( MPFileUser.class );
 
-    private final String fullName;
+    private final String                 fullName;
     private final Collection<MPFileSite> sites = Sets.newHashSet();
 
     @Nullable
     private byte[]              keyID;
     private MPMasterKey.Version algorithmVersion;
+    private MPMarshalFormat     format;
 
     private int             avatar;
     private MPResultType    defaultType;
@@ -51,17 +52,18 @@ public class MPFileUser extends MPUser<MPFileSite> implements Comparable<MPFileU
     }
 
     public MPFileUser(final String fullName, @Nullable final byte[] keyID, final MPMasterKey.Version algorithmVersion) {
-        this( fullName, keyID, algorithmVersion, 0, MPAlgorithm.mpw_default_type, new Instant() );
+        this( fullName, keyID, algorithmVersion, 0, MPAlgorithm.mpw_default_type, new Instant(), MPMarshalFormat.DEFAULT );
     }
 
     public MPFileUser(final String fullName, @Nullable final byte[] keyID, final MPMasterKey.Version algorithmVersion, final int avatar,
-                      final MPResultType defaultType, final ReadableInstant lastUsed) {
+                      final MPResultType defaultType, final ReadableInstant lastUsed, final MPMarshalFormat format) {
         this.fullName = fullName;
         this.keyID = (keyID == null)? null: keyID.clone();
         this.algorithmVersion = algorithmVersion;
         this.avatar = avatar;
         this.defaultType = defaultType;
         this.lastUsed = lastUsed;
+        this.format = format;
     }
 
     @Override
@@ -76,6 +78,14 @@ public class MPFileUser extends MPUser<MPFileSite> implements Comparable<MPFileU
 
     public void setAlgorithmVersion(final MPMasterKey.Version algorithmVersion) {
         this.algorithmVersion = algorithmVersion;
+    }
+
+    public MPMarshalFormat getFormat() {
+        return format;
+    }
+
+    public void setFormat(final MPMarshalFormat format) {
+        this.format = format;
     }
 
     @Override

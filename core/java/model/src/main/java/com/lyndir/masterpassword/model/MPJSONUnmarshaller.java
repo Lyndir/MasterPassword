@@ -31,15 +31,14 @@ public class MPJSONUnmarshaller implements MPUnmarshaller {
     @Nonnull
     @Override
     public MPFileUser unmarshall(@Nonnull final File file)
-            throws IOException {
-        // TODO
-        return null;
+            throws IOException, MPMarshalException {
+        throw new MPMarshalException( "Not yet implemented" );
     }
 
     @Nonnull
     @Override
-    public MPFileUser unmarshall(@Nonnull final String content) {
-        // TODO
-        return null;
+    public MPFileUser unmarshall(@Nonnull final String content)
+            throws MPMarshalException{
+        throw new MPMarshalException( "Not yet implemented" );
     }
 }

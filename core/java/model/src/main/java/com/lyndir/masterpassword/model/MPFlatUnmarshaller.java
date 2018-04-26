@@ -22,6 +22,7 @@ import com.google.common.base.*;
 import com.google.common.io.CharStreams;
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.CodeUtils;
+import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.ConversionUtils;
 import com.lyndir.masterpassword.*;
 import java.io.*;
@@ -36,6 +37,7 @@ import org.joda.time.DateTime;
  */
 public class MPFlatUnmarshaller implements MPUnmarshaller {
 
+    private static final Logger logger = Logger.get( MPFlatUnmarshaller.class );
     private static final Pattern[] unmarshallFormats = {
             Pattern.compile( "^([^ ]+) +(\\d+) +(\\d+)(:\\d+)? +([^\t]+)\t(.*)" ),
             Pattern.compile( "^([^ ]+) +(\\d+) +(\\d+)(:\\d+)?(:\\d+)? +([^\t]*)\t *([^\t]+)\t(.*)" ) };
@@ -45,7 +47,7 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
     @Nonnull
     @Override
     public MPFileUser unmarshall(@Nonnull final File file)
-            throws IOException {
+            throws IOException, MPMarshalException {
         try (Reader reader = new InputStreamReader( new FileInputStream( file ), Charsets.UTF_8 )) {
             return unmarshall( CharStreams.toString( reader ) );
         }
@@ -53,7 +55,8 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
 
     @Nonnull
     @Override
-    public MPFileUser unmarshall(@Nonnull final String content) {
+    public MPFileUser unmarshall(@Nonnull final String content)
+            throws MPMarshalException {
         MPFileUser   user         = null;
         byte[]       keyID        = null;
         String       fullName     = null;
@@ -70,7 +73,7 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
                     headerStarted = true;
                 else
                     // Ends the header.
-                    user = new MPFileUser( fullName, keyID, MPMasterKey.Version.fromInt( mpVersion ), avatar, defaultType, new DateTime( 0 ) );
+                    user = new MPFileUser( fullName, keyID, MPMasterKey.Version.fromInt( mpVersion ), avatar, defaultType, new DateTime( 0 ), MPMarshalFormat.Flat );
 
                 // Comment.
             else if (line.startsWith( "#" )) {
@@ -100,14 +103,17 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
             // No comment.
             else if (user != null) {
                 Matcher siteMatcher = unmarshallFormats[importFormat].matcher( line );
-                if (!siteMatcher.matches())
-                    return null;
+                if (!siteMatcher.matches()) {
+                    logger.wrn( "Couldn't parse line: %s, skipping.", line );
+                    continue;
+                }
 
                 MPFileSite site;
                 switch (importFormat) {
                     case 0:
                         site = new MPFileSite( user, //
-                                               siteMatcher.group( 5 ), siteMatcher.group( 6 ), MPFileSite.DEFAULT_COUNTER,
+                                               siteMatcher.group( 5 ), siteMatcher.group( 6 ),
+                                               user.getAlgorithmVersion().getAlgorithm().mpw_default_counter,
                                                MPResultType.forType( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ),
                                                MPMasterKey.Version.fromInt( ConversionUtils.toIntegerNN(
                                                    colon.matcher( siteMatcher.group( 4 ) ).replaceAll( "" ) ) ),
@@ -128,12 +134,15 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
                         break;
 
                     default:
-                        throw new UnsupportedOperationException( "Unexpected format: " + importFormat );
+                        throw new MPMarshalException( "Unexpected format: " + importFormat );
                 }
 
                 user.addSite( site );
             }
 
-        return Preconditions.checkNotNull( user, "No full header found in import file." );
+        if (user == null)
+            throw new MPMarshalException( "No full header found in import file." );
+
+        return user;
     }
 }

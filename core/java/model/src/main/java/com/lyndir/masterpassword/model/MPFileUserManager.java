@@ -26,6 +26,8 @@ import com.google.common.io.CharSink;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.masterpassword.*;
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -38,7 +40,7 @@ import javax.annotation.Nullable;
 public class MPFileUserManager extends MPUserManager {
 
     @SuppressWarnings("UnusedDeclaration")
-    private static final Logger logger = Logger.get( MPFileUserManager.class );
+    private static final Logger            logger = Logger.get( MPFileUserManager.class );
     private static final MPFileUserManager instance;
 
     static {
@@ -72,26 +74,32 @@ public class MPFileUserManager extends MPUserManager {
             return ImmutableList.of();
         }
 
-        return FluentIterable.from( listUserFiles( userFilesDirectory ) ).transform( new Function<File, MPFileUser>() {
-            @Nullable
-            @Override
-            public MPFileUser apply(@Nullable final File file) {
-                try {
-                    return new MPFlatUnmarshaller().unmarshall( Preconditions.checkNotNull( file ) );
-                }
-                catch (final IOException e) {
-                    logger.err( e, "Couldn't read user from: %s", file );
-                    return null;
-                }
-            }
-        } ).filter( Predicates.notNull() );
+        Map<String, MPFileUser> users = new HashMap<>();
+        for (final File userFile : listUserFiles( userFilesDirectory ))
+            for (final MPMarshalFormat format : MPMarshalFormat.values())
+                if (userFile.getName().endsWith( '.' + format.fileExtension() ))
+                    try {
+                        MPFileUser user         = format.unmarshaller().unmarshall( userFile );
+                        MPFileUser previousUser = users.put( user.getFullName(), user );
+                        if ((previousUser != null) && (previousUser.getFormat().ordinal() > user.getFormat().ordinal()))
+                            users.put( previousUser.getFullName(), previousUser );
+                    }
+                    catch (final IOException | MPMarshalException e) {
+                        logger.err( e, "Couldn't read user from: %s", userFile );
+                    }
+
+        return users.values();
     }
 
     private static ImmutableList<File> listUserFiles(final File userFilesDirectory) {
         return ImmutableList.copyOf( ifNotNullElse( userFilesDirectory.listFiles( new FilenameFilter() {
             @Override
             public boolean accept(final File dir, final String name) {
-                return name.endsWith( ".mpsites" );
+                for (final MPMarshalFormat format : MPMarshalFormat.values())
+                    if (name.endsWith( '.' + format.fileExtension() ))
+                        return true;
+
+                return false;
             }
         } ), new File[0] ) );
     }

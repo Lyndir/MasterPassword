@@ -20,6 +20,8 @@ package com.lyndir.masterpassword.model;
 
 /**
  * @author lhunath, 2017-09-20
+ *
+ * This enum is ordered from oldest to newest format, the latest being most preferred.
  */
 public enum MPMarshalFormat {
     /**
@@ -34,6 +36,11 @@ public enum MPMarshalFormat {
         @Override
         public MPUnmarshaller unmarshaller() {
             return new MPFlatUnmarshaller();
+        }
+
+        @Override
+        public String fileExtension() {
+            return "mpsites";
         }
     },
 
@@ -50,6 +57,11 @@ public enum MPMarshalFormat {
         public MPUnmarshaller unmarshaller() {
             return new MPJSONUnmarshaller();
         }
+
+        @Override
+        public String fileExtension() {
+            return "mpsites.json";
+        }
     };
 
     public static final MPMarshalFormat DEFAULT = JSON;
@@ -57,4 +69,6 @@ public enum MPMarshalFormat {
     public abstract MPMarshaller marshaller();
 
     public abstract MPUnmarshaller unmarshaller();
+
+    public abstract String fileExtension();
 }

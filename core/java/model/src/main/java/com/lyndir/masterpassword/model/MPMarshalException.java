@@ -18,37 +18,16 @@
 
 package com.lyndir.masterpassword.model;
 
-import com.lyndir.masterpassword.MPInvalidatedException;
-import com.lyndir.masterpassword.MPMasterKey;
-import javax.annotation.Nonnull;
-
-
 /**
- * @author lhunath, 14-12-07
+ * @author lhunath, 2018-04-26
  */
-public interface MPMarshaller {
+public class MPMarshalException extends Exception {
 
-    @Nonnull
-    String marshall(MPFileUser user, MPMasterKey masterKey, ContentMode contentMode)
-            throws MPInvalidatedException;
+    public MPMarshalException(final String message) {
+        super( message );
+    }
 
-    enum ContentMode {
-        PROTECTED( "Export of site names and stored passwords (unless device-private) encrypted with the master key." ),
-        VISIBLE( "Export of site names and passwords in clear-text." );
-
-        private final String description;
-        private boolean redacted;
-
-        ContentMode(final String description) {
-            this.description = description;
-        }
-
-        public String description() {
-            return description;
-        }
-
-        public boolean isRedacted() {
-            return redacted;
-        }
+    public MPMarshalException(final String message, final Throwable cause) {
+        super( message, cause );
     }
 }

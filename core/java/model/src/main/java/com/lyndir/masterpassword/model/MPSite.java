@@ -31,8 +31,6 @@ import javax.annotation.Nullable;
  */
 public abstract class MPSite {
 
-    public static final UnsignedInteger DEFAULT_COUNTER = UnsignedInteger.ONE;
-
     public abstract String getSiteName();
 
     public abstract void setSiteName(String siteName);
@@ -61,7 +59,7 @@ public abstract class MPSite {
             throws MPInvalidatedException {
 
         return masterKey.siteResult(
-                getSiteName(), DEFAULT_COUNTER, MPKeyPurpose.Identification, null, loginType, loginContent, getAlgorithmVersion() );
+                getSiteName(), MPAlgorithm.mpw_default_counter, MPKeyPurpose.Identification, null, loginType, loginContent, getAlgorithmVersion() );
     }
 
     @Override

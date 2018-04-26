@@ -34,9 +34,14 @@ import javax.annotation.Nullable;
 public interface MPAlgorithm {
 
     /**
-     * mpw: defaults: Password result type.
+     * mpw: defaults: password result type.
      */
     MPResultType mpw_default_type = MPResultType.GeneratedLong;
+
+    /**
+     * mpw: defaults: initial counter value.
+     */
+    UnsignedInteger mpw_default_counter = UnsignedInteger.ONE;
 
     /**
      * mpw: validity for the time-based rolling counter.

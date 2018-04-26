@@ -22,6 +22,7 @@ import static com.lyndir.lhunath.opal.system.util.ObjectUtils.ifNotNullElse;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
 
 import com.lyndir.masterpassword.*;
+import javax.annotation.Nonnull;
 import org.joda.time.Instant;
 
 
@@ -32,6 +33,7 @@ public class MPFlatMarshaller implements MPMarshaller {
 
     private static final int FORMAT = 1;
 
+    @Nonnull
     @Override
     public String marshall(final MPFileUser user, final MPMasterKey masterKey, final ContentMode contentMode)
             throws MPInvalidatedException {

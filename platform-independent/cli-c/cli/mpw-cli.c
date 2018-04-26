@@ -77,7 +77,7 @@ static void usage() {
             "               Defaults to 1.\n" );
     inf( ""
             "  -a version   The algorithm version to use, %d - %d.\n"
-            "               Defaults to %s in env or %d.\n",
+            "               Defaults to env var %s or %d.\n",
             MPAlgorithmVersionFirst, MPAlgorithmVersionLast, MP_ENV_algorithm, MPAlgorithmVersionCurrent );
     inf( ""
             "  -p purpose   The purpose of the generated token.\n"
@@ -95,7 +95,7 @@ static void usage() {
             "  -f|F format  The mpsites format to use for reading/writing site parameters.\n"
             "               -F forces the use of the given format,\n"
             "               -f allows fallback/migration.\n"
-            "               Defaults to %s in env or json, falls back to plain.\n"
+            "               Defaults to env var %s or json, falls back to plain.\n"
             "                   n, none     | No file\n"
             "                   f, flat     | ~/.mpw.d/Full Name.%s\n"
             "                   j, json     | ~/.mpw.d/Full Name.%s\n",
