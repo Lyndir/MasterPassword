@@ -18,6 +18,7 @@
 
 package com.lyndir.masterpassword.model;
 
+import com.lyndir.masterpassword.MPInvalidatedException;
 import com.lyndir.masterpassword.MPMasterKey;
 import javax.annotation.Nonnull;
 
@@ -29,8 +30,8 @@ public class MPJSONMarshaller implements MPMarshaller {
 
     @Nonnull
     @Override
-    public String marshall(final MPFileUser user, final MPMasterKey masterKey, final ContentMode contentMode) {
-        // TODO
-        return null;
+    public String marshall(final MPFileUser user, final MPMasterKey masterKey, final ContentMode contentMode)
+            throws MPInvalidatedException, MPMarshalException {
+        throw new MPMarshalException( "Not yet implemented" );
     }
 }

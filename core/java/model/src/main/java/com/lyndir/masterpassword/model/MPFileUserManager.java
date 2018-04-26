@@ -126,7 +126,7 @@ public class MPFileUserManager extends MPUserManager {
                         throws IOException {
                     return new OutputStreamWriter( new FileOutputStream( getUserFile( user ) ), Charsets.UTF_8 );
                 }
-            }.write( new MPFlatMarshaller().marshall( user, masterKey, MPMarshaller.ContentMode.PROTECTED ) );
+            }.write( user.getFormat().marshaller().marshall( user, masterKey, MPMarshaller.ContentMode.PROTECTED ) );
         }
         catch (final IOException e) {
             logger.err( e, "Unable to save sites for user: %s", user );

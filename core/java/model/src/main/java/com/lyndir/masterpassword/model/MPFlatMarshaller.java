@@ -36,7 +36,7 @@ public class MPFlatMarshaller implements MPMarshaller {
     @Nonnull
     @Override
     public String marshall(final MPFileUser user, final MPMasterKey masterKey, final ContentMode contentMode)
-            throws MPInvalidatedException {
+            throws MPInvalidatedException, MPMarshalException {
         StringBuilder content = new StringBuilder();
         content.append( "# Master Password site export\n" );
         content.append( "#     " ).append( contentMode.description() ).append( '\n' );

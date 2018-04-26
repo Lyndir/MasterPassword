@@ -30,7 +30,7 @@ public interface MPMarshaller {
 
     @Nonnull
     String marshall(MPFileUser user, MPMasterKey masterKey, ContentMode contentMode)
-            throws MPInvalidatedException;
+            throws MPInvalidatedException, MPMarshalException;
 
     enum ContentMode {
         PROTECTED( "Export of site names and stored passwords (unless device-private) encrypted with the master key." ),
