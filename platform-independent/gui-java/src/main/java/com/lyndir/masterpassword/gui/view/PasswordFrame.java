@@ -33,6 +33,7 @@ import com.lyndir.masterpassword.gui.util.UnsignedIntegerModel;
 import com.lyndir.masterpassword.model.*;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
 import java.awt.event.*;
 import java.util.concurrent.Callable;
 import javax.annotation.Nonnull;
@@ -65,7 +66,8 @@ public abstract class PasswordFrame<U extends MPUser<S>, S extends MPSite> exten
     private S       currentSite;
     private boolean updatingUI;
 
-    public PasswordFrame(final U user) {
+    @SuppressWarnings({ "MagicNumber", "OverridableMethodCallDuringObjectConstruction" })
+    protected PasswordFrame(final U user) {
         super( "Master Password" );
         this.user = user;
 
@@ -97,7 +99,7 @@ public abstract class PasswordFrame<U extends MPUser<S>, S extends MPSite> exten
                 Futures.addCallback( updatePassword( true ), new FutureCallback<String>() {
                     @Override
                     public void onSuccess(@Nullable final String sitePassword) {
-                        StringSelection clipboardContents = new StringSelection( sitePassword );
+                        Transferable clipboardContents = new StringSelection( sitePassword );
                         Toolkit.getDefaultToolkit().getSystemClipboard().setContents( clipboardContents, null );
 
                         SwingUtilities.invokeLater( new Runnable() {
@@ -112,7 +114,7 @@ public abstract class PasswordFrame<U extends MPUser<S>, S extends MPSite> exten
                     }
 
                     @Override
-                    public void onFailure(final Throwable t) {
+                    public void onFailure(@Nonnull final Throwable t) {
                     }
                 } );
             }
@@ -144,8 +146,8 @@ public abstract class PasswordFrame<U extends MPUser<S>, S extends MPSite> exten
                                                         Components.stud(),                                                    //
                                                         siteCounterField = Components.spinner( siteCounterModel ) );
         sitePanel.add( siteSettings );
-        resultTypeField.setFont( Res.valueFont().deriveFont( 12f ) );
-        resultTypeField.setSelectedItem( MPAlgorithm.mpw_default_type );
+        resultTypeField.setFont( Res.valueFont().deriveFont( resultTypeField.getFont().getSize2D() ) );
+        resultTypeField.setSelectedItem( user.getAlgorithm().mpw_default_type() );
         resultTypeField.addItemListener( new ItemListener() {
             @Override
             public void itemStateChanged(final ItemEvent e) {
@@ -153,9 +155,9 @@ public abstract class PasswordFrame<U extends MPUser<S>, S extends MPSite> exten
             }
         } );
 
-        siteVersionField.setFont( Res.valueFont().deriveFont( 12f ) );
+        siteVersionField.setFont( Res.valueFont().deriveFont( siteVersionField.getFont().getSize2D() ) );
         siteVersionField.setAlignmentX( RIGHT_ALIGNMENT );
-        siteVersionField.setSelectedItem( user.getAlgorithmVersion() );
+        siteVersionField.setSelectedItem( user.getAlgorithm() );
         siteVersionField.addItemListener( new ItemListener() {
             @Override
             public void itemStateChanged(final ItemEvent e) {
@@ -163,7 +165,7 @@ public abstract class PasswordFrame<U extends MPUser<S>, S extends MPSite> exten
             }
         } );
 
-        siteCounterField.setFont( Res.valueFont().deriveFont( 12f ) );
+        siteCounterField.setFont( Res.valueFont().deriveFont( siteCounterField.getFont().getSize2D() ) );
         siteCounterField.setAlignmentX( RIGHT_ALIGNMENT );
         siteCounterField.addChangeListener( new ChangeListener() {
             @Override
@@ -186,7 +188,7 @@ public abstract class PasswordFrame<U extends MPUser<S>, S extends MPSite> exten
         // Password
         passwordField = Components.passwordField();
         passwordField.setAlignmentX( Component.CENTER_ALIGNMENT );
-        passwordField.setHorizontalAlignment( JTextField.CENTER );
+        passwordField.setHorizontalAlignment( SwingConstants.CENTER );
         passwordField.putClientProperty( "JPasswordField.cutCopyAllowed", true );
         passwordField.setEditable( false );
         passwordField.setBackground( null );
@@ -215,6 +217,7 @@ public abstract class PasswordFrame<U extends MPUser<S>, S extends MPSite> exten
         setLocationRelativeTo( null );
     }
 
+    @SuppressWarnings("MagicNumber")
     private void updateMask() {
         passwordField.setEchoChar( maskPasswordField.isSelected()? passwordEchoChar: (char) 0 );
         passwordField.setFont( maskPasswordField.isSelected()? passwordEchoFont: Res.bigValueFont().deriveFont( 40f ) );
@@ -233,9 +236,9 @@ public abstract class PasswordFrame<U extends MPUser<S>, S extends MPSite> exten
             return Futures.immediateCancelledFuture();
         }
 
-        MPResultType        resultType  = resultTypeField.getModel().getElementAt( resultTypeField.getSelectedIndex() );
-        MPMasterKey.Version siteVersion = siteVersionField.getItemAt( siteVersionField.getSelectedIndex() );
-        UnsignedInteger     siteCounter = siteCounterModel.getNumber();
+        MPResultType    resultType    = resultTypeField.getModel().getElementAt( resultTypeField.getSelectedIndex() );
+        MPAlgorithm     siteAlgorithm = siteVersionField.getItemAt( siteVersionField.getSelectedIndex() ).getAlgorithm();
+        UnsignedInteger siteCounter   = siteCounterModel.getNumber();
 
         Iterable<S> siteResults = user.findSites( siteNameQuery );
         if (!allowNameCompletion)
@@ -246,10 +249,10 @@ public abstract class PasswordFrame<U extends MPUser<S>, S extends MPSite> exten
                 }
             } );
         final S site = ifNotNullElse( Iterables.getFirst( siteResults, null ),
-                                      createSite( user, siteNameQuery, siteCounter, resultType, siteVersion ) );
+                                      createSite( user, siteNameQuery, siteCounter, resultType, siteAlgorithm ) );
         if ((currentSite != null) && currentSite.getSiteName().equals( site.getSiteName() )) {
             site.setResultType( resultType );
-            site.setAlgorithmVersion( siteVersion );
+            site.setAlgorithm( siteAlgorithm );
             site.setSiteCounter( siteCounter );
         }
 
@@ -259,7 +262,7 @@ public abstract class PasswordFrame<U extends MPUser<S>, S extends MPSite> exten
                     throws Exception {
                 return user.getMasterKey()
                            .siteResult( site.getSiteName(), site.getSiteCounter(), MPKeyPurpose.Authentication, null, site.getResultType(),
-                                        null, site.getAlgorithmVersion() );
+                                        null, site.getAlgorithm() );
             }
         } );
         Futures.addCallback( passwordFuture, new FutureCallback<String>() {
@@ -276,7 +279,7 @@ public abstract class PasswordFrame<U extends MPUser<S>, S extends MPSite> exten
                         else
                             siteActionButton.setText( "Add Site" );
                         resultTypeField.setSelectedItem( currentSite.getResultType() );
-                        siteVersionField.setSelectedItem( currentSite.getAlgorithmVersion() );
+                        siteVersionField.setSelectedItem( currentSite.getAlgorithm() );
                         siteCounterField.setValue( currentSite.getSiteCounter() );
                         siteNameField.setText( currentSite.getSiteName() );
                         if (siteNameField.getText().startsWith( siteNameQuery ))
@@ -290,15 +293,14 @@ public abstract class PasswordFrame<U extends MPUser<S>, S extends MPSite> exten
             }
 
             @Override
-            public void onFailure(final Throwable t) {
+            public void onFailure(@Nonnull final Throwable t) {
             }
         } );
 
         return passwordFuture;
     }
 
-    protected abstract S createSite(U user, String siteName, UnsignedInteger siteCounter, MPResultType resultType,
-                                    MPMasterKey.Version algorithmVersion);
+    protected abstract S createSite(U user, String siteName, UnsignedInteger siteCounter, MPResultType resultType, MPAlgorithm algorithm);
 
     @Override
     public void insertUpdate(final DocumentEvent e) {

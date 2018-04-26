@@ -21,10 +21,10 @@ package com.lyndir.masterpassword.gui.view;
 import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 
 import com.lyndir.masterpassword.MPIdenticon;
-import com.lyndir.masterpassword.gui.Res;
+import com.lyndir.masterpassword.gui.*;
+import com.lyndir.masterpassword.model.MPUser;
 import com.lyndir.masterpassword.gui.util.Components;
 import com.lyndir.masterpassword.model.MPIncorrectMasterPasswordException;
-import com.lyndir.masterpassword.model.MPUser;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.concurrent.Future;
@@ -196,7 +196,7 @@ public class UnlockFrame extends JFrame {
     }
 
     void trySignIn(final JComponent... signInComponents) {
-        if (!checkSignIn())
+        if ((user == null) || !checkSignIn())
             return;
 
         for (final JComponent signInComponent : signInComponents)

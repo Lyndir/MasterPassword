@@ -62,7 +62,7 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
         String       fullName     = null;
         int          mpVersion    = 0, importFormat = 0, avatar = 0;
         boolean      clearContent = false, headerStarted = false;
-        MPResultType defaultType  = MPAlgorithm.mpw_default_type;
+        MPResultType defaultType  = null;
 
         //noinspection HardcodedLineSeparator
         for (final String line : Splitter.on( CharMatcher.anyOf( "\r\n" ) ).omitEmptyStrings().split( content ))
@@ -73,8 +73,8 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
                     headerStarted = true;
                 else
                     // Ends the header.
-                    user = new MPFileUser( fullName, keyID, MPMasterKey.Version.fromInt( mpVersion ), avatar, defaultType,
-                                           new DateTime( 0 ), MPMarshalFormat.Flat );
+                    user = new MPFileUser( fullName, keyID, MPMasterKey.Version.fromInt( mpVersion ).getAlgorithm(),
+                                           avatar, defaultType, new DateTime( 0 ), MPMarshalFormat.Flat );
 
                 // Comment.
             else if (line.startsWith( "#" )) {
@@ -114,10 +114,10 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
                     case 0:
                         site = new MPFileSite( user, //
                                                siteMatcher.group( 5 ), siteMatcher.group( 6 ),
-                                               user.getAlgorithmVersion().getAlgorithm().mpw_default_counter,
+                                               user.getAlgorithm().mpw_default_counter(),
                                                MPResultType.forType( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ),
                                                MPMasterKey.Version.fromInt( ConversionUtils.toIntegerNN(
-                                                       colon.matcher( siteMatcher.group( 4 ) ).replaceAll( "" ) ) ),
+                                                       colon.matcher( siteMatcher.group( 4 ) ).replaceAll( "" ) ) ).getAlgorithm(),
                                                null, null, null, ConversionUtils.toIntegerNN( siteMatcher.group( 2 ) ),
                                                MPConstant.dateTimeFormatter.parseDateTime( siteMatcher.group( 1 ) ).toInstant() );
                         break;
@@ -128,7 +128,7 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
                                                UnsignedInteger.valueOf( colon.matcher( siteMatcher.group( 5 ) ).replaceAll( "" ) ),
                                                MPResultType.forType( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ),
                                                MPMasterKey.Version.fromInt( ConversionUtils.toIntegerNN(
-                                                       colon.matcher( siteMatcher.group( 4 ) ).replaceAll( "" ) ) ),
+                                                       colon.matcher( siteMatcher.group( 4 ) ).replaceAll( "" ) ) ).getAlgorithm(),
                                                siteMatcher.group( 6 ), MPResultType.GeneratedName, null,
                                                ConversionUtils.toIntegerNN( siteMatcher.group( 2 ) ),
                                                MPConstant.dateTimeFormatter.parseDateTime( siteMatcher.group( 1 ) ).toInstant() );

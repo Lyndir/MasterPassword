@@ -58,21 +58,21 @@ public class MPMasterKey {
      *
      * @throws MPInvalidatedException {@link #invalidate()} has been called on this object.
      */
-    private byte[] masterKey(final Version algorithmVersion)
+    private byte[] masterKey(final MPAlgorithm algorithm)
             throws MPInvalidatedException {
         Preconditions.checkArgument( masterPassword.length > 0 );
 
         if (invalidated)
             throw new MPInvalidatedException();
 
-        byte[] key = keyByVersion.get( algorithmVersion );
+        byte[] key = keyByVersion.get( algorithm.version() );
         if (key == null) {
-            logger.trc( "-- mpw_masterKey (algorithm: %d)", algorithmVersion.toInt() );
+            logger.trc( "-- mpw_masterKey (algorithm: %s)", algorithm );
             logger.trc( "fullName: %s", fullName );
             logger.trc( "masterPassword.id: %s", CodeUtils.encodeHex(
-                    algorithmVersion.getAlgorithm().toID( algorithmVersion.getAlgorithm().toBytes( masterPassword ) ) ) );
+                    algorithm.toID( algorithm.toBytes( masterPassword ) ) ) );
 
-            keyByVersion.put( algorithmVersion, key = algorithmVersion.getAlgorithm().masterKey( fullName, masterPassword ) );
+            keyByVersion.put( algorithm.version(), key = algorithm.masterKey( fullName, masterPassword ) );
         }
 
         return key;
@@ -84,19 +84,19 @@ public class MPMasterKey {
      * @throws MPInvalidatedException {@link #invalidate()} has been called on this object.
      */
     private byte[] siteKey(final String siteName, final UnsignedInteger siteCounter, final MPKeyPurpose keyPurpose,
-                           @Nullable final String keyContext, final Version algorithmVersion)
+                           @Nullable final String keyContext, final MPAlgorithm algorithm)
             throws MPInvalidatedException {
         Preconditions.checkArgument( !siteName.isEmpty() );
 
-        byte[] masterKey = masterKey( algorithmVersion );
+        byte[] masterKey = masterKey( algorithm );
 
-        logger.trc( "-- mpw_siteKey (algorithm: %d)", algorithmVersion.toInt() );
+        logger.trc( "-- mpw_siteKey (algorithm: %s)", algorithm );
         logger.trc( "siteName: %s", siteName );
         logger.trc( "siteCounter: %s", siteCounter );
         logger.trc( "keyPurpose: %d (%s)", keyPurpose.toInt(), keyPurpose.getShortName() );
         logger.trc( "keyContext: %s", keyContext );
 
-        return algorithmVersion.getAlgorithm().siteKey( masterKey, siteName, siteCounter, keyPurpose, keyContext );
+        return algorithm.siteKey( masterKey, siteName, siteCounter, keyPurpose, keyContext );
     }
 
     /**
@@ -108,23 +108,23 @@ public class MPMasterKey {
      * @param keyContext  A site-scoped result modifier.
      * @param resultType  The type of result to generate.
      * @param resultParam A parameter for the resultType.  For stateful result types, the output of
-     *                    {@link #siteState(String, UnsignedInteger, MPKeyPurpose, String, MPResultType, String, Version)}.
+     *                    {@link #siteState(String, UnsignedInteger, MPKeyPurpose, String, MPResultType, String, MPAlgorithm)}.
      *
      * @throws MPInvalidatedException {@link #invalidate()} has been called on this object.
      */
     public String siteResult(final String siteName, final UnsignedInteger siteCounter, final MPKeyPurpose keyPurpose,
                              @Nullable final String keyContext, final MPResultType resultType, @Nullable final String resultParam,
-                             final Version algorithmVersion)
+                             final MPAlgorithm algorithm)
             throws MPInvalidatedException {
 
-        byte[] masterKey = masterKey( algorithmVersion );
-        byte[] siteKey   = siteKey( siteName, siteCounter, keyPurpose, keyContext, algorithmVersion );
+        byte[] masterKey = masterKey( algorithm );
+        byte[] siteKey   = siteKey( siteName, siteCounter, keyPurpose, keyContext, algorithm );
 
-        logger.trc( "-- mpw_siteResult (algorithm: %d)", algorithmVersion.toInt() );
+        logger.trc( "-- mpw_siteResult (algorithm: %s)", algorithm );
         logger.trc( "resultType: %d (%s)", resultType.getType(), resultType.getShortName() );
         logger.trc( "resultParam: %s", resultParam );
 
-        return algorithmVersion.getAlgorithm().siteResult(
+        return algorithm.siteResult(
                 masterKey, siteKey, siteName, siteCounter, keyPurpose, keyContext, resultType, resultParam );
     }
 
@@ -137,26 +137,26 @@ public class MPMasterKey {
      * @param keyContext  A site-scoped key modifier.
      * @param resultType  The type of result token to encrypt.
      * @param resultParam The result token desired from
-     *                    {@link #siteResult(String, UnsignedInteger, MPKeyPurpose, String, MPResultType, String, Version)}.
+     *                    {@link #siteResult(String, UnsignedInteger, MPKeyPurpose, String, MPResultType, String, MPAlgorithm)}.
      *
      * @throws MPInvalidatedException {@link #invalidate()} has been called on this object.
      */
     public String siteState(final String siteName, final UnsignedInteger siteCounter, final MPKeyPurpose keyPurpose,
                             @Nullable final String keyContext, final MPResultType resultType, @Nullable final String resultParam,
-                            final Version algorithmVersion)
+                            final MPAlgorithm algorithm)
             throws MPInvalidatedException {
 
         Preconditions.checkNotNull( resultParam );
         Preconditions.checkArgument( !resultParam.isEmpty() );
 
-        byte[] masterKey = masterKey( algorithmVersion );
-        byte[] siteKey   = siteKey( siteName, siteCounter, keyPurpose, keyContext, algorithmVersion );
+        byte[] masterKey = masterKey( algorithm );
+        byte[] siteKey   = siteKey( siteName, siteCounter, keyPurpose, keyContext, algorithm );
 
-        logger.trc( "-- mpw_siteState (algorithm: %d)", algorithmVersion.toInt() );
+        logger.trc( "-- mpw_siteState (algorithm: %s)", algorithm );
         logger.trc( "resultType: %d (%s)", resultType.getType(), resultType.getShortName() );
-        logger.trc( "resultParam: %d bytes = %s", resultParam.getBytes( MPAlgorithm.mpw_charset ).length, resultParam );
+        logger.trc( "resultParam: %d bytes = %s", resultParam.getBytes( algorithm.mpw_charset() ).length, resultParam );
 
-        return algorithmVersion.getAlgorithm().siteState(
+        return algorithm.siteState(
                 masterKey, siteKey, siteName, siteCounter, keyPurpose, keyContext, resultType, resultParam );
     }
 
@@ -171,10 +171,10 @@ public class MPMasterKey {
      *
      * @throws MPInvalidatedException {@link #invalidate()} has been called on this object.
      */
-    public byte[] getKeyID(final Version algorithmVersion)
+    public byte[] getKeyID(final MPAlgorithm algorithm)
             throws MPInvalidatedException {
 
-        return algorithmVersion.getAlgorithm().toID( masterKey( algorithmVersion ) );
+        return algorithm.toID( masterKey( algorithm ) );
     }
 
     /**

@@ -27,6 +27,8 @@ import javax.swing.*;
  */
 public class UnsignedIntegerModel extends SpinnerNumberModel {
 
+    private static final long serialVersionUID = 1L;
+
     public UnsignedIntegerModel() {
         this( UnsignedInteger.ZERO, UnsignedInteger.ZERO, UnsignedInteger.MAX_VALUE, UnsignedInteger.ONE );
     }
@@ -43,6 +45,7 @@ public class UnsignedIntegerModel extends SpinnerNumberModel {
         this( value, minimum, maximum, UnsignedInteger.ONE );
     }
 
+    @SuppressWarnings("TypeMayBeWeakened")
     public UnsignedIntegerModel(final UnsignedInteger value, final UnsignedInteger minimum, final UnsignedInteger maximum,
                                 final UnsignedInteger stepSize) {
         super( value, minimum, maximum, stepSize );

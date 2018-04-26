@@ -18,9 +18,9 @@
 
 package com.lyndir.masterpassword.gui.view;
 
+import com.google.common.base.Preconditions;
 import com.google.common.primitives.UnsignedInteger;
-import com.lyndir.masterpassword.MPMasterKey;
-import com.lyndir.masterpassword.MPResultType;
+import com.lyndir.masterpassword.*;
 import com.lyndir.masterpassword.gui.Res;
 import com.lyndir.masterpassword.gui.model.IncognitoSite;
 import com.lyndir.masterpassword.gui.model.IncognitoUser;
@@ -29,6 +29,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -81,16 +82,17 @@ public class IncognitoAuthenticationPanel extends AuthenticationPanel<IncognitoU
 
     @Override
     public PasswordFrame<IncognitoUser, ?> newPasswordFrame() {
-        return new PasswordFrame<IncognitoUser, IncognitoSite>( getSelectedUser() ) {
+        return new PasswordFrame<IncognitoUser, IncognitoSite>( Preconditions.checkNotNull( getSelectedUser() ) ) {
             @Override
             protected IncognitoSite createSite(final IncognitoUser user, final String siteName, final UnsignedInteger siteCounter,
                                                final MPResultType resultType,
-                                               final MPMasterKey.Version algorithmVersion) {
-                return new IncognitoSite( siteName, siteCounter, resultType, algorithmVersion );
+                                               final MPAlgorithm algorithm) {
+                return new IncognitoSite( siteName, siteCounter, resultType, algorithm );
             }
         };
     }
 
+    @Nullable
     @Override
     protected IncognitoUser getSelectedUser() {
         return new IncognitoUser( fullNameField.getText() );

@@ -22,8 +22,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.masterpassword.*;
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.*;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.joda.time.Instant;
@@ -43,7 +42,7 @@ public class MPFileUser extends MPUser<MPFileSite> implements Comparable<MPFileU
 
     @Nullable
     private byte[]              keyID;
-    private MPMasterKey.Version algorithmVersion;
+    private MPAlgorithm algorithm;
     private MPMarshalFormat     format;
 
     private int             avatar;
@@ -51,18 +50,18 @@ public class MPFileUser extends MPUser<MPFileSite> implements Comparable<MPFileU
     private ReadableInstant lastUsed;
 
     public MPFileUser(final String fullName) {
-        this( fullName, null, MPMasterKey.Version.CURRENT );
+        this( fullName, null, MPMasterKey.Version.CURRENT.getAlgorithm() );
     }
 
-    public MPFileUser(final String fullName, @Nullable final byte[] keyID, final MPMasterKey.Version algorithmVersion) {
-        this( fullName, keyID, algorithmVersion, 0, MPAlgorithm.mpw_default_type, new Instant(), MPMarshalFormat.DEFAULT );
+    public MPFileUser(final String fullName, @Nullable final byte[] keyID, final MPAlgorithm algorithm) {
+        this( fullName, keyID, algorithm, 0, algorithm.mpw_default_type(), new Instant(), MPMarshalFormat.DEFAULT );
     }
 
-    public MPFileUser(final String fullName, @Nullable final byte[] keyID, final MPMasterKey.Version algorithmVersion, final int avatar,
+    public MPFileUser(final String fullName, @Nullable final byte[] keyID, final MPAlgorithm algorithm, final int avatar,
                       final MPResultType defaultType, final ReadableInstant lastUsed, final MPMarshalFormat format) {
         this.fullName = fullName;
         this.keyID = (keyID == null)? null: keyID.clone();
-        this.algorithmVersion = algorithmVersion;
+        this.algorithm = algorithm;
         this.avatar = avatar;
         this.defaultType = defaultType;
         this.lastUsed = lastUsed;
@@ -75,12 +74,12 @@ public class MPFileUser extends MPUser<MPFileSite> implements Comparable<MPFileU
     }
 
     @Override
-    public MPMasterKey.Version getAlgorithmVersion() {
-        return algorithmVersion;
+    public MPAlgorithm getAlgorithm() {
+        return algorithm;
     }
 
-    public void setAlgorithmVersion(final MPMasterKey.Version algorithmVersion) {
-        this.algorithmVersion = algorithmVersion;
+    public void setAlgorithm(final MPAlgorithm algorithm) {
+        this.algorithm = algorithm;
     }
 
     public MPMarshalFormat getFormat() {
@@ -117,7 +116,7 @@ public class MPFileUser extends MPUser<MPFileSite> implements Comparable<MPFileU
     }
 
     public Iterable<MPFileSite> getSites() {
-        return sites;
+        return Collections.unmodifiableCollection( sites );
     }
 
     @Override
@@ -158,8 +157,8 @@ public class MPFileUser extends MPUser<MPFileSite> implements Comparable<MPFileU
         try {
             key = new MPMasterKey( getFullName(), masterPassword );
             if ((keyID == null) || (keyID.length == 0))
-                keyID = key.getKeyID( algorithmVersion );
-            else if (!Arrays.equals( key.getKeyID( algorithmVersion ), keyID ))
+                keyID = key.getKeyID( algorithm );
+            else if (!Arrays.equals( key.getKeyID( algorithm ), keyID ))
                 throw new MPIncorrectMasterPasswordException( this );
 
             return key;

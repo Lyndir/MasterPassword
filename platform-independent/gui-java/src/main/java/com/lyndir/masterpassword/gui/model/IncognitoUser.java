@@ -19,6 +19,7 @@
 package com.lyndir.masterpassword.gui.model;
 
 import com.google.common.collect.ImmutableList;
+import com.lyndir.masterpassword.MPAlgorithm;
 import com.lyndir.masterpassword.MPMasterKey;
 import com.lyndir.masterpassword.model.MPIncorrectMasterPasswordException;
 import com.lyndir.masterpassword.model.MPUser;
@@ -43,8 +44,8 @@ public class IncognitoUser extends MPUser<IncognitoSite> {
     }
 
     @Override
-    public MPMasterKey.Version getAlgorithmVersion() {
-        return MPMasterKey.Version.CURRENT;
+    public MPAlgorithm getAlgorithm() {
+        return MPMasterKey.Version.CURRENT.getAlgorithm();
     }
 
     @Override

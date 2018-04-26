@@ -148,7 +148,7 @@ public final class Preferences {
 
     @Nonnull
     public MPResultType getDefaultResultType() {
-        return MPResultType.values()[prefs().getInt( PREF_RESULT_TYPE, MPAlgorithm.mpw_default_type.ordinal() )];
+        return MPResultType.values()[prefs().getInt( PREF_RESULT_TYPE, getDefaultVersion().getAlgorithm().mpw_default_type().ordinal() )];
     }
 
     public boolean setDefaultVersion(final MPMasterKey.Version value) {

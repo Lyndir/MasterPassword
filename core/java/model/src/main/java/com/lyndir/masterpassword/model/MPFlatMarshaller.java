@@ -48,7 +48,7 @@ public class MPFlatMarshaller implements MPMarshaller {
         content.append( "# Full Name: " ).append( user.getFullName() ).append( '\n' );
         content.append( "# Avatar: " ).append( user.getAvatar() ).append( '\n' );
         content.append( "# Key ID: " ).append( user.exportKeyID() ).append( '\n' );
-        content.append( "# Algorithm: " ).append( user.getAlgorithmVersion().toInt() ).append( '\n' );
+        content.append( "# Algorithm: " ).append( user.getAlgorithm().version().toInt() ).append( '\n' );
         content.append( "# Default Type: " ).append( user.getDefaultType().getType() ).append( '\n' );
         content.append( "# Passwords: " ).append( contentMode.name() ).append( '\n' );
         content.append( "##\n" );
@@ -69,7 +69,7 @@ public class MPFlatMarshaller implements MPMarshaller {
                                   site.getUses(), // uses
                                   strf( "%d:%d:%d", //
                                         site.getResultType().getType(), // type
-                                        site.getAlgorithmVersion().toInt(), // algorithm
+                                        site.getAlgorithm().version().toInt(), // algorithm
                                         site.getSiteCounter().intValue() ), // counter
                                   ifNotNullElse( loginName, "" ), // loginName
                                   site.getSiteName(), // siteName

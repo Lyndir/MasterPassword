@@ -21,6 +21,8 @@ package com.lyndir.masterpassword;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import com.google.common.base.Charsets;
+import com.google.common.primitives.UnsignedBytes;
+import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.MessageAuthenticationDigests;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import java.nio.*;
@@ -66,7 +68,7 @@ public class MPIdenticon {
 
         IntBuffer identiconSeedBuffer = IntBuffer.allocate( identiconSeedBytes.capacity() );
         while (identiconSeedBytes.hasRemaining())
-            identiconSeedBuffer.put( identiconSeedBytes.get() & 0xFF );
+            identiconSeedBuffer.put( UnsignedBytes.toInt( identiconSeedBytes.get() ) );
         int[] identiconSeed = identiconSeedBuffer.array();
 
         color = colors[identiconSeed[4] % colors.length];

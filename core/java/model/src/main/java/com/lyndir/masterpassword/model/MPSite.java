@@ -43,24 +43,24 @@ public abstract class MPSite {
 
     public abstract void setResultType(MPResultType resultType);
 
-    public abstract MPMasterKey.Version getAlgorithmVersion();
+    public abstract MPAlgorithm getAlgorithm();
 
-    public abstract void setAlgorithmVersion(MPMasterKey.Version algorithmVersion);
+    public abstract void setAlgorithm(MPAlgorithm algorithm);
 
     public String resultFor(final MPMasterKey masterKey, final MPKeyPurpose keyPurpose, @Nullable final String keyContext,
                             @Nullable final String siteContent)
             throws MPInvalidatedException {
 
         return masterKey.siteResult(
-                getSiteName(), getSiteCounter(), keyPurpose, keyContext, getResultType(), siteContent, getAlgorithmVersion() );
+                getSiteName(), getSiteCounter(), keyPurpose, keyContext, getResultType(), siteContent, getAlgorithm() );
     }
 
     public String loginFor(final MPMasterKey masterKey, final MPResultType loginType, @Nullable final String loginContent)
             throws MPInvalidatedException {
 
         return masterKey.siteResult(
-                getSiteName(), MPAlgorithm.mpw_default_counter, MPKeyPurpose.Identification, null, loginType, loginContent,
-                getAlgorithmVersion() );
+                getSiteName(), getAlgorithm().mpw_default_counter(), MPKeyPurpose.Identification, null, loginType, loginContent,
+                getAlgorithm() );
     }
 
     @Override

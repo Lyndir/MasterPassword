@@ -31,6 +31,7 @@ import org.jetbrains.annotations.Contract;
  *
  * @author lhunath
  */
+@SuppressWarnings("RedundantTypeArguments" /* IDEA-191043 */)
 public enum MPResultType {
     // bit 0-3 | MPResultTypeClass | MPSiteFeature
 
@@ -134,7 +135,7 @@ public enum MPResultType {
     private final List<MPTemplate>   templates;
     private final MPResultTypeClass  typeClass;
     private final int                typeIndex;
-    private final Set<MPSiteFeature> typeFeatures;
+    private final ImmutableSet<MPSiteFeature> typeFeatures;
 
     MPResultType(final String shortName, final String description, final List<MPTemplate> templates,
                  final MPResultTypeClass typeClass, final int typeIndex, final MPSiteFeature... typeFeatures) {
@@ -166,7 +167,8 @@ public enum MPResultType {
         return typeClass;
     }
 
-    public Set<MPSiteFeature> getTypeFeatures() {
+    @SuppressWarnings("AssignmentOrReturnOfFieldWithMutableType" /* IDEA-191042 */ )
+    public ImmutableSet<MPSiteFeature> getTypeFeatures() {
 
         return typeFeatures;
     }
@@ -232,6 +234,7 @@ public enum MPResultType {
      *
      * @return All types that support the given mask's class & features.
      */
+    @SuppressWarnings({ "MagicNumber", "UnnecessaryParentheses" /* IDEA-191040 */ })
     public static ImmutableList<MPResultType> forMask(final int mask) {
 
         int typeMask = mask & ~0xF; // Ignore resultType bit 0-3

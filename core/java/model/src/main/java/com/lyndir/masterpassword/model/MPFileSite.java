@@ -35,7 +35,7 @@ public class MPFileSite extends MPSite {
     private       String              siteContent;
     private       UnsignedInteger     siteCounter;
     private       MPResultType        resultType;
-    private       MPMasterKey.Version algorithmVersion;
+    private       MPAlgorithm algorithm;
 
     @Nullable
     private String       loginContent;
@@ -49,24 +49,24 @@ public class MPFileSite extends MPSite {
 
     public MPFileSite(final MPFileUser user, final String siteName) {
         this( user, siteName,
-              user.getAlgorithmVersion().getAlgorithm().mpw_default_counter,
-              user.getAlgorithmVersion().getAlgorithm().mpw_default_type,
-              user.getAlgorithmVersion() );
+              user.getAlgorithm().mpw_default_counter(),
+              user.getAlgorithm().mpw_default_type(),
+              user.getAlgorithm() );
     }
 
     public MPFileSite(final MPFileUser user, final String siteName, final UnsignedInteger siteCounter, final MPResultType resultType,
-                      final MPMasterKey.Version algorithmVersion) {
+                      final MPAlgorithm algorithm) {
         this.user = user;
         this.siteName = siteName;
         this.siteCounter = siteCounter;
         this.resultType = resultType;
-        this.algorithmVersion = algorithmVersion;
+        this.algorithm = algorithm;
         this.lastUsed = new Instant();
     }
 
     protected MPFileSite(final MPFileUser user, final String siteName, @Nullable final String siteContent,
                          final UnsignedInteger siteCounter,
-                         final MPResultType resultType, final MPMasterKey.Version algorithmVersion,
+                         final MPResultType resultType, final MPAlgorithm algorithm,
                          @Nullable final String loginContent, @Nullable final MPResultType loginType,
                          @Nullable final String url, final int uses, final Instant lastUsed) {
         this.user = user;
@@ -74,7 +74,7 @@ public class MPFileSite extends MPSite {
         this.siteContent = siteContent;
         this.siteCounter = siteCounter;
         this.resultType = resultType;
-        this.algorithmVersion = algorithmVersion;
+        this.algorithm = algorithm;
         this.loginContent = loginContent;
         this.loginType = loginType;
         this.url = url;
@@ -129,7 +129,7 @@ public class MPFileSite extends MPSite {
             this.siteContent = null;
         else
             this.siteContent = masterKey.siteState(
-                    getSiteName(), getSiteCounter(), MPKeyPurpose.Authentication, null, getResultType(), result, getAlgorithmVersion() );
+                    getSiteName(), getSiteCounter(), MPKeyPurpose.Authentication, null, getResultType(), result, algorithm );
     }
 
     @Override
@@ -153,13 +153,13 @@ public class MPFileSite extends MPSite {
     }
 
     @Override
-    public MPMasterKey.Version getAlgorithmVersion() {
-        return algorithmVersion;
+    public MPAlgorithm getAlgorithm() {
+        return algorithm;
     }
 
     @Override
-    public void setAlgorithmVersion(final MPMasterKey.Version algorithmVersion) {
-        this.algorithmVersion = algorithmVersion;
+    public void setAlgorithm(final MPAlgorithm algorithm) {
+        this.algorithm = algorithm;
     }
 
     @Nullable
@@ -180,8 +180,8 @@ public class MPFileSite extends MPSite {
                 this.loginContent = null;
             else
                 this.loginContent = masterKey.siteState(
-                        siteName, MPAlgorithm.mpw_default_counter, MPKeyPurpose.Identification, null, this.loginType, result,
-                        algorithmVersion );
+                        siteName, algorithm.mpw_default_counter(), MPKeyPurpose.Identification, null, this.loginType, result,
+                        algorithm );
     }
 
     @Nullable

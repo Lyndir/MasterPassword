@@ -30,89 +30,102 @@ import javax.annotation.Nullable;
 /**
  * @see MPMasterKey.Version
  */
-public interface MPAlgorithm {
+@SuppressWarnings({ "FieldMayBeStatic", "NewMethodNamingConvention" })
+public abstract class MPAlgorithm {
+
+    public abstract byte[] masterKey(String fullName, char[] masterPassword);
+
+    public abstract byte[] siteKey(byte[] masterKey, String siteName, UnsignedInteger siteCounter, MPKeyPurpose keyPurpose,
+                   @Nullable String keyContext);
+
+    public abstract String siteResult(byte[] masterKey, byte[] siteKey, String siteName, UnsignedInteger siteCounter, MPKeyPurpose keyPurpose,
+                      @Nullable String keyContext, MPResultType resultType, @Nullable String resultParam);
+
+    public abstract String sitePasswordFromTemplate(byte[] masterKey, byte[] siteKey, MPResultType resultType, @Nullable String resultParam);
+
+    public abstract String sitePasswordFromCrypt(byte[] masterKey, byte[] siteKey, MPResultType resultType, @Nullable String resultParam);
+
+    public abstract String sitePasswordFromDerive(byte[] masterKey, byte[] siteKey, MPResultType resultType, @Nullable String resultParam);
+
+    public abstract String siteState(byte[] masterKey, byte[] siteKey, String siteName, UnsignedInteger siteCounter, MPKeyPurpose keyPurpose,
+                     @Nullable String keyContext, MPResultType resultType, String resultParam);
+
+    // Configuration
+
+    public abstract MPMasterKey.Version version();
 
     /**
      * mpw: defaults: password result type.
      */
-    MPResultType mpw_default_type = MPResultType.GeneratedLong;
+    public abstract MPResultType mpw_default_type();
 
     /**
      * mpw: defaults: initial counter value.
      */
-    UnsignedInteger mpw_default_counter = UnsignedInteger.ONE;
+    public abstract UnsignedInteger mpw_default_counter();
 
     /**
-     * mpw: validity for the time-based rolling counter.
+     * mpw: validity for the time-based rolling counter (s).
      */
-    int mpw_otp_window = 5 * 60 /* s */;
+    public abstract long mpw_otp_window();
 
     /**
      * mpw: Key ID hash.
      */
-    MessageDigests mpw_hash = MessageDigests.SHA256;
+    public abstract MessageDigests mpw_hash();
 
     /**
      * mpw: Site digest.
      */
-    MessageAuthenticationDigests mpw_digest = MessageAuthenticationDigests.HmacSHA256;
+    public abstract MessageAuthenticationDigests mpw_digest();
 
     /**
      * mpw: Platform-agnostic byte order.
      */
-    ByteOrder mpw_byteOrder = ByteOrder.BIG_ENDIAN;
+    public abstract ByteOrder mpw_byteOrder();
 
     /**
      * mpw: Input character encoding.
      */
-    Charset mpw_charset = Charsets.UTF_8;
+    public abstract Charset mpw_charset();
 
     /**
      * mpw: Master key size (byte).
      */
-    int mpw_dkLen = 64;
+    public abstract int mpw_dkLen();
+
+    /**
+     * mpw: Minimum size for derived keys (bit).
+     */
+    public abstract int mpw_keySize_min();
+
+    /**
+     * mpw: Maximum size for derived keys (bit).
+     */
+    public abstract int mpw_keySize_max();
 
     /**
      * scrypt: Parallelization parameter.
      */
-    int scrypt_p = 2;
+    public abstract int scrypt_p();
 
     /**
      * scrypt: Memory cost parameter.
      */
-    int scrypt_r = 8;
+    public abstract int scrypt_r();
 
     /**
      * scrypt: CPU cost parameter.
      */
-    int scrypt_N = 32768;
-
-    MPMasterKey.Version getAlgorithmVersion();
-
-    byte[] masterKey(String fullName, char[] masterPassword);
-
-    byte[] siteKey(byte[] masterKey, String siteName, UnsignedInteger siteCounter, MPKeyPurpose keyPurpose,
-                   @Nullable String keyContext);
-
-    String siteResult(byte[] masterKey, byte[] siteKey, String siteName, UnsignedInteger siteCounter, MPKeyPurpose keyPurpose,
-                      @Nullable String keyContext, MPResultType resultType, @Nullable String resultParam);
-
-    String sitePasswordFromTemplate(byte[] masterKey, byte[] siteKey, MPResultType resultType, @Nullable String resultParam);
-
-    String sitePasswordFromCrypt(byte[] masterKey, byte[] siteKey, MPResultType resultType, @Nullable String resultParam);
-
-    String sitePasswordFromDerive(byte[] masterKey, byte[] siteKey, MPResultType resultType, @Nullable String resultParam);
-
-    String siteState(byte[] masterKey, byte[] siteKey, String siteName, UnsignedInteger siteCounter, MPKeyPurpose keyPurpose,
-                     @Nullable String keyContext, MPResultType resultType, String resultParam);
+    public abstract int scrypt_N();
 
     // Utilities
 
-    byte[] toBytes(int number);
+    abstract byte[] toBytes(int number);
 
-    byte[] toBytes(UnsignedInteger number);
+    abstract byte[] toBytes(UnsignedInteger number);
 
-    byte[] toBytes(char[] characters);
+    abstract byte[] toBytes(char[] characters);
 
-    byte[] toID(byte[] bytes);
+    abstract byte[] toID(byte[] bytes);
 }

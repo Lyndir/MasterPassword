@@ -30,12 +30,6 @@ import javax.annotation.Nullable;
 public class MPAlgorithmV1 extends MPAlgorithmV0 {
 
     @Override
-    public MPMasterKey.Version getAlgorithmVersion() {
-
-        return MPMasterKey.Version.V1;
-    }
-
-    @Override
     public String sitePasswordFromTemplate(final byte[] masterKey, final byte[] siteKey, final MPResultType resultType,
                                            @Nullable final String resultParam) {
 
@@ -59,5 +53,12 @@ public class MPAlgorithmV1 extends MPAlgorithmV0 {
         logger.trc( "  => password: %s", password );
 
         return password.toString();
+    }
+
+    // Configuration
+
+    @Override
+    public MPMasterKey.Version version() {
+        return MPMasterKey.Version.V1;
     }
 }

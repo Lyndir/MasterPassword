@@ -38,6 +38,7 @@ import java.util.concurrent.Executors;
 import javax.annotation.Nullable;
 
 
+@SuppressWarnings("PublicMethodNotExposedInInterface" /* IDEA-191044 */)
 public class TestActivity extends Activity implements MPTestSuite.Listener {
 
     @SuppressWarnings("UnusedDeclaration")
@@ -64,6 +65,7 @@ public class TestActivity extends Activity implements MPTestSuite.Listener {
 
     private MPTestSuite               testSuite;
     private ListenableFuture<Boolean> testFuture;
+    @Nullable
     private Runnable                  action;
     private ImmutableSet<String>      testNames;
 

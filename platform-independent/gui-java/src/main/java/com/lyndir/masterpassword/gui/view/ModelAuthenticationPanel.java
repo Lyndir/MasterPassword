@@ -23,14 +23,14 @@ import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 import com.google.common.collect.ImmutableList;
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.logging.Logger;
-import com.lyndir.masterpassword.MPMasterKey;
-import com.lyndir.masterpassword.MPResultType;
+import com.lyndir.masterpassword.*;
 import com.lyndir.masterpassword.gui.Res;
 import com.lyndir.masterpassword.gui.util.Components;
 import com.lyndir.masterpassword.model.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -71,7 +71,7 @@ public class ModelAuthenticationPanel extends AuthenticationPanel<MPFileUser> im
         add( userLabel );
 
         userField = Components.comboBox( readConfigUsers() );
-        userField.setFont( Res.valueFont().deriveFont( 12f ) );
+        userField.setFont( Res.valueFont().deriveFont( userField.getFont().getSize2D() ) );
         userField.addItemListener( this );
         userField.addActionListener( this );
         userField.setRenderer( new DefaultListCellRenderer() {
@@ -128,6 +128,7 @@ public class ModelAuthenticationPanel extends AuthenticationPanel<MPFileUser> im
         super.updateUser( repack );
     }
 
+    @Nullable
     @Override
     protected MPFileUser getSelectedUser() {
         int selectedIndex = userField.getSelectedIndex();
@@ -210,8 +211,8 @@ public class ModelAuthenticationPanel extends AuthenticationPanel<MPFileUser> im
             @Override
             protected MPFileSite createSite(final MPFileUser user, final String siteName, final UnsignedInteger siteCounter,
                                             final MPResultType resultType,
-                                            final MPMasterKey.Version algorithmVersion) {
-                return new MPFileSite( user, siteName, siteCounter, resultType, algorithmVersion );
+                                            final MPAlgorithm algorithm) {
+                return new MPFileSite( user, siteName, siteCounter, resultType, algorithm );
             }
         };
     }

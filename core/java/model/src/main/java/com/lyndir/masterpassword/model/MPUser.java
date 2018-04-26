@@ -22,8 +22,7 @@ import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import com.google.common.base.Preconditions;
 import com.lyndir.lhunath.opal.system.CodeUtils;
-import com.lyndir.masterpassword.MPInvalidatedException;
-import com.lyndir.masterpassword.MPMasterKey;
+import com.lyndir.masterpassword.*;
 import java.util.Collection;
 import java.util.Objects;
 import javax.annotation.Nonnull;
@@ -51,10 +50,10 @@ public abstract class MPUser<S extends MPSite> {
 
     public String exportKeyID()
             throws MPInvalidatedException {
-        return CodeUtils.encodeHex( getMasterKey().getKeyID( getAlgorithmVersion() ) );
+        return CodeUtils.encodeHex( getMasterKey().getKeyID( getAlgorithm() ) );
     }
 
-    public abstract MPMasterKey.Version getAlgorithmVersion();
+    public abstract MPAlgorithm getAlgorithm();
 
     public int getAvatar() {
         return 0;

@@ -109,14 +109,15 @@ public class MPMasterKeyTest {
         MPMasterKey  masterKey      = new MPMasterKey( testCase.getFullName(), masterPassword );
 
         String password = randomString( 8 );
+        MPResultType resultType = MPResultType.StoredPersonal;
         for (final MPMasterKey.Version version : MPMasterKey.Version.values()) {
-            MPResultType resultType = MPResultType.StoredPersonal;
+            MPAlgorithm algorithm = version.getAlgorithm();
 
             // Test site state
             String state = masterKey.siteState( testCase.getSiteName(), testCase.getSiteCounter(), testCase.getKeyPurpose(),
-                                                testCase.getKeyContext(), resultType, password, version );
+                                                testCase.getKeyContext(), resultType, password, algorithm );
             String result = masterKey.siteResult( testCase.getSiteName(), testCase.getSiteCounter(), testCase.getKeyPurpose(),
-                                                  testCase.getKeyContext(), resultType, state, version );
+                                                  testCase.getKeyContext(), resultType, state, algorithm );
 
             assertEquals(
                     result,

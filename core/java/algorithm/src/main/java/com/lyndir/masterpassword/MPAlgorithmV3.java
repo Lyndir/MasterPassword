@@ -30,15 +30,9 @@ import java.util.Arrays;
 public class MPAlgorithmV3 extends MPAlgorithmV2 {
 
     @Override
-    public MPMasterKey.Version getAlgorithmVersion() {
-
-        return MPMasterKey.Version.V3;
-    }
-
-    @Override
     public byte[] masterKey(final String fullName, final char[] masterPassword) {
 
-        byte[] fullNameBytes       = fullName.getBytes( mpw_charset );
+        byte[] fullNameBytes       = fullName.getBytes( mpw_charset() );
         byte[] fullNameLengthBytes = toBytes( fullNameBytes.length );
 
         String keyScope = MPKeyPurpose.Authentication.getScope();
@@ -47,12 +41,12 @@ public class MPAlgorithmV3 extends MPAlgorithmV2 {
         // Calculate the master key salt.
         logger.trc( "masterKeySalt: keyScope=%s | #fullName=%s | fullName=%s",
                     keyScope, CodeUtils.encodeHex( fullNameLengthBytes ), fullName );
-        byte[] masterKeySalt = Bytes.concat( keyScope.getBytes( mpw_charset ), fullNameLengthBytes, fullNameBytes );
+        byte[] masterKeySalt = Bytes.concat( keyScope.getBytes( mpw_charset() ), fullNameLengthBytes, fullNameBytes );
         logger.trc( "  => masterKeySalt.id: %s", CodeUtils.encodeHex( toID( masterKeySalt ) ) );
 
         // Calculate the master key.
         logger.trc( "masterKey: scrypt( masterPassword, masterKeySalt, N=%d, r=%d, p=%d )",
-                    scrypt_N, scrypt_r, scrypt_p );
+                    scrypt_N(), scrypt_r(), scrypt_p() );
         byte[] mpBytes   = toBytes( masterPassword );
         byte[] masterKey = scrypt( masterKeySalt, mpBytes );
         Arrays.fill( masterKeySalt, (byte) 0 );
@@ -60,5 +54,12 @@ public class MPAlgorithmV3 extends MPAlgorithmV2 {
         logger.trc( "  => masterKey.id: %s", CodeUtils.encodeHex( toID( masterKey ) ) );
 
         return masterKey;
+    }
+
+    // Configuration
+
+    @Override
+    public MPMasterKey.Version version() {
+        return MPMasterKey.Version.V3;
     }
 }
