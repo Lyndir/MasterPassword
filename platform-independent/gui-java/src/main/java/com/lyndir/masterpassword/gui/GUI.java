@@ -18,6 +18,8 @@
 
 package com.lyndir.masterpassword.gui;
 
+import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
+
 import com.google.common.base.Charsets;
 import com.google.common.base.Optional;
 import com.google.common.io.CharSource;
@@ -57,7 +59,7 @@ public class GUI implements UnlockFrame.SignInCallback {
         try {
             UIManager.setLookAndFeel( UIManager.getSystemLookAndFeelClassName() );
         }
-        catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException ignored) {
+        catch (final UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException ignored) {
         }
 
         try {
@@ -69,7 +71,7 @@ public class GUI implements UnlockFrame.SignInCallback {
             else // No special platform handling.
                 new GUI().open();
         }
-        catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
+        catch (final IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
             throw logger.bug( e );
         }
     }
@@ -77,29 +79,35 @@ public class GUI implements UnlockFrame.SignInCallback {
     private static void checkUpdate() {
         try {
             Enumeration<URL> manifestURLs = Thread.currentThread().getContextClassLoader().getResources( JarFile.MANIFEST_NAME );
-            while (manifestURLs.hasMoreElements()) {
-                InputStream manifestStream = manifestURLs.nextElement().openStream();
-                Attributes  attributes     = new Manifest( manifestStream ).getMainAttributes();
-                if (!GUI.class.getCanonicalName().equals( attributes.getValue( Attributes.Name.MAIN_CLASS ) ))
-                    continue;
+            while (manifestURLs.hasMoreElements())
+                try (InputStream manifestStream = manifestURLs.nextElement().openStream()) {
+                    Attributes attributes = new Manifest( manifestStream ).getMainAttributes();
+                    if (!GUI.class.getCanonicalName().equals( attributes.getValue( Attributes.Name.MAIN_CLASS ) ))
+                        continue;
 
-                String     manifestRevision    = attributes.getValue( Attributes.Name.IMPLEMENTATION_VERSION );
-                String     upstreamRevisionURL = "https://masterpasswordapp.com/masterpassword-gui.jar.rev";
-                CharSource upstream            = Resources.asCharSource( URI.create( upstreamRevisionURL ).toURL(), Charsets.UTF_8 );
-                String     upstreamRevision    = upstream.readFirstLine();
-                if ((manifestRevision != null) && (upstreamRevision != null) && !manifestRevision.equalsIgnoreCase( upstreamRevision )) {
-                    logger.inf( "Local Revision:    <%s>", manifestRevision );
-                    logger.inf( "Upstream Revision: <%s>", upstreamRevision );
-                    logger.wrn( "You are not running the current official version.  Please update from:\n"
-                                + "https://masterpasswordapp.com/masterpassword-gui.jar" );
-                    JOptionPane.showMessageDialog( null, "A new version of Master Password is available.\n"
-                                                         + "Please download the latest version from http://masterpasswordapp.com",
-                                                   "Update Available", JOptionPane.WARNING_MESSAGE );
+                    String     manifestRevision    = attributes.getValue( Attributes.Name.IMPLEMENTATION_VERSION );
+                    String     upstreamRevisionURL = "https://masterpasswordapp.com/masterpassword-gui.jar.rev";
+                    CharSource upstream            = Resources.asCharSource( URI.create( upstreamRevisionURL ).toURL(), Charsets.UTF_8 );
+                    String     upstreamRevision    = upstream.readFirstLine();
+                    if ((manifestRevision != null) && (upstreamRevision != null) && !manifestRevision.equalsIgnoreCase(
+                            upstreamRevision )) {
+                        logger.inf( "Local Revision:    <%s>", manifestRevision );
+                        logger.inf( "Upstream Revision: <%s>", upstreamRevision );
+                        logger.wrn( "You are not running the current official version.  Please update from:%n%s",
+                                    "https://masterpasswordapp.com/masterpassword-gui.jar" );
+                        JOptionPane.showMessageDialog( null,
+                                                       strf( "A new version of Master Password is available.%n "
+                                                             + "Please download the latest version from %s",
+                                                             "https://masterpasswordapp.com" ),
+                                                       "Update Available", JOptionPane.WARNING_MESSAGE );
+                    }
                 }
-            }
+                catch (final IOException e) {
+                    logger.wrn( e, "Couldn't check for version update." );
+                }
         }
         catch (final IOException e) {
-            logger.wrn( e, "Couldn't check for version update." );
+            logger.wrn( e, "Couldn't inspect JAR." );
         }
     }
 

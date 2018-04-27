@@ -108,7 +108,7 @@ public class MPMasterKeyTest {
         char[]       masterPassword = testCase.getMasterPassword().toCharArray();
         MPMasterKey  masterKey      = new MPMasterKey( testCase.getFullName(), masterPassword );
 
-        String password = randomString( 8 );
+        String       password   = randomString( 8 );
         MPResultType resultType = MPResultType.StoredPersonal;
         for (final MPMasterKey.Version version : MPMasterKey.Version.values()) {
             MPAlgorithm algorithm = version.getAlgorithm();
@@ -126,7 +126,7 @@ public class MPMasterKeyTest {
         }
     }
 
-    public static String randomString(int length) {
+    private static String randomString(int length) {
         Random        random  = new Random();
         StringBuilder builder = new StringBuilder();
 

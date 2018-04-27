@@ -36,6 +36,7 @@ import javax.annotation.Nonnull;
  *
  * @author lhunath, 14-12-07
  */
+@SuppressWarnings("CallToSystemGetenv")
 public class MPFileUserManager extends MPUserManager {
 
     @SuppressWarnings("UnusedDeclaration")
@@ -50,21 +51,20 @@ public class MPFileUserManager extends MPUserManager {
             instance = create( new File( ifNotNullElseNullable( System.getProperty( "user.home" ), System.getenv( "HOME" ) ), ".mpw.d" ) );
     }
 
-    private final File userFilesDirectory;
+    private final File path;
 
     public static MPFileUserManager get() {
-        MPUserManager.instance = instance;
         return instance;
     }
 
-    public static MPFileUserManager create(final File userFilesDirectory) {
-        return new MPFileUserManager( userFilesDirectory );
+    public static MPFileUserManager create(final File path) {
+        return new MPFileUserManager( path );
     }
 
-    protected MPFileUserManager(final File userFilesDirectory) {
+    protected MPFileUserManager(final File path) {
 
-        super( unmarshallUsers( userFilesDirectory ) );
-        this.userFilesDirectory = userFilesDirectory;
+        super( unmarshallUsers( path ) );
+        this.path = path;
     }
 
     private static Iterable<MPFileUser> unmarshallUsers(final File userFilesDirectory) {
@@ -76,7 +76,7 @@ public class MPFileUserManager extends MPUserManager {
         Map<String, MPFileUser> users = new HashMap<>();
         for (final File userFile : listUserFiles( userFilesDirectory ))
             for (final MPMarshalFormat format : MPMarshalFormat.values())
-                if (userFile.getName().endsWith( '.' + format.fileExtension() ))
+                if (userFile.getName().endsWith( format.fileSuffix() ))
                     try {
                         MPFileUser user         = format.unmarshaller().unmarshall( userFile );
                         MPFileUser previousUser = users.put( user.getFullName(), user );
@@ -95,7 +95,7 @@ public class MPFileUserManager extends MPUserManager {
             @Override
             public boolean accept(final File dir, final String name) {
                 for (final MPMarshalFormat format : MPMarshalFormat.values())
-                    if (name.endsWith( '.' + format.fileExtension() ))
+                    if (name.endsWith( format.fileSuffix() ))
                         return true;
 
                 return false;
@@ -134,13 +134,13 @@ public class MPFileUserManager extends MPUserManager {
 
     @Nonnull
     private File getUserFile(final MPFileUser user) {
-        return new File( userFilesDirectory, user.getFullName() + ".mpsites" );
+        return new File( path, user.getFullName() + ".mpsites" );
     }
 
     /**
      * @return The location on the file system where the user models are stored.
      */
     public File getPath() {
-        return userFilesDirectory;
+        return path;
     }
 }

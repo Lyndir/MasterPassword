@@ -24,8 +24,8 @@ import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.ConversionUtils;
 import java.io.IOException;
-import java.util.Deque;
-import java.util.List;
+import java.net.URL;
+import java.util.*;
 import java.util.concurrent.Callable;
 import javax.xml.parsers.*;
 import org.xml.sax.Attributes;
@@ -56,7 +56,8 @@ public class MPTestSuite implements Callable<Boolean> {
         try {
             tests = new MPTests();
             tests.cases = Lists.newLinkedList();
-            SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
+            SAXParser        parser    = SAXParserFactory.newInstance().newSAXParser();
+            Enumeration<URL> resources = Thread.currentThread().getContextClassLoader().getResources( "." );
             parser.parse( Thread.currentThread().getContextClassLoader().getResourceAsStream( resourceName ), new DefaultHandler2() {
                 private final Deque<String> currentTags = Lists.newLinkedList();
                 private final Deque<StringBuilder> currentTexts = Lists.newLinkedList();
@@ -81,7 +82,7 @@ public class MPTestSuite implements Callable<Boolean> {
                         throws SAXException {
                     super.endElement( uri, localName, qName );
                     Preconditions.checkState( qName.equals( currentTags.pop() ) );
-                    String text = currentTexts.pop().toString();
+                    String text = Preconditions.checkNotNull( currentTexts.pop() ).toString();
 
                     if ("case".equals( qName ))
                         tests.cases.add( currentCase );
@@ -112,11 +113,11 @@ public class MPTestSuite implements Callable<Boolean> {
                         throws SAXException {
                     super.characters( ch, start, length );
 
-                    currentTexts.peek().append( ch, start, length );
+                    Preconditions.checkNotNull( currentTexts.peek() ).append( ch, start, length );
                 }
             } );
         }
-        catch (IllegalArgumentException | ParserConfigurationException | SAXException | IOException e) {
+        catch (final IllegalArgumentException | ParserConfigurationException | SAXException | IOException e) {
             throw new UnavailableException( e );
         }
 

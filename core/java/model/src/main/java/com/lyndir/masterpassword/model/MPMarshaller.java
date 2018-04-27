@@ -33,14 +33,15 @@ public interface MPMarshaller {
             throws MPInvalidatedException, MPMarshalException;
 
     enum ContentMode {
-        PROTECTED( "Export of site names and stored passwords (unless device-private) encrypted with the master key." ),
-        VISIBLE( "Export of site names and passwords in clear-text." );
+        PROTECTED( "Export of site names and stored passwords (unless device-private) encrypted with the master key.", true ),
+        VISIBLE( "Export of site names and passwords in clear-text.", false );
 
         private final String  description;
-        private       boolean redacted;
+        private final boolean redacted;
 
-        ContentMode(final String description) {
+        ContentMode(final String description, final boolean redacted) {
             this.description = description;
+            this.redacted = redacted;
         }
 
         public String description() {

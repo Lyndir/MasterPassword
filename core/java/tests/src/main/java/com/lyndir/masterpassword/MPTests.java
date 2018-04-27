@@ -28,6 +28,7 @@ import com.lyndir.lhunath.opal.system.util.NNSupplier;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
@@ -66,20 +67,23 @@ public class MPTests {
 
     public static class Case {
 
-        String          identifier;
-        String          parent;
-        Integer         algorithm;
-        String          fullName;
-        String          masterPassword;
-        String          keyID;
-        String          siteName;
+        String identifier;
+        String parent;
+        @Nullable
+        Integer algorithm;
+        String fullName;
+        String masterPassword;
+        String keyID;
+        String siteName;
+        @Nullable
         UnsignedInteger siteCounter;
-        String          resultType;
-        String          keyPurpose;
-        String          keyContext;
-        String          result;
+        String resultType;
+        String keyPurpose;
+        String keyContext;
+        String result;
 
-        private transient Case parentCase;
+        @XmlTransient
+        private Case parentCase;
 
         public void initializeParentHierarchy(final MPTests tests) {
 

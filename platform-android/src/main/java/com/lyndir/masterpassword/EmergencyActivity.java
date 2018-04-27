@@ -50,7 +50,7 @@ public class EmergencyActivity extends Activity {
     private static final Logger   logger                = Logger.get( EmergencyActivity.class );
     private static final ClipData EMPTY_CLIP            = new ClipData( new ClipDescription( "", new String[0] ), new ClipData.Item( "" ) );
     private static final int      PASSWORD_NOTIFICATION = 0;
-    public static final  int      CLIPBOARD_CLEAR_DELAY = 20 /* s */ * MPConstant.MS_PER_S;
+    private static final int      CLIPBOARD_CLEAR_DELAY = 20 /* s */ * MPConstant.MS_PER_S;
 
     private final Preferences                        preferences    = Preferences.get( this );
     private final ListeningExecutorService           executor       = MoreExecutors.listeningDecorator(
@@ -59,6 +59,7 @@ public class EmergencyActivity extends Activity {
             MPResultType.forClass( MPResultTypeClass.Template ) );
     private final ImmutableList<MPMasterKey.Version> allVersions    = ImmutableList.copyOf( MPMasterKey.Version.values() );
 
+    @Nullable
     private MPMasterKey masterKey;
 
     @BindView(R.id.progressView)
@@ -99,6 +100,7 @@ public class EmergencyActivity extends Activity {
 
     private int    id_userName;
     private int    id_masterPassword;
+    @Nullable
     private String sitePassword;
 
     public static void start(final Context context) {
@@ -176,13 +178,13 @@ public class EmergencyActivity extends Activity {
             }
         } );
 
-        fullNameField.setTypeface( Res.get( this ).exo_Thin );
+        fullNameField.setTypeface( Res.get( this ).exo_Thin() );
         fullNameField.setPaintFlags( fullNameField.getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG );
-        masterPasswordField.setTypeface( Res.get( this ).sourceCodePro_ExtraLight );
+        masterPasswordField.setTypeface( Res.get( this ).sourceCodePro_ExtraLight() );
         masterPasswordField.setPaintFlags( masterPasswordField.getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG );
-        siteNameField.setTypeface( Res.get( this ).exo_Regular );
+        siteNameField.setTypeface( Res.get( this ).exo_Regular() );
         siteNameField.setPaintFlags( siteNameField.getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG );
-        sitePasswordField.setTypeface( Res.get( this ).sourceCodePro_Black );
+        sitePasswordField.setTypeface( Res.get( this ).sourceCodePro_Black() );
         sitePasswordField.setPaintFlags( sitePasswordField.getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG );
 
         rememberFullNameField.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener() {
@@ -257,8 +259,8 @@ public class EmergencyActivity extends Activity {
     }
 
     private synchronized void updateMasterKey() {
-        final String fullName       = fullNameField.getText().toString();
-        final char[] masterPassword = masterPasswordField.getText().toString().toCharArray();
+        String fullName       = fullNameField.getText().toString();
+        char[] masterPassword = masterPasswordField.getText().toString().toCharArray();
         if ((id_userName == fullName.hashCode())
             && (id_masterPassword == Arrays.hashCode( masterPassword )))
             if (masterKey != null)
@@ -303,7 +305,8 @@ public class EmergencyActivity extends Activity {
             @Override
             public void run() {
                 try {
-                    sitePassword = masterKey.siteResult( siteName, counter, MPKeyPurpose.Authentication, null, type, null, version.getAlgorithm() );
+                    sitePassword = masterKey.siteResult( siteName, counter, MPKeyPurpose.Authentication, null, type, null,
+                                                         version.getAlgorithm() );
 
                     runOnUiThread( new Runnable() {
                         @Override
@@ -341,31 +344,39 @@ public class EmergencyActivity extends Activity {
 
         final ClipboardManager    clipboardManager    = (ClipboardManager) getSystemService( CLIPBOARD_SERVICE );
         final NotificationManager notificationManager = (NotificationManager) getSystemService( Context.NOTIFICATION_SERVICE );
+        if (clipboardManager == null)
+            return;
 
         String          title       = strf( "Password for %s", siteNameField.getText() );
         ClipDescription description = new ClipDescription( title, new String[]{ ClipDescription.MIMETYPE_TEXT_PLAIN } );
         clipboardManager.setPrimaryClip( new ClipData( description, new ClipData.Item( currentSitePassword ) ) );
 
-        Notification.Builder notificationBuilder = new Notification.Builder( this ).setContentTitle( title )
-                                                                                   .setContentText( "Paste the password into your app." )
-                                                                                   .setSmallIcon( R.drawable.icon )
-                                                                                   .setAutoCancel( true );
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            notificationBuilder.setVisibility( Notification.VISIBILITY_SECRET )
-                               .setCategory( Notification.CATEGORY_RECOMMENDATION )
-                               .setLocalOnly( true );
-        notificationManager.notify( PASSWORD_NOTIFICATION, notificationBuilder.build() );
+        if (notificationManager != null) {
+            Notification.Builder notificationBuilder = new Notification.Builder( this ).setContentTitle( title )
+                                                                                       .setContentText(
+                                                                                               "Paste the password into your app." )
+                                                                                       .setSmallIcon( R.drawable.icon )
+                                                                                       .setAutoCancel( true );
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                notificationBuilder.setVisibility( Notification.VISIBILITY_SECRET )
+                                   .setCategory( Notification.CATEGORY_RECOMMENDATION )
+                                   .setLocalOnly( true );
+            notificationManager.notify( PASSWORD_NOTIFICATION, notificationBuilder.build() );
+        }
+
         final Timer timer = new Timer();
         timer.schedule( new TimerTask() {
             @Override
             public void run() {
                 ClipData clip = clipboardManager.getPrimaryClip();
                 for (int i = 0; i < clip.getItemCount(); ++i)
-                    if (currentSitePassword.equals( clip.getItemAt( i ).coerceToText( EmergencyActivity.this ) )) {
+                    if (currentSitePassword.contentEquals( clip.getItemAt( i ).coerceToText( EmergencyActivity.this ) )) {
                         clipboardManager.setPrimaryClip( EMPTY_CLIP );
                         break;
                     }
-                notificationManager.cancel( PASSWORD_NOTIFICATION );
+
+                if (notificationManager != null)
+                    notificationManager.cancel( PASSWORD_NOTIFICATION );
                 timer.cancel();
             }
         }, CLIPBOARD_CLEAR_DELAY );

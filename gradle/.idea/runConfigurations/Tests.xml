@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Tests" type="TestNG" factoryName="TestNG" show_console_on_std_err="true">
-    <module name="" />
+    <module name="masterpassword-tests" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
     <option name="ALTERNATIVE_JRE_PATH" />
     <option name="SUITE_NAME" value="" />
@@ -13,15 +13,12 @@
     <option name="PARAMETERS" value="" />
     <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$/../core/java/tests" />
     <option name="OUTPUT_DIRECTORY" value="" />
-    <option name="ANNOTATION_TYPE" />
-    <option name="ENV_VARIABLES" />
     <option name="PASS_PARENT_ENVS" value="true" />
     <option name="TEST_SEARCH_SCOPE">
-      <value defaultName="wholeProject" />
+      <value defaultName="moduleWithDependencies" />
     </option>
     <option name="USE_DEFAULT_REPORTERS" value="false" />
     <option name="PROPERTIES_FILE" value="" />
-    <envs />
     <properties />
     <listeners />
     <method />

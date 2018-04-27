@@ -21,7 +21,8 @@ package com.lyndir.masterpassword;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.lyndir.lhunath.opal.system.logging.Logger;
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
 import javax.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
 
@@ -31,7 +32,7 @@ import org.jetbrains.annotations.Contract;
  *
  * @author lhunath
  */
-@SuppressWarnings("RedundantTypeArguments" /* IDEA-191043 */)
+@SuppressWarnings({ "RedundantTypeArguments", "SpellCheckingInspection" })
 public enum MPResultType {
     // bit 0-3 | MPResultTypeClass | MPSiteFeature
 
@@ -130,11 +131,11 @@ public enum MPResultType {
 
     static final Logger logger = Logger.get( MPResultType.class );
 
-    private final String             shortName;
-    private final String             description;
-    private final List<MPTemplate>   templates;
-    private final MPResultTypeClass  typeClass;
-    private final int                typeIndex;
+    private final String                      shortName;
+    private final String                      description;
+    private final List<MPTemplate>            templates;
+    private final MPResultTypeClass           typeClass;
+    private final int                         typeIndex;
     private final ImmutableSet<MPSiteFeature> typeFeatures;
 
     MPResultType(final String shortName, final String description, final List<MPTemplate> templates,
@@ -167,7 +168,7 @@ public enum MPResultType {
         return typeClass;
     }
 
-    @SuppressWarnings("AssignmentOrReturnOfFieldWithMutableType" /* IDEA-191042 */ )
+    @SuppressWarnings("AssignmentOrReturnOfFieldWithMutableType" /* IDEA-191042 */)
     public ImmutableSet<MPSiteFeature> getTypeFeatures() {
 
         return typeFeatures;

@@ -47,10 +47,10 @@ public class MPAlgorithmV3 extends MPAlgorithmV2 {
         // Calculate the master key.
         logger.trc( "masterKey: scrypt( masterPassword, masterKeySalt, N=%d, r=%d, p=%d )",
                     scrypt_N(), scrypt_r(), scrypt_p() );
-        byte[] mpBytes   = toBytes( masterPassword );
-        byte[] masterKey = scrypt( masterKeySalt, mpBytes );
+        byte[] masterPasswordBytes = toBytes( masterPassword );
+        byte[] masterKey           = scrypt( masterKeySalt, masterPasswordBytes );
         Arrays.fill( masterKeySalt, (byte) 0 );
-        Arrays.fill( mpBytes, (byte) 0 );
+        Arrays.fill( masterPasswordBytes, (byte) 0 );
         logger.trc( "  => masterKey.id: %s", CodeUtils.encodeHex( toID( masterKey ) ) );
 
         return masterKey;

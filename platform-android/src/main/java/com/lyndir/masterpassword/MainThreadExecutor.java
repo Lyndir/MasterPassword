@@ -25,6 +25,7 @@ import com.google.common.collect.Sets;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.*;
+import javax.annotation.Nonnull;
 
 
 /**
@@ -64,6 +65,7 @@ public class MainThreadExecutor extends AbstractExecutorService {
         shutdown = true;
     }
 
+    @Nonnull
     @Override
     public List<Runnable> shutdownNow() {
         shutdown = true;

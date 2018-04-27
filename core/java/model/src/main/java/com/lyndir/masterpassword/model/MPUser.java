@@ -45,7 +45,7 @@ public abstract class MPUser<S extends MPSite> {
 
     @Nonnull
     public MPMasterKey getMasterKey() {
-        return Preconditions.checkNotNull( key, "User is not authenticated: " + getFullName() );
+        return Preconditions.checkNotNull( key, "User is not authenticated: %s", getFullName() );
     }
 
     public String exportKeyID()

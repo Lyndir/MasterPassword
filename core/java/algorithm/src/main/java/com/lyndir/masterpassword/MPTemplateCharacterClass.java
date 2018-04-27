@@ -27,6 +27,7 @@ import org.jetbrains.annotations.NonNls;
  *
  * @author lhunath
  */
+@SuppressWarnings({ "HardcodedFileSeparator", "SpellCheckingInspection" })
 public enum MPTemplateCharacterClass {
 
     UpperVowel( 'V', "AEIOU" ),

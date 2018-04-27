@@ -32,6 +32,7 @@ import org.joda.time.ReadableInstant;
 /**
  * @author lhunath, 14-12-07
  */
+@SuppressWarnings("ComparableImplementedButEqualsNotOverridden")
 public class MPFileUser extends MPUser<MPFileSite> implements Comparable<MPFileUser> {
 
     @SuppressWarnings("UnusedDeclaration")
@@ -41,9 +42,9 @@ public class MPFileUser extends MPUser<MPFileSite> implements Comparable<MPFileU
     private final Collection<MPFileSite> sites = Sets.newHashSet();
 
     @Nullable
-    private byte[]              keyID;
-    private MPAlgorithm algorithm;
-    private MPMarshalFormat     format;
+    private byte[]          keyID;
+    private MPAlgorithm     algorithm;
+    private MPMarshalFormat format;
 
     private int             avatar;
     private MPResultType    defaultType;

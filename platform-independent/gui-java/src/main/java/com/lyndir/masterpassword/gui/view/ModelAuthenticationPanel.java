@@ -20,10 +20,12 @@ package com.lyndir.masterpassword.gui.view;
 
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.logging.Logger;
-import com.lyndir.masterpassword.*;
+import com.lyndir.masterpassword.MPAlgorithm;
+import com.lyndir.masterpassword.MPResultType;
 import com.lyndir.masterpassword.gui.Res;
 import com.lyndir.masterpassword.gui.util.Components;
 import com.lyndir.masterpassword.model.*;
@@ -171,7 +173,7 @@ public class ModelAuthenticationPanel extends AuthenticationPanel<MPFileUser> im
                             return;
 
                         if (JOptionPane.showConfirmDialog( ModelAuthenticationPanel.this, //
-                                                           strf( "Are you sure you want to delete the user and sites remembered for:\n%s.",
+                                                           strf( "Are you sure you want to delete the user and sites remembered for:%n%s.",
                                                                  deleteUser.getFullName() ), //
                                                            "Delete User", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE )
                             == JOptionPane.CANCEL_OPTION)
@@ -190,7 +192,7 @@ public class ModelAuthenticationPanel extends AuthenticationPanel<MPFileUser> im
                     @Override
                     public void actionPerformed(final ActionEvent e) {
                         JOptionPane.showMessageDialog( ModelAuthenticationPanel.this, //
-                                                       strf( "Reads users and sites from the directory at:\n%s",
+                                                       strf( "Reads users and sites from the directory at:%n%s",
                                                              MPFileUserManager.get().getPath().getAbsolutePath() ), //
                                                        "Help", JOptionPane.INFORMATION_MESSAGE );
                     }
@@ -207,7 +209,7 @@ public class ModelAuthenticationPanel extends AuthenticationPanel<MPFileUser> im
 
     @Override
     public PasswordFrame<MPFileUser, MPFileSite> newPasswordFrame() {
-        return new PasswordFrame<MPFileUser, MPFileSite>( getSelectedUser() ) {
+        return new PasswordFrame<MPFileUser, MPFileSite>( Preconditions.checkNotNull( getSelectedUser() ) ) {
             @Override
             protected MPFileSite createSite(final MPFileUser user, final String siteName, final UnsignedInteger siteCounter,
                                             final MPResultType resultType,

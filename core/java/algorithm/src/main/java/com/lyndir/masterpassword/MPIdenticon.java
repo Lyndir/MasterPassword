@@ -22,7 +22,6 @@ import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import com.google.common.base.Charsets;
 import com.google.common.primitives.UnsignedBytes;
-import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.MessageAuthenticationDigests;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import java.nio.*;

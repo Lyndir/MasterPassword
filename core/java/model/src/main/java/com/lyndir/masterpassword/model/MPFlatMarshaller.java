@@ -29,6 +29,7 @@ import org.joda.time.Instant;
 /**
  * @author lhunath, 2017-09-20
  */
+@SuppressWarnings({ "HardcodedLineSeparator", "MagicCharacter" })
 public class MPFlatMarshaller implements MPMarshaller {
 
     private static final int FORMAT = 1;

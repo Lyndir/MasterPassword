@@ -20,7 +20,8 @@ package com.lyndir.masterpassword.gui.view;
 
 import com.google.common.base.Preconditions;
 import com.google.common.primitives.UnsignedInteger;
-import com.lyndir.masterpassword.*;
+import com.lyndir.masterpassword.MPAlgorithm;
+import com.lyndir.masterpassword.MPResultType;
 import com.lyndir.masterpassword.gui.Res;
 import com.lyndir.masterpassword.gui.model.IncognitoSite;
 import com.lyndir.masterpassword.gui.model.IncognitoUser;

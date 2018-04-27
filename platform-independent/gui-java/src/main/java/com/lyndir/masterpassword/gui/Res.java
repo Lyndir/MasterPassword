@@ -47,7 +47,7 @@ import org.jetbrains.annotations.NonNls;
 /**
  * @author lhunath, 2014-06-11
  */
-@SuppressWarnings("HardcodedFileSeparator")
+@SuppressWarnings({ "HardcodedFileSeparator", "MethodReturnAlwaysConstant", "SpellCheckingInspection" })
 public abstract class Res {
 
     private static final int                                   AVATAR_COUNT     = 19;
@@ -210,7 +210,7 @@ public abstract class Res {
                 fontsByResourceName.put( fontResourceName, new SoftReference<>(
                         font = Font.createFont( Font.TRUETYPE_FONT, Resources.getResource( fontResourceName ).openStream() ) ) );
             }
-            catch (FontFormatException | IOException e) {
+            catch (final FontFormatException | IOException e) {
                 throw Throwables.propagate( e );
             }
 

@@ -39,8 +39,8 @@ public enum MPMarshalFormat {
         }
 
         @Override
-        public String fileExtension() {
-            return "mpsites";
+        public String fileSuffix() {
+            return ".mpsites";
         }
     },
 
@@ -59,8 +59,8 @@ public enum MPMarshalFormat {
         }
 
         @Override
-        public String fileExtension() {
-            return "mpsites.json";
+        public String fileSuffix() {
+            return ".mpsites.json";
         }
     };
 
@@ -70,5 +70,6 @@ public enum MPMarshalFormat {
 
     public abstract MPUnmarshaller unmarshaller();
 
-    public abstract String fileExtension();
+    @SuppressWarnings("MethodReturnAlwaysConstant")
+    public abstract String fileSuffix();
 }

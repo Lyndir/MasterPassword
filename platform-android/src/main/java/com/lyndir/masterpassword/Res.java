@@ -25,14 +25,15 @@ import android.graphics.Typeface;
 /**
  * @author lhunath, 2014-08-25
  */
+@SuppressWarnings("NewMethodNamingConvention")
 public final class Res {
 
-    public final Typeface sourceCodePro_Black;
-    public final Typeface sourceCodePro_ExtraLight;
-    public final Typeface exo_Bold;
-    public final Typeface exo_ExtraBold;
-    public final Typeface exo_Regular;
-    public final Typeface exo_Thin;
+    private final Typeface sourceCodePro_Black;
+    private final Typeface sourceCodePro_ExtraLight;
+    private final Typeface exo_Bold;
+    private final Typeface exo_ExtraBold;
+    private final Typeface exo_Regular;
+    private final Typeface exo_Thin;
 
     private static Res res;
 
@@ -52,5 +53,29 @@ public final class Res {
         exo_ExtraBold = Typeface.createFromAsset( context.getResources().getAssets(), "Exo2.0-ExtraBold.otf" );
         exo_Regular = Typeface.createFromAsset( context.getResources().getAssets(), "Exo2.0-Regular.otf" );
         exo_Thin = Typeface.createFromAsset( context.getResources().getAssets(), "Exo2.0-Thin.otf" );
+    }
+
+    public Typeface sourceCodePro_Black() {
+        return sourceCodePro_Black;
+    }
+
+    public Typeface sourceCodePro_ExtraLight() {
+        return sourceCodePro_ExtraLight;
+    }
+
+    public Typeface exo_Bold() {
+        return exo_Bold;
+    }
+
+    public Typeface exo_ExtraBold() {
+        return exo_ExtraBold;
+    }
+
+    public Typeface exo_Regular() {
+        return exo_Regular;
+    }
+
+    public Typeface exo_Thin() {
+        return exo_Thin;
     }
 }

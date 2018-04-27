@@ -16,25 +16,10 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-package com.lyndir.masterpassword.gui;
-
-import com.lyndir.lhunath.opal.system.util.ConversionUtils;
-import com.lyndir.masterpassword.MPConstant;
-
-
 /**
- * @author lhunath, 2014-08-31
+ * @author lhunath, 2018-04-26
  */
-@SuppressWarnings("CallToSystemGetenv")
-public class Config {
+@ParametersAreNonnullByDefault
+package com.lyndir.masterpassword.gui.platform.mac;
 
-    private static final Config instance = new Config();
-
-    public static Config get() {
-        return instance;
-    }
-
-    public boolean checkForUpdates() {
-        return ConversionUtils.toBoolean( System.getenv( MPConstant.env_checkUpdates ) ).or( true );
-    }
-}
+import javax.annotation.ParametersAreNonnullByDefault;

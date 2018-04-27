@@ -29,13 +29,13 @@ import org.joda.time.Instant;
  */
 public class MPFileSite extends MPSite {
 
-    private final MPFileUser          user;
-    private       String              siteName;
+    private final MPFileUser      user;
+    private       String          siteName;
     @Nullable
-    private       String              siteContent;
-    private       UnsignedInteger     siteCounter;
-    private       MPResultType        resultType;
-    private       MPAlgorithm algorithm;
+    private       String          siteContent;
+    private       UnsignedInteger siteCounter;
+    private       MPResultType    resultType;
+    private       MPAlgorithm     algorithm;
 
     @Nullable
     private String       loginContent;
@@ -122,14 +122,15 @@ public class MPFileSite extends MPSite {
         return siteContent;
     }
 
-    public void setSitePassword(final MPMasterKey masterKey, @Nullable final MPResultType resultType, @Nullable final String result)
+    public void setSitePassword(final MPMasterKey masterKey, final MPResultType resultType, @Nullable final String result)
             throws MPInvalidatedException {
         this.resultType = resultType;
+
         if (result == null)
             this.siteContent = null;
         else
             this.siteContent = masterKey.siteState(
-                    getSiteName(), getSiteCounter(), MPKeyPurpose.Authentication, null, getResultType(), result, algorithm );
+                    siteName, siteCounter, MPKeyPurpose.Authentication, null, resultType, result, algorithm );
     }
 
     @Override

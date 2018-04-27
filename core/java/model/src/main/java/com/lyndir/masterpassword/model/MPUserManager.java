@@ -29,11 +29,6 @@ import java.util.SortedSet;
 public abstract class MPUserManager {
 
     private final Map<String, MPFileUser> usersByName = Maps.newHashMap();
-    static        MPUserManager           instance;
-
-    public static MPUserManager get() {
-        return instance;
-    }
 
     protected MPUserManager(final Iterable<MPFileUser> users) {
         for (final MPFileUser user : users)

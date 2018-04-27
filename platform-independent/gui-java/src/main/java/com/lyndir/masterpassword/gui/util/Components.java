@@ -31,7 +31,7 @@ import javax.swing.border.CompoundBorder;
  */
 public abstract class Components {
 
-    public static final float CONTROL_TEXT_SIZE = 12f;
+    private static final float CONTROL_TEXT_SIZE = 12f;
 
     public static GradientPanel boxLayout(final int axis, final Component... components) {
         GradientPanel container = gradientPanel( null, null );

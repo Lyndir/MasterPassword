@@ -19,7 +19,8 @@
 package com.lyndir.masterpassword.gui.model;
 
 import com.google.common.primitives.UnsignedInteger;
-import com.lyndir.masterpassword.*;
+import com.lyndir.masterpassword.MPAlgorithm;
+import com.lyndir.masterpassword.MPResultType;
 import com.lyndir.masterpassword.model.MPSite;
 
 

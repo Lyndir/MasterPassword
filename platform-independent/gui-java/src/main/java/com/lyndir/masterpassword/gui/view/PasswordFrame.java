@@ -66,7 +66,7 @@ public abstract class PasswordFrame<U extends MPUser<S>, S extends MPSite> exten
     private S       currentSite;
     private boolean updatingUI;
 
-    @SuppressWarnings({ "MagicNumber", "OverridableMethodCallDuringObjectConstruction" })
+    @SuppressWarnings("MagicNumber")
     protected PasswordFrame(final U user) {
         super( "Master Password" );
         this.user = user;

@@ -19,12 +19,13 @@
 package com.lyndir.masterpassword.gui.view;
 
 import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
+import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import com.lyndir.masterpassword.MPIdenticon;
-import com.lyndir.masterpassword.gui.*;
-import com.lyndir.masterpassword.model.MPUser;
+import com.lyndir.masterpassword.gui.Res;
 import com.lyndir.masterpassword.gui.util.Components;
 import com.lyndir.masterpassword.model.MPIncorrectMasterPasswordException;
+import com.lyndir.masterpassword.model.MPUser;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.concurrent.Future;
@@ -47,6 +48,7 @@ public class UnlockFrame extends JFrame {
     private       AuthenticationPanel<?>   authenticationPanel;
     private       Future<?>                identiconFuture;
     private       boolean                  incognito;
+    @Nullable
     private       MPUser<?>                user;
 
     public UnlockFrame(final SignInCallback signInCallback) {
@@ -86,7 +88,7 @@ public class UnlockFrame extends JFrame {
         authenticationContainer.setBorder( BorderFactory.createEmptyBorder( 20, 20, 20, 20 ) );
         identiconLabel.setFont( Res.emoticonsFont().deriveFont( 14.f ) );
         identiconLabel.setToolTipText(
-                "A representation of your identity across all Master Password apps.\nIt should always be the same." );
+                strf( "A representation of your identity across all Master Password apps.%nIt should always be the same." ) );
         signInButton.addActionListener( new AbstractAction() {
             @Override
             public void actionPerformed(final ActionEvent e) {

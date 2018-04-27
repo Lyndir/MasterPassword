@@ -18,7 +18,6 @@
 
 package com.lyndir.masterpassword;
 
-import com.google.common.base.Charsets;
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.MessageAuthenticationDigests;
 import com.lyndir.lhunath.opal.system.MessageDigests;
@@ -30,25 +29,28 @@ import javax.annotation.Nullable;
 /**
  * @see MPMasterKey.Version
  */
-@SuppressWarnings({ "FieldMayBeStatic", "NewMethodNamingConvention" })
+@SuppressWarnings({ "FieldMayBeStatic", "NewMethodNamingConvention", "MethodReturnAlwaysConstant" })
 public abstract class MPAlgorithm {
 
     public abstract byte[] masterKey(String fullName, char[] masterPassword);
 
-    public abstract byte[] siteKey(byte[] masterKey, String siteName, UnsignedInteger siteCounter, MPKeyPurpose keyPurpose,
-                   @Nullable String keyContext);
+    public abstract byte[] siteKey(byte[] masterKey, String siteName, UnsignedInteger siteCounter,
+                                   MPKeyPurpose keyPurpose, @Nullable String keyContext);
 
-    public abstract String siteResult(byte[] masterKey, byte[] siteKey, String siteName, UnsignedInteger siteCounter, MPKeyPurpose keyPurpose,
-                      @Nullable String keyContext, MPResultType resultType, @Nullable String resultParam);
+    public abstract String siteResult(byte[] masterKey, byte[] siteKey, String siteName, UnsignedInteger siteCounter,
+                                      MPKeyPurpose keyPurpose, @Nullable String keyContext,
+                                      MPResultType resultType, @Nullable String resultParam);
 
-    public abstract String sitePasswordFromTemplate(byte[] masterKey, byte[] siteKey, MPResultType resultType, @Nullable String resultParam);
+    public abstract String sitePasswordFromTemplate(byte[] masterKey, byte[] siteKey,
+                                                    MPResultType resultType, @Nullable String resultParam);
 
     public abstract String sitePasswordFromCrypt(byte[] masterKey, byte[] siteKey, MPResultType resultType, @Nullable String resultParam);
 
     public abstract String sitePasswordFromDerive(byte[] masterKey, byte[] siteKey, MPResultType resultType, @Nullable String resultParam);
 
-    public abstract String siteState(byte[] masterKey, byte[] siteKey, String siteName, UnsignedInteger siteCounter, MPKeyPurpose keyPurpose,
-                     @Nullable String keyContext, MPResultType resultType, String resultParam);
+    public abstract String siteState(byte[] masterKey, byte[] siteKey, String siteName, UnsignedInteger siteCounter,
+                                     MPKeyPurpose keyPurpose, @Nullable String keyContext,
+                                     MPResultType resultType, String resultParam);
 
     // Configuration
 
