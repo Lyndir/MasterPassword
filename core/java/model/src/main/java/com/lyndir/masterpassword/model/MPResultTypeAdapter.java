@@ -19,39 +19,28 @@
 package com.lyndir.masterpassword.model;
 
 import com.google.gson.*;
-import com.lyndir.masterpassword.MPMasterKey;
 import com.lyndir.masterpassword.MPResultType;
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import javax.annotation.Nonnull;
+import java.lang.reflect.Type;
 
 
 /**
- * @author lhunath, 2017-09-20
+ * @author lhunath, 2018-04-27
  */
-public class MPJSONUnmarshaller implements MPUnmarshaller {
+public class MPResultTypeAdapter implements JsonSerializer<MPResultType>, JsonDeserializer<MPResultType> {
 
-    private final Gson gson = new GsonBuilder()
-            .registerTypeAdapter( MPMasterKey.Version.class, new EnumOrdinalAdapter() )
-            .registerTypeAdapter( MPResultType.class, new MPResultTypeAdapter() )
-            .setFieldNamingStrategy( FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES )
-            .setPrettyPrinting().create();
-
-    @Nonnull
     @Override
-    public MPFileUser unmarshall(@Nonnull final File file)
-            throws IOException, MPMarshalException {
-
-        try (Reader reader = new InputStreamReader( new FileInputStream( file ), StandardCharsets.UTF_8 )) {
-            return gson.fromJson( reader, MPJSONFile.class ).toUser();
+    public MPResultType deserialize(final JsonElement json, final Type typeOfT, final JsonDeserializationContext context)
+            throws JsonParseException {
+        try {
+            return MPResultType.forType( json.getAsInt() );
+        }
+        catch (final ClassCastException | IllegalStateException e) {
+            throw new JsonParseException( "Not an ordinal value: " + json, e );
         }
     }
 
-    @Nonnull
     @Override
-    public MPFileUser unmarshall(@Nonnull final String content)
-            throws MPMarshalException {
-
-        return gson.fromJson( content, MPJSONFile.class ).toUser();
+    public JsonElement serialize(final MPResultType src, final Type typeOfSrc, final JsonSerializationContext context) {
+        return new JsonPrimitive( src.getType() );
     }
 }

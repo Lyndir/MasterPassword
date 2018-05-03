@@ -108,7 +108,7 @@ public class MPFileUserManager extends MPUserManager {
         super.deleteUser( user );
 
         // Remove deleted users.
-        File userFile = getUserFile( user );
+        File userFile = getUserFile( user, user.getFormat() );
         if (userFile.exists() && !userFile.delete())
             logger.err( "Couldn't delete file: %s", userFile );
     }
@@ -119,13 +119,14 @@ public class MPFileUserManager extends MPUserManager {
     public void save(final MPFileUser user, final MPMasterKey masterKey)
             throws MPInvalidatedException {
         try {
+            final MPMarshalFormat format = user.getFormat();
             new CharSink() {
                 @Override
                 public Writer openStream()
                         throws IOException {
-                    return new OutputStreamWriter( new FileOutputStream( getUserFile( user ) ), Charsets.UTF_8 );
+                    return new OutputStreamWriter( new FileOutputStream( getUserFile( user, format ) ), Charsets.UTF_8 );
                 }
-            }.write( user.getFormat().marshaller().marshall( user, masterKey, MPMarshaller.ContentMode.PROTECTED ) );
+            }.write( format.marshaller().marshall( user, masterKey, MPMarshaller.ContentMode.PROTECTED ) );
         }
         catch (final MPMarshalException | IOException e) {
             logger.err( e, "Unable to save sites for user: %s", user );
@@ -133,8 +134,8 @@ public class MPFileUserManager extends MPUserManager {
     }
 
     @Nonnull
-    private File getUserFile(final MPFileUser user) {
-        return new File( path, user.getFullName() + ".mpsites" );
+    private File getUserFile(final MPFileUser user, final MPMarshalFormat format) {
+        return new File( path, user.getFullName() + format.fileSuffix() );
     }
 
     /**

@@ -39,7 +39,6 @@ public class MPFileSite extends MPSite {
 
     @Nullable
     private String       loginContent;
-    @Nullable
     private MPResultType loginType;
 
     @Nullable
@@ -48,35 +47,27 @@ public class MPFileSite extends MPSite {
     private Instant lastUsed;
 
     public MPFileSite(final MPFileUser user, final String siteName) {
-        this( user, siteName,
-              user.getAlgorithm().mpw_default_counter(),
-              user.getAlgorithm().mpw_default_type(),
-              user.getAlgorithm() );
+        this( user, siteName, null, null, user.getAlgorithm() );
     }
 
-    public MPFileSite(final MPFileUser user, final String siteName, final UnsignedInteger siteCounter, final MPResultType resultType,
-                      final MPAlgorithm algorithm) {
-        this.user = user;
-        this.siteName = siteName;
-        this.siteCounter = siteCounter;
-        this.resultType = resultType;
-        this.algorithm = algorithm;
-        this.lastUsed = new Instant();
+    public MPFileSite(final MPFileUser user, final String siteName, @Nullable final UnsignedInteger siteCounter,
+                      @Nullable final MPResultType resultType, final MPAlgorithm algorithm) {
+        this( user, siteName, null, siteCounter, resultType, algorithm,
+              null, null, null, 0, new Instant() );
     }
 
     protected MPFileSite(final MPFileUser user, final String siteName, @Nullable final String siteContent,
-                         final UnsignedInteger siteCounter,
-                         final MPResultType resultType, final MPAlgorithm algorithm,
+                         @Nullable final UnsignedInteger siteCounter, @Nullable final MPResultType resultType, final MPAlgorithm algorithm,
                          @Nullable final String loginContent, @Nullable final MPResultType loginType,
                          @Nullable final String url, final int uses, final Instant lastUsed) {
         this.user = user;
         this.siteName = siteName;
         this.siteContent = siteContent;
-        this.siteCounter = siteCounter;
-        this.resultType = resultType;
+        this.siteCounter = (siteCounter == null)? user.getAlgorithm().mpw_default_counter(): siteCounter;
+        this.resultType = (resultType == null)? user.getAlgorithm().mpw_default_type(): resultType;
         this.algorithm = algorithm;
         this.loginContent = loginContent;
-        this.loginType = loginType;
+        this.loginType = (loginType == null)? MPResultType.GeneratedName: loginType;
         this.url = url;
         this.uses = uses;
         this.lastUsed = lastUsed;
@@ -163,7 +154,6 @@ public class MPFileSite extends MPSite {
         this.algorithm = algorithm;
     }
 
-    @Nullable
     public MPResultType getLoginType() {
         return loginType;
     }

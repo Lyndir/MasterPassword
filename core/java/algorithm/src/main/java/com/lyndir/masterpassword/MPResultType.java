@@ -174,6 +174,11 @@ public enum MPResultType {
         return typeFeatures;
     }
 
+    public boolean supportsTypeFeature(final MPSiteFeature feature) {
+
+        return typeFeatures.contains( feature );
+    }
+
     public int getType() {
         int mask = typeIndex | typeClass.getMask();
         for (final MPSiteFeature typeFeature : typeFeatures)

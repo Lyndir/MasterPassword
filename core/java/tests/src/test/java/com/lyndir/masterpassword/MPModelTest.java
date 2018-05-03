@@ -16,29 +16,22 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-package com.lyndir.masterpassword.model;
+package com.lyndir.masterpassword;
 
-import com.google.gson.*;
-import com.lyndir.masterpassword.*;
-import javax.annotation.Nonnull;
+import com.lyndir.masterpassword.model.MPJSONUnmarshaller;
+import java.io.File;
+import org.testng.annotations.Test;
 
 
 /**
- * @author lhunath, 2017-09-20
+ * @author lhunath, 2018-04-27
  */
-public class MPJSONMarshaller implements MPMarshaller {
+public class MPModelTest {
 
-    private final Gson gson = new GsonBuilder()
-            .registerTypeAdapter( MPMasterKey.Version.class, new EnumOrdinalAdapter() )
-            .registerTypeAdapter( MPResultType.class, new MPResultTypeAdapter() )
-            .setFieldNamingStrategy( FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES )
-            .setPrettyPrinting().create();
-
-    @Nonnull
-    @Override
-    public String marshall(final MPFileUser user, final MPMasterKey masterKey, final ContentMode contentMode)
-            throws MPInvalidatedException, MPMarshalException {
-
-        return gson.toJson( new MPJSONFile( user, masterKey, contentMode ) );
+    @Test
+    public void testMasterKey()
+            throws Exception {
+        System.err.println( new MPJSONUnmarshaller().unmarshall(
+                new File( "/Users/lhunath/.mpw.d/Maarten Billemont.mpsites.json" ) ) );
     }
 }

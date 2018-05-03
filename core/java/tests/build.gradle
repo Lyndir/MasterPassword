@@ -6,6 +6,7 @@ description = 'Master Password Test Suite'
 
 dependencies {
     compile project( ':masterpassword-algorithm' )
+    compile project( ':masterpassword-model' )
 
     testCompile group: 'org.testng', name: 'testng', version: '6.8.5'
     testCompile group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.2'
