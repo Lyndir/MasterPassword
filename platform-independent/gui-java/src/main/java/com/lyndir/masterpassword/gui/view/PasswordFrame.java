@@ -108,7 +108,10 @@ public abstract class PasswordFrame<U extends MPUser<S>, S extends MPSite> exten
                                 passwordField.setText( null );
                                 siteNameField.setText( null );
 
-                                dispatchEvent( new WindowEvent( PasswordFrame.this, WindowEvent.WINDOW_CLOSING ) );
+                                String p = System.getProperty("mpw.keep-gui");
+                                if (p == null || p != "1") {
+                                    dispatchEvent( new WindowEvent( PasswordFrame.this, WindowEvent.WINDOW_CLOSING ) );
+                                }
                             }
                         } );
                     }
