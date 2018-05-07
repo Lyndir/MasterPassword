@@ -11,15 +11,6 @@ html, body {
 body * {
     /*outline: 1px solid rgba(255, 0, 0, 0.5);/**/
 }
-img, video {
-    margin:                 1ex 2%;
-    width:                  96%;
-
-    border-radius:          4px;
-    box-shadow:             0 1px 3px rgba(0, 0, 0, 0.6);
-    object-fit: contain;
-    box-sizing:             border-box;
-}
 h1 {
     margin:                 0;
 
@@ -36,6 +27,7 @@ h2 {
 
     img {
         display:            block;
+        width:              auto;
         height:             5em;
         margin:             auto;
         padding:            0 1ex;
@@ -184,6 +176,16 @@ section {
     padding:                2em 20px;
 
     font-size:              1.2em;
+
+    img, video {
+        margin:                 1ex 2%;
+        width:                  96%;
+
+        border-radius:          4px;
+        box-shadow:             0 1px 3px rgba(0, 0, 0, 0.6);
+        object-fit: contain;
+        box-sizing:             border-box;
+    }
 
     @media screen and (min-width: 1024px) {
         padding:            2em 100px;
