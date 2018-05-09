@@ -29,6 +29,7 @@ import java.io.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.joda.time.DateTime;
 
 
@@ -46,17 +47,17 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
 
     @Nonnull
     @Override
-    public MPFileUser unmarshall(@Nonnull final File file)
-            throws IOException, MPMarshalException {
+    public MPFileUser unmarshall(@Nonnull final File file, @Nullable final char[] masterPassword)
+            throws IOException, MPMarshalException, MPIncorrectMasterPasswordException, MPKeyUnavailableException {
         try (Reader reader = new InputStreamReader( new FileInputStream( file ), Charsets.UTF_8 )) {
-            return unmarshall( CharStreams.toString( reader ) );
+            return unmarshall( CharStreams.toString( reader ), masterPassword );
         }
     }
 
     @Nonnull
     @Override
-    public MPFileUser unmarshall(@Nonnull final String content)
-            throws MPMarshalException {
+    public MPFileUser unmarshall(@Nonnull final String content, @Nullable final char[] masterPassword)
+            throws MPMarshalException, MPIncorrectMasterPasswordException, MPKeyUnavailableException {
         MPFileUser   user         = null;
         byte[]       keyID        = null;
         String       fullName     = null;
@@ -74,7 +75,8 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
                 else
                     // Ends the header.
                     user = new MPFileUser( fullName, keyID, MPMasterKey.Version.fromInt( mpVersion ).getAlgorithm(),
-                                           avatar, defaultType, new DateTime( 0 ), MPMarshalFormat.Flat );
+                                           avatar, defaultType, new DateTime( 0 ), MPMarshalFormat.Flat,
+                                           clearContent? MPMarshaller.ContentMode.VISIBLE : MPMarshaller.ContentMode.PROTECTED );
 
                 // Comment.
             else if (line.startsWith( "#" )) {
@@ -113,25 +115,31 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
                 switch (importFormat) {
                     case 0:
                         site = new MPFileSite( user, //
-                                               siteMatcher.group( 5 ), siteMatcher.group( 6 ),
+                                               siteMatcher.group( 5 ), clearContent? null: siteMatcher.group( 6 ),
                                                user.getAlgorithm().mpw_default_counter(),
                                                MPResultType.forType( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ),
                                                MPMasterKey.Version.fromInt( ConversionUtils.toIntegerNN(
                                                        colon.matcher( siteMatcher.group( 4 ) ).replaceAll( "" ) ) ).getAlgorithm(),
                                                null, null, null, ConversionUtils.toIntegerNN( siteMatcher.group( 2 ) ),
                                                MPConstant.dateTimeFormatter.parseDateTime( siteMatcher.group( 1 ) ).toInstant() );
+                        if (clearContent)
+                            site.setSitePassword( site.getResultType(), siteMatcher.group( 6 ) );
                         break;
 
                     case 1:
                         site = new MPFileSite( user, //
-                                               siteMatcher.group( 7 ), siteMatcher.group( 8 ),
+                                               siteMatcher.group( 7 ), clearContent? null: siteMatcher.group( 8 ),
                                                UnsignedInteger.valueOf( colon.matcher( siteMatcher.group( 5 ) ).replaceAll( "" ) ),
                                                MPResultType.forType( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ),
                                                MPMasterKey.Version.fromInt( ConversionUtils.toIntegerNN(
                                                        colon.matcher( siteMatcher.group( 4 ) ).replaceAll( "" ) ) ).getAlgorithm(),
-                                               siteMatcher.group( 6 ), MPResultType.GeneratedName, null,
+                                               clearContent? null: siteMatcher.group( 6 ), MPResultType.GeneratedName, null,
                                                ConversionUtils.toIntegerNN( siteMatcher.group( 2 ) ),
                                                MPConstant.dateTimeFormatter.parseDateTime( siteMatcher.group( 1 ) ).toInstant() );
+                        if (clearContent) {
+                            site.setSitePassword( site.getResultType(), siteMatcher.group( 8 ) );
+                            site.setLoginName( MPResultType.StoredPersonal, siteMatcher.group( 6 ) );
+                        }
                         break;
 
                     default:

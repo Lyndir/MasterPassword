@@ -19,11 +19,11 @@
 package com.lyndir.masterpassword.model;
 
 import com.google.gson.*;
-import com.lyndir.masterpassword.MPMasterKey;
-import com.lyndir.masterpassword.MPResultType;
+import com.lyndir.masterpassword.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 
 /**
@@ -39,19 +39,29 @@ public class MPJSONUnmarshaller implements MPUnmarshaller {
 
     @Nonnull
     @Override
-    public MPFileUser unmarshall(@Nonnull final File file)
-            throws IOException, MPMarshalException {
+    public MPFileUser unmarshall(@Nonnull final File file, @Nullable final char[] masterPassword)
+            throws IOException, MPMarshalException, MPIncorrectMasterPasswordException, MPKeyUnavailableException {
 
         try (Reader reader = new InputStreamReader( new FileInputStream( file ), StandardCharsets.UTF_8 )) {
-            return gson.fromJson( reader, MPJSONFile.class ).toUser();
+            try {
+                return gson.fromJson( reader, MPJSONFile.class ).toUser( masterPassword );
+            }
+            catch (final JsonSyntaxException e) {
+                throw new MPMarshalException( "Couldn't parse JSON in: " + file, e );
+            }
         }
     }
 
     @Nonnull
     @Override
-    public MPFileUser unmarshall(@Nonnull final String content)
-            throws MPMarshalException {
+    public MPFileUser unmarshall(@Nonnull final String content, @Nullable final char[] masterPassword)
+            throws MPMarshalException, MPIncorrectMasterPasswordException, MPKeyUnavailableException {
 
-        return gson.fromJson( content, MPJSONFile.class ).toUser();
+        try {
+            return gson.fromJson( content, MPJSONFile.class ).toUser( masterPassword );
+        }
+        catch (final JsonSyntaxException e) {
+            throw new MPMarshalException( "Couldn't parse JSON", e );
+        }
     }
 }

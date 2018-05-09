@@ -56,14 +56,14 @@ public class MPMasterKey {
     /**
      * Derive the master key for a user based on their name and master password.
      *
-     * @throws MPInvalidatedException {@link #invalidate()} has been called on this object.
+     * @throws MPKeyUnavailableException {@link #invalidate()} has been called on this object.
      */
     private byte[] masterKey(final MPAlgorithm algorithm)
-            throws MPInvalidatedException {
+            throws MPKeyUnavailableException {
         Preconditions.checkArgument( masterPassword.length > 0 );
 
         if (invalidated)
-            throw new MPInvalidatedException();
+            throw new MPKeyUnavailableException();
 
         byte[] key = keyByVersion.get( algorithm.version() );
         if (key == null) {
@@ -81,11 +81,11 @@ public class MPMasterKey {
     /**
      * Derive the master key for a user based on their name and master password.
      *
-     * @throws MPInvalidatedException {@link #invalidate()} has been called on this object.
+     * @throws MPKeyUnavailableException {@link #invalidate()} has been called on this object.
      */
     private byte[] siteKey(final String siteName, final UnsignedInteger siteCounter, final MPKeyPurpose keyPurpose,
                            @Nullable final String keyContext, final MPAlgorithm algorithm)
-            throws MPInvalidatedException {
+            throws MPKeyUnavailableException {
         Preconditions.checkArgument( !siteName.isEmpty() );
 
         byte[] masterKey = masterKey( algorithm );
@@ -110,12 +110,12 @@ public class MPMasterKey {
      * @param resultParam A parameter for the resultType.  For stateful result types, the output of
      *                    {@link #siteState(String, UnsignedInteger, MPKeyPurpose, String, MPResultType, String, MPAlgorithm)}.
      *
-     * @throws MPInvalidatedException {@link #invalidate()} has been called on this object.
+     * @throws MPKeyUnavailableException {@link #invalidate()} has been called on this object.
      */
     public String siteResult(final String siteName, final UnsignedInteger siteCounter, final MPKeyPurpose keyPurpose,
                              @Nullable final String keyContext, final MPResultType resultType, @Nullable final String resultParam,
                              final MPAlgorithm algorithm)
-            throws MPInvalidatedException {
+            throws MPKeyUnavailableException {
 
         byte[] masterKey = masterKey( algorithm );
         byte[] siteKey   = siteKey( siteName, siteCounter, keyPurpose, keyContext, algorithm );
@@ -139,12 +139,12 @@ public class MPMasterKey {
      * @param resultParam The result token desired from
      *                    {@link #siteResult(String, UnsignedInteger, MPKeyPurpose, String, MPResultType, String, MPAlgorithm)}.
      *
-     * @throws MPInvalidatedException {@link #invalidate()} has been called on this object.
+     * @throws MPKeyUnavailableException {@link #invalidate()} has been called on this object.
      */
     public String siteState(final String siteName, final UnsignedInteger siteCounter, final MPKeyPurpose keyPurpose,
                             @Nullable final String keyContext, final MPResultType resultType, @Nullable final String resultParam,
                             final MPAlgorithm algorithm)
-            throws MPInvalidatedException {
+            throws MPKeyUnavailableException {
 
         Preconditions.checkNotNull( resultParam );
         Preconditions.checkArgument( !resultParam.isEmpty() );
@@ -169,10 +169,10 @@ public class MPMasterKey {
     /**
      * Calculate an identifier for the master key.
      *
-     * @throws MPInvalidatedException {@link #invalidate()} has been called on this object.
+     * @throws MPKeyUnavailableException {@link #invalidate()} has been called on this object.
      */
     public byte[] getKeyID(final MPAlgorithm algorithm)
-            throws MPInvalidatedException {
+            throws MPKeyUnavailableException {
 
         return algorithm.toID( masterKey( algorithm ) );
     }

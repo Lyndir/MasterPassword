@@ -64,7 +64,7 @@ public class MPMasterKeyTest {
                     masterKey.getKeyID( testCase.getAlgorithm() );
                     fail( "[testMasterKey] invalidate ineffective: " + testCase );
                 }
-                catch (final MPInvalidatedException ignored) {
+                catch (final MPKeyUnavailableException ignored) {
                 }
                 assertNotEquals(
                         masterPassword,

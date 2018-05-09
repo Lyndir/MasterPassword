@@ -42,9 +42,10 @@ public class MPFileUser extends MPUser<MPFileSite> implements Comparable<MPFileU
     private final Collection<MPFileSite> sites = Sets.newHashSet();
 
     @Nullable
-    private byte[]          keyID;
-    private MPAlgorithm     algorithm;
-    private MPMarshalFormat format;
+    private byte[]                   keyID;
+    private MPAlgorithm              algorithm;
+    private MPMarshalFormat          format;
+    private MPMarshaller.ContentMode contentMode;
 
     private int             avatar;
     private MPResultType    defaultType;
@@ -55,11 +56,13 @@ public class MPFileUser extends MPUser<MPFileSite> implements Comparable<MPFileU
     }
 
     public MPFileUser(final String fullName, @Nullable final byte[] keyID, final MPAlgorithm algorithm) {
-        this( fullName, keyID, algorithm, 0, algorithm.mpw_default_type(), new Instant(), MPMarshalFormat.DEFAULT );
+        this( fullName, keyID, algorithm, 0, algorithm.mpw_default_password_type(), new Instant(),
+              MPMarshalFormat.DEFAULT, MPMarshaller.ContentMode.PROTECTED );
     }
 
     public MPFileUser(final String fullName, @Nullable final byte[] keyID, final MPAlgorithm algorithm, final int avatar,
-                      final MPResultType defaultType, final ReadableInstant lastUsed, final MPMarshalFormat format) {
+                      final MPResultType defaultType, final ReadableInstant lastUsed,
+                      final MPMarshalFormat format, final MPMarshaller.ContentMode contentMode) {
         this.fullName = fullName;
         this.keyID = (keyID == null)? null: keyID.clone();
         this.algorithm = algorithm;
@@ -67,11 +70,17 @@ public class MPFileUser extends MPUser<MPFileSite> implements Comparable<MPFileU
         this.defaultType = defaultType;
         this.lastUsed = lastUsed;
         this.format = format;
+        this.contentMode = contentMode;
     }
 
     @Override
     public String getFullName() {
         return fullName;
+    }
+
+    @Nullable
+    public byte[] getKeyID() {
+        return (keyID == null)? null: keyID.clone();
     }
 
     @Override
@@ -89,6 +98,14 @@ public class MPFileUser extends MPUser<MPFileSite> implements Comparable<MPFileU
 
     public void setFormat(final MPMarshalFormat format) {
         this.format = format;
+    }
+
+    public MPMarshaller.ContentMode getContentMode() {
+        return contentMode;
+    }
+
+    public void setContentMode(final MPMarshaller.ContentMode contentMode) {
+        this.contentMode = contentMode;
     }
 
     @Override
@@ -164,13 +181,13 @@ public class MPFileUser extends MPUser<MPFileSite> implements Comparable<MPFileU
 
             return key;
         }
-        catch (final MPInvalidatedException e) {
+        catch (final MPKeyUnavailableException e) {
             throw logger.bug( e );
         }
     }
 
     void save()
-            throws MPInvalidatedException {
+            throws MPKeyUnavailableException {
         MPFileUserManager.get().save( this, getMasterKey() );
     }
 

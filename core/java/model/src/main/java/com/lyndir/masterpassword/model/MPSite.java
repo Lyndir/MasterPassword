@@ -31,6 +31,8 @@ import javax.annotation.Nullable;
  */
 public abstract class MPSite {
 
+    public abstract MPUser<?> getUser();
+
     public abstract String getSiteName();
 
     public abstract void setSiteName(String siteName);
@@ -43,24 +45,28 @@ public abstract class MPSite {
 
     public abstract void setResultType(MPResultType resultType);
 
+    public abstract MPResultType getLoginType();
+
+    public abstract void setLoginType(@Nullable MPResultType loginType);
+
     public abstract MPAlgorithm getAlgorithm();
 
     public abstract void setAlgorithm(MPAlgorithm algorithm);
 
-    public String resultFor(final MPMasterKey masterKey, final MPKeyPurpose keyPurpose, @Nullable final String keyContext,
+    public String getResult(final MPKeyPurpose keyPurpose, @Nullable final String keyContext,
                             @Nullable final String siteContent)
-            throws MPInvalidatedException {
+            throws MPKeyUnavailableException {
 
-        return masterKey.siteResult(
+        return getUser().getMasterKey().siteResult(
                 getSiteName(), getSiteCounter(), keyPurpose, keyContext, getResultType(), siteContent, getAlgorithm() );
     }
 
-    public String loginFor(final MPMasterKey masterKey, final MPResultType loginType, @Nullable final String loginContent)
-            throws MPInvalidatedException {
+    public String getLogin(@Nullable final String loginContent)
+            throws MPKeyUnavailableException {
 
-        return masterKey.siteResult(
-                getSiteName(), getAlgorithm().mpw_default_counter(), MPKeyPurpose.Identification, null, loginType, loginContent,
-                getAlgorithm() );
+        return getUser().getMasterKey().siteResult(
+                getSiteName(), getAlgorithm().mpw_default_counter(), MPKeyPurpose.Identification, null,
+                getLoginType(), loginContent, getAlgorithm() );
     }
 
     @Override

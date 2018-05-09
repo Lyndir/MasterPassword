@@ -42,5 +42,5 @@ public final class MPConstant {
 
     public static final int MS_PER_S = 1000;
 
-    public static final DateTimeFormatter dateTimeFormatter = ISODateTimeFormat.dateTimeNoMillis();
+    public static final DateTimeFormatter dateTimeFormatter = ISODateTimeFormat.dateTimeNoMillis().withZoneUTC();
 }

@@ -31,14 +31,14 @@ public class MPJSONMarshaller implements MPMarshaller {
     private final Gson gson = new GsonBuilder()
             .registerTypeAdapter( MPMasterKey.Version.class, new EnumOrdinalAdapter() )
             .registerTypeAdapter( MPResultType.class, new MPResultTypeAdapter() )
-            .setFieldNamingStrategy( FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES )
+            .setFieldNamingStrategy( FieldNamingPolicy.IDENTITY )
             .setPrettyPrinting().create();
 
     @Nonnull
     @Override
-    public String marshall(final MPFileUser user, final MPMasterKey masterKey, final ContentMode contentMode)
-            throws MPInvalidatedException, MPMarshalException {
+    public String marshall(final MPFileUser user)
+            throws MPKeyUnavailableException, MPMarshalException {
 
-        return gson.toJson( new MPJSONFile( user, masterKey, contentMode ) );
+        return gson.toJson( new MPJSONFile( user ) );
     }
 }

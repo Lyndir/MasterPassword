@@ -86,9 +86,8 @@ public class IncognitoAuthenticationPanel extends AuthenticationPanel<IncognitoU
         return new PasswordFrame<IncognitoUser, IncognitoSite>( Preconditions.checkNotNull( getSelectedUser() ) ) {
             @Override
             protected IncognitoSite createSite(final IncognitoUser user, final String siteName, final UnsignedInteger siteCounter,
-                                               final MPResultType resultType,
-                                               final MPAlgorithm algorithm) {
-                return new IncognitoSite( siteName, siteCounter, resultType, algorithm );
+                                               final MPResultType resultType, final MPAlgorithm algorithm) {
+                return new IncognitoSite( user, siteName, siteCounter, resultType, algorithm );
             }
         };
     }

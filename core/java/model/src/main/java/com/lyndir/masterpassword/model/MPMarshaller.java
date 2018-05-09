@@ -18,8 +18,7 @@
 
 package com.lyndir.masterpassword.model;
 
-import com.lyndir.masterpassword.MPInvalidatedException;
-import com.lyndir.masterpassword.MPMasterKey;
+import com.lyndir.masterpassword.MPKeyUnavailableException;
 import javax.annotation.Nonnull;
 
 
@@ -29,8 +28,8 @@ import javax.annotation.Nonnull;
 public interface MPMarshaller {
 
     @Nonnull
-    String marshall(MPFileUser user, MPMasterKey masterKey, ContentMode contentMode)
-            throws MPInvalidatedException, MPMarshalException;
+    String marshall(MPFileUser user)
+            throws MPKeyUnavailableException, MPMarshalException;
 
     enum ContentMode {
         PROTECTED( "Export of site names and stored passwords (unless device-private) encrypted with the master key.", true ),

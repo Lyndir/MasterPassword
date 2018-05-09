@@ -83,8 +83,8 @@ public class MPAlgorithmV0 extends MPAlgorithm {
     }
 
     @Override
-    public byte[] siteKey(final byte[] masterKey, final String siteName, UnsignedInteger siteCounter, final MPKeyPurpose keyPurpose,
-                          @Nullable final String keyContext) {
+    public byte[] siteKey(final byte[] masterKey, final String siteName, UnsignedInteger siteCounter,
+                          final MPKeyPurpose keyPurpose, @Nullable final String keyContext) {
 
         String keyScope = keyPurpose.getScope();
         logger.trc( "keyScope: %s", keyScope );
@@ -117,8 +117,8 @@ public class MPAlgorithmV0 extends MPAlgorithm {
 
     @Override
     public String siteResult(final byte[] masterKey, final byte[] siteKey, final String siteName, final UnsignedInteger siteCounter,
-                             final MPKeyPurpose keyPurpose,
-                             @Nullable final String keyContext, final MPResultType resultType, @Nullable final String resultParam) {
+                             final MPKeyPurpose keyPurpose, @Nullable final String keyContext,
+                             final MPResultType resultType, @Nullable final String resultParam) {
 
         switch (resultType.getTypeClass()) {
             case Template:
@@ -133,8 +133,8 @@ public class MPAlgorithmV0 extends MPAlgorithm {
     }
 
     @Override
-    public String sitePasswordFromTemplate(final byte[] masterKey, final byte[] siteKey, final MPResultType resultType,
-                                           @Nullable final String resultParam) {
+    public String sitePasswordFromTemplate(final byte[] masterKey, final byte[] siteKey,
+                                           final MPResultType resultType, @Nullable final String resultParam) {
 
         int[] _siteKey = new int[siteKey.length];
         for (int i = 0; i < siteKey.length; ++i) {
@@ -168,8 +168,8 @@ public class MPAlgorithmV0 extends MPAlgorithm {
     }
 
     @Override
-    public String sitePasswordFromCrypt(final byte[] masterKey, final byte[] siteKey, final MPResultType resultType,
-                                        @Nullable final String resultParam) {
+    public String sitePasswordFromCrypt(final byte[] masterKey, final byte[] siteKey,
+                                        final MPResultType resultType, @Nullable final String resultParam) {
 
         Preconditions.checkNotNull( resultParam );
         Preconditions.checkArgument( !resultParam.isEmpty() );
@@ -192,8 +192,8 @@ public class MPAlgorithmV0 extends MPAlgorithm {
     }
 
     @Override
-    public String sitePasswordFromDerive(final byte[] masterKey, final byte[] siteKey, final MPResultType resultType,
-                                         @Nullable final String resultParam) {
+    public String sitePasswordFromDerive(final byte[] masterKey, final byte[] siteKey,
+                                         final MPResultType resultType, @Nullable final String resultParam) {
 
         if (resultType == MPResultType.DeriveKey) {
             int resultParamInt = ConversionUtils.toIntegerNN( resultParam );
@@ -220,8 +220,8 @@ public class MPAlgorithmV0 extends MPAlgorithm {
 
     @Override
     public String siteState(final byte[] masterKey, final byte[] siteKey, final String siteName, final UnsignedInteger siteCounter,
-                            final MPKeyPurpose keyPurpose,
-                            @Nullable final String keyContext, final MPResultType resultType, final String resultParam) {
+                            final MPKeyPurpose keyPurpose, @Nullable final String keyContext,
+                            final MPResultType resultType, final String resultParam) {
 
         try {
             // Encrypt
@@ -246,111 +246,77 @@ public class MPAlgorithmV0 extends MPAlgorithm {
         return MPMasterKey.Version.V0;
     }
 
-    /**
-     * mpw: defaults: password result type.
-     */
     @Override
-    public MPResultType mpw_default_type() {
+    public MPResultType mpw_default_password_type() {
         return MPResultType.GeneratedLong;
     }
 
-    /**
-     * mpw: defaults: initial counter value.
-     */
+    @Override
+    public MPResultType mpw_default_login_type() {
+        return MPResultType.GeneratedName;
+    }
+
     @Override
     public UnsignedInteger mpw_default_counter() {
         return UnsignedInteger.ONE;
     }
 
-    /**
-     * mpw: validity for the time-based rolling counter.
-     */
     @Override
     @SuppressWarnings("MagicNumber")
     public long mpw_otp_window() {
         return 5 * 60 /* s */;
     }
 
-    /**
-     * mpw: Key ID hash.
-     */
     @Override
     public MessageDigests mpw_hash() {
         return MessageDigests.SHA256;
     }
 
-    /**
-     * mpw: Site digest.
-     */
     @Override
     public MessageAuthenticationDigests mpw_digest() {
         return MessageAuthenticationDigests.HmacSHA256;
     }
 
-    /**
-     * mpw: Platform-agnostic byte order.
-     */
     @Override
     public ByteOrder mpw_byteOrder() {
         return ByteOrder.BIG_ENDIAN;
     }
 
-    /**
-     * mpw: Input character encoding.
-     */
     @Override
     public Charset mpw_charset() {
         return Charsets.UTF_8;
     }
 
-    /**
-     * mpw: Master key size (byte).
-     */
     @Override
     @SuppressWarnings("MagicNumber")
     public int mpw_dkLen() {
         return 64;
     }
 
-    /**
-     * mpw: Minimum size for derived keys (bit).
-     */
     @Override
     @SuppressWarnings("MagicNumber")
     public int mpw_keySize_min() {
         return 128;
     }
 
-    /**
-     * mpw: Maximum size for derived keys (bit).
-     */
     @Override
     @SuppressWarnings("MagicNumber")
     public int mpw_keySize_max() {
         return 512;
     }
 
-    /**
-     * scrypt: Parallelization parameter.
-     */
     @Override
     @SuppressWarnings("MagicNumber")
     public int scrypt_p() {
         return 2;
     }
 
-    /**
-     * scrypt: Memory cost parameter.
-     */
     @Override
     @SuppressWarnings("MagicNumber")
     public int scrypt_r() {
         return 8;
     }
 
-    /**
-     * scrypt: CPU cost parameter.
-     */
     @Override
     @SuppressWarnings("MagicNumber")
     public int scrypt_N() {

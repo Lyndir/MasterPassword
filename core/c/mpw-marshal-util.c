@@ -38,6 +38,7 @@ char *mpw_get_token(const char **in, const char *eol, char *delim) {
 time_t mpw_mktime(
         const char *time) {
 
+    // TODO: Support parsing timezone into tm_gmtoff
     struct tm tm = { .tm_isdst = -1 };
     if (time && sscanf( time, "%4d-%2d-%2dT%2d:%2d:%2dZ",
             &tm.tm_year, &tm.tm_mon, &tm.tm_mday,

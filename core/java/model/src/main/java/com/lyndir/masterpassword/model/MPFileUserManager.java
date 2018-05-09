@@ -78,13 +78,16 @@ public class MPFileUserManager extends MPUserManager {
             for (final MPMarshalFormat format : MPMarshalFormat.values())
                 if (userFile.getName().endsWith( format.fileSuffix() ))
                     try {
-                        MPFileUser user         = format.unmarshaller().unmarshall( userFile );
+                        MPFileUser user         = format.unmarshaller().unmarshall( userFile, null );
                         MPFileUser previousUser = users.put( user.getFullName(), user );
                         if ((previousUser != null) && (previousUser.getFormat().ordinal() > user.getFormat().ordinal()))
                             users.put( previousUser.getFullName(), previousUser );
                     }
                     catch (final IOException | MPMarshalException e) {
                         logger.err( e, "Couldn't read user from: %s", userFile );
+                    }
+                    catch (final MPKeyUnavailableException | MPIncorrectMasterPasswordException e) {
+                        logger.err( e, "Couldn't authenticate user for: %s", userFile );
                     }
 
         return users.values();
@@ -117,7 +120,7 @@ public class MPFileUserManager extends MPUserManager {
      * Write the current user state to disk.
      */
     public void save(final MPFileUser user, final MPMasterKey masterKey)
-            throws MPInvalidatedException {
+            throws MPKeyUnavailableException {
         try {
             final MPMarshalFormat format = user.getFormat();
             new CharSink() {
@@ -126,7 +129,7 @@ public class MPFileUserManager extends MPUserManager {
                         throws IOException {
                     return new OutputStreamWriter( new FileOutputStream( getUserFile( user, format ) ), Charsets.UTF_8 );
                 }
-            }.write( format.marshaller().marshall( user, masterKey, MPMarshaller.ContentMode.PROTECTED ) );
+            }.write( format.marshaller().marshall( user ) );
         }
         catch (final MPMarshalException | IOException e) {
             logger.err( e, "Unable to save sites for user: %s", user );

@@ -20,7 +20,6 @@ package com.lyndir.masterpassword.model;
 
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
-import com.google.common.base.Preconditions;
 import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.masterpassword.*;
 import java.util.Collection;
@@ -44,12 +43,16 @@ public abstract class MPUser<S extends MPSite> {
     }
 
     @Nonnull
-    public MPMasterKey getMasterKey() {
-        return Preconditions.checkNotNull( key, "User is not authenticated: %s", getFullName() );
+    public MPMasterKey getMasterKey()
+            throws MPKeyUnavailableException {
+        if (key == null)
+            throw new MPKeyUnavailableException();
+
+        return key;
     }
 
     public String exportKeyID()
-            throws MPInvalidatedException {
+            throws MPKeyUnavailableException {
         return CodeUtils.encodeHex( getMasterKey().getKeyID( getAlgorithm() ) );
     }
 

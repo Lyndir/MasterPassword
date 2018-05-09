@@ -59,7 +59,12 @@ public abstract class MPAlgorithm {
     /**
      * mpw: defaults: password result type.
      */
-    public abstract MPResultType mpw_default_type();
+    public abstract MPResultType mpw_default_password_type();
+
+    /**
+     * mpw: defaults: login result type.
+     */
+    public abstract MPResultType mpw_default_login_type();
 
     /**
      * mpw: defaults: initial counter value.

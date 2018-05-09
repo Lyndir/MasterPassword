@@ -18,10 +18,14 @@
 
 package com.lyndir.masterpassword.gui.model;
 
+import static com.lyndir.lhunath.opal.system.util.ObjectUtils.ifNotNullElse;
+
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.masterpassword.MPAlgorithm;
 import com.lyndir.masterpassword.MPResultType;
 import com.lyndir.masterpassword.model.MPSite;
+import com.lyndir.masterpassword.model.MPUser;
+import javax.annotation.Nullable;
 
 
 /**
@@ -29,17 +33,26 @@ import com.lyndir.masterpassword.model.MPSite;
  */
 public class IncognitoSite extends MPSite {
 
+    private final IncognitoUser user;
+
     private String          siteName;
     private UnsignedInteger siteCounter;
     private MPResultType    resultType;
+    private MPResultType loginType;
     private MPAlgorithm     algorithm;
 
-    public IncognitoSite(final String siteName, final UnsignedInteger siteCounter, final MPResultType resultType,
+    public IncognitoSite(final IncognitoUser user, final String siteName, final UnsignedInteger siteCounter, final MPResultType resultType,
                          final MPAlgorithm algorithm) {
+        this.user = user;
         this.siteName = siteName;
         this.siteCounter = siteCounter;
         this.resultType = resultType;
         this.algorithm = algorithm;
+    }
+
+    @Override
+    public MPUser<?> getUser() {
+        return user;
     }
 
     @Override
@@ -60,6 +73,16 @@ public class IncognitoSite extends MPSite {
     @Override
     public void setResultType(final MPResultType resultType) {
         this.resultType = resultType;
+    }
+
+    @Override
+    public MPResultType getLoginType() {
+        return loginType;
+    }
+
+    @Override
+    public void setLoginType(@Nullable final MPResultType loginType) {
+        this.loginType = ifNotNullElse( loginType, getAlgorithm().mpw_default_login_type() );
     }
 
     @Override

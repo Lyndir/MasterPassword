@@ -147,7 +147,7 @@ public abstract class PasswordFrame<U extends MPUser<S>, S extends MPSite> exten
                                                         siteCounterField = Components.spinner( siteCounterModel ) );
         sitePanel.add( siteSettings );
         resultTypeField.setFont( Res.valueFont().deriveFont( resultTypeField.getFont().getSize2D() ) );
-        resultTypeField.setSelectedItem( user.getAlgorithm().mpw_default_type() );
+        resultTypeField.setSelectedItem( user.getAlgorithm().mpw_default_password_type() );
         resultTypeField.addItemListener( new ItemListener() {
             @Override
             public void itemStateChanged(final ItemEvent e) {

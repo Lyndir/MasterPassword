@@ -316,7 +316,7 @@ public class EmergencyActivity extends Activity {
                         }
                     } );
                 }
-                catch (final MPInvalidatedException ignored) {
+                catch (final MPKeyUnavailableException ignored) {
                     sitePasswordField.setText( "" );
                     progressView.setVisibility( View.INVISIBLE );
                 }

@@ -18,8 +18,11 @@
 
 package com.lyndir.masterpassword;
 
-import com.lyndir.masterpassword.model.MPJSONUnmarshaller;
-import java.io.File;
+import com.google.common.base.Charsets;
+import com.google.common.io.CharStreams;
+import com.lyndir.masterpassword.model.*;
+import java.io.*;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 
@@ -31,7 +34,12 @@ public class MPModelTest {
     @Test
     public void testMasterKey()
             throws Exception {
-        System.err.println( new MPJSONUnmarshaller().unmarshall(
-                new File( "/Users/lhunath/.mpw.d/Maarten Billemont.mpsites.json" ) ) );
+        File       file   = new File( "/Users/lhunath/.mpw.d/Maarten Billemont.mpsites.json" );
+        String     orig   = CharStreams.toString( new InputStreamReader( new FileInputStream( file ), Charsets.UTF_8 ) );
+        System.out.println(orig);
+        MPFileUser user   = new MPJSONUnmarshaller().unmarshall( file, null );
+        String     result = new MPJSONMarshaller().marshall( user );
+        System.out.println(result);
+        Assert.assertEquals( result, orig, "Marshalled sites do not match original sites." );
     }
 }

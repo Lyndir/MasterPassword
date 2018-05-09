@@ -18,9 +18,11 @@
 
 package com.lyndir.masterpassword.model;
 
+import com.lyndir.masterpassword.MPKeyUnavailableException;
 import java.io.File;
 import java.io.IOException;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 
 /**
@@ -29,10 +31,10 @@ import javax.annotation.Nonnull;
 public interface MPUnmarshaller {
 
     @Nonnull
-    MPFileUser unmarshall(@Nonnull File file)
-            throws IOException, MPMarshalException;
+    MPFileUser unmarshall(@Nonnull File file, @Nullable char[] masterPassword)
+            throws IOException, MPMarshalException, MPIncorrectMasterPasswordException, MPKeyUnavailableException;
 
     @Nonnull
-    MPFileUser unmarshall(@Nonnull String content)
-            throws MPMarshalException;
+    MPFileUser unmarshall(@Nonnull String content, @Nullable char[] masterPassword)
+            throws MPMarshalException, MPIncorrectMasterPasswordException, MPKeyUnavailableException;
 }

@@ -36,11 +36,11 @@ public class MPFlatMarshaller implements MPMarshaller {
 
     @Nonnull
     @Override
-    public String marshall(final MPFileUser user, final MPMasterKey masterKey, final ContentMode contentMode)
-            throws MPInvalidatedException, MPMarshalException {
+    public String marshall(final MPFileUser user)
+            throws MPKeyUnavailableException, MPMarshalException {
         StringBuilder content = new StringBuilder();
         content.append( "# Master Password site export\n" );
-        content.append( "#     " ).append( contentMode.description() ).append( '\n' );
+        content.append( "#     " ).append( user.getContentMode().description() ).append( '\n' );
         content.append( "# \n" );
         content.append( "##\n" );
         content.append( "# Format: " ).append( FORMAT ).append( '\n' );
@@ -51,18 +51,18 @@ public class MPFlatMarshaller implements MPMarshaller {
         content.append( "# Key ID: " ).append( user.exportKeyID() ).append( '\n' );
         content.append( "# Algorithm: " ).append( user.getAlgorithm().version().toInt() ).append( '\n' );
         content.append( "# Default Type: " ).append( user.getDefaultType().getType() ).append( '\n' );
-        content.append( "# Passwords: " ).append( contentMode.name() ).append( '\n' );
+        content.append( "# Passwords: " ).append( user.getContentMode().name() ).append( '\n' );
         content.append( "##\n" );
         content.append( "#\n" );
         content.append( "#               Last     Times  Password                      Login\t                     Site\tSite\n" );
         content.append( "#               used      used      type                       name\t                     name\tpassword\n" );
 
         for (final MPFileSite site : user.getSites()) {
-            String loginName = site.getLoginContent();
-            String password  = site.getSiteContent();
-            if (!contentMode.isRedacted()) {
-                loginName = site.loginFor( masterKey );
-                password = site.resultFor( masterKey );
+            String loginName = site.getLoginState();
+            String password  = site.getSiteState();
+            if (!user.getContentMode().isRedacted()) {
+                loginName = site.getLogin();
+                password = site.getResult();
             }
 
             content.append( strf( "%s  %8d  %8s  %25s\t%25s\t%s\n", //

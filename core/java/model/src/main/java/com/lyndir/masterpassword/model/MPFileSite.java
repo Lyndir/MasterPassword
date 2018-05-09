@@ -18,10 +18,14 @@
 
 package com.lyndir.masterpassword.model;
 
+import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
+
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.masterpassword.*;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.joda.time.Instant;
+import org.joda.time.ReadableInstant;
 
 
 /**
@@ -29,22 +33,23 @@ import org.joda.time.Instant;
  */
 public class MPFileSite extends MPSite {
 
-    private final MPFileUser      user;
-    private       String          siteName;
+    private final MPFileUser user;
+
+    private String          siteName;
     @Nullable
-    private       String          siteContent;
-    private       UnsignedInteger siteCounter;
-    private       MPResultType    resultType;
-    private       MPAlgorithm     algorithm;
+    private String          siteState;
+    private UnsignedInteger siteCounter;
+    private MPResultType    resultType;
+    private MPAlgorithm     algorithm;
 
     @Nullable
-    private String       loginContent;
+    private String       loginState;
     private MPResultType loginType;
 
     @Nullable
-    private String  url;
-    private int     uses;
-    private Instant lastUsed;
+    private String          url;
+    private int             uses;
+    private ReadableInstant lastUsed;
 
     public MPFileSite(final MPFileUser user, final String siteName) {
         this( user, siteName, null, null, user.getAlgorithm() );
@@ -56,45 +61,43 @@ public class MPFileSite extends MPSite {
               null, null, null, 0, new Instant() );
     }
 
-    protected MPFileSite(final MPFileUser user, final String siteName, @Nullable final String siteContent,
+    protected MPFileSite(final MPFileUser user, final String siteName, @Nullable final String siteState,
                          @Nullable final UnsignedInteger siteCounter, @Nullable final MPResultType resultType, final MPAlgorithm algorithm,
-                         @Nullable final String loginContent, @Nullable final MPResultType loginType,
-                         @Nullable final String url, final int uses, final Instant lastUsed) {
+                         @Nullable final String loginState, @Nullable final MPResultType loginType,
+                         @Nullable final String url, final int uses, final ReadableInstant lastUsed) {
         this.user = user;
         this.siteName = siteName;
-        this.siteContent = siteContent;
-        this.siteCounter = (siteCounter == null)? user.getAlgorithm().mpw_default_counter(): siteCounter;
-        this.resultType = (resultType == null)? user.getAlgorithm().mpw_default_type(): resultType;
+        this.siteState = siteState;
+        this.siteCounter = ifNotNullElse( siteCounter, user.getAlgorithm().mpw_default_counter() );
+        this.resultType = ifNotNullElse( resultType, user.getAlgorithm().mpw_default_password_type() );
         this.algorithm = algorithm;
-        this.loginContent = loginContent;
-        this.loginType = (loginType == null)? MPResultType.GeneratedName: loginType;
+        this.loginState = loginState;
+        this.loginType = ifNotNullElse( loginType, getAlgorithm().mpw_default_login_type() );
         this.url = url;
         this.uses = uses;
         this.lastUsed = lastUsed;
     }
 
-    public String resultFor(final MPMasterKey masterKey)
-            throws MPInvalidatedException {
+    public String getResult()
+            throws MPKeyUnavailableException {
 
-        return resultFor( masterKey, MPKeyPurpose.Authentication, null );
+        return getResult( MPKeyPurpose.Authentication, null );
     }
 
-    public String resultFor(final MPMasterKey masterKey, final MPKeyPurpose keyPurpose, @Nullable final String keyContext)
-            throws MPInvalidatedException {
+    public String getResult(final MPKeyPurpose keyPurpose, @Nullable final String keyContext)
+            throws MPKeyUnavailableException {
 
-        return resultFor( masterKey, keyPurpose, keyContext, getSiteContent() );
+        return getResult( keyPurpose, keyContext, siteState );
     }
 
-    public String loginFor(final MPMasterKey masterKey)
-            throws MPInvalidatedException {
+    public String getLogin()
+            throws MPKeyUnavailableException {
 
-        if (loginType == null)
-            loginType = MPResultType.GeneratedName;
-
-        return loginFor( masterKey, loginType, loginContent );
+        return getLogin( loginState );
     }
 
-    public MPFileUser getUser() {
+    @Override
+    public MPUser<?> getUser() {
         return user;
     }
 
@@ -109,18 +112,18 @@ public class MPFileSite extends MPSite {
     }
 
     @Nullable
-    public String getSiteContent() {
-        return siteContent;
+    public String getSiteState() {
+        return siteState;
     }
 
-    public void setSitePassword(final MPMasterKey masterKey, final MPResultType resultType, @Nullable final String result)
-            throws MPInvalidatedException {
+    public void setSitePassword(final MPResultType resultType, @Nullable final String result)
+            throws MPKeyUnavailableException {
         this.resultType = resultType;
 
         if (result == null)
-            this.siteContent = null;
+            this.siteState = null;
         else
-            this.siteContent = masterKey.siteState(
+            this.siteState = user.getMasterKey().siteState(
                     siteName, siteCounter, MPKeyPurpose.Authentication, null, resultType, result, algorithm );
     }
 
@@ -145,6 +148,17 @@ public class MPFileSite extends MPSite {
     }
 
     @Override
+    public MPResultType getLoginType() {
+        return loginType;
+    }
+
+    @Override
+    public void setLoginType(@Nullable final MPResultType loginType) {
+        this.loginType = ifNotNullElse( loginType, getAlgorithm().mpw_default_login_type() );
+
+    }
+
+    @Override
     public MPAlgorithm getAlgorithm() {
         return algorithm;
     }
@@ -154,25 +168,17 @@ public class MPFileSite extends MPSite {
         this.algorithm = algorithm;
     }
 
-    public MPResultType getLoginType() {
-        return loginType;
-    }
-
     @Nullable
-    public String getLoginContent() {
-        return loginContent;
+    public String getLoginState() {
+        return loginState;
     }
 
-    public void setLoginName(final MPMasterKey masterKey, @Nullable final MPResultType loginType, @Nullable final String result)
-            throws MPInvalidatedException {
+    public void setLoginName(@Nonnull final MPResultType loginType, @Nonnull final String loginName)
+            throws MPKeyUnavailableException {
         this.loginType = loginType;
-        if (this.loginType != null)
-            if (result == null)
-                this.loginContent = null;
-            else
-                this.loginContent = masterKey.siteState(
-                        siteName, algorithm.mpw_default_counter(), MPKeyPurpose.Identification, null, this.loginType, result,
-                        algorithm );
+        this.loginState = user.getMasterKey().siteState(
+                siteName, algorithm.mpw_default_counter(), MPKeyPurpose.Identification, null,
+                this.loginType, loginName, algorithm );
     }
 
     @Nullable
@@ -188,7 +194,7 @@ public class MPFileSite extends MPSite {
         return uses;
     }
 
-    public Instant getLastUsed() {
+    public ReadableInstant getLastUsed() {
         return lastUsed;
     }
 
