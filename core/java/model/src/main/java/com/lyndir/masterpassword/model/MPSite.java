@@ -18,10 +18,12 @@
 
 package com.lyndir.masterpassword.model;
 
+import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.masterpassword.*;
+import java.util.Collection;
 import java.util.Objects;
 import javax.annotation.Nullable;
 
@@ -54,20 +56,39 @@ public abstract class MPSite {
     public abstract void setAlgorithm(MPAlgorithm algorithm);
 
     public String getResult(final MPKeyPurpose keyPurpose, @Nullable final String keyContext,
-                            @Nullable final String siteContent)
+                            @Nullable final String state)
+            throws MPKeyUnavailableException {
+
+        return getResult( keyPurpose, keyContext, getSiteCounter(), getResultType(), state );
+    }
+
+    protected String getResult(final MPKeyPurpose keyPurpose, @Nullable final String keyContext,
+                               @Nullable final UnsignedInteger siteCounter, final MPResultType type,
+                               @Nullable final String state)
             throws MPKeyUnavailableException {
 
         return getUser().getMasterKey().siteResult(
-                getSiteName(), getSiteCounter(), keyPurpose, keyContext, getResultType(), siteContent, getAlgorithm() );
+                getSiteName(), ifNotNullElse( siteCounter, getAlgorithm().mpw_default_counter() ), keyPurpose, keyContext,
+                type, state, getAlgorithm() );
+    }
+
+    protected String getState(final MPKeyPurpose keyPurpose, @Nullable final String keyContext,
+                               @Nullable final UnsignedInteger siteCounter, final MPResultType type,
+                               @Nullable final String state)
+            throws MPKeyUnavailableException {
+
+        return getUser().getMasterKey().siteState(
+                getSiteName(), ifNotNullElse( siteCounter, getAlgorithm().mpw_default_counter() ), keyPurpose, keyContext,
+                type, state, getAlgorithm() );
     }
 
     public String getLogin(@Nullable final String loginContent)
             throws MPKeyUnavailableException {
 
-        return getUser().getMasterKey().siteResult(
-                getSiteName(), getAlgorithm().mpw_default_counter(), MPKeyPurpose.Identification, null,
-                getLoginType(), loginContent, getAlgorithm() );
+        return getResult( MPKeyPurpose.Identification, null,null, getLoginType(), loginContent );
     }
+
+    public abstract Collection<? extends MPQuestion> getQuestions();
 
     @Override
     public boolean equals(final Object obj) {

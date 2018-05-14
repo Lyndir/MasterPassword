@@ -67,6 +67,11 @@ public abstract class MPAlgorithm {
     public abstract MPResultType mpw_default_login_type();
 
     /**
+     * mpw: defaults: answer result type.
+     */
+    public abstract MPResultType mpw_default_answer_type();
+
+    /**
      * mpw: defaults: initial counter value.
      */
     public abstract UnsignedInteger mpw_default_counter();

@@ -260,9 +260,7 @@ public abstract class PasswordFrame<U extends MPUser<S>, S extends MPSite> exten
             @Override
             public String call()
                     throws Exception {
-                return user.getMasterKey()
-                           .siteResult( site.getSiteName(), site.getSiteCounter(), MPKeyPurpose.Authentication, null, site.getResultType(),
-                                        null, site.getAlgorithm() );
+                return site.getResult( MPKeyPurpose.Authentication, null, null );
             }
         } );
         Futures.addCallback( passwordFuture, new FutureCallback<String>() {

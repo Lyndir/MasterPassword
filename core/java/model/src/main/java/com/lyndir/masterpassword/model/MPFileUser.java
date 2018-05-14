@@ -39,7 +39,7 @@ public class MPFileUser extends MPUser<MPFileSite> implements Comparable<MPFileU
     private static final Logger logger = Logger.get( MPFileUser.class );
 
     private final String                 fullName;
-    private final Collection<MPFileSite> sites = Sets.newHashSet();
+    private final Collection<MPFileSite> sites = new LinkedHashSet<>();
 
     @Nullable
     private byte[]                   keyID;
@@ -136,7 +136,7 @@ public class MPFileUser extends MPUser<MPFileSite> implements Comparable<MPFileU
         lastUsed = new Instant();
     }
 
-    public Iterable<MPFileSite> getSites() {
+    public Collection<MPFileSite> getSites() {
         return Collections.unmodifiableCollection( sites );
     }
 

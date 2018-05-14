@@ -22,6 +22,7 @@ import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.masterpassword.*;
+import java.util.*;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.joda.time.Instant;
@@ -36,9 +37,9 @@ public class MPFileSite extends MPSite {
     private final MPFileUser user;
 
     private String          siteName;
+    private UnsignedInteger siteCounter;
     @Nullable
     private String          siteState;
-    private UnsignedInteger siteCounter;
     private MPResultType    resultType;
     private MPAlgorithm     algorithm;
 
@@ -50,6 +51,8 @@ public class MPFileSite extends MPSite {
     private String          url;
     private int             uses;
     private ReadableInstant lastUsed;
+
+    private final Collection<MPFileQuestion> questions = new LinkedHashSet<>();
 
     public MPFileSite(final MPFileUser user, final String siteName) {
         this( user, siteName, null, null, user.getAlgorithm() );
@@ -66,11 +69,12 @@ public class MPFileSite extends MPSite {
                          @Nullable final String loginState, @Nullable final MPResultType loginType,
                          @Nullable final String url, final int uses, final ReadableInstant lastUsed) {
         this.user = user;
+        this.algorithm = algorithm;
+
         this.siteName = siteName;
         this.siteState = siteState;
-        this.siteCounter = ifNotNullElse( siteCounter, user.getAlgorithm().mpw_default_counter() );
-        this.resultType = ifNotNullElse( resultType, user.getAlgorithm().mpw_default_password_type() );
-        this.algorithm = algorithm;
+        this.siteCounter = ifNotNullElse( siteCounter, getAlgorithm().mpw_default_counter() );
+        this.resultType = ifNotNullElse( resultType, getAlgorithm().mpw_default_password_type() );
         this.loginState = loginState;
         this.loginType = ifNotNullElse( loginType, getAlgorithm().mpw_default_login_type() );
         this.url = url;
@@ -116,15 +120,15 @@ public class MPFileSite extends MPSite {
         return siteState;
     }
 
-    public void setSitePassword(final MPResultType resultType, @Nullable final String result)
+    public void setSitePassword(final MPResultType resultType, @Nullable final String password)
             throws MPKeyUnavailableException {
         this.resultType = resultType;
 
-        if (result == null)
+        if (password == null)
             this.siteState = null;
         else
-            this.siteState = user.getMasterKey().siteState(
-                    siteName, siteCounter, MPKeyPurpose.Authentication, null, resultType, result, algorithm );
+            this.siteState = getState(
+                    MPKeyPurpose.Authentication, null, siteCounter, resultType, password );
     }
 
     @Override
@@ -155,7 +159,6 @@ public class MPFileSite extends MPSite {
     @Override
     public void setLoginType(@Nullable final MPResultType loginType) {
         this.loginType = ifNotNullElse( loginType, getAlgorithm().mpw_default_login_type() );
-
     }
 
     @Override
@@ -168,6 +171,11 @@ public class MPFileSite extends MPSite {
         this.algorithm = algorithm;
     }
 
+    @Override
+    public Collection<? extends MPQuestion> getQuestions() {
+        return Collections.unmodifiableCollection( questions );
+    }
+
     @Nullable
     public String getLoginState() {
         return loginState;
@@ -176,9 +184,7 @@ public class MPFileSite extends MPSite {
     public void setLoginName(@Nonnull final MPResultType loginType, @Nonnull final String loginName)
             throws MPKeyUnavailableException {
         this.loginType = loginType;
-        this.loginState = user.getMasterKey().siteState(
-                siteName, algorithm.mpw_default_counter(), MPKeyPurpose.Identification, null,
-                this.loginType, loginName, algorithm );
+        this.loginState = getState( MPKeyPurpose.Identification, null, null, this.loginType, loginName );
     }
 
     @Nullable

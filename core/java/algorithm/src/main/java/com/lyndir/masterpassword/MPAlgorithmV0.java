@@ -257,6 +257,11 @@ public class MPAlgorithmV0 extends MPAlgorithm {
     }
 
     @Override
+    public MPResultType mpw_default_answer_type() {
+        return MPResultType.GeneratedPhrase;
+    }
+
+    @Override
     public UnsignedInteger mpw_default_counter() {
         return UnsignedInteger.ONE;
     }

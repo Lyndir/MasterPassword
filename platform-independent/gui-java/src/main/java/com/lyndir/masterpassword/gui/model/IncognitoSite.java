@@ -20,11 +20,13 @@ package com.lyndir.masterpassword.gui.model;
 
 import static com.lyndir.lhunath.opal.system.util.ObjectUtils.ifNotNullElse;
 
+import com.google.common.collect.ImmutableCollection;
+import com.google.common.collect.ImmutableList;
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.masterpassword.MPAlgorithm;
 import com.lyndir.masterpassword.MPResultType;
-import com.lyndir.masterpassword.model.MPSite;
-import com.lyndir.masterpassword.model.MPUser;
+import com.lyndir.masterpassword.model.*;
+import java.util.Collection;
 import javax.annotation.Nullable;
 
 
@@ -93,6 +95,11 @@ public class IncognitoSite extends MPSite {
     @Override
     public void setAlgorithm(final MPAlgorithm algorithm) {
         this.algorithm = algorithm;
+    }
+
+    @Override
+    public Collection<MPQuestion> getQuestions() {
+        return ImmutableList.of();
     }
 
     @Override
