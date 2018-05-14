@@ -18,11 +18,19 @@
 
 package com.lyndir.masterpassword.model;
 
+import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
+
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.core.*;
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.masterpassword.*;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.io.IOException;
+import java.util.*;
 import javax.annotation.Nullable;
 import org.joda.time.Instant;
 
@@ -30,61 +38,72 @@ import org.joda.time.Instant;
 /**
  * @author lhunath, 2018-04-27
  */
-public class MPJSONFile {
+public class MPJSONFile extends MPJSONAnyObject {
 
-    public MPJSONFile(final MPFileUser user)
+    protected static final ObjectMapper objectMapper = new ObjectMapper();
+
+    static {
+        objectMapper.setSerializationInclusion( JsonInclude.Include.NON_EMPTY );
+        objectMapper.setVisibility( PropertyAccessor.FIELD, JsonAutoDetect.Visibility.NON_PRIVATE );
+    }
+
+    public MPJSONFile write(final MPFileUser modelUser)
             throws MPKeyUnavailableException {
         // Section: "export"
-        Export fileExport = this.export = new Export();
-        fileExport.format = 1;
-        fileExport.redacted = user.getContentMode().isRedacted();
-        fileExport.date = MPConstant.dateTimeFormatter.print( new Instant() );
+        if (export == null)
+            export = new Export();
+        export.format = 1;
+        export.redacted = modelUser.getContentMode().isRedacted();
+        export.date = MPConstant.dateTimeFormatter.print( new Instant() );
 
         // Section: "user"
-        User fileUser = this.user = new User();
-        fileUser.avatar = user.getAvatar();
-        fileUser.full_name = user.getFullName();
-
-        fileUser.last_used = MPConstant.dateTimeFormatter.print( user.getLastUsed() );
-        fileUser.key_id = CodeUtils.encodeHex( user.getKeyID() );
-
-        fileUser.algorithm = user.getAlgorithm().version();
-        fileUser.default_type = user.getDefaultType();
+        if (user == null)
+            user = new User();
+        user.avatar = modelUser.getAvatar();
+        user.full_name = modelUser.getFullName();
+        user.last_used = MPConstant.dateTimeFormatter.print( modelUser.getLastUsed() );
+        user.key_id = CodeUtils.encodeHex( modelUser.getKeyID() );
+        user.algorithm = modelUser.getAlgorithm().version();
+        user.default_type = modelUser.getDefaultType();
 
         // Section "sites"
-        sites = new LinkedHashMap<>();
-        for (final MPFileSite site : user.getSites()) {
-            Site   fileSite;
+        if (sites == null)
+            sites = new LinkedHashMap<>();
+        for (final MPFileSite modelSite : modelUser.getSites()) {
             String content = null, loginContent = null;
-            if (!fileExport.redacted) {
+            if (!export.redacted) {
                 // Clear Text
-                content = site.getResult();
-                loginContent = user.getMasterKey().siteResult(
-                        site.getSiteName(), site.getAlgorithm().mpw_default_counter(),
-                        MPKeyPurpose.Identification, null, site.getLoginType(), site.getLoginState(), site.getAlgorithm() );
+                content = modelSite.getResult();
+                loginContent = modelUser.getMasterKey().siteResult(
+                        modelSite.getSiteName(), modelSite.getAlgorithm().mpw_default_counter(),
+                        MPKeyPurpose.Identification, null, modelSite.getLoginType(), modelSite.getLoginState(), modelSite.getAlgorithm() );
             } else {
                 // Redacted
-                if (site.getResultType().supportsTypeFeature( MPSiteFeature.ExportContent ))
-                    content = site.getSiteState();
-                if (site.getLoginType().supportsTypeFeature( MPSiteFeature.ExportContent ))
-                    loginContent = site.getLoginState();
+                if (modelSite.getResultType().supportsTypeFeature( MPSiteFeature.ExportContent ))
+                    content = modelSite.getSiteState();
+                if (modelSite.getLoginType().supportsTypeFeature( MPSiteFeature.ExportContent ))
+                    loginContent = modelSite.getLoginState();
             }
 
-            sites.put( site.getSiteName(), fileSite = new Site() );
-            fileSite.type = site.getResultType();
-            fileSite.counter = site.getSiteCounter().longValue();
-            fileSite.algorithm = site.getAlgorithm().version();
-            fileSite.password = content;
-            fileSite.login_name = loginContent;
-            fileSite.login_type = site.getLoginType();
+            Site site = sites.get( modelSite.getSiteName() );
+            if (site == null)
+                sites.put( modelSite.getSiteName(), site = new Site() );
+            site.type = modelSite.getResultType();
+            site.counter = modelSite.getSiteCounter().longValue();
+            site.algorithm = modelSite.getAlgorithm().version();
+            site.password = content;
+            site.login_name = loginContent;
+            site.login_type = modelSite.getLoginType();
 
-            fileSite.uses = site.getUses();
-            fileSite.last_used = MPConstant.dateTimeFormatter.print( site.getLastUsed() );
+            site.uses = modelSite.getUses();
+            site.last_used = MPConstant.dateTimeFormatter.print( modelSite.getLastUsed() );
 
-            fileSite._ext_mpw = new Site.Ext();
-            fileSite._ext_mpw.url = site.getUrl();
+            if (site._ext_mpw == null)
+                site._ext_mpw = new Site.Ext();
+            site._ext_mpw.url = modelSite.getUrl();
 
-            fileSite.questions = new LinkedHashMap<>();
+            if (site.questions == null)
+                site.questions = new LinkedHashMap<>();
             //                for (size_t q = 0; q < site.questions_count; ++q) {
             //                    MPMarshalledQuestion *question = &site.questions[q];
             //                    if (!question.keyword)
@@ -112,37 +131,44 @@ public class MPJSONFile {
             //                if (site.url)
             //                    json_object_object_add( json_site_mpw, "url", site.url );
         }
+
+        return this;
     }
 
-    public MPFileUser toUser(@Nullable final char[] masterPassword)
+    public MPFileUser read(@Nullable final char[] masterPassword)
             throws MPIncorrectMasterPasswordException, MPKeyUnavailableException {
-        MPFileUser user = new MPFileUser(
-                this.user.full_name, CodeUtils.decodeHex( this.user.key_id ), this.user.algorithm.getAlgorithm(),
-                this.user.avatar, this.user.default_type, MPConstant.dateTimeFormatter.parseDateTime( this.user.last_used ),
+        MPAlgorithm algorithm = ifNotNullElse( user.algorithm, MPMasterKey.Version.CURRENT ).getAlgorithm();
+        MPFileUser model = new MPFileUser(
+                user.full_name, CodeUtils.decodeHex( user.key_id ), algorithm, user.avatar,
+                (user.default_type != null)? user.default_type: algorithm.mpw_default_password_type(),
+                (user.last_used != null)? MPConstant.dateTimeFormatter.parseDateTime( user.last_used ): new Instant(),
                 MPMarshalFormat.JSON, export.redacted? MPMarshaller.ContentMode.PROTECTED: MPMarshaller.ContentMode.VISIBLE );
+        model.setJSON( this );
         if (masterPassword != null)
-            user.authenticate( masterPassword );
+            model.authenticate( masterPassword );
 
         for (final Map.Entry<String, Site> siteEntry : sites.entrySet()) {
             String siteName = siteEntry.getKey();
             Site   fileSite = siteEntry.getValue();
             MPFileSite site = new MPFileSite(
-                    user, siteName, export.redacted? fileSite.password: null, UnsignedInteger.valueOf( fileSite.counter ),
+                    model, siteName, export.redacted? fileSite.password: null, UnsignedInteger.valueOf( fileSite.counter ),
                     fileSite.type, fileSite.algorithm.getAlgorithm(),
                     export.redacted? fileSite.login_name: null, fileSite.login_type,
-                    fileSite._ext_mpw.url, fileSite.uses, MPConstant.dateTimeFormatter.parseDateTime( fileSite.last_used ) );
+                    (fileSite._ext_mpw != null)? fileSite._ext_mpw.url: null, fileSite.uses,
+                    (fileSite.last_used != null)? MPConstant.dateTimeFormatter.parseDateTime( fileSite.last_used ): new Instant() );
 
             if (!export.redacted) {
                 if (fileSite.password != null)
-                    site.setSitePassword( fileSite.type, fileSite.password );
+                    site.setSitePassword( (fileSite.type != null)? fileSite.type: MPResultType.StoredPersonal, fileSite.password );
                 if (fileSite.login_name != null)
-                    site.setLoginName( fileSite.login_type, fileSite.login_name );
+                    site.setLoginName( (fileSite.login_type != null)? fileSite.login_type: MPResultType.StoredPersonal,
+                                       fileSite.login_name );
             }
 
-            user.addSite( site );
+            model.addSite( site );
         }
 
-        return user;
+        return model;
     }
 
     // -- Data
@@ -152,54 +178,65 @@ public class MPJSONFile {
     Map<String, Site> sites;
 
 
-    public static class Export {
+    public static class Export extends MPJSONAnyObject {
 
         int     format;
         boolean redacted;
-        String  date;
+        @Nullable
+        String date;
     }
 
 
-    public static class User {
+    public static class User extends MPJSONAnyObject {
 
-        int                 avatar;
-        String              full_name;
-        String              last_used;
+        int    avatar;
+        String full_name;
+        String last_used;
+        @Nullable
         String              key_id;
+        @Nullable
         MPMasterKey.Version algorithm;
+        @Nullable
         MPResultType        default_type;
     }
 
 
-    public static class Site {
+    public static class Site extends MPJSONAnyObject {
 
-        MPResultType        type;
+        @Nullable
+        MPResultType type;
         long                counter;
         MPMasterKey.Version algorithm;
         @Nullable
-        String password;
+        String       password;
         @Nullable
-        String login_name;
+        String       login_name;
+        @Nullable
         MPResultType login_type;
-        int          uses;
-        String       last_used;
+        int uses;
+        @Nullable
+        String last_used;
 
+        @Nullable
         Map<String, Question> questions;
 
+        @Nullable
         Ext _ext_mpw;
 
-
-        public static class Ext {
+        public static class Ext extends MPJSONAnyObject {
 
             @Nullable
             String url;
         }
 
 
-        public static class Question {
+        public static class Question extends MPJSONAnyObject {
 
+            @Nullable
             MPResultType type;
+            @Nullable
             String       answer;
         }
     }
 }
+

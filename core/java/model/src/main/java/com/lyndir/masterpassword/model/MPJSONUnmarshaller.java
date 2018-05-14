@@ -18,10 +18,13 @@
 
 package com.lyndir.masterpassword.model;
 
-import com.google.gson.*;
-import com.lyndir.masterpassword.*;
-import java.io.*;
-import java.nio.charset.StandardCharsets;
+import static com.lyndir.masterpassword.model.MPJSONFile.objectMapper;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.lyndir.masterpassword.MPKeyUnavailableException;
+import java.io.File;
+import java.io.IOException;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -31,24 +34,19 @@ import javax.annotation.Nullable;
  */
 public class MPJSONUnmarshaller implements MPUnmarshaller {
 
-    private final Gson gson = new GsonBuilder()
-            .registerTypeAdapter( MPMasterKey.Version.class, new EnumOrdinalAdapter() )
-            .registerTypeAdapter( MPResultType.class, new MPResultTypeAdapter() )
-            .setFieldNamingStrategy( FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES )
-            .setPrettyPrinting().create();
-
     @Nonnull
     @Override
     public MPFileUser unmarshall(@Nonnull final File file, @Nullable final char[] masterPassword)
             throws IOException, MPMarshalException, MPIncorrectMasterPasswordException, MPKeyUnavailableException {
 
-        try (Reader reader = new InputStreamReader( new FileInputStream( file ), StandardCharsets.UTF_8 )) {
-            try {
-                return gson.fromJson( reader, MPJSONFile.class ).toUser( masterPassword );
-            }
-            catch (final JsonSyntaxException e) {
-                throw new MPMarshalException( "Couldn't parse JSON in: " + file, e );
-            }
+        try {
+            return objectMapper.readValue( file, MPJSONFile.class ).read( masterPassword );
+        }
+        catch (final JsonParseException e) {
+            throw new MPMarshalException( "Couldn't parse JSON in: " + file, e );
+        }
+        catch (final JsonMappingException e) {
+            throw new MPMarshalException( "Couldn't map JSON in: " + file, e );
         }
     }
 
@@ -58,10 +56,16 @@ public class MPJSONUnmarshaller implements MPUnmarshaller {
             throws MPMarshalException, MPIncorrectMasterPasswordException, MPKeyUnavailableException {
 
         try {
-            return gson.fromJson( content, MPJSONFile.class ).toUser( masterPassword );
+            return objectMapper.readValue( content, MPJSONFile.class ).read( masterPassword );
         }
-        catch (final JsonSyntaxException e) {
-            throw new MPMarshalException( "Couldn't parse JSON", e );
+        catch (final JsonParseException e) {
+            throw new MPMarshalException( "Couldn't parse JSON.", e );
+        }
+        catch (final JsonMappingException e) {
+            throw new MPMarshalException( "Couldn't map JSON.", e );
+        }
+        catch (final IOException e) {
+            throw new MPMarshalException( "Couldn't read JSON.", e );
         }
     }
 }

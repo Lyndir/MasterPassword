@@ -1,0 +1,67 @@
+{
+   "export": {
+     "format": 1,
+     "redacted": true,
+     "date": "2018-05-10T03:41:18Z",
+     "_ext_mpw": {
+       "save": "me"
+     },
+     "_ext_other": {
+       "save": "me"
+     }
+   },
+   "user": {
+     "avatar": 3,
+     "full_name": "Robert Lee Mitchell",
+     "last_used": "2018-05-10T03:41:18Z",
+     "key_id": "98EEF4D1DF46D849574A82A03C3177056B15DFFCA29BB3899DE4628453675302",
+     "algorithm": 3,
+     "default_type": 17,
+     "_ext_mpw": {
+       "save": "me"
+     },
+     "_ext_other": {
+       "save": "me"
+     }
+   },
+   "sites": {
+     "masterpasswordapp.com": {
+       "type": 17,
+       "counter": 1,
+       "algorithm": 3,
+       "login_type": 30,
+       "uses": 2,
+       "last_used": "2018-05-10T03:41:18Z",
+       "questions": {
+         "": {
+           "type": 31
+         },
+         "mother": {
+           "type": 31
+         }
+       },
+       "_ext_mpw": {
+         "url": "https://masterpasswordapp.com",
+         "save": "me"
+       },
+       "_ext_other": {
+         "save": "me"
+       }
+     },
+     "personal.site": {
+       "type": 1056,
+       "counter": 1,
+       "algorithm": 3,
+       "password": "ZTgr4cY6L28wG7DsO+iz\/hrTQxM3UHz0x8ZU99LjgxjHG+bLIJygkbg\/7HdjEIFH6A3z+Dt2H1gpt9yPyQGZcewTiPXJX0pNpVsIKAAdzVNcUfYoqkWjoFRoZD7sM\/ctxWDH4JUuJ+rjoBkWtRLK9kYBvu7UD1QdlEZI\/wPKv1A=",
+       "login_type": 30,
+       "uses": 1,
+       "last_used": "2018-05-10T03:48:35Z"
+     }
+   },
+   "_ext_mpw": {
+     "save": "me"
+   },
+   "_ext_other": {
+     "save": "me"
+   }
+ }

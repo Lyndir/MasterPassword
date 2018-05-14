@@ -51,6 +51,9 @@ public class MPFileUser extends MPUser<MPFileSite> implements Comparable<MPFileU
     private MPResultType    defaultType;
     private ReadableInstant lastUsed;
 
+    @Nullable
+    private MPJSONFile json;
+
     public MPFileUser(final String fullName) {
         this( fullName, null, MPMasterKey.Version.CURRENT.getAlgorithm() );
     }
@@ -155,6 +158,15 @@ public class MPFileUser extends MPUser<MPFileSite> implements Comparable<MPFileU
                 results.add( site );
 
         return results.build();
+    }
+
+    public void setJSON(final MPJSONFile json) {
+        this.json = json;
+    }
+
+    @Nonnull
+    public MPJSONFile getJSON() {
+        return (json == null)? json = new MPJSONFile(): json;
     }
 
     /**

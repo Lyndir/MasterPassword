@@ -16,31 +16,10 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-package com.lyndir.masterpassword.model;
-
-import com.google.gson.*;
-import com.lyndir.masterpassword.MPResultType;
-import java.lang.reflect.Type;
-
+package com.lyndir.masterpassword;
 
 /**
- * @author lhunath, 2018-04-27
+ * @author lhunath, 2017-09-21
  */
-public class MPResultTypeAdapter implements JsonSerializer<MPResultType>, JsonDeserializer<MPResultType> {
-
-    @Override
-    public MPResultType deserialize(final JsonElement json, final Type typeOfT, final JsonDeserializationContext context)
-            throws JsonParseException {
-        try {
-            return MPResultType.forType( json.getAsInt() );
-        }
-        catch (final ClassCastException | IllegalStateException e) {
-            throw new JsonParseException( "Not an ordinal value: " + json, e );
-        }
-    }
-
-    @Override
-    public JsonElement serialize(final MPResultType src, final Type typeOfSrc, final JsonSerializationContext context) {
-        return new JsonPrimitive( src.getType() );
-    }
+public class MPKeyUnavailableException extends Exception {
 }

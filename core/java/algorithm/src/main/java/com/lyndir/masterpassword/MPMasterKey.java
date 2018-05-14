@@ -18,6 +18,8 @@
 
 package com.lyndir.masterpassword;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.common.base.Preconditions;
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.CodeUtils;
@@ -232,11 +234,13 @@ public class MPMasterKey {
             return algorithm;
         }
 
+        @JsonCreator
         public static Version fromInt(final int algorithmVersion) {
 
             return values()[algorithmVersion];
         }
 
+        @JsonValue
         public int toInt() {
 
             return ordinal();

@@ -16,30 +16,23 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-package com.lyndir.masterpassword;
+package com.lyndir.masterpassword.model;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.CharStreams;
-import com.lyndir.masterpassword.model.*;
-import java.io.*;
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import java.util.*;
 
 
 /**
- * @author lhunath, 2018-04-27
+ * @author lhunath, 2018-05-14
  */
-public class MPModelTest {
+class MPJSONAnyObject {
 
-    @Test
-    public void testMasterKey()
-            throws Exception {
-        File       file   = new File( "/Users/lhunath/.mpw.d/Maarten Billemont.mpsites.json" );
-        String     orig   = CharStreams.toString( new InputStreamReader( new FileInputStream( file ), Charsets.UTF_8 ) );
-        System.out.println(orig);
-        MPFileUser user   = new MPJSONUnmarshaller().unmarshall( file, null );
-        String     result = new MPJSONMarshaller().marshall( user );
-        System.out.println(result);
-        Assert.assertEquals( result, orig, "Marshalled sites do not match original sites." );
+    @JsonAnySetter
+    final Map<String, Object> any = new LinkedHashMap<>();
+
+    @JsonAnyGetter
+    public Map<String, Object> getAny() {
+        return Collections.unmodifiableMap( any );
     }
 }

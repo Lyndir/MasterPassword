@@ -18,8 +18,10 @@
 
 package com.lyndir.masterpassword.model;
 
-import com.google.gson.*;
-import com.lyndir.masterpassword.*;
+import static com.lyndir.masterpassword.model.MPJSONFile.objectMapper;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.lyndir.masterpassword.MPKeyUnavailableException;
 import javax.annotation.Nonnull;
 
 
@@ -28,17 +30,16 @@ import javax.annotation.Nonnull;
  */
 public class MPJSONMarshaller implements MPMarshaller {
 
-    private final Gson gson = new GsonBuilder()
-            .registerTypeAdapter( MPMasterKey.Version.class, new EnumOrdinalAdapter() )
-            .registerTypeAdapter( MPResultType.class, new MPResultTypeAdapter() )
-            .setFieldNamingStrategy( FieldNamingPolicy.IDENTITY )
-            .setPrettyPrinting().create();
-
     @Nonnull
     @Override
     public String marshall(final MPFileUser user)
             throws MPKeyUnavailableException, MPMarshalException {
 
-        return gson.toJson( new MPJSONFile( user ) );
+        try {
+            return objectMapper.writeValueAsString( user.getJSON().write( user ) );
+        }
+        catch (final JsonProcessingException e) {
+            throw new MPMarshalException( "Couldn't compose JSON for: " + user, e );
+        }
     }
 }

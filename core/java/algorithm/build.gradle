@@ -11,6 +11,7 @@ dependencies {
     compile group: 'com.lyndir.lhunath.opal', name: 'opal-crypto', version: '1.6-p11'
 
     compile group: 'com.lambdaworks', name: 'scrypt', version: '1.4.0'
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.9.5'
     compile group: 'org.jetbrains', name: 'annotations', version: '13.0'
     compile group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
 }

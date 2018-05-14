@@ -18,6 +18,8 @@
 
 package com.lyndir.masterpassword;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.lyndir.lhunath.opal.system.logging.Logger;
@@ -179,6 +181,7 @@ public enum MPResultType {
         return typeFeatures.contains( feature );
     }
 
+    @JsonValue
     public int getType() {
         int mask = typeIndex | typeClass.getMask();
         for (final MPSiteFeature typeFeature : typeFeatures)
@@ -226,6 +229,7 @@ public enum MPResultType {
      *
      * @return The type registered with the given type.
      */
+    @JsonCreator
     public static MPResultType forType(final int type) {
 
         for (final MPResultType resultType : values())
