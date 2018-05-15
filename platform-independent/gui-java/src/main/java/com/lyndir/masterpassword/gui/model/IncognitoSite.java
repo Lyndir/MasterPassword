@@ -19,9 +19,13 @@
 package com.lyndir.masterpassword.gui.model;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.primitives.UnsignedInteger;
+import com.lyndir.masterpassword.MPAlgorithm;
+import com.lyndir.masterpassword.MPResultType;
 import com.lyndir.masterpassword.model.*;
 import com.lyndir.masterpassword.model.impl.MPBasicSite;
 import java.util.Collection;
+import javax.annotation.Nullable;
 
 
 /**
@@ -31,8 +35,14 @@ public class IncognitoSite extends MPBasicSite {
 
     private final IncognitoUser user;
 
-    public IncognitoSite(final IncognitoUser user, final String siteName) {
-        super( siteName, user.getAlgorithm() );
+    public IncognitoSite(final IncognitoUser user, final String name) {
+        this( user, name, null, null, null, null );
+    }
+
+    public IncognitoSite(final IncognitoUser user, final String name,
+                         @Nullable final MPAlgorithm algorithm, @Nullable final UnsignedInteger counter,
+                         @Nullable final MPResultType resultType, @Nullable final MPResultType loginType) {
+        super( name, (algorithm == null)? user.getAlgorithm(): algorithm, counter, resultType, loginType );
 
         this.user = user;
     }

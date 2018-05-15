@@ -38,6 +38,7 @@ import com.google.common.primitives.UnsignedInteger;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.lyndir.lhunath.opal.system.logging.Logger;
+import com.lyndir.masterpassword.model.MPConstant;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.concurrent.Executors;

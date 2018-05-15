@@ -87,7 +87,7 @@ public class IncognitoAuthenticationPanel extends AuthenticationPanel<IncognitoU
             @Override
             protected IncognitoSite createSite(final IncognitoUser user, final String siteName, final UnsignedInteger siteCounter,
                                                final MPResultType resultType, final MPAlgorithm algorithm) {
-                return new IncognitoSite( user, siteName, siteCounter, resultType, algorithm );
+                return new IncognitoSite( user, siteName, algorithm, siteCounter, resultType, null );
             }
         };
     }

@@ -21,7 +21,6 @@ package com.lyndir.masterpassword.gui;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import com.google.common.base.Charsets;
-import com.google.common.base.Optional;
 import com.google.common.io.CharSource;
 import com.google.common.io.Resources;
 import com.lyndir.lhunath.opal.system.logging.Logger;
@@ -34,6 +33,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URL;
 import java.util.Enumeration;
+import java.util.Optional;
 import java.util.jar.*;
 import javax.swing.*;
 

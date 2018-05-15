@@ -25,6 +25,7 @@ import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.ConversionUtils;
 import com.lyndir.masterpassword.*;
+import com.lyndir.masterpassword.model.MPConstant;
 import com.lyndir.masterpassword.model.MPIncorrectMasterPasswordException;
 import java.io.*;
 import java.util.regex.Matcher;

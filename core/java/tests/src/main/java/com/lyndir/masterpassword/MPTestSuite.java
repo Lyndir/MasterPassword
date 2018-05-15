@@ -87,7 +87,7 @@ public class MPTestSuite implements Callable<Boolean> {
                     if ("case".equals( qName ))
                         tests.cases.add( currentCase );
                     if ("algorithm".equals( qName ))
-                        currentCase.algorithm = ConversionUtils.toInteger( text ).orNull();
+                        currentCase.algorithm = ConversionUtils.toInteger( text ).orElse( null );
                     if ("fullName".equals( qName ))
                         currentCase.fullName = text;
                     if ("masterPassword".equals( qName ))

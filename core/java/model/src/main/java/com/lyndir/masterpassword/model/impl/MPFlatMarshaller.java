@@ -22,6 +22,7 @@ import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import com.lyndir.masterpassword.*;
+import com.lyndir.masterpassword.model.MPConstant;
 import javax.annotation.Nonnull;
 import org.joda.time.Instant;
 

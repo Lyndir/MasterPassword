@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.*;
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.masterpassword.*;
+import com.lyndir.masterpassword.model.MPConstant;
 import com.lyndir.masterpassword.model.MPIncorrectMasterPasswordException;
 import java.util.*;
 import javax.annotation.Nullable;
