@@ -19,6 +19,7 @@
 package com.lyndir.masterpassword.model;
 
 import com.google.common.collect.*;
+import com.lyndir.masterpassword.model.impl.MPFileUser;
 import java.util.Map;
 import java.util.SortedSet;
 
@@ -26,28 +27,28 @@ import java.util.SortedSet;
 /**
  * @author lhunath, 14-12-05
  */
-public abstract class MPUserManager {
+public abstract class MPUserManager<U extends MPUser<?>> {
 
-    private final Map<String, MPFileUser> usersByName = Maps.newHashMap();
+    private final Map<String, U> usersByName = Maps.newHashMap();
 
-    protected MPUserManager(final Iterable<MPFileUser> users) {
-        for (final MPFileUser user : users)
+    protected MPUserManager(final Iterable<U> users) {
+        for (final U user : users)
             usersByName.put( user.getFullName(), user );
     }
 
-    public SortedSet<MPFileUser> getUsers() {
+    public SortedSet<U> getUsers() {
         return FluentIterable.from( usersByName.values() ).toSortedSet( Ordering.natural() );
     }
 
-    public MPFileUser getUserNamed(final String fullName) {
+    public U getUserNamed(final String fullName) {
         return usersByName.get( fullName );
     }
 
-    public void addUser(final MPFileUser user) {
+    public void addUser(final U user) {
         usersByName.put( user.getFullName(), user );
     }
 
-    public void deleteUser(final MPFileUser user) {
+    public void deleteUser(final U user) {
         usersByName.remove( user.getFullName() );
     }
 }

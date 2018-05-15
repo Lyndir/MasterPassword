@@ -29,6 +29,8 @@ import com.lyndir.masterpassword.MPResultType;
 import com.lyndir.masterpassword.gui.Res;
 import com.lyndir.masterpassword.gui.util.Components;
 import com.lyndir.masterpassword.model.*;
+import com.lyndir.masterpassword.model.impl.*;
+import com.lyndir.masterpassword.model.impl.MPFileSite;
 import java.awt.*;
 import java.awt.event.*;
 import javax.annotation.Nonnull;
@@ -214,7 +216,7 @@ public class ModelAuthenticationPanel extends AuthenticationPanel<MPFileUser> im
             protected MPFileSite createSite(final MPFileUser user, final String siteName, final UnsignedInteger siteCounter,
                                             final MPResultType resultType,
                                             final MPAlgorithm algorithm) {
-                return new MPFileSite( user, siteName, siteCounter, resultType, algorithm );
+                return new MPFileSite( user, siteName, algorithm, siteCounter, resultType );
             }
         };
     }

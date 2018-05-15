@@ -16,7 +16,7 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-package com.lyndir.masterpassword.model;
+package com.lyndir.masterpassword.model.impl;
 
 import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 
@@ -25,6 +25,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.io.CharSink;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.masterpassword.*;
+import com.lyndir.masterpassword.model.*;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +38,7 @@ import javax.annotation.Nonnull;
  * @author lhunath, 14-12-07
  */
 @SuppressWarnings("CallToSystemGetenv")
-public class MPFileUserManager extends MPUserManager {
+public class MPFileUserManager extends MPUserManager<MPFileUser> {
 
     @SuppressWarnings("UnusedDeclaration")
     private static final Logger            logger = Logger.get( MPFileUserManager.class );
@@ -137,7 +138,7 @@ public class MPFileUserManager extends MPUserManager {
     }
 
     @Nonnull
-    private File getUserFile(final MPFileUser user, final MPMarshalFormat format) {
+    private File getUserFile(final MPUser<?> user, final MPMarshalFormat format) {
         return new File( path, user.getFullName() + format.fileSuffix() );
     }
 

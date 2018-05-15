@@ -18,72 +18,78 @@
 
 package com.lyndir.masterpassword.model;
 
-import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
-
-import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.masterpassword.*;
 import java.util.Collection;
-import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 
 /**
- * @author lhunath, 2014-06-08
+ * @author lhunath, 2018-05-14
  */
-public abstract class MPUser<S extends MPSite> {
+public interface MPUser<S extends MPSite> extends Comparable<MPUser<?>> {
+
+    // - Meta
+
+    int getAvatar();
+
+    void setAvatar(int avatar);
+
+    @Nonnull
+    String getFullName();
+
+    // - Algorithm
+
+    @Nonnull
+    MPAlgorithm getAlgorithm();
+
+    void setAlgorithm(MPAlgorithm algorithm);
 
     @Nullable
-    protected MPMasterKey key;
+    byte[] getKeyID();
 
-    public abstract String getFullName();
+    @Nullable
+    String exportKeyID();
 
-    public boolean isMasterKeyAvailable() {
-        return key != null;
-    }
-
-    @Nonnull
-    public MPMasterKey getMasterKey()
-            throws MPKeyUnavailableException {
-        if (key == null)
-            throw new MPKeyUnavailableException();
-
-        return key;
-    }
-
-    public String exportKeyID()
-            throws MPKeyUnavailableException {
-        return CodeUtils.encodeHex( getMasterKey().getKeyID( getAlgorithm() ) );
-    }
-
-    public abstract MPAlgorithm getAlgorithm();
-
-    public int getAvatar() {
-        return 0;
-    }
-
-    public abstract void addSite(S site);
-
-    public abstract void deleteSite(S site);
-
-    public abstract Collection<S> findSites(String query);
-
-    @Nonnull
-    public abstract MPMasterKey authenticate(char[] masterPassword)
+    /**
+     * Performs an authentication attempt against the keyID for this user.
+     *
+     * Note: If a keyID is not set, authentication will always succeed and the keyID will be set to match the given master password.
+     *
+     * @param masterPassword The password to authenticate with.
+     *
+     * @throws MPIncorrectMasterPasswordException If authentication fails due to the given master password not matching the user's keyID.
+     */
+    void authenticate(char[] masterPassword)
             throws MPIncorrectMasterPasswordException;
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode( getFullName() );
-    }
+    /**
+     * Performs an authentication attempt against the keyID for this user.
+     *
+     * Note: If a keyID is not set, authentication will always succeed and the keyID will be set to match the given key.
+     *
+     * @param masterKey The master key to authenticate with.
+     *
+     * @throws MPIncorrectMasterPasswordException If authentication fails due to the given master password not matching the user's keyID.
+     */
+    void authenticate(MPMasterKey masterKey)
+            throws MPIncorrectMasterPasswordException, MPKeyUnavailableException;
 
-    @Override
-    public boolean equals(final Object obj) {
-        return (this == obj) || ((obj instanceof MPUser) && Objects.equals( getFullName(), ((MPUser<?>) obj).getFullName() ));
-    }
+    boolean isMasterKeyAvailable();
 
-    @Override
-    public String toString() {
-        return strf( "{%s: %s}", getClass().getSimpleName(), getFullName() );
-    }
+    @Nonnull
+    MPMasterKey getMasterKey()
+            throws MPKeyUnavailableException;
+
+    // - Relations
+
+    void addSite(S site);
+
+    void deleteSite(S site);
+
+    @Nonnull
+    Collection<S> getSites();
+
+    @Nonnull
+    Collection<S> findSites(String query);
 }

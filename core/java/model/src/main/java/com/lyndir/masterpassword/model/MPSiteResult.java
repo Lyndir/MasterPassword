@@ -21,35 +21,41 @@ package com.lyndir.masterpassword.model;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 
 /**
  * @author lhunath, 14-12-07
  */
-public class MPSiteResult {
+public class MPSiteResult implements Comparable<MPSiteResult> {
 
-    private final MPFileSite site;
+    private final MPSite site;
 
-    public MPSiteResult(final MPFileSite site) {
+    public MPSiteResult(final MPSite site) {
         this.site = site;
     }
 
-    public MPFileSite getSite() {
+    public MPSite getSite() {
         return site;
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        return (this == obj) || ((obj instanceof MPSiteResult) && Objects.equals( site, ((MPSiteResult) obj).site ));
+    public int hashCode() {
+        return Objects.hashCode( getSite() );
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hashCode( site );
+    public boolean equals(final Object obj) {
+        return (this == obj) || ((obj instanceof MPSiteResult) && Objects.equals( getSite(), ((MPSiteResult) obj).getSite() ));
+    }
+
+    @Override
+    public int compareTo(@NotNull final MPSiteResult o) {
+        return getSite().compareTo( o.getSite() );
     }
 
     @Override
     public String toString() {
-        return strf( "{MPSiteResult: %s}", site );
+        return strf( "{%s: %s}", getClass().getSimpleName(), getSite() );
     }
 }

@@ -18,90 +18,50 @@
 
 package com.lyndir.masterpassword.model;
 
-import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
-import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
-
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.masterpassword.*;
 import java.util.Collection;
-import java.util.Objects;
 import javax.annotation.Nullable;
 
 
 /**
- * @author lhunath, 14-12-16
+ * @author lhunath, 2018-05-14
  */
-public abstract class MPSite {
+public interface MPSite extends Comparable<MPSite> {
 
-    public abstract MPUser<?> getUser();
+    // - Meta
 
-    public abstract String getSiteName();
+    String getName();
 
-    public abstract void setSiteName(String siteName);
+    void setName(String name);
 
-    public abstract UnsignedInteger getSiteCounter();
+    // - Algorithm
 
-    public abstract void setSiteCounter(UnsignedInteger siteCounter);
+    MPAlgorithm getAlgorithm();
 
-    public abstract MPResultType getResultType();
+    void setAlgorithm(MPAlgorithm algorithm);
 
-    public abstract void setResultType(MPResultType resultType);
+    UnsignedInteger getCounter();
 
-    public abstract MPResultType getLoginType();
+    void setCounter(UnsignedInteger counter);
 
-    public abstract void setLoginType(@Nullable MPResultType loginType);
+    MPResultType getResultType();
 
-    public abstract MPAlgorithm getAlgorithm();
+    void setResultType(MPResultType resultType);
 
-    public abstract void setAlgorithm(MPAlgorithm algorithm);
+    MPResultType getLoginType();
 
-    public String getResult(final MPKeyPurpose keyPurpose, @Nullable final String keyContext,
-                            @Nullable final String state)
-            throws MPKeyUnavailableException {
+    void setLoginType(@Nullable MPResultType loginType);
 
-        return getResult( keyPurpose, keyContext, getSiteCounter(), getResultType(), state );
-    }
+    String getResult(MPKeyPurpose keyPurpose, @Nullable String keyContext, @Nullable String state)
+            throws MPKeyUnavailableException;
 
-    protected String getResult(final MPKeyPurpose keyPurpose, @Nullable final String keyContext,
-                               @Nullable final UnsignedInteger siteCounter, final MPResultType type,
-                               @Nullable final String state)
-            throws MPKeyUnavailableException {
+    String getLogin(@Nullable String state)
+            throws MPKeyUnavailableException;
 
-        return getUser().getMasterKey().siteResult(
-                getSiteName(), ifNotNullElse( siteCounter, getAlgorithm().mpw_default_counter() ), keyPurpose, keyContext,
-                type, state, getAlgorithm() );
-    }
+    // - Relations
 
-    protected String getState(final MPKeyPurpose keyPurpose, @Nullable final String keyContext,
-                               @Nullable final UnsignedInteger siteCounter, final MPResultType type,
-                               @Nullable final String state)
-            throws MPKeyUnavailableException {
+    MPUser<? extends MPSite> getUser();
 
-        return getUser().getMasterKey().siteState(
-                getSiteName(), ifNotNullElse( siteCounter, getAlgorithm().mpw_default_counter() ), keyPurpose, keyContext,
-                type, state, getAlgorithm() );
-    }
-
-    public String getLogin(@Nullable final String loginContent)
-            throws MPKeyUnavailableException {
-
-        return getResult( MPKeyPurpose.Identification, null,null, getLoginType(), loginContent );
-    }
-
-    public abstract Collection<? extends MPQuestion> getQuestions();
-
-    @Override
-    public boolean equals(final Object obj) {
-        return (this == obj) || ((obj instanceof MPSite) && Objects.equals( getSiteName(), ((MPSite) obj).getSiteName() ));
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode( getSiteName() );
-    }
-
-    @Override
-    public String toString() {
-        return strf( "{%s: %s}", getClass().getSimpleName(), getSiteName() );
-    }
+    Collection<? extends MPQuestion> getQuestions();
 }

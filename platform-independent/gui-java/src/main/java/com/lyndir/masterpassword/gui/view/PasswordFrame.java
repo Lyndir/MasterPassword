@@ -31,6 +31,9 @@ import com.lyndir.masterpassword.gui.Res;
 import com.lyndir.masterpassword.gui.util.Components;
 import com.lyndir.masterpassword.gui.util.UnsignedIntegerModel;
 import com.lyndir.masterpassword.model.*;
+import com.lyndir.masterpassword.model.impl.MPBasicSite;
+import com.lyndir.masterpassword.model.impl.MPFileSite;
+import com.lyndir.masterpassword.model.impl.MPFileUser;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
@@ -45,7 +48,7 @@ import javax.swing.event.*;
 /**
  * @author lhunath, 2014-06-08
  */
-public abstract class PasswordFrame<U extends MPUser<S>, S extends MPSite> extends JFrame implements DocumentListener {
+public abstract class PasswordFrame<U extends MPUser<S>, S extends MPBasicSite> extends JFrame implements DocumentListener {
 
     @SuppressWarnings("FieldCanBeLocal")
     private final Components.GradientPanel       root;
@@ -147,7 +150,7 @@ public abstract class PasswordFrame<U extends MPUser<S>, S extends MPSite> exten
                                                         siteCounterField = Components.spinner( siteCounterModel ) );
         sitePanel.add( siteSettings );
         resultTypeField.setFont( Res.valueFont().deriveFont( resultTypeField.getFont().getSize2D() ) );
-        resultTypeField.setSelectedItem( user.getAlgorithm().mpw_default_password_type() );
+        resultTypeField.setSelectedItem( user.getAlgorithm().mpw_default_result_type() );
         resultTypeField.addItemListener( new ItemListener() {
             @Override
             public void itemStateChanged(final ItemEvent e) {
@@ -245,15 +248,15 @@ public abstract class PasswordFrame<U extends MPUser<S>, S extends MPSite> exten
             siteResults = FluentIterable.from( siteResults ).filter( new Predicate<S>() {
                 @Override
                 public boolean apply(@Nullable final S siteResult) {
-                    return (siteResult != null) && siteNameQuery.equals( siteResult.getSiteName() );
+                    return (siteResult != null) && siteNameQuery.equals( siteResult.getName() );
                 }
             } );
         final S site = ifNotNullElse( Iterables.getFirst( siteResults, null ),
                                       createSite( user, siteNameQuery, siteCounter, resultType, siteAlgorithm ) );
-        if ((currentSite != null) && currentSite.getSiteName().equals( site.getSiteName() )) {
+        if ((currentSite != null) && currentSite.getName().equals( site.getName() )) {
             site.setResultType( resultType );
             site.setAlgorithm( siteAlgorithm );
-            site.setSiteCounter( siteCounter );
+            site.setCounter( siteCounter );
         }
 
         ListenableFuture<String> passwordFuture = Res.execute( this, new Callable<String>() {
@@ -278,8 +281,8 @@ public abstract class PasswordFrame<U extends MPUser<S>, S extends MPSite> exten
                             siteActionButton.setText( "Add Site" );
                         resultTypeField.setSelectedItem( currentSite.getResultType() );
                         siteVersionField.setSelectedItem( currentSite.getAlgorithm() );
-                        siteCounterField.setValue( currentSite.getSiteCounter() );
-                        siteNameField.setText( currentSite.getSiteName() );
+                        siteCounterField.setValue( currentSite.getCounter() );
+                        siteNameField.setText( currentSite.getName() );
                         if (siteNameField.getText().startsWith( siteNameQuery ))
                             siteNameField.select( siteNameQuery.length(), siteNameField.getText().length() );
 

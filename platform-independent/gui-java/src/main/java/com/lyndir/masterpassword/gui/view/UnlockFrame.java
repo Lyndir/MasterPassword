@@ -24,8 +24,7 @@ import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 import com.lyndir.masterpassword.MPIdenticon;
 import com.lyndir.masterpassword.gui.Res;
 import com.lyndir.masterpassword.gui.util.Components;
-import com.lyndir.masterpassword.model.MPIncorrectMasterPasswordException;
-import com.lyndir.masterpassword.model.MPUser;
+import com.lyndir.masterpassword.model.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.concurrent.Future;
@@ -49,7 +48,7 @@ public class UnlockFrame extends JFrame {
     private       Future<?>                identiconFuture;
     private       boolean                  incognito;
     @Nullable
-    private       MPUser<?>                user;
+    private       MPUser<? extends MPSite> user;
 
     public UnlockFrame(final SignInCallback signInCallback) {
         super( "Unlock Master Password" );
@@ -158,7 +157,7 @@ public class UnlockFrame extends JFrame {
         } );
     }
 
-    void updateUser(@Nullable final MPUser<?> user) {
+    void updateUser(@Nullable final MPUser<? extends MPSite> user) {
         this.user = user;
         checkSignIn();
     }

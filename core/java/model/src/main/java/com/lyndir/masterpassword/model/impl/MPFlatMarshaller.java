@@ -16,7 +16,7 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-package com.lyndir.masterpassword.model;
+package com.lyndir.masterpassword.model.impl;
 
 import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
@@ -59,7 +59,7 @@ public class MPFlatMarshaller implements MPMarshaller {
 
         for (final MPFileSite site : user.getSites()) {
             String loginName = site.getLoginState();
-            String password  = site.getSiteState();
+            String password  = site.getResultState();
             if (!user.getContentMode().isRedacted()) {
                 loginName = site.getLogin();
                 password = site.getResult();
@@ -71,9 +71,9 @@ public class MPFlatMarshaller implements MPMarshaller {
                                   strf( "%d:%d:%d", //
                                         site.getResultType().getType(), // type
                                         site.getAlgorithm().version().toInt(), // algorithm
-                                        site.getSiteCounter().intValue() ), // counter
+                                        site.getCounter().intValue() ), // counter
                                   ifNotNullElse( loginName, "" ), // loginName
-                                  site.getSiteName(), // siteName
+                                  site.getName(), // siteName
                                   ifNotNullElse( password, "" ) // password
             ) );
         }

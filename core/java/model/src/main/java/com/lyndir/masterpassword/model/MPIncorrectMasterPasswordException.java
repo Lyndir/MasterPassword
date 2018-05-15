@@ -18,20 +18,21 @@
 
 package com.lyndir.masterpassword.model;
 
+
 /**
  * @author lhunath, 14-12-17
  */
 public class MPIncorrectMasterPasswordException extends Exception {
 
-    private final MPFileUser user;
+    private final MPUser<?> user;
 
-    public MPIncorrectMasterPasswordException(final MPFileUser user) {
+    public MPIncorrectMasterPasswordException(final MPUser<?> user) {
         super( "Incorrect master password for user: " + user.getFullName() );
 
         this.user = user;
     }
 
-    public MPFileUser getUser() {
+    public MPUser<?> getUser() {
         return user;
     }
 }

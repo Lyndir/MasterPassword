@@ -16,25 +16,10 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-package com.lyndir.masterpassword.model;
-
-import com.lyndir.masterpassword.MPKeyUnavailableException;
-import java.io.File;
-import java.io.IOException;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-
 /**
- * @author lhunath, 14-12-07
+ * @author lhunath, 2018-05-14
  */
-public interface MPUnmarshaller {
+@ParametersAreNonnullByDefault
+package com.lyndir.masterpassword.model.impl;
 
-    @Nonnull
-    MPFileUser unmarshall(@Nonnull File file, @Nullable char[] masterPassword)
-            throws IOException, MPMarshalException, MPIncorrectMasterPasswordException, MPKeyUnavailableException;
-
-    @Nonnull
-    MPFileUser unmarshall(@Nonnull String content, @Nullable char[] masterPassword)
-            throws MPMarshalException, MPIncorrectMasterPasswordException, MPKeyUnavailableException;
-}
+import javax.annotation.ParametersAreNonnullByDefault;

@@ -247,7 +247,7 @@ public class MPAlgorithmV0 extends MPAlgorithm {
     }
 
     @Override
-    public MPResultType mpw_default_password_type() {
+    public MPResultType mpw_default_result_type() {
         return MPResultType.GeneratedLong;
     }
 

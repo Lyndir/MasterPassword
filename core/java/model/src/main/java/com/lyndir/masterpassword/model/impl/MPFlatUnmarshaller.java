@@ -16,7 +16,7 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-package com.lyndir.masterpassword.model;
+package com.lyndir.masterpassword.model.impl;
 
 import com.google.common.base.*;
 import com.google.common.io.CharStreams;
@@ -25,6 +25,7 @@ import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.ConversionUtils;
 import com.lyndir.masterpassword.*;
+import com.lyndir.masterpassword.model.MPIncorrectMasterPasswordException;
 import java.io.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -115,11 +116,11 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
                 switch (importFormat) {
                     case 0:
                         site = new MPFileSite( user, //
-                                               siteMatcher.group( 5 ), clearContent? null: siteMatcher.group( 6 ),
+                                               siteMatcher.group( 5 ), MPMasterKey.Version.fromInt( ConversionUtils.toIntegerNN(
+                                                       colon.matcher( siteMatcher.group( 4 ) ).replaceAll( "" ) ) ).getAlgorithm(),
                                                user.getAlgorithm().mpw_default_counter(),
                                                MPResultType.forType( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ),
-                                               MPMasterKey.Version.fromInt( ConversionUtils.toIntegerNN(
-                                                       colon.matcher( siteMatcher.group( 4 ) ).replaceAll( "" ) ) ).getAlgorithm(),
+                                               clearContent? null: siteMatcher.group( 6 ),
                                                null, null, null, ConversionUtils.toIntegerNN( siteMatcher.group( 2 ) ),
                                                MPConstant.dateTimeFormatter.parseDateTime( siteMatcher.group( 1 ) ).toInstant() );
                         if (clearContent)
@@ -128,12 +129,12 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
 
                     case 1:
                         site = new MPFileSite( user, //
-                                               siteMatcher.group( 7 ), clearContent? null: siteMatcher.group( 8 ),
+                                               siteMatcher.group( 7 ), MPMasterKey.Version.fromInt( ConversionUtils.toIntegerNN(
+                                                       colon.matcher( siteMatcher.group( 4 ) ).replaceAll( "" ) ) ).getAlgorithm(),
                                                UnsignedInteger.valueOf( colon.matcher( siteMatcher.group( 5 ) ).replaceAll( "" ) ),
                                                MPResultType.forType( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ),
-                                               MPMasterKey.Version.fromInt( ConversionUtils.toIntegerNN(
-                                                       colon.matcher( siteMatcher.group( 4 ) ).replaceAll( "" ) ) ).getAlgorithm(),
-                                               clearContent? null: siteMatcher.group( 6 ), MPResultType.GeneratedName, null,
+                                               clearContent? null: siteMatcher.group( 8 ),
+                                               MPResultType.GeneratedName, clearContent? null: siteMatcher.group( 6 ), null,
                                                ConversionUtils.toIntegerNN( siteMatcher.group( 2 ) ),
                                                MPConstant.dateTimeFormatter.parseDateTime( siteMatcher.group( 1 ) ).toInstant() );
                         if (clearContent) {

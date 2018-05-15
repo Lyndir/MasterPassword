@@ -16,30 +16,26 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-package com.lyndir.masterpassword.model;
+package com.lyndir.masterpassword.model.impl;
 
-import static com.lyndir.masterpassword.model.MPJSONFile.objectMapper;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.lyndir.masterpassword.MPKeyUnavailableException;
+import com.lyndir.masterpassword.model.MPIncorrectMasterPasswordException;
+import java.io.File;
+import java.io.IOException;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 
 /**
- * @author lhunath, 2017-09-20
+ * @author lhunath, 14-12-07
  */
-public class MPJSONMarshaller implements MPMarshaller {
+public interface MPUnmarshaller {
 
     @Nonnull
-    @Override
-    public String marshall(final MPFileUser user)
-            throws MPKeyUnavailableException, MPMarshalException {
+    MPFileUser unmarshall(@Nonnull File file, @Nullable char[] masterPassword)
+            throws IOException, MPMarshalException, MPIncorrectMasterPasswordException, MPKeyUnavailableException;
 
-        try {
-            return objectMapper.writeValueAsString( user.getJSON().write( user ) );
-        }
-        catch (final JsonProcessingException e) {
-            throw new MPMarshalException( "Couldn't compose JSON for: " + user, e );
-        }
-    }
+    @Nonnull
+    MPFileUser unmarshall(@Nonnull String content, @Nullable char[] masterPassword)
+            throws MPMarshalException, MPIncorrectMasterPasswordException, MPKeyUnavailableException;
 }

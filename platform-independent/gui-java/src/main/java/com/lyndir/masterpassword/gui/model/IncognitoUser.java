@@ -18,53 +18,23 @@
 
 package com.lyndir.masterpassword.gui.model;
 
-import com.google.common.collect.ImmutableList;
-import com.lyndir.masterpassword.MPAlgorithm;
 import com.lyndir.masterpassword.MPMasterKey;
-import com.lyndir.masterpassword.model.MPIncorrectMasterPasswordException;
-import com.lyndir.masterpassword.model.MPUser;
-import java.util.Collection;
-import javax.annotation.Nonnull;
+import com.lyndir.masterpassword.model.impl.MPBasicUser;
+import javax.annotation.Nullable;
 
 
 /**
  * @author lhunath, 2014-06-08
  */
-public class IncognitoUser extends MPUser<IncognitoSite> {
-
-    private final String fullName;
+public class IncognitoUser extends MPBasicUser<IncognitoSite> {
 
     public IncognitoUser(final String fullName) {
-        this.fullName = fullName;
+        super(fullName, MPMasterKey.Version.CURRENT.getAlgorithm());
     }
 
+    @Nullable
     @Override
-    public String getFullName() {
-        return fullName;
-    }
-
-    @Override
-    public MPAlgorithm getAlgorithm() {
-        return MPMasterKey.Version.CURRENT.getAlgorithm();
-    }
-
-    @Override
-    public void addSite(final IncognitoSite site) {
-    }
-
-    @Override
-    public void deleteSite(final IncognitoSite site) {
-    }
-
-    @Override
-    public Collection<IncognitoSite> findSites(final String query) {
-        return ImmutableList.of();
-    }
-
-    @Nonnull
-    @Override
-    public MPMasterKey authenticate(final char[] masterPassword)
-            throws MPIncorrectMasterPasswordException {
-        return key = new MPMasterKey( getFullName(), masterPassword );
+    public byte[] getKeyID() {
+        return null;
     }
 }

@@ -16,7 +16,7 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-package com.lyndir.masterpassword.model;
+package com.lyndir.masterpassword.model.impl;
 
 import com.lyndir.masterpassword.MPKeyUnavailableException;
 import javax.annotation.Nonnull;

@@ -16,69 +16,52 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-package com.lyndir.masterpassword.model;
+package com.lyndir.masterpassword.model.impl;
 
 import static com.lyndir.lhunath.opal.system.util.ObjectUtils.ifNotNullElse;
 
 import com.lyndir.masterpassword.*;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 
 /**
  * @author lhunath, 2018-05-14
  */
-public class MPFileQuestion extends MPQuestion {
+public class MPFileQuestion extends MPBasicQuestion {
 
-    private final MPSite site;
+    private final MPFileSite site;
 
-    private String       keyword;
     @Nullable
     private String       state;
-    private MPResultType type;
 
-    public MPFileQuestion(final MPSite site, final String keyword, @Nullable final String state, @Nullable final MPResultType type) {
+    public MPFileQuestion(final MPFileSite site, final String keyword,
+                          @Nullable final MPResultType type, @Nullable final String state) {
+        super( keyword, ifNotNullElse( type, site.getAlgorithm().mpw_default_answer_type() ) );
+
         this.site = site;
-        this.keyword = keyword;
         this.state = state;
-        this.type = ifNotNullElse( type, site.getAlgorithm().mpw_default_answer_type() );
-    }
-
-    @Override
-    public MPSite getSite() {
-        return site;
-    }
-
-    @Override
-    public String getKeyword() {
-        return keyword;
-    }
-
-    public void setKeyword(final String keyword) {
-        this.keyword = keyword;
-    }
-
-    public void setAnswer(final MPResultType type, @Nullable final String answer)
-            throws MPKeyUnavailableException {
-        this.type = type;
-
-        if (answer == null)
-            this.state = null;
-        else
-            this.state = getSite().getState(
-                    MPKeyPurpose.Recovery, getKeyword(), null, type, answer );
-    }
-
-    @Override
-    public MPResultType getType() {
-        return type;
-    }
-
-    public void setType(final MPResultType type) {
-        this.type = type;
     }
 
     public String getAnswer()
             throws MPKeyUnavailableException {
         return getAnswer( state );
+    }
+
+    public void setAnswer(final MPResultType type, @Nullable final String answer)
+            throws MPKeyUnavailableException {
+        setType( type );
+
+        if (answer == null)
+            this.state = null;
+        else
+            this.state = getSite().getState(
+                    MPKeyPurpose.Recovery, getKeyword(), null, getType(), answer );
+    }
+
+    @Nonnull
+    @Override
+    public MPFileSite getSite() {
+        return site;
     }
 }

@@ -16,23 +16,18 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-package com.lyndir.masterpassword.model;
-
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import java.util.*;
-
+package com.lyndir.masterpassword.model.impl;
 
 /**
- * @author lhunath, 2018-05-14
+ * @author lhunath, 2018-04-26
  */
-class MPJSONAnyObject {
+public class MPMarshalException extends Exception {
 
-    @JsonAnySetter
-    final Map<String, Object> any = new LinkedHashMap<>();
+    public MPMarshalException(final String message) {
+        super( message );
+    }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAny() {
-        return Collections.unmodifiableMap( any );
+    public MPMarshalException(final String message, final Throwable cause) {
+        super( message, cause );
     }
 }

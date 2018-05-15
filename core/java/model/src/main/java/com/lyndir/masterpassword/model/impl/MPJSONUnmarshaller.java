@@ -16,13 +16,14 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-package com.lyndir.masterpassword.model;
+package com.lyndir.masterpassword.model.impl;
 
-import static com.lyndir.masterpassword.model.MPJSONFile.objectMapper;
+import static com.lyndir.masterpassword.model.impl.MPJSONFile.objectMapper;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.lyndir.masterpassword.MPKeyUnavailableException;
+import com.lyndir.masterpassword.model.MPIncorrectMasterPasswordException;
 import java.io.File;
 import java.io.IOException;
 import javax.annotation.Nonnull;
