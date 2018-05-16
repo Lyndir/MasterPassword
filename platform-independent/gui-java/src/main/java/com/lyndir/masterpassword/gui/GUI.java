@@ -112,14 +112,11 @@ public class GUI implements UnlockFrame.SignInCallback {
     }
 
     protected void open() {
-        SwingUtilities.invokeLater( new Runnable() {
-            @Override
-            public void run() {
-                if (passwordFrame == null)
-                    unlockFrame.setVisible( true );
-                else
-                    passwordFrame.setVisible( true );
-            }
+        SwingUtilities.invokeLater( () -> {
+            if (passwordFrame == null)
+                unlockFrame.setVisible( true );
+            else
+                passwordFrame.setVisible( true );
         } );
     }
 

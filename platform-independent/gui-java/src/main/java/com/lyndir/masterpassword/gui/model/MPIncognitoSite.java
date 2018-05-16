@@ -31,17 +31,17 @@ import javax.annotation.Nullable;
 /**
  * @author lhunath, 14-12-16
  */
-public class IncognitoSite extends MPBasicSite {
+public class MPIncognitoSite extends MPBasicSite {
 
-    private final IncognitoUser user;
+    private final MPIncognitoUser user;
 
-    public IncognitoSite(final IncognitoUser user, final String name) {
+    public MPIncognitoSite(final MPIncognitoUser user, final String name) {
         this( user, name, null, null, null, null );
     }
 
-    public IncognitoSite(final IncognitoUser user, final String name,
-                         @Nullable final MPAlgorithm algorithm, @Nullable final UnsignedInteger counter,
-                         @Nullable final MPResultType resultType, @Nullable final MPResultType loginType) {
+    public MPIncognitoSite(final MPIncognitoUser user, final String name,
+                           @Nullable final MPAlgorithm algorithm, @Nullable final UnsignedInteger counter,
+                           @Nullable final MPResultType resultType, @Nullable final MPResultType loginType) {
         super( name, (algorithm == null)? user.getAlgorithm(): algorithm, counter, resultType, loginType );
 
         this.user = user;

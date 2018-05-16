@@ -16,16 +16,18 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-package com.lyndir.masterpassword;
+package com.lyndir.masterpassword.impl;
 
 import com.google.common.primitives.Bytes;
 import com.lyndir.lhunath.opal.system.CodeUtils;
+import com.lyndir.masterpassword.MPAlgorithm;
+import com.lyndir.masterpassword.MPKeyPurpose;
 import java.util.Arrays;
 
 
 /**
  * @author lhunath, 2014-08-30
- * @see MPMasterKey.Version#V3
+ * @see Version#V3
  */
 public class MPAlgorithmV3 extends MPAlgorithmV2 {
 
@@ -59,7 +61,7 @@ public class MPAlgorithmV3 extends MPAlgorithmV2 {
     // Configuration
 
     @Override
-    public MPMasterKey.Version version() {
-        return MPMasterKey.Version.V3;
+    public Version version() {
+        return MPAlgorithm.Version.V3;
     }
 }

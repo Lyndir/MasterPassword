@@ -16,25 +16,10 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-package com.lyndir.masterpassword.gui.model;
-
-import com.lyndir.masterpassword.MPMasterKey;
-import com.lyndir.masterpassword.model.impl.MPBasicUser;
-import javax.annotation.Nullable;
-
-
 /**
- * @author lhunath, 2014-06-08
+ * @author lhunath, 2018-05-15
  */
-public class IncognitoUser extends MPBasicUser<IncognitoSite> {
+@ParametersAreNonnullByDefault
+package com.lyndir.masterpassword.impl;
 
-    public IncognitoUser(final String fullName) {
-        super(fullName, MPMasterKey.Version.CURRENT.getAlgorithm());
-    }
-
-    @Nullable
-    @Override
-    public byte[] getKeyID() {
-        return null;
-    }
-}
+import javax.annotation.ParametersAreNonnullByDefault;

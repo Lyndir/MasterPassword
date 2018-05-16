@@ -72,8 +72,8 @@ public class MPJSONFile extends MPJSONAnyObject {
                 // Clear Text
                 content = modelSite.getResult();
                 loginContent = modelUser.getMasterKey().siteResult(
-                        modelSite.getName(), modelSite.getAlgorithm().mpw_default_counter(),
-                        MPKeyPurpose.Identification, null, modelSite.getLoginType(), modelSite.getLoginState(), modelSite.getAlgorithm() );
+                        modelSite.getName(), modelSite.getAlgorithm(), modelSite.getAlgorithm().mpw_default_counter(),
+                        MPKeyPurpose.Identification, null, modelSite.getLoginType(), modelSite.getLoginState() );
             } else {
                 // Redacted
                 if (modelSite.getResultType().supportsTypeFeature( MPSiteFeature.ExportContent ))
@@ -134,7 +134,7 @@ public class MPJSONFile extends MPJSONAnyObject {
 
     public MPFileUser read(@Nullable final char[] masterPassword)
             throws MPIncorrectMasterPasswordException, MPKeyUnavailableException {
-        MPAlgorithm algorithm = ifNotNullElse( user.algorithm, MPMasterKey.Version.CURRENT ).getAlgorithm();
+        MPAlgorithm algorithm = ifNotNullElse( user.algorithm, MPAlgorithm.Version.CURRENT ).getAlgorithm();
         MPFileUser model = new MPFileUser(
                 user.full_name, CodeUtils.decodeHex( user.key_id ), algorithm, user.avatar,
                 (user.default_type != null)? user.default_type: algorithm.mpw_default_result_type(),
@@ -192,7 +192,7 @@ public class MPJSONFile extends MPJSONAnyObject {
         @Nullable
         String              key_id;
         @Nullable
-        MPMasterKey.Version algorithm;
+        MPAlgorithm.Version algorithm;
         @Nullable
         MPResultType        default_type;
     }
@@ -203,7 +203,7 @@ public class MPJSONFile extends MPJSONAnyObject {
         @Nullable
         MPResultType type;
         long                counter;
-        MPMasterKey.Version algorithm;
+        MPAlgorithm.Version algorithm;
         @Nullable
         String       password;
         @Nullable

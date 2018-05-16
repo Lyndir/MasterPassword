@@ -176,7 +176,7 @@ public class MPTests {
 
         @Nonnull
         public MPAlgorithm getAlgorithm() {
-            return MPMasterKey.Version.fromInt( checkNotNull( algorithm ) ).getAlgorithm();
+            return MPAlgorithm.Version.fromInt( checkNotNull( algorithm ) ).getAlgorithm();
         }
 
         @Nonnull

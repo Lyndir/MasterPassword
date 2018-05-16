@@ -49,7 +49,7 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
     private MPJSONFile json;
 
     public MPFileUser(final String fullName) {
-        this( fullName, null, MPMasterKey.Version.CURRENT.getAlgorithm() );
+        this( fullName, null, MPAlgorithm.Version.CURRENT.getAlgorithm() );
     }
 
     public MPFileUser(final String fullName, @Nullable final byte[] keyID, final MPAlgorithm algorithm) {

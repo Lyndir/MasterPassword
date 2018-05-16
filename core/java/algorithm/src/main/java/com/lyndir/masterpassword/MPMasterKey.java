@@ -18,8 +18,6 @@
 
 package com.lyndir.masterpassword;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.common.base.Preconditions;
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.CodeUtils;
@@ -38,128 +36,21 @@ public class MPMasterKey {
     @SuppressWarnings("UnusedDeclaration")
     private static final Logger logger = Logger.get( MPMasterKey.class );
 
-    private final EnumMap<Version, byte[]> keyByVersion = new EnumMap<>( Version.class );
-    private final String                   fullName;
-    private final char[]                   masterPassword;
+    private final EnumMap<MPAlgorithm.Version, byte[]> keyByVersion = new EnumMap<>( MPAlgorithm.Version.class );
+    private final String                               fullName;
+    private final char[]                               masterPassword;
 
     private boolean invalidated;
 
     /**
-     * @param masterPassword The characters of the user's master password.  Note: this array is held by reference and its contents
-     *                       invalidated on {@link #invalidate()}.
+     * @param masterPassword The characters of the user's master password.
+     *                       Note: this array is held by reference and its contents invalidated on {@link #invalidate()}.
      */
     @SuppressWarnings("AssignmentToCollectionOrArrayFieldFromParameter")
     public MPMasterKey(final String fullName, final char[] masterPassword) {
 
         this.fullName = fullName;
         this.masterPassword = masterPassword;
-    }
-
-    /**
-     * Derive the master key for a user based on their name and master password.
-     *
-     * @throws MPKeyUnavailableException {@link #invalidate()} has been called on this object.
-     */
-    private byte[] masterKey(final MPAlgorithm algorithm)
-            throws MPKeyUnavailableException {
-        Preconditions.checkArgument( masterPassword.length > 0 );
-
-        if (invalidated)
-            throw new MPKeyUnavailableException();
-
-        byte[] key = keyByVersion.get( algorithm.version() );
-        if (key == null) {
-            logger.trc( "-- mpw_masterKey (algorithm: %s)", algorithm );
-            logger.trc( "fullName: %s", fullName );
-            logger.trc( "masterPassword.id: %s", CodeUtils.encodeHex(
-                    algorithm.toID( algorithm.toBytes( masterPassword ) ) ) );
-
-            keyByVersion.put( algorithm.version(), key = algorithm.masterKey( fullName, masterPassword ) );
-        }
-
-        return key;
-    }
-
-    /**
-     * Derive the master key for a user based on their name and master password.
-     *
-     * @throws MPKeyUnavailableException {@link #invalidate()} has been called on this object.
-     */
-    private byte[] siteKey(final String siteName, final UnsignedInteger siteCounter, final MPKeyPurpose keyPurpose,
-                           @Nullable final String keyContext, final MPAlgorithm algorithm)
-            throws MPKeyUnavailableException {
-        Preconditions.checkArgument( !siteName.isEmpty() );
-
-        byte[] masterKey = masterKey( algorithm );
-
-        logger.trc( "-- mpw_siteKey (algorithm: %s)", algorithm );
-        logger.trc( "siteName: %s", siteName );
-        logger.trc( "siteCounter: %s", siteCounter );
-        logger.trc( "keyPurpose: %d (%s)", keyPurpose.toInt(), keyPurpose.getShortName() );
-        logger.trc( "keyContext: %s", keyContext );
-
-        return algorithm.siteKey( masterKey, siteName, siteCounter, keyPurpose, keyContext );
-    }
-
-    /**
-     * Generate a site result token.
-     *
-     * @param siteName    A site identifier.
-     * @param siteCounter The result identifier.
-     * @param keyPurpose  The intended purpose for this site result.
-     * @param keyContext  A site-scoped result modifier.
-     * @param resultType  The type of result to generate.
-     * @param resultParam A parameter for the resultType.  For stateful result types, the output of
-     *                    {@link #siteState(String, UnsignedInteger, MPKeyPurpose, String, MPResultType, String, MPAlgorithm)}.
-     *
-     * @throws MPKeyUnavailableException {@link #invalidate()} has been called on this object.
-     */
-    public String siteResult(final String siteName, final UnsignedInteger siteCounter, final MPKeyPurpose keyPurpose,
-                             @Nullable final String keyContext, final MPResultType resultType, @Nullable final String resultParam,
-                             final MPAlgorithm algorithm)
-            throws MPKeyUnavailableException {
-
-        byte[] masterKey = masterKey( algorithm );
-        byte[] siteKey   = siteKey( siteName, siteCounter, keyPurpose, keyContext, algorithm );
-
-        logger.trc( "-- mpw_siteResult (algorithm: %s)", algorithm );
-        logger.trc( "resultType: %d (%s)", resultType.getType(), resultType.getShortName() );
-        logger.trc( "resultParam: %s", resultParam );
-
-        return algorithm.siteResult(
-                masterKey, siteKey, siteName, siteCounter, keyPurpose, keyContext, resultType, resultParam );
-    }
-
-    /**
-     * Encrypt a stateful site token for persistence.
-     *
-     * @param siteName    A site identifier.
-     * @param siteCounter The result identifier.
-     * @param keyPurpose  The intended purpose for the site token.
-     * @param keyContext  A site-scoped key modifier.
-     * @param resultType  The type of result token to encrypt.
-     * @param resultParam The result token desired from
-     *                    {@link #siteResult(String, UnsignedInteger, MPKeyPurpose, String, MPResultType, String, MPAlgorithm)}.
-     *
-     * @throws MPKeyUnavailableException {@link #invalidate()} has been called on this object.
-     */
-    public String siteState(final String siteName, final UnsignedInteger siteCounter, final MPKeyPurpose keyPurpose,
-                            @Nullable final String keyContext, final MPResultType resultType, @Nullable final String resultParam,
-                            final MPAlgorithm algorithm)
-            throws MPKeyUnavailableException {
-
-        Preconditions.checkNotNull( resultParam );
-        Preconditions.checkArgument( !resultParam.isEmpty() );
-
-        byte[] masterKey = masterKey( algorithm );
-        byte[] siteKey   = siteKey( siteName, siteCounter, keyPurpose, keyContext, algorithm );
-
-        logger.trc( "-- mpw_siteState (algorithm: %s)", algorithm );
-        logger.trc( "resultType: %d (%s)", resultType.getType(), resultType.getShortName() );
-        logger.trc( "resultParam: %d bytes = %s", resultParam.getBytes( algorithm.mpw_charset() ).length, resultParam );
-
-        return algorithm.siteState(
-                masterKey, siteKey, siteName, siteCounter, keyPurpose, keyContext, resultType, resultParam );
     }
 
     @Nonnull
@@ -190,60 +81,101 @@ public class MPMasterKey {
         Arrays.fill( masterPassword, (char) 0 );
     }
 
+    private byte[] masterKey(final MPAlgorithm algorithm)
+            throws MPKeyUnavailableException {
+        Preconditions.checkArgument( masterPassword.length > 0 );
+
+        if (invalidated)
+            throw new MPKeyUnavailableException();
+
+        byte[] key = keyByVersion.get( algorithm.version() );
+        if (key == null) {
+            logger.trc( "-- mpw_masterKey (algorithm: %s)", algorithm );
+            logger.trc( "fullName: %s", fullName );
+            logger.trc( "masterPassword.id: %s", CodeUtils.encodeHex(
+                    algorithm.toID( algorithm.toBytes( masterPassword ) ) ) );
+
+            keyByVersion.put( algorithm.version(), key = algorithm.masterKey( fullName, masterPassword ) );
+        }
+
+        return key;
+    }
+
+    private byte[] siteKey(final String siteName, final MPAlgorithm algorithm, final UnsignedInteger siteCounter,
+                           final MPKeyPurpose keyPurpose, @Nullable final String keyContext)
+            throws MPKeyUnavailableException {
+        Preconditions.checkArgument( !siteName.isEmpty() );
+
+        byte[] masterKey = masterKey( algorithm );
+
+        logger.trc( "-- mpw_siteKey (algorithm: %s)", algorithm );
+        logger.trc( "siteName: %s", siteName );
+        logger.trc( "siteCounter: %s", siteCounter );
+        logger.trc( "keyPurpose: %d (%s)", keyPurpose.toInt(), keyPurpose.getShortName() );
+        logger.trc( "keyContext: %s", keyContext );
+
+        return algorithm.siteKey( masterKey, siteName, siteCounter, keyPurpose, keyContext );
+    }
+
     /**
-     * The algorithm iterations.
+     * Generate a token for use with site.
+     *
+     * @param siteName    The site's identifier.
+     * @param siteCounter The result's generation.
+     * @param keyPurpose  The intended purpose for the site token.
+     * @param keyContext  The purpose-specific context for this token.
+     * @param resultType  The type of token we're deriving.
+     * @param resultParam Type-specific contextual data for the derivation.
+     *                    In the case of {@link MPResultTypeClass#Stateful} types, the result of
+     *                    {@link #siteState(String, MPAlgorithm, UnsignedInteger, MPKeyPurpose, String, MPResultType, String)}.
+     *
+     * @throws MPKeyUnavailableException {@link #invalidate()} has been called on this object.
      */
-    public enum Version {
+    public String siteResult(final String siteName, final MPAlgorithm algorithm, final UnsignedInteger siteCounter,
+                             final MPKeyPurpose keyPurpose, @Nullable final String keyContext,
+                             final MPResultType resultType, @Nullable final String resultParam)
+            throws MPKeyUnavailableException {
 
-        /**
-         * bugs:
-         * - does math with chars whose signedness was platform-dependent.
-         * - miscounted the byte-length for multi-byte site names.
-         * - miscounted the byte-length for multi-byte user names.
-         */
-        V0( new MPAlgorithmV0() ),
+        byte[] masterKey = masterKey( algorithm );
+        byte[] siteKey   = siteKey( siteName, algorithm, siteCounter, keyPurpose, keyContext );
 
-        /**
-         * bugs:
-         * - miscounted the byte-length for multi-byte site names.
-         * - miscounted the byte-length for multi-byte user names.
-         */
-        V1( new MPAlgorithmV1() ),
+        logger.trc( "-- mpw_siteResult (algorithm: %s)", algorithm );
+        logger.trc( "resultType: %d (%s)", resultType.getType(), resultType.getShortName() );
+        logger.trc( "resultParam: %s", resultParam );
 
-        /**
-         * bugs:
-         * - miscounted the byte-length for multi-byte user names.
-         */
-        V2( new MPAlgorithmV2() ),
+        return algorithm.siteResult(
+                masterKey, siteKey, siteName, siteCounter, keyPurpose, keyContext, resultType, resultParam );
+    }
 
-        /**
-         * bugs:
-         * - no known issues.
-         */
-        V3( new MPAlgorithmV3() );
+    /**
+     * Encrypt a stateful site token for persistence.
+     *
+     * @param siteName    The site's identifier.
+     * @param siteCounter The result's generation.
+     * @param keyPurpose  The intended purpose for the site token.
+     * @param keyContext  The purpose-specific context for this token.
+     * @param resultType  The type of token we're deriving.
+     * @param resultParam The original token that this method's state should reconstruct when passed into
+     *                    {@link #siteResult(String, MPAlgorithm, UnsignedInteger, MPKeyPurpose, String, MPResultType, String)}.
+     *
+     * @throws MPKeyUnavailableException {@link #invalidate()} has been called on this object.
+     */
+    public String siteState(final String siteName, final MPAlgorithm algorithm, final UnsignedInteger siteCounter,
+                            final MPKeyPurpose keyPurpose, @Nullable final String keyContext,
+                            final MPResultType resultType, @Nullable final String resultParam)
+            throws MPKeyUnavailableException {
 
-        public static final Version CURRENT = V3;
+        Preconditions.checkNotNull( resultParam );
+        Preconditions.checkArgument( !resultParam.isEmpty() );
 
-        private final MPAlgorithm algorithm;
+        byte[] masterKey = masterKey( algorithm );
+        byte[] siteKey   = siteKey( siteName, algorithm, siteCounter, keyPurpose, keyContext );
 
-        Version(final MPAlgorithm algorithm) {
-            this.algorithm = algorithm;
-        }
+        logger.trc( "-- mpw_siteState (algorithm: %s)", algorithm );
+        logger.trc( "resultType: %d (%s)", resultType.getType(), resultType.getShortName() );
+        logger.trc( "resultParam: %d bytes = %s", resultParam.getBytes( algorithm.mpw_charset() ).length, resultParam );
 
-        public MPAlgorithm getAlgorithm() {
-            return algorithm;
-        }
-
-        @JsonCreator
-        public static Version fromInt(final int algorithmVersion) {
-
-            return values()[algorithmVersion];
-        }
-
-        @JsonValue
-        public int toInt() {
-
-            return ordinal();
-        }
+        return algorithm.siteState(
+                masterKey, siteKey, siteName, siteCounter, keyPurpose, keyContext, resultType, resultParam );
     }
 }

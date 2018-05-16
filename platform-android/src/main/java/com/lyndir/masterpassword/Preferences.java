@@ -151,7 +151,7 @@ public final class Preferences {
         return MPResultType.values()[prefs().getInt( PREF_RESULT_TYPE, getDefaultVersion().getAlgorithm().mpw_default_result_type().ordinal() )];
     }
 
-    public boolean setDefaultVersion(final MPMasterKey.Version value) {
+    public boolean setDefaultVersion(final MPAlgorithm.Version value) {
         if (getDefaultVersion() == value)
             return false;
 
@@ -160,7 +160,7 @@ public final class Preferences {
     }
 
     @Nonnull
-    public MPMasterKey.Version getDefaultVersion() {
-        return MPMasterKey.Version.values()[prefs().getInt( PREF_ALGORITHM_VERSION, MPMasterKey.Version.CURRENT.ordinal() )];
+    public MPAlgorithm.Version getDefaultVersion() {
+        return MPAlgorithm.Version.values()[prefs().getInt( PREF_ALGORITHM_VERSION, MPAlgorithm.Version.CURRENT.ordinal() )];
     }
 }

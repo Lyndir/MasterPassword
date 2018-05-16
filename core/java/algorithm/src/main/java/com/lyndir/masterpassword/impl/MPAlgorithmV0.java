@@ -16,7 +16,7 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-package com.lyndir.masterpassword;
+package com.lyndir.masterpassword.impl;
 
 import com.google.common.base.*;
 import com.google.common.primitives.Bytes;
@@ -26,6 +26,7 @@ import com.lyndir.lhunath.opal.crypto.CryptUtils;
 import com.lyndir.lhunath.opal.system.*;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.ConversionUtils;
+import com.lyndir.masterpassword.*;
 import java.nio.*;
 import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
@@ -37,12 +38,12 @@ import javax.crypto.IllegalBlockSizeException;
 
 /**
  * @author lhunath, 2014-08-30
- * @see MPMasterKey.Version#V0
+ * @see MPAlgorithm.Version#V0
  */
 @SuppressWarnings("NewMethodNamingConvention")
 public class MPAlgorithmV0 extends MPAlgorithm {
 
-    public final MPMasterKey.Version version = MPMasterKey.Version.V0;
+    public final Version version = MPAlgorithm.Version.V0;
 
     protected final Logger logger = Logger.get( getClass() );
 
@@ -122,19 +123,19 @@ public class MPAlgorithmV0 extends MPAlgorithm {
 
         switch (resultType.getTypeClass()) {
             case Template:
-                return sitePasswordFromTemplate( masterKey, siteKey, resultType, resultParam );
+                return siteResultFromTemplate( masterKey, siteKey, resultType, resultParam );
             case Stateful:
-                return sitePasswordFromCrypt( masterKey, siteKey, resultType, resultParam );
+                return siteResultFromState( masterKey, siteKey, resultType, resultParam );
             case Derive:
-                return sitePasswordFromDerive( masterKey, siteKey, resultType, resultParam );
+                return siteResultFromDerive( masterKey, siteKey, resultType, resultParam );
         }
 
         throw logger.bug( "Unsupported result type class: %s", resultType.getTypeClass() );
     }
 
     @Override
-    public String sitePasswordFromTemplate(final byte[] masterKey, final byte[] siteKey,
-                                           final MPResultType resultType, @Nullable final String resultParam) {
+    public String siteResultFromTemplate(final byte[] masterKey, final byte[] siteKey,
+                                         final MPResultType resultType, @Nullable final String resultParam) {
 
         int[] _siteKey = new int[siteKey.length];
         for (int i = 0; i < siteKey.length; ++i) {
@@ -168,8 +169,8 @@ public class MPAlgorithmV0 extends MPAlgorithm {
     }
 
     @Override
-    public String sitePasswordFromCrypt(final byte[] masterKey, final byte[] siteKey,
-                                        final MPResultType resultType, @Nullable final String resultParam) {
+    public String siteResultFromState(final byte[] masterKey, final byte[] siteKey,
+                                      final MPResultType resultType, @Nullable final String resultParam) {
 
         Preconditions.checkNotNull( resultParam );
         Preconditions.checkArgument( !resultParam.isEmpty() );
@@ -192,8 +193,8 @@ public class MPAlgorithmV0 extends MPAlgorithm {
     }
 
     @Override
-    public String sitePasswordFromDerive(final byte[] masterKey, final byte[] siteKey,
-                                         final MPResultType resultType, @Nullable final String resultParam) {
+    public String siteResultFromDerive(final byte[] masterKey, final byte[] siteKey,
+                                       final MPResultType resultType, @Nullable final String resultParam) {
 
         if (resultType == MPResultType.DeriveKey) {
             int resultParamInt = ConversionUtils.toIntegerNN( resultParam );
@@ -242,8 +243,8 @@ public class MPAlgorithmV0 extends MPAlgorithm {
     // Configuration
 
     @Override
-    public MPMasterKey.Version version() {
-        return MPMasterKey.Version.V0;
+    public Version version() {
+        return MPAlgorithm.Version.V0;
     }
 
     @Override

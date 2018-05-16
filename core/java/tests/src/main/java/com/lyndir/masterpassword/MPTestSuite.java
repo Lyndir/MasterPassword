@@ -168,17 +168,13 @@ public class MPTestSuite implements Callable<Boolean> {
     @Override
     public Boolean call()
             throws Exception {
-        return forEach( "mpw", new TestCase() {
-            @Override
-            public boolean run(final MPTests.Case testCase)
-                    throws Exception {
-                MPMasterKey masterKey = new MPMasterKey( testCase.getFullName(), testCase.getMasterPassword().toCharArray() );
-                String sitePassword = masterKey.siteResult( testCase.getSiteName(), testCase.getSiteCounter(), testCase.getKeyPurpose(),
-                                                            testCase.getKeyContext(), testCase.getResultType(),
-                                                            null, testCase.getAlgorithm() );
+        return forEach( "mpw", testCase -> {
+            MPMasterKey masterKey = new MPMasterKey( testCase.getFullName(), testCase.getMasterPassword().toCharArray() );
+            String sitePassword = masterKey.siteResult( testCase.getSiteName(), testCase.getAlgorithm(), testCase.getSiteCounter(),
+                                                        testCase.getKeyPurpose(), testCase.getKeyContext(),
+                                                        testCase.getResultType(), null );
 
-                return testCase.getResult().equals( sitePassword );
-            }
+            return testCase.getResult().equals( sitePassword );
         } );
     }
 
@@ -192,12 +188,14 @@ public class MPTestSuite implements Callable<Boolean> {
     }
 
 
+    @FunctionalInterface
     public interface Listener {
 
         void progress(int current, int max, String messageFormat, Object... args);
     }
 
 
+    @FunctionalInterface
     public interface TestCase {
 
         boolean run(MPTests.Case testCase)

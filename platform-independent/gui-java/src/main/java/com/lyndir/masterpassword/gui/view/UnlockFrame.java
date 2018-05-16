@@ -119,20 +119,12 @@ public class UnlockFrame extends JFrame {
         authenticationContainer.add( authenticationPanel );
         authenticationContainer.add( Components.stud() );
 
-        final JCheckBox incognitoCheckBox = Components.checkBox( "Incognito" );
+        JCheckBox incognitoCheckBox = Components.checkBox( "Incognito" );
         incognitoCheckBox.setToolTipText( "Log in without saving any information." );
         incognitoCheckBox.setSelected( incognito );
-        incognitoCheckBox.addItemListener( new ItemListener() {
-            @Override
-            public void itemStateChanged(final ItemEvent e) {
-                incognito = incognitoCheckBox.isSelected();
-                SwingUtilities.invokeLater( new Runnable() {
-                    @Override
-                    public void run() {
-                        createAuthenticationPanel();
-                    }
-                } );
-            }
+        incognitoCheckBox.addItemListener( e -> {
+            incognito = incognitoCheckBox.isSelected();
+            SwingUtilities.invokeLater( this::createAuthenticationPanel );
         } );
 
         JComponent toolsPanel = Components.boxLayout( BoxLayout.LINE_AXIS, incognitoCheckBox, Box.createGlue() );
@@ -149,12 +141,7 @@ public class UnlockFrame extends JFrame {
         validate();
         repack();
 
-        SwingUtilities.invokeLater( new Runnable() {
-            @Override
-            public void run() {
-                ifNotNullElse( authenticationPanel.getFocusComponent(), signInButton ).requestFocusInWindow();
-            }
-        } );
+        SwingUtilities.invokeLater( () -> ifNotNullElse( authenticationPanel.getFocusComponent(), signInButton ).requestFocusInWindow() );
     }
 
     void updateUser(@Nullable final MPUser<? extends MPSite> user) {
@@ -165,28 +152,20 @@ public class UnlockFrame extends JFrame {
     boolean checkSignIn() {
         if (identiconFuture != null)
             identiconFuture.cancel( false );
-        identiconFuture = Res.schedule( this, new Runnable() {
-            @Override
-            public void run() {
-                SwingUtilities.invokeLater( new Runnable() {
-                    @Override
-                    public void run() {
-                        String fullName       = (user == null)? "": user.getFullName();
-                        char[] masterPassword = authenticationPanel.getMasterPassword();
+        identiconFuture = Res.schedule( this, () -> SwingUtilities.invokeLater( () -> {
+            String fullName       = (user == null)? "": user.getFullName();
+            char[] masterPassword = authenticationPanel.getMasterPassword();
 
-                        if (fullName.isEmpty() || (masterPassword.length == 0)) {
-                            identiconLabel.setText( " " );
-                            return;
-                        }
-
-                        MPIdenticon identicon = new MPIdenticon( fullName, masterPassword );
-                        identiconLabel.setText( identicon.getText() );
-                        identiconLabel.setForeground(
-                                Res.colors().fromIdenticonColor( identicon.getColor(), Res.Colors.BackgroundMode.DARK ) );
-                    }
-                } );
+            if (fullName.isEmpty() || (masterPassword.length == 0)) {
+                identiconLabel.setText( " " );
+                return;
             }
-        }, 300, TimeUnit.MILLISECONDS );
+
+            MPIdenticon identicon = new MPIdenticon( fullName, masterPassword );
+            identiconLabel.setText( identicon.getText() );
+            identiconLabel.setForeground(
+                    Res.colors().fromIdenticonColor( identicon.getColor(), Res.Colors.BackgroundMode.DARK ) );
+        } ), 300, TimeUnit.MILLISECONDS );
 
         String  fullName       = (user == null)? "": user.getFullName();
         char[]  masterPassword = authenticationPanel.getMasterPassword();
@@ -206,37 +185,29 @@ public class UnlockFrame extends JFrame {
         signInButton.setEnabled( false );
         signInButton.setText( "Signing In..." );
 
-        Res.execute( this, new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    user.authenticate( authenticationPanel.getMasterPassword() );
+        Res.execute( this, () -> {
+            try {
+                user.authenticate( authenticationPanel.getMasterPassword() );
 
-                    SwingUtilities.invokeLater( new Runnable() {
-                        @Override
-                        public void run() {
-                            signInCallback.signedIn( authenticationPanel.newPasswordFrame() );
-                            dispose();
-                        }
-                    } );
-                }
-                catch (final MPIncorrectMasterPasswordException e) {
-                    SwingUtilities.invokeLater( new Runnable() {
-                        @Override
-                        public void run() {
-                            JOptionPane.showMessageDialog( null, e.getLocalizedMessage(), "Sign In Failed", JOptionPane.ERROR_MESSAGE );
-                            authenticationPanel.reset();
-                            signInButton.setText( "Sign In" );
-                            for (final JComponent signInComponent : signInComponents)
-                                signInComponent.setEnabled( true );
-                            checkSignIn();
-                        }
-                    } );
-                }
+                SwingUtilities.invokeLater( () -> {
+                    signInCallback.signedIn( authenticationPanel.newPasswordFrame() );
+                    dispose();
+                } );
+            }
+            catch (final MPIncorrectMasterPasswordException e) {
+                SwingUtilities.invokeLater( () -> {
+                    JOptionPane.showMessageDialog( null, e.getLocalizedMessage(), "Sign In Failed", JOptionPane.ERROR_MESSAGE );
+                    authenticationPanel.reset();
+                    signInButton.setText( "Sign In" );
+                    for (final JComponent signInComponent : signInComponents)
+                        signInComponent.setEnabled( true );
+                    checkSignIn();
+                } );
             }
         } );
     }
 
+    @FunctionalInterface
     public interface SignInCallback {
 
         void signedIn(PasswordFrame<?, ?> passwordFrame);

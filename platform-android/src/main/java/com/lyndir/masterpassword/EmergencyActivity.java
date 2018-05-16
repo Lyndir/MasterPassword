@@ -58,7 +58,7 @@ public class EmergencyActivity extends Activity {
             Executors.newSingleThreadExecutor() );
     private final ImmutableList<MPResultType>        allResultTypes = ImmutableList.copyOf(
             MPResultType.forClass( MPResultTypeClass.Template ) );
-    private final ImmutableList<MPMasterKey.Version> allVersions    = ImmutableList.copyOf( MPMasterKey.Version.values() );
+    private final ImmutableList<MPAlgorithm.Version> allVersions    = ImmutableList.copyOf( MPAlgorithm.Version.values() );
 
     @Nullable
     private MPMasterKey masterKey;
@@ -160,7 +160,7 @@ public class EmergencyActivity extends Activity {
             @Override
             public void onClick(final View v) {
                 @SuppressWarnings("SuspiciousMethodCalls")
-                MPMasterKey.Version siteVersion =
+                MPAlgorithm.Version siteVersion =
                         allVersions.get( (allVersions.indexOf( siteVersionButton.getTag() ) + 1) % allVersions.size() );
                 preferences.setDefaultVersion( siteVersion );
                 siteVersionButton.setTag( siteVersion );
@@ -227,7 +227,7 @@ public class EmergencyActivity extends Activity {
         MPResultType defaultResultType = preferences.getDefaultResultType();
         resultTypeButton.setTag( defaultResultType );
         resultTypeButton.setText( defaultResultType.getShortName() );
-        MPMasterKey.Version defaultVersion = preferences.getDefaultVersion();
+        MPAlgorithm.Version defaultVersion = preferences.getDefaultVersion();
         siteVersionButton.setTag( defaultVersion );
         siteVersionButton.setText( defaultVersion.name() );
         siteCounterButton.setText( MessageFormat.format( "{0}", 1 ) );
@@ -289,7 +289,7 @@ public class EmergencyActivity extends Activity {
         final String              siteName = siteNameField.getText().toString();
         final MPResultType        type     = (MPResultType) resultTypeButton.getTag();
         final UnsignedInteger     counter  = UnsignedInteger.valueOf( siteCounterButton.getText().toString() );
-        final MPMasterKey.Version version  = (MPMasterKey.Version) siteVersionButton.getTag();
+        final MPAlgorithm.Version version  = (MPAlgorithm.Version) siteVersionButton.getTag();
 
         if ((masterKey == null) || siteName.isEmpty() || (type == null)) {
             sitePasswordField.setText( "" );
@@ -306,8 +306,8 @@ public class EmergencyActivity extends Activity {
             @Override
             public void run() {
                 try {
-                    sitePassword = masterKey.siteResult( siteName, counter, MPKeyPurpose.Authentication, null, type, null,
-                                                         version.getAlgorithm() );
+                    sitePassword = masterKey.siteResult( siteName, version.getAlgorithm(), counter, MPKeyPurpose.Authentication, null, type, null
+                    );
 
                     runOnUiThread( new Runnable() {
                         @Override

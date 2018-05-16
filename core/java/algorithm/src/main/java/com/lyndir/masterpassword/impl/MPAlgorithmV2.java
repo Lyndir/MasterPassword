@@ -16,23 +16,25 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-package com.lyndir.masterpassword;
+package com.lyndir.masterpassword.impl;
 
 import com.google.common.primitives.Bytes;
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.CodeUtils;
+import com.lyndir.masterpassword.MPAlgorithm;
+import com.lyndir.masterpassword.MPKeyPurpose;
 import javax.annotation.Nullable;
 
 
 /**
  * @author lhunath, 2014-08-30
- * @see MPMasterKey.Version#V2
+ * @see Version#V2
  */
 public class MPAlgorithmV2 extends MPAlgorithmV1 {
 
     @Override
-    public byte[] siteKey(final byte[] masterKey, final String siteName, UnsignedInteger siteCounter, final MPKeyPurpose keyPurpose,
-                          @Nullable final String keyContext) {
+    public byte[] siteKey(final byte[] masterKey, final String siteName, UnsignedInteger siteCounter,
+                          final MPKeyPurpose keyPurpose, @Nullable final String keyContext) {
 
         String keyScope = keyPurpose.getScope();
         logger.trc( "keyScope: %s", keyScope );
@@ -66,7 +68,7 @@ public class MPAlgorithmV2 extends MPAlgorithmV1 {
     // Configuration
 
     @Override
-    public MPMasterKey.Version version() {
-        return MPMasterKey.Version.V2;
+    public Version version() {
+        return MPAlgorithm.Version.V2;
     }
 }

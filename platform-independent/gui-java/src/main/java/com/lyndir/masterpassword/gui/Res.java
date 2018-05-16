@@ -60,15 +60,12 @@ public abstract class Res {
     }
 
     public static Future<?> schedule(final Window host, final Runnable job, final long delay, final TimeUnit timeUnit) {
-        return getExecutor( host ).schedule( new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    job.run();
-                }
-                catch (final Throwable t) {
-                    logger.err( t, "Unexpected: %s", t.getLocalizedMessage() );
-                }
+        return getExecutor( host ).schedule( () -> {
+            try {
+                job.run();
+            }
+            catch (final Throwable t) {
+                logger.err( t, "Unexpected: %s", t.getLocalizedMessage() );
             }
         }, delay, timeUnit );
     }
@@ -79,17 +76,13 @@ public abstract class Res {
 
     public static <V> ListenableFuture<V> schedule(final Window host, final Callable<V> job, final long delay, final TimeUnit timeUnit) {
         ScheduledExecutorService executor = getExecutor( host );
-        return JdkFutureAdapters.listenInPoolThread( executor.schedule( new Callable<V>() {
-            @Override
-            public V call()
-                    throws Exception {
-                try {
-                    return job.call();
-                }
-                catch (final Throwable t) {
-                    logger.err( t, "Unexpected: %s", t.getLocalizedMessage() );
-                    throw Throwables.propagate( t );
-                }
+        return JdkFutureAdapters.listenInPoolThread( executor.schedule( () -> {
+            try {
+                return job.call();
+            }
+            catch (final Throwable t) {
+                logger.err( t, "Unexpected: %s", t.getLocalizedMessage() );
+                throw Throwables.propagate( t );
             }
         }, delay, timeUnit ), executor );
     }

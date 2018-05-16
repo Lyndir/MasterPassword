@@ -23,8 +23,8 @@ import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.masterpassword.MPAlgorithm;
 import com.lyndir.masterpassword.MPResultType;
 import com.lyndir.masterpassword.gui.Res;
-import com.lyndir.masterpassword.gui.model.IncognitoSite;
-import com.lyndir.masterpassword.gui.model.IncognitoUser;
+import com.lyndir.masterpassword.gui.model.MPIncognitoSite;
+import com.lyndir.masterpassword.gui.model.MPIncognitoUser;
 import com.lyndir.masterpassword.gui.util.Components;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -40,7 +40,7 @@ import javax.swing.event.DocumentListener;
  * @author lhunath, 2014-06-11
  */
 @SuppressWarnings({ "serial", "MagicNumber" })
-public class IncognitoAuthenticationPanel extends AuthenticationPanel<IncognitoUser> implements DocumentListener, ActionListener {
+public class IncognitoAuthenticationPanel extends AuthenticationPanel<MPIncognitoUser> implements DocumentListener, ActionListener {
 
     private final JTextField     fullNameField;
     private final JPasswordField masterPasswordField;
@@ -82,20 +82,20 @@ public class IncognitoAuthenticationPanel extends AuthenticationPanel<IncognitoU
     }
 
     @Override
-    public PasswordFrame<IncognitoUser, ?> newPasswordFrame() {
-        return new PasswordFrame<IncognitoUser, IncognitoSite>( Preconditions.checkNotNull( getSelectedUser() ) ) {
+    public PasswordFrame<MPIncognitoUser, ?> newPasswordFrame() {
+        return new PasswordFrame<MPIncognitoUser, MPIncognitoSite>( Preconditions.checkNotNull( getSelectedUser() ) ) {
             @Override
-            protected IncognitoSite createSite(final IncognitoUser user, final String siteName, final UnsignedInteger siteCounter,
-                                               final MPResultType resultType, final MPAlgorithm algorithm) {
-                return new IncognitoSite( user, siteName, algorithm, siteCounter, resultType, null );
+            protected MPIncognitoSite createSite(final MPIncognitoUser user, final String siteName, final UnsignedInteger siteCounter,
+                                                 final MPResultType resultType, final MPAlgorithm algorithm) {
+                return new MPIncognitoSite( user, siteName, algorithm, siteCounter, resultType, null );
             }
         };
     }
 
     @Nullable
     @Override
-    protected IncognitoUser getSelectedUser() {
-        return new IncognitoUser( fullNameField.getText() );
+    protected MPIncognitoUser getSelectedUser() {
+        return new MPIncognitoUser( fullNameField.getText() );
     }
 
     @Nonnull

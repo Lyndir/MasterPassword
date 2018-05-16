@@ -118,8 +118,8 @@ public abstract class MPBasicSite implements MPSite {
             throws MPKeyUnavailableException {
 
         return getUser().getMasterKey().siteResult(
-                getName(), ifNotNullElse( counter, getAlgorithm().mpw_default_counter() ), keyPurpose, keyContext,
-                type, state, getAlgorithm() );
+                getName(), getAlgorithm(), ifNotNullElse( counter, getAlgorithm().mpw_default_counter() ),
+                keyPurpose, keyContext, type, state );
     }
 
     protected String getState(final MPKeyPurpose keyPurpose, @Nullable final String keyContext,
@@ -127,8 +127,8 @@ public abstract class MPBasicSite implements MPSite {
             throws MPKeyUnavailableException {
 
         return getUser().getMasterKey().siteState(
-                getName(), ifNotNullElse( counter, getAlgorithm().mpw_default_counter() ), keyPurpose, keyContext,
-                type, state, getAlgorithm() );
+                getName(), getAlgorithm(), ifNotNullElse( counter, getAlgorithm().mpw_default_counter() ),
+                keyPurpose, keyContext, type, state );
     }
 
     @Override

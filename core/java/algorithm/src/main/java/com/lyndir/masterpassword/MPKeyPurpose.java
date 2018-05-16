@@ -18,6 +18,8 @@
 
 package com.lyndir.masterpassword;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import java.util.Locale;
 import javax.annotation.Nullable;
@@ -33,10 +35,12 @@ public enum MPKeyPurpose {
      * Generate a key for authentication.
      */
     Authentication( "authentication", "Generate a key for authentication.", "com.lyndir.masterpassword" ),
+
     /**
      * Generate a name for identification.
      */
     Identification( "identification", "Generate a name for identification.", "com.lyndir.masterpassword.login" ),
+
     /**
      * Generate a recovery token.
      */
@@ -85,11 +89,13 @@ public enum MPKeyPurpose {
         throw logger.bug( "No purpose for name: %s", shortNamePrefix );
     }
 
+    @JsonCreator
     public static MPKeyPurpose forInt(final int keyPurpose) {
 
         return values()[keyPurpose];
     }
 
+    @JsonValue
     public int toInt() {
 
         return ordinal();
