@@ -25,6 +25,7 @@ import javax.annotation.Nonnull;
 /**
  * @author lhunath, 14-12-07
  */
+@FunctionalInterface
 public interface MPMarshaller {
 
     @Nonnull

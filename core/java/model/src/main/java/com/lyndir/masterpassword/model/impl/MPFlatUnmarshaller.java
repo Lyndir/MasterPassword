@@ -33,6 +33,7 @@ import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.joda.time.DateTime;
+import org.joda.time.Instant;
 
 
 /**
@@ -77,7 +78,7 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
                 else
                     // Ends the header.
                     user = new MPFileUser( fullName, keyID, MPAlgorithm.Version.fromInt( mpVersion ).getAlgorithm(),
-                                           avatar, defaultType, new DateTime( 0 ), MPMarshalFormat.Flat,
+                                           avatar, defaultType, new Instant( 0 ), MPMarshalFormat.Flat,
                                            clearContent? MPMarshaller.ContentMode.VISIBLE: MPMarshaller.ContentMode.PROTECTED );
 
                 // Comment.

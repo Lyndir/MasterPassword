@@ -164,7 +164,7 @@ public abstract class MPBasicSite<Q extends MPQuestion> implements MPSite<Q> {
     }
 
     @Override
-    public int compareTo(@NotNull final MPSite<Q> o) {
+    public int compareTo(@NotNull final MPSite<?> o) {
         return getName().compareTo( o.getName() );
     }
 

@@ -68,7 +68,7 @@ public abstract class MPBasicQuestion implements MPQuestion {
 
     @Nonnull
     @Override
-    public abstract MPBasicSite getSite();
+    public abstract MPBasicSite<?> getSite();
 
     @Override
     public int hashCode() {

@@ -20,8 +20,6 @@ package com.lyndir.masterpassword.model.impl;
 
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.masterpassword.*;
-import com.lyndir.masterpassword.model.MPSite;
-import com.lyndir.masterpassword.model.MPUser;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.joda.time.Instant;

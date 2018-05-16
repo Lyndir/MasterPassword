@@ -48,5 +48,5 @@ public interface MPQuestion extends Comparable<MPQuestion> {
     // -- Relationship
 
     @Nonnull
-    MPSite getSite();
+    MPSite<?> getSite();
 }

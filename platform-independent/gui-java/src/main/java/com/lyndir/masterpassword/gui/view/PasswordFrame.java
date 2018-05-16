@@ -28,6 +28,7 @@ import com.lyndir.masterpassword.*;
 import com.lyndir.masterpassword.gui.Res;
 import com.lyndir.masterpassword.gui.util.Components;
 import com.lyndir.masterpassword.gui.util.UnsignedIntegerModel;
+import com.lyndir.masterpassword.model.MPSite;
 import com.lyndir.masterpassword.model.MPUser;
 import com.lyndir.masterpassword.model.impl.*;
 import java.awt.*;
@@ -46,7 +47,7 @@ import javax.swing.event.DocumentListener;
 /**
  * @author lhunath, 2014-06-08
  */
-public abstract class PasswordFrame<U extends MPUser<S>, S extends MPBasicSite> extends JFrame implements DocumentListener {
+public abstract class PasswordFrame<U extends MPUser<S>, S extends MPSite<?>> extends JFrame implements DocumentListener {
 
     @SuppressWarnings("FieldCanBeLocal")
     private final Components.GradientPanel       root;

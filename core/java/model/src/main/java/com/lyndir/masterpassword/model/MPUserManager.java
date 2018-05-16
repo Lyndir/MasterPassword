@@ -19,8 +19,8 @@
 package com.lyndir.masterpassword.model;
 
 import com.google.common.collect.*;
-import java.util.Map;
-import java.util.SortedSet;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -35,8 +35,8 @@ public abstract class MPUserManager<U extends MPUser<?>> {
             usersByName.put( user.getFullName(), user );
     }
 
-    public SortedSet<U> getUsers() {
-        return FluentIterable.from( usersByName.values() ).toSortedSet( Ordering.natural() );
+    public Collection<U> getUsers() {
+        return ImmutableList.copyOf( usersByName.values() );
     }
 
     public U getUserNamed(final String fullName) {

@@ -27,7 +27,7 @@ import javax.annotation.Nullable;
 /**
  * @author lhunath, 2018-05-14
  */
-public interface MPUser<S extends MPSite> extends Comparable<MPUser<?>> {
+public interface MPUser<S extends MPSite<?>> extends Comparable<MPUser<?>> {
 
     // - Meta
 

@@ -86,7 +86,7 @@ public final class Preferences {
     }
 
     public Set<String> getTestsPassed() {
-        return prefs().getStringSet( PREF_TESTS_PASSED, ImmutableSet.<String>of() );
+        return prefs().getStringSet( PREF_TESTS_PASSED, ImmutableSet.of() );
     }
 
     public boolean setRememberFullName(final boolean enabled) {

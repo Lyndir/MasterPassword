@@ -29,13 +29,13 @@ import org.jetbrains.annotations.NotNull;
  */
 public class MPSiteResult implements Comparable<MPSiteResult> {
 
-    private final MPSite site;
+    private final MPSite<?> site;
 
-    public MPSiteResult(final MPSite site) {
+    public MPSiteResult(final MPSite<?> site) {
         this.site = site;
     }
 
-    public MPSite getSite() {
+    public MPSite<?> getSite() {
         return site;
     }
 

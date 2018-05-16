@@ -96,15 +96,12 @@ public class MPFileUserManager extends MPUserManager<MPFileUser> {
     }
 
     private static ImmutableList<File> listUserFiles(final File userFilesDirectory) {
-        return ImmutableList.copyOf( ifNotNullElse( userFilesDirectory.listFiles( new FilenameFilter() {
-            @Override
-            public boolean accept(final File dir, final String name) {
-                for (final MPMarshalFormat format : MPMarshalFormat.values())
-                    if (name.endsWith( format.fileSuffix() ))
-                        return true;
+        return ImmutableList.copyOf( ifNotNullElse( userFilesDirectory.listFiles( (dir, name) -> {
+            for (final MPMarshalFormat format : MPMarshalFormat.values())
+                if (name.endsWith( format.fileSuffix() ))
+                    return true;
 
-                return false;
-            }
+            return false;
         } ), new File[0] ) );
     }
 
@@ -124,7 +121,7 @@ public class MPFileUserManager extends MPUserManager<MPFileUser> {
     public void save(final MPFileUser user, final MPMasterKey masterKey)
             throws MPKeyUnavailableException {
         try {
-            final MPMarshalFormat format = user.getFormat();
+            MPMarshalFormat format = user.getFormat();
             new CharSink() {
                 @Override
                 public Writer openStream()

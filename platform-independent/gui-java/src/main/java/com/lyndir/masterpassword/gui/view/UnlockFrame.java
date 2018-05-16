@@ -48,7 +48,7 @@ public class UnlockFrame extends JFrame {
     private       Future<?>                identiconFuture;
     private       boolean                  incognito;
     @Nullable
-    private       MPUser<? extends MPSite> user;
+    private       MPUser<? extends MPSite<?>> user;
 
     public UnlockFrame(final SignInCallback signInCallback) {
         super( "Unlock Master Password" );
@@ -144,7 +144,7 @@ public class UnlockFrame extends JFrame {
         SwingUtilities.invokeLater( () -> ifNotNullElse( authenticationPanel.getFocusComponent(), signInButton ).requestFocusInWindow() );
     }
 
-    void updateUser(@Nullable final MPUser<? extends MPSite> user) {
+    void updateUser(@Nullable final MPUser<? extends MPSite<?>> user) {
         this.user = user;
         checkSignIn();
     }

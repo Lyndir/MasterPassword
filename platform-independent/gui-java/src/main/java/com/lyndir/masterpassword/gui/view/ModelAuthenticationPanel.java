@@ -189,15 +189,11 @@ public class ModelAuthenticationPanel extends AuthenticationPanel<MPFileUser> im
             }
         }, new JButton( Res.iconQuestion() ) {
             {
-                addActionListener( new ActionListener() {
-                    @Override
-                    public void actionPerformed(final ActionEvent e) {
-                        JOptionPane.showMessageDialog( ModelAuthenticationPanel.this, //
-                                                       strf( "Reads users and sites from the directory at:%n%s",
-                                                             MPFileUserManager.get().getPath().getAbsolutePath() ), //
-                                                       "Help", JOptionPane.INFORMATION_MESSAGE );
-                    }
-                } );
+                addActionListener( e -> JOptionPane.showMessageDialog(
+                        ModelAuthenticationPanel.this, //
+                        strf( "Reads users and sites from the directory at:%n%s",
+                              MPFileUserManager.get().getPath().getAbsolutePath() ), //
+                        "Help", JOptionPane.INFORMATION_MESSAGE ) );
                 setToolTipText( "More information." );
             }
         } );

@@ -33,7 +33,7 @@ import javax.annotation.Nullable;
 /**
  * @author lhunath, 2014-06-08
  */
-public abstract class MPBasicUser<S extends MPBasicSite> implements MPUser<S> {
+public abstract class MPBasicUser<S extends MPBasicSite<?>> implements MPUser<S> {
 
     private       int         avatar;
     private final String      fullName;
