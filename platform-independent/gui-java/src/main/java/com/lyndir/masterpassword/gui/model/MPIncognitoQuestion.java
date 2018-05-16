@@ -18,7 +18,7 @@
 
 package com.lyndir.masterpassword.gui.model;
 
-import static com.lyndir.lhunath.opal.system.util.ObjectUtils.ifNotNullElse;
+import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 
 import com.lyndir.masterpassword.MPResultType;
 import com.lyndir.masterpassword.model.impl.MPBasicQuestion;

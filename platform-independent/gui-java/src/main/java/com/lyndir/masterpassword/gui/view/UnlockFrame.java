@@ -39,14 +39,14 @@ import javax.swing.*;
 @SuppressWarnings({ "MagicNumber", "serial" })
 public class UnlockFrame extends JFrame {
 
-    private final SignInCallback           signInCallback;
-    private final Components.GradientPanel root;
-    private final JLabel                   identiconLabel;
-    private final JButton                  signInButton;
-    private final JPanel                   authenticationContainer;
-    private       AuthenticationPanel<?>   authenticationPanel;
-    private       Future<?>                identiconFuture;
-    private       boolean                  incognito;
+    private final SignInCallback              signInCallback;
+    private final Components.GradientPanel    root;
+    private final JLabel                      identiconLabel;
+    private final JButton                     signInButton;
+    private final JPanel                      authenticationContainer;
+    private       AuthenticationPanel<?>      authenticationPanel;
+    private       Future<?>                   identiconFuture;
+    private       boolean                     incognito;
     @Nullable
     private       MPUser<? extends MPSite<?>> user;
 

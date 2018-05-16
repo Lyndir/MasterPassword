@@ -18,9 +18,10 @@
 
 package com.lyndir.masterpassword.model;
 
-import com.google.common.collect.*;
-import java.util.*;
-import java.util.stream.Collectors;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
+import java.util.Collection;
+import java.util.Map;
 
 
 /**
