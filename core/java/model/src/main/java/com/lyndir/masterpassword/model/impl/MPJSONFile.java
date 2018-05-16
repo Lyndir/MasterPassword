@@ -21,13 +21,14 @@ package com.lyndir.masterpassword.model.impl;
 import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 
 import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.masterpassword.*;
 import com.lyndir.masterpassword.model.MPConstant;
 import com.lyndir.masterpassword.model.MPIncorrectMasterPasswordException;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import javax.annotation.Nullable;
 import org.joda.time.Instant;
 
@@ -219,6 +220,7 @@ public class MPJSONFile extends MPJSONAnyObject {
 
         @Nullable
         Ext _ext_mpw;
+
 
         public static class Ext extends MPJSONAnyObject {
 

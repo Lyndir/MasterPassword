@@ -19,7 +19,6 @@
 package com.lyndir.masterpassword.model;
 
 import com.google.common.collect.*;
-import com.lyndir.masterpassword.model.impl.MPFileUser;
 import java.util.Map;
 import java.util.SortedSet;
 

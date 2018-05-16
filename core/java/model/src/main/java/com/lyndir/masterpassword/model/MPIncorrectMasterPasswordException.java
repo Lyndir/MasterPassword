@@ -18,7 +18,6 @@
 
 package com.lyndir.masterpassword.model;
 
-
 /**
  * @author lhunath, 14-12-17
  */

@@ -18,7 +18,7 @@
 
 package com.lyndir.masterpassword.model.impl;
 
-import static com.lyndir.masterpassword.model.impl.MPJSONFile.objectMapper;
+import static com.lyndir.masterpassword.model.impl.MPJSONFile.*;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;

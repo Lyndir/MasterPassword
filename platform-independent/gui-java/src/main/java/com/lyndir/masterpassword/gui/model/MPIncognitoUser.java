@@ -29,7 +29,7 @@ import javax.annotation.Nullable;
 public class MPIncognitoUser extends MPBasicUser<MPIncognitoSite> {
 
     public MPIncognitoUser(final String fullName) {
-        super( fullName, MPAlgorithm.Version.CURRENT.getAlgorithm());
+        super( fullName, MPAlgorithm.Version.CURRENT.getAlgorithm() );
     }
 
     @Nullable

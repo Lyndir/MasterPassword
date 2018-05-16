@@ -18,7 +18,7 @@
 
 package com.lyndir.masterpassword.model.impl;
 
-import static com.lyndir.lhunath.opal.system.util.ObjectUtils.ifNotNullElse;
+import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 
 import com.lyndir.masterpassword.*;
 import javax.annotation.Nonnull;
@@ -33,7 +33,7 @@ public class MPFileQuestion extends MPBasicQuestion {
     private final MPFileSite site;
 
     @Nullable
-    private String       state;
+    private String state;
 
     public MPFileQuestion(final MPFileSite site, final String keyword,
                           @Nullable final MPResultType type, @Nullable final String state) {

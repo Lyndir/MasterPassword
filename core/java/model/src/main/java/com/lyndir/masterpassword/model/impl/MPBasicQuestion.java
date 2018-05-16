@@ -18,7 +18,7 @@
 
 package com.lyndir.masterpassword.model.impl;
 
-import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
+import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import com.lyndir.masterpassword.*;
 import com.lyndir.masterpassword.model.MPQuestion;
@@ -69,7 +69,6 @@ public abstract class MPBasicQuestion implements MPQuestion {
     @Nonnull
     @Override
     public abstract MPBasicSite getSite();
-
 
     @Override
     public int hashCode() {
