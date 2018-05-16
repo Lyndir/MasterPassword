@@ -39,7 +39,7 @@ public enum MPResultType {
     // bit 0-3 | MPResultTypeClass | MPSiteFeature
 
     /**
-     * pg^VMAUBk5x3p%HP%i4=
+     * 16: pg^VMAUBk5x3p%HP%i4=
      */
     GeneratedMaximum( "maximum", "20 characters, contains symbols.", //
                       ImmutableList.of( new MPTemplate( "anoxxxxxxxxxxxxxxxxx" ),
@@ -47,7 +47,7 @@ public enum MPResultType {
                       MPResultTypeClass.Template, 0x0 ),
 
     /**
-     * BiroYena8:Kixa
+     * 17: BiroYena8:Kixa
      */
     GeneratedLong( "long", "Copy-friendly, 14 characters, contains symbols.", //
                    ImmutableList.of( new MPTemplate( "CvcvnoCvcvCvcv" ), new MPTemplate( "CvcvCvcvnoCvcv" ),
@@ -64,7 +64,7 @@ public enum MPResultType {
                    MPResultTypeClass.Template, 0x1 ),
 
     /**
-     * BirSuj0-
+     * 18: BirSuj0-
      */
     GeneratedMedium( "medium", "Copy-friendly, 8 characters, contains symbols.", //
                      ImmutableList.of( new MPTemplate( "CvcnoCvc" ),
@@ -72,7 +72,14 @@ public enum MPResultType {
                      MPResultTypeClass.Template, 0x2 ),
 
     /**
-     * pO98MoD0
+     * 19: Bir8
+     */
+    GeneratedShort( "short", "Copy-friendly, 4 characters, no symbols.", //
+                    ImmutableList.of( new MPTemplate( "Cvcn" ) ), //
+                    MPResultTypeClass.Template, 0x4 ),
+
+    /**
+     * 20: pO98MoD0
      */
     GeneratedBasic( "basic", "8 characters, no symbols.", //
                     ImmutableList.of( new MPTemplate( "aaanaaan" ),
@@ -81,28 +88,21 @@ public enum MPResultType {
                     MPResultTypeClass.Template, 0x3 ),
 
     /**
-     * Bir8
-     */
-    GeneratedShort( "short", "Copy-friendly, 4 characters, no symbols.", //
-                    ImmutableList.of( new MPTemplate( "Cvcn" ) ), //
-                    MPResultTypeClass.Template, 0x4 ),
-
-    /**
-     * 2798
+     * 21: 2798
      */
     GeneratedPIN( "pin", "4 numbers.", //
                   ImmutableList.of( new MPTemplate( "nnnn" ) ), //
                   MPResultTypeClass.Template, 0x5 ),
 
     /**
-     * birsujano
+     * 30: birsujano
      */
     GeneratedName( "name", "9 letter name.", //
                    ImmutableList.of( new MPTemplate( "cvccvcvcv" ) ), //
                    MPResultTypeClass.Template, 0xE ),
 
     /**
-     * bir yennoquce fefi
+     * 31: bir yennoquce fefi
      */
     GeneratedPhrase( "phrase", "20 character sentence.", //
                      ImmutableList.of( new MPTemplate( "cvcc cvc cvccvcv cvc" ),
@@ -111,21 +111,21 @@ public enum MPResultType {
                      MPResultTypeClass.Template, 0xF ),
 
     /**
-     * Custom saved password.
+     * 1056: Custom saved password.
      */
     StoredPersonal( "personal", "AES-encrypted, exportable.", //
                     ImmutableList.<MPTemplate>of(), //
                     MPResultTypeClass.Stateful, 0x0, MPSiteFeature.ExportContent ),
 
     /**
-     * Custom saved password that should not be exported from the device.
+     * 2081: Custom saved password that should not be exported from the device.
      */
     StoredDevicePrivate( "device", "AES-encrypted, not exported.", //
                          ImmutableList.<MPTemplate>of(), //
                          MPResultTypeClass.Stateful, 0x1, MPSiteFeature.DevicePrivate ),
 
     /**
-     * Derive a unique binary key.
+     * 4160: Derive a unique binary key.
      */
     DeriveKey( "key", "Encryption key.", //
                ImmutableList.<MPTemplate>of(), //

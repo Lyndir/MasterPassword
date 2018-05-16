@@ -33,7 +33,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author lhunath, 14-12-16
  */
-public abstract class MPBasicSite implements MPSite {
+public abstract class MPBasicSite<Q extends MPQuestion> implements MPSite<Q> {
 
     private String          name;
     private MPAlgorithm     algorithm;
@@ -41,7 +41,7 @@ public abstract class MPBasicSite implements MPSite {
     private MPResultType    resultType;
     private MPResultType    loginType;
 
-    private final Collection<MPFileQuestion> questions = new LinkedHashSet<>();
+    private final Collection<Q> questions = new LinkedHashSet<>();
 
     protected MPBasicSite(final String name, final MPAlgorithm algorithm) {
         this( name, algorithm, null, null, null );
@@ -139,7 +139,17 @@ public abstract class MPBasicSite implements MPSite {
     }
 
     @Override
-    public Collection<? extends MPQuestion> getQuestions() {
+    public void addQuestion(final Q question) {
+        questions.add( question );
+    }
+
+    @Override
+    public void deleteQuestion(final Q question) {
+        questions.remove( question );
+    }
+
+    @Override
+    public Collection<Q> getQuestions() {
         return Collections.unmodifiableCollection( questions );
     }
 
@@ -150,11 +160,11 @@ public abstract class MPBasicSite implements MPSite {
 
     @Override
     public boolean equals(final Object obj) {
-        return (this == obj) || ((obj instanceof MPSite) && Objects.equals( getName(), ((MPSite) obj).getName() ));
+        return (this == obj) || ((obj instanceof MPSite) && Objects.equals( getName(), ((MPSite<?>) obj).getName() ));
     }
 
     @Override
-    public int compareTo(@NotNull final MPSite o) {
+    public int compareTo(@NotNull final MPSite<Q> o) {
         return getName().compareTo( o.getName() );
     }
 

@@ -20,6 +20,7 @@ package com.lyndir.masterpassword.model.impl;
 
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.masterpassword.*;
+import com.lyndir.masterpassword.model.MPSite;
 import com.lyndir.masterpassword.model.MPUser;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -30,7 +31,7 @@ import org.joda.time.ReadableInstant;
 /**
  * @author lhunath, 14-12-05
  */
-public class MPFileSite extends MPBasicSite {
+public class MPFileSite extends MPBasicSite<MPFileQuestion> {
 
     private final MPFileUser user;
 
@@ -60,7 +61,8 @@ public class MPFileSite extends MPBasicSite {
                          @Nullable final MPResultType resultType, @Nullable final String resultState,
                          @Nullable final MPResultType loginType, @Nullable final String loginState,
                          @Nullable final String url, final int uses, final ReadableInstant lastUsed) {
-        super( name, (algorithm == null)? user.getAlgorithm(): algorithm, counter, resultType, loginType );
+        super( name, (algorithm == null)? user.getAlgorithm(): algorithm, counter,
+               (resultType == null)? user.getDefaultType(): resultType, loginType );
 
         this.user = user;
         this.resultState = resultState;
@@ -144,7 +146,7 @@ public class MPFileSite extends MPBasicSite {
     }
 
     @Override
-    public MPUser<? extends com.lyndir.masterpassword.model.MPSite> getUser() {
+    public MPFileUser getUser() {
         return user;
     }
 }

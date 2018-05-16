@@ -191,9 +191,9 @@ public class MPJSONFile extends MPJSONAnyObject {
         String full_name;
         String last_used;
         @Nullable
-        String              key_id;
-        @Nullable
         MPAlgorithm.Version algorithm;
+        @Nullable
+        String              key_id;
         @Nullable
         MPResultType        default_type;
     }
@@ -201,16 +201,17 @@ public class MPJSONFile extends MPJSONAnyObject {
 
     public static class Site extends MPJSONAnyObject {
 
-        @Nullable
-        MPResultType type;
         long                counter;
         MPAlgorithm.Version algorithm;
         @Nullable
+        MPResultType type;
+        @Nullable
         String       password;
         @Nullable
-        String       login_name;
-        @Nullable
         MPResultType login_type;
+        @Nullable
+        String       login_name;
+
         int uses;
         @Nullable
         String last_used;

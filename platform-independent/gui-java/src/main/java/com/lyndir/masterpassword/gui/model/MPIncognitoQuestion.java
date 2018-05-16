@@ -18,34 +18,30 @@
 
 package com.lyndir.masterpassword.gui.model;
 
-import com.google.common.primitives.UnsignedInteger;
-import com.lyndir.masterpassword.MPAlgorithm;
+import static com.lyndir.lhunath.opal.system.util.ObjectUtils.ifNotNullElse;
+
 import com.lyndir.masterpassword.MPResultType;
-import com.lyndir.masterpassword.model.impl.MPBasicSite;
+import com.lyndir.masterpassword.model.impl.MPBasicQuestion;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 
 /**
- * @author lhunath, 14-12-16
+ * @author lhunath, 2018-05-16
  */
-public class MPIncognitoSite extends MPBasicSite<MPIncognitoQuestion> {
+public class MPIncognitoQuestion extends MPBasicQuestion {
 
-    private final MPIncognitoUser user;
+    private final MPIncognitoSite site;
 
-    public MPIncognitoSite(final MPIncognitoUser user, final String name) {
-        this( user, name, null, null, null, null );
+    public MPIncognitoQuestion(final MPIncognitoSite site, final String keyword, @Nullable final MPResultType type) {
+        super( keyword, ifNotNullElse( type, site.getAlgorithm().mpw_default_answer_type() ) );
+
+        this.site = site;
     }
 
-    public MPIncognitoSite(final MPIncognitoUser user, final String name,
-                           @Nullable final MPAlgorithm algorithm, @Nullable final UnsignedInteger counter,
-                           @Nullable final MPResultType resultType, @Nullable final MPResultType loginType) {
-        super( name, (algorithm == null)? user.getAlgorithm(): algorithm, counter, resultType, loginType );
-
-        this.user = user;
-    }
-
+    @Nonnull
     @Override
-    public MPIncognitoUser getUser() {
-        return user;
+    public MPIncognitoSite getSite() {
+        return site;
     }
 }

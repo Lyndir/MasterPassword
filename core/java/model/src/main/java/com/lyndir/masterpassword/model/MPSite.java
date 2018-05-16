@@ -27,7 +27,7 @@ import javax.annotation.Nullable;
 /**
  * @author lhunath, 2018-05-14
  */
-public interface MPSite extends Comparable<MPSite> {
+public interface MPSite<Q extends MPQuestion> extends Comparable<MPSite<Q>> {
 
     // - Meta
 
@@ -61,7 +61,11 @@ public interface MPSite extends Comparable<MPSite> {
 
     // - Relations
 
-    MPUser<? extends MPSite> getUser();
+    MPUser<? extends MPSite<?>> getUser();
 
-    Collection<? extends MPQuestion> getQuestions();
+    void addQuestion(Q question);
+
+    void deleteQuestion(Q question);
+
+    Collection<Q> getQuestions();
 }
