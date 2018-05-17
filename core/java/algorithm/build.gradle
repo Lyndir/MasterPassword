@@ -5,10 +5,10 @@ plugins {
 description = 'Master Password Algorithm Implementation'
 
 dependencies {
-    compile( group: 'com.lyndir.lhunath.opal', name: 'opal-system', version: 'GIT-SNAPSHOT' ) {
+    compile( group: 'com.lyndir.lhunath.opal', name: 'opal-system', version: '1.7-p1' ) {
         exclude( module: 'joda-time' )
     }
-    compile group: 'com.lyndir.lhunath.opal', name: 'opal-crypto', version: 'GIT-SNAPSHOT'
+    compile group: 'com.lyndir.lhunath.opal', name: 'opal-crypto', version: '1.7-p1'
 
     compile group: 'com.lambdaworks', name: 'scrypt', version: '1.4.0'
     compile 'com.fasterxml.jackson.core:jackson-annotations:2.9.5'

@@ -24,7 +24,7 @@
         <dependency>
             <groupId>com.lyndir.lhunath.opal</groupId>
             <artifactId>opal-system</artifactId>
-            <version>1.6-p11</version>
+            <version>1.7.-p1</version>
             <exclusions>
                 <exclusion>
                     <groupId>joda-time</groupId>
@@ -35,7 +35,7 @@
         <dependency>
             <groupId>com.lyndir.lhunath.opal</groupId>
             <artifactId>opal-crypto</artifactId>
-            <version>1.6-p11</version>
+            <version>1.7-p1</version>
         </dependency>
 
         <!-- EXTERNAL DEPENDENCIES -->
@@ -43,6 +43,11 @@
             <groupId>com.lambdaworks</groupId>
             <artifactId>scrypt</artifactId>
             <version>1.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.9.5</version>
         </dependency>
 
     </dependencies>
