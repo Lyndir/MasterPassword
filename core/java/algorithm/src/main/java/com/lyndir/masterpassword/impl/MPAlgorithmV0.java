@@ -125,7 +125,7 @@ public class MPAlgorithmV0 extends MPAlgorithm {
             case Template:
                 return siteResultFromTemplate( masterKey, siteKey, resultType, resultParam );
             case Stateful:
-                return siteResultFromState( masterKey, siteKey, resultType, resultParam );
+                return siteResultFromState( masterKey, siteKey, resultType, Preconditions.checkNotNull( resultParam ) );
             case Derive:
                 return siteResultFromDerive( masterKey, siteKey, resultType, resultParam );
         }
@@ -170,7 +170,7 @@ public class MPAlgorithmV0 extends MPAlgorithm {
 
     @Override
     public String siteResultFromState(final byte[] masterKey, final byte[] siteKey,
-                                      final MPResultType resultType, @Nullable final String resultParam) {
+                                      final MPResultType resultType, final String resultParam) {
 
         Preconditions.checkNotNull( resultParam );
         Preconditions.checkArgument( !resultParam.isEmpty() );

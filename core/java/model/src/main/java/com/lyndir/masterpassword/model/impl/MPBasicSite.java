@@ -123,7 +123,7 @@ public abstract class MPBasicSite<Q extends MPQuestion> implements MPSite<Q> {
     }
 
     protected String getState(final MPKeyPurpose keyPurpose, @Nullable final String keyContext,
-                              @Nullable final UnsignedInteger counter, final MPResultType type, @Nullable final String state)
+                              @Nullable final UnsignedInteger counter, final MPResultType type, final String state)
             throws MPKeyUnavailableException {
 
         return getUser().getMasterKey().siteState(

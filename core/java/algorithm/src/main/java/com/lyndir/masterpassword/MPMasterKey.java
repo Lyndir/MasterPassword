@@ -44,13 +44,14 @@ public class MPMasterKey {
 
     /**
      * @param masterPassword The characters of the user's master password.
-     *                       Note: this array is held by reference and its contents invalidated on {@link #invalidate()}.
+     *                       <b>Note: this method destroys the contents of the array.</b>
      */
     @SuppressWarnings("AssignmentToCollectionOrArrayFieldFromParameter")
     public MPMasterKey(final String fullName, final char[] masterPassword) {
 
         this.fullName = fullName;
-        this.masterPassword = masterPassword;
+        this.masterPassword = masterPassword.clone();
+        Arrays.fill( masterPassword, (char) 0 );
     }
 
     @Nonnull
@@ -162,7 +163,7 @@ public class MPMasterKey {
      */
     public String siteState(final String siteName, final MPAlgorithm algorithm, final UnsignedInteger siteCounter,
                             final MPKeyPurpose keyPurpose, @Nullable final String keyContext,
-                            final MPResultType resultType, @Nullable final String resultParam)
+                            final MPResultType resultType, final String resultParam)
             throws MPKeyUnavailableException {
 
         Preconditions.checkNotNull( resultParam );

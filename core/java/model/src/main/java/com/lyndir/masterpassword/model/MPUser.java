@@ -57,6 +57,7 @@ public interface MPUser<S extends MPSite<?>> extends Comparable<MPUser<?>> {
      * Note: If a keyID is not set, authentication will always succeed and the keyID will be set to match the given master password.
      *
      * @param masterPassword The password to authenticate with.
+     *                       You cannot re-use this array after passing it in, authentication will destroy its contents.
      *
      * @throws MPIncorrectMasterPasswordException If authentication fails due to the given master password not matching the user's keyID.
      */

@@ -77,7 +77,7 @@ public abstract class MPAlgorithm {
      * for the case where {@code resultType} is a {@link MPResultTypeClass#Stateful}.
      */
     public abstract String siteResultFromState(byte[] masterKey, byte[] siteKey,
-                                               MPResultType resultType, @Nullable String resultParam);
+                                               MPResultType resultType, String resultParam);
 
     /**
      * The result for {@link #siteResult(byte[], byte[], String, UnsignedInteger, MPKeyPurpose, String, MPResultType, String)}
