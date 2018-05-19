@@ -112,9 +112,9 @@
                                     <includes>
                                         <include>target/*.jar</include>
                                     </includes>
-                                    <keystore>release.jks</keystore>
-                                    <storepass>${env.PASSWORD}</storepass>
-                                    <keypass>${env.PASSWORD}</keypass>
+                                    <keystore>masterpassword.keystore</keystore>
+                                    <storepass>${env.STORE_PW}</storepass>
+                                    <keypass>${env.KEY_PW_DESKTOP}</keypass>
                                     <alias>masterpassword-desktop</alias>
                                     <arguments>
                                         <argument>-sigalg</argument>

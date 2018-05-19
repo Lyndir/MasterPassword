@@ -18,19 +18,19 @@ android {
         jackOptions.enabled true
     }
 
-    // release with: STORE_PW=$(mpw masterpassword.keystore) KEY_PW=$(mpw masterpassword-android) gradle assembleRelease
+    // release with: STORE_PW=$(mpw masterpassword.keystore) KEY_PW_ANDROID=$(mpw masterpassword-android) gradle masterpassword-android:assembleRelease
     signingConfigs {
         release {
             storeFile file( 'masterpassword.keystore' )
             storePassword System.getenv( 'STORE_PW' )
 
             keyAlias 'masterpassword-android'
-            keyPassword System.getenv( 'KEY_PW' )
+            keyPassword System.getenv( 'KEY_PW_ANDROID' )
         }
     }
     buildTypes {
         release {
-            if (System.getenv( 'STORE_PW' ) != null)
+            if (System.getenv( 'KEY_PW_ANDROID' ) != null)
                 signingConfig signingConfigs.release
         }
     }

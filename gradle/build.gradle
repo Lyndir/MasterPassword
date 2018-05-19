@@ -1,5 +1,5 @@
 allprojects {
-    //apply plugin: 'findbugs'
+    apply plugin: 'findbugs'
 
     group = 'com.lyndir.masterpassword'
     version = 'GIT-SNAPSHOT'

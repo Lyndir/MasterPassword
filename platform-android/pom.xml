@@ -82,9 +82,9 @@
                                     <includes>
                                         <include>target/*.apk</include>
                                     </includes>
-                                    <keystore>release.jks</keystore>
-                                    <storepass>${env.PASSWORD}</storepass>
-                                    <keypass>${env.PASSWORD}</keypass>
+                                    <keystore>masterpassword.keystore</keystore>
+                                    <storepass>${env.STORE_PW}</storepass>
+                                    <keypass>${env.KEY_PW_ANDROID}</keypass>
                                     <alias>masterpassword-android</alias>
                                     <arguments>
                                         <argument>-sigalg</argument>
