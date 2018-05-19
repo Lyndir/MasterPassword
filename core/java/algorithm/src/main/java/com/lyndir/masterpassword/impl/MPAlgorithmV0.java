@@ -18,22 +18,27 @@
 
 package com.lyndir.masterpassword.impl;
 
-import com.google.common.base.*;
+import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
+
+import com.google.common.base.Charsets;
+import com.google.common.base.Preconditions;
+import com.google.common.io.BaseEncoding;
 import com.google.common.primitives.Bytes;
 import com.google.common.primitives.UnsignedInteger;
-import com.lambdaworks.crypto.SCrypt;
-import com.lyndir.lhunath.opal.crypto.CryptUtils;
 import com.lyndir.lhunath.opal.system.*;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.ConversionUtils;
 import com.lyndir.masterpassword.*;
 import java.nio.*;
 import java.nio.charset.Charset;
-import java.security.GeneralSecurityException;
+import java.security.*;
+import java.security.spec.AlgorithmParameterSpec;
 import java.util.Arrays;
 import javax.annotation.Nullable;
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.*;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import org.libsodium.jni.Sodium;
 
 
 /**
@@ -42,6 +47,15 @@ import javax.crypto.IllegalBlockSizeException;
  */
 @SuppressWarnings("NewMethodNamingConvention")
 public class MPAlgorithmV0 extends MPAlgorithm {
+
+    @SuppressWarnings("HardcodedFileSeparator")
+    protected static final String AES_TRANSFORMATION = "AES/CBC/PKCS5Padding";
+    protected static final int    AES_BLOCKSIZE      = 128 /* bit */;
+
+    static {
+        if (Sodium.sodium_init() < 0)
+            throw new IllegalStateException( "Couldn't initialize libsodium." );
+    }
 
     public final Version version = MPAlgorithm.Version.V0;
 
@@ -66,21 +80,25 @@ public class MPAlgorithmV0 extends MPAlgorithm {
         logger.trc( "masterKey: scrypt( masterPassword, masterKeySalt, N=%d, r=%d, p=%d )",
                     scrypt_N(), scrypt_r(), scrypt_p() );
         byte[] masterPasswordBytes = toBytes( masterPassword );
-        byte[] masterKey           = scrypt( masterKeySalt, masterPasswordBytes );
+        byte[] masterKey           = scrypt( masterPasswordBytes, masterKeySalt, mpw_dkLen() );
         Arrays.fill( masterKeySalt, (byte) 0 );
         Arrays.fill( masterPasswordBytes, (byte) 0 );
+        if (masterKey == null)
+            throw new IllegalStateException( "Could not derive master key." );
         logger.trc( "  => masterKey.id: %s", CodeUtils.encodeHex( toID( masterKey ) ) );
 
         return masterKey;
     }
 
-    protected byte[] scrypt(final byte[] masterKeySalt, final byte[] mpBytes) {
-        try {
-            return SCrypt.scrypt( mpBytes, masterKeySalt, scrypt_N(), scrypt_r(), scrypt_p(), mpw_dkLen() );
-        }
-        catch (final GeneralSecurityException e) {
-            throw logger.bug( e );
-        }
+    @Nullable
+    protected byte[] scrypt(final byte[] secret, final byte[] salt, final int keySize) {
+        byte[] buffer = new byte[keySize];
+        if (Sodium.crypto_pwhash_scryptsalsa208sha256_ll(
+                secret, secret.length, salt, salt.length,
+                scrypt_N(), scrypt_r(), scrypt_p(), buffer, buffer.length ) < 0)
+            return null;
+
+        return buffer;
     }
 
     @Override
@@ -175,20 +193,65 @@ public class MPAlgorithmV0 extends MPAlgorithm {
         Preconditions.checkNotNull( resultParam );
         Preconditions.checkArgument( !resultParam.isEmpty() );
 
+        // Base64-decode
+        byte[] cipherBuf = BaseEncoding.base64().decode( resultParam );
+        logger.trc( "b64 decoded: %d bytes = %s", cipherBuf.length, CodeUtils.encodeHex( cipherBuf ) );
+
+        // Decrypt
+        byte[] plainBuf  = aes_decrypt( cipherBuf, masterKey );
+        String plainText = mpw_charset().decode( ByteBuffer.wrap( plainBuf ) ).toString();
+        logger.trc( "decrypted -> plainText: %d bytes = %s = %s", plainBuf.length, plainText, CodeUtils.encodeHex( plainBuf ) );
+
+        return plainText;
+    }
+
+    protected byte[] aes_encrypt(final byte[] buf, final byte[] key) {
+        return aes( true, buf, key );
+    }
+
+    protected byte[] aes_decrypt(final byte[] buf, final byte[] key) {
+        return aes( false, buf, key );
+    }
+
+    protected byte[] aes(final boolean encrypt, final byte[] buf, final byte[] key) {
+        int    blockByteSize = AES_BLOCKSIZE / Byte.SIZE;
+        byte[] blockSizedKey = key;
+        if (blockSizedKey.length != blockByteSize) {
+            blockSizedKey = new byte[blockByteSize];
+            System.arraycopy( key, 0, blockSizedKey, 0, blockByteSize );
+        }
+
+        // Encrypt data with key.
         try {
-            // Base64-decode
-            byte[] cipherBuf = CryptUtils.decodeBase64( resultParam );
-            logger.trc( "b64 decoded: %d bytes = %s", cipherBuf.length, CodeUtils.encodeHex( cipherBuf ) );
+            Cipher                 cipher     = Cipher.getInstance( AES_TRANSFORMATION );
+            AlgorithmParameterSpec parameters = new IvParameterSpec( new byte[blockByteSize] );
+            cipher.init( encrypt? Cipher.ENCRYPT_MODE: Cipher.DECRYPT_MODE, new SecretKeySpec( blockSizedKey, "AES" ), parameters );
 
-            // Decrypt
-            byte[] plainBuf  = CryptUtils.decrypt( cipherBuf, masterKey, true );
-            String plainText = mpw_charset().decode( ByteBuffer.wrap( plainBuf ) ).toString();
-            logger.trc( "decrypted -> plainText: %d bytes = %s = %s", plainBuf.length, plainText, CodeUtils.encodeHex( plainBuf ) );
-
-            return plainText;
+            return cipher.doFinal( buf );
+        }
+        catch (final NoSuchAlgorithmException e) {
+            throw new IllegalStateException(
+                    strf( "Cipher transformation: %s, is not valid or not supported by the provider.", AES_TRANSFORMATION ), e );
+        }
+        catch (final NoSuchPaddingException e) {
+            throw new IllegalStateException(
+                    strf( "Cipher transformation: %s, padding scheme is not supported by the provider.", AES_TRANSFORMATION ), e );
         }
         catch (final BadPaddingException e) {
-            throw Throwables.propagate( e );
+            throw new IllegalArgumentException(
+                    strf( "Message is incorrectly padded for cipher transformation: %s.", AES_TRANSFORMATION ), e );
+        }
+        catch (final IllegalBlockSizeException e) {
+            throw new IllegalArgumentException(
+                    strf( "Message size is invalid for cipher transformation: %s.", AES_TRANSFORMATION ), e );
+        }
+        catch (final InvalidKeyException e) {
+            throw new IllegalArgumentException(
+                    strf( "Key is inappropriate for cipher transformation: %s.", AES_TRANSFORMATION ), e );
+        }
+        catch (final InvalidAlgorithmParameterException e) {
+            throw new IllegalStateException(
+                    strf( "IV is inappropriate for cipher transformation: %s.", AES_TRANSFORMATION ), e );
         }
     }
 
@@ -211,7 +274,7 @@ public class MPAlgorithmV0 extends MPAlgorithm {
                 throw logger.bug( "Could not derive result key." );
 
             // Base64-encode
-            String b64Key = Preconditions.checkNotNull( CryptUtils.encodeBase64( resultKey ) );
+            String b64Key = Preconditions.checkNotNull( BaseEncoding.base64().encode( resultKey ) );
             logger.trc( "b64 encoded -> key: %s", b64Key );
 
             return b64Key;
@@ -224,20 +287,15 @@ public class MPAlgorithmV0 extends MPAlgorithm {
                             final MPKeyPurpose keyPurpose, @Nullable final String keyContext,
                             final MPResultType resultType, final String resultParam) {
 
-        try {
-            // Encrypt
-            byte[] cipherBuf = CryptUtils.encrypt( resultParam.getBytes( mpw_charset() ), masterKey, true );
-            logger.trc( "cipherBuf: %d bytes = %s", cipherBuf.length, CodeUtils.encodeHex( cipherBuf ) );
+        // Encrypt
+        byte[] cipherBuf = aes_encrypt( resultParam.getBytes( mpw_charset() ), masterKey );
+        logger.trc( "cipherBuf: %d bytes = %s", cipherBuf.length, CodeUtils.encodeHex( cipherBuf ) );
 
-            // Base64-encode
-            String cipherText = Preconditions.checkNotNull( CryptUtils.encodeBase64( cipherBuf ) );
-            logger.trc( "b64 encoded -> cipherText: %s", cipherText );
+        // Base64-encode
+        String cipherText = Preconditions.checkNotNull( BaseEncoding.base64().encode( cipherBuf ) );
+        logger.trc( "b64 encoded -> cipherText: %s", cipherText );
 
-            return cipherText;
-        }
-        catch (final IllegalBlockSizeException e) {
-            throw logger.bug( e );
-        }
+        return cipherText;
     }
 
     // Configuration

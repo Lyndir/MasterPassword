@@ -50,9 +50,11 @@ public class MPAlgorithmV3 extends MPAlgorithmV2 {
         logger.trc( "masterKey: scrypt( masterPassword, masterKeySalt, N=%d, r=%d, p=%d )",
                     scrypt_N(), scrypt_r(), scrypt_p() );
         byte[] masterPasswordBytes = toBytes( masterPassword );
-        byte[] masterKey           = scrypt( masterKeySalt, masterPasswordBytes );
+        byte[] masterKey           = scrypt( masterKeySalt, masterPasswordBytes, mpw_dkLen() );
         Arrays.fill( masterKeySalt, (byte) 0 );
         Arrays.fill( masterPasswordBytes, (byte) 0 );
+        if (masterKey == null)
+            throw new IllegalStateException( "Could not derive master key." );
         logger.trc( "  => masterKey.id: %s", CodeUtils.encodeHex( toID( masterKey ) ) );
 
         return masterKey;
