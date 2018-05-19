@@ -106,6 +106,11 @@ public abstract class MPAlgorithm {
     public abstract Version version();
 
     /**
+     * mpw: defaults: initial counter value.
+     */
+    public abstract UnsignedInteger mpw_default_counter();
+
+    /**
      * mpw: defaults: password result type.
      */
     public abstract MPResultType mpw_default_result_type();
@@ -121,14 +126,14 @@ public abstract class MPAlgorithm {
     public abstract MPResultType mpw_default_answer_type();
 
     /**
-     * mpw: defaults: initial counter value.
+     * mpw: Input character encoding.
      */
-    public abstract UnsignedInteger mpw_default_counter();
+    public abstract Charset mpw_charset();
 
     /**
-     * mpw: validity for the time-based rolling counter (s).
+     * mpw: Platform-agnostic byte order.
      */
-    public abstract long mpw_otp_window();
+    public abstract ByteOrder mpw_byteOrder();
 
     /**
      * mpw: Key ID hash.
@@ -139,16 +144,6 @@ public abstract class MPAlgorithm {
      * mpw: Site digest.
      */
     public abstract MessageAuthenticationDigests mpw_digest();
-
-    /**
-     * mpw: Platform-agnostic byte order.
-     */
-    public abstract ByteOrder mpw_byteOrder();
-
-    /**
-     * mpw: Input character encoding.
-     */
-    public abstract Charset mpw_charset();
 
     /**
      * mpw: Master key size (byte).
@@ -166,9 +161,14 @@ public abstract class MPAlgorithm {
     public abstract int mpw_keySize_max();
 
     /**
-     * scrypt: Parallelization parameter.
+     * mpw: validity for the time-based rolling counter (s).
      */
-    public abstract int scrypt_p();
+    public abstract long mpw_otp_window();
+
+    /**
+     * scrypt: CPU cost parameter.
+     */
+    public abstract int scrypt_N();
 
     /**
      * scrypt: Memory cost parameter.
@@ -176,9 +176,9 @@ public abstract class MPAlgorithm {
     public abstract int scrypt_r();
 
     /**
-     * scrypt: CPU cost parameter.
+     * scrypt: Parallelization parameter.
      */
-    public abstract int scrypt_N();
+    public abstract int scrypt_p();
 
     // Utilities
 

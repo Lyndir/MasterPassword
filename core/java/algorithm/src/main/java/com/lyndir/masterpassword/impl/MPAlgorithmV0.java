@@ -248,6 +248,11 @@ public class MPAlgorithmV0 extends MPAlgorithm {
     }
 
     @Override
+    public UnsignedInteger mpw_default_counter() {
+        return UnsignedInteger.ONE;
+    }
+
+    @Override
     public MPResultType mpw_default_result_type() {
         return MPResultType.GeneratedLong;
     }
@@ -263,14 +268,13 @@ public class MPAlgorithmV0 extends MPAlgorithm {
     }
 
     @Override
-    public UnsignedInteger mpw_default_counter() {
-        return UnsignedInteger.ONE;
+    public Charset mpw_charset() {
+        return Charsets.UTF_8;
     }
 
     @Override
-    @SuppressWarnings("MagicNumber")
-    public long mpw_otp_window() {
-        return 5 * 60 /* s */;
+    public ByteOrder mpw_byteOrder() {
+        return ByteOrder.BIG_ENDIAN;
     }
 
     @Override
@@ -281,16 +285,6 @@ public class MPAlgorithmV0 extends MPAlgorithm {
     @Override
     public MessageAuthenticationDigests mpw_digest() {
         return MessageAuthenticationDigests.HmacSHA256;
-    }
-
-    @Override
-    public ByteOrder mpw_byteOrder() {
-        return ByteOrder.BIG_ENDIAN;
-    }
-
-    @Override
-    public Charset mpw_charset() {
-        return Charsets.UTF_8;
     }
 
     @Override
@@ -313,8 +307,14 @@ public class MPAlgorithmV0 extends MPAlgorithm {
 
     @Override
     @SuppressWarnings("MagicNumber")
-    public int scrypt_p() {
-        return 2;
+    public long mpw_otp_window() {
+        return 5 * 60 /* s */;
+    }
+
+    @Override
+    @SuppressWarnings("MagicNumber")
+    public int scrypt_N() {
+        return 32768;
     }
 
     @Override
@@ -325,8 +325,8 @@ public class MPAlgorithmV0 extends MPAlgorithm {
 
     @Override
     @SuppressWarnings("MagicNumber")
-    public int scrypt_N() {
-        return 32768;
+    public int scrypt_p() {
+        return 2;
     }
 
     // Utilities
