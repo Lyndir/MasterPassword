@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+source "${BASH_SOURCE%/*}/build_lib"
+
+autoreconf() {
+    command autoreconf -Iautoconf-archive/m4 "$@"
+}
+
+build libjson-c macos

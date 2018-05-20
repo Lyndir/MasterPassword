@@ -19,11 +19,11 @@
 [submodule "MasterPassword/Web/js/mpw-js"]
 	path = platform-independent/web-js/js/mpw-js
 	url = https://github.com/tmthrgd/mpw-js.git
-[submodule "platform-darwin/External/libsodium"]
-	path = platform-darwin/External/libsodium
+[submodule "lib/libsodium"]
+	path = lib/libsodium
 	url = https://github.com/jedisct1/libsodium.git
-[submodule "platform-darwin/External/libjson-c"]
-	path = platform-darwin/External/libjson-c
+[submodule "lib/libjson-c"]
+	path = lib/libjson-c
 	url = https://github.com/lhunath/json-c.git
 [submodule "public/site"]
 	path = public/site

@@ -1789,7 +1789,7 @@
 				DA0979151E9A81EE00F0BFE8 /* lib */,
 			);
 			name = "libsodium-ios";
-			path = "libsodium/libsodium-ios";
+			path = "../../lib/libsodium/build-ios~/out";
 			sourceTree = "<group>";
 		};
 		DA0978D91E9A81EE00F0BFE8 /* include */ = {
@@ -2128,7 +2128,7 @@
 				DAB7AE751F3D755B00C856B1 /* lib */,
 			);
 			name = "libjson-c-ios";
-			path = "libjson-c/libjson-c-ios";
+			path = "../../lib/libjson-c/build-ios~/out";
 			sourceTree = "<group>";
 		};
 		DAB7AE5F1F3D755B00C856B1 /* include */ = {
@@ -3389,7 +3389,7 @@
 			buildConfigurationList = DAB7AE411F3D464A00C856B1 /* Build configuration list for PBXLegacyTarget "libjson-c-ios" */;
 			buildPhases = (
 			);
-			buildToolPath = "Scripts/build_libjson-c-ios";
+			buildToolPath = "../lib/bin/build_libjson-c-ios";
 			buildWorkingDirectory = "";
 			dependencies = (
 			);
@@ -3403,7 +3403,8 @@
 			buildConfigurationList = DAB7AE481F3D468300C856B1 /* Build configuration list for PBXLegacyTarget "libsodium-ios" */;
 			buildPhases = (
 			);
-			buildToolPath = "Scripts/build_libsodium-ios";
+			buildToolPath = "../lib/bin/build_libsodium-ios";
+			buildWorkingDirectory = "";
 			dependencies = (
 			);
 			name = "libsodium-ios";
@@ -4360,8 +4361,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/External/libsodium/libsodium-ios/lib",
-					"$(PROJECT_DIR)/External/libjson-c/libjson-c-ios/lib",
+					"$(PROJECT_DIR)/../lib/libsodium/build-ios~/out/lib",
+					"$(PROJECT_DIR)/../lib/libjson-c/build-ios~/out/lib",
 				);
 				OTHER_CFLAGS = (
 					"-DMPW_SODIUM=1",
@@ -4685,8 +4686,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/External/libsodium/libsodium-ios/lib",
-					"$(PROJECT_DIR)/External/libjson-c/libjson-c-ios/lib",
+					"$(PROJECT_DIR)/../lib/libsodium/build-ios~/out/lib",
+					"$(PROJECT_DIR)/../lib/libjson-c/build-ios~/out/lib",
 				);
 				OTHER_CFLAGS = (
 					"-DMPW_SODIUM=1",
@@ -4724,8 +4725,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/External/libsodium/libsodium-ios/lib",
-					"$(PROJECT_DIR)/External/libjson-c/libjson-c-ios/lib",
+					"$(PROJECT_DIR)/../lib/libsodium/build-ios~/out/lib",
+					"$(PROJECT_DIR)/../lib/libjson-c/build-ios~/out/lib",
 				);
 				OTHER_CFLAGS = (
 					"-DMPW_SODIUM=1",

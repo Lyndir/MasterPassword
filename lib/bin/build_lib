@@ -1,0 +1,242 @@
+#!/usr/bin/env bash
+#
+# Your build script should simply source this script, optionally override any build hooks and then invoke `build`.
+# The build product should be available under `build-<platform>~/out`, under the library path.
+# 
+# Hook lifecycle:
+# - build
+#     - initialize
+#         - needs
+#         - clean
+#     - prepare
+#     - target
+#         - prepare
+#         - configure
+#         - build
+#     - finalize
+#         - merge
+#         - clean
+#
+# You can override any of these hooks to provide a custom implementation or call their underscore variant to delegate to the default implementation.
+# For example:
+# target_prepare() { make -s distclean; }
+# target_configure() { _target_configure "$@" --enable-minimal; }
+set -e
+
+# needs <binary> ...
+#
+# Utility for ensuring all tools needed by the script are installed prior to starting.
+needs() { _needs "$@"; }
+_needs() {
+    local failed=0
+    for tool; do
+        hash "$tool" || { echo >&2 "Missing: $tool.  Please install this tool."; (( failed++ )); }
+    done
+
+    return $failed
+}
+
+# initialize <prefix>
+#
+# The build script invokes this once prior to all other actions if the user wants a clean slate.
+initialize() { _initialize "$@"; }
+_initialize() {
+    initialize_needs "$@"
+    initialize_clean "$@"
+}
+
+# initialize_needs <prefix>
+#
+# Check if all tools needed for the default implementations are available.
+#
+# By default, this will check for `automake` and `autoreconf`.
+initialize_needs() { _initialize_needs "$@"; }
+_initialize_needs() {
+    needs automake autoreconf
+}
+
+# initialize_clean <prefix>
+#
+# Perform any necessary clean-up of the library code prior to building.
+#
+# By default, this will run `make distclean`.
+initialize_clean() { _initialize_clean "$@"; }
+_initialize_clean() {
+    [[ ! -e Makefile ]] || make -s distclean
+}
+
+# prepare <prefix> [<arch> ...]
+#
+# Configure the library for building the <arch>s on this machine.
+# The build script invokes this once prior to building each of its targets.
+# The <prefix> has been newly created.
+#
+# By default, this will run `autoreconf`.
+prepare() { _prepare "$@"; }
+_prepare() {
+    local prefix=$1; shift 1
+
+    autoreconf --verbose --install --symlink 2> >(sed 's/^\([^:]*\):[0-9]\{1,\}: /\1: /')
+}
+
+# target <prefix> <arch> <platform>
+#
+# Build the library for the given <arch> and <platform> into the given <prefix>.
+# The build script invokes this function when it's ready to build the library's code.
+# Generic platform-specific environment setup has been done.
+target() { _target "$@"; }
+_target() {
+    target_prepare "$@"
+    target_configure "$@"
+    target_build "$@"
+}
+
+# target_prepare <prefix> <arch> <platform>
+#
+# Prepare the library configuration for building the target.
+#
+# By default, this will run `make clean` if a Makefile is found.
+target_prepare() { _target_prepare "$@"; }
+_target_prepare() {
+    local prefix=$1 arch=$2 platform=$3; shift 3
+    [[ ! -e Makefile ]] || make -s clean
+}
+
+# target_configure <prefix> <arch> <platform> [<args> ...]
+#
+# Configure the library for building the target.
+#
+# By default, this will run `./configure --host=<cpu> --prefix=<prefix>/<arch> --disable-shared <args>`.
+target_configure() { _target_configure "$@"; }
+_target_configure() {
+    local prefix=$1 arch=$2 platform=$3 cpu=$arch; shift 3
+    [[ $cpu = *arm* ]] && cpu=arm
+
+    ./configure ${cpu:+--host="$cpu"} --prefix="$prefix/$arch" --disable-shared "$@"
+}
+
+# target_build <prefix> <arch> <platform>
+#
+# Build the library code for the target.
+#
+# By default, this will run `make check install`.
+target_build() { _target_build "$@"; }
+_target_build() {
+    local prefix=$1 arch=$2 platform=$3; shift 3
+    #make -j3 check
+    make -j3 install
+}
+
+# finalize <prefix> [ <arch> ... ]
+#
+# Prepare the final build product.
+# The build script invokes this once after a successful build of all targets.
+finalize() { _finalize "$@"; }
+_finalize() {
+    finalize_merge "$@"
+    finalize_clean "$@"
+}
+
+# finalize_merge <prefix> [ <arch> ... ]
+#
+# Merge all targets into a product the application can use, available at `<prefix>/out`.
+#
+# By default, this will copy the headers to `<prefix>/out/include` and merge the libraries into `<prefix>/out/lib`.
+finalize_merge() { _finalize_merge "$@"; }
+_finalize_merge() {
+    local prefix=$1; shift 1
+
+    mv -f -- "$prefix/$1/include" "$prefix/out/"
+
+    mkdir -p "$prefix/out/lib"
+    for lib in "$prefix/$1/lib/"*; do
+        if lipo -info "$lib" >/dev/null 2>&1; then
+            local lib=("${lib##*/}") libs=("${@/#/$prefix/}") libs=("${libs[@]/%//lib/$lib}")
+            lipo -create "${libs[@]}" -output "$prefix/out/lib/$lib"
+        fi
+    done
+}
+
+# finalize_clean <prefix> [ <arch> ... ]
+#
+# Clean up the library after a successful build (eg. housekeeping of temporary files).
+#
+# By default, this will run `make distclean`.
+finalize_clean() { _finalize_clean "$@"; }
+_finalize_clean() {
+    [[ ! -e Makefile ]] || make -s distclean
+}
+
+# build <name> [<platform>]
+#
+# Build the library <name> (found at ../<name>) for platform <platform> (or "host" if unspecified).
+build() { _build "$@"; }
+_build() {
+    local name=$1 platform=${2:-host}
+    local path="../$name"
+    [[ $path = /* ]] || path="${BASH_SOURCE%/*}/$path"
+    cd "$path"
+
+    if [[ $platform = host ]]; then
+        case "$(uname -s)" in
+            'Darwin') platform='macos' archs=( "$(uname -m)" ) ;;
+        esac
+    fi
+    if (( ! ${#archs[@]} )); then
+        case "$platform" in
+            'macos') archs=( 'x86_64' ) ;;
+            'ios') archs=( 'i386' 'x86_64' 'armv7' 'armv7s' 'arm64' ) ;;
+        esac
+    fi
+
+    local prefix="$PWD/build-$platform~"
+    initialize "$prefix"
+
+    # "clean" argument wipes the prefix and exits. If lib exists in prefix, skip build.
+    if [[ ${BASH_ARGV[@]:(-1)} = clean ]]; then
+        rm -rf "$prefix"
+        exit
+    elif files=( "$prefix"/out/lib/* ) && [[ -e $files ]]; then
+        echo >&2 "Output product already exists: ${files[*]}.  Skipping build."
+        exit
+    fi
+
+    # Prepare the output location and build configuration.
+    mkdir -p "$prefix/out"
+    prepare "$prefix" "${archs[@]}"
+
+    # Repeat the build for each individual architecture.
+    for arch in "${archs[@]}"; do (
+
+        # Set up a base environment for the platform.
+        case "$platform" in
+            'macos')
+                SDKROOT="$(xcrun --show-sdk-path --sdk macosx)"
+                export PATH="$(xcrun --show-sdk-platform-path --sdk macosx)/usr/bin:$PATH"
+                export CFLAGS="-arch $arch -isysroot $SDKROOT -mmacosx-version-min=${MACOSX_DEPLOYMENT_TARGET:-10.8} -O2 -flto -g $CFLAGS"
+                export LDFLAGS="-arch $arch -isysroot $SDKROOT -mmacosx-version-min=${MACOSX_DEPLOYMENT_TARGET:-10.8} -flto $LDFLAGS"
+                export CPPFLAGS="$CFLAGS $CPPFLAGS"
+            ;;
+            'ios')
+                if [[ $arch = *arm* ]]; then
+                    SDKROOT="$(xcrun --show-sdk-path --sdk iphoneos)"
+                    export PATH="$(xcrun --show-sdk-platform-path --sdk iphoneos)/usr/bin:$PATH"
+                    export CFLAGS="-mthumb -arch $arch -isysroot $SDKROOT -mios-version-min=${IPHONEOS_DEPLOYMENT_TARGET:-8.0} -O2 -flto -g $CFLAGS"
+                    export LDFLAGS="-mthumb -arch $arch -isysroot $SDKROOT -mios-version-min=${IPHONEOS_DEPLOYMENT_TARGET:-8.0} -flto $LDFLAGS"
+                    export CPPFLAGS="$CFLAGS $CPPFLAGS"
+                else
+                    SDKROOT="$(xcrun --show-sdk-path --sdk iphonesimulator)"
+                    export PATH="$(xcrun --show-sdk-platform-path --sdk iphonesimulator)/usr/bin:$PATH"
+                    export CFLAGS="-arch $arch -isysroot $SDKROOT -mios-simulator-version-min=${IPHONEOS_DEPLOYMENT_TARGET:-8.0} -O2 -flto -g $CFLAGS"
+                    export LDFLAGS="-arch $arch -isysroot $SDKROOT -mios-simulator-version-min=${IPHONEOS_DEPLOYMENT_TARGET:-8.0} -flto $LDFLAGS"
+                    export CPPFLAGS="$CFLAGS $CPPFLAGS"
+                fi
+            ;;
+        esac
+
+        target "$prefix" "$arch" "$platform"
+    ); done
+
+    finalize "$prefix" "${archs[@]}"
+}
+

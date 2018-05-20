@@ -1203,14 +1203,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		DA0979181E9A824700F0BFE8 /* libsodium-osx */ = {
+		DA0979181E9A824700F0BFE8 /* libsodium-macos */ = {
 			isa = PBXGroup;
 			children = (
 				DA0979191E9A824700F0BFE8 /* include */,
 				DA0979551E9A824700F0BFE8 /* lib */,
 			);
-			name = "libsodium-osx";
-			path = "libsodium/libsodium-osx";
+			name = "libsodium-macos";
+			path = "../../lib/libsodium/build-macos~/out";
 			sourceTree = "<group>";
 		};
 		DA0979191E9A824700F0BFE8 /* include */ = {
@@ -1944,14 +1944,14 @@
 			path = KCOrderedAccessorFix;
 			sourceTree = "<group>";
 		};
-		DAB7AE781F3D757B00C856B1 /* libjson-c-osx */ = {
+		DAB7AE781F3D757B00C856B1 /* libjson-c-macos */ = {
 			isa = PBXGroup;
 			children = (
 				DAB7AE791F3D757B00C856B1 /* include */,
 				DAB7AE8F1F3D757B00C856B1 /* lib */,
 			);
-			name = "libjson-c-osx";
-			path = "libjson-c/libjson-c-osx";
+			name = "libjson-c-macos";
+			path = "../../lib/libjson-c/build-macos~/out";
 			sourceTree = "<group>";
 		};
 		DAB7AE791F3D757B00C856B1 /* include */ = {
@@ -2011,8 +2011,8 @@
 		DACA22121705DDC5002C6C22 /* External */ = {
 			isa = PBXGroup;
 			children = (
-				DAB7AE781F3D757B00C856B1 /* libjson-c-osx */,
-				DA0979181E9A824700F0BFE8 /* libsodium-osx */,
+				DAB7AE781F3D757B00C856B1 /* libjson-c-macos */,
+				DA0979181E9A824700F0BFE8 /* libsodium-macos */,
 				DACA29751705E2BD002C6C22 /* jrswizzle */,
 				DAADCC6819FB007F00987B1D /* KCOrderedAccessorFix */,
 				DA3B8449190FC5A900246EEA /* Mac */,
@@ -2312,31 +2312,31 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXLegacyTarget section */
-		DA5B0B611F3D416500B663F0 /* libsodium-osx */ = {
+		DA5B0B611F3D416500B663F0 /* libsodium-macos */ = {
 			isa = PBXLegacyTarget;
 			buildArgumentsString = "$(ACTION)";
-			buildConfigurationList = DA5B0B621F3D416500B663F0 /* Build configuration list for PBXLegacyTarget "libsodium-osx" */;
+			buildConfigurationList = DA5B0B621F3D416500B663F0 /* Build configuration list for PBXLegacyTarget "libsodium-macos" */;
 			buildPhases = (
 			);
-			buildToolPath = "Scripts/build_libsodium-osx";
+			buildToolPath = "../lib/bin/build_libsodium-macos";
 			buildWorkingDirectory = "";
 			dependencies = (
 			);
-			name = "libsodium-osx";
+			name = "libsodium-macos";
 			passBuildSettingsInEnvironment = 1;
 			productName = "libsodium-osx";
 		};
-		DAB7AE421F3D466D00C856B1 /* libjson-c-osx */ = {
+		DAB7AE421F3D466D00C856B1 /* libjson-c-macos */ = {
 			isa = PBXLegacyTarget;
 			buildArgumentsString = "$(ACTION)";
-			buildConfigurationList = DAB7AE431F3D466D00C856B1 /* Build configuration list for PBXLegacyTarget "libjson-c-osx" */;
+			buildConfigurationList = DAB7AE431F3D466D00C856B1 /* Build configuration list for PBXLegacyTarget "libjson-c-macos" */;
 			buildPhases = (
 			);
-			buildToolPath = "Scripts/build_libjson-c-osx";
+			buildToolPath = "../lib/bin/build_libjson-c-macos";
 			buildWorkingDirectory = "";
 			dependencies = (
 			);
-			name = "libjson-c-osx";
+			name = "libjson-c-macos";
 			passBuildSettingsInEnvironment = 1;
 			productName = "libjson-c";
 		};
@@ -2553,8 +2553,8 @@
 				DA67743A1A474A03004F356A /* mpw-test */,
 				DA1C7AC61F1A8FD8009A3551 /* mpw-bench */,
 				DA1C7AA61F1A8F24009A3551 /* mpw-cli */,
-				DA5B0B611F3D416500B663F0 /* libsodium-osx */,
-				DAB7AE421F3D466D00C856B1 /* libjson-c-osx */,
+				DA5B0B611F3D416500B663F0 /* libsodium-macos */,
+				DAB7AE421F3D466D00C856B1 /* libjson-c-macos */,
 			);
 		};
 /* End PBXProject section */
@@ -2843,32 +2843,32 @@
 /* Begin PBXTargetDependency section */
 		DAB7AE351F3D423600C856B1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = DA5B0B611F3D416500B663F0 /* libsodium-osx */;
+			target = DA5B0B611F3D416500B663F0 /* libsodium-macos */;
 			targetProxy = DAB7AE341F3D423600C856B1 /* PBXContainerItemProxy */;
 		};
 		DAB7AE371F3D423D00C856B1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = DA5B0B611F3D416500B663F0 /* libsodium-osx */;
+			target = DA5B0B611F3D416500B663F0 /* libsodium-macos */;
 			targetProxy = DAB7AE361F3D423D00C856B1 /* PBXContainerItemProxy */;
 		};
 		DAB7AE391F3D424200C856B1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = DA5B0B611F3D416500B663F0 /* libsodium-osx */;
+			target = DA5B0B611F3D416500B663F0 /* libsodium-macos */;
 			targetProxy = DAB7AE381F3D424200C856B1 /* PBXContainerItemProxy */;
 		};
 		DAB7AE3B1F3D424700C856B1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = DA5B0B611F3D416500B663F0 /* libsodium-osx */;
+			target = DA5B0B611F3D416500B663F0 /* libsodium-macos */;
 			targetProxy = DAB7AE3A1F3D424700C856B1 /* PBXContainerItemProxy */;
 		};
 		DAB7AE521F3D649400C856B1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = DAB7AE421F3D466D00C856B1 /* libjson-c-osx */;
+			target = DAB7AE421F3D466D00C856B1 /* libjson-c-macos */;
 			targetProxy = DAB7AE511F3D649400C856B1 /* PBXContainerItemProxy */;
 		};
 		DAB7AE581F3D64A600C856B1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = DAB7AE421F3D466D00C856B1 /* libjson-c-osx */;
+			target = DAB7AE421F3D466D00C856B1 /* libjson-c-macos */;
 			targetProxy = DAB7AE571F3D64A600C856B1 /* PBXContainerItemProxy */;
 		};
 		DABFA072176E3FDF00E83589 /* PBXTargetDependency */ = {
@@ -3036,8 +3036,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/External/libsodium/libsodium-osx/lib",
-					"$(PROJECT_DIR)/External/libjson-c/libjson-c-osx/lib",
+					"$(PROJECT_DIR)/../lib/libsodium/build-macos~/out/lib",
+					"$(PROJECT_DIR)/../lib/libjson-c/build-macos~/out/lib",
 				);
 				OTHER_CFLAGS = (
 					"-DMPW_SODIUM=1",
@@ -3094,7 +3094,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/External/libsodium/libsodium-osx/lib",
+					"$(PROJECT_DIR)/../lib/libsodium/build-macos~/out/lib",
 				);
 				OTHER_CFLAGS = (
 					"-DMPW_SODIUM=1",
@@ -3109,8 +3109,8 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/External/libsodium/libsodium-osx/lib",
-					"$(PROJECT_DIR)/External/libjson-c/libjson-c-osx/lib",
+					"$(PROJECT_DIR)/../lib/libsodium/build-macos~/out/lib",
+					"$(PROJECT_DIR)/../lib/libjson-c/build-macos~/out/lib",
 				);
 				OTHER_CFLAGS = (
 					"-DMPW_SODIUM=1",
@@ -3128,8 +3128,8 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/External/libsodium/libsodium-osx/lib",
-					"$(PROJECT_DIR)/External/libjson-c/libjson-c-osx/lib",
+					"$(PROJECT_DIR)/../lib/libsodium/build-macos~/out/lib",
+					"$(PROJECT_DIR)/../lib/libjson-c/build-macos~/out/lib",
 				);
 				OTHER_CFLAGS = (
 					"-DMPW_SODIUM=1",
@@ -3147,8 +3147,8 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/External/libsodium/libsodium-osx/lib",
-					"$(PROJECT_DIR)/External/libjson-c/libjson-c-osx/lib",
+					"$(PROJECT_DIR)/../lib/libsodium/build-macos~/out/lib",
+					"$(PROJECT_DIR)/../lib/libjson-c/build-macos~/out/lib",
 				);
 				OTHER_CFLAGS = (
 					"-DMPW_SODIUM=1",
@@ -3166,7 +3166,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/External/libsodium/libsodium-osx/lib",
+					"$(PROJECT_DIR)/../lib/libsodium/build-macos~/out/lib",
 				);
 				OTHER_CFLAGS = (
 					"-DMPW_SODIUM=1",
@@ -3182,7 +3182,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/External/libsodium/libsodium-osx/lib",
+					"$(PROJECT_DIR)/../lib/libsodium/build-macos~/out/lib",
 				);
 				OTHER_CFLAGS = (
 					"-DMPW_SODIUM=1",
@@ -3198,7 +3198,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/External/libsodium/libsodium-osx/lib",
+					"$(PROJECT_DIR)/../lib/libsodium/build-macos~/out/lib",
 				);
 				OTHER_CFLAGS = (
 					"-DMPW_SODIUM=1",
@@ -3499,8 +3499,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/External/libsodium/libsodium-osx/lib",
-					"$(PROJECT_DIR)/External/libjson-c/libjson-c-osx/lib",
+					"$(PROJECT_DIR)/../lib/libsodium/build-macos~/out/lib",
+					"$(PROJECT_DIR)/../lib/libjson-c/build-macos~/out/lib",
 				);
 				OTHER_CFLAGS = (
 					"-DMPW_SODIUM=1",
@@ -3531,8 +3531,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/External/libsodium/libsodium-osx/lib",
-					"$(PROJECT_DIR)/External/libjson-c/libjson-c-osx/lib",
+					"$(PROJECT_DIR)/../lib/libsodium/build-macos~/out/lib",
+					"$(PROJECT_DIR)/../lib/libjson-c/build-macos~/out/lib",
 				);
 				OTHER_CFLAGS = (
 					"-DMPW_SODIUM=1",
@@ -3555,7 +3555,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/External/libsodium/libsodium-osx/lib",
+					"$(PROJECT_DIR)/../lib/libsodium/build-macos~/out/lib",
 				);
 				OTHER_CFLAGS = (
 					"-DMPW_SODIUM=1",
@@ -3575,7 +3575,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/External/libsodium/libsodium-osx/lib",
+					"$(PROJECT_DIR)/../lib/libsodium/build-macos~/out/lib",
 				);
 				OTHER_CFLAGS = (
 					"-DMPW_SODIUM=1",
@@ -3734,7 +3734,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Test;
 		};
-		DA5B0B621F3D416500B663F0 /* Build configuration list for PBXLegacyTarget "libsodium-osx" */ = {
+		DA5B0B621F3D416500B663F0 /* Build configuration list for PBXLegacyTarget "libsodium-macos" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DA5B0B631F3D416500B663F0 /* Debug */,
@@ -3784,7 +3784,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Test;
 		};
-		DAB7AE431F3D466D00C856B1 /* Build configuration list for PBXLegacyTarget "libjson-c-osx" */ = {
+		DAB7AE431F3D466D00C856B1 /* Build configuration list for PBXLegacyTarget "libjson-c-macos" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DAB7AE441F3D466D00C856B1 /* Debug */,
