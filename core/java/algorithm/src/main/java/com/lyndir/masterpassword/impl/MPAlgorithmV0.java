@@ -27,7 +27,6 @@ import com.google.common.primitives.Bytes;
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.*;
 import com.lyndir.lhunath.opal.system.logging.Logger;
-import com.lyndir.lhunath.opal.system.util.ConversionUtils;
 import com.lyndir.masterpassword.*;
 import java.nio.*;
 import java.nio.charset.Charset;
@@ -38,7 +37,6 @@ import javax.annotation.Nullable;
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import org.libsodium.jni.Sodium;
 
 
 /**
@@ -53,8 +51,7 @@ public class MPAlgorithmV0 extends MPAlgorithm {
     protected static final int    AES_BLOCKSIZE      = 128 /* bit */;
 
     static {
-        if (Sodium.sodium_init() < 0)
-            throw new IllegalStateException( "Couldn't initialize libsodium." );
+        Native.load( MPAlgorithmV0.class, "mpw" );
     }
 
     public final Version version = MPAlgorithm.Version.V0;
@@ -93,13 +90,15 @@ public class MPAlgorithmV0 extends MPAlgorithm {
     @Nullable
     protected byte[] scrypt(final byte[] secret, final byte[] salt, final int keySize) {
         byte[] buffer = new byte[keySize];
-        if (Sodium.crypto_pwhash_scryptsalsa208sha256_ll(
+        if (_scrypt(
                 secret, secret.length, salt, salt.length,
                 scrypt_N(), scrypt_r(), scrypt_p(), buffer, buffer.length ) < 0)
             return null;
 
         return buffer;
     }
+
+    protected native int _scrypt(byte[] passwd, int passwdlen, byte[] salt, int saltlen, int N, int r, int p, byte[] buf, int buflen);
 
     @Override
     public byte[] siteKey(final byte[] masterKey, final String siteName, UnsignedInteger siteCounter,
@@ -259,27 +258,29 @@ public class MPAlgorithmV0 extends MPAlgorithm {
     public String siteResultFromDerive(final byte[] masterKey, final byte[] siteKey,
                                        final MPResultType resultType, @Nullable final String resultParam) {
 
-        if (resultType == MPResultType.DeriveKey) {
-            int resultParamInt = ConversionUtils.toIntegerNN( resultParam );
-            if (resultParamInt == 0)
-                resultParamInt = mpw_keySize_max();
-            if ((resultParamInt < mpw_keySize_min()) || (resultParamInt > mpw_keySize_max()) || ((resultParamInt % 8) != 0))
-                throw logger.bug( "Parameter is not a valid key size (should be 128 - 512): %s", resultParam );
-            int keySize = resultParamInt / 8;
-            logger.trc( "keySize: %d", keySize );
+        throw new UnsupportedOperationException( "TODO" );
 
-            // Derive key
-            byte[] resultKey = null; // TODO: mpw_kdf_blake2b()( keySize, siteKey, MPSiteKeySize, NULL, 0, 0, NULL );
-            if (resultKey == null)
-                throw logger.bug( "Could not derive result key." );
-
-            // Base64-encode
-            String b64Key = Preconditions.checkNotNull( BaseEncoding.base64().encode( resultKey ) );
-            logger.trc( "b64 encoded -> key: %s", b64Key );
-
-            return b64Key;
-        } else
-            throw logger.bug( "Unsupported derived password type: %s", resultType );
+        //        if (resultType == MPResultType.DeriveKey) {
+        //            int resultParamInt = ConversionUtils.toIntegerNN( resultParam );
+        //            if (resultParamInt == 0)
+        //                resultParamInt = mpw_keySize_max();
+        //            if ((resultParamInt < mpw_keySize_min()) || (resultParamInt > mpw_keySize_max()) || ((resultParamInt % 8) != 0))
+        //                throw logger.bug( "Parameter is not a valid key size (should be 128 - 512): %s", resultParam );
+        //            int keySize = resultParamInt / 8;
+        //            logger.trc( "keySize: %d", keySize );
+        //
+        //            // Derive key
+        //            byte[] resultKey = null; // TODO: mpw_kdf_blake2b()( keySize, siteKey, MPSiteKeySize, NULL, 0, 0, NULL );
+        //            if (resultKey == null)
+        //                throw logger.bug( "Could not derive result key." );
+        //
+        //            // Base64-encode
+        //            String b64Key = Preconditions.checkNotNull( BaseEncoding.base64().encode( resultKey ) );
+        //            logger.trc( "b64 encoded -> key: %s", b64Key );
+        //
+        //            return b64Key;
+        //        } else
+        //            throw logger.bug( "Unsupported derived password type: %s", resultType );
     }
 
     @Override

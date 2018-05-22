@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:MasterPassword-JNI/MasterPassword-JNI.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:MasterPassword-iOS.xcodeproj">
    </FileRef>
    <FileRef

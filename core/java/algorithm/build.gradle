@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'c'
 }
 
 description = 'Master Password Algorithm Implementation'
@@ -9,8 +10,69 @@ dependencies {
         exclude( module: 'joda-time' )
     }
 
-    compile 'com.github.joshjdevl.libsodiumjni:libsodium-jni:1.0.6'
     compile 'com.fasterxml.jackson.core:jackson-annotations:2.9.5'
     compile group: 'org.jetbrains', name: 'annotations', version: '13.0'
     compile group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
+}
+
+processResources {
+    dependsOn 'mpwSharedLibrary'
+}
+
+// TODO: nativeGenHeaders should run prior to mpwSharedLibrary
+// TODO: but that creates a cyclic dependency since processResources runs before compileJava which nativeGenHeaders depends on.
+//task mpwSharedLibrary {
+//    dependsOn processResources
+//}
+build {
+//    dependsOn 'mpwSharedLibrary'
+    dependsOn 'nativeGenHeaders'
+}
+
+task nativeGenHeaders {
+    description "Uses javah to regenerate the JNI header files"
+    inputs.file sourceSets.main.output.asFileTree.matching {
+        include 'com/lyndir/masterpassword/impl/MPAlgorithmV0.class'
+    }
+    outputs.file 'src/mpw/c/jni_mpw.h'
+    def classpath = files( sourceSets.main.compileClasspath, sourceSets.main.output )
+    doLast {
+        ant.javah( class: 'com.lyndir.masterpassword.impl.MPAlgorithmV0',
+                   outputFile: 'src/mpw/c/jni_mpw.h',
+                   classpath: classpath.asPath )
+    }
+}
+
+model {
+    components {
+        mpw( NativeLibrarySpec ) {
+            binaries.all {
+                if (targetPlatform.operatingSystem.macOsX) {
+                    cCompiler.args '-I', "${org.gradle.internal.jvm.Jvm.current().javaHome}/include"
+                    cCompiler.args '-I', "${org.gradle.internal.jvm.Jvm.current().javaHome}/include/darwin"
+                    cCompiler.args '-mmacosx-version-min=10.4'
+                    linker.args '-mmacosx-version-min=10.4'
+                } else if (targetPlatform.operatingSystem.linux) {
+                    cCompiler.args '-I', "${org.gradle.internal.jvm.Jvm.current().javaHome}/include"
+                    cCompiler.args '-I', "${org.gradle.internal.jvm.Jvm.current().javaHome}/include/linux"
+                    cCompiler.args '-D_FILE_OFFSET_BITS=64'
+                } else if (targetPlatform.operatingSystem.windows) {
+                    cCompiler.args "-I${org.gradle.internal.jvm.Jvm.current().javaHome}/include"
+                    cCompiler.args "-I${org.gradle.internal.jvm.Jvm.current().javaHome}/include/win32"
+                    linker.args "Shlwapi.lib", "Advapi32.lib"
+                } else if (targetPlatform.operatingSystem.freeBSD) {
+                    cCompiler.args '-I', "${org.gradle.internal.jvm.Jvm.current().javaHome}/include"
+                    cCompiler.args '-I', "${org.gradle.internal.jvm.Jvm.current().javaHome}/include/freebsd"
+                }
+            }
+            // TODO: Can't we add the sharedLibraryFile to the resources through some kind of task dependency instead?
+            binaries.withType( SharedLibraryBinarySpec ) {
+                sourceSets.main.resources.srcDirs it.sharedLibraryFile.parent
+//                copy {
+//                    from sharedLibraryFile
+//                    to sourceSets.main.resources.outputDir
+//                }
+            }
+        }
+    }
 }

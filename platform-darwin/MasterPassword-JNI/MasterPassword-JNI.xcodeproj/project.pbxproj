@@ -1,0 +1,181 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXFileReference section */
+		DA1554DE20B3928E00EA92C5 /* aes.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aes.c; sourceTree = "<group>"; };
+		DA1554DF20B3928E00EA92C5 /* mpw-algorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-algorithm.h"; sourceTree = "<group>"; };
+		DA1554E020B3928E00EA92C5 /* base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = base64.h; sourceTree = "<group>"; };
+		DA1554E120B3928E00EA92C5 /* mpw-marshal.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-marshal.c"; sourceTree = "<group>"; };
+		DA1554E220B3928E00EA92C5 /* mpw-algorithm_v2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-algorithm_v2.c"; sourceTree = "<group>"; };
+		DA1554E320B3928E00EA92C5 /* mpw-types.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-types.c"; sourceTree = "<group>"; };
+		DA1554E420B3928E00EA92C5 /* mpw-marshal-util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-marshal-util.c"; sourceTree = "<group>"; };
+		DA1554E520B3928E00EA92C5 /* mpw-util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-util.c"; sourceTree = "<group>"; };
+		DA1554E620B3928E00EA92C5 /* mpw-algorithm_v1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-algorithm_v1.c"; sourceTree = "<group>"; };
+		DA1554E720B3928E00EA92C5 /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
+		DA1554E820B3928E00EA92C5 /* mpw-marshal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-marshal.h"; sourceTree = "<group>"; };
+		DA1554E920B3928E00EA92C5 /* base64.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = base64.c; sourceTree = "<group>"; };
+		DA1554EA20B3928E00EA92C5 /* mpw-algorithm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-algorithm.c"; sourceTree = "<group>"; };
+		DA1554EB20B3928E00EA92C5 /* mpw-algorithm_v0.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-algorithm_v0.c"; sourceTree = "<group>"; };
+		DA1554EC20B3928E00EA92C5 /* mpw-types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-types.h"; sourceTree = "<group>"; };
+		DA1554ED20B3928E00EA92C5 /* mpw-util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-util.h"; sourceTree = "<group>"; };
+		DA1554EE20B3928E00EA92C5 /* mpw-marshal-util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-marshal-util.h"; sourceTree = "<group>"; };
+		DA1554EF20B3928E00EA92C5 /* mpw-algorithm_v3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-algorithm_v3.c"; sourceTree = "<group>"; };
+		DA1554F120B392A100EA92C5 /* jni_mpw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jni_mpw.h; sourceTree = "<group>"; };
+		DA1554F220B392A100EA92C5 /* jni_mpw.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = jni_mpw.c; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		DA1554D220B3924000EA92C5 = {
+			isa = PBXGroup;
+			children = (
+				DA1554F020B392A100EA92C5 /* jni */,
+				DA1554DD20B3928E00EA92C5 /* core */,
+			);
+			sourceTree = "<group>";
+		};
+		DA1554DD20B3928E00EA92C5 /* core */ = {
+			isa = PBXGroup;
+			children = (
+				DA1554DE20B3928E00EA92C5 /* aes.c */,
+				DA1554DF20B3928E00EA92C5 /* mpw-algorithm.h */,
+				DA1554E020B3928E00EA92C5 /* base64.h */,
+				DA1554E120B3928E00EA92C5 /* mpw-marshal.c */,
+				DA1554E220B3928E00EA92C5 /* mpw-algorithm_v2.c */,
+				DA1554E320B3928E00EA92C5 /* mpw-types.c */,
+				DA1554E420B3928E00EA92C5 /* mpw-marshal-util.c */,
+				DA1554E520B3928E00EA92C5 /* mpw-util.c */,
+				DA1554E620B3928E00EA92C5 /* mpw-algorithm_v1.c */,
+				DA1554E720B3928E00EA92C5 /* aes.h */,
+				DA1554E820B3928E00EA92C5 /* mpw-marshal.h */,
+				DA1554E920B3928E00EA92C5 /* base64.c */,
+				DA1554EA20B3928E00EA92C5 /* mpw-algorithm.c */,
+				DA1554EB20B3928E00EA92C5 /* mpw-algorithm_v0.c */,
+				DA1554EC20B3928E00EA92C5 /* mpw-types.h */,
+				DA1554ED20B3928E00EA92C5 /* mpw-util.h */,
+				DA1554EE20B3928E00EA92C5 /* mpw-marshal-util.h */,
+				DA1554EF20B3928E00EA92C5 /* mpw-algorithm_v3.c */,
+			);
+			name = core;
+			path = ../../core/c;
+			sourceTree = "<group>";
+		};
+		DA1554F020B392A100EA92C5 /* jni */ = {
+			isa = PBXGroup;
+			children = (
+				DA1554F120B392A100EA92C5 /* jni_mpw.h */,
+				DA1554F220B392A100EA92C5 /* jni_mpw.c */,
+			);
+			name = jni;
+			path = ../../core/java/algorithm/src/mpw/c;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXLegacyTarget section */
+		DA1554D720B3924000EA92C5 /* MasterPassword-JNI */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = ":masterpassword-algorithm:nativeGenHeaders";
+			buildConfigurationList = DA1554DA20B3924000EA92C5 /* Build configuration list for PBXLegacyTarget "MasterPassword-JNI" */;
+			buildPhases = (
+			);
+			buildToolPath = gradle;
+			buildWorkingDirectory = /Users/lhunath/Documents/workspace/lyndir/MasterPassword/gradle;
+			dependencies = (
+			);
+			name = "MasterPassword-JNI";
+			passBuildSettingsInEnvironment = 1;
+			productName = "MasterPassword-JNI";
+		};
+/* End PBXLegacyTarget section */
+
+/* Begin PBXProject section */
+		DA1554D320B3924000EA92C5 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0930;
+				ORGANIZATIONNAME = "Maarten Billemont";
+				TargetAttributes = {
+					DA1554D720B3924000EA92C5 = {
+						CreatedOnToolsVersion = 9.3.1;
+					};
+				};
+			};
+			buildConfigurationList = DA1554D620B3924000EA92C5 /* Build configuration list for PBXProject "MasterPassword-JNI" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = DA1554D220B3924000EA92C5;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				DA1554D720B3924000EA92C5 /* MasterPassword-JNI */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin XCBuildConfiguration section */
+		DA1554D820B3924000EA92C5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				HEADER_SEARCH_PATHS = (
+					"/Library/Java/JavaVirtualMachines/jdk1.8.0_161.jdk/Contents/Home/include/**",
+				);
+			};
+			name = Debug;
+		};
+		DA1554D920B3924000EA92C5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				HEADER_SEARCH_PATHS = (
+					"/Library/Java/JavaVirtualMachines/jdk1.8.0_161.jdk/Contents/Home/include/**",
+				);
+			};
+			name = Release;
+		};
+		DA1554DB20B3924000EA92C5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				JAVA_HOME = /Library/Java/JavaVirtualMachines/jdk1.8.0_161.jdk/Contents/Home;
+			};
+			name = Debug;
+		};
+		DA1554DC20B3924000EA92C5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				JAVA_HOME = /Library/Java/JavaVirtualMachines/jdk1.8.0_161.jdk/Contents/Home;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		DA1554D620B3924000EA92C5 /* Build configuration list for PBXProject "MasterPassword-JNI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DA1554D820B3924000EA92C5 /* Debug */,
+				DA1554D920B3924000EA92C5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DA1554DA20B3924000EA92C5 /* Build configuration list for PBXLegacyTarget "MasterPassword-JNI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DA1554DB20B3924000EA92C5 /* Debug */,
+				DA1554DC20B3924000EA92C5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = DA1554D320B3924000EA92C5 /* Project object */;
+}
