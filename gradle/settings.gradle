@@ -6,6 +6,9 @@ try {
 } catch (FileNotFoundException ignored) {
 }
 
+include 'masterpassword-core'
+project(':masterpassword-core').projectDir = new File( '../core/c' )
+
 include 'masterpassword-algorithm'
 project(':masterpassword-algorithm').projectDir = new File( '../core/java/algorithm' )
 
@@ -18,9 +21,10 @@ project(':masterpassword-tests').projectDir = new File( '../core/java/tests' )
 include 'masterpassword-gui'
 project(':masterpassword-gui').projectDir = new File( '../platform-independent/gui-java' )
 
+/*
 if (local.containsKey('sdk.dir')) {
     include 'masterpassword-android'
     project(':masterpassword-android').projectDir = new File( '../platform-android' )
 } else {
     logger.warn( "Skipping masterpassword-android since sdk.dir is not defined in local.properties." )
-}
+}*/

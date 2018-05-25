@@ -18,42 +18,67 @@
 
 package com.lyndir.masterpassword.impl;
 
+import com.google.common.base.Joiner;
 import com.google.common.io.ByteStreams;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import java.io.*;
+import java.util.Locale;
+import javax.annotation.Nonnull;
 
 
 /**
  * @author lhunath, 2018-05-22
  */
 public final class Native {
+
     private static final Logger logger = Logger.get( Native.class );
 
-    private static final char   FILE_DOT     = '.';
-    private static final String NATIVES_PATH = "";
+    @SuppressWarnings("HardcodedFileSeparator")
+    private static final char   RESOURCE_SEPARATOR  = '/';
+    private static final char   EXTENSION_SEPARATOR = '.';
+    private static final String NATIVES_PATH        = "lib";
 
     @SuppressWarnings({ "HardcodedFileSeparator", "LoadLibraryWithNonConstantString" })
     public static void load(final Class<?> context, final String name) {
         try {
+            // Find and open a stream to the packaged library resource.
             String      library          = System.mapLibraryName( name );
-            int         libraryDot       = library.lastIndexOf( FILE_DOT );
+            int         libraryDot       = library.lastIndexOf( EXTENSION_SEPARATOR );
             String      libraryName      = (libraryDot > 0)? library.substring( 0, libraryDot ): library;
-            String      libraryExtension = (libraryDot > 0)? library.substring( libraryDot ): "lib";
-            String      libraryResource  = String.format( "%s/%s", NATIVES_PATH, library );
+            String      libraryExtension = (libraryDot > 0)? library.substring( libraryDot ): ".lib";
+            String      libraryResource  = getLibraryResource( library );
             InputStream libraryStream    = context.getResourceAsStream( libraryResource );
             if (libraryStream == null)
                 throw new IllegalStateException(
                         "Library: " + name + " (" + libraryResource + "), not found in class loader for: " + context );
 
-            File libraryFile = File.createTempFile( "libmpw", ".dylib" );
-            ByteStreams.copy( libraryStream, new FileOutputStream( libraryFile ) );
+            // Write the library resource to a temporary file.
+            File             libraryFile       = File.createTempFile( libraryName, libraryExtension );
+            FileOutputStream libraryFileStream = new FileOutputStream( libraryFile );
+            try {
+                libraryFile.deleteOnExit();
+                ByteStreams.copy( libraryStream, libraryFileStream );
+            }
+            finally {
+                libraryFileStream.close();
+                libraryStream.close();
+            }
+
+            // Load the library from the temporary file.
             System.load( libraryFile.getAbsolutePath() );
-            libraryFile.deleteOnExit();
-            if (!libraryFile.delete())
-                logger.wrn( "Couldn't clean up library after loading: " + libraryFile );
         }
         catch (final IOException e) {
-            throw new IllegalStateException( "Couldn't load library: " + name, e );
+            throw new IllegalStateException( "Couldn't extract library: " + name, e );
         }
+    }
+
+    @Nonnull
+    private static String getLibraryResource(final String library) {
+        String system       = System.getProperty( "os.name" ).toLowerCase( Locale.ROOT );
+        String architecture = System.getProperty( "os.arch" ).toLowerCase( Locale.ROOT );
+        if ("Mac OS X".equalsIgnoreCase( system ))
+            system = "macos";
+
+        return Joiner.on( RESOURCE_SEPARATOR ).join( NATIVES_PATH, system, architecture, library );
     }
 }

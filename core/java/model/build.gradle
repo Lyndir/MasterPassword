@@ -1,19 +1,22 @@
 plugins {
-    id 'java'
+    id 'java-library'
     id 'net.ltgt.apt' version '0.9'
 }
 
 description = 'Master Password Site Model'
 
 dependencies {
-    compile project( ':masterpassword-algorithm' )
-    compile 'joda-time:joda-time:2.4'
-    compile 'com.fasterxml.jackson.core:jackson-core:2.9.5'
-    compile 'com.fasterxml.jackson.core:jackson-annotations:2.9.5'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.9.5'
-    //compile group: 'com.google.code.gson', name: 'gson', version: '2.8.2'
+    implementation group: 'com.lyndir.lhunath.opal', name: 'opal-system', version: '1.7-p1'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.9.5'
+
+    api project( ':masterpassword-algorithm' )
+    api 'joda-time:joda-time:2.4'
+    api 'com.fasterxml.jackson.core:jackson-annotations:2.9.5'
+    api 'com.fasterxml.jackson.core:jackson-databind:2.9.5'
+
     compileOnly 'com.google.auto.value:auto-value:1.2'
     apt group: 'com.google.auto.value', name: 'auto-value', version: '1.2'
+
     testCompile 'org.testng:testng:6.8.5'
     testCompile 'ch.qos.logback:logback-classic:1.1.2'
 }
