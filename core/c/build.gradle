@@ -3,29 +3,49 @@ import org.gradle.internal.jvm.Jvm
 
 plugins {
     id 'cpp-library'
-    id 'xcode'
-    id 'visual-studio'
+    id 'base'
 }
 
 description = 'Master Password Algorithm Implementation'
 
+task archive( type: Zip ) {
+    dependsOn assemble
+
+    components.withType( ComponentWithRuntimeFile ) {
+        if (isOptimized()) {
+            from getRuntimeFile()
+            into standardOperatingSystem( linkTask.get().targetPlatform.get() ) + '/' +
+                 standardArchitecture( linkTask.get().targetPlatform.get() )
+        }
+    }
+}
+
 library {
     linkage.set( [Linkage.STATIC, Linkage.SHARED] )
 
-    binaries.configureEach {
-        // Reconfigure the toolchain from C++ to C.
-        compileTask.get().source.setFrom( fileTree( dir: "src", include: "**/*.c" ) )
-        if (toolChain instanceof VisualCpp) {
-            compileTask.get().compilerArgs = ["/TC"]
-        } else if (toolChain instanceof GccCompatibleToolChain) {
-            compileTask.get().compilerArgs = ["-x", "c", "-std=c11"]
-            //linkTask.get().linkerArgs = ["-nodefaultlibs", "-lc"]
+    // Reconfigure the toolchain from C++ to C.
+    toolChains {
+        withType( GccCompatibleToolChain ) {
+            //TODO: Cross-compiling, blocked by: https://github.com/gradle/gradle-native/issues/169
+            //setTargets( "arm", "arm64", "x86-64", "x86" )
+            eachPlatform {
+                cppCompiler.withArguments { addAll( ["-x", "c", "-std=c11", "-DMPW_SODIUM=1"] ) }
+            }
         }
+    }
+    components.withType( CppComponent ) {
+        // Reconfigure the toolchain from C++ to C.
+        cppSource.from fileTree( dir: "src", include: "**/*.c" )
+    }
 
-        // Resolve our standard naming for OS platforms.
-        def platform = System.getProperty( "os.name" ).toLowerCase( Locale.ROOT )
-        if (platform.startsWith( "mac" ))
-            platform = "macos"
+    // Cross-compile for these host platforms.
+    operatingSystems.set( [objects.named( OperatingSystemFamily, OperatingSystemFamily.WINDOWS ),
+                           objects.named( OperatingSystemFamily, OperatingSystemFamily.LINUX ),
+                           objects.named( OperatingSystemFamily, OperatingSystemFamily.MAC_OS )] )
+
+    binaries.configureEach {
+        // Resolve a standard name for the platform.
+        def platform = standardOperatingSystem( targetPlatform )
 
         project.dependencies {
             // Depend on JDK for JNI support.
@@ -38,7 +58,23 @@ library {
             add( linkLibraries.name,
                  fileTree( "../../lib/libsodium/build-${platform}~/out/lib" ) )
         }
-
-        compileTask.get().compilerArgs.add "-DMPW_SODIUM=1"
     }
+}
+
+static String standardOperatingSystem(NativePlatform platform) {
+    OperatingSystem os = platform.getOperatingSystem()
+    if (os.isWindows()) {
+        return OperatingSystemFamily.WINDOWS
+    } else if (os.isLinux()) {
+        return OperatingSystemFamily.LINUX
+    } else if (os.isMacOsX()) {
+        return OperatingSystemFamily.MAC_OS
+    }
+
+    return os.name.toLowerCase()
+}
+
+static String standardArchitecture(NativePlatform platform) {
+    Architecture arch = platform.getArchitecture()
+    return arch.name.toLowerCase().replaceAll( "-", "_" )
 }

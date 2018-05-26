@@ -16,7 +16,8 @@ dependencies {
     api group: 'org.jetbrains', name: 'annotations', version: '13.0'
     api group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
 
-    resource project( path: ':masterpassword-core', configuration: 'releaseSharedRuntimeElements' )
+    // TODO: pending cross-compilation support
+    //resource project( path: ':masterpassword-core', configuration: 'releaseSharedRuntimeElements' )
 }
 
 jar {
