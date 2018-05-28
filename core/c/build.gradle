@@ -8,14 +8,14 @@ plugins {
 
 description = 'Master Password Algorithm Implementation'
 
-task archive( type: Zip ) {
-    dependsOn assemble
-
-    components.withType( ComponentWithRuntimeFile ) {
-        if (isOptimized()) {
-            from getRuntimeFile()
-            into standardOperatingSystem( linkTask.get().targetPlatform.get() ) + '/' +
-                 standardArchitecture( linkTask.get().targetPlatform.get() )
+artifacts {
+    'default' task( type: Zip, "archive" ) {
+        components.withType( ComponentWithRuntimeFile ) {
+            if (isOptimized()) {
+                from getRuntimeFile()
+                into standardOperatingSystem( linkTask.get().targetPlatform.get() ) + '/' +
+                     standardArchitecture( linkTask.get().targetPlatform.get() )
+            }
         }
     }
 }
@@ -34,7 +34,6 @@ library {
         }
     }
     components.withType( CppComponent ) {
-        // Reconfigure the toolchain from C++ to C.
         cppSource.from fileTree( dir: "src", include: "**/*.c" )
     }
 
@@ -43,6 +42,7 @@ library {
                            objects.named( OperatingSystemFamily, OperatingSystemFamily.LINUX ),
                            objects.named( OperatingSystemFamily, OperatingSystemFamily.MAC_OS )] )
 
+    //
     binaries.configureEach {
         // Resolve a standard name for the platform.
         def platform = standardOperatingSystem( targetPlatform )

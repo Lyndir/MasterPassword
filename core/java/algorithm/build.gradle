@@ -2,27 +2,29 @@ plugins {
     id 'java-library'
 }
 
-
 description = 'Master Password Algorithm Implementation'
 
 configurations {
-    resource
+    lib
 }
 
 dependencies {
     implementation group: 'com.lyndir.lhunath.opal', name: 'opal-system', version: '1.7-p1'
 
-    api( group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.5' )
+    api group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.5'
     api group: 'org.jetbrains', name: 'annotations', version: '13.0'
     api group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
 
-    // TODO: pending cross-compilation support
-    //resource project( path: ':masterpassword-core', configuration: 'releaseSharedRuntimeElements' )
+    lib project( path: ':masterpassword-core', configuration: 'default' )
 }
 
-jar {
-    dependsOn task( type: Sync, 'copyResources' ) {
-        from files( configurations.resource )
-        into processResources.outputs.files.singleFile
-    }
+processResources {
+    dependsOn task( type: Sync, 'copyResources', {
+        dependsOn configurations.lib {
+            files.each { libFile ->
+                from zipTree( libFile )
+                into new File( processResources.outputs.files.singleFile, "lib" )
+            }
+        }
+    } )
 }
