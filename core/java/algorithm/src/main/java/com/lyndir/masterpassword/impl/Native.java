@@ -79,6 +79,6 @@ public final class Native {
         if ("Mac OS X".equalsIgnoreCase( system ))
             system = "macos";
 
-        return Joiner.on( RESOURCE_SEPARATOR ).join( NATIVES_PATH, system, architecture, library );
+        return Joiner.on( RESOURCE_SEPARATOR ).join( "", NATIVES_PATH, system, architecture, library );
     }
 }
