@@ -62,7 +62,8 @@ static MPMasterKey mpw_masterKey_v3(
 
     // Calculate the master key.
     trc( "masterKey: scrypt( masterPassword, masterKeySalt, N=%lu, r=%u, p=%u )", MP_N, MP_r, MP_p );
-    MPMasterKey masterKey = mpw_kdf_scrypt( MPMasterKeySize, masterPassword, masterKeySalt, masterKeySaltSize, MP_N, MP_r, MP_p );
+    MPMasterKey masterKey = mpw_kdf_scrypt( MPMasterKeySize,
+            (uint8_t *)masterPassword, strlen( masterPassword ), masterKeySalt, masterKeySaltSize, MP_N, MP_r, MP_p );
     mpw_free( &masterKeySalt, masterKeySaltSize );
     if (!masterKey) {
         err( "Could not derive master key: %s", strerror( errno ) );

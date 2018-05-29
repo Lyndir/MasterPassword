@@ -25,15 +25,14 @@
 		DA1554ED20B3928E00EA92C5 /* mpw-util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-util.h"; sourceTree = "<group>"; };
 		DA1554EE20B3928E00EA92C5 /* mpw-marshal-util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-marshal-util.h"; sourceTree = "<group>"; };
 		DA1554EF20B3928E00EA92C5 /* mpw-algorithm_v3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-algorithm_v3.c"; sourceTree = "<group>"; };
-		DA1554F120B392A100EA92C5 /* jni_mpw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jni_mpw.h; sourceTree = "<group>"; };
-		DA1554F220B392A100EA92C5 /* jni_mpw.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = jni_mpw.c; sourceTree = "<group>"; };
+		DA1F44B020BCF0C200957B45 /* mpw-jni.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-jni.h"; sourceTree = "<group>"; };
+		DA1F44B120BCF0C200957B45 /* mpw-jni.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-jni.c"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
 		DA1554D220B3924000EA92C5 = {
 			isa = PBXGroup;
 			children = (
-				DA1554F020B392A100EA92C5 /* jni */,
 				DA1554DD20B3928E00EA92C5 /* core */,
 			);
 			sourceTree = "<group>";
@@ -42,36 +41,28 @@
 			isa = PBXGroup;
 			children = (
 				DA1554DE20B3928E00EA92C5 /* aes.c */,
-				DA1554DF20B3928E00EA92C5 /* mpw-algorithm.h */,
-				DA1554E020B3928E00EA92C5 /* base64.h */,
-				DA1554E120B3928E00EA92C5 /* mpw-marshal.c */,
-				DA1554E220B3928E00EA92C5 /* mpw-algorithm_v2.c */,
-				DA1554E320B3928E00EA92C5 /* mpw-types.c */,
-				DA1554E420B3928E00EA92C5 /* mpw-marshal-util.c */,
-				DA1554E520B3928E00EA92C5 /* mpw-util.c */,
-				DA1554E620B3928E00EA92C5 /* mpw-algorithm_v1.c */,
 				DA1554E720B3928E00EA92C5 /* aes.h */,
-				DA1554E820B3928E00EA92C5 /* mpw-marshal.h */,
 				DA1554E920B3928E00EA92C5 /* base64.c */,
-				DA1554EA20B3928E00EA92C5 /* mpw-algorithm.c */,
+				DA1554E020B3928E00EA92C5 /* base64.h */,
 				DA1554EB20B3928E00EA92C5 /* mpw-algorithm_v0.c */,
-				DA1554EC20B3928E00EA92C5 /* mpw-types.h */,
-				DA1554ED20B3928E00EA92C5 /* mpw-util.h */,
-				DA1554EE20B3928E00EA92C5 /* mpw-marshal-util.h */,
+				DA1554E620B3928E00EA92C5 /* mpw-algorithm_v1.c */,
+				DA1554E220B3928E00EA92C5 /* mpw-algorithm_v2.c */,
 				DA1554EF20B3928E00EA92C5 /* mpw-algorithm_v3.c */,
+				DA1554EA20B3928E00EA92C5 /* mpw-algorithm.c */,
+				DA1554DF20B3928E00EA92C5 /* mpw-algorithm.h */,
+				DA1F44B120BCF0C200957B45 /* mpw-jni.c */,
+				DA1F44B020BCF0C200957B45 /* mpw-jni.h */,
+				DA1554E420B3928E00EA92C5 /* mpw-marshal-util.c */,
+				DA1554EE20B3928E00EA92C5 /* mpw-marshal-util.h */,
+				DA1554E120B3928E00EA92C5 /* mpw-marshal.c */,
+				DA1554E820B3928E00EA92C5 /* mpw-marshal.h */,
+				DA1554E320B3928E00EA92C5 /* mpw-types.c */,
+				DA1554EC20B3928E00EA92C5 /* mpw-types.h */,
+				DA1554E520B3928E00EA92C5 /* mpw-util.c */,
+				DA1554ED20B3928E00EA92C5 /* mpw-util.h */,
 			);
 			name = core;
-			path = ../../core/c;
-			sourceTree = "<group>";
-		};
-		DA1554F020B392A100EA92C5 /* jni */ = {
-			isa = PBXGroup;
-			children = (
-				DA1554F120B392A100EA92C5 /* jni_mpw.h */,
-				DA1554F220B392A100EA92C5 /* jni_mpw.c */,
-			);
-			name = jni;
-			path = ../../core/java/algorithm/src/mpw/c;
+			path = ../core/c/src;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -125,32 +116,42 @@
 		DA1554D820B3924000EA92C5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				HEADER_SEARCH_PATHS = (
-					"/Library/Java/JavaVirtualMachines/jdk1.8.0_161.jdk/Contents/Home/include/**",
-				);
 			};
 			name = Debug;
 		};
 		DA1554D920B3924000EA92C5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				HEADER_SEARCH_PATHS = (
-					"/Library/Java/JavaVirtualMachines/jdk1.8.0_161.jdk/Contents/Home/include/**",
-				);
 			};
 			name = Release;
 		};
 		DA1554DB20B3924000EA92C5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				HEADER_SEARCH_PATHS = (
+					"/Library/Java/JavaVirtualMachines/jdk1.8.0_161.jdk/Contents/Home/include/**",
+					../lib/libsodium/src/libsodium/include,
+				);
 				JAVA_HOME = /Library/Java/JavaVirtualMachines/jdk1.8.0_161.jdk/Contents/Home;
+				OTHER_CFLAGS = (
+					"-DMPW_SODIUM=1",
+					"-DMPW_CPERCIVA=0",
+				);
 			};
 			name = Debug;
 		};
 		DA1554DC20B3924000EA92C5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				HEADER_SEARCH_PATHS = (
+					"/Library/Java/JavaVirtualMachines/jdk1.8.0_161.jdk/Contents/Home/include/**",
+					../lib/libsodium/src/libsodium/include,
+				);
 				JAVA_HOME = /Library/Java/JavaVirtualMachines/jdk1.8.0_161.jdk/Contents/Home;
+				OTHER_CFLAGS = (
+					"-DMPW_SODIUM=1",
+					"-DMPW_CPERCIVA=0",
+				);
 			};
 			name = Release;
 		};

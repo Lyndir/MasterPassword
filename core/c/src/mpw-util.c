@@ -169,10 +169,10 @@ bool __mpw_free_strings(char **strings, ...) {
     return success;
 }
 
-uint8_t const *mpw_kdf_scrypt(const size_t keySize, const char *secret, const uint8_t *salt, const size_t saltSize,
+uint8_t const *mpw_kdf_scrypt(const size_t keySize, const uint8_t *secret, const size_t secretSize, const uint8_t *salt, const size_t saltSize,
         uint64_t N, uint32_t r, uint32_t p) {
 
-    if (!secret || !salt)
+    if (!secret || !salt || !secretSize || !saltSize)
         return NULL;
 
     uint8_t *key = malloc( keySize );
@@ -185,7 +185,7 @@ uint8_t const *mpw_kdf_scrypt(const size_t keySize, const char *secret, const ui
         return NULL;
     }
 #elif MPW_SODIUM
-    if (crypto_pwhash_scryptsalsa208sha256_ll( (const uint8_t *)secret, strlen( secret ), salt, saltSize, N, r, p, key, keySize ) != 0) {
+    if (crypto_pwhash_scryptsalsa208sha256_ll( secret, secretSize, salt, saltSize, N, r, p, key, keySize ) != 0) {
         mpw_free( &key, keySize );
         return NULL;
     }
