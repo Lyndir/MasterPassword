@@ -1756,7 +1756,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		93D39A2239FFFE6BEC83E191 /* C */ = {
+		93D39A2239FFFE6BEC83E191 /* core */ = {
 			isa = PBXGroup;
 			children = (
 				DAB07C9B1F7725C500CC6D43 /* aes.c */,
@@ -1778,8 +1778,8 @@
 				93D396C311C3725870343EE0 /* mpw-util.c */,
 				93D39CF7DB942C69D1C5D6BE /* mpw-util.h */,
 			);
-			name = C;
-			path = ../core/c;
+			name = core;
+			path = ../core/c/src;
 			sourceTree = "<group>";
 		};
 		DA0978D81E9A81EE00F0BFE8 /* libsodium-ios */ = {
@@ -2033,7 +2033,7 @@
 		DA5BFA39147E415C00F98B1E = {
 			isa = PBXGroup;
 			children = (
-				93D39A2239FFFE6BEC83E191 /* C */,
+				93D39A2239FFFE6BEC83E191 /* core */,
 				DABD3B9F1711E2DB00CF925C /* Source */,
 				DACA23B41705DF7D002C6C22 /* Resources */,
 				DACA22121705DDC5002C6C22 /* External */,

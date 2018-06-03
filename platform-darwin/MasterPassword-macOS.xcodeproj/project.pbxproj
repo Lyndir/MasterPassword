@@ -1343,7 +1343,7 @@
 		DA5BFA39147E415C00F98B1E = {
 			isa = PBXGroup;
 			children = (
-				DA6773291A4746AF004F356A /* C */,
+				DA6773291A4746AF004F356A /* core */,
 				DA5E5C961724A667003798D8 /* Source */,
 				DACA23B41705DF7D002C6C22 /* Resources */,
 				DACA22121705DDC5002C6C22 /* External */,
@@ -1889,7 +1889,7 @@
 			path = Insignia;
 			sourceTree = "<group>";
 		};
-		DA6773291A4746AF004F356A /* C */ = {
+		DA6773291A4746AF004F356A /* core */ = {
 			isa = PBXGroup;
 			children = (
 				DAB07C9E1F7725D400CC6D43 /* aes.c */,
@@ -1912,8 +1912,8 @@
 				DA6773C51A4746AF004F356A /* mpw-util.c */,
 				DA6773C61A4746AF004F356A /* mpw-util.h */,
 			);
-			name = C;
-			path = ../core/c;
+			name = core;
+			path = ../core/c/src;
 			sourceTree = "<group>";
 		};
 		DA89D4E51A51E53100AC64D7 /* Pearl-Cocoa */ = {
