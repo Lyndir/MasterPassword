@@ -16,8 +16,13 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
+#define _POSIX_C_SOURCE 200809L
+
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sysexits.h>
 
 #ifndef mpw_log_do
 #define mpw_log_do(level, format, ...) ({ \
@@ -32,7 +37,47 @@
 
 #include "mpw-tests-util.h"
 
+/** Output the program's usage documentation. */
+static void usage() {
+
+    inf( ""
+            "  Master Password v%s - Tests\n"
+            "--------------------------------------------------------------------------------\n"
+            "      https://masterpasswordapp.com\n", stringify_def( MP_VERSION ) );
+    inf( ""
+            "\nUSAGE\n\n"
+            "  mpw-tests [-v|-q]* [-h] [test-name ...]\n" );
+    inf( ""
+            "  -v           Increase output verbosity (can be repeated).\n"
+            "  -q           Decrease output verbosity (can be repeated).\n" );
+    inf( ""
+            "  -h           Show this help output instead of performing any operation.\n" );
+    inf( ""
+            "  test-name    Only run tests whose identifier starts with one of the these.\n" );
+    exit( EX_OK );
+}
+
 int main(int argc, char *const argv[]) {
+
+    for (int opt; (opt = getopt( argc, argv, "vqh" )) != EOF;
+         optarg? mpw_zero( optarg, strlen( optarg ) ): (void)0)
+        switch (opt) {
+            case 'v':
+                ++mpw_verbosity;
+                break;
+            case 'q':
+                --mpw_verbosity;
+                break;
+            case 'h':
+                usage();
+                break;
+            case '?':
+                ftl( "Unknown option: -%c", optopt );
+                exit( EX_USAGE );
+            default:
+                ftl( "Unexpected option: %c", opt );
+                exit( EX_USAGE );
+        }
 
     int failedTests = 0;
 
@@ -64,6 +109,15 @@ int main(int argc, char *const argv[]) {
 
         // Run the test case.
         do {
+            if (optind < argc) {
+                bool selected = false;
+                for (int a = optind; !selected && a <= argc; ++a)
+                    if (strstr((char *)id, argv[optind]) == (char *)id)
+                        selected = true;
+                if (!selected)
+                    continue;
+            }
+
             fprintf( stdout, "test case %s... ", id );
             if (!xmlStrlen( result )) {
                 fprintf( stdout, "abstract." );

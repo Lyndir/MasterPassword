@@ -34,14 +34,14 @@
 static void usage() {
 
     inf( ""
-            "  Master Password v%s\n"
+            "  Master Password v%s - CLI\n"
             "--------------------------------------------------------------------------------\n"
             "      https://masterpasswordapp.com\n", stringify_def( MP_VERSION ) );
     inf( ""
             "\nUSAGE\n\n"
             "  mpw [-u|-U full-name] [-m fd] [-t pw-type] [-P value] [-c counter]\n"
             "      [-a version] [-p purpose] [-C context] [-f|F format] [-R 0|1]\n"
-            "      [-v|-q] [-h] [site-name]\n" );
+            "      [-v|-q]* [-h] [site-name]\n" );
     inf( ""
             "  -u full-name Specify the full name of the user.\n"
             "               -u checks the master password against the config,\n"
@@ -110,6 +110,8 @@ static void usage() {
             "  -q           Decrease output verbosity (can be repeated).\n" );
     inf( ""
             "  -h           Show this help output instead of performing any operation.\n" );
+    inf( ""
+            "  site-name    Name of the site for which to generate a token.\n" );
     inf( ""
             "\nENVIRONMENT\n\n"
             "  %-12s The full name of the user (see -u).\n"
