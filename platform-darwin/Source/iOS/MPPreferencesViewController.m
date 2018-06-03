@@ -207,13 +207,13 @@
 - (IBAction)homePageButton:(id)sender {
 
     [[self dismissPopup].navigationController performSegueWithIdentifier:@"web" sender:
-            [NSURL URLWithString:@"https://masterpasswordapp.com"]];
+            [NSURL URLWithString:@"https://masterpassword.app"]];
 }
 
 - (IBAction)securityButton:(id)sender {
 
     [[self dismissPopup].navigationController performSegueWithIdentifier:@"web" sender:
-            [NSURL URLWithString:@"https://masterpasswordapp.com/security.html"]];
+            [NSURL URLWithString:@"https://masterpassword.app/security.html"]];
 }
 
 - (IBAction)sourceButton:(id)sender {

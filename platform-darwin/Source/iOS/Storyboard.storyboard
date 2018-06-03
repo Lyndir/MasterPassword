@@ -489,7 +489,7 @@
                             <navigationBar contentMode="scaleToFill" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="03x-KT-JQN">
                                 <rect key="frame" x="0.0" y="20" width="375" height="74"/>
                                 <items>
-                                    <navigationItem title="masterpasswordapp.com" prompt="Loading" id="Wpf-6b-UJb">
+                                    <navigationItem title="masterpassword.app" prompt="Loading" id="Wpf-6b-UJb">
                                         <barButtonItem key="rightBarButtonItem" systemItem="done" id="Tbg-c3-qOh">
                                             <connections>
                                                 <action selector="done:" destination="Sd5-eW-Cx2" id="cuN-bV-cwl"/>
@@ -2487,11 +2487,11 @@ See </string>
                                                     <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                                 </attributes>
                                             </fragment>
-                                            <fragment content="http://masterpasswordapp.com/security.html">
+                                            <fragment content="https://masterpassword.app/security.html">
                                                 <attributes>
                                                     <color key="NSColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <font key="NSFont" size="14" name="Exo2.0-Regular"/>
-                                                    <url key="NSLink" string="http://masterpasswordapp.com/security.html"/>
+                                                    <url key="NSLink" string="https://masterpassword.app/security.html"/>
                                                     <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                                 </attributes>
                                             </fragment>

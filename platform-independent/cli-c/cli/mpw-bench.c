@@ -66,7 +66,7 @@ int main(int argc, char *const argv[]) {
 
     const char *fullName = "Robert Lee Mitchel";
     const char *masterPassword = "banana colored duckling";
-    const char *siteName = "masterpasswordapp.com";
+    const char *siteName = "masterpassword.app";
     const MPCounterValue siteCounter = MPCounterValueDefault;
     const MPResultType resultType = MPResultTypeDefault;
     const MPKeyPurpose keyPurpose = MPKeyPurposeAuthentication;

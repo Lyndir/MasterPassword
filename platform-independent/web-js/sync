@@ -2,5 +2,5 @@
 set -e
 
 cd "${BASH_SOURCE[0]%/*}"
-#s3cmd sync --exclude '.git/**' --delete-removed --follow-symlinks --preserve --acl-public --reduced-redundancy . s3://js.masterpasswordapp.com/
-rsync -avP --delete --no-group . satura.lyndir.com:/usr/local/www/js.masterpasswordapp.com/htdocs-secure/
+#s3cmd sync --exclude '.git/**' --delete-removed --follow-symlinks --preserve --acl-public --reduced-redundancy . s3://js.masterpassword.app/
+rsync -avP --delete --no-group . satura.lyndir.com:/usr/local/www/js.masterpassword.app/htdocs-secure/

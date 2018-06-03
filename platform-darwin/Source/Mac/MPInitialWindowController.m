@@ -44,7 +44,7 @@
 
 - (IBAction)androidPlayStore:(id)sender {
 
-    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://masterpasswordapp.com"]];
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://masterpassword.app"]];
     [self close];
 }
 

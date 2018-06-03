@@ -32,4 +32,4 @@ echo
 echo "Done.  Ready to publish the site."
 echo "     package: $mpwArchive"
 echo "   signature: $mpwArchive.sig"
-echo "         url: https://masterpasswordapp.com/$mpwArchive"
+echo "         url: https://masterpassword.app/$mpwArchive"

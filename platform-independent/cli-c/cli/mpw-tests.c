@@ -43,7 +43,7 @@ static void usage() {
     inf( ""
             "  Master Password v%s - Tests\n"
             "--------------------------------------------------------------------------------\n"
-            "      https://masterpasswordapp.com\n", stringify_def( MP_VERSION ) );
+            "      https://masterpassword.app\n", stringify_def( MP_VERSION ) );
     inf( ""
             "\nUSAGE\n\n"
             "  mpw-tests [-v|-q]* [-h] [test-name ...]\n" );

@@ -36,7 +36,7 @@ static void usage() {
     inf( ""
             "  Master Password v%s - CLI\n"
             "--------------------------------------------------------------------------------\n"
-            "      https://masterpasswordapp.com\n", stringify_def( MP_VERSION ) );
+            "      https://masterpassword.app\n", stringify_def( MP_VERSION ) );
     inf( ""
             "\nUSAGE\n\n"
             "  mpw [-u|-U full-name] [-m fd] [-t pw-type] [-P value] [-c counter]\n"
