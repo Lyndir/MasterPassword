@@ -2,7 +2,7 @@
 [![Join the chat at https://gitter.im/lyndir/MasterPassword](https://badges.gitter.im/lyndir/MasterPassword.svg)](https://gitter.im/lyndir/MasterPassword?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![license](https://img.shields.io/github/license/lyndir/masterpassword.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
-
+<p align="center"><img src="logo/1024px.png" alt="MasterPassword" height="200px"></p>
 
 
 # [Master Password •••|](http://masterpassword.app)
