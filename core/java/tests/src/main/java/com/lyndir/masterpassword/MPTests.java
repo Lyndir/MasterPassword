@@ -60,7 +60,7 @@ public class MPTests {
     }
 
     public Case getCase(final String identifier) {
-        for (final Case testCase : getCases())
+        for (final Case testCase : cases)
             if (identifier.equals( testCase.getIdentifier() ))
                 return testCase;
 

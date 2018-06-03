@@ -90,15 +90,13 @@ public class MPAlgorithmV0 extends MPAlgorithm {
     @Nullable
     protected byte[] scrypt(final byte[] secret, final byte[] salt, final int keySize) {
         byte[] buffer = new byte[keySize];
-        if (_scrypt(
-                secret, secret.length, salt, salt.length,
-                scrypt_N(), scrypt_r(), scrypt_p(), buffer, buffer.length ) < 0)
+        if (_scrypt( secret, salt, scrypt_N(), scrypt_r(), scrypt_p(), buffer ) < 0)
             return null;
 
         return buffer;
     }
 
-    protected native int _scrypt(byte[] passwd, int passwdlen, byte[] salt, int saltlen, int N, int r, int p, byte[] buf, int buflen);
+    protected native int _scrypt(byte[] passwd, byte[] salt, int N, int r, int p, byte[] buf);
 
     @Override
     public byte[] siteKey(final byte[] masterKey, final String siteName, UnsignedInteger siteCounter,

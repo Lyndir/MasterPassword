@@ -29,7 +29,7 @@ library {
             //TODO: Cross-compiling, blocked by: https://github.com/gradle/gradle-native/issues/169
             //setTargets( "arm", "arm64", "x86-64", "x86" )
             eachPlatform {
-                cppCompiler.withArguments { addAll( ["-x", "c", "-std=c11", "-DMPW_SODIUM=1"] ) }
+                cppCompiler.withArguments { addAll( ["-x", "c", "-std=c11", "-Werror", "-DMPW_SODIUM=1"] ) }
             }
         }
     }

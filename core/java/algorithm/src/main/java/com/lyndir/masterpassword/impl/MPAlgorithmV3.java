@@ -50,7 +50,7 @@ public class MPAlgorithmV3 extends MPAlgorithmV2 {
         logger.trc( "masterKey: scrypt( masterPassword, masterKeySalt, N=%d, r=%d, p=%d )",
                     scrypt_N(), scrypt_r(), scrypt_p() );
         byte[] masterPasswordBytes = toBytes( masterPassword );
-        byte[] masterKey           = scrypt( masterKeySalt, masterPasswordBytes, mpw_dkLen() );
+        byte[] masterKey           = scrypt( masterPasswordBytes, masterKeySalt, mpw_dkLen() );
         Arrays.fill( masterKeySalt, (byte) 0 );
         Arrays.fill( masterPasswordBytes, (byte) 0 );
         if (masterKey == null)

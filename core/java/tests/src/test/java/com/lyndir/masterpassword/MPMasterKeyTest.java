@@ -39,7 +39,7 @@ public class MPMasterKeyTest {
             throws Exception {
 
         testSuite = new MPTestSuite();
-        //testSuite.getTests().addFilters( "v0" );
+        //testSuite.getTests().addFilters( "v3_type_maximum" );
     }
 
     @Test
