@@ -18,6 +18,8 @@
 
 package com.lyndir.masterpassword;
 
+import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.common.primitives.UnsignedInteger;
@@ -189,6 +191,12 @@ public abstract class MPAlgorithm {
     protected abstract byte[] toBytes(char[] characters);
 
     protected abstract byte[] toID(byte[] bytes);
+
+    @Override
+    public String toString() {
+        
+        return strf( "%d, %s", version().toInt(), getClass().getSimpleName() );
+    }
 
     /**
      * The algorithm iterations.

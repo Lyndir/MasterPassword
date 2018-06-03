@@ -39,6 +39,7 @@ public class MPMasterKeyTest {
             throws Exception {
 
         testSuite = new MPTestSuite();
+        //testSuite.getTests().addFilters( "v0" );
     }
 
     @Test
@@ -53,20 +54,20 @@ public class MPMasterKeyTest {
             assertEquals(
                     CodeUtils.encodeHex( masterKey.getKeyID( testCase.getAlgorithm() ) ),
                     testCase.getKeyID(),
-                    "[testMasterKey] keyID mismatch: " + testCase );
+                    "[testMasterKey] keyID mismatch for test case: " + testCase );
 
             // Test invalidation
             masterKey.invalidate();
             try {
                 masterKey.getKeyID( testCase.getAlgorithm() );
-                fail( "[testMasterKey] invalidate ineffective: " + testCase );
+                fail( "[testMasterKey] invalidate ineffective for test case: " + testCase );
             }
             catch (final MPKeyUnavailableException ignored) {
             }
             assertNotEquals(
                     masterPassword,
                     testCase.getMasterPassword().toCharArray(),
-                    "[testMasterKey] masterPassword not wiped: " + testCase );
+                    "[testMasterKey] masterPassword not wiped for test case: " + testCase );
 
             return true;
         } );
@@ -87,7 +88,7 @@ public class MPMasterKeyTest {
                                           testCase.getKeyContext(), testCase.getResultType(),
                                           null ),
                     testCase.getResult(),
-                    "[testSiteResult] result mismatch: " + testCase );
+                    "[testSiteResult] result mismatch for test case: " + testCase );
 
             return true;
         } );
@@ -115,7 +116,7 @@ public class MPMasterKeyTest {
             assertEquals(
                     result,
                     password,
-                    "[testSiteState] state mismatch: " + testCase );
+                    "[testSiteState] state mismatch for test case: " + testCase );
         }
     }
 
