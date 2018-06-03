@@ -72,7 +72,7 @@ public class MPTests {
             return getCase( ID_DEFAULT );
         }
         catch (final IllegalArgumentException e) {
-            throw new IllegalStateException( strf( "Missing default case in test suite.  Add a case with id: %d", ID_DEFAULT ), e );
+            throw new IllegalStateException( strf( "Missing default case in test suite.  Add a case with id: %s", ID_DEFAULT ), e );
         }
     }
 
