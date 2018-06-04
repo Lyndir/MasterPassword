@@ -76,7 +76,7 @@ public enum MPResultType {
      */
     GeneratedShort( "short", "Copy-friendly, 4 characters, no symbols.", //
                     ImmutableList.of( new MPTemplate( "Cvcn" ) ), //
-                    MPResultTypeClass.Template, 0x4 ),
+                    MPResultTypeClass.Template, 0x3 ),
 
     /**
      * 20: pO98MoD0
@@ -85,7 +85,7 @@ public enum MPResultType {
                     ImmutableList.of( new MPTemplate( "aaanaaan" ),
                                       new MPTemplate( "aannaaan" ),
                                       new MPTemplate( "aaannaaa" ) ), //
-                    MPResultTypeClass.Template, 0x3 ),
+                    MPResultTypeClass.Template, 0x4 ),
 
     /**
      * 21: 2798
