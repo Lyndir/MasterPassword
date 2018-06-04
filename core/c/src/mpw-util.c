@@ -271,17 +271,17 @@ uint8_t const *mpw_hash_hmac_sha256(const uint8_t *key, const size_t keySize, co
 // We do our best to not fail on odd buf's, eg. non-padded cipher texts.
 static uint8_t const *mpw_aes(bool encrypt, const uint8_t *key, const size_t keySize, const uint8_t *buf, size_t *bufSize) {
 
-    if (!key || keySize < 16 || !*bufSize)
+    if (!key || keySize < AES_BLOCKLEN || !*bufSize)
         return NULL;
 
     // IV = zero
-    uint8_t iv[16];
+    uint8_t iv[AES_BLOCKLEN];
     mpw_zero( iv, sizeof iv );
 
     // Add PKCS#7 padding
-    uint32_t aesSize = ((uint32_t)*bufSize + 15 / 16) * 16; // round up to block size.
-    if (encrypt && !(*bufSize % 16)) // add pad block if plain text fits block size.
-        encrypt += 16;
+    uint32_t aesSize = ((uint32_t)*bufSize + AES_BLOCKLEN - 1) & -AES_BLOCKLEN; // round up to block size.
+    if (encrypt && !(*bufSize % AES_BLOCKLEN)) // add pad block if plain text fits block size.
+        encrypt += AES_BLOCKLEN;
     uint8_t aesBuf[aesSize];
     memcpy( aesBuf, buf, *bufSize );
     memset( aesBuf + *bufSize, aesSize - *bufSize, aesSize - *bufSize );
@@ -292,12 +292,12 @@ static uint8_t const *mpw_aes(bool encrypt, const uint8_t *key, const size_t key
     else
         AES_CBC_decrypt_buffer( resultBuf, aesBuf, aesSize, key, iv );
     mpw_zero( aesBuf, aesSize );
-    mpw_zero( iv, 16 );
+    mpw_zero( iv, AES_BLOCKLEN );
 
     // Truncate PKCS#7 padding
     if (encrypt)
         *bufSize = aesSize;
-    else if (*bufSize % 16 == 0 && resultBuf[aesSize - 1] < 16)
+    else if (*bufSize % AES_BLOCKLEN == 0 && resultBuf[aesSize - 1] < AES_BLOCKLEN)
         *bufSize -= resultBuf[aesSize - 1];
 
     return resultBuf;
