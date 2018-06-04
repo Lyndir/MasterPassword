@@ -61,7 +61,7 @@ public abstract class MPBasicQuestion implements MPQuestion {
     @Nonnull
     @Override
     public String getAnswer(@Nullable final String state)
-            throws MPKeyUnavailableException {
+            throws MPKeyUnavailableException, MPAlgorithmException {
 
         return getSite().getResult( MPKeyPurpose.Recovery, getKeyword(), null, getType(), state );
     }

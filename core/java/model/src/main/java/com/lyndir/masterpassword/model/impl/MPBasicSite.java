@@ -108,14 +108,14 @@ public abstract class MPBasicSite<Q extends MPQuestion> implements MPSite<Q> {
 
     @Override
     public String getResult(final MPKeyPurpose keyPurpose, @Nullable final String keyContext, @Nullable final String state)
-            throws MPKeyUnavailableException {
+            throws MPKeyUnavailableException, MPAlgorithmException {
 
         return getResult( keyPurpose, keyContext, getCounter(), getResultType(), state );
     }
 
     protected String getResult(final MPKeyPurpose keyPurpose, @Nullable final String keyContext,
                                @Nullable final UnsignedInteger counter, final MPResultType type, @Nullable final String state)
-            throws MPKeyUnavailableException {
+            throws MPKeyUnavailableException, MPAlgorithmException {
 
         return getUser().getMasterKey().siteResult(
                 getName(), getAlgorithm(), ifNotNullElse( counter, getAlgorithm().mpw_default_counter() ),
@@ -124,7 +124,7 @@ public abstract class MPBasicSite<Q extends MPQuestion> implements MPSite<Q> {
 
     protected String getState(final MPKeyPurpose keyPurpose, @Nullable final String keyContext,
                               @Nullable final UnsignedInteger counter, final MPResultType type, final String state)
-            throws MPKeyUnavailableException {
+            throws MPKeyUnavailableException, MPAlgorithmException {
 
         return getUser().getMasterKey().siteState(
                 getName(), getAlgorithm(), ifNotNullElse( counter, getAlgorithm().mpw_default_counter() ),
@@ -133,7 +133,7 @@ public abstract class MPBasicSite<Q extends MPQuestion> implements MPSite<Q> {
 
     @Override
     public String getLogin(@Nullable final String state)
-            throws MPKeyUnavailableException {
+            throws MPKeyUnavailableException, MPAlgorithmException {
 
         return getResult( MPKeyPurpose.Identification, null, null, getLoginType(), state );
     }

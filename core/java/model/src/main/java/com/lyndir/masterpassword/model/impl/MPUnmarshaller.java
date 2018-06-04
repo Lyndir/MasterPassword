@@ -18,6 +18,7 @@
 
 package com.lyndir.masterpassword.model.impl;
 
+import com.lyndir.masterpassword.MPAlgorithmException;
 import com.lyndir.masterpassword.MPKeyUnavailableException;
 import com.lyndir.masterpassword.model.MPIncorrectMasterPasswordException;
 import java.io.File;
@@ -33,9 +34,9 @@ public interface MPUnmarshaller {
 
     @Nonnull
     MPFileUser unmarshall(@Nonnull File file, @Nullable char[] masterPassword)
-            throws IOException, MPMarshalException, MPIncorrectMasterPasswordException, MPKeyUnavailableException;
+            throws IOException, MPMarshalException, MPIncorrectMasterPasswordException, MPKeyUnavailableException, MPAlgorithmException;
 
     @Nonnull
     MPFileUser unmarshall(@Nonnull String content, @Nullable char[] masterPassword)
-            throws MPMarshalException, MPIncorrectMasterPasswordException, MPKeyUnavailableException;
+            throws MPMarshalException, MPIncorrectMasterPasswordException, MPKeyUnavailableException, MPAlgorithmException;
 }

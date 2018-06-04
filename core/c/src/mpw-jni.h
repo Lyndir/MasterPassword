@@ -11,11 +11,35 @@ extern "C" {
 #define com_lyndir_masterpassword_impl_MPAlgorithmV0_AES_BLOCKSIZE 128L
 /*
  * Class:     com_lyndir_masterpassword_impl_MPAlgorithmV0
- * Method:    _scrypt
- * Signature: ([B[BIII[B)I
+ * Method:    _masterKey
+ * Signature: (Ljava/lang/String;[BI)[B
  */
-JNIEXPORT jint JNICALL Java_com_lyndir_masterpassword_impl_MPAlgorithmV0__1scrypt
-  (JNIEnv *, jobject, jbyteArray, jbyteArray, jint, jint, jint, jbyteArray);
+JNIEXPORT jbyteArray JNICALL Java_com_lyndir_masterpassword_impl_MPAlgorithmV0__1masterKey
+  (JNIEnv *, jobject, jstring, jbyteArray, jint);
+
+/*
+ * Class:     com_lyndir_masterpassword_impl_MPAlgorithmV0
+ * Method:    _siteKey
+ * Signature: ([BLjava/lang/String;JILjava/lang/String;I)[B
+ */
+JNIEXPORT jbyteArray JNICALL Java_com_lyndir_masterpassword_impl_MPAlgorithmV0__1siteKey
+  (JNIEnv *, jobject, jbyteArray, jstring, jlong, jint, jstring, jint);
+
+/*
+ * Class:     com_lyndir_masterpassword_impl_MPAlgorithmV0
+ * Method:    _siteResult
+ * Signature: ([B[BLjava/lang/String;JILjava/lang/String;ILjava/lang/String;I)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_com_lyndir_masterpassword_impl_MPAlgorithmV0__1siteResult
+  (JNIEnv *, jobject, jbyteArray, jbyteArray, jstring, jlong, jint, jstring, jint, jstring, jint);
+
+/*
+ * Class:     com_lyndir_masterpassword_impl_MPAlgorithmV0
+ * Method:    _siteState
+ * Signature: ([B[BLjava/lang/String;JILjava/lang/String;ILjava/lang/String;I)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_com_lyndir_masterpassword_impl_MPAlgorithmV0__1siteState
+  (JNIEnv *, jobject, jbyteArray, jbyteArray, jstring, jlong, jint, jstring, jint, jstring, jint);
 
 #ifdef __cplusplus
 }

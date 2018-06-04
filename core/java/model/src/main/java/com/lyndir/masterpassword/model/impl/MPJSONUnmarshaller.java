@@ -22,6 +22,7 @@ import static com.lyndir.masterpassword.model.impl.MPJSONFile.*;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.lyndir.masterpassword.MPAlgorithmException;
 import com.lyndir.masterpassword.MPKeyUnavailableException;
 import com.lyndir.masterpassword.model.MPIncorrectMasterPasswordException;
 import java.io.File;
@@ -38,7 +39,7 @@ public class MPJSONUnmarshaller implements MPUnmarshaller {
     @Nonnull
     @Override
     public MPFileUser unmarshall(@Nonnull final File file, @Nullable final char[] masterPassword)
-            throws IOException, MPMarshalException, MPIncorrectMasterPasswordException, MPKeyUnavailableException {
+            throws IOException, MPMarshalException, MPIncorrectMasterPasswordException, MPKeyUnavailableException, MPAlgorithmException {
 
         try {
             return objectMapper.readValue( file, MPJSONFile.class ).read( masterPassword );
@@ -54,7 +55,7 @@ public class MPJSONUnmarshaller implements MPUnmarshaller {
     @Nonnull
     @Override
     public MPFileUser unmarshall(@Nonnull final String content, @Nullable final char[] masterPassword)
-            throws MPMarshalException, MPIncorrectMasterPasswordException, MPKeyUnavailableException {
+            throws MPMarshalException, MPIncorrectMasterPasswordException, MPKeyUnavailableException, MPAlgorithmException {
 
         try {
             return objectMapper.readValue( content, MPJSONFile.class ).read( masterPassword );

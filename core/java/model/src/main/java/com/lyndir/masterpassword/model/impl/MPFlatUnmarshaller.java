@@ -50,7 +50,7 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
     @Nonnull
     @Override
     public MPFileUser unmarshall(@Nonnull final File file, @Nullable final char[] masterPassword)
-            throws IOException, MPMarshalException, MPIncorrectMasterPasswordException, MPKeyUnavailableException {
+            throws IOException, MPMarshalException, MPIncorrectMasterPasswordException, MPKeyUnavailableException, MPAlgorithmException {
         try (Reader reader = new InputStreamReader( new FileInputStream( file ), Charsets.UTF_8 )) {
             return unmarshall( CharStreams.toString( reader ), masterPassword );
         }
@@ -59,7 +59,7 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
     @Nonnull
     @Override
     public MPFileUser unmarshall(@Nonnull final String content, @Nullable final char[] masterPassword)
-            throws MPMarshalException, MPIncorrectMasterPasswordException, MPKeyUnavailableException {
+            throws MPMarshalException, MPIncorrectMasterPasswordException, MPKeyUnavailableException, MPAlgorithmException {
         MPFileUser   user         = null;
         byte[]       keyID        = null;
         String       fullName     = null;

@@ -22,6 +22,7 @@ import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import com.google.common.collect.ImmutableList;
 import com.lyndir.lhunath.opal.system.CodeUtils;
+import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.masterpassword.*;
 import com.lyndir.masterpassword.model.MPIncorrectMasterPasswordException;
 import com.lyndir.masterpassword.model.MPUser;
@@ -34,6 +35,8 @@ import javax.annotation.Nullable;
  * @author lhunath, 2014-06-08
  */
 public abstract class MPBasicUser<S extends MPBasicSite<?>> implements MPUser<S> {
+
+    protected final Logger logger = Logger.get( getClass() );
 
     private       int         avatar;
     private final String      fullName;
@@ -86,7 +89,8 @@ public abstract class MPBasicUser<S extends MPBasicSite<?>> implements MPUser<S>
         try {
             return getMasterKey().getKeyID( getAlgorithm() );
         }
-        catch (final MPKeyUnavailableException ignore) {
+        catch (final MPException e) {
+            logger.wrn( e, "While deriving key ID for user: %s", this );
             return null;
         }
     }
@@ -99,7 +103,7 @@ public abstract class MPBasicUser<S extends MPBasicSite<?>> implements MPUser<S>
 
     @Override
     public void authenticate(final char[] masterPassword)
-            throws MPIncorrectMasterPasswordException {
+            throws MPIncorrectMasterPasswordException, MPAlgorithmException {
         try {
             authenticate( new MPMasterKey( getFullName(), masterPassword ) );
         }
@@ -110,7 +114,7 @@ public abstract class MPBasicUser<S extends MPBasicSite<?>> implements MPUser<S>
 
     @Override
     public void authenticate(final MPMasterKey masterKey)
-            throws MPIncorrectMasterPasswordException, MPKeyUnavailableException {
+            throws MPIncorrectMasterPasswordException, MPKeyUnavailableException, MPAlgorithmException {
         if (!masterKey.getFullName().equals( getFullName() ))
             throw new IllegalArgumentException(
                     "Master key (for " + masterKey.getFullName() + ") is not for this user (" + getFullName() + ")." );
@@ -132,7 +136,7 @@ public abstract class MPBasicUser<S extends MPBasicSite<?>> implements MPUser<S>
     public MPMasterKey getMasterKey()
             throws MPKeyUnavailableException {
         if (masterKey == null)
-            throw new MPKeyUnavailableException();
+            throw new MPKeyUnavailableException( "Master key was not yet set." );
 
         return masterKey;
     }

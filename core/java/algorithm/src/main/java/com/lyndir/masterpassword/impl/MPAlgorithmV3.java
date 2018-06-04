@@ -18,11 +18,7 @@
 
 package com.lyndir.masterpassword.impl;
 
-import com.google.common.primitives.Bytes;
-import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.masterpassword.MPAlgorithm;
-import com.lyndir.masterpassword.MPKeyPurpose;
-import java.util.Arrays;
 
 
 /**
@@ -30,35 +26,6 @@ import java.util.Arrays;
  * @see Version#V3
  */
 public class MPAlgorithmV3 extends MPAlgorithmV2 {
-
-    @Override
-    public byte[] masterKey(final String fullName, final char[] masterPassword) {
-
-        byte[] fullNameBytes       = fullName.getBytes( mpw_charset() );
-        byte[] fullNameLengthBytes = toBytes( fullNameBytes.length );
-
-        String keyScope = MPKeyPurpose.Authentication.getScope();
-        logger.trc( "keyScope: %s", keyScope );
-
-        // Calculate the master key salt.
-        logger.trc( "masterKeySalt: keyScope=%s | #fullName=%s | fullName=%s",
-                    keyScope, CodeUtils.encodeHex( fullNameLengthBytes ), fullName );
-        byte[] masterKeySalt = Bytes.concat( keyScope.getBytes( mpw_charset() ), fullNameLengthBytes, fullNameBytes );
-        logger.trc( "  => masterKeySalt.id: %s", CodeUtils.encodeHex( toID( masterKeySalt ) ) );
-
-        // Calculate the master key.
-        logger.trc( "masterKey: scrypt( masterPassword, masterKeySalt, N=%d, r=%d, p=%d )",
-                    scrypt_N(), scrypt_r(), scrypt_p() );
-        byte[] masterPasswordBytes = toBytes( masterPassword );
-        byte[] masterKey           = scrypt( masterPasswordBytes, masterKeySalt, mpw_dkLen() );
-        Arrays.fill( masterKeySalt, (byte) 0 );
-        Arrays.fill( masterPasswordBytes, (byte) 0 );
-        if (masterKey == null)
-            throw new IllegalStateException( "Could not derive master key." );
-        logger.trc( "  => masterKey.id: %s", CodeUtils.encodeHex( toID( masterKey ) ) );
-
-        return masterKey;
-    }
 
     // Configuration
 

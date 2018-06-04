@@ -18,10 +18,13 @@
 
 package com.lyndir.masterpassword.model;
 
+import com.lyndir.masterpassword.MPException;
+
+
 /**
  * @author lhunath, 14-12-17
  */
-public class MPIncorrectMasterPasswordException extends Exception {
+public class MPIncorrectMasterPasswordException extends MPException {
 
     private final MPUser<?> user;
 

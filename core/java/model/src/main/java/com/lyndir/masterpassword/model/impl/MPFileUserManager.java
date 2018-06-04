@@ -24,8 +24,7 @@ import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.CharSink;
 import com.lyndir.lhunath.opal.system.logging.Logger;
-import com.lyndir.masterpassword.MPKeyUnavailableException;
-import com.lyndir.masterpassword.MPMasterKey;
+import com.lyndir.masterpassword.*;
 import com.lyndir.masterpassword.model.*;
 import java.io.*;
 import java.util.HashMap;
@@ -88,7 +87,7 @@ public class MPFileUserManager extends MPUserManager<MPFileUser> {
                     catch (final IOException | MPMarshalException e) {
                         logger.err( e, "Couldn't read user from: %s", userFile );
                     }
-                    catch (final MPKeyUnavailableException | MPIncorrectMasterPasswordException e) {
+                    catch (final MPKeyUnavailableException | MPIncorrectMasterPasswordException | MPAlgorithmException e) {
                         logger.err( e, "Couldn't authenticate user for: %s", userFile );
                     }
 
@@ -119,7 +118,7 @@ public class MPFileUserManager extends MPUserManager<MPFileUser> {
      * Write the current user state to disk.
      */
     public void save(final MPFileUser user, final MPMasterKey masterKey)
-            throws MPKeyUnavailableException {
+            throws MPKeyUnavailableException, MPAlgorithmException {
         try {
             MPMarshalFormat format = user.getFormat();
             new CharSink() {

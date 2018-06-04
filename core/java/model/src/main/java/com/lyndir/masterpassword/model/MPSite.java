@@ -54,10 +54,10 @@ public interface MPSite<Q extends MPQuestion> extends Comparable<MPSite<?>> {
     void setLoginType(@Nullable MPResultType loginType);
 
     String getResult(MPKeyPurpose keyPurpose, @Nullable String keyContext, @Nullable String state)
-            throws MPKeyUnavailableException;
+            throws MPKeyUnavailableException, MPAlgorithmException;
 
     String getLogin(@Nullable String state)
-            throws MPKeyUnavailableException;
+            throws MPKeyUnavailableException, MPAlgorithmException;
 
     // - Relations
 

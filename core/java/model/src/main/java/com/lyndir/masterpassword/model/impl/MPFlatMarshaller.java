@@ -21,6 +21,7 @@ package com.lyndir.masterpassword.model.impl;
 import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
+import com.lyndir.masterpassword.MPAlgorithmException;
 import com.lyndir.masterpassword.MPKeyUnavailableException;
 import com.lyndir.masterpassword.model.MPConstant;
 import javax.annotation.Nonnull;
@@ -38,7 +39,7 @@ public class MPFlatMarshaller implements MPMarshaller {
     @Nonnull
     @Override
     public String marshall(final MPFileUser user)
-            throws MPKeyUnavailableException, MPMarshalException {
+            throws MPKeyUnavailableException, MPMarshalException, MPAlgorithmException {
         StringBuilder content = new StringBuilder();
         content.append( "# Master Password site export\n" );
         content.append( "#     " ).append( user.getContentMode().description() ).append( '\n' );

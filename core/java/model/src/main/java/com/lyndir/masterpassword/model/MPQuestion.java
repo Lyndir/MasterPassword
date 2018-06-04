@@ -18,8 +18,7 @@
 
 package com.lyndir.masterpassword.model;
 
-import com.lyndir.masterpassword.MPKeyUnavailableException;
-import com.lyndir.masterpassword.MPResultType;
+import com.lyndir.masterpassword.*;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -43,7 +42,7 @@ public interface MPQuestion extends Comparable<MPQuestion> {
 
     @Nonnull
     String getAnswer(@Nullable String state)
-            throws MPKeyUnavailableException;
+            throws MPKeyUnavailableException, MPAlgorithmException;
 
     // -- Relationship
 

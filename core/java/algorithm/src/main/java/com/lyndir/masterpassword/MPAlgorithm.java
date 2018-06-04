@@ -43,6 +43,7 @@ public abstract class MPAlgorithm {
      * @param fullName       The name of the user whose identity is described by the key.
      * @param masterPassword The user's secret that authenticates his access to the identity.
      */
+    @Nullable
     public abstract byte[] masterKey(String fullName, char[] masterPassword);
 
     /**
@@ -54,6 +55,7 @@ public abstract class MPAlgorithm {
      * @param keyPurpose  The action that the user aims to undertake with this key.
      * @param keyContext  An action-specific context within which to scope the key.
      */
+    @Nullable
     public abstract byte[] siteKey(byte[] masterKey, String siteName, UnsignedInteger siteCounter,
                                    MPKeyPurpose keyPurpose, @Nullable String keyContext);
 
@@ -63,30 +65,10 @@ public abstract class MPAlgorithm {
      * @param resultType  The template to base the site key's encoding on.
      * @param resultParam A parameter that provides contextual data specific to the type template.
      */
+    @Nullable
     public abstract String siteResult(byte[] masterKey, byte[] siteKey, String siteName, UnsignedInteger siteCounter,
                                       MPKeyPurpose keyPurpose, @Nullable String keyContext,
                                       MPResultType resultType, @Nullable String resultParam);
-
-    /**
-     * The result for {@link #siteResult(byte[], byte[], String, UnsignedInteger, MPKeyPurpose, String, MPResultType, String)}
-     * for the case where {@code resultType} is a {@link MPResultTypeClass#Template}.
-     */
-    public abstract String siteResultFromTemplate(byte[] masterKey, byte[] siteKey,
-                                                  MPResultType resultType, @Nullable String resultParam);
-
-    /**
-     * The result for {@link #siteResult(byte[], byte[], String, UnsignedInteger, MPKeyPurpose, String, MPResultType, String)}
-     * for the case where {@code resultType} is a {@link MPResultTypeClass#Stateful}.
-     */
-    public abstract String siteResultFromState(byte[] masterKey, byte[] siteKey,
-                                               MPResultType resultType, String resultParam);
-
-    /**
-     * The result for {@link #siteResult(byte[], byte[], String, UnsignedInteger, MPKeyPurpose, String, MPResultType, String)}
-     * for the case where {@code resultType} is a {@link MPResultTypeClass#Derive}.
-     */
-    public abstract String siteResultFromDerive(byte[] masterKey, byte[] siteKey,
-                                                MPResultType resultType, @Nullable String resultParam);
 
     /**
      * For {@link MPResultTypeClass#Stateful} {@code resultType}s, generate the {@code resultParam} to use with the
@@ -96,6 +78,7 @@ public abstract class MPAlgorithm {
      * @param resultType  The template to base the site key's encoding on.
      * @param resultParam A parameter that provides contextual data specific to the type template.
      */
+    @Nullable
     public abstract String siteState(byte[] masterKey, byte[] siteKey, String siteName, UnsignedInteger siteCounter,
                                      MPKeyPurpose keyPurpose, @Nullable String keyContext,
                                      MPResultType resultType, String resultParam);

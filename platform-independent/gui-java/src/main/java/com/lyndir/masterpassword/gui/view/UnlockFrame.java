@@ -21,6 +21,7 @@ package com.lyndir.masterpassword.gui.view;
 import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
+import com.lyndir.masterpassword.MPAlgorithmException;
 import com.lyndir.masterpassword.MPIdenticon;
 import com.lyndir.masterpassword.gui.Res;
 import com.lyndir.masterpassword.gui.util.Components;
@@ -194,7 +195,7 @@ public class UnlockFrame extends JFrame {
                     dispose();
                 } );
             }
-            catch (final MPIncorrectMasterPasswordException e) {
+            catch (final MPIncorrectMasterPasswordException | MPAlgorithmException e) {
                 SwingUtilities.invokeLater( () -> {
                     JOptionPane.showMessageDialog( null, e.getLocalizedMessage(), "Sign In Failed", JOptionPane.ERROR_MESSAGE );
                     authenticationPanel.reset();

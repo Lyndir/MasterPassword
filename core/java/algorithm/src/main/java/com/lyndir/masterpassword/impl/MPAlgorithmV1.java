@@ -18,10 +18,7 @@
 
 package com.lyndir.masterpassword.impl;
 
-import com.google.common.base.Preconditions;
-import com.google.common.primitives.UnsignedBytes;
 import com.lyndir.masterpassword.*;
-import javax.annotation.Nullable;
 
 
 /**
@@ -29,32 +26,6 @@ import javax.annotation.Nullable;
  * @see Version#V1
  */
 public class MPAlgorithmV1 extends MPAlgorithmV0 {
-
-    @Override
-    public String siteResultFromTemplate(final byte[] masterKey, final byte[] siteKey,
-                                         final MPResultType resultType, @Nullable final String resultParam) {
-
-        // Determine the template.
-        Preconditions.checkState( siteKey.length > 0 );
-        int        templateIndex = UnsignedBytes.toInt( siteKey[0] );
-        MPTemplate template      = resultType.getTemplateAtRollingIndex( templateIndex );
-        logger.trc( "template: %d => %s", templateIndex, template.getTemplateString() );
-
-        // Encode the password from the seed using the template.
-        StringBuilder password = new StringBuilder( template.length() );
-        for (int i = 0; i < template.length(); ++i) {
-            int                      characterIndex    = UnsignedBytes.toInt( siteKey[i + 1] );
-            MPTemplateCharacterClass characterClass    = template.getCharacterClassAtIndex( i );
-            char                     passwordCharacter = characterClass.getCharacterAtRollingIndex( characterIndex );
-            logger.trc( "  - class: %c, index: %3d (0x%2H) => character: %c",
-                        characterClass.getIdentifier(), characterIndex, siteKey[i + 1], passwordCharacter );
-
-            password.append( passwordCharacter );
-        }
-        logger.trc( "  => password: %s", password );
-
-        return password.toString();
-    }
 
     // Configuration
 

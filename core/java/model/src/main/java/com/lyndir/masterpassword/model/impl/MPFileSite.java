@@ -94,19 +94,19 @@ public class MPFileSite extends MPBasicSite<MPFileQuestion> {
     }
 
     public String getResult()
-            throws MPKeyUnavailableException {
+            throws MPKeyUnavailableException, MPAlgorithmException {
 
         return getResult( MPKeyPurpose.Authentication, null );
     }
 
     public String getResult(final MPKeyPurpose keyPurpose, @Nullable final String keyContext)
-            throws MPKeyUnavailableException {
+            throws MPKeyUnavailableException, MPAlgorithmException {
 
         return getResult( keyPurpose, keyContext, getResultState() );
     }
 
     public String getLogin()
-            throws MPKeyUnavailableException {
+            throws MPKeyUnavailableException, MPAlgorithmException {
 
         return getLogin( getLoginState() );
     }
@@ -117,7 +117,7 @@ public class MPFileSite extends MPBasicSite<MPFileQuestion> {
     }
 
     public void setSitePassword(final MPResultType resultType, @Nullable final String password)
-            throws MPKeyUnavailableException {
+            throws MPKeyUnavailableException, MPAlgorithmException {
         setResultType( resultType );
 
         if (password == null)
@@ -133,7 +133,7 @@ public class MPFileSite extends MPBasicSite<MPFileQuestion> {
     }
 
     public void setLoginName(@Nonnull final MPResultType loginType, @Nullable final String loginName)
-            throws MPKeyUnavailableException {
+            throws MPKeyUnavailableException, MPAlgorithmException {
         setLoginType( loginType );
 
         if (loginName == null)

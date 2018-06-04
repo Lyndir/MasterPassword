@@ -62,7 +62,7 @@ public interface MPUser<S extends MPSite<?>> extends Comparable<MPUser<?>> {
      * @throws MPIncorrectMasterPasswordException If authentication fails due to the given master password not matching the user's keyID.
      */
     void authenticate(char[] masterPassword)
-            throws MPIncorrectMasterPasswordException;
+            throws MPIncorrectMasterPasswordException, MPAlgorithmException;
 
     /**
      * Performs an authentication attempt against the keyID for this user.
@@ -74,7 +74,7 @@ public interface MPUser<S extends MPSite<?>> extends Comparable<MPUser<?>> {
      * @throws MPIncorrectMasterPasswordException If authentication fails due to the given master password not matching the user's keyID.
      */
     void authenticate(MPMasterKey masterKey)
-            throws MPIncorrectMasterPasswordException, MPKeyUnavailableException;
+            throws MPIncorrectMasterPasswordException, MPKeyUnavailableException, MPAlgorithmException;
 
     boolean isMasterKeyAvailable();
 

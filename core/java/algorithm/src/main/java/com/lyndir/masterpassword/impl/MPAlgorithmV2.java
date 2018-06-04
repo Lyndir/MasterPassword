@@ -18,12 +18,7 @@
 
 package com.lyndir.masterpassword.impl;
 
-import com.google.common.primitives.Bytes;
-import com.google.common.primitives.UnsignedInteger;
-import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.masterpassword.MPAlgorithm;
-import com.lyndir.masterpassword.MPKeyPurpose;
-import javax.annotation.Nullable;
 
 
 /**
@@ -31,39 +26,6 @@ import javax.annotation.Nullable;
  * @see Version#V2
  */
 public class MPAlgorithmV2 extends MPAlgorithmV1 {
-
-    @Override
-    public byte[] siteKey(final byte[] masterKey, final String siteName, UnsignedInteger siteCounter,
-                          final MPKeyPurpose keyPurpose, @Nullable final String keyContext) {
-
-        String keyScope = keyPurpose.getScope();
-        logger.trc( "keyScope: %s", keyScope );
-
-        // OTP counter value.
-        if (siteCounter.longValue() == 0)
-            siteCounter = UnsignedInteger.valueOf( (System.currentTimeMillis() / (mpw_otp_window() * 1000)) * mpw_otp_window() );
-
-        // Calculate the site seed.
-        byte[] siteNameBytes         = siteName.getBytes( mpw_charset() );
-        byte[] siteNameLengthBytes   = toBytes( siteNameBytes.length );
-        byte[] siteCounterBytes      = toBytes( siteCounter );
-        byte[] keyContextBytes       = ((keyContext == null) || keyContext.isEmpty())? null: keyContext.getBytes( mpw_charset() );
-        byte[] keyContextLengthBytes = (keyContextBytes == null)? null: toBytes( keyContextBytes.length );
-        logger.trc( "siteSalt: keyScope=%s | #siteName=%s | siteName=%s | siteCounter=%s | #keyContext=%s | keyContext=%s",
-                    keyScope, CodeUtils.encodeHex( siteNameLengthBytes ), siteName, CodeUtils.encodeHex( siteCounterBytes ),
-                    (keyContextLengthBytes == null)? null: CodeUtils.encodeHex( keyContextLengthBytes ), keyContext );
-
-        byte[] sitePasswordInfo = Bytes.concat( keyScope.getBytes( mpw_charset() ), siteNameLengthBytes, siteNameBytes, siteCounterBytes );
-        if (keyContextBytes != null)
-            sitePasswordInfo = Bytes.concat( sitePasswordInfo, keyContextLengthBytes, keyContextBytes );
-        logger.trc( "  => siteSalt.id: %s", CodeUtils.encodeHex( toID( sitePasswordInfo ) ) );
-
-        logger.trc( "siteKey: hmac-sha256( masterKey.id=%s, siteSalt )", CodeUtils.encodeHex( toID( masterKey ) ) );
-        byte[] sitePasswordSeedBytes = mpw_digest().of( masterKey, sitePasswordInfo );
-        logger.trc( "  => siteKey.id: %s", CodeUtils.encodeHex( toID( sitePasswordSeedBytes ) ) );
-
-        return sitePasswordSeedBytes;
-    }
 
     // Configuration
 

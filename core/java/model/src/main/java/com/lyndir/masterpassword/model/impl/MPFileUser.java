@@ -87,6 +87,9 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
             catch (final MPKeyUnavailableException e) {
                 throw new IllegalStateException( "Cannot update algorithm when keyID is set but masterKey is unavailable.", e );
             }
+            catch (final MPAlgorithmException e) {
+                throw new IllegalStateException( e );
+            }
         }
 
         super.setAlgorithm( algorithm );
@@ -135,7 +138,7 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
 
     @Override
     public void authenticate(final MPMasterKey masterKey)
-            throws MPIncorrectMasterPasswordException, MPKeyUnavailableException {
+            throws MPIncorrectMasterPasswordException, MPKeyUnavailableException, MPAlgorithmException {
         super.authenticate( masterKey );
 
         if (keyID == null)
@@ -143,7 +146,7 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
     }
 
     void save()
-            throws MPKeyUnavailableException {
+            throws MPKeyUnavailableException, MPAlgorithmException {
         MPFileUserManager.get().save( this, getMasterKey() );
     }
 

@@ -44,12 +44,12 @@ public class MPFileQuestion extends MPBasicQuestion {
     }
 
     public String getAnswer()
-            throws MPKeyUnavailableException {
+            throws MPKeyUnavailableException, MPAlgorithmException {
         return getAnswer( state );
     }
 
     public void setAnswer(final MPResultType type, @Nullable final String answer)
-            throws MPKeyUnavailableException {
+            throws MPKeyUnavailableException, MPAlgorithmException {
         setType( type );
 
         if (answer == null)

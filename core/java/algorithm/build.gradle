@@ -13,7 +13,8 @@ dependencies {
 
     api group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.5'
     api group: 'org.jetbrains', name: 'annotations', version: '13.0'
-    api group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
+    api group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
+    api group: 'com.google.code.findbugs', name: 'findbugs-annotations', version: '3.0.1'
 
     lib project( path: ':masterpassword-core', configuration: 'default' )
 }

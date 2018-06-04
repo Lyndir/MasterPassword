@@ -18,10 +18,13 @@
 
 package com.lyndir.masterpassword.model.impl;
 
+import com.lyndir.masterpassword.MPException;
+
+
 /**
  * @author lhunath, 2018-04-26
  */
-public class MPMarshalException extends Exception {
+public class MPMarshalException extends MPException {
 
     public MPMarshalException(final String message) {
         super( message );

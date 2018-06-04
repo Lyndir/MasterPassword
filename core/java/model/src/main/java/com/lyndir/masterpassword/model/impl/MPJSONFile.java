@@ -27,6 +27,7 @@ import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.masterpassword.*;
 import com.lyndir.masterpassword.model.MPConstant;
 import com.lyndir.masterpassword.model.MPIncorrectMasterPasswordException;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.annotation.Nullable;
@@ -36,6 +37,7 @@ import org.joda.time.Instant;
 /**
  * @author lhunath, 2018-04-27
  */
+@SuppressFBWarnings( "URF_UNREAD_FIELD" )
 public class MPJSONFile extends MPJSONAnyObject {
 
     protected static final ObjectMapper objectMapper = new ObjectMapper();
@@ -46,7 +48,7 @@ public class MPJSONFile extends MPJSONAnyObject {
     }
 
     public MPJSONFile write(final MPFileUser modelUser)
-            throws MPKeyUnavailableException {
+            throws MPKeyUnavailableException, MPAlgorithmException {
         // Section: "export"
         if (export == null)
             export = new Export();
@@ -134,7 +136,7 @@ public class MPJSONFile extends MPJSONAnyObject {
     }
 
     public MPFileUser read(@Nullable final char[] masterPassword)
-            throws MPIncorrectMasterPasswordException, MPKeyUnavailableException {
+            throws MPIncorrectMasterPasswordException, MPKeyUnavailableException, MPAlgorithmException {
         MPAlgorithm algorithm = ifNotNullElse( user.algorithm, MPAlgorithm.Version.CURRENT ).getAlgorithm();
         MPFileUser model = new MPFileUser(
                 user.full_name, CodeUtils.decodeHex( user.key_id ), algorithm, user.avatar,

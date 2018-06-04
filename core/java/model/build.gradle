@@ -7,17 +7,18 @@ description = 'Master Password Site Model'
 
 dependencies {
     implementation group: 'com.lyndir.lhunath.opal', name: 'opal-system', version: '1.7-p1'
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.9.5'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.5'
 
     api project( ':masterpassword-algorithm' )
-    api 'joda-time:joda-time:2.4'
-    api 'com.fasterxml.jackson.core:jackson-annotations:2.9.5'
-    api 'com.fasterxml.jackson.core:jackson-databind:2.9.5'
+    api group: 'joda-time', name: 'joda-time', version: '2.4'
+    api group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.5'
+    api group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.5'
+    api group: 'com.google.code.findbugs', name: 'findbugs-annotations', version: '3.0.1'
 
-    compileOnly 'com.google.auto.value:auto-value:1.2'
+    compileOnly group: 'com.google.auto.value', name: 'auto-value', version: '1.2'
     apt group: 'com.google.auto.value', name: 'auto-value', version: '1.2'
 
-    testCompile 'org.testng:testng:6.8.5'
-    testCompile 'ch.qos.logback:logback-classic:1.1.2'
+    testCompile group: 'org.testng', name: 'testng', version: '6.8.5'
+    testCompile group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.2'
 }
 test.useTestNG()

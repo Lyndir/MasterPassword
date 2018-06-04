@@ -19,15 +19,15 @@
 package com.lyndir.masterpassword;
 
 /**
- * @author lhunath, 2017-09-21
+ * @author lhunath, 2018-06-03
  */
-public class MPKeyUnavailableException extends MPException {
+public class MPException extends Exception {
 
-    public MPKeyUnavailableException(final String message) {
+    public MPException(final String message) {
         super( message );
     }
 
-    public MPKeyUnavailableException(final String message, final Throwable cause) {
+    public MPException(final String message, final Throwable cause) {
         super( message, cause );
     }
 }

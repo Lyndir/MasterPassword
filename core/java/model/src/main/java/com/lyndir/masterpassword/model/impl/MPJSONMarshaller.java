@@ -21,6 +21,7 @@ package com.lyndir.masterpassword.model.impl;
 import static com.lyndir.masterpassword.model.impl.MPJSONFile.*;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.lyndir.masterpassword.MPAlgorithmException;
 import com.lyndir.masterpassword.MPKeyUnavailableException;
 import javax.annotation.Nonnull;
 
@@ -33,7 +34,7 @@ public class MPJSONMarshaller implements MPMarshaller {
     @Nonnull
     @Override
     public String marshall(final MPFileUser user)
-            throws MPKeyUnavailableException, MPMarshalException {
+            throws MPKeyUnavailableException, MPMarshalException, MPAlgorithmException {
 
         try {
             return objectMapper.writeValueAsString( user.getJSON().write( user ) );
