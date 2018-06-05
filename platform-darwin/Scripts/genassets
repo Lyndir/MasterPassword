@@ -2,10 +2,15 @@
 # See https://developer.apple.com/library/ios/qa/qa1686/_index.html
 cd "${BASH_SOURCE%/*}"
 source bashlib
-trap 'c=$BASH_COMMAND s=$?; (( s )) && echo "ERROR: $s: $c"; exit $s' EXIT
+trap 'c=$BASH_COMMAND s=$?; echo "EXIT: $s: $c"; exit $s' EXIT
 set -e
 cd ..
 export PATH+=:/usr/local/bin
+echo >&2 "stderr"
+echo "stdout"
+echo "== declare -xp =="
+declare -xp
+echo "== declare -xp =="
 
 # icons format: [pixel size]@[scale]@[idiom]@[os]:[filename] -- if os is "anything lower", omit it
 icons=(
