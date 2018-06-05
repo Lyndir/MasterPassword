@@ -21,7 +21,7 @@ before_script:
 - bundle install
 
 pages:
-  stage: deploy
+  stage: build
   script:
   - bundle exec jekyll build -d public
   artifacts:
