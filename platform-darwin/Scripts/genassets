@@ -98,26 +98,18 @@ if [[ "$(latest "$ios_icon"/*)" -nt "$appiconset/Contents.json" ]] ||
             source=$ios_icon/$filename
             if [[ ! -e $source ]]; then
                 source=$mac_icon/$filename
-                if [[ ! -e $source ]]; then
-                    err 'No icon for: %s' "$filename"
-                    exit 1
-                fi
+                [[ -e $source ]] || ftl 'No icon for: %s' "$filename"
             fi
 
-            if imageProps=$(copyImage "$source" "$appiconset/$filename"); then
-                printf '%s{"size":"%dx%d","filename":"%s","scale":"%sx"' \
-                    "$comma" "$pt" "$pt" "$filename" "$scale"
-                [[ $idiom ]] && printf ',"idiom":"%s"' "$idiom"
-                [[ $os ]] && printf ',"minimum-system-version":"%s"' "$os"
-                [[ $imageProps ]] && printf '%s' "$imageProps"
-                printf '}'
+            imageProps=$(copyImage "$source" "$appiconset/$filename")
+            printf '%s{"size":"%dx%d","filename":"%s","scale":"%sx"' \
+                "$comma" "$pt" "$pt" "$filename" "$scale"
+            [[ $idiom ]] && printf ',"idiom":"%s"' "$idiom"
+            [[ $os ]] && printf ',"minimum-system-version":"%s"' "$os"
+            [[ $imageProps ]] && printf '%s' "$imageProps"
+            printf '}'
 
-                comma=,
-            else
-                rm "$appiconset/Contents.json"
-                exit
-            fi
-
+            comma=,
         done
         printf '],"info":{"version":1,"author":"genassets"},"properties":{"pre-rendered":true}}\n'
     } > "$appiconset/Contents.json"
@@ -138,20 +130,16 @@ if [[ "$(latest "$ios_launch"/*)" -nt "$launchimage/Contents.json" ]]; then
             esac
             filename="Default${os:+-$os}${subtype:+-$subtype}${scale:+@${scale}x}${idiom:+~$idiom}.png"
 
-            if imageProps=$(copyImage "$ios_launch/$name${scale:+@${scale}x}.png" "$launchimage/$filename"); then
-                printf '%s{"extent":"full-screen","filename":"%s","orientation":"portrait","scale":"%sx"' \
-                    "$comma" "$filename" "${scale:-1}"
-                [[ $idiom ]] && printf ',"idiom":"%s"' "$idiom"
-                [[ $os ]] && printf ',"minimum-system-version":"%s"' "$os"
-                [[ $subtype ]] && printf ',"subtype":"%s"' "$subtype"
-                [[ $imageProps ]] && printf '%s' "$imageProps"
-                printf '}'
+            imageProps=$(copyImage "$ios_launch/$name${scale:+@${scale}x}.png" "$launchimage/$filename"); then
+            printf '%s{"extent":"full-screen","filename":"%s","orientation":"portrait","scale":"%sx"' \
+                "$comma" "$filename" "${scale:-1}"
+            [[ $idiom ]] && printf ',"idiom":"%s"' "$idiom"
+            [[ $os ]] && printf ',"minimum-system-version":"%s"' "$os"
+            [[ $subtype ]] && printf ',"subtype":"%s"' "$subtype"
+            [[ $imageProps ]] && printf '%s' "$imageProps"
+            printf '}'
 
-                comma=,
-            else
-                rm "$launchimage/Contents.json"
-                exit
-            fi
+            comma=,
         done
         printf '],"info":{"version":1,"author":"genassets"}}\n'
     } > "$launchimage/Contents.json"
