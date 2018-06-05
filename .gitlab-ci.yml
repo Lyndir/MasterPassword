@@ -1,0 +1,31 @@
+variables:
+  JEKYLL_ENV: production
+
+stages:
+  - build
+
+build_project:
+  stage: build
+  script:
+    - "( ./lib/bin/build_libsodium-macos )"
+    - "( cd ./platform-independent/cli-c && ./clean && targets='mpw mpw-bench mpw-tests' ./build && ./mpw-tests && ./mpw-cli-tests )"
+    - "( cd ./gradle && ./gradlew --info clean test )"
+    - "( xcodebuild -workspace platform-darwin/MasterPassword.xcworkspace -configuration 'Test' -scheme 'MasterPassword iOS' -sdk iphonesimulator | xcpretty -s )"
+    - "( xcodebuild -workspace platform-darwin/MasterPassword.xcworkspace -configuration 'Test' -scheme 'MasterPassword macOS' | xcpretty -s )"
+  tags:
+    - xcode-9
+  only:
+    - master
+
+before_script:
+- bundle install
+
+pages:
+  stage: deploy
+  script:
+  - bundle exec jekyll build -d public
+  artifacts:
+    paths:
+    - public
+  only:
+  - gh-pages
