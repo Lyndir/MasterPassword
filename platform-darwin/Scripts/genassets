@@ -54,8 +54,6 @@ splashes=(
 )
 
 copyImage() {
-trap 'echo >&2 "ERROR: $?: $BASH_COMMAND"' ERR
-set -e
     local src=$1 dst=$2
 
     if [[ $src = *.9.png || $src = *.9@*.png ]]; then
@@ -71,11 +69,8 @@ set -e
         fnip
     else
         pinf '%s -> %s' "${src##*/}" "${dst##*/}"
-        echo >&2 "pinf: $?"
             cp "$src" "$dst"
-        echo >&2 "cp <$src> <$dst>: $?"
         fnip
-        echo >&2 "fnip: $?"
     fi
 }
 
@@ -135,7 +130,7 @@ if [[ "$(latest "$ios_launch"/*)" -nt "$launchimage/Contents.json" ]]; then
             esac
             filename="Default${os:+-$os}${subtype:+-$subtype}${scale:+@${scale}x}${idiom:+~$idiom}.png"
 
-            imageProps=$(copyImage "$ios_launch/$name${scale:+@${scale}x}.png" "$launchimage/$filename"); then
+            imageProps=$(copyImage "$ios_launch/$name${scale:+@${scale}x}.png" "$launchimage/$filename")
             printf '%s{"extent":"full-screen","filename":"%s","orientation":"portrait","scale":"%sx"' \
                 "$comma" "$filename" "${scale:-1}"
             [[ $idiom ]] && printf ',"idiom":"%s"' "$idiom"
