@@ -2,7 +2,7 @@
 cd "${BASH_SOURCE%/*}"
 source ./bashlib
 trap 'echo >&2 "ERROR: $?: $BASH_COMMAND"' ERR
-set -eE
+set -e
 cd ..
 export PATH+=:/usr/libexec
 

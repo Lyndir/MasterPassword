@@ -3,7 +3,7 @@
 cd "${BASH_SOURCE%/*}"
 source bashlib
 trap 'echo >&2 "ERROR: $?: $BASH_COMMAND"' ERR
-set -eE
+set -e
 cd ..
 export PATH+=:/usr/local/bin
 
@@ -54,6 +54,8 @@ splashes=(
 )
 
 copyImage() {
+trap 'echo >&2 "ERROR: $?: $BASH_COMMAND"' ERR
+set -e
     local src=$1 dst=$2
 
     if [[ $src = *.9.png || $src = *.9@*.png ]]; then
@@ -68,8 +70,11 @@ copyImage() {
             done <<< "$niftyNinePatch"
         fnip
     else
+        echo >&2 'pinf'
         pinf '%s -> %s' "${src##*/}" "${dst##*/}"
+        echo >&2 'cp <$src> <$dst>'
             cp "$src" "$dst"
+        echo >&2 'fnip'
         fnip
     fi
 }
