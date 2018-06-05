@@ -66,12 +66,6 @@
 #     readwhile command [args]
 # Outputs the characters typed by the user into the terminal's input buffer while running the given command.
 #
-#     pushqueue element ...
-# Pushes the given arguments as elements onto the queue.
-#
-#     popqueue
-# Pops one element off the queue.
-#
 #     log [format] [arguments...]
 # Log an event at a certain importance level.
 # The event is expressed as a printf(1) format argument.
@@ -85,7 +79,7 @@
 #     reverse [-0|-d delimitor] [elements ...] [<<< elements]
 # Reverse the order of the given elements.
 #
-#     order [-0|-d char] [-[cC] isAscending|-n] [-t number] [elements ...] [<<< elements]
+#     order [-0|-d char] [-[cC] comparator|-n] [-t number] [elements ...] [<<< elements]
 # Orders the elements in ascending order.
 #
 #     mutex file
@@ -180,6 +174,9 @@ genToc() {
 # |                                          .:  GLOBAL DECLARATIONS  :. |
 # |______________________________________________________________________|
 
+# Environment
+TMPDIR=${TMPDIR:-/tmp} TMPDIR=${TMPDIR%/}
+
 # Variables for convenience sequences.
 bobber=(     '.' 'o' 'O' 'o' )
 spinner=(    '-' \\  '|' '/' )
@@ -190,8 +187,8 @@ runner=(     '> >'           \
 
 # Variables for terminal requests.
 [[ -t 2 && $TERM != dumb ]] && {
-    COLUMNS=$(  tput cols   || tput co      ) # Columns in a line
-    LINES=$(    tput lines  || tput li      ) # Lines on screen
+    COLUMNS=$({ tput cols   || tput co;} 2>&3) # Columns in a line
+    LINES=$({   tput lines  || tput li;} 2>&3) # Lines on screen
     alt=$(      tput smcup  || tput ti      ) # Start alt display
     ealt=$(     tput rmcup  || tput te      ) # End   alt display
     hide=$(     tput civis  || tput vi      ) # Hide cursor
@@ -230,7 +227,7 @@ runner=(     '> >'           \
                 tput eA; tput as;
                 tput ac; tput ae;         } )   # Drawing characters
     back=$'\b'
-} ||:
+} 3>&2 2>/dev/null ||:
 
 
 
@@ -264,7 +261,10 @@ chr() {
 # Outputs the decimal ASCII value of the given character.
 #
 ord() {
-    printf '%d' "'$1"
+    local str=$1 s
+    for (( s=0; s < ${#str}; ++s )); do
+        printf '%d' "'${str:s:1}"
+    done
 } # _____________________________________________________________________
 
 
@@ -277,7 +277,10 @@ ord() {
 # Outputs the hexadecimal ASCII value of the given character.
 #
 hex() { 
-    printf '%x' "'$1"
+    local str=$1 s
+    for (( s=0; s < ${#str}; ++s )); do
+        printf '%02X' "'${str:s:1}"
+    done
 } # _____________________________________________________________________
 
 
@@ -290,7 +293,10 @@ hex() {
 # Outputs the character that has the given hexadecimal ASCII value.
 #
 unhex() {
-    printf "\\x$1"
+    local hex=$1 h
+    for (( h=0; h < ${#hex}; h+=2 )); do
+        printf "\\x${hex:h:2}"
+    done
 } # _____________________________________________________________________
 
 
@@ -325,6 +331,26 @@ min() {
         (( n < min )) && min=$n
     done
     printf '%d' "$min"
+} # _____________________________________________________________________
+
+
+
+#  ______________________________________________________________________
+# |__ si ________________________________________________________________|
+#
+#       si number
+#
+# Output a human-readable version of the number using SI units.
+#
+si() {
+    local number=$1
+
+    if (( number >= 1000000000000000 )); then printf '%dM' "$((number / 1000000000000000))"
+    elif (( number >= 1000000000000 )); then printf '%dM' "$((number / 1000000000000))"
+    elif (( number >= 1000000000 )); then printf '%dM' "$((number / 1000000000))"
+    elif (( number >= 1000000 )); then printf '%dM' "$((number / 1000000))"
+    elif (( number >= 1000 )); then printf '%dk' "$((number / 1000))"
+    else printf '%d' "$number"; fi
 } # _____________________________________________________________________
 
 
@@ -528,6 +554,50 @@ iterate() (
     fi
 ) # _____________________________________________________________________
 
+
+
+#  _______________________________________________________________________
+# |__ csvline ____________________________________________________________|
+#
+#       csvline [-d delimiter] [-D line-delimiter]
+#
+# Parse a CSV record from standard input, storing the fields in the CSVLINE array.
+#
+# By default, a single line of input is read and parsed into comma-delimited fields.
+# Fields can optionally contain double-quoted data, including field delimiters.
+#
+# A different field delimiter can be specified using -d.  You can use -D
+# to change the definition of a "record" (eg. to support NULL-delimited records).
+#
+csvline() {
+    CSVLINE=()
+    local line field quoted=0 delimiter=, lineDelimiter=$'\n' c
+    local OPTIND=1 arg
+    while getopts :d: arg; do
+        case $arg in
+            d) delimiter=$OPTARG ;;
+        esac
+    done
+
+    IFS= read -d "$lineDelimiter" -r line || return
+    while IFS= read -rn1 c; do
+        case $c in
+            \")
+                (( quoted = !quoted ))
+                continue ;;
+            $delimiter)
+                if (( ! quoted )); then
+                    CSVLINE+=( "$field" ) field=
+                    continue
+                fi ;;
+        esac
+        field+=$c
+    done <<< "$line"
+    [[ $field ]] && CSVLINE+=( "$field" ) ||:
+} # _____________________________________________________________________
+
+
+
 #  ______________________________________________________________________
 # |__ Logging ___________________________________________________________|
 #
@@ -551,11 +621,11 @@ iterate() (
 # The closing statement also takes a format and arguments, which are displayed in the spinner.
 #
 log() {
-    local exitcode=$? level=${level:-inf} supported=0 end=$'\n' type=msg conMsg= logMsg= format= colorFormat= date= info= arg= args=() colorArgs=() ruler=
+    local exitcode=$? result=0 level=${level:-inf} supported=0 end=$'\n' type=msg conMsg= logMsg= format= colorFormat= date= info= arg= args=() colorArgs=() ruler=
 
     # Handle options.
     local OPTIND=1
-    while getopts :tpuPrR:d:n arg; do
+    while getopts :tpuPrR:d:nx arg; do
         case $arg in
             p)
                 end='.. '
@@ -573,13 +643,14 @@ log() {
                 end=$OPTARG ;;
             n)
                 end= ;;
-            t)
-                date=$(date +"${_logDate:-%H:%M}") ;;
+            x)
+                result=$exitcode ;;
         esac
     done
     shift "$((OPTIND-1))"
     format=$1 args=( "${@:2}" )
     (( ! ${#args[@]} )) && [[ $format ]] && { args=("$format") format=%s; local bold=; }
+    date=${_logDate+$(date +"${_logDate:-%H:%M}")}
 
     # Level-specific settings.
     local logLevelColor
@@ -600,17 +671,17 @@ log() {
                 log FTL 'Log level %s does not exist' "$level"
                 exit 1 ;;
     esac
-    (( ! supported )) && return "$exitcode"
+    (( ! supported )) && return "$result"
     local logColor=${_logColor:+$logLevelColor}
 
     # Generate the log message.
     case $type in
         msg|startProgress)
-            printf -v logMsg "[${date:+%s }%-3s] $format$end" ${date:+"$date"} "$level" "${args[@]}"
+            printf -v logMsg "${date:+%s }${_logLevel:+%-3s }$format$end" ${date:+"$date"} ${_logLevel:+"$level"} "${args[@]}"
             if (( _logColor )); then
-                colorFormat=$(sed ${reset:+-e "s/$(requote "$reset")/$reset$logColor/g"} -e "s/%[^a-z]*[a-z]/$reset$bold$logColor&$reset$logColor/g" <<< "$format")
-                colorArgs=("${args[@]//$reset/$reset$bold$logColor}")
-                printf -v conMsg "$reset[${date:+%s }$logColor$bold%-3s$reset] $logColor$colorFormat$reset$black\$$reset$end$save" ${date:+"$date"} "$level" "${colorArgs[@]}"
+                colorFormat=$(sed ${reset:+-e "s/$(requote "$reset")/$reset$_logAttributes$logColor/g"} -e "s/%[^a-z]*[a-z]/$reset$_logAttributes$bold$logColor&$reset$_logAttributes$logColor/g" <<< "$format")
+                colorArgs=("${args[@]//$reset/$reset$_logAttributes$bold$logColor}")
+                printf -v conMsg "$reset$_logAttributes${date:+%s }${_logLevel:+$logColor$bold%-3s$reset $_logAttributes}$logColor$colorFormat$reset$_logAttributes$black\$$reset$end$save" ${date:+"$date"} ${_logLevel:+"$level"} "${colorArgs[@]}"
             else
                 conMsg=$logMsg
             fi
@@ -619,15 +690,17 @@ log() {
         updateProgress)
             printf -v logMsg printf " [$format]" "${args[@]}"
             if (( _logColor )); then
-                colorFormat=$(sed ${reset:+-e "s/$(requote "$reset")/$reset$logColor/g"} -e "s/%[^a-z]*[a-z]/$reset$bold$logColor&$reset$logColor/g" <<< "$format")
-                colorArgs=("${args[@]//$reset/$reset$bold$logColor}")
-                printf -v conMsg "$load$eel$blue$bold[$reset$logColor$colorFormat$reset$blue$bold]$reset$end" "${colorArgs[@]}"
+                colorFormat=$(sed ${reset:+-e "s/$(requote "$reset")/$reset$_logAttributes$logColor/g"} -e "s/%[^a-z]*[a-z]/$reset$_logAttributes$bold$logColor&$reset$_logAttributes$logColor/g" <<< "$format")
+                colorArgs=("${args[@]//$reset/$reset$_logAttributes$bold$logColor}")
+                printf -v conMsg "$load$eel$blue$bold[$reset$_logAttributes$logColor$colorFormat$reset$_logAttributes$blue$bold]$reset$end" "${colorArgs[@]}"
             else
                 conMsg=$logMsg
             fi
         ;;
 
         stopProgress)
+            kill -0 "$_logSpinner" 2>/dev/null || return
+
             case $exitcode in
                 0)  printf -v logMsg "done${format:+ ($format)}.\n" "${args[@]}"
                     if (( _logColor )); then
@@ -653,15 +726,17 @@ log() {
 
     # Create the log file.
     if [[ $_logFile && ! -e $_logFile ]]; then
-        [[ $_logFile = */* ]] || $_logFile=./$logFile
+        [[ $_logFile = */* ]] || _logFile=./$_logFile
         mkdir -p "${_logFile%/*}" && touch "$_logFile"
     fi
 
     # Stop the spinner.
     if [[ $type = stopProgress && $_logSpinner ]]; then
-        kill "$_logSpinner"
-        wait "$_logSpinner" 2>/dev/null
-        unset _logSpinner
+        {
+            kill "$_logSpinner" ||:
+            wait "$_logSpinner" ||:
+            unset _logSpinner
+        } 2>/dev/null
     fi
 
     # Output the ruler.
@@ -685,9 +760,10 @@ log() {
             while printf >&2 "$eel$blue$bold[$reset%s$reset$blue$bold]$reset\b\b\b" "${spinner[s++ % ${#spinner[@]}]}" && sleep .1
             do :; done
         } & _logSpinner=$!
+        addtrap EXIT 'level=%q _logSpinner=%q golp' "$level" "$_logSpinner"
     fi
 
-    return $exitcode
+    return $result
 }
 trc() { level=TRC log "$@"; }
 dbg() { level=DBG log "$@"; }
@@ -718,6 +794,8 @@ rrep() { level=ERR golp "$@"; }
 ltfp() { level=FTL golp "$@"; }
 _logColor=${_logColor:-$([[ -t 2 ]] && echo 1)} _logVerbosity=2
 _logTrcColor=$grey _logDbgColor=$blue _logInfColor=$white _logWrnColor=$yellow _logErrColor=$red _logFtlColor=$bold$red
+#_logDate=%H:%M # Set this to enable date output in log messages.
+#_logLevel=1 # Set this to enable level output in log messages.
 # _______________________________________________________________________
 
 
@@ -794,10 +872,10 @@ ask() {
             printf '%s' "$muteChar"                                 >&$fd
         done
         REPLY=$reply
+        [[ $options && $REPLY ]] || (( silent )) && printf '\n'     >&$fd
     else
         read -u8 -e ${options:+-n1} ${silent:+-s}
     fi
-    [[ $options && $REPLY ]] || (( silent )) && printf '\n'         >&$fd
 
     # Evaluate the reply.
     while true; do
@@ -886,7 +964,7 @@ reverse() {
 #  ______________________________________________________________________
 # |__ Order _____________________________________________________________|
 #
-#       order [-0|-d char] [-[fF] isDesired] [-[cC] isAscending|-n|-r|-t] [-T number] [-a array|elements ...] [<<< elements]
+#       order [-0|-d char] [-[fF] isDesired] [-[cC] comparator|-n|-R|-t] [-r] [-T number] [-a array|elements ...] [<<< elements]
 #
 # Orders the elements in ascending order.
 # Elements are read from command arguments or standard input if no element
@@ -895,21 +973,23 @@ reverse() {
 #
 # By default, the elements will be ordered using lexicographic comparison.
 # If the -n option is given, the elements will be ordered numerically.
-# If the -r option is given, the elements will be ordered randomly.
+# If the -R option is given, the elements will be ordered randomly.
+# If the -t option is given, the elements are ordered by file mtime.
 # If the -f option is given, the command name following it will be used
 # as a filter.
 # If the -c option is given, the command name following it will be used
 # as a comparator.
 # If the -C option is given, the bash code following it will be used
 # as a comparator.
-# If the -t option is given, only the first number results are returned.
+# If the -r option is given, the ordering will be reversed.
+# If the -T option is given, only the first number results are returned.
 # If the -a option is given, the elements in array are ordered instead and
 # array is mutated to contain the result.
 # If number is 0, all results are returned.
 #
 # isDesired is a command name which will get one parameter.  The parameter
 # is an element which will only be included if the command exits successfully.
-# isAscending is a command name which will be executed for each element
+# comparator is a command name which will be executed for each element
 # comparison and will be passed two element arguments.  The command should
 # succeed if the first argument is less than the second argument for the
 # purpose of this sort.
@@ -924,59 +1004,61 @@ reverse() {
 order() {
    
     # Initialize the vars.
-    local delimitor=$'\n' i isDesired=true isAscending=string_ascends top=0 arrayName= array=
+    local _delimitor=$'\n' _i _j _isDesired=true _comparator=string_ascends _comparator_ascends=1 _top=0 _arrayName= _array=
 
     # Parse the options.
     local OPTIND=1
-    while getopts :0nrd:f:F:c:C:tT:a: opt; do
+    while getopts :0nrRd:f:F:c:C:tT:a: opt; do
         case $opt in
-            0) delimitor=$'\0' ;;
-            d) delimitor=$OPTARG ;;
-            n) isAscending=number_ascends ;;
-            r) isAscending=random_ascends ;;
-            t) isAscending=mtime_ascends ;;
-            f) isDesired=$OPTARG ;;
-            F) isDesired=bash_desired bash_desired_code=$OPTARG ;;
-            c) isAscending=$OPTARG ;;
-            C) isAscending=bash_ascends bash_ascends_code=$OPTARG ;;
-            T) top=$OPTARG ;;
-            a) arrayName=$OPTARG array=$arrayName[@] ;;
+            0) _delimitor=$'\0' ;;
+            d) _delimitor=$OPTARG ;;
+            n) _comparator=number_ascends ;;
+            R) _comparator=random_ascends ;;
+            t) _comparator=mtime_ascends ;;
+            f) _isDesired=$OPTARG ;;
+            F) _isDesired=bash_desired _bash_desired_code=$OPTARG ;;
+            c) _comparator=$OPTARG ;;
+            C) _comparator=bash_ascends _bash_ascends_code=$OPTARG ;;
+            r) _comparator_ascends=0 ;;
+            T) _top=$OPTARG ;;
+            a) _arrayName=$OPTARG _array=$_arrayName[@] ;;
         esac
     done
     shift "$((OPTIND-1))"
 
     # Get the elements.
-    local elements=() element
-    if [[ $arrayName ]]; then
-        for element in "${!array}"; do
-            "$isDesired" "$element" && elements+=("$element")
+    local _elements=() _element
+    if [[ $_arrayName ]]; then
+        for _element in "${!_array}"; do
+            "$_isDesired" "$_element" && _elements+=("$_element")
         done
     elif (( $# )); then
-        for element; do
-            "$isDesired" "$element" && elements+=("$element")
+        for _element; do
+            "$_isDesired" "$_element" && _elements+=("$_element")
         done
     else
-        while IFS= read -r -d "$delimitor" element; do
-            "$isDesired" "$element" && elements+=("$element")
+        while IFS= read -r -d "$_delimitor" _element; do
+            "$_isDesired" "$_element" && _elements+=("$_element")
         done
     fi
 
     # Iterate in reverse order.
-    for (( i = 1; i < ${#elements[@]}; ++i )); do
-        for (( j = i; j > 0; --j )); do
-            element=${elements[j]}
-            if "$isAscending" "$element" "${elements[j-1]}"; then
-                elements[j]=${elements[j-1]}
-                elements[j-1]=$element
+    for (( _i = 1; _i < ${#_elements[@]}; ++_i )); do
+        for (( _j = _i; _j > 0; --_j )); do
+            _element=${_elements[_j]}
+            if ( (( _comparator_ascends )) && "$_comparator" "$_element" "${_elements[_j-1]}" ) ||
+               ( (( ! _comparator_ascends )) && ! "$_comparator" "$_element" "${_elements[_j-1]}" ); then
+                _elements[_j]=${_elements[_j-1]}
+                _elements[_j-1]=$_element
             fi
         done
     done
 
-    (( top )) || top=${#elements[@]}
-    if [[ $array ]]; then
-        declare -ga "$array=($(printf '%q ' "${elements[@]:0:top}"))"
+    (( _top )) || _top=${#_elements[@]}
+    if [[ $_array ]]; then
+        declare -ga "$_array=($(printf '%q ' "${_elements[@]:0:_top}"))"
     else
-        printf "%s${delimitor:-\0}" "${elements[@]:0:top}"
+        printf "%s${_delimitor:-\0}" "${_elements[@]:0:_top}"
     fi
 } # _____________________________________________________________________
 string_ascends()    { [[ $1 < $2 ]]; }
@@ -987,8 +1069,28 @@ exists_desired()    { [[ -e $1 ]]; }
 line_desired()      { [[ $1 ]]; }
 code_desired()      { line_desired "$1" && ! comment_desired "$1"; }
 comment_desired()   { line_desired "$1" && [[ $1 = @(#|//|/\*)* ]]; }
-bash_desired()      { bash -c "$bash_desired_code" -- "$@"; }
-bash_ascends()      { bash -c "$bash_ascends_code" -- "$@"; }
+bash_desired()      { bash -c "$_bash_desired_code" -- "$@"; }
+bash_ascends()      { bash -c "$_bash_ascends_code" -- "$@"; }
+
+
+#  ______________________________________________________________________
+# |__ AddTrap _____________________________________________________________|
+#
+#       addtrap signal command-format [args...]
+#
+# Add a command to the current commands executed when a signal is received by the bash process.
+#
+# The command-format is a printf-style format for the command to execute.  The optional
+# args are interpolated into the command-format by bash's built-in printf.
+#
+addtrap() {
+    local signal=$1 cmd=$2; shift 2
+    printf -v cmd "$cmd" "$@"
+
+    read _ _ oldtrap <<< "$(trap -p "$signal")"
+    eval "declare oldtrap=${oldtrap% *}"
+    trap "$oldtrap${oldtrap:+; }$cmd" "$signal"
+}
 
 
 #  ______________________________________________________________________
@@ -1214,18 +1316,17 @@ showHelp() {
 shquote() {
 
     # Initialize the defaults.
-    local arg escape=0 sq="'\\''" dq='\"' quotedArgs=() type=single always=0
+    local OPTIND=1 arg escape=0 sq="'\\''" dq='\"' quotedArgs=() type=single always=0
 
     # Parse the options.
-    while [[ $1 = -* ]]; do
-        case $1 in
-            -e) type=escape  ;;
-            -d) type=double  ;;
-            -a) always=1     ;;
-            --) shift; break ;;
+    while getopts :eda arg; do
+        case $arg in
+            e) type=escape  ;;
+            d) type=double  ;;
+            a) always=1     ;;
         esac
-        shift
     done
+    shift "$((OPTIND-1))"
 
     # Print out each argument, quoting it properly.
     for arg; do
@@ -1331,6 +1432,29 @@ shorten() {
 
 
 #  ______________________________________________________________________
+# |__ CdSource ________________________________________________________________|
+#
+#       cdsource [file]
+#
+# Change the current directory into the directory where the file is located, resolving symlinks.
+#
+cdsource() {
+    local source=${1:-${BASH_SOURCE[1]}}
+
+    while [[ $source ]]; do
+        [[ $source = */* ]] && cd "${source%/*}"
+
+        if [[ -L ${source##*/} ]]; then
+            source=$(readlink "${source##*/}")
+        else
+            source=
+        fi
+    done
+} # _____________________________________________________________________
+
+
+
+#  ______________________________________________________________________
 # |__ Up ________________________________________________________________|
 #
 #       up .../path|num
@@ -1405,7 +1529,34 @@ inArray() {
 
     # Perform the search.
     for element
-    do [[ $element = $search ]] && return 0; done
+    do [[ "$element" = "$search" ]] && return 0; done
+    return 1
+} # _____________________________________________________________________
+
+
+
+#  ______________________________________________________________________
+# |__ IndexOf ___________________________________________________________|
+#
+#       indexOf element array
+#
+# Outputs the index of the given element in the given array.
+#
+#   element The element to search the array for.
+#   array   This is a list of elements to search through.
+#
+indexOf() {
+
+    # Parse the options.
+    local element index=0
+    local search=$1; shift
+
+    # Perform the search.
+    for element
+    do
+        [[ $element = $search ]] && echo "$index" && return 0
+        let ++index
+    done
     return 1
 } # _____________________________________________________________________
 

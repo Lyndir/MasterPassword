@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 cd "${BASH_SOURCE%/*}"
 source ./bashlib
+trap 'c=$BASH_COMMAND s=$?; (( s )) && echo "ERROR: $s: $c"; exit $s' EXIT
+set -e
 cd ..
 export PATH+=:/usr/libexec
 

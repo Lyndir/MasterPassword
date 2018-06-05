@@ -2,6 +2,7 @@
 # See https://developer.apple.com/library/ios/qa/qa1686/_index.html
 cd "${BASH_SOURCE%/*}"
 source bashlib
+trap 'c=$BASH_COMMAND s=$?; (( s )) && echo "ERROR: $s: $c"; exit $s' EXIT
 set -e
 cd ..
 export PATH+=:/usr/local/bin
