@@ -1,5 +1,6 @@
 variables:
   JEKYLL_ENV: production
+  GIT_SUBMODULE_STRATEGY: recursive
 
 stages:
   - build
