@@ -3,10 +3,6 @@ variables:
   JEKYLL_ENV: production
   GIT_SUBMODULE_STRATEGY: recursive
 
-stages:
-  - build
-  - deploy
-
 build_project:
   stage: build
   script:
@@ -20,17 +16,3 @@ build_project:
     - brew
     - java
     - xcode_9
-  only:
-    - master
-
-pages:
-  stage: deploy
-  script:
-    - exec jekyll build -d public
-  artifacts:
-    paths:
-      - public
-  tags:
-    - jekyll
-  only:
-    - gh-pages
