@@ -1,8 +1,6 @@
 variables:
-  SHLVL: 0
-  JEKYLL_ENV: production
+  GIT_DEPTH: 3
   GIT_SUBMODULE_STRATEGY: recursive
-  GIT_DEPTH: "3"
 
 build_project:
   stage: build
