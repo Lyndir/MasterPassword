@@ -70,12 +70,12 @@ set -e
             done <<< "$niftyNinePatch"
         fnip
     else
-        echo >&2 'pinf'
         pinf '%s -> %s' "${src##*/}" "${dst##*/}"
-        echo >&2 'cp <$src> <$dst>'
+        echo >&2 "pinf: $?"
             cp "$src" "$dst"
-        echo >&2 'fnip'
+        echo >&2 "cp <$src> <$dst>: $?"
         fnip
+        echo >&2 "fnip: $?"
     fi
 }
 

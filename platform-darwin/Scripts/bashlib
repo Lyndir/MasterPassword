@@ -699,7 +699,7 @@ log() {
         ;;
 
         stopProgress)
-            kill -0 "$_logSpinner" 2>/dev/null || return
+            ! kill -0 "$_logSpinner" 2>/dev/null && return
 
             case $exitcode in
                 0)  printf -v logMsg "done${format:+ ($format)}.\n" "${args[@]}"
