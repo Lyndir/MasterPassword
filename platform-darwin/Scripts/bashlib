@@ -175,7 +175,7 @@ genToc() {
 # |______________________________________________________________________|
 
 # Environment
-TMPDIR=${TMPDIR:-/tmp} TMPDIR=${TMPDIR%/}
+export TMPDIR=${TMPDIR:-/tmp} TMPDIR=${TMPDIR%/} TERM=${TERM:-dumb}
 
 # Variables for convenience sequences.
 bobber=(     '.' 'o' 'O' 'o' )
