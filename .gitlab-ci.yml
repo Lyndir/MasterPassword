@@ -17,13 +17,10 @@ build_project:
   only:
     - master
 
-before_script:
-- bundle install
-
 pages:
   stage: build
   script:
-  - bundle exec jekyll build -d public
+  - exec jekyll build -d public
   artifacts:
     paths:
     - public
