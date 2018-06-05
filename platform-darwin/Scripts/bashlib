@@ -582,7 +582,7 @@ csvline() {
     IFS= read -d "$lineDelimiter" -r line || return
     while IFS= read -rn1 c; do
         case $c in
-            \")
+            '"')
                 (( quoted = !quoted ))
                 continue ;;
             $delimiter)
@@ -1221,9 +1221,10 @@ options() {
     while getopts "$optstring" arg; do
         if [[ $arg = h && ! ${options[h]} ]]; then
             # Show usage message.
-            [[ -t 1 ]]; local fd=$(( $? + 1 )) optarg
+            [[ -t 1 ]] && local fd=1 || local fd=2
 
             # Print out the app usage.
+            local optarg
             printf "  Usage: $reset$bold%s$reset" "${BASH_SOURCE[1]##*/}"   >&$fd
             for optchar in "${!options[@]}"; do
                 [[ $optchar = *: ]] && optarg=" arg" || optarg=
@@ -1274,7 +1275,7 @@ showHelp() {
     (( cols = ${cols:-80} - 10 ))
 
     # Figure out what FD to use for our messages.
-    [[ -t 1 ]]; local fd=$(( $? + 1 ))
+    [[ -t 1 ]] && local fd=1 || local fd=2
 
     # Print out the help header.
     printf "$reset$bold\n"                                          >&$fd
