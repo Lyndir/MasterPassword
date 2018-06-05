@@ -1,4 +1,5 @@
 variables:
+  SHLVL: 0
   JEKYLL_ENV: production
   GIT_SUBMODULE_STRATEGY: recursive
 
