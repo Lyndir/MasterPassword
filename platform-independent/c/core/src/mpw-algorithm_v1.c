@@ -53,7 +53,7 @@ static MPSiteKey mpw_siteKey_v1(
 }
 
 static const char *mpw_sitePasswordFromTemplate_v1(
-        MPMasterKey __unused masterKey, MPSiteKey siteKey, MPResultType resultType, const char __unused *resultParam) {
+        MPMasterKey masterKey, MPSiteKey siteKey, MPResultType resultType, const char *resultParam) {
 
     // Determine the template.
     uint8_t seedByte = siteKey[0];

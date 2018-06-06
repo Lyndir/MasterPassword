@@ -494,7 +494,7 @@ Blowfish_expandstate(blf_ctx *c, const uint8_t *data, uint16_t databytes,
 }
 
 void
-__unused blf_key(blf_ctx *c, const uint8_t *k, uint16_t len)
+blf_key(blf_ctx *c, const uint8_t *k, uint16_t len)
 {
 	/* Initialize S-boxes and subkeys with Pi */
 	Blowfish_initstate(c);
@@ -517,7 +517,7 @@ blf_enc(blf_ctx *c, uint32_t *data, uint16_t blocks)
 }
 
 void
-__unused blf_dec(blf_ctx *c, uint32_t *data, uint16_t blocks)
+blf_dec(blf_ctx *c, uint32_t *data, uint16_t blocks)
 {
 	uint32_t *d;
 	uint16_t i;
@@ -530,7 +530,7 @@ __unused blf_dec(blf_ctx *c, uint32_t *data, uint16_t blocks)
 }
 
 void
-__unused blf_ecb_encrypt(blf_ctx *c, uint8_t *data, uint32_t len)
+blf_ecb_encrypt(blf_ctx *c, uint8_t *data, uint32_t len)
 {
 	uint32_t l, r;
 	uint32_t i;
@@ -552,7 +552,7 @@ __unused blf_ecb_encrypt(blf_ctx *c, uint8_t *data, uint32_t len)
 }
 
 void
-__unused blf_ecb_decrypt(blf_ctx *c, uint8_t *data, uint32_t len)
+blf_ecb_decrypt(blf_ctx *c, uint8_t *data, uint32_t len)
 {
 	uint32_t l, r;
 	uint32_t i;
@@ -574,7 +574,7 @@ __unused blf_ecb_decrypt(blf_ctx *c, uint8_t *data, uint32_t len)
 }
 
 void
-__unused blf_cbc_encrypt(blf_ctx *c, uint8_t *iv, uint8_t *data, uint32_t len)
+blf_cbc_encrypt(blf_ctx *c, uint8_t *iv, uint8_t *data, uint32_t len)
 {
 	uint32_t l, r;
 	uint32_t i, j;
@@ -599,7 +599,7 @@ __unused blf_cbc_encrypt(blf_ctx *c, uint8_t *iv, uint8_t *data, uint32_t len)
 }
 
 void
-__unused blf_cbc_decrypt(blf_ctx *c, uint8_t *iva, uint8_t *data, uint32_t len)
+blf_cbc_decrypt(blf_ctx *c, uint8_t *iva, uint8_t *data, uint32_t len)
 {
 	uint32_t l, r;
 	uint8_t *iv;

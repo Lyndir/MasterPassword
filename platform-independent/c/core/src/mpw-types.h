@@ -29,10 +29,6 @@
 #define mpw_enum(_type, _name) _type _name; enum
 #endif
 
-#ifndef __unused
-#define __unused __attribute__((unused))
-#endif
-
 //// Types.
 
 extern const size_t MPMasterKeySize, MPSiteKeySize; /* bytes */

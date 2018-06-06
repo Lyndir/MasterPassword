@@ -127,7 +127,7 @@ static MPSiteKey mpw_siteKey_v0(
 }
 
 static const char *mpw_sitePasswordFromTemplate_v0(
-        MPMasterKey __unused masterKey, MPSiteKey siteKey, MPResultType resultType, const char __unused *resultParam) {
+        MPMasterKey masterKey, MPSiteKey siteKey, MPResultType resultType, const char *resultParam) {
 
     const char *_siteKey = (const char *)siteKey;
 
@@ -157,7 +157,7 @@ static const char *mpw_sitePasswordFromTemplate_v0(
 }
 
 static const char *mpw_sitePasswordFromCrypt_v0(
-        MPMasterKey masterKey, MPSiteKey __unused siteKey, MPResultType __unused resultType, const char *cipherText) {
+        MPMasterKey masterKey, MPSiteKey siteKey, MPResultType resultType, const char *cipherText) {
 
     if (!cipherText) {
         err( "Missing encrypted state." );
@@ -187,7 +187,7 @@ static const char *mpw_sitePasswordFromCrypt_v0(
 }
 
 static const char *mpw_sitePasswordFromDerive_v0(
-        MPMasterKey __unused masterKey, MPSiteKey siteKey, MPResultType resultType, const char *resultParam) {
+        MPMasterKey masterKey, MPSiteKey siteKey, MPResultType resultType, const char *resultParam) {
 
     switch (resultType) {
         case MPResultTypeDeriveKey: {
@@ -232,7 +232,7 @@ static const char *mpw_sitePasswordFromDerive_v0(
 }
 
 static const char *mpw_siteState_v0(
-        MPMasterKey masterKey, MPSiteKey __unused siteKey, MPResultType __unused resultType, const char *plainText) {
+        MPMasterKey masterKey, MPSiteKey siteKey, MPResultType resultType, const char *plainText) {
 
     // Encrypt
     size_t bufSize = strlen( plainText );

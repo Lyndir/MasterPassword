@@ -530,7 +530,7 @@ void cli_user(Arguments *args, Operation *operation) {
                 operation->fullName, operation->masterPassword, MPAlgorithmVersionCurrent );
 }
 
-void cli_site(Arguments __unused *args, Operation *operation) {
+void cli_site(Arguments *args, Operation *operation) {
 
     if (!operation->siteName)
         abort();
@@ -546,7 +546,7 @@ void cli_site(Arguments __unused *args, Operation *operation) {
                 operation->user, operation->siteName, operation->user->defaultType, MPCounterValueDefault, operation->user->algorithm );
 }
 
-void cli_question(Arguments __unused *args, Operation *operation) {
+void cli_question(Arguments *args, Operation *operation) {
 
     if (!operation->site)
         abort();
@@ -569,7 +569,7 @@ void cli_question(Arguments __unused *args, Operation *operation) {
     }
 }
 
-void cli_operation(Arguments __unused *args, Operation *operation) {
+void cli_operation(Arguments *args, Operation *operation) {
 
     mpw_free_string( &operation->identicon );
     operation->identicon = mpw_identicon_str( mpw_identicon( operation->user->fullName, operation->user->masterPassword ) );
@@ -770,7 +770,7 @@ void cli_mpw(Arguments *args, Operation *operation) {
     operation->site->uses++;
 }
 
-void cli_save(Arguments __unused *args, Operation *operation) {
+void cli_save(Arguments *args, Operation *operation) {
 
     if (operation->sitesFormat == MPMarshalFormatNone)
         return;
