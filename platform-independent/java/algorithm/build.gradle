@@ -33,7 +33,7 @@ processResources {
 compileJava {
     doLast {
         ant.javah( class: 'com.lyndir.masterpassword.impl.MPAlgorithmV0',
-                   outputFile: '../../c/src/mpw-jni.h',
+                   outputFile: '../../c/core/src/mpw-jni.h',
                    classpath: files( sourceSets.main.compileClasspath, sourceSets.main.output ).asPath )
     }
 }
