@@ -52,11 +52,11 @@ library {
             add( includePathConfiguration.name,
                  files( new File( Jvm.current().javaHome, "include" ) ) { first().eachDir { from it } } )
 
-            // Depend on libsodium from `lib`; run `lib/bin/build_libsodium-${os}` first.
+            // Depend on libsodium from `lib`; run `lib/bin/build_libsodium-${platform}` first.
             add( includePathConfiguration.name,
-                 files( "../../lib/libsodium/build-${platform}~/out/include" ) )
+                 files( "../../../lib/libsodium/build-${platform}~/out/include" ) )
             add( linkLibraries.name,
-                 fileTree( "../../lib/libsodium/build-${platform}~/out/lib" ) )
+                 fileTree( "../../../lib/libsodium/build-${platform}~/out/lib" ) )
         }
     }
 }

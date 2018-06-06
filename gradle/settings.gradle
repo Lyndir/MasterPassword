@@ -10,7 +10,7 @@ include 'masterpassword-core'
 project(':masterpassword-core').projectDir = new File( '../platform-independent/c/core' )
 
 include 'masterpassword-algorithm'
-project(':masterpassword-algorithm').projectDir = new File( '../platform-independent/java/core' )
+project(':masterpassword-algorithm').projectDir = new File( '../platform-independent/java/algorithm' )
 
 include 'masterpassword-model'
 project(':masterpassword-model').projectDir = new File( '../platform-independent/java/model' )
