@@ -7,16 +7,16 @@ try {
 }
 
 include 'masterpassword-core'
-project(':masterpassword-core').projectDir = new File( '../core/c' )
+project(':masterpassword-core').projectDir = new File( '../platform-independent/c/core' )
 
 include 'masterpassword-algorithm'
-project(':masterpassword-algorithm').projectDir = new File( '../core/java/algorithm' )
+project(':masterpassword-algorithm').projectDir = new File( '../platform-independent/java/core' )
 
 include 'masterpassword-model'
-project(':masterpassword-model').projectDir = new File( '../core/java/model' )
+project(':masterpassword-model').projectDir = new File( '../platform-independent/java/model' )
 
 include 'masterpassword-tests'
-project(':masterpassword-tests').projectDir = new File( '../core/java/tests' )
+project(':masterpassword-tests').projectDir = new File( '../platform-independent/java/tests' )
 
 include 'masterpassword-gui'
 project(':masterpassword-gui').projectDir = new File( '../platform-independent/gui-java' )

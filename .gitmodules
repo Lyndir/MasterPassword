@@ -17,7 +17,7 @@
 	path = platform-darwin/External/jrswizzle
 	url = git://github.com/jonmarimba/jrswizzle.git
 [submodule "MasterPassword/Web/js/mpw-js"]
-	path = platform-independent/web-js/js/mpw-js
+	path = platform-independent/web/js/mpw-js
 	url = https://github.com/tmthrgd/mpw-js.git
 [submodule "lib/libsodium"]
 	path = lib/libsodium

@@ -123,9 +123,11 @@ endfunction()
 ### TARGET: MPW
 if( BUILD_MPW )
     # target
-    add_executable( mpw "core/base64.c" "core/aes.c" "core/mpw-algorithm.c" "core/mpw-types.c" "core/mpw-util.c" "core/mpw-marshal-util.c" "core/mpw-marshal.c"
-                        "cli/mpw-cli-util.c" "cli/mpw-cli.c" )
-    target_include_directories( mpw PUBLIC core cli )
+    add_executable( mpw "../core/src/base64.c" "../core/src/aes.c" "../core/src/mpw-algorithm.c" "../core/src/mpw-types.c" "../core/src/mpw-util.c"
+                        "../core/src/mpw-marshal-util.c" "../core/src/mpw-marshal.c"
+                        "src/mpw-cli-util.c" "src/mpw-cli.c" )
+    target_include_directories( mpw PUBLIC ../core/src src )
+    install( TARGETS mpw RUNTIME DESTINATION bin )
 
     # dependencies
     use_mpw_sodium( mpw required )
@@ -137,23 +139,25 @@ endif()
 ### TARGET: MPW-BENCH
 if( BUILD_MPW_BENCH )
     # target
-    add_executable( mpw_bench "core/base64.c" "core/aes.c" "core/mpw-algorithm.c" "core/mpw-types.c" "core/mpw-util.c"
-                        "cli/mpw-bench.c" )
-    target_include_directories( mpw_bench PUBLIC core cli )
+    add_executable( mpw-bench "../core/src/base64.c" "../core/src/aes.c" "../core/src/mpw-algorithm.c" "../core/src/mpw-types.c" "../core/src/mpw-util.c"
+                              "src/mpw-bench.c" )
+    target_include_directories( mpw-bench PUBLIC ../core/src src )
+    install( TARGETS mpw-bench RUNTIME DESTINATION bin )
 
     # dependencies
-    use_mpw_sodium( mpw_bench required )
+    use_mpw_sodium( mpw-bench required )
 endif()
 
 
 ### TARGET: MPW-TESTS
 if( BUILD_MPW_TESTS )
     # target
-    add_executable( mpw_tests "core/base64.c" "core/aes.c" "core/mpw-algorithm.c" "core/mpw-types.c" "core/mpw-util.c"
-                              "cli/mpw-tests-util.c" "cli/mpw-tests.c" )
-    target_include_directories( mpw_tests PUBLIC core cli )
+    add_executable( mpw-tests "../core/src/base64.c" "../core/src/aes.c" "../core/src/mpw-algorithm.c" "../core/src/mpw-types.c" "../core/src/mpw-util.c"
+                              "src/mpw-tests-util.c" "src/mpw-tests.c" )
+    target_include_directories( mpw-tests PUBLIC ../core/src src )
+    install( TARGETS mpw-tests RUNTIME DESTINATION bin )
 
     # dependencies
-    use_mpw_sodium( mpw_tests required )
-    use_mpw_xml( mpw_tests required )
+    use_mpw_sodium( mpw-tests required )
+    use_mpw_xml( mpw-tests required )
 endif()

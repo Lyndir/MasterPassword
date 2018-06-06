@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-cd "${BASH_SOURCE%/*}"
+cd "${BASH_SOURCE%/*}/.."
 tag=$(git describe --exact-match --match '*-cli*') || { echo >&2 "Tree is not at a release tag."; exit 1; }
 version=$(git describe --match '*-cli*' --long --dirty --broken)
 [[ $version != *-dirty ]] || { echo >&2 "Tree is dirty, first commit any changes."; exit 1; }
@@ -11,7 +11,7 @@ mpwArchive=mpw-$version.tar.gz
 read -n1 -p "Will prepare and release $mpwArchive.  Press a key to continue or ^C to abort."
 
 echo "Cleaning .."
-( git clean -ffdx . && cd core && git clean -ffdx . )
+git clean -ffdx .
 
 echo "Creating archive $mpwArchive .."
 echo "$version" > VERSION

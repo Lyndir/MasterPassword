@@ -1,8 +1,12 @@
 # Native CLI
 
-This is a command-line terminal interface to the Master Password standard implementation.
+The CLI is a command-line terminal interface to the Master Password standard implementation.
 
 To use the app, you'll first need to build it, then install it into your system's PATH.
+
+Start by changing into the CLI application directory:
+
+    cd cli
 
 
 ## Building
@@ -13,6 +17,13 @@ To build the code to run on your specific system, run the `build` command:
 
 Note that the build depends on your system having certain dependencies already installed.
 By default, you'll need to have at least `libsodium`, `libjson-c` and `libncurses` installed.
+
+
+## Building with docker
+
+To install mpw into a Docker container, make sure you have Docker installed on your system, then run something like:
+
+    docker build -f cli/Dockerfile .
 
 
 ## Building with cmake
