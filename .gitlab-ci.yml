@@ -7,7 +7,7 @@ build_project:
   script:
     - "( brew install libsodium json-c )"
     - "( ./lib/bin/build_libsodium-macos )"
-    - "( cd ./platform-independent/cli-c && ./clean && targets='mpw mpw-bench mpw-tests' ./build && ./mpw-tests && ./mpw-cli-tests )"
+    - "( cd ./platform-independent/c/cli && ./clean && targets=all ./build && ./mpw-tests && ./mpw-cli-tests )"
     - "( cd ./gradle && ./gradlew --info clean test )"
     - "( xcodebuild -workspace platform-darwin/MasterPassword.xcworkspace -configuration 'Test' -scheme 'MasterPassword iOS' -sdk iphonesimulator clean build )"
     - "( xcodebuild -workspace platform-darwin/MasterPassword.xcworkspace -configuration 'Test' -scheme 'MasterPassword macOS' clean build )"

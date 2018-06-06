@@ -62,7 +62,7 @@
 				DA1554ED20B3928E00EA92C5 /* mpw-util.h */,
 			);
 			name = core;
-			path = ../core/c/src;
+			path = ../platform-independent/c/core/src;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

@@ -1783,7 +1783,7 @@
 				93D39CF7DB942C69D1C5D6BE /* mpw-util.h */,
 			);
 			name = core;
-			path = ../core/c/src;
+			path = ../platform-independent/c/core/src;
 			sourceTree = "<group>";
 		};
 		DA0CC4F41EAB99BA009A8ED9 /* Resources */ = {

@@ -1820,7 +1820,7 @@
 				DA6773C61A4746AF004F356A /* mpw-util.h */,
 			);
 			name = core;
-			path = ../core/c/src;
+			path = ../platform-independent/c/core/src;
 			sourceTree = "<group>";
 		};
 		DA89D4E51A51E53100AC64D7 /* Pearl-Cocoa */ = {
