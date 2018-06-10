@@ -8,7 +8,7 @@ To skip the intro and go straight to the information on how to use the code, [cl
 
 Master Password is available for [📲 iOS](https://itunes.apple.com/app/id510296984), [🖥 macOS](https://masterpassword.app/masterpassword-mac.zip), [📲 Android](https://masterpassword.app/masterpassword-android.apk), [🖥 Desktop](https://masterpassword.app/masterpassword-gui.jar), and [⌨ Console](https://masterpassword.app/masterpassword-cli.tar.gz).
 
-Master Password is also available from the following package managers: [macOS: Homebrew](https://brew.sh/) (`brew install mpw`).
+Master Password is also available from: [macOS: Homebrew](https://brew.sh/) (`brew install mpw`) and [Docker](https://www.docker.com/) (`docker run -ti registry.gitlab.com/masterpassword/masterpassword`).
 Get in touch if you are interested in adding Master Password to any other package managers.
 
 There are many reasons for using Master Password instead of an ordinary password manager, read below for the details, but if you want my personal favourites, they would be:
