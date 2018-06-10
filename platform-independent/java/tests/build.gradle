@@ -5,7 +5,7 @@ plugins {
 description = 'Master Password Test Suite'
 
 dependencies {
-    implementation group: 'com.lyndir.lhunath.opal', name: 'opal-system', version: '1.7-p1'
+    implementation group: 'com.lyndir.lhunath.opal', name: 'opal-system', version: '1.7-p2'
 
     compile project( ':masterpassword-algorithm' )
     compile project( ':masterpassword-model' )

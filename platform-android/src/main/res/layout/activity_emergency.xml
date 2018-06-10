@@ -253,15 +253,6 @@
             </LinearLayout>
         </LinearLayout>
 
-        <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:textSize="16sp"
-                android:text="@string/btn_tests"
-                android:onClick="integrityTests"
-                android:background="@android:color/transparent" />
-
         <View
                 android:layout_width="1dp"
                 android:layout_height="0dp"

@@ -38,7 +38,6 @@ import com.google.common.primitives.UnsignedInteger;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.lyndir.lhunath.opal.system.logging.Logger;
-import com.lyndir.masterpassword.model.MPConstant;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.concurrent.Executors;
@@ -51,7 +50,7 @@ public class EmergencyActivity extends Activity {
     private static final Logger   logger                = Logger.get( EmergencyActivity.class );
     private static final ClipData EMPTY_CLIP            = new ClipData( new ClipDescription( "", new String[0] ), new ClipData.Item( "" ) );
     private static final int      PASSWORD_NOTIFICATION = 0;
-    private static final int      CLIPBOARD_CLEAR_DELAY = 20 /* s */ * MPConstant.MS_PER_S;
+    private static final int      CLIPBOARD_CLEAR_DELAY = 20 /* s */ * MPConstants.MS_PER_S;
 
     private final Preferences                        preferences    = Preferences.get( this );
     private final ListeningExecutorService           executor       = MoreExecutors.listeningDecorator(
@@ -321,21 +320,13 @@ public class EmergencyActivity extends Activity {
                     sitePasswordField.setText( "" );
                     progressView.setVisibility( View.INVISIBLE );
                 }
-                catch (final RuntimeException e) {
+                catch (final MPAlgorithmException e) {
                     sitePasswordField.setText( "" );
                     progressView.setVisibility( View.INVISIBLE );
                     logger.err( e, "While generating site password." );
-                    throw e;
                 }
             }
         } );
-    }
-
-    public void integrityTests(final View view) {
-        if (masterKey != null)
-            masterKey = null;
-
-        TestActivity.startNoSkip( this );
     }
 
     public void copySitePassword(final View view) {

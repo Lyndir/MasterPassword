@@ -23,7 +23,7 @@ import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import com.lyndir.masterpassword.MPAlgorithmException;
 import com.lyndir.masterpassword.MPKeyUnavailableException;
-import com.lyndir.masterpassword.model.MPConstant;
+import com.lyndir.masterpassword.model.MPConstants;
 import javax.annotation.Nonnull;
 import org.joda.time.Instant;
 
@@ -46,7 +46,7 @@ public class MPFlatMarshaller implements MPMarshaller {
         content.append( "# \n" );
         content.append( "##\n" );
         content.append( "# Format: " ).append( FORMAT ).append( '\n' );
-        content.append( "# Date: " ).append( MPConstant.dateTimeFormatter.print( new Instant() ) ).append( '\n' );
+        content.append( "# Date: " ).append( MPConstants.dateTimeFormatter.print( new Instant() ) ).append( '\n' );
         content.append( "# User Name: " ).append( user.getFullName() ).append( '\n' );
         content.append( "# Full Name: " ).append( user.getFullName() ).append( '\n' );
         content.append( "# Avatar: " ).append( user.getAvatar() ).append( '\n' );
@@ -68,7 +68,7 @@ public class MPFlatMarshaller implements MPMarshaller {
             }
 
             content.append( strf( "%s  %8d  %8s  %25s\t%25s\t%s\n", //
-                                  MPConstant.dateTimeFormatter.print( site.getLastUsed() ), // lastUsed
+                                  MPConstants.dateTimeFormatter.print( site.getLastUsed() ), // lastUsed
                                   site.getUses(), // uses
                                   strf( "%d:%d:%d", //
                                         site.getResultType().getType(), // type

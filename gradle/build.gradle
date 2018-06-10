@@ -4,11 +4,11 @@ allprojects {
     group = 'com.lyndir.masterpassword'
     version = 'GIT-SNAPSHOT'
 
-    tasks.withType(JavaCompile) {
+    tasks.withType( JavaCompile ) {
         sourceCompatibility = '1.8'
         targetCompatibility = '1.8'
     }
-    tasks.withType(FindBugs) {
+    tasks.withType( FindBugs ) {
         reports {
             xml.enabled false
             html.enabled true
@@ -18,16 +18,19 @@ allprojects {
 
 buildscript {
     repositories {
+        google()
         jcenter()
     }
 
     dependencies {
-        classpath group: 'com.android.tools.build', name: 'gradle', version: '2.3.2'
+        classpath group: 'com.android.tools.build', name: 'gradle', version: '3.1.0'
     }
 }
 
 subprojects {
     repositories {
+        google()
+        jcenter()
         mavenCentral()
         maven { url 'http://maven.lyndir.com' }
     }

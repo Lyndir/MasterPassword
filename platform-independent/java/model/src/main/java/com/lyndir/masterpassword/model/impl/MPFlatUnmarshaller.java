@@ -25,7 +25,7 @@ import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.ConversionUtils;
 import com.lyndir.masterpassword.*;
-import com.lyndir.masterpassword.model.MPConstant;
+import com.lyndir.masterpassword.model.MPConstants;
 import com.lyndir.masterpassword.model.MPIncorrectMasterPasswordException;
 import java.io.*;
 import java.util.regex.Matcher;
@@ -123,7 +123,7 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
                                                MPResultType.forType( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ),
                                                clearContent? null: siteMatcher.group( 6 ),
                                                null, null, null, ConversionUtils.toIntegerNN( siteMatcher.group( 2 ) ),
-                                               MPConstant.dateTimeFormatter.parseDateTime( siteMatcher.group( 1 ) ).toInstant() );
+                                               MPConstants.dateTimeFormatter.parseDateTime( siteMatcher.group( 1 ) ).toInstant() );
                         if (clearContent)
                             site.setSitePassword( site.getResultType(), siteMatcher.group( 6 ) );
                         break;
@@ -137,7 +137,7 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
                                                clearContent? null: siteMatcher.group( 8 ),
                                                MPResultType.GeneratedName, clearContent? null: siteMatcher.group( 6 ), null,
                                                ConversionUtils.toIntegerNN( siteMatcher.group( 2 ) ),
-                                               MPConstant.dateTimeFormatter.parseDateTime( siteMatcher.group( 1 ) ).toInstant() );
+                                               MPConstants.dateTimeFormatter.parseDateTime( siteMatcher.group( 1 ) ).toInstant() );
                         if (clearContent) {
                             site.setSitePassword( site.getResultType(), siteMatcher.group( 8 ) );
                             site.setLoginName( MPResultType.StoredPersonal, siteMatcher.group( 6 ) );

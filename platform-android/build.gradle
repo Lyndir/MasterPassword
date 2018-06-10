@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '25.0.3'
+    buildToolsVersion '27.0.3'
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -15,7 +15,6 @@ android {
         targetSdkVersion 25
         versionCode 20501
         versionName '2.5.1'
-        jackOptions.enabled true
     }
 
     // release with: STORE_PW=$(mpw masterpassword.keystore) KEY_PW_ANDROID=$(mpw masterpassword-android) gradle masterpassword-android:assembleRelease
@@ -37,10 +36,10 @@ android {
 }
 
 dependencies {
-    compile project( ':masterpassword-algorithm' )
-    compile project( ':masterpassword-tests' )
+    api project( ':masterpassword-algorithm' )
+    implementation group: 'com.lyndir.lhunath.opal', name: 'opal-system', version: '1.7-p2'
 
-    compile group: 'org.slf4j', name: 'slf4j-android', version: '1.7.13-underscore'
-    compile group: 'com.jakewharton', name: 'butterknife', version: '8.5.1'
+    implementation group: 'org.slf4j', name: 'slf4j-android', version: '1.7.13-underscore'
+    implementation group: 'com.jakewharton', name: 'butterknife', version: '8.5.1'
     annotationProcessor group: 'com.jakewharton', name: 'butterknife-compiler', version: '8.5.1'
 }

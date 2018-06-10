@@ -45,7 +45,7 @@ public class MPFileUserManager extends MPUserManager<MPFileUser> {
     private static final MPFileUserManager instance;
 
     static {
-        String rcDir = System.getenv( MPConstant.env_rcDir );
+        String rcDir = System.getenv( MPConstants.env_rcDir );
         if (rcDir != null)
             instance = create( new File( rcDir ) );
         else

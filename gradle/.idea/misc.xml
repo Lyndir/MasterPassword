@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <type id="jpa" />
+    <type id="web" />
+  </component>
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/../../opal/pom.xml" />
+        <option value="$PROJECT_DIR$/../../pom.xml" />
       </list>
     </option>
   </component>

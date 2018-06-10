@@ -9,7 +9,7 @@ configurations {
 }
 
 dependencies {
-    implementation group: 'com.lyndir.lhunath.opal', name: 'opal-system', version: '1.7-p1'
+    implementation group: 'com.lyndir.lhunath.opal', name: 'opal-system', version: '1.7-p2'
 
     api group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.5'
     api group: 'org.jetbrains', name: 'annotations', version: '13.0'

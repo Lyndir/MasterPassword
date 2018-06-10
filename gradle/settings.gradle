@@ -19,12 +19,11 @@ include 'masterpassword-tests'
 project(':masterpassword-tests').projectDir = new File( '../platform-independent/java/tests' )
 
 include 'masterpassword-gui'
-project(':masterpassword-gui').projectDir = new File( '../platform-independent/gui-java' )
+project(':masterpassword-gui').projectDir = new File( '../platform-independent/java/gui' )
 
-/*
 if (local.containsKey('sdk.dir')) {
     include 'masterpassword-android'
     project(':masterpassword-android').projectDir = new File( '../platform-android' )
 } else {
     logger.warn( "Skipping masterpassword-android since sdk.dir is not defined in local.properties." )
-}*/
+}

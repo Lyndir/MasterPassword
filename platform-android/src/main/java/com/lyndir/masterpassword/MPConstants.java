@@ -16,25 +16,12 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-package com.lyndir.masterpassword.gui;
-
-import com.lyndir.lhunath.opal.system.util.ConversionUtils;
-import com.lyndir.masterpassword.model.MPConstants;
-
+package com.lyndir.masterpassword;
 
 /**
- * @author lhunath, 2014-08-31
+ * @author lhunath, 2018-06-10
  */
-@SuppressWarnings("CallToSystemGetenv")
-public class Config {
+public class MPConstants {
 
-    private static final Config instance = new Config();
-
-    public static Config get() {
-        return instance;
-    }
-
-    public boolean checkForUpdates() {
-        return ConversionUtils.toBoolean( System.getenv( MPConstants.env_checkUpdates ) ).orElse( true );
-    }
+    public static final int MS_PER_S = 1000;
 }

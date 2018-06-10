@@ -25,7 +25,7 @@ import org.joda.time.format.ISODateTimeFormat;
 /**
  * @author lhunath, 2016-10-29
  */
-public final class MPConstant {
+public final class MPConstants {
 
     /* Environment */
 
@@ -39,8 +39,6 @@ public final class MPConstant {
     public static final String env_checkUpdates = "MPW_CHECKUPDATES";
 
     /* Algorithm */
-
-    public static final int MS_PER_S = 1000;
 
     public static final DateTimeFormatter dateTimeFormatter = ISODateTimeFormat.dateTimeNoMillis().withZoneUTC();
 }

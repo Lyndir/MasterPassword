@@ -6,7 +6,7 @@ plugins {
 description = 'Master Password Site Model'
 
 dependencies {
-    implementation group: 'com.lyndir.lhunath.opal', name: 'opal-system', version: '1.7-p1'
+    implementation group: 'com.lyndir.lhunath.opal', name: 'opal-system', version: '1.7-p2'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.5'
 
     api project( ':masterpassword-algorithm' )
