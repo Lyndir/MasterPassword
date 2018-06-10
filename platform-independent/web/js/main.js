@@ -44,7 +44,8 @@ function update(working) {
     }
     else {
         $('#site').removeClass('active');
-        $('#siteName')[0].value = $('#sitePassword')[0].value = '';
+        $('#siteName').val(null);
+        $('#sitePassword').text(null);
     }
 
     // Working
