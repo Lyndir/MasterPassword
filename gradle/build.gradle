@@ -32,6 +32,6 @@ subprojects {
         google()
         jcenter()
         mavenCentral()
-        maven { url 'http://maven.lyndir.com' }
+        maven { url 'https://maven.lyndir.com' }
     }
 }

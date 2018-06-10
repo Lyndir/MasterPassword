@@ -26,8 +26,6 @@ library {
     // Reconfigure the toolchain from C++ to C.
     toolChains {
         withType( GccCompatibleToolChain ) {
-            //TODO: Cross-compiling, blocked by: https://github.com/gradle/gradle-native/issues/169
-            //setTargets( "arm", "arm64", "x86-64", "x86" )
             eachPlatform {
                 cppCompiler.withArguments { addAll( ["-x", "c", "-std=c11", "-Werror", "-DMPW_SODIUM=1"] ) }
             }
@@ -38,11 +36,11 @@ library {
     }
 
     // Cross-compile for these host platforms.
+    // TODO: Cross-compiling, blocked by: https://github.com/gradle/gradle-native/issues/169 - CppLibraryPlugin.java:163
     operatingSystems.set( [objects.named( OperatingSystemFamily, OperatingSystemFamily.WINDOWS ),
                            objects.named( OperatingSystemFamily, OperatingSystemFamily.LINUX ),
                            objects.named( OperatingSystemFamily, OperatingSystemFamily.MAC_OS )] )
 
-    //
     binaries.configureEach {
         // Resolve a standard name for the platform.
         def platform = standardOperatingSystem( targetPlatform )
