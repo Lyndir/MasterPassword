@@ -16,7 +16,7 @@ dependencies {
     api group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
     api group: 'com.google.code.findbugs', name: 'findbugs-annotations', version: '3.0.1'
 
-    lib project( path: ':masterpassword-core', configuration: 'default' )
+    //lib project( path: ':masterpassword-core', configuration: 'default' )
 }
 
 processResources {

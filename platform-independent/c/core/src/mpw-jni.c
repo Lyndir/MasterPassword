@@ -6,6 +6,14 @@
 
 // TODO: We may need to zero the jbytes safely.
 
+JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved) {
+    JNIEnv* env;
+    if (vm->GetEnv(&env, JNI_VERSION_1_6) != JNI_OK)
+        return -1;
+
+    return JNI_VERSION_1_6;
+}
+
 /* native int _masterKey(final String fullName, final byte[] masterPassword, final Version version) */
 JNIEXPORT jbyteArray JNICALL Java_com_lyndir_masterpassword_impl_MPAlgorithmV0__1masterKey(JNIEnv *env, jobject obj,
         jstring fullName, jbyteArray masterPassword, jint algorithmVersion) {
