@@ -18,6 +18,9 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved) {
 JNIEXPORT jbyteArray JNICALL Java_com_lyndir_masterpassword_impl_MPAlgorithmV0__1masterKey(JNIEnv *env, jobject obj,
         jstring fullName, jbyteArray masterPassword, jint algorithmVersion) {
 
+    if (!fullName || !masterPassword)
+        return NULL;
+
     const char *fullNameString = (*env)->GetStringUTFChars( env, fullName, NULL );
     jbyte *masterPasswordString = (*env)->GetByteArrayElements( env, masterPassword, NULL );
 
@@ -40,6 +43,9 @@ JNIEXPORT jbyteArray JNICALL Java_com_lyndir_masterpassword_impl_MPAlgorithmV0__
 JNIEXPORT jbyteArray JNICALL Java_com_lyndir_masterpassword_impl_MPAlgorithmV0__1siteKey(JNIEnv *env, jobject obj,
         jbyteArray masterKey, jstring siteName, jlong siteCounter, jint keyPurpose, jstring keyContext, jint algorithmVersion) {
 
+    if (!masterKey || !siteName)
+        return NULL;
+
     jbyte *masterKeyBytes = (*env)->GetByteArrayElements( env, masterKey, NULL );
     const char *siteNameString = (*env)->GetStringUTFChars( env, siteName, NULL );
     const char *keyContextString = keyContext? (*env)->GetStringUTFChars( env, keyContext, NULL ): NULL;
@@ -48,7 +54,8 @@ JNIEXPORT jbyteArray JNICALL Java_com_lyndir_masterpassword_impl_MPAlgorithmV0__
             (MPKeyPurpose)keyPurpose, keyContextString, (MPAlgorithmVersion)algorithmVersion );
     (*env)->ReleaseByteArrayElements( env, masterKey, masterKeyBytes, JNI_ABORT );
     (*env)->ReleaseStringUTFChars( env, siteName, siteNameString );
-    (*env)->ReleaseStringUTFChars( env, keyContext, keyContextString );
+    if (keyContext)
+        (*env)->ReleaseStringUTFChars( env, keyContext, keyContextString );
 
     if (!siteKeyBytes)
         return NULL;
@@ -67,6 +74,9 @@ JNIEXPORT jstring JNICALL Java_com_lyndir_masterpassword_impl_MPAlgorithmV0__1si
         jbyteArray masterKey, jbyteArray siteKey, jstring siteName, jlong siteCounter, jint keyPurpose, jstring keyContext,
         jint resultType, jstring resultParam, jint algorithmVersion) {
 
+    if (!masterKey || !siteKey || !siteName)
+        return NULL;
+
     jbyte *masterKeyBytes = (*env)->GetByteArrayElements( env, masterKey, NULL );
     jbyte *siteKeyBytes = (*env)->GetByteArrayElements( env, siteKey, NULL );
     const char *siteNameString = (*env)->GetStringUTFChars( env, siteName, NULL );
@@ -78,8 +88,10 @@ JNIEXPORT jstring JNICALL Java_com_lyndir_masterpassword_impl_MPAlgorithmV0__1si
     (*env)->ReleaseByteArrayElements( env, masterKey, masterKeyBytes, JNI_ABORT );
     (*env)->ReleaseByteArrayElements( env, siteKey, siteKeyBytes, JNI_ABORT );
     (*env)->ReleaseStringUTFChars( env, siteName, siteNameString );
-    (*env)->ReleaseStringUTFChars( env, keyContext, keyContextString );
-    (*env)->ReleaseStringUTFChars( env, resultParam, resultParamString );
+    if (keyContext)
+        (*env)->ReleaseStringUTFChars( env, keyContext, keyContextString );
+    if (resultParam)
+        (*env)->ReleaseStringUTFChars( env, resultParam, resultParamString );
 
     if (!siteResultString)
         return NULL;
@@ -97,6 +109,9 @@ JNIEXPORT jstring JNICALL Java_com_lyndir_masterpassword_impl_MPAlgorithmV0__1si
         jbyteArray masterKey, jbyteArray siteKey, jstring siteName, jlong siteCounter, jint keyPurpose, jstring keyContext,
         jint resultType, jstring resultParam, jint algorithmVersion) {
 
+    if (!masterKey || !siteKey || !siteName || !resultParam)
+        return NULL;
+
     jbyte *masterKeyBytes = (*env)->GetByteArrayElements( env, masterKey, NULL );
     jbyte *siteKeyBytes = (*env)->GetByteArrayElements( env, siteKey, NULL );
     const char *siteNameString = (*env)->GetStringUTFChars( env, siteName, NULL );
@@ -108,8 +123,10 @@ JNIEXPORT jstring JNICALL Java_com_lyndir_masterpassword_impl_MPAlgorithmV0__1si
     (*env)->ReleaseByteArrayElements( env, masterKey, masterKeyBytes, JNI_ABORT );
     (*env)->ReleaseByteArrayElements( env, siteKey, siteKeyBytes, JNI_ABORT );
     (*env)->ReleaseStringUTFChars( env, siteName, siteNameString );
-    (*env)->ReleaseStringUTFChars( env, keyContext, keyContextString );
-    (*env)->ReleaseStringUTFChars( env, resultParam, resultParamString );
+    if (keyContextString)
+        (*env)->ReleaseStringUTFChars( env, keyContext, keyContextString );
+    if (resultParam)
+        (*env)->ReleaseStringUTFChars( env, resultParam, resultParamString );
 
     if (!siteStateString)
         return NULL;
