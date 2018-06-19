@@ -21,6 +21,7 @@ artifacts {
 }
 
 library {
+    baseName.set( "mpw" )
     linkage.set( [Linkage.STATIC, Linkage.SHARED] )
 
     // Reconfigure the toolchain from C++ to C.

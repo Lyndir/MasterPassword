@@ -1,5 +1,5 @@
 ### CMAKE
-project( mpw-cli C )
+project( masterpassword-cli C )
 cmake_minimum_required( VERSION 3.0.2 )
 
 

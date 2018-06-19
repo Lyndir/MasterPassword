@@ -40,8 +40,16 @@ public final class Native {
 
     @SuppressWarnings({ "HardcodedFileSeparator", "LoadLibraryWithNonConstantString" })
     public static void load(final Class<?> context, final String name) {
+
+        // Try to load the library using the native system.
         try {
-            // Find and open a stream to the packaged library resource.
+            System.loadLibrary( name );
+            return;
+        } catch (@SuppressWarnings("ErrorNotRethrown") final UnsatisfiedLinkError ignored) {
+        }
+
+        // Try to find and open a stream to the packaged library resource.
+        try {
             String      library          = System.mapLibraryName( name );
             int         libraryDot       = library.lastIndexOf( EXTENSION_SEPARATOR );
             String      libraryName      = (libraryDot > 0)? library.substring( 0, libraryDot ): library;

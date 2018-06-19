@@ -42,7 +42,7 @@ public class MPAlgorithmV0 extends MPAlgorithm {
     protected static final int    AES_BLOCKSIZE      = 128 /* bit */;
 
     static {
-        Native.load( MPAlgorithmV0.class, "masterpassword-core" );
+        Native.load( MPAlgorithmV0.class, "mpw" );
     }
 
     public final Version version = MPAlgorithm.Version.V0;
