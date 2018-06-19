@@ -8,8 +8,8 @@ android {
         applicationId 'com.lyndir.masterpassword'
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 20501
-        versionName '2.5.1'
+        versionCode 20701
+        versionName '2.7.1'
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
