@@ -27,6 +27,7 @@ build
 !/build
 .gradle
 local.properties
+/platform-android/.externalNativeBuild
 
 # Maven
 target
