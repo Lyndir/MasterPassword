@@ -21,10 +21,15 @@ artifacts {
 }
 
 library {
-    linkage.set( [Linkage.STATIC, Linkage.SHARED] )
+    linkage.set( [ Linkage.SHARED ] )
 
     // Reconfigure the toolchain from C++ to C.
     toolChains {
+        withType( VisualCpp ) {
+            eachPlatform {
+                cppCompiler.withArguments { addAll( ["/TC", "/DMPW_SODIUM=1"] ) }
+            }
+        }
         withType( GccCompatibleToolChain ) {
             eachPlatform {
                 cppCompiler.withArguments { addAll( ["-x", "c", "-std=c11", "-Werror", "-DMPW_SODIUM=1"] ) }
@@ -52,7 +57,7 @@ library {
 
             // Depend on libsodium from `lib`; run `lib/bin/build_libsodium-${platform}` first.
             add( includePathConfiguration.name,
-                 files( "../../../lib/libsodium/build-${platform}~/out/include" ) )
+                 files( "../../../lib/libsodium/src/libsodium/include" ) )
             add( linkLibraries.name,
                  fileTree( "../../../lib/libsodium/build-${platform}~/out/lib" ) )
         }

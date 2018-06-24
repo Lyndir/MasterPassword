@@ -62,6 +62,25 @@ void mpw_uint64(const uint64_t number, uint8_t buf[8]) {
     buf[7] = (uint8_t)((number >> 0L) & UINT8_MAX);
 }
 
+const char **mpw_strings(size_t *count, const char *strings, ...) {
+
+    va_list args;
+    va_start( args, strings );
+    char **array = NULL;
+    size_t arraySize = 0;
+    for (const char *string; string = va_arg( args, const char * );) {
+        size_t cursor = arraySize;
+        if (!mpw_realloc( &array, &arraySize, sizeof(string) )) {
+            mpw_free( &array, arraySize );
+            return NULL;
+        }
+        array[cursor] = string;
+    }
+    va_end( args );
+
+    return array;
+}
+
 bool mpw_push_buf(uint8_t **buffer, size_t *bufferSize, const void *pushBuffer, const size_t pushSize) {
 
     if (!buffer || !bufferSize || !pushBuffer || !pushSize)
@@ -275,14 +294,15 @@ static uint8_t const *mpw_aes(bool encrypt, const uint8_t *key, const size_t key
         return NULL;
 
     // IV = zero
-    uint8_t iv[AES_BLOCKLEN];
-    mpw_zero( iv, sizeof iv );
+    static uint8_t *iv = NULL;
+    if (!iv)
+        iv = calloc( AES_BLOCKLEN, sizeof( uint8_t ) );
 
     // Add PKCS#7 padding
     uint32_t aesSize = ((uint32_t)*bufSize + AES_BLOCKLEN - 1) & -AES_BLOCKLEN; // round up to block size.
     if (encrypt && !(*bufSize % AES_BLOCKLEN)) // add pad block if plain text fits block size.
         encrypt += AES_BLOCKLEN;
-    uint8_t aesBuf[aesSize];
+    uint8_t *aesBuf = malloc( aesSize );
     memcpy( aesBuf, buf, *bufSize );
     memset( aesBuf + *bufSize, aesSize - *bufSize, aesSize - *bufSize );
     uint8_t *resultBuf = malloc( aesSize );
@@ -291,8 +311,7 @@ static uint8_t const *mpw_aes(bool encrypt, const uint8_t *key, const size_t key
         AES_CBC_encrypt_buffer( resultBuf, aesBuf, aesSize, key, iv );
     else
         AES_CBC_decrypt_buffer( resultBuf, aesBuf, aesSize, key, iv );
-    mpw_zero( aesBuf, aesSize );
-    mpw_zero( iv, AES_BLOCKLEN );
+    mpw_free( aesBuf, aesSize );
 
     // Truncate PKCS#7 padding
     if (encrypt)
@@ -495,4 +514,16 @@ char *mpw_strndup(const char *src, size_t max) {
     dst[len] = '\0';
 
     return dst;
+}
+
+int *mpw_strncasecmp(const char *s1, const char *s2, size_t max) {
+
+    if (s1 && s2 && max)
+        for (; --max > 0; ++s1, ++s2) {
+            int cmp = tolower( *(unsigned char *)s1 ) - tolower( *(unsigned char *)s2 );
+            if (!cmp || *s1 == '\0')
+                return cmp;
+        }
+
+    return 0;
 }

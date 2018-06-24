@@ -53,38 +53,31 @@ const MPResultType mpw_typeWithName(const char *typeName) {
             return MPResultTypeDeriveKey;
     }
 
-    // Lower-case typeName to standardize it.
-    size_t stdTypeNameSize = strlen( typeName );
-    char stdTypeName[stdTypeNameSize + 1];
-    for (size_t c = 0; c < stdTypeNameSize; ++c)
-        stdTypeName[c] = (char)tolower( typeName[c] );
-    stdTypeName[stdTypeNameSize] = '\0';
-
     // Find what password type is represented by the type name.
-    if (strncmp( mpw_nameForType( MPResultTypeTemplateMaximum ), stdTypeName, strlen( stdTypeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_nameForType( MPResultTypeTemplateMaximum ), typeName, strlen( typeName ) ) == 0)
         return MPResultTypeTemplateMaximum;
-    if (strncmp( mpw_nameForType( MPResultTypeTemplateLong ), stdTypeName, strlen( stdTypeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_nameForType( MPResultTypeTemplateLong ), typeName, strlen( typeName ) ) == 0)
         return MPResultTypeTemplateLong;
-    if (strncmp( mpw_nameForType( MPResultTypeTemplateMedium ), stdTypeName, strlen( stdTypeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_nameForType( MPResultTypeTemplateMedium ), typeName, strlen( typeName ) ) == 0)
         return MPResultTypeTemplateMedium;
-    if (strncmp( mpw_nameForType( MPResultTypeTemplateBasic ), stdTypeName, strlen( stdTypeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_nameForType( MPResultTypeTemplateBasic ), typeName, strlen( typeName ) ) == 0)
         return MPResultTypeTemplateBasic;
-    if (strncmp( mpw_nameForType( MPResultTypeTemplateShort ), stdTypeName, strlen( stdTypeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_nameForType( MPResultTypeTemplateShort ), typeName, strlen( typeName ) ) == 0)
         return MPResultTypeTemplateShort;
-    if (strncmp( mpw_nameForType( MPResultTypeTemplatePIN ), stdTypeName, strlen( stdTypeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_nameForType( MPResultTypeTemplatePIN ), typeName, strlen( typeName ) ) == 0)
         return MPResultTypeTemplatePIN;
-    if (strncmp( mpw_nameForType( MPResultTypeTemplateName ), stdTypeName, strlen( stdTypeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_nameForType( MPResultTypeTemplateName ), typeName, strlen( typeName ) ) == 0)
         return MPResultTypeTemplateName;
-    if (strncmp( mpw_nameForType( MPResultTypeTemplatePhrase ), stdTypeName, strlen( stdTypeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_nameForType( MPResultTypeTemplatePhrase ), typeName, strlen( typeName ) ) == 0)
         return MPResultTypeTemplatePhrase;
-    if (strncmp( mpw_nameForType( MPResultTypeStatefulPersonal ), stdTypeName, strlen( stdTypeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_nameForType( MPResultTypeStatefulPersonal ), typeName, strlen( typeName ) ) == 0)
         return MPResultTypeStatefulPersonal;
-    if (strncmp( mpw_nameForType( MPResultTypeStatefulDevice ), stdTypeName, strlen( stdTypeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_nameForType( MPResultTypeStatefulDevice ), typeName, strlen( typeName ) ) == 0)
         return MPResultTypeStatefulDevice;
-    if (strncmp( mpw_nameForType( MPResultTypeDeriveKey ), stdTypeName, strlen( stdTypeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_nameForType( MPResultTypeDeriveKey ), typeName, strlen( typeName ) ) == 0)
         return MPResultTypeDeriveKey;
 
-    dbg( "Not a generated type name: %s", stdTypeName );
+    dbg( "Not a generated type name: %s", typeName );
     return (MPResultType)ERR;
 }
 
@@ -129,35 +122,35 @@ const char **mpw_templatesForType(MPResultType type, size_t *count) {
 
     switch (type) {
         case MPResultTypeTemplateMaximum:
-            return mpw_alloc_array( count, const char *,
-                    "anoxxxxxxxxxxxxxxxxx", "axxxxxxxxxxxxxxxxxno" );
+            return mpw_strings( count,
+                    "anoxxxxxxxxxxxxxxxxx", "axxxxxxxxxxxxxxxxxno", NULL );
         case MPResultTypeTemplateLong:
-            return mpw_alloc_array( count, const char *,
+            return mpw_strings( count,
                     "CvcvnoCvcvCvcv", "CvcvCvcvnoCvcv", "CvcvCvcvCvcvno",
                     "CvccnoCvcvCvcv", "CvccCvcvnoCvcv", "CvccCvcvCvcvno",
                     "CvcvnoCvccCvcv", "CvcvCvccnoCvcv", "CvcvCvccCvcvno",
                     "CvcvnoCvcvCvcc", "CvcvCvcvnoCvcc", "CvcvCvcvCvccno",
                     "CvccnoCvccCvcv", "CvccCvccnoCvcv", "CvccCvccCvcvno",
                     "CvcvnoCvccCvcc", "CvcvCvccnoCvcc", "CvcvCvccCvccno",
-                    "CvccnoCvcvCvcc", "CvccCvcvnoCvcc", "CvccCvcvCvccno" );
+                    "CvccnoCvcvCvcc", "CvccCvcvnoCvcc", "CvccCvcvCvccno", NULL );
         case MPResultTypeTemplateMedium:
-            return mpw_alloc_array( count, const char *,
-                    "CvcnoCvc", "CvcCvcno" );
+            return mpw_strings( count,
+                    "CvcnoCvc", "CvcCvcno", NULL );
         case MPResultTypeTemplateShort:
-            return mpw_alloc_array( count, const char *,
-                    "Cvcn" );
+            return mpw_strings( count,
+                    "Cvcn", NULL );
         case MPResultTypeTemplateBasic:
-            return mpw_alloc_array( count, const char *,
-                    "aaanaaan", "aannaaan", "aaannaaa" );
+            return mpw_strings( count,
+                    "aaanaaan", "aannaaan", "aaannaaa", NULL );
         case MPResultTypeTemplatePIN:
-            return mpw_alloc_array( count, const char *,
-                    "nnnn" );
+            return mpw_strings( count,
+                    "nnnn", NULL );
         case MPResultTypeTemplateName:
-            return mpw_alloc_array( count, const char *,
-                    "cvccvcvcv" );
+            return mpw_strings( count,
+                    "cvccvcvcv", NULL );
         case MPResultTypeTemplatePhrase:
-            return mpw_alloc_array( count, const char *,
-                    "cvcc cvc cvccvcv cvc", "cvc cvccvcvcv cvcv", "cv cvccv cvc cvcvccv" );
+            return mpw_strings( count,
+                    "cvcc cvc cvccvcv cvc", "cvc cvccvcvcv cvcv", "cv cvccv cvc cvcvccv", NULL );
         default: {
             dbg( "Unknown generated type: %d", type );
             return NULL;
@@ -177,21 +170,14 @@ const char *mpw_templateForType(MPResultType type, uint8_t templateIndex) {
 
 const MPKeyPurpose mpw_purposeWithName(const char *purposeName) {
 
-    // Lower-case and trim optionally leading "generated" string from typeName to standardize it.
-    size_t stdPurposeNameSize = strlen( purposeName );
-    char stdPurposeName[stdPurposeNameSize + 1];
-    for (size_t c = 0; c < stdPurposeNameSize; ++c)
-        stdPurposeName[c] = (char)tolower( purposeName[c] );
-    stdPurposeName[stdPurposeNameSize] = '\0';
-
-    if (strncmp( mpw_nameForPurpose( MPKeyPurposeAuthentication ), stdPurposeName, strlen( stdPurposeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_nameForPurpose( MPKeyPurposeAuthentication ), purposeName, strlen( purposeName ) ) == 0)
         return MPKeyPurposeAuthentication;
-    if (strncmp( mpw_nameForPurpose( MPKeyPurposeIdentification ), stdPurposeName, strlen( stdPurposeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_nameForPurpose( MPKeyPurposeIdentification ), purposeName, strlen( purposeName ) ) == 0)
         return MPKeyPurposeIdentification;
-    if (strncmp( mpw_nameForPurpose( MPKeyPurposeRecovery ), stdPurposeName, strlen( stdPurposeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_nameForPurpose( MPKeyPurposeRecovery ), purposeName, strlen( purposeName ) ) == 0)
         return MPKeyPurposeRecovery;
 
-    dbg( "Not a purpose name: %s", stdPurposeName );
+    dbg( "Not a purpose name: %s", purposeName );
     return (MPKeyPurpose)ERR;
 }
 

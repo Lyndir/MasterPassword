@@ -33,36 +33,36 @@ extern int mpw_verbosity;
 #endif
 
 #ifndef mpw_log
-#define mpw_log(level, ...) ({ \
+#define mpw_log(level, format, ...) do { \
     if (mpw_verbosity >= level) { \
-        mpw_log_do( level, ##__VA_ARGS__ ); \
-    }; })
+        mpw_log_do( level, format, ##__VA_ARGS__ ); \
+    }; } while (0)
 #endif
 
 #ifndef trc
 /** Logging internal state. */
 #define trc_level 3
-#define trc(...) mpw_log( trc_level, ##__VA_ARGS__ )
+#define trc(format, ...) mpw_log( trc_level, format, ##__VA_ARGS__ )
 
 /** Logging state and events interesting when investigating issues. */
 #define dbg_level 2
-#define dbg(...) mpw_log( dbg_level, ##__VA_ARGS__ )
+#define dbg(format, ...) mpw_log( dbg_level, format, ##__VA_ARGS__ )
 
 /** User messages. */
 #define inf_level 1
-#define inf(...) mpw_log( inf_level, ##__VA_ARGS__ )
+#define inf(format, ...) mpw_log( inf_level, format, ##__VA_ARGS__ )
 
 /** Recoverable issues and user suggestions. */
 #define wrn_level 0
-#define wrn(...) mpw_log( wrn_level, ##__VA_ARGS__ )
+#define wrn(format, ...) mpw_log( wrn_level, format, ##__VA_ARGS__ )
 
 /** Unrecoverable issues. */
 #define err_level -1
-#define err(...) mpw_log( err_level, ##__VA_ARGS__ )
+#define err(format, ...) mpw_log( err_level, format, ##__VA_ARGS__ )
 
 /** Issues that lead to abortion. */
 #define ftl_level -2
-#define ftl(...) mpw_log( ftl_level, ##__VA_ARGS__ )
+#define ftl(format, ...) mpw_log( ftl_level, format, ##__VA_ARGS__ )
 #endif
 
 #ifndef min
@@ -98,14 +98,8 @@ void mpw_uint32(const uint32_t number, uint8_t buf[4]);
 void mpw_uint64(const uint64_t number, uint8_t buf[8]);
 
 /** Allocate a new array of _type, assign its element count to _count if not NULL and populate it with the varargs. */
-#define mpw_alloc_array(_count, _type, ...) ({ \
-    _type stackElements[] = { __VA_ARGS__ }; \
-    if (_count) \
-        *_count = sizeof( stackElements ) / sizeof( _type ); \
-    _type *allocElements = malloc( sizeof( stackElements ) ); \
-    memcpy( allocElements, stackElements, sizeof( stackElements ) ); \
-    allocElements; \
- })
+const char **mpw_strings(
+        size_t *count, const char *strings, ...);
 
 /** Push a buffer onto a buffer.  reallocs the given buffer and appends the given buffer. */
 bool mpw_push_buf(
@@ -150,6 +144,20 @@ bool __mpw_free_string(
         ({ __typeof__(strings) _s = strings; const char *__s = *_s; (void)__s; __mpw_free_strings( (char **)_s, __VA_ARGS__ ); })
 bool __mpw_free_strings(
         char **strings, ...);
+#ifdef _MSC_VER
+#undef mpw_realloc
+#define mpw_realloc(buffer, bufferSize, deltaSize) \
+        __mpw_realloc( (const void **)buffer, bufferSize, deltaSize )
+#undef mpw_free
+#define mpw_free(buffer, bufferSize) \
+        __mpw_free( (void **)buffer, bufferSize )
+#undef mpw_free_string
+#define mpw_free_string(string) \
+        __mpw_free_string( (char **)string )
+#undef mpw_free_strings
+#define mpw_free_strings(strings, ...) \
+        __mpw_free_strings( (char **)strings, __VA_ARGS__ )
+#endif
 
 //// Cryptographic functions.
 
@@ -207,5 +215,7 @@ const size_t mpw_utf8_strlen(const char *utf8String);
 char *mpw_strdup(const char *src);
 /** Drop-in for POSIX strndup(3). */
 char *mpw_strndup(const char *src, size_t max);
+/** Drop-in for POSIX strncasecmp(3). */
+int *mpw_strncasecmp(const char *s1, const char *s2, size_t max);
 
 #endif // _MPW_UTIL_H

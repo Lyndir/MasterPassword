@@ -206,7 +206,7 @@ static bool mpw_marshal_write_flat(
         if (strftime( dateString, sizeof( dateString ), "%FT%TZ", gmtime( &site->lastUsed ) ))
             mpw_string_pushf( out, "%s  %8ld  %lu:%lu:%lu  %25s\t%25s\t%s\n",
                     dateString, (long)site->uses, (long)site->type, (long)site->algorithm, (long)site->counter,
-                    loginContent?: "", site->name, content?: "" );
+                    loginContent? loginContent: "", site->name, content? content: "" );
         mpw_free_strings( &content, &loginContent, NULL );
     }
     mpw_free( &masterKey, MPMasterKeySize );
@@ -871,21 +871,14 @@ const MPMarshalFormat mpw_formatWithName(
     if (!formatName || !strlen( formatName ))
         return MPMarshalFormatNone;
 
-    // Lower-case to standardize it.
-    size_t stdFormatNameSize = strlen( formatName );
-    char stdFormatName[stdFormatNameSize + 1];
-    for (size_t c = 0; c < stdFormatNameSize; ++c)
-        stdFormatName[c] = (char)tolower( formatName[c] );
-    stdFormatName[stdFormatNameSize] = '\0';
-
-    if (strncmp( mpw_nameForFormat( MPMarshalFormatNone ), stdFormatName, strlen( stdFormatName ) ) == 0)
+    if (mpw_strncasecmp( mpw_nameForFormat( MPMarshalFormatNone ), formatName, strlen( formatName ) ) == 0)
         return MPMarshalFormatNone;
-    if (strncmp( mpw_nameForFormat( MPMarshalFormatFlat ), stdFormatName, strlen( stdFormatName ) ) == 0)
+    if (mpw_strncasecmp( mpw_nameForFormat( MPMarshalFormatFlat ), formatName, strlen( formatName ) ) == 0)
         return MPMarshalFormatFlat;
-    if (strncmp( mpw_nameForFormat( MPMarshalFormatJSON ), stdFormatName, strlen( stdFormatName ) ) == 0)
+    if (mpw_strncasecmp( mpw_nameForFormat( MPMarshalFormatJSON ), formatName, strlen( formatName ) ) == 0)
         return MPMarshalFormatJSON;
 
-    dbg( "Not a format name: %s", stdFormatName );
+    dbg( "Not a format name: %s", formatName );
     return (MPMarshalFormat)ERR;
 }
 
