@@ -95,7 +95,7 @@ bool mpw_get_json_boolean(
     if (!json_value)
         return defaultValue;
 
-    return json_object_get_boolean( json_value ) == TRUE;
+    return json_object_get_boolean( json_value ) == true;
 }
 #endif
 

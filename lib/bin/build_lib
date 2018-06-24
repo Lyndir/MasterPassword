@@ -50,7 +50,7 @@ _initialize() {
 #
 # Check if all tools needed for the default implementations are available.
 #
-# By default, this will check for `automake` and `autoreconf`.
+# By default, this will check for `automake` (for aclocal) and `autoconf` (for autoreconf).
 initialize_needs() { _initialize_needs "$@"; }
 _initialize_needs() {
     if [[ $platform = windows ]]; then
@@ -58,7 +58,7 @@ _initialize_needs() {
         export VSINSTALLDIR="${VSINSTALLDIR:-$(cd "$(cygpath -F 0x002a)/Microsoft Visual Studio"/*/*/Common7/.. && pwd)}"
         [[ -e "$VSINSTALLDIR/Common7/Tools/VsMSBuildCmd.bat" ]] || { echo >&2 "Missing: msbuild.  Please install 'Build Tools for Visual Studio'."; return 1; }
     else
-        needs automake autoreconf
+        needs automake autoconf
     fi
 }
 

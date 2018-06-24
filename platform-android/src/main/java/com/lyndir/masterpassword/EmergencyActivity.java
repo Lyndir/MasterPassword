@@ -130,7 +130,7 @@ public class EmergencyActivity extends Activity {
         siteNameField.addTextChangedListener( new ValueChangedListener() {
             @Override
             void update() {
-                siteCounterButton.setText( MessageFormat.format( "{0}", 1 ) );
+                siteCounterButton.setText( MessageFormat.format( "{0}", UnsignedInteger.ONE ) );
                 updateSitePassword();
             }
         } );
@@ -153,6 +153,17 @@ public class EmergencyActivity extends Activity {
                         UnsignedInteger.valueOf( siteCounterButton.getText().toString() ).plus( UnsignedInteger.ONE );
                 siteCounterButton.setText( MessageFormat.format( "{0}", counter ) );
                 updateSitePassword();
+            }
+        } );
+        siteCounterButton.setOnLongClickListener( new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(final View v) {
+                if (UnsignedInteger.valueOf( siteCounterButton.getText().toString() ).equals( UnsignedInteger.ONE ))
+                    return false;
+
+                siteCounterButton.setText( MessageFormat.format( "{0}", UnsignedInteger.ONE ) );
+                updateSitePassword();
+                return true;
             }
         } );
         siteVersionButton.setOnClickListener( new View.OnClickListener() {
@@ -229,7 +240,7 @@ public class EmergencyActivity extends Activity {
         MPAlgorithm.Version defaultVersion = preferences.getDefaultVersion();
         siteVersionButton.setTag( defaultVersion );
         siteVersionButton.setText( defaultVersion.name() );
-        siteCounterButton.setText( MessageFormat.format( "{0}", 1 ) );
+        siteCounterButton.setText( MessageFormat.format( "{0}", UnsignedInteger.ONE ) );
 
         if (TextUtils.isEmpty( fullNameField.getText() ))
             fullNameField.requestFocus();

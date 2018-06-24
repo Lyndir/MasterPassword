@@ -5,7 +5,7 @@ variables:
 build_project:
   stage: build
   script:
-    - "( brew install libsodium json-c )"
+    - "( brew bundle )"
     - "( ./lib/bin/build_libsodium-macos )"
     - "( cd ./platform-independent/c/cli && ./clean && targets=all ./build && ./mpw-tests && ./mpw-cli-tests )"
     - "( cd ./gradle && ./gradlew --info clean test )"
