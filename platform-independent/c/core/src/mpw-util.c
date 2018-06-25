@@ -67,17 +67,19 @@ const char **mpw_strings(size_t *count, const char *strings, ...) {
     va_list args;
     va_start( args, strings );
     const char **array = NULL;
-    size_t arraySize = 0;
-    for (const char *string; (string = va_arg( args, const char * ));) {
-        size_t cursor = arraySize;
-        if (!mpw_realloc( &array, &arraySize, sizeof(string) )) {
-            mpw_free( &array, arraySize );
+    size_t size = 0;
+    for (const char *string = strings; string; (string = va_arg( args, const char * ))) {
+        size_t cursor = size / sizeof( *array );
+        if (!mpw_realloc( &array, &size, sizeof( string ) )) {
+            mpw_free( &array, size );
+            *count = 0;
             return NULL;
         }
         array[cursor] = string;
     }
     va_end( args );
 
+    *count = size / sizeof( *array );
     return array;
 }
 
@@ -518,12 +520,9 @@ char *mpw_strndup(const char *src, size_t max) {
 
 int mpw_strncasecmp(const char *s1, const char *s2, size_t max) {
 
-    if (s1 && s2 && max)
-        for (; --max > 0; ++s1, ++s2) {
-            int cmp = tolower( *(unsigned char *)s1 ) - tolower( *(unsigned char *)s2 );
-            if (!cmp || *s1 == '\0')
-                return cmp;
-        }
+    int cmp = 0;
+    for (; !cmp && max-- > 0 && s1 && s2; ++s1, ++s2)
+        cmp = tolower( *(unsigned char *)s1 ) - tolower( *(unsigned char *)s2 );
 
-    return 0;
+    return cmp;
 }

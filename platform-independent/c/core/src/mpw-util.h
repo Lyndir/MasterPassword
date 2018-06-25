@@ -118,9 +118,9 @@ bool mpw_push_int(
 /** Reallocate the given buffer from the given size by adding the delta size.
   * On success, the buffer size pointer will be updated to the buffer's new size
   * and the buffer pointer may be updated to a new memory address.
-  * On failure, the buffer and pointers will remain unaffected.
+  * On failure, the pointers will remain unaffected.
   * @param buffer A pointer to the buffer to reallocate.
-  * @param bufferSize A pointer to the buffer's actual size.
+  * @param bufferSize A pointer to the buffer's current size.
   * @param deltaSize The amount to increase the buffer's size by.
   * @return true if successful, false if reallocation failed.
   */
