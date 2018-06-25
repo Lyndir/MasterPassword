@@ -77,18 +77,28 @@ library {
 
 static String standardOperatingSystem(NativePlatform platform) {
     OperatingSystem os = platform.getOperatingSystem()
-    if (os.isWindows()) {
+    if (os.isWindows())
         return OperatingSystemFamily.WINDOWS
-    } else if (os.isLinux()) {
-        return OperatingSystemFamily.LINUX
-    } else if (os.isMacOsX()) {
+    else if (os.isMacOsX())
         return OperatingSystemFamily.MAC_OS
-    }
+    else if (os.isLinux())
+        return OperatingSystemFamily.LINUX
 
-    return os.name.toLowerCase()
+    // Other systems will need to use a Linux compatibility layer for now.
+    return OperatingSystemFamily.LINUX
 }
 
 static String standardArchitecture(NativePlatform platform) {
     Architecture arch = platform.getArchitecture()
-    return arch.name.toLowerCase().replaceAll( "-", "_" )
+    if (arch.isArm())
+        return "arm"
+    else if (arch.name.toLowerCase( Locale.ROOT ).startsWith( "arm" ))
+        return "arm64"
+    else if (arch.isAmd64())
+        return "x86_64"
+    else if (arch.isI386())
+        return "x86"
+
+    // Other systems will need to be compatible with the x86 architecture.
+    return "x86"
 }
