@@ -18,12 +18,16 @@
 
 package com.lyndir.masterpassword.impl;
 
+import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
+
 import com.google.common.base.Joiner;
+import com.google.common.collect.ImmutableList;
 import com.google.common.io.ByteStreams;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import java.io.*;
 import java.util.Locale;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 
 /**
@@ -45,7 +49,8 @@ public final class Native {
         try {
             System.loadLibrary( name );
             return;
-        } catch (@SuppressWarnings("ErrorNotRethrown") final UnsatisfiedLinkError ignored) {
+        }
+        catch (@SuppressWarnings("ErrorNotRethrown") final UnsatisfiedLinkError ignored) {
         }
 
         // Try to find and open a stream to the packaged library resource.
@@ -82,10 +87,26 @@ public final class Native {
 
     @Nonnull
     private static String getLibraryResource(final String library) {
-        String system       = System.getProperty( "os.name" ).toLowerCase( Locale.ROOT );
-        String architecture = System.getProperty( "os.arch" ).toLowerCase( Locale.ROOT );
-        if ("Mac OS X".equalsIgnoreCase( system ))
+        String system       = ifNotNullElse( System.getProperty( "os.name" ), "linux" ).toLowerCase( Locale.ROOT );
+        String architecture = ifNotNullElse( System.getProperty( "os.arch" ), "x86" ).toLowerCase( Locale.ROOT );
+
+        // Standardize system naming in accordance with masterpassword-core.
+        if (system.contains( "windows" ))
+            system = "windows";
+        else if (system.contains( "mac os x" ) || system.contains( "darwin" ) || system.contains( "osx" ))
             system = "macos";
+        else
+            system = "linux";
+
+        // Standardize architecture naming in accordance with masterpassword-core.
+        if (ImmutableList.of( "arm", "arm-v7", "armv7", "arm32" ).contains( architecture ))
+            architecture = "arm";
+        else if (architecture.startsWith( "arm" ))
+            architecture = "arm64";
+        else if (ImmutableList.of( "x86_64", "amd64", "x64", "x86-64" ).contains( architecture ))
+            architecture = "x86_64";
+        else
+            architecture = "x86";
 
         return Joiner.on( RESOURCE_SEPARATOR ).join( "", NATIVES_PATH, system, architecture, library );
     }
