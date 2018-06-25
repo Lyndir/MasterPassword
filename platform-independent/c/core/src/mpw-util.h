@@ -216,6 +216,6 @@ char *mpw_strdup(const char *src);
 /** Drop-in for POSIX strndup(3). */
 char *mpw_strndup(const char *src, size_t max);
 /** Drop-in for POSIX strncasecmp(3). */
-int *mpw_strncasecmp(const char *s1, const char *s2, size_t max);
+int mpw_strncasecmp(const char *s1, const char *s2, size_t max);
 
 #endif // _MPW_UTIL_H
