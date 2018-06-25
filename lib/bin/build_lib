@@ -222,7 +222,7 @@ _finalize_merge() {
         'windows')
             for arch; do
                 install -d "$prefix/out/lib/$arch"
-                install -p "$prefix/Win32/"*.lib "$prefix/out/lib/"
+                install -p "$prefix/$arch/"*.lib "$prefix/out/lib/$arch/"
             done
         ;;
         'macos'|'ios')

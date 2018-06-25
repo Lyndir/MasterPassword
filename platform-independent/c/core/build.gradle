@@ -51,12 +51,23 @@ library {
         // Resolve a standard name for the platform.
         def platform = standardOperatingSystem( targetPlatform )
 
+        if (project.tasks.findByName('buildLibSodium') == null)
+            archive.dependsOn task( type: Exec, 'buildLibSodium', {
+                workingDir file( "$rootDir/../lib/bin" )
+                commandLine 'bash', "./build_libsodium-${platform}"
+            } )
+//        if (project.tasks.findByName('buildLibJson-c') == null)
+//            archive.dependsOn task( type: Exec, 'buildLibJson-c', {
+//                workingDir file( "$rootDir/../lib/bin" )
+//                commandLine 'bash', "./build_libjson-c-${platform}"
+//            } )
+
         project.dependencies {
             // Depend on JDK for JNI support.
             add( includePathConfiguration.name,
                  files( new File( Jvm.current().javaHome, "include" ) ) { first().eachDir { from it } } )
 
-            // Depend on libsodium from `lib`; run `lib/bin/build_libsodium-${platform}` first.
+            // Depend on libsodium from `lib`.
             add( includePathConfiguration.name,
                  files( "../../../lib/libsodium/src/libsodium/include" ) )
             add( linkLibraries.name,
@@ -64,6 +75,7 @@ library {
         }
     }
 }
+
 
 static String standardOperatingSystem(NativePlatform platform) {
     OperatingSystem os = platform.getOperatingSystem()
