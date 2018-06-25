@@ -53,13 +53,11 @@ library {
 
         if (project.tasks.findByName('buildLibSodium') == null)
             archive.dependsOn task( type: Exec, 'buildLibSodium', {
-                workingDir file( "$rootDir/../lib/bin" )
-                commandLine 'bash', "./build_libsodium-${platform}"
+                commandLine 'bash', "$rootDir/../lib/bin/build_libsodium-${platform}"
             } )
 //        if (project.tasks.findByName('buildLibJson-c') == null)
 //            archive.dependsOn task( type: Exec, 'buildLibJson-c', {
-//                workingDir file( "$rootDir/../lib/bin" )
-//                commandLine 'bash', "./build_libjson-c-${platform}"
+//                commandLine 'bash', "$rootDir/../lib/bin/build_libjson-c-${platform}"
 //            } )
 
         project.dependencies {

@@ -56,10 +56,10 @@ dependencies {
 
 preBuild {
     dependsOn task( type: Exec, 'buildLibSodium', {
-        commandLine "$projectDir/../lib/bin/build_libsodium-android"
+        commandLine 'bash', "$rootDir/../lib/bin/build_libsodium-android"
     } )
     dependsOn task( type: Exec, 'buildLibJson-c', {
-        commandLine "$projectDir/../lib/bin/build_libjson-c-android"
+        commandLine 'bash', "$rootDir/../lib/bin/build_libjson-c-android"
     } )
 }
 
