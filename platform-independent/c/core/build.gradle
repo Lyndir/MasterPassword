@@ -12,9 +12,8 @@ artifacts {
     'default' task( type: Zip, "archive" ) {
         components.withType( ComponentWithRuntimeFile ) {
             if (isOptimized()) {
-                from getRuntimeFile()
-                into standardOperatingSystem( linkTask.get().targetPlatform.get() ) + '/' +
-                     standardArchitecture( linkTask.get().targetPlatform.get() )
+                from runtimeFile
+                into standardOperatingSystem( targetPlatform ) + '/' + standardArchitecture( targetPlatform )
             }
         }
     }
@@ -28,12 +27,12 @@ library {
     toolChains {
         withType( VisualCpp ) {
             eachPlatform {
-                cppCompiler.withArguments { addAll( ["/TC", "/DMPW_SODIUM=1"] ) }
+                cppCompiler.withArguments { addAll( ["/TC", "/MT", "/Ox", "/DMPW_SODIUM=1", "/DSODIUM_STATIC", "/DSODIUM_EXPORT="] ) }
             }
         }
         withType( GccCompatibleToolChain ) {
             eachPlatform {
-                cppCompiler.withArguments { addAll( ["-x", "c", "-std=c11", "-Werror", "-DMPW_SODIUM=1"] ) }
+                cppCompiler.withArguments { addAll( ["-x", "c", "-O3", "-std=c11", "-Werror", "-DMPW_SODIUM=1"] ) }
             }
         }
     }
@@ -47,30 +46,27 @@ library {
                            objects.named( OperatingSystemFamily, OperatingSystemFamily.LINUX ),
                            objects.named( OperatingSystemFamily, OperatingSystemFamily.MAC_OS )] )
 
+    publicHeaders {
+        // Depend on JDK for JNI support.
+        from files( new File( Jvm.current().javaHome, "include" ) ) { first().eachDir { from it } }
+        publicHeaders.from files( "$rootDir/../lib/libsodium/src/libsodium/include" )
+    }
+
     binaries.configureEach {
-        // Resolve a standard name for the platform.
-        def platform = standardOperatingSystem( targetPlatform )
+        def system = standardOperatingSystem( targetPlatform )
 
-        if (project.tasks.findByName('buildLibSodium') == null)
-            archive.dependsOn task( type: Exec, 'buildLibSodium', {
-                commandLine 'bash', "$rootDir/../lib/bin/build_libsodium-${platform}"
-            } )
-//        if (project.tasks.findByName('buildLibJson-c') == null)
-//            archive.dependsOn task( type: Exec, 'buildLibJson-c', {
-//                commandLine 'bash', "$rootDir/../lib/bin/build_libjson-c-${platform}"
-//            } )
-
-        project.dependencies {
-            // Depend on JDK for JNI support.
-            add( includePathConfiguration.name,
-                 files( new File( Jvm.current().javaHome, "include" ) ) { first().eachDir { from it } } )
-
-            // Depend on libsodium from `lib`.
-            add( includePathConfiguration.name,
-                 files( "../../../lib/libsodium/src/libsodium/include" ) )
-            add( linkLibraries.name,
-                 fileTree( "../../../lib/libsodium/build-${platform}~/out/lib" ) )
+        dependencies {
+            implementation fileTree( "$rootDir/../lib/libsodium/build-${system}~/out/lib" )
         }
+
+        if (project.tasks.findByName('build_libsodium') == null)
+            archive.dependsOn task( type: Exec, 'build_libsodium', {
+                commandLine 'bash', "$rootDir/../lib/bin/build_libsodium-${system}"
+            } )
+//        if (project.tasks.findByName('build_libjson-c') == null)
+//            archive.dependsOn task( type: Exec, 'build_libjson-c', {
+//                commandLine 'bash', "$rootDir/../lib/bin/build_libjson-c-${system}"
+//            } )
     }
 }
 
