@@ -19,6 +19,7 @@
 package com.lyndir.masterpassword.gui.platform.mac;
 
 import com.apple.eawt.*;
+import com.google.common.base.Preconditions;
 import com.lyndir.masterpassword.gui.GUI;
 
 
@@ -27,25 +28,30 @@ import com.lyndir.masterpassword.gui.GUI;
  */
 public class AppleGUI extends GUI {
 
+    static Application application;
+
+    static {
+        application = Preconditions.checkNotNull( Application.getApplication(), "Not an Apple Java application." );
+    }
+
     public AppleGUI() {
+        application.addAppEventListener( new ApplicationListener() );
+    }
 
-        Application application = Application.getApplication();
-        application.addAppEventListener( new AppForegroundListener() {
+    private class ApplicationListener implements AppForegroundListener, AppReOpenedListener {
 
-            @Override
-            public void appMovedToBackground(final AppEvent.AppForegroundEvent arg0) {
-            }
+        @Override
+        public void appMovedToBackground(final AppEvent.AppForegroundEvent arg0) {
+        }
 
-            @Override
-            public void appRaisedToForeground(final AppEvent.AppForegroundEvent arg0) {
-                open();
-            }
-        } );
-        application.addAppEventListener( new AppReOpenedListener() {
-            @Override
-            public void appReOpened(final AppEvent.AppReOpenedEvent arg0) {
-                open();
-            }
-        } );
+        @Override
+        public void appRaisedToForeground(final AppEvent.AppForegroundEvent arg0) {
+            open();
+        }
+
+        @Override
+        public void appReOpened(final AppEvent.AppReOpenedEvent arg0) {
+            open();
+        }
     }
 }

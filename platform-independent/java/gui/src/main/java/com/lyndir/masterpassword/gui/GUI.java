@@ -21,8 +21,8 @@ package com.lyndir.masterpassword.gui;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import com.google.common.base.Charsets;
+import com.google.common.io.ByteSource;
 import com.google.common.io.CharSource;
-import com.google.common.io.Resources;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.TypeUtils;
 import com.lyndir.masterpassword.gui.view.PasswordFrame;
@@ -30,8 +30,7 @@ import com.lyndir.masterpassword.gui.view.UnlockFrame;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.net.URI;
-import java.net.URL;
+import java.net.*;
 import java.util.Enumeration;
 import java.util.Optional;
 import java.util.jar.*;
@@ -62,18 +61,24 @@ public class GUI implements UnlockFrame.SignInCallback {
         catch (final UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException ignored) {
         }
 
+        create().open();
+    }
+
+    private static GUI create() {
         try {
             // AppleGUI adds support for macOS features.
             Optional<Class<GUI>> appleGUI = TypeUtils.loadClass( "com.lyndir.masterpassword.gui.platform.mac.AppleGUI" );
             if (appleGUI.isPresent())
-                appleGUI.get().getConstructor().newInstance().open();
-
-            else // No special platform handling.
-                new GUI().open();
+                return appleGUI.get().getConstructor().newInstance();
+        }
+        catch (@SuppressWarnings("ErrorNotRethrown") final LinkageError ignored) {
         }
         catch (final IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
             throw logger.bug( e );
         }
+
+        // Use platform-independent GUI.
+        return new GUI();
     }
 
     private static void checkUpdate() {
@@ -85,10 +90,18 @@ public class GUI implements UnlockFrame.SignInCallback {
                     if (!GUI.class.getCanonicalName().equals( attributes.getValue( Attributes.Name.MAIN_CLASS ) ))
                         continue;
 
-                    String     manifestRevision    = attributes.getValue( Attributes.Name.IMPLEMENTATION_VERSION );
-                    String     upstreamRevisionURL = "https://masterpassword.app/masterpassword-gui.jar.rev";
-                    CharSource upstream            = Resources.asCharSource( URI.create( upstreamRevisionURL ).toURL(), Charsets.UTF_8 );
-                    String     upstreamRevision    = upstream.readFirstLine();
+                    String manifestRevision = attributes.getValue( Attributes.Name.IMPLEMENTATION_VERSION );
+                    String upstreamRevision = new ByteSource() {
+                        @Override
+                        public InputStream openStream()
+                                throws IOException {
+                            URL           url  = URI.create( "https://masterpassword.app/masterpassword-gui.jar.rev" ).toURL();
+                            URLConnection conn = url.openConnection();
+                            conn.addRequestProperty( "User-Agent", "masterpassword-gui" );
+                            return conn.getInputStream();
+                        }
+                    }.asCharSource( Charsets.UTF_8 ).readFirstLine();
+
                     if ((manifestRevision != null) && (upstreamRevision != null) && !manifestRevision.equalsIgnoreCase(
                             upstreamRevision )) {
                         logger.inf( "Local Revision:    <%s>", manifestRevision );
