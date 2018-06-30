@@ -9,30 +9,34 @@ plugins {
 description = 'Master Password Algorithm Implementation'
 
 artifacts {
-    'default' task( type: Zip, "archive" ) {
+    'default' task( type: Zip, 'archive' ) {
+        // TODO: exclude lib files that are produced by the build.
+        from 'lib'
+
         components.withType( ComponentWithRuntimeFile ) {
             if (isOptimized()) {
-                from runtimeFile
-                into standardOperatingSystem( targetPlatform ) + '/' + standardArchitecture( targetPlatform )
+                from runtimeFile, {
+                    into standardOperatingSystem( targetPlatform ) + '/' + standardArchitecture( targetPlatform )
+                }
             }
         }
     }
 }
 
 library {
-    baseName.set( "mpw" )
+    baseName.set( 'mpw' )
     linkage.set( [Linkage.SHARED] )
 
     // Reconfigure the toolchain from C++ to C.
     toolChains {
         withType( VisualCpp ) {
             eachPlatform {
-                cppCompiler.withArguments { addAll( ["/TC", "/MT", "/Ox", "/DMPW_SODIUM=1", "/DSODIUM_STATIC", "/DSODIUM_EXPORT="] ) }
+                cppCompiler.withArguments { addAll( ['/TC', '/MT', '/Ox', '/DMPW_SODIUM=1', '/DSODIUM_STATIC', '/DSODIUM_EXPORT='] ) }
             }
         }
         withType( GccCompatibleToolChain ) {
             eachPlatform {
-                cppCompiler.withArguments { addAll( ["-x", "c", "-O3", "-std=c11", "-Werror", "-DMPW_SODIUM=1"] ) }
+                cppCompiler.withArguments { addAll( ['-x', 'c', '-O3', '-std=c11', '-Werror', '-DMPW_SODIUM=1'] ) }
             }
         }
     }
@@ -44,11 +48,11 @@ library {
                            objects.named( OperatingSystemFamily, OperatingSystemFamily.WINDOWS )] )
 
     components.withType( CppComponent ) {
-        cppSource.from fileTree( "src" )
+        cppSource.from fileTree( 'src' )
 
         privateHeaders {
             // JDK for JNI support.
-            from files( new File( Jvm.current().javaHome, "include" ) ) { first().eachDir { from it } }
+            from files( new File( Jvm.current().javaHome, 'include' ) ) { first().eachDir { from it } }
         }
 
         binaries.configureEach {
@@ -89,17 +93,17 @@ static String standardOperatingSystem(NativePlatform platform) {
 static String standardArchitecture(NativePlatform platform) {
     Architecture arch = platform.getArchitecture()
     if (arch.isArm())
-        return "arm"
+        return 'arm'
 
-    else if (arch.name.toLowerCase( Locale.ROOT ).startsWith( "arm" ))
-        return "arm64"
+    else if (arch.name.toLowerCase( Locale.ROOT ).startsWith( 'arm' ))
+        return 'arm64'
 
     else if (arch.isAmd64())
-        return "x86_64"
+        return 'x86_64'
 
     else if (arch.isI386())
-        return "x86"
+        return 'x86'
 
     // Other systems will need to be compatible with the x86 architecture.
-    return "x86"
+    return 'x86'
 }
