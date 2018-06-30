@@ -55,11 +55,13 @@ dependencies {
 }
 
 preBuild {
-    dependsOn task( type: Exec, 'buildLibSodium', {
+    dependsOn task( type: Exec, 'build_libsodium-android', {
         commandLine 'bash', "$rootDir/../lib/bin/build_libsodium-android"
+        environment 'ANDROID_NDK_HOME', android.ndkDirectory
     } )
-    dependsOn task( type: Exec, 'buildLibJson-c', {
+    dependsOn task( type: Exec, 'build_libjson-c-android', {
         commandLine 'bash', "$rootDir/../lib/bin/build_libjson-c-android"
+        environment 'ANDROID_NDK_HOME', android.ndkDirectory
     } )
 }
 

@@ -21,7 +21,7 @@ artifacts {
 
 library {
     baseName.set( "mpw" )
-    linkage.set( [ Linkage.SHARED ] )
+    linkage.set( [Linkage.SHARED] )
 
     // Reconfigure the toolchain from C++ to C.
     toolChains {
@@ -36,47 +36,49 @@ library {
             }
         }
     }
-    components.withType( CppComponent ) {
-        cppSource.from fileTree( dir: "src", include: "**/*.c" )
-    }
 
     // Cross-compile for these host platforms.
     // TODO: Cross-compiling, blocked by: https://github.com/gradle/gradle-native/issues/169 - CppLibraryPlugin.java:163
-    operatingSystems.set( [objects.named( OperatingSystemFamily, OperatingSystemFamily.WINDOWS ),
-                           objects.named( OperatingSystemFamily, OperatingSystemFamily.LINUX ),
-                           objects.named( OperatingSystemFamily, OperatingSystemFamily.MAC_OS )] )
+    operatingSystems.set( [objects.named( OperatingSystemFamily, OperatingSystemFamily.LINUX ),
+                           objects.named( OperatingSystemFamily, OperatingSystemFamily.MAC_OS ),
+                           objects.named( OperatingSystemFamily, OperatingSystemFamily.WINDOWS )] )
 
-    publicHeaders {
-        // Depend on JDK for JNI support.
-        from files( new File( Jvm.current().javaHome, "include" ) ) { first().eachDir { from it } }
-        publicHeaders.from files( "$rootDir/../lib/libsodium/src/libsodium/include" )
-    }
+    components.withType( CppComponent ) {
+        cppSource.from fileTree( "src" )
 
-    binaries.configureEach {
-        def system = standardOperatingSystem( targetPlatform )
-
-        dependencies {
-            implementation fileTree( "$rootDir/../lib/libsodium/build-${system}~/out/lib" )
+        privateHeaders {
+            // JDK for JNI support.
+            from files( new File( Jvm.current().javaHome, "include" ) ) { first().eachDir { from it } }
         }
 
-        if (project.tasks.findByName('build_libsodium') == null)
-            archive.dependsOn task( type: Exec, 'build_libsodium', {
+        binaries.configureEach {
+            def system = standardOperatingSystem( targetPlatform )
+
+            project.dependencies {
+                add( linkLibraries.name,
+                     fileTree( "../../../lib/libsodium/build-${system}~/out/lib" ) )
+            }
+
+            archive.dependsOn project.tasks.maybeCreate( "build_libsodium-${system}", Exec.class ).configure {
                 commandLine 'bash', "$rootDir/../lib/bin/build_libsodium-${system}"
-            } )
-//        if (project.tasks.findByName('build_libjson-c') == null)
-//            archive.dependsOn task( type: Exec, 'build_libjson-c', {
-//                commandLine 'bash', "$rootDir/../lib/bin/build_libjson-c-${system}"
-//            } )
+                privateHeaders.from "$rootDir/../lib/libsodium/src/libsodium/include"
+            }
+            archive.dependsOn project.tasks.maybeCreate( "build_libjson-c-${system}", Exec.class ).configure {
+                commandLine 'bash', "$rootDir/../lib/bin/build_libjson-c-${system}"
+                privateHeaders.from "$rootDir/../lib/libjson-c/build-${system}~/out"
+            }
+        }
     }
 }
-
 
 static String standardOperatingSystem(NativePlatform platform) {
     OperatingSystem os = platform.getOperatingSystem()
     if (os.isWindows())
         return OperatingSystemFamily.WINDOWS
+
     else if (os.isMacOsX())
         return OperatingSystemFamily.MAC_OS
+
     else if (os.isLinux())
         return OperatingSystemFamily.LINUX
 
@@ -88,10 +90,13 @@ static String standardArchitecture(NativePlatform platform) {
     Architecture arch = platform.getArchitecture()
     if (arch.isArm())
         return "arm"
+
     else if (arch.name.toLowerCase( Locale.ROOT ).startsWith( "arm" ))
         return "arm64"
+
     else if (arch.isAmd64())
         return "x86_64"
+
     else if (arch.isI386())
         return "x86"
 
