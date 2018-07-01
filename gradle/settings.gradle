@@ -1,29 +1,27 @@
 rootProject.name = 'masterpassword'
 
-def local = new Properties();
-try {
-    local.load(file('local.properties').newDataInputStream())
-} catch (FileNotFoundException ignored) {
-}
+def local = new Properties()
+def localFile = file( 'local.properties' )
+localFile.exists() && local.load( localFile.newDataInputStream() )
 
 include 'masterpassword-core'
-project(':masterpassword-core').projectDir = new File( '../platform-independent/c/core' )
+project( ':masterpassword-core' ).projectDir = new File( '../platform-independent/c/core' )
 
 include 'masterpassword-algorithm'
-project(':masterpassword-algorithm').projectDir = new File( '../platform-independent/java/algorithm' )
+project( ':masterpassword-algorithm' ).projectDir = new File( '../platform-independent/java/algorithm' )
 
 include 'masterpassword-model'
-project(':masterpassword-model').projectDir = new File( '../platform-independent/java/model' )
+project( ':masterpassword-model' ).projectDir = new File( '../platform-independent/java/model' )
 
 include 'masterpassword-tests'
-project(':masterpassword-tests').projectDir = new File( '../platform-independent/java/tests' )
+project( ':masterpassword-tests' ).projectDir = new File( '../platform-independent/java/tests' )
 
 include 'masterpassword-gui'
-project(':masterpassword-gui').projectDir = new File( '../platform-independent/java/gui' )
+project( ':masterpassword-gui' ).projectDir = new File( '../platform-independent/java/gui' )
 
-//if (local.containsKey('sdk.dir')) {
+if (local.containsKey( 'sdk.dir' ) && file( local.getProperty( 'sdk.dir' ) ).exists()) {
     include 'masterpassword-android'
-    project(':masterpassword-android').projectDir = new File( '../platform-android' )
-//} else {
-//    logger.warn( "Skipping masterpassword-android since sdk.dir is not defined in local.properties." )
-//}
+    project( ':masterpassword-android' ).projectDir = new File( '../platform-android' )
+} else {
+    logger.warn( "Skipping masterpassword-android since sdk.dir is not defined in local.properties." )
+}

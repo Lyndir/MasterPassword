@@ -64,11 +64,11 @@ library {
             }
 
             archive.dependsOn project.tasks.maybeCreate( "build_libsodium-${system}", Exec.class ).configure {
-                commandLine 'bash', "$rootDir/../lib/bin/build_libsodium-${system}"
+                commandLine 'bash', '-x', "$rootDir/../lib/bin/build_libsodium-${system}"
                 privateHeaders.from "$rootDir/../lib/libsodium/src/libsodium/include"
             }
             archive.dependsOn project.tasks.maybeCreate( "build_libjson-c-${system}", Exec.class ).configure {
-                commandLine 'bash', "$rootDir/../lib/bin/build_libjson-c-${system}"
+                commandLine 'bash', '-x', "$rootDir/../lib/bin/build_libjson-c-${system}"
                 privateHeaders.from "$rootDir/../lib/libjson-c/build-${system}~/out"
             }
         }
