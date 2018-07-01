@@ -151,7 +151,9 @@ _target_prepare() {
 #
 # Configure the library for building the target.
 #
-# By default, this will run `./configure --host=<host> --prefix=<prefix>/<arch> --disable-shared <args>`.
+# By default, this will run `./configure --host=<host> --prefix=<prefix>/<arch> <args>`.
+# By default, some platform-specific arguments will be passed in as well as
+# --enable-pic --disable-pie to ensure the resulting library can be linked again.
 target_configure() { _target_configure "$@"; }
 _target_configure() {
     local prefix=$1 platform=$2 arch=$3; shift 3
@@ -173,7 +175,7 @@ _target_configure() {
         ;;
     esac
 
-    ./configure ${host:+--host="$host"} --prefix="$prefix/$arch" "$@"
+    ./configure ${host:+--host="$host"} --enable-pic --disable-pie --prefix="$prefix/$arch" "$@"
 }
 
 # target_build <prefix> <platform> <arch>
@@ -214,27 +216,34 @@ _finalize() {
 finalize_merge() { _finalize_merge "$@"; }
 _finalize_merge() {
     local prefix=$1 platform=$2; shift 2
+    local archs=( "$@" )
 
-    [[ -e "$prefix/$1/include" ]] && mv -f -- "$prefix/$1/include" "$prefix/out/"
+    [[ -e "$prefix/$archs/include" ]] && mv -f -- "$prefix/$archs/include" "$prefix/out/"
 
     mkdir -p "$prefix/out/lib"
     case "$platform" in
+        'linux')
+            for arch in "${archs[@]}"; do
+                install -d "$prefix/out/lib/$arch"
+                install -p "$prefix/$arch/lib/"*.a "$prefix/out/lib/$arch/"
+            done
+        ;;
         'windows')
-            for arch; do
+            for arch in "${archs[@]}"; do
                 install -d "$prefix/out/lib/$arch"
                 install -p "$prefix/$arch/"*.lib "$prefix/out/lib/$arch/"
             done
         ;;
         'macos'|'ios')
-            for lib in "$prefix/$1/lib/"*; do
+            for lib in "$prefix/$archs/lib/"*; do
                 if lipo -info "$lib" >/dev/null 2>&1; then
-                    local lib=("${lib##*/}") libs=("${@/#/$prefix/}") libs=("${libs[@]/%//lib/$lib}")
+                    local lib=("${lib##*/}") libs=("${archs/#/$prefix/}") libs=("${libs[@]/%//lib/$lib}")
                     lipo -create "${libs[@]}" -output "$prefix/out/lib/$lib"
                 fi
             done
         ;;
         'android')
-            for arch; do
+            for arch in "${archs[@]}"; do
                 local abi=$arch
                 case "$arch" in
                     'arm')      abi='armeabi-v7a' ;;
