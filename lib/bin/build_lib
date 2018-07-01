@@ -237,7 +237,7 @@ _finalize_merge() {
         'macos'|'ios')
             for lib in "$prefix/$archs/lib/"*; do
                 if lipo -info "$lib" >/dev/null 2>&1; then
-                    local lib=("${lib##*/}") libs=("${archs/#/$prefix/}") libs=("${libs[@]/%//lib/$lib}")
+                    local lib=("${lib##*/}") libs=("${archs[@]/#/$prefix/}") libs=("${libs[@]/%//lib/$lib}")
                     lipo -create "${libs[@]}" -output "$prefix/out/lib/$lib"
                 fi
             done
