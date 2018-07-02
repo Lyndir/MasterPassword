@@ -67,9 +67,15 @@ library {
                 commandLine 'bash', '-x', "$rootDir/../lib/bin/build_libsodium-${system}"
                 privateHeaders.from "$rootDir/../lib/libsodium/src/libsodium/include"
             }
+            clean.dependsOn project.tasks.maybeCreate( "clean_libsodium-${system}", Exec.class ).configure {
+                commandLine 'bash', '-x', "$rootDir/../lib/bin/build_libsodium-${system}", 'clean'
+            }
             archive.dependsOn project.tasks.maybeCreate( "build_libjson-c-${system}", Exec.class ).configure {
                 commandLine 'bash', '-x', "$rootDir/../lib/bin/build_libjson-c-${system}"
                 privateHeaders.from "$rootDir/../lib/libjson-c/build-${system}~/out"
+            }
+            clean.dependsOn project.tasks.maybeCreate( "clean_libjson-c-${system}", Exec.class ).configure {
+                commandLine 'bash', '-x', "$rootDir/../lib/bin/build_libjson-c-${system}", 'clean'
             }
         }
     }

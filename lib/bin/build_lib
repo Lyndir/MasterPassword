@@ -69,16 +69,15 @@ _initialize_needs() {
 # By default, this will wipe the prefix, run `make distclean` and `git clean -fdx`.
 clean() { _clean "$@"; }
 _clean() {
-    rm -rf "$prefix"
-
     if [[ $platform = windows ]]; then
         printf '"%%VSINSTALLDIR%%\Common7\Tools\VsMSBuildCmd.bat" && msbuild /t:Clean' > .clean.bat
         cmd //c .clean.bat
         rm -f .clean.bat
+    elif [[ -e Makefile ]] && make -s distclean; then :
+    elif [[ -e .git ]] && git clean -fdx; then :
     fi
 
-    [[ ! -e Makefile ]] || make -s distclean
-    [[ ! -e .git ]] || git clean -fdx
+    rm -rf "$prefix"
 }
 
 # prepare <prefix> <platform> [ <arch> ... ]
@@ -104,7 +103,7 @@ _prepare_clean() {
     local prefix=$1 platform=$2; shift 2
 
     rm -rf "$prefix"
-    install -d "$prefix"
+    install -d "$prefix/out"
 }
 
 # prepare_config <prefix> <platform> [ <arch> ... ]
@@ -116,9 +115,14 @@ prepare_config() { _prepare_config "$@"; }
 _prepare_config() {
     local prefix=$1 platform=$2; shift 2
 
-    [[ $platform = windows ]] && return
+    [[ -e "$prefix/out/.prepared" ]] && return
 
-    [[ -e configure ]] || autoreconf --verbose --install --symlink 2> >(sed 's/^\([^:]*\):[0-9]\{1,\}: /\1: /')
+    if [[ $platform = windows ]]; then :
+    else
+        autoreconf --verbose --install --symlink 2> >(sed 's/^\([^:]*\):[0-9]\{1,\}: /\1: /')
+    fi
+
+    touch "$prefix/out/.prepared"
 }
 
 # target <prefix> <platform> <arch>
@@ -142,9 +146,10 @@ target_prepare() { _target_prepare "$@"; }
 _target_prepare() {
     local prefix=$1 platform=$2 arch=$3; shift 3
 
-    [[ $platform = windows ]] && return
-
-    [[ ! -e Makefile ]] || make -s clean
+    if [[ $platform = windows ]]; then :
+    else
+        [[ ! -e Makefile ]] || make -s clean
+    fi
 }
 
 # target_configure <prefix> <platform> <arch> [ <args> ... ]
@@ -220,7 +225,7 @@ _finalize_merge() {
 
     [[ -e "$prefix/$archs/include" ]] && mv -f -- "$prefix/$archs/include" "$prefix/out/"
 
-    mkdir -p "$prefix/out/lib"
+    install -d "$prefix/out/lib"
     case "$platform" in
         'linux')
             for arch in "${archs[@]}"; do
