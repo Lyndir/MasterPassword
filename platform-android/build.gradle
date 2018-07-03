@@ -22,8 +22,8 @@ android {
     }
     sourceSets {
         main {
-            jniLibs.srcDirs "$projectDir/../lib/libsodium/build-android~/out/lib",
-                            "$projectDir/../lib/libjson-c/build-android~/out/lib"
+            jniLibs.srcDirs "$rootDir/../lib/libsodium/build-android~/out/lib",
+                            "$rootDir/../lib/libjson-c/build-android~/out/lib"
         }
     }
 
@@ -65,3 +65,13 @@ preBuild {
     } )
 }
 
+clean {
+    dependsOn task( type: Exec, 'clean_libsodium-android', {
+        commandLine 'bash', "$rootDir/../lib/bin/build_libsodium-android", 'clean'
+        environment 'ANDROID_NDK_HOME', android.ndkDirectory
+    } )
+    dependsOn task( type: Exec, 'clean_libjson-c-android', {
+        commandLine 'bash', "$rootDir/../lib/bin/build_libjson-c-android", 'clean'
+        environment 'ANDROID_NDK_HOME', android.ndkDirectory
+    } )
+}

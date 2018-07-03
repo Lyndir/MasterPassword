@@ -13,7 +13,5 @@ dependencies {
     testImplementation group: 'org.testng', name: 'testng', version: '6.8.5'
     testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.2'
 }
-//tasks.withType(Test) {
-//    systemProperty "java.library.path", "/Users/lhunath/Documents/workspace/lyndir/MasterPassword/core/java/algorithm/build/libs/mpw/shared"
-//}
+
 test.useTestNG()

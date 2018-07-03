@@ -21,4 +21,5 @@ dependencies {
     testImplementation group: 'org.testng', name: 'testng', version: '6.8.5'
     testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.2'
 }
+
 test.useTestNG()

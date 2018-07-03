@@ -60,22 +60,22 @@ library {
 
             project.dependencies {
                 add( linkLibraries.name,
-                     fileTree( "../../../lib/libsodium/build-${system}~/out/lib" ) )
+                     fileTree( "$rootDir/../lib/libsodium/build-${system}~/out/lib" ) )
             }
 
             archive.dependsOn project.tasks.maybeCreate( "build_libsodium-${system}", Exec.class ).configure {
-                commandLine 'bash', '-x', "$rootDir/../lib/bin/build_libsodium-${system}"
+                commandLine 'bash', "$rootDir/../lib/bin/build_libsodium-${system}"
                 privateHeaders.from "$rootDir/../lib/libsodium/src/libsodium/include"
             }
             clean.dependsOn project.tasks.maybeCreate( "clean_libsodium-${system}", Exec.class ).configure {
-                commandLine 'bash', '-x', "$rootDir/../lib/bin/build_libsodium-${system}", 'clean'
+                commandLine 'bash', "$rootDir/../lib/bin/build_libsodium-${system}", 'clean'
             }
             archive.dependsOn project.tasks.maybeCreate( "build_libjson-c-${system}", Exec.class ).configure {
-                commandLine 'bash', '-x', "$rootDir/../lib/bin/build_libjson-c-${system}"
-                privateHeaders.from "$rootDir/../lib/libjson-c/build-${system}~/out"
+                commandLine 'bash', "$rootDir/../lib/bin/build_libjson-c-${system}"
+                privateHeaders.from "$rootDir/../lib/libjson-c/build-${system}~/out/include"
             }
             clean.dependsOn project.tasks.maybeCreate( "clean_libjson-c-${system}", Exec.class ).configure {
-                commandLine 'bash', '-x', "$rootDir/../lib/bin/build_libjson-c-${system}", 'clean'
+                commandLine 'bash', "$rootDir/../lib/bin/build_libjson-c-${system}", 'clean'
             }
         }
     }
@@ -92,7 +92,7 @@ static String standardOperatingSystem(NativePlatform platform) {
     else if (os.isLinux())
         return OperatingSystemFamily.LINUX
 
-    // Other systems will need to use a Linux compatibility layer for now.
+    // Other systems will need to use a Linux compatibility layer.
     return OperatingSystemFamily.LINUX
 }
 
