@@ -1783,7 +1783,7 @@
 				93D39CF7DB942C69D1C5D6BE /* mpw-util.h */,
 			);
 			name = core;
-			path = ../platform-independent/c/core/src;
+			path = "../platform-independent/c/core/src";
 			sourceTree = "<group>";
 		};
 		DA0CC4F41EAB99BA009A8ED9 /* Resources */ = {
@@ -4311,8 +4311,6 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/$(PLATFORM_NAME)/include\"",
-					"\"$(PROJECT_DIR)/External/libsodium/libsodium-ios/include\"",
-					"\"$(PROJECT_DIR)/External/libjson-c/libjson-c-ios/include\"",
 					"$(inherited)",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -4348,13 +4346,19 @@
 				GCC_C_LANGUAGE_STANDARD = c11;
 				GCC_PREFIX_HEADER = "Source/MasterPassword-Prefix.pch";
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/$(PLATFORM_NAME)/include\"",
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/../lib/libsodium/build-ios~/out/include\"",
+					"\"$(PROJECT_DIR)/../lib/libjson-c/build-ios~/out/include\"",
+				);
 				INFOPLIST_FILE = "Source/iOS/MasterPassword-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/../lib/libsodium/build-ios~/out/lib",
-					"$(PROJECT_DIR)/../lib/libjson-c/build-ios~/out/lib",
+					"\"$(PROJECT_DIR)/../lib/libsodium/build-ios~/out/lib\"",
+					"\"$(PROJECT_DIR)/../lib/libjson-c/build-ios~/out/lib\"",
 				);
 				OTHER_CFLAGS = (
 					"-DMPW_SODIUM=1",
@@ -4526,8 +4530,6 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/$(PLATFORM_NAME)/include\"",
-					"\"$(PROJECT_DIR)/External/libsodium/libsodium-ios/include\"",
-					"\"$(PROJECT_DIR)/External/libjson-c/libjson-c-ios/include\"",
 					"$(inherited)",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -4637,8 +4639,6 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/$(PLATFORM_NAME)/include\"",
-					"\"$(PROJECT_DIR)/External/libsodium/libsodium-ios/include\"",
-					"\"$(PROJECT_DIR)/External/libjson-c/libjson-c-ios/include\"",
 					"$(inherited)",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -4673,13 +4673,19 @@
 				GCC_C_LANGUAGE_STANDARD = c11;
 				GCC_PREFIX_HEADER = "Source/MasterPassword-Prefix.pch";
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/$(PLATFORM_NAME)/include\"",
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/../lib/libsodium/build-ios~/out/include\"",
+					"\"$(PROJECT_DIR)/../lib/libjson-c/build-ios~/out/include\"",
+				);
 				INFOPLIST_FILE = "Source/iOS/MasterPassword-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/../lib/libsodium/build-ios~/out/lib",
-					"$(PROJECT_DIR)/../lib/libjson-c/build-ios~/out/lib",
+					"\"$(PROJECT_DIR)/../lib/libsodium/build-ios~/out/lib\"",
+					"\"$(PROJECT_DIR)/../lib/libjson-c/build-ios~/out/lib\"",
 				);
 				OTHER_CFLAGS = (
 					"-DMPW_SODIUM=1",
@@ -4712,13 +4718,19 @@
 				GCC_C_LANGUAGE_STANDARD = c11;
 				GCC_PREFIX_HEADER = "Source/MasterPassword-Prefix.pch";
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/$(PLATFORM_NAME)/include\"",
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/../lib/libsodium/build-ios~/out/include\"",
+					"\"$(PROJECT_DIR)/../lib/libjson-c/build-ios~/out/include\"",
+				);
 				INFOPLIST_FILE = "Source/iOS/MasterPassword-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/../lib/libsodium/build-ios~/out/lib",
-					"$(PROJECT_DIR)/../lib/libjson-c/build-ios~/out/lib",
+					"\"$(PROJECT_DIR)/../lib/libsodium/build-ios~/out/lib\"",
+					"\"$(PROJECT_DIR)/../lib/libjson-c/build-ios~/out/lib\"",
 				);
 				OTHER_CFLAGS = (
 					"-DMPW_SODIUM=1",

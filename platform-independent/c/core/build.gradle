@@ -65,7 +65,7 @@ library {
 
             archive.dependsOn project.tasks.maybeCreate( "build_libsodium-${system}", Exec.class ).configure {
                 commandLine 'bash', "$rootDir/../lib/bin/build_libsodium-${system}"
-                privateHeaders.from "$rootDir/../lib/libsodium/src/libsodium/include"
+                privateHeaders.from "$rootDir/../lib/libsodium/build-${system}~/out/include"
             }
             clean.dependsOn project.tasks.maybeCreate( "clean_libsodium-${system}", Exec.class ).configure {
                 commandLine 'bash', "$rootDir/../lib/bin/build_libsodium-${system}", 'clean'

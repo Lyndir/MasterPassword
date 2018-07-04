@@ -1820,7 +1820,7 @@
 				DA6773C61A4746AF004F356A /* mpw-util.h */,
 			);
 			name = core;
-			path = ../platform-independent/c/core/src;
+			path = "../platform-independent/c/core/src";
 			sourceTree = "<group>";
 		};
 		DA89D4E51A51E53100AC64D7 /* Pearl-Cocoa */ = {
@@ -2994,8 +2994,6 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/$(PLATFORM_NAME)/include\"",
-					"\"$(PROJECT_DIR)/External/libsodium/libsodium-osx/include\"",
-					"\"$(PROJECT_DIR)/External/libjson-c/libjson-c-osx/include\"",
 					"$(inherited)",
 				);
 				LD_DYLIB_INSTALL_NAME = "@rpath/$(EXECUTABLE_PATH)";
@@ -3028,6 +3026,12 @@
 				);
 				GCC_PREFIX_HEADER = "Source/MasterPassword-Prefix.pch";
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/$(PLATFORM_NAME)/include\"",
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/../lib/libsodium/build-ios~/out/include\"",
+					"\"$(PROJECT_DIR)/../lib/libjson-c/build-ios~/out/include\"",
+				);
 				INFOPLIST_FILE = "Source/Mac/MasterPassword-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -3350,8 +3354,6 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/$(PLATFORM_NAME)/include\"",
-					"\"$(PROJECT_DIR)/External/libsodium/libsodium-osx/include\"",
-					"\"$(PROJECT_DIR)/External/libjson-c/libjson-c-osx/include\"",
 					"$(inherited)",
 				);
 				LD_DYLIB_INSTALL_NAME = "@rpath/$(EXECUTABLE_PATH)";
@@ -3457,8 +3459,6 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/$(PLATFORM_NAME)/include\"",
-					"\"$(PROJECT_DIR)/External/libsodium/libsodium-osx/include\"",
-					"\"$(PROJECT_DIR)/External/libjson-c/libjson-c-osx/include\"",
 					"$(inherited)",
 				);
 				LD_DYLIB_INSTALL_NAME = "@rpath/$(EXECUTABLE_PATH)";
@@ -3491,6 +3491,12 @@
 				);
 				GCC_PREFIX_HEADER = "Source/MasterPassword-Prefix.pch";
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/$(PLATFORM_NAME)/include\"",
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/../lib/libsodium/build-ios~/out/include\"",
+					"\"$(PROJECT_DIR)/../lib/libjson-c/build-ios~/out/include\"",
+				);
 				INFOPLIST_FILE = "Source/Mac/MasterPassword-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -3523,6 +3529,12 @@
 				);
 				GCC_PREFIX_HEADER = "Source/MasterPassword-Prefix.pch";
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/$(PLATFORM_NAME)/include\"",
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/../lib/libsodium/build-ios~/out/include\"",
+					"\"$(PROJECT_DIR)/../lib/libjson-c/build-ios~/out/include\"",
+				);
 				INFOPLIST_FILE = "Source/Mac/MasterPassword-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (

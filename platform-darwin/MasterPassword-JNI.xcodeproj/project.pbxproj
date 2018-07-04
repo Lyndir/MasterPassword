@@ -62,7 +62,7 @@
 				DA1554ED20B3928E00EA92C5 /* mpw-util.h */,
 			);
 			name = core;
-			path = ../platform-independent/c/core/src;
+			path = "../platform-independent/c/core/src";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -129,8 +129,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				HEADER_SEARCH_PATHS = (
-					"/Library/Java/JavaVirtualMachines/jdk1.8.0_161.jdk/Contents/Home/include/**",
-					../lib/libsodium/src/libsodium/include,
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/../lib/libsodium/build-ios~/out/include\"",
+					"\"$(PROJECT_DIR)/../lib/libjson-c/build-ios~/out/include\"",
 				);
 				JAVA_HOME = /Library/Java/JavaVirtualMachines/jdk1.8.0_161.jdk/Contents/Home;
 				OTHER_CFLAGS = (
@@ -144,8 +145,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				HEADER_SEARCH_PATHS = (
-					"/Library/Java/JavaVirtualMachines/jdk1.8.0_161.jdk/Contents/Home/include/**",
-					../lib/libsodium/src/libsodium/include,
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/../lib/libsodium/build-ios~/out/include\"",
+					"\"$(PROJECT_DIR)/../lib/libjson-c/build-ios~/out/include\"",
 				);
 				JAVA_HOME = /Library/Java/JavaVirtualMachines/jdk1.8.0_161.jdk/Contents/Home;
 				OTHER_CFLAGS = (
