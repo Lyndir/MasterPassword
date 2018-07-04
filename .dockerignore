@@ -1,0 +1,28 @@
+# OS-Specific junk.
+.DS_Store
+Thumbs.db
+
+# IntelliJ
+.idea
+*.iml
+*.ipr
+*.iws
+
+# Xcode IDE
+xcuserdata/
+DerivedData/
+
+# Generated
+/platform-darwin/Resources/Media/Images.xcassets/
+/platform-darwin/Podfile.lock
+/platform-darwin/Pods/
+
+# Gradle
+build
+.gradle
+local.properties
+/gradle/builds
+/platform-android/.externalNativeBuild
+
+# Git
+.git

@@ -119,7 +119,7 @@ _prepare_config() {
 
     if [[ $platform = windows ]]; then :
     else
-        autoreconf --verbose --install --symlink 2> >(sed 's/^\([^:]*\):[0-9]\{1,\}: /\1: /')
+        autoreconf --verbose --install --force 2> >(sed 's/^\([^:]*\):[0-9]\{1,\}: /\1: /')
     fi
 
     touch "$prefix/out/.prepared"
