@@ -187,7 +187,7 @@ Note that in order to build the Android application, you will need to have the A
 
 Go into the `platform-independent/cli-c` directory and run `./build`.  The native command-line client will then be built.
 
-For detailed instructions, see [the native CLI instructions](platform-independent/cli-c/README.md).
+For detailed instructions, see [the native CLI instructions](platform-independent/c/README.md).
 
 
 ## Support
