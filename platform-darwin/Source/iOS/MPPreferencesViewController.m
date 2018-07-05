@@ -219,7 +219,7 @@
 - (IBAction)sourceButton:(id)sender {
 
     [[self dismissPopup].navigationController performSegueWithIdentifier:@"web" sender:
-            [NSURL URLWithString:@"https://github.com/Lyndir/MasterPassword/"]];
+            [NSURL URLWithString:@"https://gitlab.com/MasterPassword/MasterPassword/"]];
 }
 
 - (IBAction)thanksButton:(id)sender {

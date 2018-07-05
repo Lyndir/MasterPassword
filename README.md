@@ -122,7 +122,7 @@ The `master-password` on the other hand, is only a simple phrase, which means it
 
  5. I have another question.
 
-Please don't hesitate to [get in touch](#support), we're more than happy to answer all your Master Password questions.  Any problems or suggestions can be reported [as GitHub issues](https://github.com/Lyndir/MasterPassword/issues).
+Please don't hesitate to [get in touch](#support), we're more than happy to answer all your Master Password questions.  Any problems or suggestions can be reported [as GitLab issues](https://gitlab.com/MasterPassword/MasterPassword/issues/).
 
 
 
