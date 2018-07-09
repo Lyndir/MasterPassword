@@ -38,14 +38,16 @@ char *mpw_get_token(const char **in, const char *eol, char *delim) {
 time_t mpw_mktime(
         const char *time) {
 
-    // TODO: Support parsing timezone into tm_gmtoff
+    // TODO: Support for parsing non-UTC time strings
     struct tm tm = { .tm_isdst = -1 };
     if (time && sscanf( time, "%4d-%2d-%2dT%2d:%2d:%2dZ",
             &tm.tm_year, &tm.tm_mon, &tm.tm_mday,
             &tm.tm_hour, &tm.tm_min, &tm.tm_sec ) == 6) {
         tm.tm_year -= 1900; // tm_year 0 = rfc3339 year  1900
         tm.tm_mon -= 1;     // tm_mon  0 = rfc3339 month 1
-        return mktime( &tm );
+
+        // mktime interprets tm as local & writes TZ to tm_gmtoff; offset its result back to UTC.
+        return mktime( &tm ) + tm.tm_gmtoff;
     }
 
     return false;
