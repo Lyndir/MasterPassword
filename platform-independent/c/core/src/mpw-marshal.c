@@ -331,14 +331,16 @@ static bool mpw_marshal_write_json(
         }
 
         json_object *json_site_mpw = json_object_new_object();
-        json_object_object_add( json_site, "_ext_mpw", json_site_mpw );
         if (site->url)
             json_object_object_add( json_site_mpw, "url", json_object_new_string( site->url ) );
+        if (json_object_object_length( json_site_mpw ))
+            json_object_object_add( json_site, "_ext_mpw", json_site_mpw );
 
         mpw_free_strings( &content, &loginContent, NULL );
     }
 
-    mpw_string_pushf( out, "%s\n", json_object_to_json_string_ext( json_file, JSON_C_TO_STRING_PRETTY | JSON_C_TO_STRING_SPACED ) );
+    mpw_string_pushf( out, "%s\n", json_object_to_json_string_ext( json_file,
+            JSON_C_TO_STRING_PRETTY | JSON_C_TO_STRING_SPACED | JSON_C_TO_STRING_NOSLASHESCAPE ) );
     mpw_free( &masterKey, MPMasterKeySize );
     json_object_put( json_file );
 

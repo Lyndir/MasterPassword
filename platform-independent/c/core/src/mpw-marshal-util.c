@@ -46,7 +46,7 @@ time_t mpw_mktime(
         tm.tm_year -= 1900; // tm_year 0 = rfc3339 year  1900
         tm.tm_mon -= 1;     // tm_mon  0 = rfc3339 month 1
 
-        // mktime interprets tm as local & writes TZ to tm_gmtoff; offset its result back to UTC.
+        // mktime converts tm to local, setting tm_gmtoff; use it to offset the result back to UTC.
         return mktime( &tm ) + tm.tm_gmtoff;
     }
 
