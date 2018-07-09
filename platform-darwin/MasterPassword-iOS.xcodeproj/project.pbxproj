@@ -4309,10 +4309,6 @@
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/$(PLATFORM_NAME)/include\"",
-					"$(inherited)",
-				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "-ObjC";
@@ -4347,7 +4343,6 @@
 				GCC_PREFIX_HEADER = "Source/MasterPassword-Prefix.pch";
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 				HEADER_SEARCH_PATHS = (
-					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/$(PLATFORM_NAME)/include\"",
 					"$(inherited)",
 					"\"$(PROJECT_DIR)/../lib/libsodium/build-ios~/out/include\"",
 					"\"$(PROJECT_DIR)/../lib/libjson-c/build-ios~/out/include\"",
@@ -4528,10 +4523,6 @@
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/$(PLATFORM_NAME)/include\"",
-					"$(inherited)",
-				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -4637,10 +4628,6 @@
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/$(PLATFORM_NAME)/include\"",
-					"$(inherited)",
-				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "-ObjC";
@@ -4674,7 +4661,6 @@
 				GCC_PREFIX_HEADER = "Source/MasterPassword-Prefix.pch";
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 				HEADER_SEARCH_PATHS = (
-					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/$(PLATFORM_NAME)/include\"",
 					"$(inherited)",
 					"\"$(PROJECT_DIR)/../lib/libsodium/build-ios~/out/include\"",
 					"\"$(PROJECT_DIR)/../lib/libjson-c/build-ios~/out/include\"",
@@ -4719,7 +4705,6 @@
 				GCC_PREFIX_HEADER = "Source/MasterPassword-Prefix.pch";
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 				HEADER_SEARCH_PATHS = (
-					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/$(PLATFORM_NAME)/include\"",
 					"$(inherited)",
 					"\"$(PROJECT_DIR)/../lib/libsodium/build-ios~/out/include\"",
 					"\"$(PROJECT_DIR)/../lib/libjson-c/build-ios~/out/include\"",
