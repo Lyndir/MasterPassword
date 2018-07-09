@@ -45,8 +45,6 @@ public class MPAlgorithmV0 extends MPAlgorithm {
         Native.load( MPAlgorithmV0.class, "mpw" );
     }
 
-    public final Version version = MPAlgorithm.Version.V0;
-
     protected final Logger logger = Logger.get( getClass() );
 
     @Nullable

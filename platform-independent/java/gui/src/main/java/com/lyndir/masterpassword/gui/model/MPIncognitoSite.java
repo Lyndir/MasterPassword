@@ -22,6 +22,7 @@ import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.masterpassword.MPAlgorithm;
 import com.lyndir.masterpassword.MPResultType;
 import com.lyndir.masterpassword.model.impl.MPBasicSite;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 
@@ -44,6 +45,7 @@ public class MPIncognitoSite extends MPBasicSite<MPIncognitoQuestion> {
         this.user = user;
     }
 
+    @Nonnull
     @Override
     public MPIncognitoUser getUser() {
         return user;

@@ -20,7 +20,7 @@ package com.lyndir.masterpassword.model.impl;
 
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSortedSet;
 import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.masterpassword.*;
@@ -34,7 +34,7 @@ import javax.annotation.Nullable;
 /**
  * @author lhunath, 2014-06-08
  */
-public abstract class MPBasicUser<S extends MPBasicSite<?>> implements MPUser<S> {
+public abstract class MPBasicUser<S extends MPBasicSite<?>> extends Changeable implements MPUser<S> {
 
     protected final Logger logger = Logger.get( getClass() );
 
@@ -64,6 +64,8 @@ public abstract class MPBasicUser<S extends MPBasicSite<?>> implements MPUser<S>
     @Override
     public void setAvatar(final int avatar) {
         this.avatar = avatar;
+
+        setChanged();
     }
 
     @Nonnull
@@ -81,6 +83,8 @@ public abstract class MPBasicUser<S extends MPBasicSite<?>> implements MPUser<S>
     @Override
     public void setAlgorithm(final MPAlgorithm algorithm) {
         this.algorithm = algorithm;
+
+        setChanged();
     }
 
     @Nullable
@@ -136,7 +140,7 @@ public abstract class MPBasicUser<S extends MPBasicSite<?>> implements MPUser<S>
     public MPMasterKey getMasterKey()
             throws MPKeyUnavailableException {
         if (masterKey == null)
-            throw new MPKeyUnavailableException( "Master key was not yet set." );
+            throw new MPKeyUnavailableException( "Master key was not yet set for: " + this );
 
         return masterKey;
     }
@@ -144,11 +148,15 @@ public abstract class MPBasicUser<S extends MPBasicSite<?>> implements MPUser<S>
     @Override
     public void addSite(final S site) {
         sites.add( site );
+
+        setChanged();
     }
 
     @Override
     public void deleteSite(final S site) {
         sites.remove( site );
+
+        setChanged();
     }
 
     @Nonnull
@@ -160,7 +168,7 @@ public abstract class MPBasicUser<S extends MPBasicSite<?>> implements MPUser<S>
     @Nonnull
     @Override
     public Collection<S> findSites(final String query) {
-        ImmutableList.Builder<S> results = ImmutableList.builder();
+        ImmutableSortedSet.Builder<S> results = ImmutableSortedSet.naturalOrder();
         for (final S site : getSites())
             if (site.getName().startsWith( query ))
                 results.add( site );

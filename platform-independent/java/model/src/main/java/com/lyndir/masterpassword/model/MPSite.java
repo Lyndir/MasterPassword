@@ -21,6 +21,7 @@ package com.lyndir.masterpassword.model;
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.masterpassword.*;
 import java.util.Collection;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 
@@ -31,41 +32,50 @@ public interface MPSite<Q extends MPQuestion> extends Comparable<MPSite<?>> {
 
     // - Meta
 
+    @Nonnull
     String getName();
 
     void setName(String name);
 
     // - Algorithm
 
+    @Nonnull
     MPAlgorithm getAlgorithm();
 
     void setAlgorithm(MPAlgorithm algorithm);
 
+    @Nonnull
     UnsignedInteger getCounter();
 
     void setCounter(UnsignedInteger counter);
 
+    @Nonnull
     MPResultType getResultType();
 
     void setResultType(MPResultType resultType);
 
+    @Nonnull
     MPResultType getLoginType();
 
     void setLoginType(@Nullable MPResultType loginType);
 
+    @Nonnull
     String getResult(MPKeyPurpose keyPurpose, @Nullable String keyContext, @Nullable String state)
             throws MPKeyUnavailableException, MPAlgorithmException;
 
+    @Nonnull
     String getLogin(@Nullable String state)
             throws MPKeyUnavailableException, MPAlgorithmException;
 
     // - Relations
 
-    MPUser<? extends MPSite<?>> getUser();
+    @Nonnull
+    MPUser<?> getUser();
 
     void addQuestion(Q question);
 
     void deleteQuestion(Q question);
 
+    @Nonnull
     Collection<Q> getQuestions();
 }

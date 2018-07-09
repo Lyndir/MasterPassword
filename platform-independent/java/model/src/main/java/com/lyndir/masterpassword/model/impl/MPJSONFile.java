@@ -20,7 +20,10 @@ package com.lyndir.masterpassword.model.impl;
 
 import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
+import com.fasterxml.jackson.core.util.Separators;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.CodeUtils;
@@ -37,18 +40,28 @@ import org.joda.time.Instant;
 /**
  * @author lhunath, 2018-04-27
  */
-@SuppressFBWarnings( "URF_UNREAD_FIELD" )
+@SuppressFBWarnings("URF_UNREAD_FIELD")
 public class MPJSONFile extends MPJSONAnyObject {
 
     protected static final ObjectMapper objectMapper = new ObjectMapper();
 
     static {
-        objectMapper.setSerializationInclusion( JsonInclude.Include.NON_EMPTY );
+        objectMapper.setDefaultPrettyPrinter( new DefaultPrettyPrinter() {
+            private static final long serialVersionUID = 1;
+
+            @Override
+            public DefaultPrettyPrinter withSeparators(final Separators separators) {
+                super.withSeparators( separators );
+                _objectFieldValueSeparatorWithSpaces = separators.getObjectFieldValueSeparator() + " ";
+                return this;
+            }
+        } );
         objectMapper.setVisibility( PropertyAccessor.FIELD, JsonAutoDetect.Visibility.NON_PRIVATE );
     }
 
     public MPJSONFile write(final MPFileUser modelUser)
             throws MPKeyUnavailableException, MPAlgorithmException {
+
         // Section: "export"
         if (export == null)
             export = new Export();
@@ -98,38 +111,27 @@ public class MPJSONFile extends MPJSONAnyObject {
             site.uses = modelSite.getUses();
             site.last_used = MPConstants.dateTimeFormatter.print( modelSite.getLastUsed() );
 
+            if (site.questions == null)
+                site.questions = new LinkedHashMap<>();
+            for (final MPFileQuestion question : modelSite.getQuestions())
+                site.questions.put( question.getKeyword(), new Site.Question() {
+                    {
+                        type = question.getType();
+
+                        if (!export.redacted) {
+                            // Clear Text
+                            answer = question.getAnswer();
+                        } else {
+                            // Redacted
+                            if (question.getType().supportsTypeFeature( MPSiteFeature.ExportContent ))
+                                answer = question.getAnswerState();
+                        }
+                    }
+                } );
+
             if (site._ext_mpw == null)
                 site._ext_mpw = new Site.Ext();
             site._ext_mpw.url = modelSite.getUrl();
-
-            if (site.questions == null)
-                site.questions = new LinkedHashMap<>();
-            //                for (size_t q = 0; q < site.questions_count; ++q) {
-            //                    MPMarshalledQuestion *question = &site.questions[q];
-            //                    if (!question.keyword)
-            //                        continue;
-            //
-            //                    json_object *json_site_question = json_object_new_object();
-            //                    json_object_object_add( json_site_questions, question.keyword, json_site_question );
-            //                    json_object_object_add( json_site_question, "type = question.type;
-            //
-            //                    if (!user.redacted) {
-            //                        // Clear Text
-            //                const char *answerContent = mpw_siteResult( masterKey, site.name, MPCounterValueInitial,
-            //                                                            MPKeyPurposeRecovery, question.keyword, question.type, question.content, site.algorithm );
-            //                        json_object_object_add( json_site_question, "answer = answerContent;
-            //                    }
-            //                    else {
-            //                        // Redacted
-            //                        if (site.type & MPSiteFeatureExportContent && question.content && strlen( question.content ))
-            //                            json_object_object_add( json_site_question, "answer = question.content;
-            //                    }
-            //                }
-
-            //                json_object *json_site_mpw = json_object_new_object();
-            //                fileSite._ext_mpw = json_site_mpw;
-            //                if (site.url)
-            //                    json_object_object_add( json_site_mpw, "url", site.url );
         }
 
         return this;
@@ -143,6 +145,7 @@ public class MPJSONFile extends MPJSONAnyObject {
                 (user.default_type != null)? user.default_type: algorithm.mpw_default_result_type(),
                 (user.last_used != null)? MPConstants.dateTimeFormatter.parseDateTime( user.last_used ): new Instant(),
                 MPMarshalFormat.JSON, export.redacted? MPMarshaller.ContentMode.PROTECTED: MPMarshaller.ContentMode.VISIBLE );
+        model.beginChanges();
         model.setJSON( this );
         if (masterPassword != null)
             model.authenticate( masterPassword );
@@ -167,6 +170,7 @@ public class MPJSONFile extends MPJSONAnyObject {
 
             model.addSite( site );
         }
+        model.endChanges();
 
         return model;
     }
@@ -193,9 +197,9 @@ public class MPJSONFile extends MPJSONAnyObject {
         String full_name;
         String last_used;
         @Nullable
-        MPAlgorithm.Version algorithm;
-        @Nullable
         String              key_id;
+        @Nullable
+        MPAlgorithm.Version algorithm;
         @Nullable
         MPResultType        default_type;
     }
@@ -203,16 +207,16 @@ public class MPJSONFile extends MPJSONAnyObject {
 
     public static class Site extends MPJSONAnyObject {
 
+        @Nullable
+        MPResultType type;
         long                counter;
         MPAlgorithm.Version algorithm;
         @Nullable
-        MPResultType type;
-        @Nullable
         String       password;
         @Nullable
-        MPResultType login_type;
-        @Nullable
         String       login_name;
+        @Nullable
+        MPResultType login_type;
 
         int uses;
         @Nullable

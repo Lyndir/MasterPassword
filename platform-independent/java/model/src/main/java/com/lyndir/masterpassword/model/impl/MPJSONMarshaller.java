@@ -37,7 +37,7 @@ public class MPJSONMarshaller implements MPMarshaller {
             throws MPKeyUnavailableException, MPMarshalException, MPAlgorithmException {
 
         try {
-            return objectMapper.writeValueAsString( user.getJSON().write( user ) );
+            return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString( user.getJSON().write( user ) );
         }
         catch (final JsonProcessingException e) {
             throw new MPMarshalException( "Couldn't compose JSON for: " + user, e );

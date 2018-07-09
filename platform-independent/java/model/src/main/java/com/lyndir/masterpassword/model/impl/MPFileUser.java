@@ -18,7 +18,6 @@
 
 package com.lyndir.masterpassword.model.impl;
 
-import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.masterpassword.*;
 import com.lyndir.masterpassword.model.MPIncorrectMasterPasswordException;
 import com.lyndir.masterpassword.model.MPUser;
@@ -33,9 +32,6 @@ import org.joda.time.ReadableInstant;
  */
 @SuppressWarnings("ComparableImplementedButEqualsNotOverridden")
 public class MPFileUser extends MPBasicUser<MPFileSite> {
-
-    @SuppressWarnings("UnusedDeclaration")
-    private static final Logger logger = Logger.get( MPFileUser.class );
 
     @Nullable
     private byte[]                   keyID;
@@ -101,6 +97,8 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
 
     public void setFormat(final MPMarshalFormat format) {
         this.format = format;
+
+        setChanged();
     }
 
     public MPMarshaller.ContentMode getContentMode() {
@@ -109,6 +107,8 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
 
     public void setContentMode(final MPMarshaller.ContentMode contentMode) {
         this.contentMode = contentMode;
+
+        setChanged();
     }
 
     public MPResultType getDefaultType() {
@@ -117,6 +117,8 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
 
     public void setDefaultType(final MPResultType defaultType) {
         this.defaultType = defaultType;
+
+        setChanged();
     }
 
     public ReadableInstant getLastUsed() {
@@ -125,6 +127,8 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
 
     public void use() {
         lastUsed = new Instant();
+
+        setChanged();
     }
 
     public void setJSON(final MPJSONFile json) {
@@ -141,8 +145,23 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
             throws MPIncorrectMasterPasswordException, MPKeyUnavailableException, MPAlgorithmException {
         super.authenticate( masterKey );
 
-        if (keyID == null)
+        if (keyID == null) {
             keyID = masterKey.getKeyID( getAlgorithm() );
+
+            setChanged();
+        }
+    }
+
+    @Override
+    protected void onChanged() {
+        super.onChanged();
+
+        try {
+            save();
+        }
+        catch (final MPKeyUnavailableException | MPAlgorithmException e) {
+            logger.wrn( e, "Couldn't save change." );
+        }
     }
 
     void save()
@@ -152,7 +171,7 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
 
     @Override
     public int compareTo(final MPUser<?> o) {
-        int comparison = (o instanceof MPFileUser)? getLastUsed().compareTo( ((MPFileUser) o).getLastUsed() ): 0;
+        int comparison = (o instanceof MPFileUser)? -getLastUsed().compareTo( ((MPFileUser) o).getLastUsed() ): 0;
         if (comparison != 0)
             return comparison;
 

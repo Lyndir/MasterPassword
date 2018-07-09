@@ -18,14 +18,14 @@
 
 package com.lyndir.masterpassword.model.impl;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.*;
 import java.util.*;
 
 
 /**
  * @author lhunath, 2018-05-14
  */
+@JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = MPJSONAnyObject.MPJSONEmptyValue.class)
 class MPJSONAnyObject {
 
     @JsonAnySetter
@@ -34,5 +34,22 @@ class MPJSONAnyObject {
     @JsonAnyGetter
     public Map<String, Object> getAny() {
         return Collections.unmodifiableMap( any );
+    }
+
+    @SuppressWarnings("EqualsAndHashcode")
+    public static class MPJSONEmptyValue {
+
+        @Override
+        @SuppressWarnings({ "ChainOfInstanceofChecks", "Contract" })
+        public boolean equals(final Object obj) {
+            if (obj instanceof Collection<?>)
+                return ((Collection<?>) obj).isEmpty();
+            if (obj instanceof Map<?, ?>)
+                return ((Map<?, ?>) obj).isEmpty();
+            if (obj instanceof MPJSONFile.Site.Ext)
+                return ((MPJSONAnyObject) obj).any.isEmpty();
+
+            return obj == null;
+        }
     }
 }

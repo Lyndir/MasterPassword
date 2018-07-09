@@ -26,6 +26,7 @@ import com.lyndir.masterpassword.*;
 import com.lyndir.masterpassword.model.MPQuestion;
 import com.lyndir.masterpassword.model.MPSite;
 import java.util.*;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,7 +34,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author lhunath, 14-12-16
  */
-public abstract class MPBasicSite<Q extends MPQuestion> implements MPSite<Q> {
+public abstract class MPBasicSite<Q extends MPQuestion> extends Changeable implements MPSite<Q> {
 
     private String          name;
     private MPAlgorithm     algorithm;
@@ -56,6 +57,7 @@ public abstract class MPBasicSite<Q extends MPQuestion> implements MPSite<Q> {
         this.loginType = (loginType == null)? algorithm.mpw_default_login_type(): loginType;
     }
 
+    @Nonnull
     @Override
     public String getName() {
         return name;
@@ -64,8 +66,11 @@ public abstract class MPBasicSite<Q extends MPQuestion> implements MPSite<Q> {
     @Override
     public void setName(final String name) {
         this.name = name;
+
+        setChanged();
     }
 
+    @Nonnull
     @Override
     public MPAlgorithm getAlgorithm() {
         return algorithm;
@@ -74,8 +79,11 @@ public abstract class MPBasicSite<Q extends MPQuestion> implements MPSite<Q> {
     @Override
     public void setAlgorithm(final MPAlgorithm algorithm) {
         this.algorithm = algorithm;
+
+        setChanged();
     }
 
+    @Nonnull
     @Override
     public UnsignedInteger getCounter() {
         return counter;
@@ -84,8 +92,11 @@ public abstract class MPBasicSite<Q extends MPQuestion> implements MPSite<Q> {
     @Override
     public void setCounter(final UnsignedInteger counter) {
         this.counter = counter;
+
+        setChanged();
     }
 
+    @Nonnull
     @Override
     public MPResultType getResultType() {
         return resultType;
@@ -94,8 +105,11 @@ public abstract class MPBasicSite<Q extends MPQuestion> implements MPSite<Q> {
     @Override
     public void setResultType(final MPResultType resultType) {
         this.resultType = resultType;
+
+        setChanged();
     }
 
+    @Nonnull
     @Override
     public MPResultType getLoginType() {
         return loginType;
@@ -104,8 +118,11 @@ public abstract class MPBasicSite<Q extends MPQuestion> implements MPSite<Q> {
     @Override
     public void setLoginType(@Nullable final MPResultType loginType) {
         this.loginType = ifNotNullElse( loginType, getAlgorithm().mpw_default_login_type() );
+
+        setChanged();
     }
 
+    @Nonnull
     @Override
     public String getResult(final MPKeyPurpose keyPurpose, @Nullable final String keyContext, @Nullable final String state)
             throws MPKeyUnavailableException, MPAlgorithmException {
@@ -131,6 +148,7 @@ public abstract class MPBasicSite<Q extends MPQuestion> implements MPSite<Q> {
                 keyPurpose, keyContext, type, state );
     }
 
+    @Nonnull
     @Override
     public String getLogin(@Nullable final String state)
             throws MPKeyUnavailableException, MPAlgorithmException {
@@ -141,16 +159,32 @@ public abstract class MPBasicSite<Q extends MPQuestion> implements MPSite<Q> {
     @Override
     public void addQuestion(final Q question) {
         questions.add( question );
+
+        setChanged();
     }
 
     @Override
     public void deleteQuestion(final Q question) {
         questions.remove( question );
+
+        setChanged();
     }
 
+    @Nonnull
     @Override
     public Collection<Q> getQuestions() {
         return Collections.unmodifiableCollection( questions );
+    }
+
+    @Nonnull
+    @Override
+    public abstract MPBasicUser<?> getUser();
+
+    @Override
+    protected void onChanged() {
+        super.onChanged();
+
+        getUser().setChanged();
     }
 
     @Override

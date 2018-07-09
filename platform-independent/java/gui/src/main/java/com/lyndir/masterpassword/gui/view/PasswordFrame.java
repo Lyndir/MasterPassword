@@ -23,11 +23,12 @@ import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import com.google.common.collect.Iterables;
 import com.google.common.primitives.UnsignedInteger;
-import com.google.common.util.concurrent.*;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.masterpassword.*;
 import com.lyndir.masterpassword.gui.Res;
-import com.lyndir.masterpassword.gui.util.Components;
-import com.lyndir.masterpassword.gui.util.UnsignedIntegerModel;
+import com.lyndir.masterpassword.gui.util.*;
 import com.lyndir.masterpassword.model.MPSite;
 import com.lyndir.masterpassword.model.MPUser;
 import com.lyndir.masterpassword.model.impl.MPFileSite;
@@ -35,7 +36,7 @@ import com.lyndir.masterpassword.model.impl.MPFileUser;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
-import java.awt.event.*;
+import java.awt.event.WindowEvent;
 import java.util.Collection;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
@@ -49,6 +50,8 @@ import javax.swing.event.DocumentListener;
  * @author lhunath, 2014-06-08
  */
 public abstract class PasswordFrame<U extends MPUser<S>, S extends MPSite<?>> extends JFrame implements DocumentListener {
+
+    private static final Logger logger = Logger.get( PasswordFrame.class );
 
     @SuppressWarnings("FieldCanBeLocal")
     private final Components.GradientPanel       root;
@@ -96,40 +99,33 @@ public abstract class PasswordFrame<U extends MPUser<S>, S extends MPSite<?>> ex
                                                         siteNameField = Components.textField(), Components.stud(),
                                                         siteActionButton = Components.button( "Add Site" ) );
         siteNameField.getDocument().addDocumentListener( this );
-        siteNameField.addActionListener( new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                Futures.addCallback( updatePassword( true ), new FutureCallback<String>() {
+        siteNameField.addActionListener(
+                e -> Futures.addCallback( updatePassword( true ), new FailableCallback<String>( logger ) {
                     @Override
                     public void onSuccess(@Nullable final String sitePassword) {
+                        if (sitePassword == null)
+                            return;
+
+                        if (currentSite instanceof MPFileSite)
+                            ((MPFileSite) currentSite).use();
+
                         Transferable clipboardContents = new StringSelection( sitePassword );
                         Toolkit.getDefaultToolkit().getSystemClipboard().setContents( clipboardContents, null );
-
-                        SwingUtilities.invokeLater( () -> {
-                            passwordField.setText( null );
-                            siteNameField.setText( null );
-
-                            dispatchEvent( new WindowEvent( PasswordFrame.this, WindowEvent.WINDOW_CLOSING ) );
-                        } );
+                        dispatchEvent( new WindowEvent( PasswordFrame.this, WindowEvent.WINDOW_CLOSING ) );
                     }
+                }, Res.uiExecutor( false ) ) );
+        siteActionButton.addActionListener(
+                e -> {
+                    if (currentSite == null)
+                        return;
+                    if (currentSite instanceof MPFileSite)
+                        this.user.deleteSite( currentSite );
+                    else
+                        this.user.addSite( currentSite );
+                    siteNameField.requestFocus();
 
-                    @Override
-                    public void onFailure(@Nonnull final Throwable t) {
-                    }
+                    updatePassword( true );
                 } );
-            }
-        } );
-        siteActionButton.addActionListener( e -> {
-            if (currentSite == null)
-                return;
-            if (currentSite instanceof MPFileSite)
-                this.user.deleteSite( currentSite );
-            else
-                this.user.addSite( currentSite );
-            siteNameField.requestFocus();
-
-            updatePassword( true );
-        } );
         sitePanel.add( siteControls );
         sitePanel.add( Components.stud() );
 
@@ -229,34 +225,36 @@ public abstract class PasswordFrame<U extends MPUser<S>, S extends MPSite<?>> ex
             site.setCounter( siteCounter );
         }
 
-        ListenableFuture<String> passwordFuture = Res.execute( this, () -> site.getResult( MPKeyPurpose.Authentication, null, null ) );
-        Futures.addCallback( passwordFuture, new FutureCallback<String>() {
-            @Override
-            public void onSuccess(@Nullable final String sitePassword) {
-                SwingUtilities.invokeLater( () -> {
-                    updatingUI = true;
-                    currentSite = site;
-                    siteActionButton.setVisible( user instanceof MPFileUser );
-                    if (currentSite instanceof MPFileSite)
-                        siteActionButton.setText( "Delete Site" );
-                    else
-                        siteActionButton.setText( "Add Site" );
-                    resultTypeField.setSelectedItem( currentSite.getResultType() );
-                    siteVersionField.setSelectedItem( currentSite.getAlgorithm() );
-                    siteCounterField.setValue( currentSite.getCounter() );
-                    siteNameField.setText( currentSite.getName() );
-                    if (siteNameField.getText().startsWith( siteNameQuery ))
-                        siteNameField.select( siteNameQuery.length(), siteNameField.getText().length() );
+        ListenableFuture<String> passwordFuture = Res.job( this, () ->
+                site.getResult( MPKeyPurpose.Authentication, null, null ) );
+
+        SwingUtilities.invokeLater( () -> {
+            updatingUI = true;
+            currentSite = site;
+            siteActionButton.setVisible( user instanceof MPFileUser );
+            if (currentSite instanceof MPFileSite)
+                siteActionButton.setText( "Delete Site" );
+            else
+                siteActionButton.setText( "Add Site" );
+            resultTypeField.setSelectedItem( currentSite.getResultType() );
+            siteVersionField.setSelectedItem( currentSite.getAlgorithm().version() );
+            siteCounterField.setValue( currentSite.getCounter() );
+            siteNameField.setText( currentSite.getName() );
+            if (siteNameField.getText().startsWith( siteNameQuery ))
+                siteNameField.select( siteNameQuery.length(), siteNameField.getText().length() );
+            passwordField.setText( null );
+            tipLabel.setText( "Getting password..." );
+
+            Futures.addCallback( passwordFuture, new FailableCallback<String>( logger ) {
+                @Override
+                public void onSuccess(@Nullable final String sitePassword) {
+                    if (sitePassword != null)
+                        tipLabel.setText( "Press [Enter] to copy the password.  Then paste it into the password field." );
 
                     passwordField.setText( sitePassword );
-                    tipLabel.setText( "Press [Enter] to copy the password.  Then paste it into the password field." );
                     updatingUI = false;
-                } );
-            }
-
-            @Override
-            public void onFailure(@Nonnull final Throwable t) {
-            }
+                }
+            }, Res.uiExecutor( true ) );
         } );
 
         return passwordFuture;

@@ -18,8 +18,7 @@
 
 package com.lyndir.masterpassword.model;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Maps;
+import com.google.common.collect.*;
 import java.util.Collection;
 import java.util.Map;
 
@@ -37,7 +36,7 @@ public abstract class MPUserManager<U extends MPUser<?>> {
     }
 
     public Collection<U> getUsers() {
-        return ImmutableList.copyOf( usersByName.values() );
+        return ImmutableSortedSet.copyOf( usersByName.values() );
     }
 
     public U getUserNamed(final String fullName) {

@@ -20,6 +20,7 @@ package com.lyndir.masterpassword.model.impl;
 
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.masterpassword.*;
+import com.lyndir.masterpassword.model.MPSite;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.joda.time.Instant;
@@ -29,6 +30,7 @@ import org.joda.time.ReadableInstant;
 /**
  * @author lhunath, 14-12-05
  */
+@SuppressWarnings("ComparableImplementedButEqualsNotOverridden")
 public class MPFileSite extends MPBasicSite<MPFileQuestion> {
 
     private final MPFileUser user;
@@ -77,6 +79,8 @@ public class MPFileSite extends MPBasicSite<MPFileQuestion> {
 
     public void setUrl(@Nullable final String url) {
         this.url = url;
+
+        setChanged();
     }
 
     public int getUses() {
@@ -125,6 +129,8 @@ public class MPFileSite extends MPBasicSite<MPFileQuestion> {
         else
             this.resultState = getState(
                     MPKeyPurpose.Authentication, null, getCounter(), getResultType(), password );
+
+        setChanged();
     }
 
     @Nullable
@@ -141,10 +147,22 @@ public class MPFileSite extends MPBasicSite<MPFileQuestion> {
         else
             this.loginState = getState(
                     MPKeyPurpose.Identification, null, null, getLoginType(), loginName );
+
+        setChanged();
     }
 
+    @Nonnull
     @Override
     public MPFileUser getUser() {
         return user;
+    }
+
+    @Override
+    public int compareTo(final MPSite<?> o) {
+        int comparison = (o instanceof MPFileSite)? -getLastUsed().compareTo( ((MPFileSite) o).getLastUsed() ): 0;
+        if (comparison != 0)
+            return comparison;
+
+        return super.compareTo( o );
     }
 }

@@ -153,7 +153,7 @@ public class UnlockFrame extends JFrame {
     boolean checkSignIn() {
         if (identiconFuture != null)
             identiconFuture.cancel( false );
-        identiconFuture = Res.schedule( this, () -> SwingUtilities.invokeLater( () -> {
+        identiconFuture = Res.job( this, () -> SwingUtilities.invokeLater( () -> {
             String fullName       = (user == null)? "": user.getFullName();
             char[] masterPassword = authenticationPanel.getMasterPassword();
 
@@ -186,7 +186,7 @@ public class UnlockFrame extends JFrame {
         signInButton.setEnabled( false );
         signInButton.setText( "Signing In..." );
 
-        Res.execute( this, () -> {
+        Res.job( this, () -> {
             try {
                 user.authenticate( authenticationPanel.getMasterPassword() );
 

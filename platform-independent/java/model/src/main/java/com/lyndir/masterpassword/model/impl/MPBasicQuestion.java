@@ -31,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author lhunath, 2018-05-14
  */
-public abstract class MPBasicQuestion implements MPQuestion {
+public abstract class MPBasicQuestion extends Changeable implements MPQuestion {
 
     private final String       keyword;
     private       MPResultType type;
@@ -56,6 +56,8 @@ public abstract class MPBasicQuestion implements MPQuestion {
     @Override
     public void setType(final MPResultType type) {
         this.type = type;
+
+        setChanged();
     }
 
     @Nonnull
@@ -69,6 +71,13 @@ public abstract class MPBasicQuestion implements MPQuestion {
     @Nonnull
     @Override
     public abstract MPBasicSite<?> getSite();
+
+    @Override
+    protected void onChanged() {
+        super.onChanged();
+
+        getSite().setChanged();
+    }
 
     @Override
     public int hashCode() {

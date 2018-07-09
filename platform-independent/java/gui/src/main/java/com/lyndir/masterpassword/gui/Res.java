@@ -21,7 +21,6 @@ package com.lyndir.masterpassword.gui;
 import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
-import com.google.common.base.Throwables;
 import com.google.common.collect.Maps;
 import com.google.common.io.Resources;
 import com.google.common.util.concurrent.JdkFutureAdapters;
@@ -50,17 +49,19 @@ import org.jetbrains.annotations.NonNls;
 @SuppressWarnings({ "HardcodedFileSeparator", "MethodReturnAlwaysConstant", "SpellCheckingInspection" })
 public abstract class Res {
 
-    private static final int                                   AVATAR_COUNT     = 19;
-    private static final Map<Window, ScheduledExecutorService> executorByWindow = new WeakHashMap<>();
-    private static final Logger                                logger           = Logger.get( Res.class );
-    private static final Colors                                colors           = new Colors();
+    private static final int                                   AVATAR_COUNT        = 19;
+    private static final Map<Window, ScheduledExecutorService> jobExecutorByWindow = new WeakHashMap<>();
+    private static final Executor                              immediateUiExecutor = new SwingExecutorService( true );
+    private static final Executor                              laterUiExecutor     = new SwingExecutorService( false );
+    private static final Logger                                logger              = Logger.get( Res.class );
+    private static final Colors                                colors              = new Colors();
 
-    public static Future<?> execute(final Window host, final Runnable job) {
-        return schedule( host, job, 0, TimeUnit.MILLISECONDS );
+    public static Future<?> job(final Window host, final Runnable job) {
+        return job( host, job, 0, TimeUnit.MILLISECONDS );
     }
 
-    public static Future<?> schedule(final Window host, final Runnable job, final long delay, final TimeUnit timeUnit) {
-        return getExecutor( host ).schedule( () -> {
+    public static Future<?> job(final Window host, final Runnable job, final long delay, final TimeUnit timeUnit) {
+        return jobExecutor( host ).schedule( () -> {
             try {
                 job.run();
             }
@@ -70,33 +71,29 @@ public abstract class Res {
         }, delay, timeUnit );
     }
 
-    public static <V> ListenableFuture<V> execute(final Window host, final Callable<V> job) {
-        return schedule( host, job, 0, TimeUnit.MILLISECONDS );
+    public static <V> ListenableFuture<V> job(final Window host, final Callable<V> job) {
+        return job( host, job, 0, TimeUnit.MILLISECONDS );
     }
 
-    public static <V> ListenableFuture<V> schedule(final Window host, final Callable<V> job, final long delay, final TimeUnit timeUnit) {
-        ScheduledExecutorService executor = getExecutor( host );
-        return JdkFutureAdapters.listenInPoolThread( executor.schedule( () -> {
-            try {
-                return job.call();
-            }
-            catch (final Throwable t) {
-                logger.err( t, "Unexpected: %s", t.getLocalizedMessage() );
-                throw Throwables.propagate( t );
-            }
-        }, delay, timeUnit ), executor );
+    public static <V> ListenableFuture<V> job(final Window host, final Callable<V> job, final long delay, final TimeUnit timeUnit) {
+        ScheduledExecutorService executor = jobExecutor( host );
+        return JdkFutureAdapters.listenInPoolThread( executor.schedule( job::call, delay, timeUnit ), executor );
     }
 
-    private static ScheduledExecutorService getExecutor(final Window host) {
-        ScheduledExecutorService executor = executorByWindow.get( host );
+    public static Executor uiExecutor(final boolean immediate) {
+        return immediate? immediateUiExecutor: laterUiExecutor;
+    }
+
+    public static ScheduledExecutorService jobExecutor(final Window host) {
+        ScheduledExecutorService executor = jobExecutorByWindow.get( host );
 
         if (executor == null) {
-            executorByWindow.put( host, executor = Executors.newSingleThreadScheduledExecutor() );
+            jobExecutorByWindow.put( host, executor = Executors.newSingleThreadScheduledExecutor() );
 
             host.addWindowListener( new WindowAdapter() {
                 @Override
                 public void windowClosed(final WindowEvent e) {
-                    ExecutorService executor = executorByWindow.remove( host );
+                    ExecutorService executor = jobExecutorByWindow.remove( host );
                     if (executor != null)
                         executor.shutdownNow();
                 }
@@ -204,7 +201,7 @@ public abstract class Res {
                         font = Font.createFont( Font.TRUETYPE_FONT, Resources.getResource( fontResourceName ).openStream() ) ) );
             }
             catch (final FontFormatException | IOException e) {
-                throw Throwables.propagate( e );
+                throw logger.bug( e );
             }
 
         return font;

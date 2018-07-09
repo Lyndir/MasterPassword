@@ -33,19 +33,24 @@ public class MPFileQuestion extends MPBasicQuestion {
     private final MPFileSite site;
 
     @Nullable
-    private String state;
+    private String answerState;
 
     public MPFileQuestion(final MPFileSite site, final String keyword,
-                          @Nullable final MPResultType type, @Nullable final String state) {
+                          @Nullable final MPResultType type, @Nullable final String answerState) {
         super( keyword, ifNotNullElse( type, site.getAlgorithm().mpw_default_answer_type() ) );
 
         this.site = site;
-        this.state = state;
+        this.answerState = answerState;
+    }
+
+    @Nullable
+    public String getAnswerState() {
+        return answerState;
     }
 
     public String getAnswer()
             throws MPKeyUnavailableException, MPAlgorithmException {
-        return getAnswer( state );
+        return getAnswer( answerState );
     }
 
     public void setAnswer(final MPResultType type, @Nullable final String answer)
@@ -53,10 +58,12 @@ public class MPFileQuestion extends MPBasicQuestion {
         setType( type );
 
         if (answer == null)
-            this.state = null;
+            this.answerState = null;
         else
-            this.state = getSite().getState(
+            this.answerState = getSite().getState(
                     MPKeyPurpose.Recovery, getKeyword(), null, getType(), answer );
+
+        setChanged();
     }
 
     @Nonnull

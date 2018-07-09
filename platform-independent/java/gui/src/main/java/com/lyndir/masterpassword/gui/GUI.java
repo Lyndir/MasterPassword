@@ -22,7 +22,6 @@ import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.ByteSource;
-import com.google.common.io.CharSource;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.TypeUtils;
 import com.lyndir.masterpassword.gui.view.PasswordFrame;
@@ -51,6 +50,9 @@ public class GUI implements UnlockFrame.SignInCallback {
     private       PasswordFrame<?, ?> passwordFrame;
 
     public static void main(final String... args) {
+        Thread.setDefaultUncaughtExceptionHandler(
+                (t, e) -> logger.err( e, "Uncaught: %s", e.getLocalizedMessage() ) );
+
         if (Config.get().checkForUpdates())
             checkUpdate();
 
