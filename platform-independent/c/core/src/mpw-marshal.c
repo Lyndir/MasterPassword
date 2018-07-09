@@ -304,27 +304,29 @@ static bool mpw_marshal_write_json(
         if (strftime( dateString, sizeof( dateString ), "%FT%TZ", gmtime( &site->lastUsed ) ))
             json_object_object_add( json_site, "last_used", json_object_new_string( dateString ) );
 
-        json_object *json_site_questions = json_object_new_object();
-        json_object_object_add( json_site, "questions", json_site_questions );
-        for (size_t q = 0; q < site->questions_count; ++q) {
-            MPMarshalledQuestion *question = &site->questions[q];
-            if (!question->keyword)
-                continue;
+        if (site->questions_count) {
+            json_object *json_site_questions = json_object_new_object();
+            json_object_object_add( json_site, "questions", json_site_questions );
+            for (size_t q = 0; q < site->questions_count; ++q) {
+                MPMarshalledQuestion *question = &site->questions[q];
+                if (!question->keyword)
+                    continue;
 
-            json_object *json_site_question = json_object_new_object();
-            json_object_object_add( json_site_questions, question->keyword, json_site_question );
-            json_object_object_add( json_site_question, "type", json_object_new_int( (int32_t)question->type ) );
+                json_object *json_site_question = json_object_new_object();
+                json_object_object_add( json_site_questions, question->keyword, json_site_question );
+                json_object_object_add( json_site_question, "type", json_object_new_int( (int32_t)question->type ) );
 
-            if (!user->redacted) {
-                // Clear Text
-                const char *answerContent = mpw_siteResult( masterKey, site->name, MPCounterValueInitial,
-                        MPKeyPurposeRecovery, question->keyword, question->type, question->content, site->algorithm );
-                json_object_object_add( json_site_question, "answer", json_object_new_string( answerContent ) );
-            }
-            else {
-                // Redacted
-                if (site->type & MPSiteFeatureExportContent && question->content && strlen( question->content ))
-                    json_object_object_add( json_site_question, "answer", json_object_new_string( question->content ) );
+                if (!user->redacted) {
+                    // Clear Text
+                    const char *answerContent = mpw_siteResult( masterKey, site->name, MPCounterValueInitial,
+                            MPKeyPurposeRecovery, question->keyword, question->type, question->content, site->algorithm );
+                    json_object_object_add( json_site_question, "answer", json_object_new_string( answerContent ) );
+                }
+                else {
+                    // Redacted
+                    if (site->type & MPSiteFeatureExportContent && question->content && strlen( question->content ))
+                        json_object_object_add( json_site_question, "answer", json_object_new_string( question->content ) );
+                }
             }
         }
 
@@ -797,23 +799,25 @@ static MPMarshalledUser *mpw_marshal_read_json(
                 site->loginContent = mpw_strdup( siteLoginName );
         }
 
-        json_object_iter json_site_question;
         json_object *json_site_questions = mpw_get_json_section( json_site.val, "questions" );
-        json_object_object_foreachC( json_site_questions, json_site_question ) {
-            MPMarshalledQuestion *question = mpw_marshal_question( site, json_site_question.key );
-            const char *answerContent = mpw_get_json_string( json_site_question.val, "answer", NULL );
-            question->type = (MPResultType)mpw_get_json_int( json_site_question.val, "type", MPResultTypeTemplatePhrase );
+        if (json_site_questions) {
+            json_object_iter json_site_question;
+            json_object_object_foreachC( json_site_questions, json_site_question ) {
+                MPMarshalledQuestion *question = mpw_marshal_question( site, json_site_question.key );
+                const char *answerContent = mpw_get_json_string( json_site_question.val, "answer", NULL );
+                question->type = (MPResultType)mpw_get_json_int( json_site_question.val, "type", MPResultTypeTemplatePhrase );
 
-            if (!user->redacted) {
-                // Clear Text
-                if (answerContent && strlen( answerContent ))
-                    question->content = mpw_siteState( masterKey, site->name, MPCounterValueInitial,
-                            MPKeyPurposeRecovery, question->keyword, question->type, answerContent, site->algorithm );
-            }
-            else {
-                // Redacted
-                if (answerContent && strlen( answerContent ))
-                    question->content = mpw_strdup( answerContent );
+                if (!user->redacted) {
+                    // Clear Text
+                    if (answerContent && strlen( answerContent ))
+                        question->content = mpw_siteState( masterKey, site->name, MPCounterValueInitial,
+                                MPKeyPurposeRecovery, question->keyword, question->type, answerContent, site->algorithm );
+                }
+                else {
+                    // Redacted
+                    if (answerContent && strlen( answerContent ))
+                        question->content = mpw_strdup( answerContent );
+                }
             }
         }
     }
