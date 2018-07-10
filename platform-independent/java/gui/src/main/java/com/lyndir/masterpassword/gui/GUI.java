@@ -30,9 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.*;
-import java.util.Enumeration;
 import java.util.Optional;
-import java.util.jar.*;
 import javax.swing.*;
 
 
@@ -85,44 +83,33 @@ public class GUI implements UnlockFrame.SignInCallback {
 
     private static void checkUpdate() {
         try {
-            Enumeration<URL> manifestURLs = Thread.currentThread().getContextClassLoader().getResources( JarFile.MANIFEST_NAME );
-            while (manifestURLs.hasMoreElements())
-                try (InputStream manifestStream = manifestURLs.nextElement().openStream()) {
-                    Attributes attributes = new Manifest( manifestStream ).getMainAttributes();
-                    if (!GUI.class.getCanonicalName().equals( attributes.getValue( Attributes.Name.MAIN_CLASS ) ))
-                        continue;
-
-                    String manifestRevision = attributes.getValue( Attributes.Name.IMPLEMENTATION_VERSION );
-                    String upstreamRevision = new ByteSource() {
-                        @Override
-                        public InputStream openStream()
-                                throws IOException {
-                            URL           url  = URI.create( "https://masterpassword.app/masterpassword-gui.jar.rev" ).toURL();
-                            URLConnection conn = url.openConnection();
-                            conn.addRequestProperty( "User-Agent", "masterpassword-gui" );
-                            return conn.getInputStream();
-                        }
-                    }.asCharSource( Charsets.UTF_8 ).readFirstLine();
-
-                    if ((manifestRevision != null) && (upstreamRevision != null) && !manifestRevision.equalsIgnoreCase(
-                            upstreamRevision )) {
-                        logger.inf( "Local Revision:    <%s>", manifestRevision );
-                        logger.inf( "Upstream Revision: <%s>", upstreamRevision );
-                        logger.wrn( "You are not running the current official version.  Please update from:%n%s",
-                                    "https://masterpassword.app/masterpassword-gui.jar" );
-                        JOptionPane.showMessageDialog( null,
-                                                       strf( "A new version of Master Password is available.%n "
-                                                             + "Please download the latest version from %s",
-                                                             "https://masterpassword.app" ),
-                                                       "Update Available", JOptionPane.WARNING_MESSAGE );
-                    }
+            String implementationVersion = GUI.class.getPackage().getImplementationVersion();
+            String latestVersion = new ByteSource() {
+                @Override
+                public InputStream openStream()
+                        throws IOException {
+                    URL           url  = URI.create( "https://masterpassword.app/masterpassword-gui.jar.rev" ).toURL();
+                    URLConnection conn = url.openConnection();
+                    conn.addRequestProperty( "User-Agent", "masterpassword-gui" );
+                    return conn.getInputStream();
                 }
-                catch (final IOException e) {
-                    logger.wrn( e, "Couldn't check for version update." );
-                }
+            }.asCharSource( Charsets.UTF_8 ).readFirstLine();
+
+            if ((implementationVersion != null) && (latestVersion != null) &&
+                !implementationVersion.equalsIgnoreCase( latestVersion )) {
+                logger.inf( "Implementation: <%s>", implementationVersion );
+                logger.inf( "Latest        : <%s>", latestVersion );
+                logger.wrn( "You are not running the current official version.  Please update from:%n%s",
+                            "https://masterpassword.app/masterpassword-gui.jar" );
+                JOptionPane.showMessageDialog( null,
+                                               strf( "A new version of Master Password is available.%n "
+                                                     + "Please download the latest version from %s",
+                                                     "https://masterpassword.app" ),
+                                               "Update Available", JOptionPane.INFORMATION_MESSAGE );
+            }
         }
         catch (final IOException e) {
-            logger.wrn( e, "Couldn't inspect JAR." );
+            logger.wrn( e, "Couldn't check for version update." );
         }
     }
 
