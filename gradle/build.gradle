@@ -2,7 +2,7 @@ allprojects {
     apply plugin: 'findbugs'
 
     group = 'com.lyndir.masterpassword'
-    version = 'GIT-SNAPSHOT'
+    version = '2.7'
 
     tasks.withType( JavaCompile ) {
         options.encoding = 'UTF-8'

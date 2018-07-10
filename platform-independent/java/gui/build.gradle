@@ -16,18 +16,22 @@ dependencies {
 }
 
 
-// release with: STORE_PW=$(mpw masterpassword.keystore) KEY_PW_ANDROID=$(mpw masterpassword-android) gradle masterpassword-gui:shadowJar
-shadowJar.doLast {
-    if (System.getenv( 'KEY_PW_DESKTOP' ) != null)
-        ant.signjar(
-            jar: archivePath,
-            alias: 'masterpassword-desktop',
-            keystore: 'masterpassword.keystore',
-            storepass: System.getenv( 'STORE_PW' ),
-            keypass: System.getenv( 'KEY_PW_DESKTOP' ),
-            preservelastmodified: 'true',
-            destdir: '.'
-        )
+// release with: STORE_PW=$(mpw masterpassword.keystore) KEY_PW_DESKTOP=$(mpw masterpassword-desktop) gradle clean masterpassword-gui:shadowJar
+shadowJar {
+    manifest {
+        attributes 'Implementation-Title': description
+        attributes 'Implementation-Version': version
+    }
+    doLast {
+        if (System.getenv( 'KEY_PW_DESKTOP' ) != null)
+            ant.signjar( jar: archivePath,
+                         alias: 'masterpassword-desktop',
+                         keystore: 'masterpassword.keystore',
+                         storepass: System.getenv( 'STORE_PW' ),
+                         keypass: System.getenv( 'KEY_PW_DESKTOP' ),
+                         preservelastmodified: 'true',
+                         destdir: '.' )
+    }
 }
 
 run {
