@@ -74,11 +74,13 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
                 if (!headerStarted)
                     // Starts the header.
                     headerStarted = true;
-                else
+                else {
                     // Ends the header.
                     user = new MPFileUser( fullName, keyID, MPAlgorithm.Version.fromInt( mpVersion ).getAlgorithm(),
                                            avatar, defaultType, new Instant( 0 ), MPMarshalFormat.Flat,
                                            clearContent? MPMarshaller.ContentMode.VISIBLE: MPMarshaller.ContentMode.PROTECTED );
+                    user.ignoreChanges();
+                }
 
                 // Comment.
             else if (line.startsWith( "#" )) {
@@ -154,6 +156,7 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
         if (user == null)
             throw new MPMarshalException( "No full header found in import file." );
 
+        user.endChanges();
         return user;
     }
 }

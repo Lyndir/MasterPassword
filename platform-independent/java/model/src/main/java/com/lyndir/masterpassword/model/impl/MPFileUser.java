@@ -133,6 +133,8 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
 
     public void setJSON(final MPJSONFile json) {
         this.json = json;
+
+        setChanged();
     }
 
     @Nonnull

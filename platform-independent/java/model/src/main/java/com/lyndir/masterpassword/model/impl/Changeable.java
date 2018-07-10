@@ -11,21 +11,22 @@ public class Changeable {
 
     private static final ExecutorService changeExecutor = Executors.newSingleThreadExecutor();
 
-    private boolean changed;
-    private boolean batchingChanges;
+    private boolean  changed;
+    private Grouping grouping = Grouping.APPLY;
 
     void setChanged() {
         synchronized (changeExecutor) {
             if (changed)
                 return;
-            changed = true;
 
-            if (batchingChanges)
+            if (grouping != Grouping.IGNORE)
+                changed = true;
+            if (grouping != Grouping.APPLY)
                 return;
 
             changeExecutor.submit( () -> {
                 synchronized (changeExecutor) {
-                    if (batchingChanges)
+                    if (grouping != Grouping.APPLY)
                         return;
                     changed = false;
                 }
@@ -40,13 +41,19 @@ public class Changeable {
 
     public void beginChanges() {
         synchronized (changeExecutor) {
-            batchingChanges = true;
+            grouping = Grouping.BATCH;
+        }
+    }
+
+    public void ignoreChanges() {
+        synchronized (changeExecutor) {
+            grouping = Grouping.IGNORE;
         }
     }
 
     public boolean endChanges() {
         synchronized (changeExecutor) {
-            batchingChanges = false;
+            grouping = Grouping.APPLY;
 
             if (changed) {
                 this.changed = false;
@@ -55,5 +62,9 @@ public class Changeable {
             } else
                 return false;
         }
+    }
+
+    private enum Grouping {
+        APPLY, BATCH, IGNORE
     }
 }
