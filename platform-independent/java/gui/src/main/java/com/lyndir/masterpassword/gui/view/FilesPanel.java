@@ -43,8 +43,8 @@ public class FilesPanel extends JPanel implements ActionListener {
 
         // User Selection
         add( userField );
-        userField.setFont( Res.valueFont().deriveFont( userField.getFont().getSize2D() ) );
         userField.addActionListener( this );
+        userField.setFont( Res.fonts().valueFont().deriveFont( userField.getFont().getSize2D() ) );
         userField.setRenderer( new DefaultListCellRenderer() {
             @Override
             @SuppressWarnings("unchecked")

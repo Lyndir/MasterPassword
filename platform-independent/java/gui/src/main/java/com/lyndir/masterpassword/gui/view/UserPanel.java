@@ -74,9 +74,11 @@ public class UserPanel extends Components.GradientPanel implements MPUser.Listen
     private static final class NoUserPanel extends JPanel {
 
         private NoUserPanel() {
-            super( new BorderLayout() );
+            setLayout( new BoxLayout( this, BoxLayout.PAGE_AXIS ) );
 
-            add( Components.heading( "Select a user to proceed." ), BorderLayout.CENTER );
+            add( Box.createGlue() );
+            add( Components.heading( "Select a user to proceed." ) );
+            add( Box.createGlue() );
         }
     }
 
@@ -94,12 +96,11 @@ public class UserPanel extends Components.GradientPanel implements MPUser.Listen
 
             this.user = user;
 
+            add( Components.heading( user.getFullName(), SwingConstants.CENTER ) );
             add( Box.createGlue() );
 
-            add( Components.heading( user.getFullName(), SwingConstants.CENTER ) );
-            add( Components.strut() );
-
             add( Components.label( "Master Password:" ) );
+            add( Components.strut() );
             add( masterPasswordField );
             masterPasswordField.addActionListener( this );
             masterPasswordField.getDocument().addDocumentListener( this );
@@ -107,6 +108,8 @@ public class UserPanel extends Components.GradientPanel implements MPUser.Listen
             errorLabel.setForeground( Res.colors().errorFg() );
 
             add( Box.createGlue() );
+
+            Res.ui( false, masterPasswordField::requestFocusInWindow );
         }
 
         @Override
@@ -147,7 +150,7 @@ public class UserPanel extends Components.GradientPanel implements MPUser.Listen
         private final MPUser<?>  user;
         private final JLabel     passwordLabel = Components.label( " ", SwingConstants.CENTER );
         private final JLabel     passwordField = Components.heading( " ", SwingConstants.CENTER );
-        private final JLabel     queryLabel    = Components.label( " ", SwingConstants.CENTER );
+        private final JLabel     queryLabel    = Components.label( " " );
         private final JTextField queryField    = Components.textField();
 
         private AuthenticatedUserPanel(@Nonnull final MPUser<?> user) {
@@ -155,8 +158,13 @@ public class UserPanel extends Components.GradientPanel implements MPUser.Listen
 
             this.user = user;
 
+            add( Components.heading( user.getFullName(), SwingConstants.CENTER ) );
+            add( Components.strut() );
+
             add( passwordLabel );
             add( passwordField );
+            passwordField.setForeground( Res.colors().highlightFg() );
+            passwordField.setFont( Res.fonts().bigValueFont().deriveFont( Font.BOLD, 48 ) );
             add( Box.createGlue() );
 
             add( queryLabel );
@@ -165,6 +173,8 @@ public class UserPanel extends Components.GradientPanel implements MPUser.Listen
             queryField.addActionListener( this );
             queryField.getDocument().addDocumentListener( this );
             add( Box.createGlue() );
+
+            Res.ui( false, queryField::requestFocusInWindow );
         }
 
         @Override

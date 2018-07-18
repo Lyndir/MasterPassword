@@ -42,7 +42,7 @@ class MPJSONAnyObject {
 
         @Override
         @SuppressWarnings({ "ChainOfInstanceofChecks", "Contract" })
-        @SuppressFBWarnings({"EQ_UNUSUAL","EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS", "HE_EQUALS_USE_HASHCODE"})
+        @SuppressFBWarnings({ "EQ_UNUSUAL", "EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS", "HE_EQUALS_USE_HASHCODE" })
         public boolean equals(final Object obj) {
             if (obj instanceof Collection<?>)
                 return ((Collection<?>) obj).isEmpty();

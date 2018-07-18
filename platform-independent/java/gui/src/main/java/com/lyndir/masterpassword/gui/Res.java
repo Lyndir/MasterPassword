@@ -51,6 +51,7 @@ public abstract class Res {
     private static final Executor                          immediateUiExecutor = new SwingExecutorService( true );
     private static final Executor                          laterUiExecutor     = new SwingExecutorService( false );
     private static final Logger                            logger              = Logger.get( Res.class );
+    private static final Fonts                             fonts               = new Fonts();
     private static final Colors                            colors              = new Colors();
 
     public static Future<?> job(final Runnable job) {
@@ -112,88 +113,8 @@ public abstract class Res {
         return AVATAR_COUNT;
     }
 
-    public static Font emoticonsFont() {
-        return emoticonsRegular();
-    }
-
-    public static Font controlFont() {
-        return arimoRegular();
-    }
-
-    public static Font valueFont() {
-        return sourceSansProRegular();
-    }
-
-    public static Font bigValueFont() {
-        return sourceSansProBlack();
-    }
-
-    public static Font emoticonsRegular() {
-        return font( "fonts/Emoticons-Regular.otf" );
-    }
-
-    public static Font sourceCodeProRegular() {
-        return font( "fonts/SourceCodePro-Regular.otf" );
-    }
-
-    public static Font sourceCodeProBlack() {
-        return font( "fonts/SourceCodePro-Bold.otf" );
-    }
-
-    public static Font sourceSansProRegular() {
-        return font( "fonts/SourceSansPro-Regular.otf" );
-    }
-
-    public static Font sourceSansProBlack() {
-        return font( "fonts/SourceSansPro-Bold.otf" );
-    }
-
-    public static Font exoBold() {
-        return font( "fonts/Exo2.0-Bold.otf" );
-    }
-
-    public static Font exoExtraBold() {
-        return font( "fonts/Exo2.0-ExtraBold.otf" );
-    }
-
-    public static Font exoRegular() {
-        return font( "fonts/Exo2.0-Regular.otf" );
-    }
-
-    public static Font exoThin() {
-        return font( "fonts/Exo2.0-Thin.otf" );
-    }
-
-    public static Font arimoBold() {
-        return font( "fonts/Arimo-Bold.ttf" );
-    }
-
-    public static Font arimoBoldItalic() {
-        return font( "fonts/Arimo-BoldItalic.ttf" );
-    }
-
-    public static Font arimoItalic() {
-        return font( "fonts/Arimo-Italic.ttf" );
-    }
-
-    public static Font arimoRegular() {
-        return font( "fonts/Arimo-Regular.ttf" );
-    }
-
-    private static Font font(@NonNls final String fontResourceName) {
-        Map<String, SoftReference<Font>> fontsByResourceName = Maps.newHashMap();
-        SoftReference<Font>              fontRef             = fontsByResourceName.get( fontResourceName );
-        Font                             font                = (fontRef == null)? null: fontRef.get();
-        if (font == null)
-            try {
-                fontsByResourceName.put( fontResourceName, new SoftReference<>(
-                        font = Font.createFont( Font.TRUETYPE_FONT, Resources.getResource( fontResourceName ).openStream() ) ) );
-            }
-            catch (final FontFormatException | IOException e) {
-                throw logger.bug( e );
-            }
-
-        return font;
+    public static Fonts fonts() {
+        return fonts;
     }
 
     public static Colors colors() {
@@ -257,11 +178,100 @@ public abstract class Res {
     }
 
 
+    public static class Fonts {
+
+        public Font emoticonsFont() {
+            return emoticonsRegular();
+        }
+
+        public Font controlFont() {
+            return exoRegular();
+        }
+
+        public Font valueFont() {
+            return sourceSansProRegular();
+        }
+
+        public Font bigValueFont() {
+            return sourceSansProBlack();
+        }
+
+        public Font emoticonsRegular() {
+            return font( "fonts/Emoticons-Regular.otf" );
+        }
+
+        public Font sourceCodeProRegular() {
+            return font( "fonts/SourceCodePro-Regular.otf" );
+        }
+
+        public Font sourceCodeProBlack() {
+            return font( "fonts/SourceCodePro-Bold.otf" );
+        }
+
+        public Font sourceSansProRegular() {
+            return font( "fonts/SourceSansPro-Regular.otf" );
+        }
+
+        public Font sourceSansProBlack() {
+            return font( "fonts/SourceSansPro-Bold.otf" );
+        }
+
+        public Font exoBold() {
+            return font( "fonts/Exo2.0-Bold.otf" );
+        }
+
+        public Font exoExtraBold() {
+            return font( "fonts/Exo2.0-ExtraBold.otf" );
+        }
+
+        public Font exoRegular() {
+            return font( "fonts/Exo2.0-Regular.otf" );
+        }
+
+        public Font exoThin() {
+            return font( "fonts/Exo2.0-Thin.otf" );
+        }
+
+        public Font arimoBold() {
+            return font( "fonts/Arimo-Bold.ttf" );
+        }
+
+        public Font arimoBoldItalic() {
+            return font( "fonts/Arimo-BoldItalic.ttf" );
+        }
+
+        public Font arimoItalic() {
+            return font( "fonts/Arimo-Italic.ttf" );
+        }
+
+        public Font arimoRegular() {
+            return font( "fonts/Arimo-Regular.ttf" );
+        }
+
+        private static Font font(@NonNls final String fontResourceName) {
+            Map<String, SoftReference<Font>> fontsByResourceName = Maps.newHashMap();
+            SoftReference<Font>              fontRef             = fontsByResourceName.get( fontResourceName );
+            Font                             font                = (fontRef == null)? null: fontRef.get();
+            if (font == null)
+                try {
+                    fontsByResourceName.put( fontResourceName, new SoftReference<>(
+                            font = Font.createFont( Font.TRUETYPE_FONT, Resources.getResource( fontResourceName ).openStream() ) ) );
+                }
+                catch (final FontFormatException | IOException e) {
+                    throw logger.bug( e );
+                }
+
+            return font;
+        }
+    }
+
+
     public static class Colors {
 
         private final Color frameBg       = Color.decode( "#5A5D6B" );
-        private final Color controlBg     = Color.decode( "#ECECEC" );
+        private final Color controlBg     = SystemColor.window;
         private final Color controlBorder = Color.decode( "#BFBFBF" );
+        private final Color highlightFg   = SystemColor.controlHighlight;
         private final Color errorFg       = Color.decode( "#FF3333" );
 
         public Color frameBg() {
@@ -274,6 +284,10 @@ public abstract class Res {
 
         public Color controlBorder() {
             return controlBorder;
+        }
+
+        public Color highlightFg() {
+            return highlightFg;
         }
 
         public Color errorFg() {
