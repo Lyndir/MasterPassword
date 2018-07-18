@@ -159,7 +159,7 @@ public class MPFileSite extends MPBasicSite<MPFileQuestion> {
 
     @Override
     public int compareTo(final MPSite<?> o) {
-        int comparison = (o instanceof MPFileSite)? -getLastUsed().compareTo( ((MPFileSite) o).getLastUsed() ): 0;
+        int comparison = (o instanceof MPFileSite)? ((MPFileSite) o).getLastUsed().compareTo( getLastUsed() ): 0;
         if (comparison != 0)
             return comparison;
 

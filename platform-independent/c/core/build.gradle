@@ -14,11 +14,10 @@ artifacts {
         from 'lib'
 
         components.withType( ComponentWithRuntimeFile ) {
-            if (isOptimized()) {
+            if (optimized)
                 from runtimeFile, {
                     into standardOperatingSystem( targetPlatform ) + '/' + standardArchitecture( targetPlatform )
                 }
-            }
         }
     }
 }
@@ -55,27 +54,29 @@ library {
             from files( new File( Jvm.current().javaHome, 'include' ) ) { first().eachDir { from it } }
         }
 
-        binaries.configureEach {
-            def system = standardOperatingSystem( targetPlatform )
-
+        binaries.whenElementFinalized {
             project.dependencies {
-                add( linkLibraries.name,
-                     fileTree( "$rootDir/../lib/libsodium/build-${system}~/out/lib" ) )
-            }
+                def system = standardOperatingSystem( targetPlatform )
 
-            archive.dependsOn project.tasks.maybeCreate( "build_libsodium-${system}", Exec.class ).configure {
-                commandLine 'bash', "$rootDir/../lib/bin/build_libsodium-${system}"
-                privateHeaders.from "$rootDir/../lib/libsodium/build-${system}~/out/include"
-            }
-            clean.dependsOn project.tasks.maybeCreate( "clean_libsodium-${system}", Exec.class ).configure {
-                commandLine 'bash', "$rootDir/../lib/bin/build_libsodium-${system}", 'clean'
-            }
-            archive.dependsOn project.tasks.maybeCreate( "build_libjson-c-${system}", Exec.class ).configure {
-                commandLine 'bash', "$rootDir/../lib/bin/build_libjson-c-${system}"
-                privateHeaders.from "$rootDir/../lib/libjson-c/build-${system}~/out/include"
-            }
-            clean.dependsOn project.tasks.maybeCreate( "clean_libjson-c-${system}", Exec.class ).configure {
-                commandLine 'bash', "$rootDir/../lib/bin/build_libjson-c-${system}", 'clean'
+                // libsodium
+                archive.dependsOn project.tasks.maybeCreate( "build_libsodium-${system}", Exec ).configure {
+                    commandLine 'bash', "$rootDir/../lib/bin/build_libsodium-${system}"
+                    privateHeaders.from "$rootDir/../lib/libsodium/build-${system}~/out/include"
+                    add( linkLibraries.name, fileTree( "$rootDir/../lib/libsodium/build-${system}~/out/lib" ) )
+                }
+                clean.dependsOn project.tasks.maybeCreate( "clean_libsodium-${system}", Exec ).configure {
+                    commandLine 'bash', "$rootDir/../lib/bin/build_libsodium-${system}", 'clean'
+                }
+
+                // libjson-c
+                archive.dependsOn project.tasks.maybeCreate( "build_libjson-c-${system}", Exec ).configure {
+                    commandLine 'bash', "$rootDir/../lib/bin/build_libjson-c-${system}"
+                    privateHeaders.from "$rootDir/../lib/libjson-c/build-${system}~/out/include"
+                    add( linkLibraries.name, fileTree( "$rootDir/../lib/libjson-c/build-${system}~/out/lib" ) )
+                }
+                clean.dependsOn project.tasks.maybeCreate( "clean_libjson-c-${system}", Exec ).configure {
+                    commandLine 'bash', "$rootDir/../lib/bin/build_libjson-c-${system}", 'clean'
+                }
             }
         }
     }

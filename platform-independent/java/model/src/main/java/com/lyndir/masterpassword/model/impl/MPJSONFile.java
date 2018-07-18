@@ -82,8 +82,7 @@ public class MPJSONFile extends MPJSONAnyObject {
         user.default_type = modelUser.getDefaultType();
 
         // Section "sites"
-        if (sites == null)
-            sites = new LinkedHashMap<>();
+        sites = new LinkedHashMap<>();
         for (final MPFileSite modelSite : modelUser.getSites()) {
             String content = null, loginContent = null;
 

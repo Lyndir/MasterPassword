@@ -171,7 +171,7 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
 
     @Override
     public int compareTo(final MPUser<?> o) {
-        int comparison = (o instanceof MPFileUser)? -getLastUsed().compareTo( ((MPFileUser) o).getLastUsed() ): 0;
+        int comparison = (o instanceof MPFileUser)? ((MPFileUser) o).getLastUsed().compareTo( getLastUsed() ): 0;
         if (comparison != 0)
             return comparison;
 

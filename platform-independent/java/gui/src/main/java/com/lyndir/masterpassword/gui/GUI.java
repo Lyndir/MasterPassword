@@ -47,7 +47,7 @@ public class GUI {
 
     public static void main(final String... args) {
         Thread.setDefaultUncaughtExceptionHandler(
-                (t, e) -> logger.err( e, "Uncaught: %s", e.getLocalizedMessage() ) );
+                (t, e) -> logger.bug( e, "Uncaught: %s", e.getLocalizedMessage() ) );
 
         if (Config.get().checkForUpdates())
             checkUpdate();

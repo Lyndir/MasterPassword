@@ -33,7 +33,7 @@ public class SwingExecutorService extends AbstractExecutorService {
 
         synchronized (pendingCommands) {
             if (pendingCommands.isEmpty())
-                terminated.offer( true );
+                terminated.add( true );
         }
     }
 
@@ -85,7 +85,7 @@ public class SwingExecutorService extends AbstractExecutorService {
             pendingCommands.remove( command );
 
             if (shutdown && pendingCommands.isEmpty())
-                terminated.offer( true );
+                terminated.add( true );
         }
     }
 }
