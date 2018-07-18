@@ -19,6 +19,8 @@
 package com.lyndir.masterpassword.model;
 
 import com.lyndir.masterpassword.*;
+import com.lyndir.masterpassword.model.impl.MPBasicSite;
+import com.lyndir.masterpassword.model.impl.MPBasicUser;
 import java.util.Collection;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -93,4 +95,15 @@ public interface MPUser<S extends MPSite<?>> extends Comparable<MPUser<?>> {
 
     @Nonnull
     Collection<S> findSites(String query);
+
+    boolean addListener(Listener listener);
+
+    boolean removeListener(Listener listener);
+
+    interface Listener {
+
+        void onUserUpdated(MPUser<?> user);
+
+        void onUserAuthenticated(MPUser<?> user);
+    }
 }

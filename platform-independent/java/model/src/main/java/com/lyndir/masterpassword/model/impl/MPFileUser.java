@@ -21,7 +21,8 @@ package com.lyndir.masterpassword.model.impl;
 import com.lyndir.masterpassword.*;
 import com.lyndir.masterpassword.model.MPIncorrectMasterPasswordException;
 import com.lyndir.masterpassword.model.MPUser;
-import javax.annotation.Nonnull;
+import java.io.File;
+import java.io.IOException;
 import javax.annotation.Nullable;
 import org.joda.time.Instant;
 import org.joda.time.ReadableInstant;
@@ -35,32 +36,31 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
 
     @Nullable
     private byte[]                   keyID;
+    private File                     path;
     private MPMarshalFormat          format;
     private MPMarshaller.ContentMode contentMode;
 
     private MPResultType    defaultType;
     private ReadableInstant lastUsed;
 
-    @Nullable
-    private MPJSONFile json;
-
     public MPFileUser(final String fullName) {
         this( fullName, null, MPAlgorithm.Version.CURRENT.getAlgorithm() );
     }
 
     public MPFileUser(final String fullName, @Nullable final byte[] keyID, final MPAlgorithm algorithm) {
-        this( fullName, keyID, algorithm, 0, algorithm.mpw_default_result_type(), new Instant(),
-              MPMarshalFormat.DEFAULT, MPMarshaller.ContentMode.PROTECTED );
+        this( fullName, keyID, algorithm, 0, null, new Instant(),
+              MPMarshaller.ContentMode.PROTECTED, MPMarshalFormat.DEFAULT, MPFileUserManager.get().getPath() );
     }
 
     public MPFileUser(final String fullName, @Nullable final byte[] keyID, final MPAlgorithm algorithm,
-                      final int avatar, final MPResultType defaultType, final ReadableInstant lastUsed,
-                      final MPMarshalFormat format, final MPMarshaller.ContentMode contentMode) {
+                      final int avatar, @Nullable final MPResultType defaultType, final ReadableInstant lastUsed,
+                      final MPMarshaller.ContentMode contentMode, final MPMarshalFormat format, final File path) {
         super( avatar, fullName, algorithm );
 
-        this.keyID = (keyID == null)? null: keyID.clone();
-        this.defaultType = defaultType;
+        this.keyID = (keyID != null)? keyID.clone(): null;
+        this.defaultType = (defaultType != null)? defaultType: algorithm.mpw_default_result_type();
         this.lastUsed = lastUsed;
+        this.path = path;
         this.format = format;
         this.contentMode = contentMode;
     }
@@ -131,21 +131,21 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
         setChanged();
     }
 
-    public void setJSON(final MPJSONFile json) {
-        this.json = json;
-
-        setChanged();
-    }
-
-    @Nonnull
-    public MPJSONFile getJSON() {
-        return (json == null)? json = new MPJSONFile(): json;
+    public File getFile() {
+        return new File( path, getFullName() + getFormat().fileSuffix() );
     }
 
     @Override
     public void authenticate(final MPMasterKey masterKey)
             throws MPIncorrectMasterPasswordException, MPKeyUnavailableException, MPAlgorithmException {
         super.authenticate( masterKey );
+
+        try {
+            getFormat().unmarshaller().readSites( this );
+        }
+        catch (final IOException | MPMarshalException e) {
+            logger.err( e, "While reading sites on authentication." );
+        }
 
         if (keyID == null) {
             keyID = masterKey.getKeyID( getAlgorithm() );
@@ -156,19 +156,17 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
 
     @Override
     protected void onChanged() {
-        super.onChanged();
-
         try {
-            save();
+            getFormat().marshaller().marshall( this );
         }
-        catch (final MPKeyUnavailableException | MPAlgorithmException e) {
-            logger.wrn( e, "Couldn't save change." );
+        catch (final MPKeyUnavailableException e) {
+            logger.wrn( e, "Cannot write out changes for unauthenticated user: %s.", this );
         }
-    }
+        catch (final IOException | MPMarshalException | MPAlgorithmException e) {
+            logger.err( e, "Unable to write out changes for user: %s", this );
+        }
 
-    void save()
-            throws MPKeyUnavailableException, MPAlgorithmException {
-        MPFileUserManager.get().save( this, getMasterKey() );
+        super.onChanged();
     }
 
     @Override

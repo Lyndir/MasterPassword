@@ -23,6 +23,7 @@ import static com.lyndir.masterpassword.model.impl.MPJSONFile.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.lyndir.masterpassword.MPAlgorithmException;
 import com.lyndir.masterpassword.MPKeyUnavailableException;
+import java.io.IOException;
 import javax.annotation.Nonnull;
 
 
@@ -33,11 +34,11 @@ public class MPJSONMarshaller implements MPMarshaller {
 
     @Nonnull
     @Override
-    public String marshall(final MPFileUser user)
-            throws MPKeyUnavailableException, MPMarshalException, MPAlgorithmException {
+    public void marshall(final MPFileUser user)
+            throws IOException, MPKeyUnavailableException, MPMarshalException, MPAlgorithmException {
 
         try {
-            return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString( user.getJSON().write( user ) );
+            objectMapper.writerWithDefaultPrettyPrinter().writeValue( user.getFile(), new MPJSONFile( user ) );
         }
         catch (final JsonProcessingException e) {
             throw new MPMarshalException( "Couldn't compose JSON for: " + user, e );

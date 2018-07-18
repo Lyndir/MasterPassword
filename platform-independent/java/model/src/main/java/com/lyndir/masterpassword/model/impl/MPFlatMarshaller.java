@@ -21,10 +21,12 @@ package com.lyndir.masterpassword.model.impl;
 import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.CharSink;
 import com.lyndir.masterpassword.MPAlgorithmException;
 import com.lyndir.masterpassword.MPKeyUnavailableException;
 import com.lyndir.masterpassword.model.MPConstants;
-import javax.annotation.Nonnull;
+import java.io.*;
 import org.joda.time.Instant;
 
 
@@ -36,10 +38,9 @@ public class MPFlatMarshaller implements MPMarshaller {
 
     private static final int FORMAT = 1;
 
-    @Nonnull
     @Override
-    public String marshall(final MPFileUser user)
-            throws MPKeyUnavailableException, MPMarshalException, MPAlgorithmException {
+    public void marshall(final MPFileUser user)
+            throws IOException, MPKeyUnavailableException, MPMarshalException, MPAlgorithmException {
         StringBuilder content = new StringBuilder();
         content.append( "# Master Password site export\n" );
         content.append( "#     " ).append( user.getContentMode().description() ).append( '\n' );
@@ -80,6 +81,12 @@ public class MPFlatMarshaller implements MPMarshaller {
             ) );
         }
 
-        return content.toString();
+        new CharSink() {
+            @Override
+            public Writer openStream()
+                    throws IOException {
+                return new OutputStreamWriter( new FileOutputStream( user.getFile() ), Charsets.UTF_8 );
+            }
+        }.write( content.toString() );
     }
 }

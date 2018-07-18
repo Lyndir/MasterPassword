@@ -28,7 +28,6 @@ import com.lyndir.masterpassword.model.MPIncorrectMasterPasswordException;
 import java.io.File;
 import java.io.IOException;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 
 /**
@@ -38,27 +37,11 @@ public class MPJSONUnmarshaller implements MPUnmarshaller {
 
     @Nonnull
     @Override
-    public MPFileUser unmarshall(@Nonnull final File file, @Nullable final char[] masterPassword)
-            throws IOException, MPMarshalException, MPIncorrectMasterPasswordException, MPKeyUnavailableException, MPAlgorithmException {
+    public MPFileUser readUser(@Nonnull final File file)
+            throws IOException, MPMarshalException {
 
         try {
-            return objectMapper.readValue( file, MPJSONFile.class ).read( masterPassword );
-        }
-        catch (final JsonParseException e) {
-            throw new MPMarshalException( "Couldn't parse JSON in: " + file, e );
-        }
-        catch (final JsonMappingException e) {
-            throw new MPMarshalException( "Couldn't map JSON in: " + file, e );
-        }
-    }
-
-    @Nonnull
-    @Override
-    public MPFileUser unmarshall(@Nonnull final String content, @Nullable final char[] masterPassword)
-            throws MPMarshalException, MPIncorrectMasterPasswordException, MPKeyUnavailableException, MPAlgorithmException {
-
-        try {
-            return objectMapper.readValue( content, MPJSONFile.class ).read( masterPassword );
+            return objectMapper.readValue( file, MPJSONFile.class ).readUser( file );
         }
         catch (final JsonParseException e) {
             throw new MPMarshalException( "Couldn't parse JSON.", e );
@@ -66,8 +49,20 @@ public class MPJSONUnmarshaller implements MPUnmarshaller {
         catch (final JsonMappingException e) {
             throw new MPMarshalException( "Couldn't map JSON.", e );
         }
-        catch (final IOException e) {
-            throw new MPMarshalException( "Couldn't read JSON.", e );
+    }
+
+    @Override
+    public void readSites(final MPFileUser user)
+            throws IOException, MPMarshalException, MPIncorrectMasterPasswordException, MPKeyUnavailableException, MPAlgorithmException {
+
+        try {
+            objectMapper.readValue( user.getFile(), MPJSONFile.class ).readSites( user );
+        }
+        catch (final JsonParseException e) {
+            throw new MPMarshalException( "Couldn't parse JSON.", e );
+        }
+        catch (final JsonMappingException e) {
+            throw new MPMarshalException( "Couldn't map JSON.", e );
         }
     }
 }

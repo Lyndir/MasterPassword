@@ -63,13 +63,6 @@ public abstract class MPBasicSite<Q extends MPQuestion> extends Changeable imple
         return name;
     }
 
-    @Override
-    public void setName(final String name) {
-        this.name = name;
-
-        setChanged();
-    }
-
     @Nonnull
     @Override
     public MPAlgorithm getAlgorithm() {

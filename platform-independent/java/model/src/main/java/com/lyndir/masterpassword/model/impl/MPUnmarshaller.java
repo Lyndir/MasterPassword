@@ -24,7 +24,6 @@ import com.lyndir.masterpassword.model.MPIncorrectMasterPasswordException;
 import java.io.File;
 import java.io.IOException;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 
 /**
@@ -33,10 +32,9 @@ import javax.annotation.Nullable;
 public interface MPUnmarshaller {
 
     @Nonnull
-    MPFileUser unmarshall(@Nonnull File file, @Nullable char[] masterPassword)
-            throws IOException, MPMarshalException, MPIncorrectMasterPasswordException, MPKeyUnavailableException, MPAlgorithmException;
+    MPFileUser readUser(File file)
+            throws IOException, MPMarshalException;
 
-    @Nonnull
-    MPFileUser unmarshall(@Nonnull String content, @Nullable char[] masterPassword)
-            throws MPMarshalException, MPIncorrectMasterPasswordException, MPKeyUnavailableException, MPAlgorithmException;
+    void readSites(MPFileUser user)
+            throws IOException, MPMarshalException, MPIncorrectMasterPasswordException, MPKeyUnavailableException, MPAlgorithmException;
 }

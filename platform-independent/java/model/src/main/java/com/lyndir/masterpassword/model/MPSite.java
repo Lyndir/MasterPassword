@@ -35,8 +35,6 @@ public interface MPSite<Q extends MPQuestion> extends Comparable<MPSite<?>> {
     @Nonnull
     String getName();
 
-    void setName(String name);
-
     // - Algorithm
 
     @Nonnull

@@ -27,6 +27,7 @@ import com.lyndir.masterpassword.*;
 import com.lyndir.masterpassword.model.MPIncorrectMasterPasswordException;
 import com.lyndir.masterpassword.model.MPUser;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArraySet;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -36,7 +37,8 @@ import javax.annotation.Nullable;
  */
 public abstract class MPBasicUser<S extends MPBasicSite<?>> extends Changeable implements MPUser<S> {
 
-    protected final Logger logger = Logger.get( getClass() );
+    protected final Logger        logger    = Logger.get( getClass() );
+    private final   Set<Listener> listeners = new CopyOnWriteArraySet<>();
 
     private       int         avatar;
     private final String      fullName;
@@ -44,7 +46,7 @@ public abstract class MPBasicUser<S extends MPBasicSite<?>> extends Changeable i
     @Nullable
     protected     MPMasterKey masterKey;
 
-    private final Collection<S> sites = new LinkedHashSet<>();
+    private final Map<String, S> sites = new LinkedHashMap<>();
 
     protected MPBasicUser(final String fullName, final MPAlgorithm algorithm) {
         this( 0, fullName, algorithm );
@@ -128,6 +130,9 @@ public abstract class MPBasicUser<S extends MPBasicSite<?>> extends Changeable i
             throw new MPIncorrectMasterPasswordException( this );
 
         this.masterKey = masterKey;
+
+        for (final Listener listener : listeners)
+            listener.onUserAuthenticated( this );
     }
 
     @Override
@@ -147,14 +152,14 @@ public abstract class MPBasicUser<S extends MPBasicSite<?>> extends Changeable i
 
     @Override
     public void addSite(final S site) {
-        sites.add( site );
+        sites.put( site.getName(), site );
 
         setChanged();
     }
 
     @Override
     public void deleteSite(final S site) {
-        sites.remove( site );
+        sites.values().remove( site );
 
         setChanged();
     }
@@ -162,7 +167,7 @@ public abstract class MPBasicUser<S extends MPBasicSite<?>> extends Changeable i
     @Nonnull
     @Override
     public Collection<S> getSites() {
-        return Collections.unmodifiableCollection( sites );
+        return Collections.unmodifiableCollection( sites.values() );
     }
 
     @Nonnull
@@ -174,6 +179,24 @@ public abstract class MPBasicUser<S extends MPBasicSite<?>> extends Changeable i
                 results.add( site );
 
         return results.build();
+    }
+
+    @Override
+    public boolean addListener(final Listener listener) {
+        return listeners.add( listener );
+    }
+
+    @Override
+    public boolean removeListener(final Listener listener) {
+        return listeners.remove( listener );
+    }
+
+    @Override
+    protected void onChanged() {
+        super.onChanged();
+
+        for (final Listener listener : listeners)
+            listener.onUserUpdated( this );
     }
 
     @Override

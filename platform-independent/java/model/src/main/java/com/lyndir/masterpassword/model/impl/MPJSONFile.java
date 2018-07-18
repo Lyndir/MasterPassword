@@ -31,6 +31,7 @@ import com.lyndir.masterpassword.*;
 import com.lyndir.masterpassword.model.MPConstants;
 import com.lyndir.masterpassword.model.MPIncorrectMasterPasswordException;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.annotation.Nullable;
@@ -59,19 +60,20 @@ public class MPJSONFile extends MPJSONAnyObject {
         objectMapper.setVisibility( PropertyAccessor.FIELD, JsonAutoDetect.Visibility.NON_PRIVATE );
     }
 
-    public MPJSONFile write(final MPFileUser modelUser)
-            throws MPKeyUnavailableException, MPAlgorithmException {
+    public MPJSONFile() {
+    }
+
+    public MPJSONFile(final MPFileUser modelUser)
+            throws MPAlgorithmException, MPKeyUnavailableException {
 
         // Section: "export"
-        if (export == null)
-            export = new Export();
+        export = new Export();
         export.format = 1;
         export.redacted = modelUser.getContentMode().isRedacted();
         export.date = MPConstants.dateTimeFormatter.print( new Instant() );
 
         // Section: "user"
-        if (user == null)
-            user = new User();
+        user = new User();
         user.avatar = modelUser.getAvatar();
         user.full_name = modelUser.getFullName();
         user.last_used = MPConstants.dateTimeFormatter.print( modelUser.getLastUsed() );
@@ -84,6 +86,7 @@ public class MPJSONFile extends MPJSONAnyObject {
             sites = new LinkedHashMap<>();
         for (final MPFileSite modelSite : modelUser.getSites()) {
             String content = null, loginContent = null;
+
             if (!export.redacted) {
                 // Clear Text
                 content = modelSite.getResult();
@@ -111,8 +114,7 @@ public class MPJSONFile extends MPJSONAnyObject {
             site.uses = modelSite.getUses();
             site.last_used = MPConstants.dateTimeFormatter.print( modelSite.getLastUsed() );
 
-            if (site.questions == null)
-                site.questions = new LinkedHashMap<>();
+            site.questions = new LinkedHashMap<>();
             for (final MPFileQuestion question : modelSite.getQuestions())
                 site.questions.put( question.getKeyword(), new Site.Question() {
                     {
@@ -129,32 +131,32 @@ public class MPJSONFile extends MPJSONAnyObject {
                     }
                 } );
 
-            if (site._ext_mpw == null)
-                site._ext_mpw = new Site.Ext();
+            site._ext_mpw = new Site.Ext();
             site._ext_mpw.url = modelSite.getUrl();
         }
-
-        return this;
     }
 
-    public MPFileUser read(@Nullable final char[] masterPassword)
-            throws MPIncorrectMasterPasswordException, MPKeyUnavailableException, MPAlgorithmException {
+    public MPFileUser readUser(final File file) {
         MPAlgorithm algorithm = ifNotNullElse( user.algorithm, MPAlgorithm.Version.CURRENT ).getAlgorithm();
-        MPFileUser model = new MPFileUser(
+
+        return new MPFileUser(
                 user.full_name, CodeUtils.decodeHex( user.key_id ), algorithm, user.avatar,
                 (user.default_type != null)? user.default_type: algorithm.mpw_default_result_type(),
                 (user.last_used != null)? MPConstants.dateTimeFormatter.parseDateTime( user.last_used ): new Instant(),
-                MPMarshalFormat.JSON, export.redacted? MPMarshaller.ContentMode.PROTECTED: MPMarshaller.ContentMode.VISIBLE );
-        model.ignoreChanges();
-        model.setJSON( this );
-        if (masterPassword != null)
-            model.authenticate( masterPassword );
+                export.redacted? MPMarshaller.ContentMode.PROTECTED: MPMarshaller.ContentMode.VISIBLE,
+                MPMarshalFormat.JSON, file.getParentFile()
+        );
+    }
+
+    public void readSites(final MPFileUser user)
+            throws MPIncorrectMasterPasswordException, MPKeyUnavailableException, MPAlgorithmException {
+        user.ignoreChanges();
 
         for (final Map.Entry<String, Site> siteEntry : sites.entrySet()) {
             String siteName = siteEntry.getKey();
             Site   fileSite = siteEntry.getValue();
             MPFileSite site = new MPFileSite(
-                    model, siteName, fileSite.algorithm.getAlgorithm(), UnsignedInteger.valueOf( fileSite.counter ), fileSite.type,
+                    user, siteName, fileSite.algorithm.getAlgorithm(), UnsignedInteger.valueOf( fileSite.counter ), fileSite.type,
                     export.redacted? fileSite.password: null,
                     fileSite.login_type, export.redacted? fileSite.login_name: null,
                     (fileSite._ext_mpw != null)? fileSite._ext_mpw.url: null, fileSite.uses,
@@ -168,18 +170,17 @@ public class MPJSONFile extends MPJSONAnyObject {
                                        fileSite.login_name );
             }
 
-            model.addSite( site );
+            user.addSite( site );
         }
-        model.endChanges();
 
-        return model;
+        user.endChanges();
     }
 
     // -- Data
 
-    Export            export;
-    User              user;
-    Map<String, Site> sites;
+    Export            export = new Export();
+    User              user   = new User();
+    Map<String, Site> sites  = new LinkedHashMap<>();
 
 
     public static class Export extends MPJSONAnyObject {
@@ -210,7 +211,7 @@ public class MPJSONFile extends MPJSONAnyObject {
         @Nullable
         MPResultType type;
         long                counter;
-        MPAlgorithm.Version algorithm;
+        MPAlgorithm.Version algorithm = MPAlgorithm.Version.CURRENT;
         @Nullable
         String       password;
         @Nullable

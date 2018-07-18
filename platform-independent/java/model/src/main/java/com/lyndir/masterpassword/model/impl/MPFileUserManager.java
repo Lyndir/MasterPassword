@@ -20,16 +20,13 @@ package com.lyndir.masterpassword.model.impl;
 
 import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 
-import com.google.common.base.Charsets;
-import com.google.common.collect.ImmutableList;
-import com.google.common.io.CharSink;
+import com.google.common.collect.ImmutableSortedSet;
 import com.lyndir.lhunath.opal.system.logging.Logger;
-import com.lyndir.masterpassword.*;
-import com.lyndir.masterpassword.model.*;
-import java.io.*;
+import com.lyndir.masterpassword.model.MPConstants;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import javax.annotation.Nonnull;
 
 
 /**
@@ -38,7 +35,7 @@ import javax.annotation.Nonnull;
  * @author lhunath, 14-12-07
  */
 @SuppressWarnings("CallToSystemGetenv")
-public class MPFileUserManager extends MPUserManager<MPFileUser> {
+public class MPFileUserManager {
 
     @SuppressWarnings("UnusedDeclaration")
     private static final Logger            logger = Logger.get( MPFileUserManager.class );
@@ -46,13 +43,17 @@ public class MPFileUserManager extends MPUserManager<MPFileUser> {
 
     static {
         String rcDir = System.getenv( MPConstants.env_rcDir );
+
         if (rcDir != null)
             instance = create( new File( rcDir ) );
-        else
-            instance = create( new File( ifNotNullElseNullable( System.getProperty( "user.home" ), System.getenv( "HOME" ) ), ".mpw.d" ) );
+        else {
+            String home = ifNotNullElseNullable( System.getProperty( "user.home" ), System.getenv( "HOME" ) );
+            instance = create( new File( home, ".mpw.d" ) );
+        }
     }
 
-    private final File path;
+    private final Map<String, MPFileUser> userByName = new HashMap<>();
+    private final File                    path;
 
     public static MPFileUserManager get() {
         return instance;
@@ -63,86 +64,53 @@ public class MPFileUserManager extends MPUserManager<MPFileUser> {
     }
 
     protected MPFileUserManager(final File path) {
-
-        super( unmarshallUsers( path ) );
         this.path = path;
     }
 
-    private static Iterable<MPFileUser> unmarshallUsers(final File userFilesDirectory) {
-        if (!userFilesDirectory.mkdirs() && !userFilesDirectory.isDirectory()) {
-            logger.err( "Couldn't create directory for user files: %s", userFilesDirectory );
-            return ImmutableList.of();
+    public void reload() {
+        userByName.clear();
+
+        File[] pathFiles;
+        if ((!path.exists() && !path.mkdirs()) || ((pathFiles = path.listFiles()) == null)) {
+            logger.err( "Couldn't create directory for user files: %s", path );
+            return;
         }
 
-        Map<String, MPFileUser> users = new HashMap<>();
-        for (final File userFile : listUserFiles( userFilesDirectory ))
+        for (final File file : pathFiles)
             for (final MPMarshalFormat format : MPMarshalFormat.values())
-                if (userFile.getName().endsWith( format.fileSuffix() ))
+                if (file.getName().endsWith( format.fileSuffix() ))
                     try {
-                        MPFileUser user         = format.unmarshaller().unmarshall( userFile, null );
-                        MPFileUser previousUser = users.put( user.getFullName(), user );
+                        MPFileUser user         = format.unmarshaller().readUser( file );
+                        MPFileUser previousUser = userByName.put( user.getFullName(), user );
                         if ((previousUser != null) && (previousUser.getFormat().ordinal() > user.getFormat().ordinal()))
-                            users.put( previousUser.getFullName(), previousUser );
+                            userByName.put( previousUser.getFullName(), previousUser );
+                        break;
                     }
                     catch (final IOException | MPMarshalException e) {
-                        logger.err( e, "Couldn't read user from: %s", userFile );
+                        logger.err( e, "Couldn't read user from: %s", file );
                     }
-                    catch (final MPKeyUnavailableException | MPIncorrectMasterPasswordException | MPAlgorithmException e) {
-                        logger.err( e, "Couldn't authenticate user for: %s", userFile );
-                    }
-
-        return users.values();
     }
 
-    private static ImmutableList<File> listUserFiles(final File userFilesDirectory) {
-        return ImmutableList.copyOf( ifNotNullElse( userFilesDirectory.listFiles( (dir, name) -> {
-            for (final MPMarshalFormat format : MPMarshalFormat.values())
-                if (name.endsWith( format.fileSuffix() ))
-                    return true;
-
-            return false;
-        } ), new File[0] ) );
+    public MPFileUser add(final String fullName) {
+        MPFileUser user = new MPFileUser( fullName );
+        userByName.put( user.getFullName(), user );
+        return user;
     }
 
-    @Override
-    public void deleteUser(final MPFileUser user) {
-        super.deleteUser( user );
-
+    public void delete(final MPFileUser user) {
         // Remove deleted users.
-        File userFile = getUserFile( user, user.getFormat() );
+        File userFile = user.getFile();
         if (userFile.exists() && !userFile.delete())
             logger.err( "Couldn't delete file: %s", userFile );
+        else
+            userByName.values().remove( user );
     }
 
-    /**
-     * Write the current user state to disk.
-     */
-    public void save(final MPFileUser user, final MPMasterKey masterKey)
-            throws MPKeyUnavailableException, MPAlgorithmException {
-        try {
-            MPMarshalFormat format = user.getFormat();
-            new CharSink() {
-                @Override
-                public Writer openStream()
-                        throws IOException {
-                    return new OutputStreamWriter( new FileOutputStream( getUserFile( user, format ) ), Charsets.UTF_8 );
-                }
-            }.write( format.marshaller().marshall( user ) );
-        }
-        catch (final MPMarshalException | IOException e) {
-            logger.err( e, "Unable to save sites for user: %s", user );
-        }
-    }
-
-    @Nonnull
-    private File getUserFile(final MPUser<?> user, final MPMarshalFormat format) {
-        return new File( path, user.getFullName() + format.fileSuffix() );
-    }
-
-    /**
-     * @return The location on the file system where the user models are stored.
-     */
     public File getPath() {
         return path;
+    }
+
+    public ImmutableSortedSet<MPFileUser> getFiles() {
+        return ImmutableSortedSet.copyOf( userByName.values() );
     }
 }
