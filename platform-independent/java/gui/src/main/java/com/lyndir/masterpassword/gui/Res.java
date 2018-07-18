@@ -23,19 +23,15 @@ import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import com.google.common.collect.Maps;
 import com.google.common.io.Resources;
-import com.google.common.util.concurrent.JdkFutureAdapters;
-import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.*;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.masterpassword.MPIdenticon;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.awt.image.ImageObserver;
 import java.io.IOException;
 import java.lang.ref.SoftReference;
 import java.net.URL;
 import java.util.Map;
-import java.util.WeakHashMap;
 import java.util.concurrent.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -49,19 +45,20 @@ import org.jetbrains.annotations.NonNls;
 @SuppressWarnings({ "HardcodedFileSeparator", "MethodReturnAlwaysConstant", "SpellCheckingInspection" })
 public abstract class Res {
 
-    private static final int                                   AVATAR_COUNT        = 19;
-    private static final Map<Window, ScheduledExecutorService> jobExecutorByWindow = new WeakHashMap<>();
-    private static final Executor                              immediateUiExecutor = new SwingExecutorService( true );
-    private static final Executor                              laterUiExecutor     = new SwingExecutorService( false );
-    private static final Logger                                logger              = Logger.get( Res.class );
-    private static final Colors                                colors              = new Colors();
+    private static final int                               AVATAR_COUNT        = 19;
+    private static final ListeningScheduledExecutorService jobExecutor         = MoreExecutors.listeningDecorator(
+            Executors.newSingleThreadScheduledExecutor() );
+    private static final Executor                          immediateUiExecutor = new SwingExecutorService( true );
+    private static final Executor                          laterUiExecutor     = new SwingExecutorService( false );
+    private static final Logger                            logger              = Logger.get( Res.class );
+    private static final Colors                            colors              = new Colors();
 
-    public static Future<?> job(final Window host, final Runnable job) {
-        return job( host, job, 0, TimeUnit.MILLISECONDS );
+    public static Future<?> job(final Runnable job) {
+        return job( job, 0, TimeUnit.MILLISECONDS );
     }
 
-    public static Future<?> job(final Window host, final Runnable job, final long delay, final TimeUnit timeUnit) {
-        return jobExecutor( host ).schedule( () -> {
+    public static Future<?> job(final Runnable job, final long delay, final TimeUnit timeUnit) {
+        return jobExecutor.schedule( () -> {
             try {
                 job.run();
             }
@@ -71,36 +68,28 @@ public abstract class Res {
         }, delay, timeUnit );
     }
 
-    public static <V> ListenableFuture<V> job(final Window host, final Callable<V> job) {
-        return job( host, job, 0, TimeUnit.MILLISECONDS );
+    public static <V> ListenableFuture<V> job(final Callable<V> job) {
+        return job( job, 0, TimeUnit.MILLISECONDS );
     }
 
-    public static <V> ListenableFuture<V> job(final Window host, final Callable<V> job, final long delay, final TimeUnit timeUnit) {
-        ScheduledExecutorService executor = jobExecutor( host );
-        return JdkFutureAdapters.listenInPoolThread( executor.schedule( job::call, delay, timeUnit ), executor );
+    public static <V> ListenableFuture<V> job(final Callable<V> job, final long delay, final TimeUnit timeUnit) {
+        return jobExecutor.schedule( job, delay, timeUnit );
+    }
+
+    public static void ui(final Runnable job) {
+        ui( true, job );
+    }
+
+    public static void ui(final boolean immediate, final Runnable job) {
+        uiExecutor( immediate ).execute( job );
+    }
+
+    public static Executor uiExecutor() {
+        return uiExecutor( true );
     }
 
     public static Executor uiExecutor(final boolean immediate) {
         return immediate? immediateUiExecutor: laterUiExecutor;
-    }
-
-    public static ScheduledExecutorService jobExecutor(final Window host) {
-        ScheduledExecutorService executor = jobExecutorByWindow.get( host );
-
-        if (executor == null) {
-            jobExecutorByWindow.put( host, executor = Executors.newSingleThreadScheduledExecutor() );
-
-            host.addWindowListener( new WindowAdapter() {
-                @Override
-                public void windowClosed(final WindowEvent e) {
-                    ExecutorService executor = jobExecutorByWindow.remove( host );
-                    if (executor != null)
-                        executor.shutdownNow();
-                }
-            } );
-        }
-
-        return executor;
     }
 
     public static Icon iconAdd() {
@@ -273,6 +262,7 @@ public abstract class Res {
         private final Color frameBg       = Color.decode( "#5A5D6B" );
         private final Color controlBg     = Color.decode( "#ECECEC" );
         private final Color controlBorder = Color.decode( "#BFBFBF" );
+        private final Color errorFg       = Color.decode( "#FF3333" );
 
         public Color frameBg() {
             return frameBg;
@@ -284,6 +274,10 @@ public abstract class Res {
 
         public Color controlBorder() {
             return controlBorder;
+        }
+
+        public Color errorFg() {
+            return errorFg;
         }
 
         public Color fromIdenticonColor(final MPIdenticon.Color identiconColor, final BackgroundMode backgroundMode) {

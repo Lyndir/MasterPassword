@@ -31,6 +31,7 @@ import javax.swing.border.CompoundBorder;
  */
 public abstract class Components {
 
+    private static final float HEADING_TEXT_SIZE = 18f;
     private static final float CONTROL_TEXT_SIZE = 12f;
 
     public static GradientPanel boxLayout(final int axis, final Component... components) {
@@ -118,8 +119,12 @@ public abstract class Components {
         };
     }
 
-    public static Component stud() {
-        Dimension  studDimension = new Dimension( 8, 8 );
+    public static Component strut() {
+        return strut( 8 );
+    }
+
+    public static Component strut(final int size) {
+        Dimension  studDimension = new Dimension( size, size );
         Box.Filler rigidArea     = new Box.Filler( studDimension, studDimension, studDimension );
         rigidArea.setAlignmentX( Component.LEFT_ALIGNMENT );
         rigidArea.setAlignmentY( Component.BOTTOM_ALIGNMENT );
@@ -142,6 +147,34 @@ public abstract class Components {
             @Override
             public Dimension getMaximumSize() {
                 return new Dimension( 20, getPreferredSize().height );
+            }
+        };
+    }
+
+    public static JLabel heading(@Nullable final String heading) {
+        return heading( heading, SwingConstants.CENTER );
+    }
+
+    /**
+     * @param horizontalAlignment One of the following constants
+     *                            defined in {@code SwingConstants}:
+     *                            {@code LEFT},
+     *                            {@code CENTER},
+     *                            {@code RIGHT},
+     *                            {@code LEADING} or
+     *                            {@code TRAILING}.
+     */
+    public static JLabel heading(@Nullable final String heading, final int horizontalAlignment) {
+        return new JLabel( heading, horizontalAlignment ) {
+            {
+                setFont( Res.controlFont().deriveFont( Font.BOLD, HEADING_TEXT_SIZE ) );
+                setAlignmentX( LEFT_ALIGNMENT );
+                setAlignmentY( BOTTOM_ALIGNMENT );
+            }
+
+            @Override
+            public Dimension getMaximumSize() {
+                return new Dimension( Integer.MAX_VALUE, getPreferredSize().height );
             }
         };
     }
@@ -218,7 +251,15 @@ public abstract class Components {
         @Nullable
         private GradientPaint paint;
 
-        protected GradientPanel(@Nullable final LayoutManager layout, @Nullable final Color gradientColor) {
+        public GradientPanel() {
+            this( null, null );
+        }
+
+        public GradientPanel(@Nullable final Color gradientColor) {
+            this( null, gradientColor );
+        }
+
+        public GradientPanel(@Nullable final LayoutManager layout, @Nullable final Color gradientColor) {
             super( layout );
             this.gradientColor = gradientColor;
             setBackground( null );

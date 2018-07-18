@@ -24,8 +24,7 @@ import com.google.common.base.Charsets;
 import com.google.common.io.ByteSource;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.TypeUtils;
-import com.lyndir.masterpassword.gui.view.PasswordFrame;
-import com.lyndir.masterpassword.gui.view.UnlockFrame;
+import com.lyndir.masterpassword.gui.view.MasterPasswordFrame;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
@@ -39,13 +38,12 @@ import javax.swing.*;
  *
  * @author mbillemo
  */
-public class GUI implements UnlockFrame.SignInCallback {
+public class GUI {
 
     @SuppressWarnings("UnusedDeclaration")
     private static final Logger logger = Logger.get( GUI.class );
 
-    private final UnlockFrame         unlockFrame = new UnlockFrame( this );
-    private       PasswordFrame<?, ?> passwordFrame;
+    private final MasterPasswordFrame frame = new MasterPasswordFrame();
 
     public static void main(final String... args) {
         Thread.setDefaultUncaughtExceptionHandler(
@@ -114,17 +112,8 @@ public class GUI implements UnlockFrame.SignInCallback {
     }
 
     protected void open() {
-        SwingUtilities.invokeLater( () -> {
-            if (passwordFrame == null)
-                unlockFrame.setVisible( true );
-            else
-                passwordFrame.setVisible( true );
+        Res.ui( () -> {
+            frame.setVisible( true );
         } );
-    }
-
-    @Override
-    public void signedIn(final PasswordFrame<?, ?> passwordFrame) {
-        this.passwordFrame = passwordFrame;
-        open();
     }
 }
