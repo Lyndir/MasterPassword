@@ -23,12 +23,14 @@ public class MasterPasswordFrame extends JFrame implements FilesPanel.Listener {
         super( "Master Password" );
 
         setDefaultCloseOperation( DISPOSE_ON_CLOSE );
-        setContentPane( root = Components.gradientPanel( new FlowLayout(), Res.colors().frameBg() ) );
+        setContentPane( root = Components.gradientPanel( Res.colors().frameBg(), new FlowLayout() ) );
         root.setLayout( new BoxLayout( root, BoxLayout.PAGE_AXIS ) );
         root.setBorder( BorderFactory.createEmptyBorder( 20, 20, 20, 20 ) );
 
         root.add( filesPanel );
-        root.add( Components.borderPanel( userPanel, BorderFactory.createRaisedBevelBorder(), Res.colors().controlBg() ) );
+        root.add( new JSeparator( SwingConstants.HORIZONTAL ) );
+        root.add( Components.strut() );
+        root.add( Components.borderPanel( BorderFactory.createRaisedBevelBorder(), Res.colors().controlBg(), userPanel ) );
 
         filesPanel.addListener( this );
         filesPanel.reload();

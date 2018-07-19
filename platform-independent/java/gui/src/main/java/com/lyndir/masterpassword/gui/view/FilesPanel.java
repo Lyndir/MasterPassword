@@ -1,28 +1,30 @@
 package com.lyndir.masterpassword.gui.view;
 
 import com.lyndir.masterpassword.gui.Res;
+import com.lyndir.masterpassword.gui.util.CollectionListModel;
 import com.lyndir.masterpassword.gui.util.Components;
 import com.lyndir.masterpassword.model.MPUser;
-import com.lyndir.masterpassword.model.impl.MPFileUser;
 import com.lyndir.masterpassword.model.impl.MPFileUserManager;
 import java.awt.*;
-import java.awt.event.*;
-import java.util.Set;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArraySet;
 import javax.annotation.Nullable;
 import javax.swing.*;
-import javax.swing.plaf.metal.MetalComboBoxEditor;
 
 
 /**
  * @author lhunath, 2018-07-14
  */
-public class FilesPanel extends JPanel implements ActionListener {
+public class FilesPanel extends JPanel implements ItemListener {
 
-    private final Set<Listener> listeners = new CopyOnWriteArraySet<>();
+    private final Collection<Listener> listeners = new CopyOnWriteArraySet<>();
 
-    private final JLabel                avatarLabel = new JLabel();
-    private final JComboBox<MPFileUser> userField   = Components.comboBox();
+    private final JLabel                         avatarLabel = new JLabel();
+    private final CollectionListModel<MPUser<?>> usersModel  = new CollectionListModel<>();
+    private final JComboBox<MPUser<?>>           userField   =
+            Components.comboBox( usersModel, user -> (user != null)? user.getFullName(): null );
 
     protected FilesPanel() {
         setOpaque( false );
@@ -43,25 +45,7 @@ public class FilesPanel extends JPanel implements ActionListener {
 
         // User Selection
         add( userField );
-        userField.addActionListener( this );
-        userField.setFont( Res.fonts().valueFont().deriveFont( userField.getFont().getSize2D() ) );
-        userField.setRenderer( new DefaultListCellRenderer() {
-            @Override
-            @SuppressWarnings("unchecked")
-            public Component getListCellRendererComponent(final JList<?> list, final Object value, final int index,
-                                                          final boolean isSelected, final boolean cellHasFocus) {
-                String userValue = (value == null)? null: ((MPFileUser) value).getFullName();
-                return super.getListCellRendererComponent( list, userValue, index, isSelected, cellHasFocus );
-            }
-        } );
-        userField.setEditor( new MetalComboBoxEditor() {
-            @Override
-            protected JTextField createEditorComponent() {
-                JTextField editorComponents = Components.textField();
-                editorComponents.setForeground( Color.red );
-                return editorComponents;
-            }
-        } );
+        userField.addItemListener( this );
 
         // -
         add( Box.createVerticalGlue() );
@@ -69,34 +53,23 @@ public class FilesPanel extends JPanel implements ActionListener {
 
     public void reload() {
         MPFileUserManager.get().reload();
-        userField.setModel( new DefaultComboBoxModel<>( MPFileUserManager.get().getFiles().toArray( new MPFileUser[0] ) ) );
-        updateFile();
-    }
-
-    @Override
-    public void actionPerformed(final ActionEvent e) {
-        updateFile();
-    }
-
-    @Nullable
-    private MPFileUser getSelectedUser() {
-        int selectedIndex = userField.getSelectedIndex();
-        if (selectedIndex < 0)
-            return null;
-
-        return userField.getModel().getElementAt( selectedIndex );
-    }
-
-    private void updateFile() {
-        MPFileUser selectedFile = getSelectedUser();
-        avatarLabel.setIcon( Res.avatar( (selectedFile == null)? 0: selectedFile.getAvatar() ) );
-
-        for (final Listener listener : listeners)
-            listener.onUserSelected( selectedFile );
+        usersModel.set( MPFileUserManager.get().getFiles() );
     }
 
     public boolean addListener(final Listener listener) {
         return listeners.add( listener );
+    }
+
+    @Override
+    public void itemStateChanged(final ItemEvent e) {
+        if (e.getStateChange() != ItemEvent.SELECTED)
+            return;
+
+        MPUser<?> selectedUser = usersModel.getSelectedItem();
+        avatarLabel.setIcon( Res.avatar( (selectedUser == null)? 0: selectedUser.getAvatar() ) );
+
+        for (final Listener listener : listeners)
+            listener.onUserSelected( selectedUser );
     }
 
     public interface Listener {

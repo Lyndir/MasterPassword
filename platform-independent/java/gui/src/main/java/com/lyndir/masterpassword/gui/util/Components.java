@@ -20,6 +20,7 @@ package com.lyndir.masterpassword.gui.util;
 
 import com.lyndir.masterpassword.gui.Res;
 import java.awt.*;
+import java.util.function.Function;
 import javax.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -34,9 +35,8 @@ public abstract class Components {
     private static final float HEADING_TEXT_SIZE = 19f;
     private static final float CONTROL_TEXT_SIZE = 13f;
 
-    public static GradientPanel boxLayout(final int axis, final Component... components) {
+    public static GradientPanel boxPanel(final int axis, final Component... components) {
         GradientPanel container = gradientPanel( null, null );
-        //        container.setBackground( Color.red );
         container.setLayout( new BoxLayout( container, axis ) );
         for (final Component component : components)
             container.add( component );
@@ -44,12 +44,13 @@ public abstract class Components {
         return container;
     }
 
-    public static GradientPanel borderPanel(final JComponent component, @Nullable final Border border) {
-        return borderPanel( component, border, null );
+    public static GradientPanel borderPanel(@Nullable final Border border, final Component... components) {
+        return borderPanel( border, null, components );
     }
 
-    public static GradientPanel borderPanel(final JComponent component, @Nullable final Border border, @Nullable final Color background) {
-        GradientPanel box = boxLayout( BoxLayout.LINE_AXIS, component );
+    public static GradientPanel borderPanel(@Nullable final Border border, @Nullable final Color background,
+                                            final Component... components) {
+        GradientPanel box = boxPanel( BoxLayout.LINE_AXIS, components );
 
         if (border != null)
             box.setBorder( border );
@@ -60,11 +61,11 @@ public abstract class Components {
         return box;
     }
 
-    public static GradientPanel gradientPanel(@Nullable final LayoutManager layout, @Nullable final Color color) {
+    public static GradientPanel gradientPanel(@Nullable final Color color, @Nullable final LayoutManager layout) {
         return new GradientPanel( layout, color ) {
             {
                 setOpaque( color != null );
-                setBackground( null );
+                setBackground( color );
                 setAlignmentX( LEFT_ALIGNMENT );
                 setAlignmentY( BOTTOM_ALIGNMENT );
             }
@@ -100,6 +101,45 @@ public abstract class Components {
             @Override
             public Dimension getMaximumSize() {
                 return new Dimension( Integer.MAX_VALUE, getPreferredSize().height );
+            }
+        };
+    }
+
+    public static <E> JList<E> list(final ListModel<E> model, final Function<E, String> valueTransformer) {
+        return new JList<E>( model ) {
+            {
+                setFont( Res.fonts().valueFont().deriveFont( CONTROL_TEXT_SIZE ) );
+                setBorder( BorderFactory.createEmptyBorder( 4, 0, 4, 0 ) );
+                setCellRenderer( new DefaultListCellRenderer() {
+                    {
+                        setBorder( BorderFactory.createEmptyBorder( 0, 4, 0, 4 ) );
+                    }
+
+                    @Override
+                    @SuppressWarnings({ "unchecked", "SerializableStoresNonSerializable" })
+                    public Component getListCellRendererComponent(final JList<?> list, final Object value, final int index,
+                                                                  final boolean isSelected, final boolean cellHasFocus) {
+                        return super.getListCellRendererComponent(
+                                list, valueTransformer.apply( (E) value ), index, isSelected, cellHasFocus );
+                    }
+                } );
+                setAlignmentX( LEFT_ALIGNMENT );
+                setAlignmentY( BOTTOM_ALIGNMENT );
+            }
+
+            @Override
+            public Dimension getMaximumSize() {
+                return new Dimension( Integer.MAX_VALUE, Integer.MAX_VALUE );
+            }
+        };
+    }
+
+    public static JScrollPane scrollPane(final Component child) {
+        return new JScrollPane( child ) {
+            {
+                setBorder( BorderFactory.createLineBorder( Res.colors().controlBorder(), 1, true ) );
+                setAlignmentX( LEFT_ALIGNMENT );
+                setAlignmentY( BOTTOM_ALIGNMENT );
             }
         };
     }
@@ -219,14 +259,28 @@ public abstract class Components {
     }
 
     @SafeVarargs
-    public static <V> JComboBox<V> comboBox(final V... values) {
-        return comboBox( new DefaultComboBoxModel<>( values ) );
+    public static <E> JComboBox<E> comboBox(final Function<E, String> valueTransformer, final E... values) {
+        return comboBox( new DefaultComboBoxModel<>( values ), valueTransformer );
     }
 
-    public static <M> JComboBox<M> comboBox(final ComboBoxModel<M> model) {
-        return new JComboBox<M>( model ) {
+    public static <E> JComboBox<E> comboBox(final ComboBoxModel<E> model, final Function<E, String> valueTransformer) {
+        return new JComboBox<E>( model ) {
             {
-                setFont( Res.fonts().controlFont().deriveFont( CONTROL_TEXT_SIZE ) );
+                setFont( Res.fonts().valueFont().deriveFont( CONTROL_TEXT_SIZE ) );
+                setBorder( BorderFactory.createEmptyBorder( 4, 0, 4, 0 ) );
+                setRenderer( new DefaultListCellRenderer() {
+                    {
+                        setBorder( BorderFactory.createEmptyBorder( 0, 4, 0, 4 ) );
+                    }
+
+                    @Override
+                    @SuppressWarnings({ "unchecked", "SerializableStoresNonSerializable" })
+                    public Component getListCellRendererComponent(final JList<?> list, final Object value, final int index,
+                                                                  final boolean isSelected, final boolean cellHasFocus) {
+                        return super.getListCellRendererComponent(
+                                list, valueTransformer.apply( (E) value ), index, isSelected, cellHasFocus );
+                    }
+                } );
                 setAlignmentX( LEFT_ALIGNMENT );
                 setAlignmentY( BOTTOM_ALIGNMENT );
             }

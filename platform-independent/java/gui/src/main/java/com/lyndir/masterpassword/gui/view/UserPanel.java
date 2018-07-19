@@ -2,22 +2,25 @@ package com.lyndir.masterpassword.gui.view;
 
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
+import com.google.common.collect.ImmutableCollection;
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.masterpassword.*;
 import com.lyndir.masterpassword.gui.Res;
+import com.lyndir.masterpassword.gui.util.CollectionListModel;
 import com.lyndir.masterpassword.gui.util.Components;
-import com.lyndir.masterpassword.model.MPIncorrectMasterPasswordException;
-import com.lyndir.masterpassword.model.MPUser;
+import com.lyndir.masterpassword.model.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
+import java.awt.event.*;
 import java.util.Objects;
+import java.util.concurrent.Future;
+import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+import javax.swing.event.*;
 
 
 /**
@@ -128,30 +131,35 @@ public class UserPanel extends Components.GradientPanel implements MPUser.Listen
         }
 
         @Override
-        public void insertUpdate(final DocumentEvent e) {
+        public void insertUpdate(final DocumentEvent event) {
             errorLabel.setText( null );
         }
 
         @Override
-        public void removeUpdate(final DocumentEvent e) {
+        public void removeUpdate(final DocumentEvent event) {
             errorLabel.setText( null );
         }
 
         @Override
-        public void changedUpdate(final DocumentEvent e) {
+        public void changedUpdate(final DocumentEvent event) {
             errorLabel.setText( null );
         }
     }
 
 
-    private static final class AuthenticatedUserPanel extends JPanel implements ActionListener, DocumentListener {
+    private static final class AuthenticatedUserPanel extends JPanel implements ActionListener, DocumentListener, ListSelectionListener,
+            KeyListener {
 
         @Nonnull
-        private final MPUser<?>  user;
-        private final JLabel     passwordLabel = Components.label( " ", SwingConstants.CENTER );
-        private final JLabel     passwordField = Components.heading( " ", SwingConstants.CENTER );
-        private final JLabel     queryLabel    = Components.label( " " );
-        private final JTextField queryField    = Components.textField();
+        private final MPUser<?>                      user;
+        private final JLabel                         passwordLabel = Components.label( " ", SwingConstants.CENTER );
+        private final JLabel                         passwordField = Components.heading( " ", SwingConstants.CENTER );
+        private final JLabel                         queryLabel    = Components.label( " " );
+        private final JTextField                     queryField    = Components.textField();
+        private final CollectionListModel<MPSite<?>> sitesModel    = new CollectionListModel<>();
+        private final JList<MPSite<?>>               sitesList     = Components.list( sitesModel,
+                                                                                      value -> (value != null)? value.getName(): null );
+        private       Future<?>                      updateSitesJob;
 
         private AuthenticatedUserPanel(@Nonnull final MPUser<?> user) {
             setLayout( new BoxLayout( this, BoxLayout.PAGE_AXIS ) );
@@ -166,12 +174,17 @@ public class UserPanel extends Components.GradientPanel implements MPUser.Listen
             passwordField.setForeground( Res.colors().highlightFg() );
             passwordField.setFont( Res.fonts().bigValueFont().deriveFont( Font.BOLD, 48 ) );
             add( Box.createGlue() );
+            add( Components.strut() );
 
             add( queryLabel );
             queryLabel.setText( strf( "%s's password for:", user.getFullName() ) );
             add( queryField );
             queryField.addActionListener( this );
+            queryField.addKeyListener( this );
             queryField.getDocument().addDocumentListener( this );
+            add( Components.strut() );
+            add( Components.scrollPane( sitesList ) );
+            sitesList.addListSelectionListener( this );
             add( Box.createGlue() );
 
             Res.ui( false, queryField::requestFocusInWindow );
@@ -179,12 +192,59 @@ public class UserPanel extends Components.GradientPanel implements MPUser.Listen
 
         @Override
         public void actionPerformed(final ActionEvent event) {
-            String siteName = queryField.getText();
+            showSiteResult( sitesList.getSelectedValue(), result -> {
+                if (result == null)
+                    return;
+
+                Transferable clipboardContents = new StringSelection( result );
+                Toolkit.getDefaultToolkit().getSystemClipboard().setContents( clipboardContents, null );
+
+                Res.ui( () -> {
+                    Window window = SwingUtilities.windowForComponent( this );
+                    window.dispatchEvent( new WindowEvent( window, WindowEvent.WINDOW_CLOSING ) );
+                } );
+            } );
+        }
+
+        @Override
+        public void insertUpdate(final DocumentEvent event) {
+            updateSites();
+        }
+
+        @Override
+        public void removeUpdate(final DocumentEvent event) {
+            updateSites();
+        }
+
+        @Override
+        public void changedUpdate(final DocumentEvent event) {
+            updateSites();
+        }
+
+        @Override
+        public void valueChanged(final ListSelectionEvent event) {
+            showSiteResult( event.getValueIsAdjusting()? null: sitesList.getSelectedValue(), null );
+        }
+
+        private void showSiteResult(@Nullable final MPSite<?> site, @Nullable final Consumer<String> resultCallback) {
+            if (site == null) {
+                if (resultCallback != null)
+                    resultCallback.accept( null );
+                Res.ui( () -> {
+                    passwordLabel.setText( " " );
+                    passwordField.setText( " " );
+                } );
+                return;
+            }
+
+            String siteName = site.getName();
             Res.job( () -> {
                 try {
                     String result = user.getMasterKey().siteResult(
                             siteName, user.getAlgorithm(), UnsignedInteger.ONE,
                             MPKeyPurpose.Authentication, null, MPResultType.GeneratedLong, null );
+                    if (resultCallback != null)
+                        resultCallback.accept( result );
 
                     Res.ui( () -> {
                         passwordLabel.setText( strf( "Your password for %s:", siteName ) );
@@ -192,27 +252,35 @@ public class UserPanel extends Components.GradientPanel implements MPUser.Listen
                     } );
                 }
                 catch (final MPKeyUnavailableException | MPAlgorithmException e) {
-                    logger.err( e, "While resolving password for: %s", siteName );
+                    logger.err( e, "While resolving password for: %s", site );
                 }
             } );
         }
 
         @Override
-        public void insertUpdate(final DocumentEvent e) {
-            // TODO
-
+        public void keyTyped(final KeyEvent event) {
         }
 
         @Override
-        public void removeUpdate(final DocumentEvent e) {
-            // TODO
-
+        public void keyPressed(final KeyEvent event) {
+            if ((event.getKeyCode() == KeyEvent.VK_UP) || (event.getKeyCode() == KeyEvent.VK_DOWN))
+                sitesList.dispatchEvent( event );
         }
 
         @Override
-        public void changedUpdate(final DocumentEvent e) {
-            // TODO
+        public void keyReleased(final KeyEvent event) {
+            if ((event.getKeyCode() == KeyEvent.VK_UP) || (event.getKeyCode() == KeyEvent.VK_DOWN))
+                sitesList.dispatchEvent( event );
+        }
 
+        private synchronized void updateSites() {
+            if (updateSitesJob != null)
+                updateSitesJob.cancel( true );
+
+            updateSitesJob = Res.job( () -> {
+                ImmutableCollection<? extends MPSite<?>> sites = user.findSites( queryField.getText() );
+                Res.ui( () -> sitesModel.set( sites ) );
+            } );
         }
     }
 }
