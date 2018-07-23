@@ -4,17 +4,20 @@ import com.google.common.collect.ImmutableList;
 import java.util.*;
 import javax.annotation.Nullable;
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 
 /**
  * @author lhunath, 2018-07-19
  */
 @SuppressWarnings("serial")
-public class CollectionListModel<E> extends AbstractListModel<E> implements ComboBoxModel<E> {
+public class CollectionListModel<E> extends AbstractListModel<E> implements ComboBoxModel<E>, ListSelectionListener {
 
-    private final List<E> model = new LinkedList<>();
+    private final List<E>  model = new LinkedList<>();
     @Nullable
-    private       E       selectedItem;
+    private       E        selectedItem;
+    private       JList<E> list;
 
     public CollectionListModel() {
     }
@@ -77,6 +80,10 @@ public class CollectionListModel<E> extends AbstractListModel<E> implements Comb
         if (!Objects.equals( selectedItem, newSelectedItem ) && model.contains( newSelectedItem )) {
             selectedItem = (E) newSelectedItem;
             fireContentsChanged( this, -1, -1 );
+
+            //noinspection ObjectEquality
+            if ((list != null) && (list.getModel() == this))
+                list.setSelectedValue( selectedItem, true );
         }
     }
 
@@ -84,5 +91,22 @@ public class CollectionListModel<E> extends AbstractListModel<E> implements Comb
     @Override
     public synchronized E getSelectedItem() {
         return selectedItem;
+    }
+
+    public synchronized void registerList(final JList<E> list) {
+        // TODO: This class should probably implement ListSelectionModel instead.
+        if (this.list != null)
+            this.list.removeListSelectionListener( this );
+
+        this.list = list;
+        this.list.addListSelectionListener( this );
+        this.list.setModel( this );
+    }
+
+    @Override
+    public synchronized void valueChanged(final ListSelectionEvent event) {
+        //noinspection ObjectEquality
+        if ((event.getSource() == list) && (list.getModel() == this))
+            selectedItem = list.getSelectedValue();
     }
 }

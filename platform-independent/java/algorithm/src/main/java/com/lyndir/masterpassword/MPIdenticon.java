@@ -27,6 +27,7 @@ import com.lyndir.lhunath.opal.system.logging.Logger;
 import java.nio.*;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.Locale;
 
 
 /**
@@ -83,6 +84,10 @@ public class MPIdenticon {
         return text;
     }
 
+    public String getHTML() {
+        return strf( "<span style='color: %s'>%s</span>", color.getCSS(), text );
+    }
+
     public Color getColor() {
         return color;
     }
@@ -94,6 +99,15 @@ public class MPIdenticon {
         BLUE,
         MAGENTA,
         CYAN,
-        MONO
+        MONO {
+            @Override
+            public String getCSS() {
+                return "inherit";
+            }
+        };
+
+        public String getCSS() {
+            return name().toLowerCase( Locale.ROOT );
+        }
     }
 }

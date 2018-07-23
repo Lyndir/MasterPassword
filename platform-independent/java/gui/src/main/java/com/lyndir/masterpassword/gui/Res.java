@@ -180,20 +180,20 @@ public abstract class Res {
 
     public static class Fonts {
 
-        public Font emoticonsFont() {
-            return emoticonsRegular();
+        public Font emoticonsFont(final float size) {
+            return emoticonsRegular().deriveFont( size );
         }
 
-        public Font controlFont() {
-            return exoRegular();
+        public Font controlFont(final float size) {
+            return exoRegular().deriveFont( size );
         }
 
-        public Font valueFont() {
-            return sourceSansProRegular();
+        public Font valueFont(final float size) {
+            return sourceSansProRegular().deriveFont( size );
         }
 
-        public Font bigValueFont() {
-            return sourceSansProBlack();
+        public Font bigValueFont(final float size) {
+            return sourceSansProBlack().deriveFont( size );
         }
 
         public Font emoticonsRegular() {
@@ -268,11 +268,16 @@ public abstract class Res {
 
     public static class Colors {
 
+        private final Color transparent   = new Color( 0, 0, 0, 0 );
         private final Color frameBg       = Color.decode( "#5A5D6B" );
         private final Color controlBg     = SystemColor.window;
         private final Color controlBorder = Color.decode( "#BFBFBF" );
         private final Color highlightFg   = SystemColor.controlHighlight;
         private final Color errorFg       = Color.decode( "#FF3333" );
+
+        public Color transparent() {
+            return transparent;
+        }
 
         public Color frameBg() {
             return frameBg;

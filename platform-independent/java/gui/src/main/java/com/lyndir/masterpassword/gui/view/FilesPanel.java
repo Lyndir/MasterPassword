@@ -28,7 +28,7 @@ public class FilesPanel extends JPanel implements ItemListener {
 
     protected FilesPanel() {
         setOpaque( false );
-        setBackground( new Color( 0, 0, 0, 0 ) );
+        setBackground( Res.colors().transparent() );
         setLayout( new BoxLayout( this, BoxLayout.PAGE_AXIS ) );
 
         // -
@@ -46,9 +46,6 @@ public class FilesPanel extends JPanel implements ItemListener {
         // User Selection
         add( userField );
         userField.addItemListener( this );
-
-        // -
-        add( Box.createVerticalGlue() );
     }
 
     public void reload() {

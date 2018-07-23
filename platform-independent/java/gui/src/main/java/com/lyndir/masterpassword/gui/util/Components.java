@@ -32,8 +32,10 @@ import javax.swing.border.CompoundBorder;
  */
 public abstract class Components {
 
-    private static final float HEADING_TEXT_SIZE = 19f;
-    private static final float CONTROL_TEXT_SIZE = 13f;
+    public static final float TEXT_SIZE_HEADING = 19f;
+    public static final float TEXT_SIZE_CONTROL = 13f;
+    public static final int   SIZE_MARGIN       = 20;
+    public static final int   SIZE_PADDING      = 8;
 
     public static GradientPanel boxPanel(final int axis, final Component... components) {
         GradientPanel container = gradientPanel( null, null );
@@ -77,7 +79,7 @@ public abstract class Components {
             {
                 setBorder( BorderFactory.createCompoundBorder( BorderFactory.createLineBorder( Res.colors().controlBorder(), 1, true ),
                                                                BorderFactory.createEmptyBorder( 4, 4, 4, 4 ) ) );
-                setFont( Res.fonts().valueFont().deriveFont( CONTROL_TEXT_SIZE ) );
+                setFont( Res.fonts().valueFont( TEXT_SIZE_CONTROL ) );
                 setAlignmentX( LEFT_ALIGNMENT );
                 setAlignmentY( BOTTOM_ALIGNMENT );
             }
@@ -108,7 +110,7 @@ public abstract class Components {
     public static <E> JList<E> list(final ListModel<E> model, final Function<E, String> valueTransformer) {
         return new JList<E>( model ) {
             {
-                setFont( Res.fonts().valueFont().deriveFont( CONTROL_TEXT_SIZE ) );
+                setFont( Res.fonts().valueFont( TEXT_SIZE_CONTROL ) );
                 setBorder( BorderFactory.createEmptyBorder( 4, 0, 4, 0 ) );
                 setCellRenderer( new DefaultListCellRenderer() {
                     {
@@ -147,7 +149,7 @@ public abstract class Components {
     public static JButton button(final String label) {
         return new JButton( label ) {
             {
-                setFont( Res.fonts().controlFont().deriveFont( CONTROL_TEXT_SIZE ) );
+                setFont( Res.fonts().controlFont( TEXT_SIZE_CONTROL ) );
                 setAlignmentX( LEFT_ALIGNMENT );
                 setAlignmentY( BOTTOM_ALIGNMENT );
             }
@@ -160,7 +162,7 @@ public abstract class Components {
     }
 
     public static Component strut() {
-        return strut( 8 );
+        return strut( SIZE_PADDING );
     }
 
     public static Component strut(final int size) {
@@ -170,6 +172,18 @@ public abstract class Components {
         rigidArea.setAlignmentY( Component.BOTTOM_ALIGNMENT );
         rigidArea.setBackground( Color.red );
         return rigidArea;
+    }
+
+    public static int margin() {
+        return SIZE_MARGIN;
+    }
+
+    public static Border marginBorder() {
+        return marginBorder( margin() );
+    }
+
+    public static Border marginBorder(final int size) {
+        return BorderFactory.createEmptyBorder( size, size, size, size );
     }
 
     public static JSpinner spinner(final SpinnerModel model) {
@@ -191,6 +205,14 @@ public abstract class Components {
         };
     }
 
+    public static JLabel heading() {
+        return heading( " " );
+    }
+
+    public static JLabel heading(final int horizontalAlignment) {
+        return heading( " ", horizontalAlignment );
+    }
+
     public static JLabel heading(@Nullable final String heading) {
         return heading( heading, SwingConstants.CENTER );
     }
@@ -207,7 +229,7 @@ public abstract class Components {
     public static JLabel heading(@Nullable final String heading, final int horizontalAlignment) {
         return new JLabel( heading, horizontalAlignment ) {
             {
-                setFont( Res.fonts().controlFont().deriveFont( Font.BOLD, HEADING_TEXT_SIZE ) );
+                setFont( Res.fonts().controlFont( TEXT_SIZE_HEADING ).deriveFont( Font.BOLD ) );
                 setAlignmentX( LEFT_ALIGNMENT );
                 setAlignmentY( BOTTOM_ALIGNMENT );
             }
@@ -217,6 +239,14 @@ public abstract class Components {
                 return new Dimension( Integer.MAX_VALUE, getPreferredSize().height );
             }
         };
+    }
+
+    public static JLabel label() {
+        return label( " " );
+    }
+
+    public static JLabel label(final int horizontalAlignment) {
+        return label( " ", horizontalAlignment );
     }
 
     public static JLabel label(@Nullable final String label) {
@@ -235,7 +265,7 @@ public abstract class Components {
     public static JLabel label(@Nullable final String label, final int horizontalAlignment) {
         return new JLabel( label, horizontalAlignment ) {
             {
-                setFont( Res.fonts().controlFont().deriveFont( CONTROL_TEXT_SIZE ) );
+                setFont( Res.fonts().controlFont( TEXT_SIZE_CONTROL ) );
                 setAlignmentX( LEFT_ALIGNMENT );
                 setAlignmentY( BOTTOM_ALIGNMENT );
             }
@@ -250,7 +280,7 @@ public abstract class Components {
     public static JCheckBox checkBox(final String label) {
         return new JCheckBox( label ) {
             {
-                setFont( Res.fonts().controlFont().deriveFont( CONTROL_TEXT_SIZE ) );
+                setFont( Res.fonts().controlFont( TEXT_SIZE_CONTROL ) );
                 setBackground( null );
                 setAlignmentX( LEFT_ALIGNMENT );
                 setAlignmentY( BOTTOM_ALIGNMENT );
@@ -266,7 +296,7 @@ public abstract class Components {
     public static <E> JComboBox<E> comboBox(final ComboBoxModel<E> model, final Function<E, String> valueTransformer) {
         return new JComboBox<E>( model ) {
             {
-                setFont( Res.fonts().valueFont().deriveFont( CONTROL_TEXT_SIZE ) );
+                setFont( Res.fonts().valueFont( TEXT_SIZE_CONTROL ) );
                 setBorder( BorderFactory.createEmptyBorder( 4, 0, 4, 0 ) );
                 setRenderer( new DefaultListCellRenderer() {
                     {

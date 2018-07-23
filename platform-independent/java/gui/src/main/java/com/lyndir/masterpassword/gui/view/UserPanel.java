@@ -15,7 +15,9 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.*;
 import java.util.Objects;
+import java.util.Random;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -34,8 +36,9 @@ public class UserPanel extends Components.GradientPanel implements MPUser.Listen
     private MPUser<?> user;
 
     public UserPanel() {
-        super( new BorderLayout( 20, 20 ), null );
-        setBorder( BorderFactory.createEmptyBorder( 20, 20, 20, 20 ) );
+        super( new BorderLayout( Components.margin(), Components.margin() ), null );
+        setBorder( Components.marginBorder() );
+        setUser( null );
     }
 
     public void setUser(@Nullable final MPUser<?> user) {
@@ -61,6 +64,7 @@ public class UserPanel extends Components.GradientPanel implements MPUser.Listen
             }
 
             revalidate();
+            transferFocus();
         } );
     }
 
@@ -88,11 +92,16 @@ public class UserPanel extends Components.GradientPanel implements MPUser.Listen
 
     private static final class AuthenticateUserPanel extends JPanel implements ActionListener, DocumentListener {
 
+        private static final Random random = new Random();
+
         @Nonnull
         private final MPUser<?> user;
 
         private final JPasswordField masterPasswordField = Components.passwordField();
-        private final JLabel         errorLabel          = Components.label( null );
+        private final JLabel         errorLabel          = Components.label();
+        private final JLabel         identiconLabel      = Components.label( SwingConstants.CENTER );
+
+        private Future<?> identiconJob;
 
         private AuthenticateUserPanel(@Nonnull final MPUser<?> user) {
             setLayout( new BoxLayout( this, BoxLayout.PAGE_AXIS ) );
@@ -110,39 +119,72 @@ public class UserPanel extends Components.GradientPanel implements MPUser.Listen
             add( errorLabel );
             errorLabel.setForeground( Res.colors().errorFg() );
 
-            add( Box.createGlue() );
+            add( Components.strut() );
+            add( identiconLabel );
+            identiconLabel.setFont( Res.fonts().emoticonsFont( Components.TEXT_SIZE_CONTROL ) );
 
-            Res.ui( false, masterPasswordField::requestFocusInWindow );
+            add( Box.createGlue() );
         }
 
         @Override
         public void actionPerformed(final ActionEvent event) {
-            try {
-                user.authenticate( masterPasswordField.getPassword() );
-            }
-            catch (final MPIncorrectMasterPasswordException e) {
-                logger.wrn( e, "During user authentication for: %s", user );
-                errorLabel.setText( e.getLocalizedMessage() );
-            }
-            catch (final MPAlgorithmException e) {
-                logger.err( e, "During user authentication for: %s", user );
-                errorLabel.setText( e.getLocalizedMessage() );
-            }
+            updateIdenticon();
+            
+            char[] masterPassword = masterPasswordField.getPassword();
+            Res.job( () -> {
+                try {
+                    user.authenticate( masterPassword );
+                }
+                catch (final MPIncorrectMasterPasswordException e) {
+                    logger.wrn( e, "During user authentication for: %s", user );
+                    errorLabel.setText( e.getLocalizedMessage() );
+                }
+                catch (final MPAlgorithmException e) {
+                    logger.err( e, "During user authentication for: %s", user );
+                    errorLabel.setText( e.getLocalizedMessage() );
+                }
+            } );
         }
 
         @Override
         public void insertUpdate(final DocumentEvent event) {
-            errorLabel.setText( null );
+            update();
         }
 
         @Override
         public void removeUpdate(final DocumentEvent event) {
-            errorLabel.setText( null );
+            update();
         }
 
         @Override
         public void changedUpdate(final DocumentEvent event) {
+            update();
+        }
+
+        private synchronized void update() {
             errorLabel.setText( null );
+
+            if (identiconJob != null)
+                identiconJob.cancel( true );
+
+            identiconJob = Res.job( this::updateIdenticon, 100 + random.nextInt( 100 ), TimeUnit.MILLISECONDS );
+        }
+
+        private void updateIdenticon() {
+            char[] masterPassword = masterPasswordField.getPassword();
+            MPIdenticon identicon = ((masterPassword != null) && (masterPassword.length > 0))?
+                    new MPIdenticon( user.getFullName(), masterPassword ): null;
+
+            Res.ui( () -> {
+                if (identicon != null) {
+                    identiconLabel.setForeground(
+                            Res.colors().fromIdenticonColor( identicon.getColor(), Res.Colors.BackgroundMode.LIGHT ) );
+                    identiconLabel.setText( identicon.getText() );
+                } else {
+                    identiconLabel.setForeground( null );
+                    identiconLabel.setText( " " );
+                }
+            } );
         }
     }
 
@@ -150,11 +192,13 @@ public class UserPanel extends Components.GradientPanel implements MPUser.Listen
     private static final class AuthenticatedUserPanel extends JPanel implements ActionListener, DocumentListener, ListSelectionListener,
             KeyListener {
 
+        public static final int SIZE_RESULT = 48;
+
         @Nonnull
         private final MPUser<?>                      user;
-        private final JLabel                         passwordLabel = Components.label( " ", SwingConstants.CENTER );
-        private final JLabel                         passwordField = Components.heading( " ", SwingConstants.CENTER );
-        private final JLabel                         queryLabel    = Components.label( " " );
+        private final JLabel                         passwordLabel = Components.label( SwingConstants.CENTER );
+        private final JLabel                         passwordField = Components.heading( SwingConstants.CENTER );
+        private final JLabel                         queryLabel    = Components.label();
         private final JTextField                     queryField    = Components.textField();
         private final CollectionListModel<MPSite<?>> sitesModel    = new CollectionListModel<>();
         private final JList<MPSite<?>>               sitesList     = Components.list( sitesModel,
@@ -172,7 +216,7 @@ public class UserPanel extends Components.GradientPanel implements MPUser.Listen
             add( passwordLabel );
             add( passwordField );
             passwordField.setForeground( Res.colors().highlightFg() );
-            passwordField.setFont( Res.fonts().bigValueFont().deriveFont( Font.BOLD, 48 ) );
+            passwordField.setFont( Res.fonts().bigValueFont( SIZE_RESULT ) );
             add( Box.createGlue() );
             add( Components.strut() );
 
@@ -182,12 +226,12 @@ public class UserPanel extends Components.GradientPanel implements MPUser.Listen
             queryField.addActionListener( this );
             queryField.addKeyListener( this );
             queryField.getDocument().addDocumentListener( this );
+            queryField.requestFocusInWindow();
             add( Components.strut() );
             add( Components.scrollPane( sitesList ) );
+            sitesModel.registerList( sitesList );
             sitesList.addListSelectionListener( this );
             add( Box.createGlue() );
-
-            Res.ui( false, queryField::requestFocusInWindow );
         }
 
         @Override
