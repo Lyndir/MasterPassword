@@ -95,6 +95,8 @@ public class MPFileSite extends MPBasicSite<MPFileQuestion> {
         uses++;
         lastUsed = new Instant();
         user.use();
+
+        setChanged();
     }
 
     public String getResult()

@@ -9,6 +9,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import javax.annotation.Nullable;
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 
 
 /**
@@ -29,24 +30,23 @@ public class MasterPasswordFrame extends JFrame implements FilesPanel.Listener, 
         super( "Master Password" );
 
         setDefaultCloseOperation( DISPOSE_ON_CLOSE );
-        setContentPane( root = Components.gradientPanel( Res.colors().frameBg(), new FlowLayout() ) );
-        root.setLayout( new BoxLayout( root, BoxLayout.PAGE_AXIS ) );
-        root.setBorder( Components.marginBorder() );
-
+        setContentPane( root = Components.borderPanel( Res.colors().frameBg(), BoxLayout.PAGE_AXIS ) );
         root.add( filesPanel );
         root.add( new JSeparator( SwingConstants.HORIZONTAL ) );
         root.add( Components.strut() );
-        root.add( Components.borderPanel( BorderFactory.createRaisedBevelBorder(), Res.colors().controlBg(), userPanel ) );
+        root.add( Components.borderPanel(
+                BorderFactory.createBevelBorder( BevelBorder.RAISED, Res.colors().controlBorder(), Res.colors().frameBg() ),
+                Res.colors().controlBg(), BoxLayout.PAGE_AXIS, userPanel ) );
 
         filesPanel.addListener( this );
         filesPanel.reload();
 
-        addComponentListener(this  );
+        addComponentListener( this );
         setPreferredSize( new Dimension( 640, 480 ) );
         pack();
 
-        setLocationByPlatform( true );
         setLocationRelativeTo( null );
+        setLocationByPlatform( true );
     }
 
     @Override

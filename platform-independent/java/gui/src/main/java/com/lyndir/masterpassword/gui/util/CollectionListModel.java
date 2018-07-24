@@ -2,6 +2,7 @@ package com.lyndir.masterpassword.gui.util;
 
 import com.google.common.collect.ImmutableList;
 import java.util.*;
+import java.util.function.Consumer;
 import javax.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -14,17 +15,24 @@ import javax.swing.event.ListSelectionListener;
 @SuppressWarnings("serial")
 public class CollectionListModel<E> extends AbstractListModel<E> implements ComboBoxModel<E>, ListSelectionListener {
 
-    private final List<E>  model = new LinkedList<>();
+    private final List<E>     model = new LinkedList<>();
     @Nullable
-    private       E        selectedItem;
-    private       JList<E> list;
+    private       E           selectedItem;
+    private       JList<E>    list;
+    @Nullable
+    private       Consumer<E> selectionConsumer;
 
-    public CollectionListModel() {
+    @SafeVarargs
+    public static <E> CollectionListModel<E> copy(final E... elements) {
+        return copy( Arrays.asList( elements ) );
     }
 
-    public CollectionListModel(final Collection<E> model) {
-        this.model.addAll( model );
-        fireIntervalAdded( this, 0, model.size() );
+    public static <E> CollectionListModel<E> copy(final Collection<E> elements) {
+        CollectionListModel<E> model = new CollectionListModel<>();
+        model.model.addAll( elements );
+        model.fireIntervalAdded( model, 0, model.model.size() );
+
+        return model;
     }
 
     @Override
@@ -79,11 +87,14 @@ public class CollectionListModel<E> extends AbstractListModel<E> implements Comb
     public synchronized void setSelectedItem(@Nullable final Object newSelectedItem) {
         if (!Objects.equals( selectedItem, newSelectedItem ) && model.contains( newSelectedItem )) {
             selectedItem = (E) newSelectedItem;
-            fireContentsChanged( this, -1, -1 );
 
+            fireContentsChanged( this, -1, -1 );
             //noinspection ObjectEquality
             if ((list != null) && (list.getModel() == this))
                 list.setSelectedValue( selectedItem, true );
+
+            if (selectionConsumer != null)
+                selectionConsumer.accept( selectedItem );
         }
     }
 
@@ -101,6 +112,17 @@ public class CollectionListModel<E> extends AbstractListModel<E> implements Comb
         this.list = list;
         this.list.addListSelectionListener( this );
         this.list.setModel( this );
+    }
+
+    public CollectionListModel<E> selection(@Nullable final E selectedItem, @Nullable final Consumer<E> selectionConsumer) {
+        this.selectionConsumer = null;
+        setSelectedItem( selectedItem );
+
+        this.selectionConsumer = selectionConsumer;
+        if (this.selectionConsumer != null)
+            this.selectionConsumer.accept( selectedItem );
+
+        return this;
     }
 
     @Override

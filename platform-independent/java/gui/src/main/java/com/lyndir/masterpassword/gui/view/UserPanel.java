@@ -10,6 +10,8 @@ import com.lyndir.masterpassword.gui.Res;
 import com.lyndir.masterpassword.gui.util.CollectionListModel;
 import com.lyndir.masterpassword.gui.util.Components;
 import com.lyndir.masterpassword.model.*;
+import com.lyndir.masterpassword.model.impl.MPFileSite;
+import com.lyndir.masterpassword.model.impl.MPFileUser;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
@@ -129,7 +131,7 @@ public class UserPanel extends Components.GradientPanel implements MPUser.Listen
         @Override
         public void actionPerformed(final ActionEvent event) {
             updateIdenticon();
-            
+
             char[] masterPassword = masterPasswordField.getPassword();
             Res.job( () -> {
                 try {
@@ -223,6 +225,7 @@ public class UserPanel extends Components.GradientPanel implements MPUser.Listen
             add( queryLabel );
             queryLabel.setText( strf( "%s's password for:", user.getFullName() ) );
             add( queryField );
+            queryField.putClientProperty( "JTextField.variant", "search" );
             queryField.addActionListener( this );
             queryField.addKeyListener( this );
             queryField.getDocument().addDocumentListener( this );
@@ -236,9 +239,13 @@ public class UserPanel extends Components.GradientPanel implements MPUser.Listen
 
         @Override
         public void actionPerformed(final ActionEvent event) {
-            showSiteResult( sitesList.getSelectedValue(), result -> {
+            MPSite<?> site = sitesList.getSelectedValue();
+            showSiteResult( site, result -> {
                 if (result == null)
                     return;
+
+                if (site instanceof MPFileSite)
+                    ((MPFileSite) site).use();
 
                 Transferable clipboardContents = new StringSelection( result );
                 Toolkit.getDefaultToolkit().getSystemClipboard().setContents( clipboardContents, null );

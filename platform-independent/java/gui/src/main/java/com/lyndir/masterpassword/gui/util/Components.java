@@ -20,6 +20,8 @@ package com.lyndir.masterpassword.gui.util;
 
 import com.lyndir.masterpassword.gui.Res;
 import java.awt.*;
+import java.util.Collection;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import javax.annotation.Nullable;
 import javax.swing.*;
@@ -30,15 +32,20 @@ import javax.swing.border.CompoundBorder;
 /**
  * @author lhunath, 2014-06-08
  */
+@SuppressWarnings("SerializableStoresNonSerializable")
 public abstract class Components {
 
     public static final float TEXT_SIZE_HEADING = 19f;
     public static final float TEXT_SIZE_CONTROL = 13f;
-    public static final int   SIZE_MARGIN       = 20;
+    public static final int   SIZE_MARGIN       = 12;
     public static final int   SIZE_PADDING      = 8;
 
-    public static GradientPanel boxPanel(final int axis, final Component... components) {
-        GradientPanel container = gradientPanel( null, null );
+    public static GradientPanel panel(final int axis, final Component... components) {
+        return panel( axis, null, components );
+    }
+
+    public static GradientPanel panel(final int axis, @Nullable final Color background, final Component... components) {
+        GradientPanel container = gradientPanel( background, null );
         container.setLayout( new BoxLayout( container, axis ) );
         for (final Component component : components)
             container.add( component );
@@ -46,19 +53,23 @@ public abstract class Components {
         return container;
     }
 
-    public static GradientPanel borderPanel(@Nullable final Border border, final Component... components) {
-        return borderPanel( border, null, components );
+    public static GradientPanel borderPanel(final int axis, final Component... components) {
+        return borderPanel( marginBorder(), null, axis, components );
     }
 
-    public static GradientPanel borderPanel(@Nullable final Border border, @Nullable final Color background,
-                                            final Component... components) {
-        GradientPanel box = boxPanel( BoxLayout.LINE_AXIS, components );
+    public static GradientPanel borderPanel(@Nullable final Border border, final int axis, final Component... components) {
+        return borderPanel( border, null, axis, components );
+    }
 
+    public static GradientPanel borderPanel(@Nullable final Color background, final int axis, final Component... components) {
+        return borderPanel( marginBorder(), background, axis, components );
+    }
+
+    public static GradientPanel borderPanel(@Nullable final Border border, @Nullable final Color background, final int axis,
+                                            final Component... components) {
+        GradientPanel box = panel( axis, background, components );
         if (border != null)
             box.setBorder( border );
-
-        if (background != null)
-            box.setBackground( background );
 
         return box;
     }
@@ -69,9 +80,37 @@ public abstract class Components {
                 setOpaque( color != null );
                 setBackground( color );
                 setAlignmentX( LEFT_ALIGNMENT );
-                setAlignmentY( BOTTOM_ALIGNMENT );
             }
         };
+    }
+
+    public static JDialog showDialog(@Nullable final Component owner, @Nullable final String title, final JOptionPane pane) {
+        JDialog dialog = pane.createDialog( owner, title );
+        dialog.setModalityType( Dialog.ModalityType.DOCUMENT_MODAL );
+
+        return showDialog( dialog );
+    }
+
+    public static JDialog showDialog(@Nullable final Component owner, @Nullable final String title, final Container content) {
+        JDialog dialog = new JDialog( (owner != null)? SwingUtilities.windowForComponent( owner ): null,
+                                      title, Dialog.ModalityType.DOCUMENT_MODAL );
+        dialog.setMinimumSize( new Dimension( 320, 0 ) );
+        dialog.setLocationRelativeTo( owner );
+        dialog.setLocationByPlatform( true );
+        dialog.setContentPane( content );
+
+        return showDialog( dialog );
+    }
+
+    private static JDialog showDialog(final JDialog dialog) {
+        // OpenJDK does not correctly implement this setting in native code.
+        dialog.getRootPane().putClientProperty( "apple.awt.documentModalSheet", Boolean.TRUE );
+        dialog.getRootPane().putClientProperty( "Window.style", "small" );
+        dialog.pack();
+
+        dialog.setVisible( true );
+
+        return dialog;
     }
 
     public static JTextField textField() {
@@ -81,7 +120,6 @@ public abstract class Components {
                                                                BorderFactory.createEmptyBorder( 4, 4, 4, 4 ) ) );
                 setFont( Res.fonts().valueFont( TEXT_SIZE_CONTROL ) );
                 setAlignmentX( LEFT_ALIGNMENT );
-                setAlignmentY( BOTTOM_ALIGNMENT );
             }
 
             @Override
@@ -97,7 +135,6 @@ public abstract class Components {
                 setBorder( BorderFactory.createCompoundBorder( BorderFactory.createLineBorder( Res.colors().controlBorder(), 1, true ),
                                                                BorderFactory.createEmptyBorder( 4, 4, 4, 4 ) ) );
                 setAlignmentX( LEFT_ALIGNMENT );
-                setAlignmentY( BOTTOM_ALIGNMENT );
             }
 
             @Override
@@ -126,7 +163,6 @@ public abstract class Components {
                     }
                 } );
                 setAlignmentX( LEFT_ALIGNMENT );
-                setAlignmentY( BOTTOM_ALIGNMENT );
             }
 
             @Override
@@ -141,22 +177,21 @@ public abstract class Components {
             {
                 setBorder( BorderFactory.createLineBorder( Res.colors().controlBorder(), 1, true ) );
                 setAlignmentX( LEFT_ALIGNMENT );
-                setAlignmentY( BOTTOM_ALIGNMENT );
             }
         };
     }
 
     public static JButton button(final String label) {
+        return button( label, null );
+    }
+
+    public static JButton button(final String label, @Nullable final Action action) {
         return new JButton( label ) {
             {
                 setFont( Res.fonts().controlFont( TEXT_SIZE_CONTROL ) );
                 setAlignmentX( LEFT_ALIGNMENT );
-                setAlignmentY( BOTTOM_ALIGNMENT );
-            }
-
-            @Override
-            public Dimension getMaximumSize() {
-                return new Dimension( 20, getPreferredSize().height );
+                if (action != null)
+                    setAction( action );
             }
         };
     }
@@ -169,7 +204,6 @@ public abstract class Components {
         Dimension  studDimension = new Dimension( size, size );
         Box.Filler rigidArea     = new Box.Filler( studDimension, studDimension, studDimension );
         rigidArea.setAlignmentX( Component.LEFT_ALIGNMENT );
-        rigidArea.setAlignmentY( Component.BOTTOM_ALIGNMENT );
         rigidArea.setBackground( Color.red );
         return rigidArea;
     }
@@ -194,7 +228,6 @@ public abstract class Components {
                         BorderFactory.createEmptyBorder( 4, 4, 4, 4 ) );
                 ((DefaultEditor) getEditor()).getTextField().setBorder( editorBorder );
                 setAlignmentX( LEFT_ALIGNMENT );
-                setAlignmentY( BOTTOM_ALIGNMENT );
                 setBorder( null );
             }
 
@@ -231,7 +264,6 @@ public abstract class Components {
             {
                 setFont( Res.fonts().controlFont( TEXT_SIZE_HEADING ).deriveFont( Font.BOLD ) );
                 setAlignmentX( LEFT_ALIGNMENT );
-                setAlignmentY( BOTTOM_ALIGNMENT );
             }
 
             @Override
@@ -267,7 +299,6 @@ public abstract class Components {
             {
                 setFont( Res.fonts().controlFont( TEXT_SIZE_CONTROL ) );
                 setAlignmentX( LEFT_ALIGNMENT );
-                setAlignmentY( BOTTOM_ALIGNMENT );
             }
 
             @Override
@@ -283,7 +314,6 @@ public abstract class Components {
                 setFont( Res.fonts().controlFont( TEXT_SIZE_CONTROL ) );
                 setBackground( null );
                 setAlignmentX( LEFT_ALIGNMENT );
-                setAlignmentY( BOTTOM_ALIGNMENT );
             }
         };
     }
@@ -291,6 +321,16 @@ public abstract class Components {
     @SafeVarargs
     public static <E> JComboBox<E> comboBox(final Function<E, String> valueTransformer, final E... values) {
         return comboBox( new DefaultComboBoxModel<>( values ), valueTransformer );
+    }
+
+    public static <E> JComboBox<E> comboBox(final E[] values, final Function<E, String> valueTransformer, final E selectedItem,
+                                            @Nullable final Consumer<E> selectionConsumer) {
+        return comboBox( CollectionListModel.copy( values ).selection( selectedItem, selectionConsumer ), valueTransformer );
+    }
+
+    public static <E> JComboBox<E> comboBox(final Collection<E> values, final Function<E, String> valueTransformer, final E selectedItem,
+                                            @Nullable final Consumer<E> selectionConsumer) {
+        return comboBox( CollectionListModel.copy( values ).selection( selectedItem, selectionConsumer ), valueTransformer );
     }
 
     public static <E> JComboBox<E> comboBox(final ComboBoxModel<E> model, final Function<E, String> valueTransformer) {
@@ -311,8 +351,8 @@ public abstract class Components {
                                 list, valueTransformer.apply( (E) value ), index, isSelected, cellHasFocus );
                     }
                 } );
+                putClientProperty( "JComboBox.isPopDown", Boolean.TRUE );
                 setAlignmentX( LEFT_ALIGNMENT );
-                setAlignmentY( BOTTOM_ALIGNMENT );
             }
 
             @Override
