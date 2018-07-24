@@ -37,6 +37,9 @@ public class MPJSONMarshaller implements MPMarshaller {
     public void marshall(final MPFileUser user)
             throws IOException, MPKeyUnavailableException, MPMarshalException, MPAlgorithmException {
 
+        if (!user.isComplete())
+            throw new IllegalStateException( "Cannot marshall an incomplete user: " + user );
+
         try {
             objectMapper.writerWithDefaultPrettyPrinter().writeValue( user.getFile(), new MPJSONFile( user ) );
         }

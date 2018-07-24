@@ -188,6 +188,7 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
                 throw new MPMarshalException( "No full header found in import file." );
         }
 
+        user.setComplete();
         user.endChanges();
     }
 }

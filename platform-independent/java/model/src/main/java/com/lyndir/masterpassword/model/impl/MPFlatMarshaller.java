@@ -41,6 +41,9 @@ public class MPFlatMarshaller implements MPMarshaller {
     @Override
     public void marshall(final MPFileUser user)
             throws IOException, MPKeyUnavailableException, MPMarshalException, MPAlgorithmException {
+        if (!user.isComplete())
+            throw new IllegalStateException( "Cannot marshall an incomplete user: " + user );
+
         StringBuilder content = new StringBuilder();
         content.append( "# Master Password site export\n" );
         content.append( "#     " ).append( user.getContentMode().description() ).append( '\n' );

@@ -155,8 +155,8 @@ public class MPJSONFile extends MPJSONAnyObject {
             String siteName = siteEntry.getKey();
             Site   fileSite = siteEntry.getValue();
             MPFileSite site = new MPFileSite(
-                    user, siteName, fileSite.algorithm.getAlgorithm(), UnsignedInteger.valueOf( fileSite.counter ), fileSite.type,
-                    export.redacted? fileSite.password: null,
+                    user, siteName, fileSite.algorithm.getAlgorithm(), UnsignedInteger.valueOf( fileSite.counter ),
+                    fileSite.type, export.redacted? fileSite.password: null,
                     fileSite.login_type, export.redacted? fileSite.login_name: null,
                     (fileSite._ext_mpw != null)? fileSite._ext_mpw.url: null, fileSite.uses,
                     (fileSite.last_used != null)? MPConstants.dateTimeFormatter.parseDateTime( fileSite.last_used ): new Instant() );
@@ -169,9 +169,23 @@ public class MPJSONFile extends MPJSONAnyObject {
                                        fileSite.login_name );
             }
 
+            if (fileSite.questions != null)
+                for (final Map.Entry<String, Site.Question> questionEntry : fileSite.questions.entrySet()) {
+                    Site.Question fileQuestion = questionEntry.getValue();
+                    MPFileQuestion question = new MPFileQuestion( site, questionEntry.getKey(),
+                                                                  fileQuestion.type, export.redacted? fileQuestion.answer: null );
+
+                    if (!export.redacted && (fileQuestion.answer != null))
+                        question.setAnswer( (fileQuestion.type != null)? fileQuestion.type: MPResultType.StoredPersonal,
+                                            fileQuestion.answer );
+
+                    site.addQuestion( question );
+                }
+
             user.addSite( site );
         }
 
+        user.setComplete();
         user.endChanges();
     }
 

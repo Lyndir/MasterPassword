@@ -42,6 +42,7 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
 
     private MPResultType    defaultType;
     private ReadableInstant lastUsed;
+    private boolean         complete;
 
     public MPFileUser(final String fullName) {
         this( fullName, null, MPAlgorithm.Version.CURRENT.getAlgorithm() );
@@ -131,6 +132,14 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
         setChanged();
     }
 
+    protected boolean isComplete() {
+        return complete;
+    }
+
+    protected void setComplete() {
+        complete = true;
+    }
+
     public File getFile() {
         return new File( path, getFullName() + getFormat().fileSuffix() );
     }
@@ -157,7 +166,8 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
     @Override
     protected void onChanged() {
         try {
-            getFormat().marshaller().marshall( this );
+            if (isComplete())
+                getFormat().marshaller().marshall( this );
         }
         catch (final MPKeyUnavailableException e) {
             logger.wrn( e, "Cannot write out changes for unauthenticated user: %s.", this );
