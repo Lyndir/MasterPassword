@@ -24,6 +24,7 @@ import com.google.common.base.Charsets;
 import com.google.common.io.ByteSource;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.TypeUtils;
+import com.lyndir.masterpassword.gui.util.Res;
 import com.lyndir.masterpassword.gui.view.MasterPasswordFrame;
 import java.io.IOException;
 import java.io.InputStream;

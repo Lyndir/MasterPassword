@@ -18,8 +18,9 @@
 
 package com.lyndir.masterpassword.gui.util;
 
-import com.lyndir.masterpassword.gui.Res;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Collection;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -32,7 +33,7 @@ import javax.swing.border.CompoundBorder;
 /**
  * @author lhunath, 2014-06-08
  */
-@SuppressWarnings("SerializableStoresNonSerializable")
+@SuppressWarnings({ "SerializableStoresNonSerializable", "serial" })
 public abstract class Components {
 
     public static final float TEXT_SIZE_HEADING = 19f;
@@ -45,7 +46,7 @@ public abstract class Components {
     }
 
     public static GradientPanel panel(final int axis, @Nullable final Color background, final Component... components) {
-        GradientPanel container = gradientPanel( background, null );
+        GradientPanel container = panel( null, background );
         container.setLayout( new BoxLayout( container, axis ) );
         for (final Component component : components)
             container.add( component );
@@ -74,14 +75,8 @@ public abstract class Components {
         return box;
     }
 
-    public static GradientPanel gradientPanel(@Nullable final Color color, @Nullable final LayoutManager layout) {
-        return new GradientPanel( layout, color ) {
-            {
-                setOpaque( color != null );
-                setBackground( color );
-                setAlignmentX( LEFT_ALIGNMENT );
-            }
-        };
+    public static GradientPanel panel(@Nullable final LayoutManager layout, @Nullable final Color color) {
+        return new GradientPanel( layout, color );
     }
 
     public static JDialog showDialog(@Nullable final Component owner, @Nullable final String title, final JOptionPane pane) {
@@ -181,17 +176,40 @@ public abstract class Components {
         };
     }
 
-    public static JButton button(final String label) {
-        return button( label, null );
+    public static JButton button(final String label, @Nullable final ActionListener actionListener) {
+        return button( new AbstractAction( label ) {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                if (actionListener != null)
+                    actionListener.actionPerformed( e );
+            }
+        } );
     }
 
-    public static JButton button(final String label, @Nullable final Action action) {
-        return new JButton( label ) {
+    public static JButton button(final Icon icon, @Nullable final ActionListener actionListener) {
+        JButton iconButton = button( new AbstractAction( null, icon ) {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                if (actionListener != null)
+                    actionListener.actionPerformed( e );
+            }
+        } );
+        iconButton.setFocusable( false );
+
+        return iconButton;
+    }
+
+    public static JButton button(final Action action) {
+        return new JButton( action ) {
             {
                 setFont( Res.fonts().controlFont( TEXT_SIZE_CONTROL ) );
                 setAlignmentX( LEFT_ALIGNMENT );
-                if (action != null)
-                    setAction( action );
+
+                if (getText() == null) {
+                    setContentAreaFilled( false );
+                    setBorderPainted( false );
+                    setOpaque( false );
+                }
             }
         };
     }
@@ -323,13 +341,18 @@ public abstract class Components {
         return comboBox( new DefaultComboBoxModel<>( values ), valueTransformer );
     }
 
-    public static <E> JComboBox<E> comboBox(final E[] values, final Function<E, String> valueTransformer, final E selectedItem,
-                                            @Nullable final Consumer<E> selectionConsumer) {
+    public static <E> JComboBox<E> comboBox(final E[] values, final Function<E, String> valueTransformer,
+                                            @Nullable final E selectedItem, @Nullable final Consumer<E> selectionConsumer) {
         return comboBox( CollectionListModel.copy( values ).selection( selectedItem, selectionConsumer ), valueTransformer );
     }
 
-    public static <E> JComboBox<E> comboBox(final Collection<E> values, final Function<E, String> valueTransformer, final E selectedItem,
+    public static <E> JComboBox<E> comboBox(final Collection<E> values, final Function<E, String> valueTransformer,
                                             @Nullable final Consumer<E> selectionConsumer) {
+        return comboBox( CollectionListModel.copy( values ).selection( selectionConsumer ), valueTransformer );
+    }
+
+    public static <E> JComboBox<E> comboBox(final Collection<E> values, final Function<E, String> valueTransformer,
+                                            @Nullable final E selectedItem, @Nullable final Consumer<E> selectionConsumer) {
         return comboBox( CollectionListModel.copy( values ).selection( selectedItem, selectionConsumer ), valueTransformer );
     }
 
@@ -378,10 +401,15 @@ public abstract class Components {
             this( null, gradientColor );
         }
 
+        public GradientPanel(@Nullable final LayoutManager layout) {
+            this( layout, null );
+        }
+
         public GradientPanel(@Nullable final LayoutManager layout, @Nullable final Color gradientColor) {
             super( layout );
             this.gradientColor = gradientColor;
             setBackground( null );
+            setAlignmentX( LEFT_ALIGNMENT );
         }
 
         @Nullable

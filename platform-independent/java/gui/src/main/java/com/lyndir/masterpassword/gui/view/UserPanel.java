@@ -3,10 +3,11 @@ package com.lyndir.masterpassword.gui.view;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import com.google.common.collect.ImmutableCollection;
+import com.google.common.collect.ImmutableList;
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.masterpassword.*;
-import com.lyndir.masterpassword.gui.Res;
+import com.lyndir.masterpassword.gui.util.Res;
 import com.lyndir.masterpassword.gui.util.CollectionListModel;
 import com.lyndir.masterpassword.gui.util.Components;
 import com.lyndir.masterpassword.model.*;
@@ -30,6 +31,7 @@ import javax.swing.event.*;
 /**
  * @author lhunath, 2018-07-14
  */
+@SuppressWarnings("SerializableStoresNonSerializable")
 public class UserPanel extends Components.GradientPanel implements MPUser.Listener {
 
     private static final Logger logger = Logger.get( UserPanel.class );
@@ -212,8 +214,12 @@ public class UserPanel extends Components.GradientPanel implements MPUser.Listen
 
             this.user = user;
 
-            add( Components.heading( user.getFullName(), SwingConstants.CENTER ) );
-            add( Components.strut() );
+            add( new Components.GradientPanel( new BorderLayout() ) {
+                {
+                    add( Components.heading( user.getFullName(), SwingConstants.CENTER ), BorderLayout.CENTER );
+                    add( Components.button( Res.icons().user(), event -> showPreferences() ), BorderLayout.LINE_END );
+                }
+            } );
 
             add( passwordLabel );
             add( passwordField );
@@ -235,6 +241,25 @@ public class UserPanel extends Components.GradientPanel implements MPUser.Listen
             sitesModel.registerList( sitesList );
             sitesList.addListSelectionListener( this );
             add( Box.createGlue() );
+        }
+
+        public void showPreferences() {
+            ImmutableList.Builder<Component> components = ImmutableList.builder();
+
+            MPFileUser fileUser = (user instanceof MPFileUser)? (MPFileUser) user: null;
+            if (fileUser != null)
+                components.add( Components.label( "Default Password Type:" ),
+                                Components.comboBox( MPResultType.values(), MPResultType::getLongName,
+                                                     fileUser.getDefaultType(), fileUser::setDefaultType ),
+                                Components.strut() );
+
+            components.add( Components.label( "Default Algorithm:" ),
+                            Components.comboBox( MPAlgorithm.Version.values(), MPAlgorithm.Version::name,
+                                                 user.getAlgorithm().version(),
+                                                 version -> user.setAlgorithm( version.getAlgorithm() ) ) );
+
+            Components.showDialog( this, user.getFullName(), new JOptionPane( Components.panel(
+                    BoxLayout.PAGE_AXIS, components.build().toArray( new Component[0] ) ) ) );
         }
 
         @Override

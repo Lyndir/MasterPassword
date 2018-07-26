@@ -67,13 +67,13 @@ public class MPFileUserManager {
         this.path = path;
     }
 
-    public void reload() {
+    public ImmutableSortedSet<MPFileUser> reload() {
         userByName.clear();
 
         File[] pathFiles;
         if ((!path.exists() && !path.mkdirs()) || ((pathFiles = path.listFiles()) == null)) {
             logger.err( "Couldn't create directory for user files: %s", path );
-            return;
+            return getFiles();
         }
 
         for (final File file : pathFiles)
@@ -89,6 +89,8 @@ public class MPFileUserManager {
                     catch (final IOException | MPMarshalException e) {
                         logger.err( e, "Couldn't read user from: %s", file );
                     }
+
+        return getFiles();
     }
 
     public MPFileUser add(final String fullName) {

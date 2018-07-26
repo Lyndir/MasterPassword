@@ -27,12 +27,15 @@ public class CollectionListModel<E> extends AbstractListModel<E> implements Comb
         return copy( Arrays.asList( elements ) );
     }
 
-    public static <E> CollectionListModel<E> copy(final Collection<E> elements) {
+    public static <E> CollectionListModel<E> copy(final Collection<? extends E> elements) {
         CollectionListModel<E> model = new CollectionListModel<>();
-        model.model.addAll( elements );
-        model.fireIntervalAdded( model, 0, model.model.size() );
+        synchronized (model) {
+            model.model.addAll( elements );
+            model.selectedItem = model.getElementAt( 0 );
+            model.fireIntervalAdded( model, 0, model.model.size() );
 
-        return model;
+            return model;
+        }
     }
 
     @Override
@@ -41,8 +44,9 @@ public class CollectionListModel<E> extends AbstractListModel<E> implements Comb
     }
 
     @Override
+    @Nullable
     public synchronized E getElementAt(final int index) {
-        return model.get( index );
+        return (index < model.size())? model.get( index ): null;
     }
 
     /**
@@ -76,10 +80,8 @@ public class CollectionListModel<E> extends AbstractListModel<E> implements Comb
             }
         }
 
-        if ((selectedItem == null) && !model.isEmpty())
-            setSelectedItem( model.get( 0 ) );
-        else if (!model.contains( selectedItem ))
-            setSelectedItem( null );
+        if ((selectedItem == null) || !model.contains( selectedItem ))
+            setSelectedItem( getElementAt( 0 ) );
     }
 
     @Override
@@ -114,15 +116,19 @@ public class CollectionListModel<E> extends AbstractListModel<E> implements Comb
         this.list.setModel( this );
     }
 
-    public CollectionListModel<E> selection(@Nullable final E selectedItem, @Nullable final Consumer<E> selectionConsumer) {
+    public synchronized CollectionListModel<E> selection(@Nullable final Consumer<E> selectionConsumer) {
+        this.selectionConsumer = selectionConsumer;
+        if (selectionConsumer != null)
+            selectionConsumer.accept( selectedItem );
+
+        return this;
+    }
+
+    public synchronized CollectionListModel<E> selection(@Nullable final E selectedItem, @Nullable final Consumer<E> selectionConsumer) {
         this.selectionConsumer = null;
         setSelectedItem( selectedItem );
 
-        this.selectionConsumer = selectionConsumer;
-        if (this.selectionConsumer != null)
-            this.selectionConsumer.accept( selectedItem );
-
-        return this;
+        return selection( selectionConsumer );
     }
 
     @Override

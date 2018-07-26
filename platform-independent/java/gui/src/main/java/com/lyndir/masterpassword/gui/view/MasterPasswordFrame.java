@@ -1,7 +1,7 @@
 package com.lyndir.masterpassword.gui.view;
 
 import com.lyndir.lhunath.opal.system.logging.Logger;
-import com.lyndir.masterpassword.gui.Res;
+import com.lyndir.masterpassword.gui.util.Res;
 import com.lyndir.masterpassword.gui.util.Components;
 import com.lyndir.masterpassword.model.MPUser;
 import java.awt.*;
@@ -50,8 +50,8 @@ public class MasterPasswordFrame extends JFrame implements FilesPanel.Listener, 
     }
 
     @Override
-    public void onUserSelected(@Nullable final MPUser<?> selectedUser) {
-        userPanel.setUser( selectedUser );
+    public void onUserSelected(@Nullable final MPUser<?> user) {
+        userPanel.setUser( user );
     }
 
     @Override

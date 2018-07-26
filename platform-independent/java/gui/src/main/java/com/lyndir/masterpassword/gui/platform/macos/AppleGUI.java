@@ -16,7 +16,7 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-package com.lyndir.masterpassword.gui.platform.mac;
+package com.lyndir.masterpassword.gui.platform.macos;
 
 import com.apple.eawt.*;
 import com.google.common.base.Preconditions;

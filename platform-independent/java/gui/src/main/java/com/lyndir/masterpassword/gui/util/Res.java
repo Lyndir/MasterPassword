@@ -16,9 +16,8 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-package com.lyndir.masterpassword.gui;
+package com.lyndir.masterpassword.gui.util;
 
-import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import com.google.common.collect.Maps;
@@ -26,15 +25,13 @@ import com.google.common.io.Resources;
 import com.google.common.util.concurrent.*;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.masterpassword.MPIdenticon;
+import com.lyndir.masterpassword.gui.SwingExecutorService;
 import java.awt.*;
-import java.awt.image.ImageObserver;
 import java.io.IOException;
 import java.lang.ref.SoftReference;
-import java.net.URL;
 import java.util.Map;
 import java.util.concurrent.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import javax.annotation.Nullable;
 import javax.swing.*;
 import org.jetbrains.annotations.NonNls;
 
@@ -42,7 +39,7 @@ import org.jetbrains.annotations.NonNls;
 /**
  * @author lhunath, 2014-06-11
  */
-@SuppressWarnings({ "HardcodedFileSeparator", "MethodReturnAlwaysConstant", "SpellCheckingInspection" })
+@SuppressWarnings({ "HardcodedFileSeparator", "MethodReturnAlwaysConstant", "SpellCheckingInspection", "serial" })
 public abstract class Res {
 
     private static final int                               AVATAR_COUNT        = 19;
@@ -51,6 +48,7 @@ public abstract class Res {
     private static final Executor                          immediateUiExecutor = new SwingExecutorService( true );
     private static final Executor                          laterUiExecutor     = new SwingExecutorService( false );
     private static final Logger                            logger              = Logger.get( Res.class );
+    private static final Icons                             icons               = new Icons();
     private static final Fonts                             fonts               = new Fonts();
     private static final Colors                            colors              = new Colors();
 
@@ -93,24 +91,8 @@ public abstract class Res {
         return immediate? immediateUiExecutor: laterUiExecutor;
     }
 
-    public static Icon iconAdd() {
-        return new RetinaIcon( Resources.getResource( "media/icon_add@2x.png" ) );
-    }
-
-    public static Icon iconDelete() {
-        return new RetinaIcon( Resources.getResource( "media/icon_delete@2x.png" ) );
-    }
-
-    public static Icon iconQuestion() {
-        return new RetinaIcon( Resources.getResource( "media/icon_question@2x.png" ) );
-    }
-
-    public static Icon avatar(final int index) {
-        return new RetinaIcon( Resources.getResource( strf( "media/avatar-%d@2x.png", index % avatars() ) ) );
-    }
-
-    public static int avatars() {
-        return AVATAR_COUNT;
+    public static Icons icons() {
+        return icons;
     }
 
     public static Fonts fonts() {
@@ -121,64 +103,39 @@ public abstract class Res {
         return colors;
     }
 
-    private static final class RetinaIcon extends ImageIcon {
+    public static final class Icons {
 
-        private static final Pattern scalePattern     = Pattern.compile( ".*@(\\d+)x.[^.]+$" );
-        private static final long    serialVersionUID = 1L;
-
-        private final float scale;
-
-        private RetinaIcon(final URL url) {
-            super( url );
-
-            Matcher scaleMatcher = scalePattern.matcher( url.getPath() );
-            scale = scaleMatcher.matches()? Float.parseFloat( scaleMatcher.group( 1 ) ): 1;
+        public Icon add() {
+            return icon( "media/icon_add.png" );
         }
 
-        //private static URL retinaURL(final URL url) {
-        //    try {
-        //        final boolean[] isRetina = new boolean[1];
-        //        new apple.awt.CImage.HiDPIScaledImage(1,1, BufferedImage.TYPE_INT_ARGB) {
-        //            @Override
-        //            public void drawIntoImage(BufferedImage image, float v) {
-        //                isRetina[0] = v > 1;
-        //            }
-        //        };
-        //        return isRetina[0];
-        //    } catch (Throwable e) {
-        //        e.printStackTrace();
-        //        return url;
-        //    }
-        //}
-
-        @Override
-        public int getIconWidth() {
-            return (int) (super.getIconWidth() / scale);
+        public Icon delete() {
+            return icon( "media/icon_delete.png" );
         }
 
-        @Override
-        public int getIconHeight() {
-            return (int) (super.getIconHeight() / scale);
+        public Icon question() {
+            return icon( "media/icon_question.png" );
         }
 
-        @Override
-        public synchronized void paintIcon(final Component c, final Graphics g, final int x, final int y) {
-            ImageObserver observer = ifNotNullElse( getImageObserver(), c );
+        public Icon user() {
+            return icon( "media/icon_user.png" );
+        }
 
-            Image      image  = getImage();
-            int        width  = image.getWidth( observer );
-            int        height = image.getHeight( observer );
-            Graphics2D g2d    = (Graphics2D) g.create( x, y, width, height );
+        public Icon avatar(final int index) {
+            return icon( strf( "media/avatar-%d.png", index % avatars() ) );
+        }
 
-            g2d.scale( 1 / scale, 1 / scale );
-            g2d.drawImage( image, 0, 0, observer );
-            g2d.scale( 1, 1 );
-            g2d.dispose();
+        public int avatars() {
+            return AVATAR_COUNT;
+        }
+
+        private static Icon icon(@NonNls final String resourceName) {
+            return new ImageIcon( Toolkit.getDefaultToolkit().getImage( Res.class.getClassLoader().getResource( resourceName ) ) );
         }
     }
 
 
-    public static class Fonts {
+    public static final class Fonts {
 
         public Font emoticonsFont(final float size) {
             return emoticonsRegular().deriveFont( size );
@@ -266,7 +223,7 @@ public abstract class Res {
     }
 
 
-    public static class Colors {
+    public static final class Colors {
 
         private final Color transparent   = new Color( 0, 0, 0, 0 );
         private final Color frameBg       = Color.decode( "#5A5D6B" );
