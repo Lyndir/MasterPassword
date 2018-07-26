@@ -36,5 +36,5 @@ shadowJar {
 
 run {
     // I don't fully understand why this is necessary, but without it -Dmp.log.level is lost.
-    systemProperties = System.properties
+    //systemProperties = System.properties
 }

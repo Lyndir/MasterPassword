@@ -4,6 +4,11 @@ plugins {
 
 description = 'Master Password Algorithm Implementation'
 
+tasks.withType( JavaCompile ) {
+    // Native headers
+    options.compilerArgs += ["-h", new File( new File( project( ':masterpassword-core' ).projectDir, 'src' ), 'java' ).absolutePath]
+}
+
 configurations {
     lib
 }
@@ -24,17 +29,7 @@ processResources {
         into new File( processResources.outputs.files.singleFile, "lib" )
 
         dependsOn configurations.lib {
-            files.each { libFile ->
-                from( zipTree( libFile ) )
-            }
+            files.each { libFile -> from( zipTree( libFile ) ) }
         }
     } )
-}
-
-compileJava {
-    doLast {
-        ant.javah( class: 'com.lyndir.masterpassword.impl.MPAlgorithmV0',
-                   outputFile: new File( project( ':masterpassword-core' ).projectDir, 'src/mpw-jni.h' ),
-                   classpath: files( sourceSets.main.compileClasspath, sourceSets.main.output ).asPath )
-    }
 }

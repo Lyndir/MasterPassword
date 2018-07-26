@@ -24,6 +24,7 @@
 # target_prepare() { make -s distclean; }
 # target_configure() { _target_configure "$@" --enable-minimal; }
 set -e
+PATH+=:/usr/local/bin
 
 # needs <binary> ...
 #

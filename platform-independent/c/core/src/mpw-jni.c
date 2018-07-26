@@ -1,6 +1,7 @@
 #include <string.h>
 
-#include "mpw-jni.h"
+#include "java/com_lyndir_masterpassword_impl_MPAlgorithmV0.h"
+
 #include "mpw-algorithm.h"
 #include "mpw-util.h"
 
