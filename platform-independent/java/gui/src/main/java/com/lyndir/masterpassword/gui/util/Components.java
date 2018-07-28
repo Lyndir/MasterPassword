@@ -441,7 +441,7 @@ public abstract class Components {
 
         public GradientPanel(@Nullable final LayoutManager layout, @Nullable final Color gradientColor) {
             super( layout );
-            this.gradientColor = gradientColor;
+            setGradientColor( gradientColor );
             setBackground( null );
             setAlignmentX( LEFT_ALIGNMENT );
         }
@@ -453,17 +453,32 @@ public abstract class Components {
 
         public void setGradientColor(@Nullable final Color gradientColor) {
             this.gradientColor = gradientColor;
-            revalidate();
+            updatePaint();
         }
 
         @Override
-        public void doLayout() {
-            super.doLayout();
+        public void setBackground(@Nullable final Color bg) {
+            super.setBackground( bg );
+            updatePaint();
+        }
 
-            if (gradientColor != null) {
-                paint = new GradientPaint( new Point( 0, 0 ), gradientColor, new Point( getWidth(), getHeight() ), gradientColor.darker() );
-                repaint();
+        @Override
+        public void setBounds(final int x, final int y, final int width, final int height) {
+            super.setBounds( x, y, width, height );
+            updatePaint();
+        }
+
+        private void updatePaint() {
+            setOpaque( (getGradientColor() != null) || (getBackground() != null) );
+
+            if (gradientColor == null) {
+                paint = null;
+                return;
             }
+
+            paint = new GradientPaint( new Point( 0, 0 ), gradientColor,
+                                       new Point( getWidth(), getHeight() ), gradientColor.darker() );
+            repaint();
         }
 
         @Override
