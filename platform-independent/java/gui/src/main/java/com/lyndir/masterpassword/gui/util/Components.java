@@ -28,6 +28,8 @@ import javax.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 
 /**
@@ -40,6 +42,12 @@ public abstract class Components {
     public static final float TEXT_SIZE_CONTROL = 13f;
     public static final int   SIZE_MARGIN       = 12;
     public static final int   SIZE_PADDING      = 8;
+
+    public static GradientPanel panel(final Component... components) {
+        GradientPanel panel = panel( BoxLayout.LINE_AXIS, null, components );
+        panel.setLayout( new OverlayLayout( panel ) );
+        return panel;
+    }
 
     public static GradientPanel panel(final int axis, final Component... components) {
         return panel( axis, null, components );
@@ -124,6 +132,40 @@ public abstract class Components {
         };
     }
 
+    public static JTextField textField(@Nullable final String text, @Nullable final Consumer<String> selection) {
+        return new JTextField( text ) {
+            {
+                setBorder( BorderFactory.createCompoundBorder( BorderFactory.createLineBorder( Res.colors().controlBorder(), 1, true ),
+                                                               BorderFactory.createEmptyBorder( 4, 4, 4, 4 ) ) );
+                setFont( Res.fonts().valueFont( TEXT_SIZE_CONTROL ) );
+                setAlignmentX( LEFT_ALIGNMENT );
+
+                if (selection != null)
+                    getDocument().addDocumentListener( new DocumentListener() {
+                        @Override
+                        public void insertUpdate(final DocumentEvent e) {
+                            selection.accept( getText() );
+                        }
+
+                        @Override
+                        public void removeUpdate(final DocumentEvent e) {
+                            selection.accept( getText() );
+                        }
+
+                        @Override
+                        public void changedUpdate(final DocumentEvent e) {
+                            selection.accept( getText() );
+                        }
+                    } );
+            }
+
+            @Override
+            public Dimension getMaximumSize() {
+                return new Dimension( Integer.MAX_VALUE, getPreferredSize().height );
+            }
+        };
+    }
+
     public static JPasswordField passwordField() {
         return new JPasswordField() {
             {
@@ -143,18 +185,16 @@ public abstract class Components {
         return new JList<E>( model ) {
             {
                 setFont( Res.fonts().valueFont( TEXT_SIZE_CONTROL ) );
-                setBorder( BorderFactory.createEmptyBorder( 4, 0, 4, 0 ) );
                 setCellRenderer( new DefaultListCellRenderer() {
-                    {
-                        setBorder( BorderFactory.createEmptyBorder( 0, 4, 0, 4 ) );
-                    }
-
                     @Override
                     @SuppressWarnings({ "unchecked", "SerializableStoresNonSerializable" })
                     public Component getListCellRendererComponent(final JList<?> list, final Object value, final int index,
                                                                   final boolean isSelected, final boolean cellHasFocus) {
-                        return super.getListCellRendererComponent(
+                        super.getListCellRendererComponent(
                                 list, valueTransformer.apply( (E) value ), index, isSelected, cellHasFocus );
+                        setBorder( BorderFactory.createEmptyBorder( 2, 4, 2, 4 ) );
+
+                        return this;
                     }
                 } );
                 setAlignmentX( LEFT_ALIGNMENT );
@@ -247,11 +287,6 @@ public abstract class Components {
                 ((DefaultEditor) getEditor()).getTextField().setBorder( editorBorder );
                 setAlignmentX( LEFT_ALIGNMENT );
                 setBorder( null );
-            }
-
-            @Override
-            public Dimension getMaximumSize() {
-                return new Dimension( 20, getPreferredSize().height );
             }
         };
     }
@@ -362,16 +397,15 @@ public abstract class Components {
                 setFont( Res.fonts().valueFont( TEXT_SIZE_CONTROL ) );
                 setBorder( BorderFactory.createEmptyBorder( 4, 0, 4, 0 ) );
                 setRenderer( new DefaultListCellRenderer() {
-                    {
-                        setBorder( BorderFactory.createEmptyBorder( 0, 4, 0, 4 ) );
-                    }
-
                     @Override
                     @SuppressWarnings({ "unchecked", "SerializableStoresNonSerializable" })
                     public Component getListCellRendererComponent(final JList<?> list, final Object value, final int index,
                                                                   final boolean isSelected, final boolean cellHasFocus) {
-                        return super.getListCellRendererComponent(
+                        super.getListCellRendererComponent(
                                 list, valueTransformer.apply( (E) value ), index, isSelected, cellHasFocus );
+                        setBorder( BorderFactory.createEmptyBorder( 0, 4, 0, 4 ) );
+
+                        return this;
                     }
                 } );
                 putClientProperty( "JComboBox.isPopDown", Boolean.TRUE );

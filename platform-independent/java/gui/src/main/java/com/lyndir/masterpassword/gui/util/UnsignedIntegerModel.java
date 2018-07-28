@@ -19,15 +19,23 @@
 package com.lyndir.masterpassword.gui.util;
 
 import com.google.common.primitives.UnsignedInteger;
+import java.util.function.Consumer;
+import javax.annotation.Nullable;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 
 /**
  * @author lhunath, 2016-10-29
  */
-public class UnsignedIntegerModel extends SpinnerNumberModel {
+public class UnsignedIntegerModel extends SpinnerNumberModel
+implements Selectable<UnsignedInteger, UnsignedIntegerModel> {
 
     private static final long serialVersionUID = 1L;
+
+    @Nullable
+    private ChangeListener changeListener;
 
     public UnsignedIntegerModel() {
         this( UnsignedInteger.ZERO, UnsignedInteger.ZERO, UnsignedInteger.MAX_VALUE, UnsignedInteger.ONE );
@@ -54,5 +62,31 @@ public class UnsignedIntegerModel extends SpinnerNumberModel {
     @Override
     public UnsignedInteger getNumber() {
         return (UnsignedInteger) super.getNumber();
+    }
+
+    @Override
+    public UnsignedIntegerModel selection(@Nullable final Consumer<UnsignedInteger> selectionConsumer) {
+        if (changeListener != null) {
+            removeChangeListener( changeListener );
+            changeListener = null;
+        }
+
+        if (selectionConsumer != null) {
+            addChangeListener( changeListener = e -> selectionConsumer.accept( getNumber() ) );
+            selectionConsumer.accept( getNumber() );
+        }
+
+        return this;
+    }
+
+    @Override
+    public UnsignedIntegerModel selection(final UnsignedInteger selectedItem, @Nullable final Consumer<UnsignedInteger> selectionConsumer) {
+        if (changeListener != null) {
+            removeChangeListener( changeListener );
+            changeListener = null;
+        }
+
+        setValue( selectedItem );
+        return selection( selectionConsumer );
     }
 }

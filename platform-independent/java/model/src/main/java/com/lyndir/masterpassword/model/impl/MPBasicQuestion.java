@@ -70,7 +70,7 @@ public abstract class MPBasicQuestion extends Changeable implements MPQuestion {
 
     @Nonnull
     @Override
-    public abstract MPBasicSite<?> getSite();
+    public abstract MPBasicSite<?, ?> getSite();
 
     @Override
     protected void onChanged() {

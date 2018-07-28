@@ -13,7 +13,8 @@ import javax.swing.event.ListSelectionListener;
  * @author lhunath, 2018-07-19
  */
 @SuppressWarnings("serial")
-public class CollectionListModel<E> extends AbstractListModel<E> implements ComboBoxModel<E>, ListSelectionListener {
+public class CollectionListModel<E> extends AbstractListModel<E>
+        implements ComboBoxModel<E>, ListSelectionListener, Selectable<E, CollectionListModel<E>> {
 
     private final List<E>     model = new LinkedList<>();
     @Nullable
@@ -55,13 +56,16 @@ public class CollectionListModel<E> extends AbstractListModel<E> implements Comb
      * This operation will mutate the internal model to reflect the given model.
      * The given model will remain untouched and independent from this object.
      */
-    @SuppressWarnings("AssignmentToForLoopParameter")
-    public synchronized void set(final Collection<? extends E> newModel) {
-        ImmutableList<? extends E> newModelList = ImmutableList.copyOf( newModel );
+    @SuppressWarnings({ "unchecked", "SuspiciousToArrayCall" })
+    public synchronized void set(final Collection<? extends E> elements) {
+        set( (E[]) elements.toArray( new Object[0] ) );
+    }
 
+    @SuppressWarnings("AssignmentToForLoopParameter")
+    public synchronized void set(final E... elements) {
         ListIterator<E> oldIt = model.listIterator();
         for (int from = 0; oldIt.hasNext(); ++from) {
-            int to = newModelList.indexOf( oldIt.next() );
+            int to = Arrays.binarySearch( elements, oldIt.next() );
 
             if (to != from) {
                 oldIt.remove();
@@ -70,9 +74,8 @@ public class CollectionListModel<E> extends AbstractListModel<E> implements Comb
             }
         }
 
-        Iterator<? extends E> newIt = newModelList.iterator();
-        for (int to = 0; newIt.hasNext(); ++to) {
-            E newSite = newIt.next();
+        for (int to = 0; to < elements.length; ++to) {
+            E newSite = elements[to];
 
             if ((to >= model.size()) || !Objects.equals( model.get( to ), newSite )) {
                 model.add( to, newSite );
@@ -116,6 +119,7 @@ public class CollectionListModel<E> extends AbstractListModel<E> implements Comb
         this.list.setModel( this );
     }
 
+    @Override
     public synchronized CollectionListModel<E> selection(@Nullable final Consumer<E> selectionConsumer) {
         this.selectionConsumer = selectionConsumer;
         if (selectionConsumer != null)
@@ -124,6 +128,7 @@ public class CollectionListModel<E> extends AbstractListModel<E> implements Comb
         return this;
     }
 
+    @Override
     public synchronized CollectionListModel<E> selection(@Nullable final E selectedItem, @Nullable final Consumer<E> selectionConsumer) {
         this.selectionConsumer = null;
         setSelectedItem( selectedItem );
@@ -134,7 +139,11 @@ public class CollectionListModel<E> extends AbstractListModel<E> implements Comb
     @Override
     public synchronized void valueChanged(final ListSelectionEvent event) {
         //noinspection ObjectEquality
-        if ((event.getSource() == list) && (list.getModel() == this))
+        if (!event.getValueIsAdjusting() && (event.getSource() == list) && (list.getModel() == this)) {
             selectedItem = list.getSelectedValue();
+
+            if (selectionConsumer != null)
+                selectionConsumer.accept( selectedItem );
+        }
     }
 }

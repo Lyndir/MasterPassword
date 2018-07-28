@@ -36,7 +36,7 @@ import javax.annotation.Nullable;
 /**
  * @author lhunath, 2014-06-08
  */
-public abstract class MPBasicUser<S extends MPBasicSite<?>> extends Changeable implements MPUser<S> {
+public abstract class MPBasicUser<S extends MPBasicSite<?, ?>> extends Changeable implements MPUser<S> {
 
     protected final Logger        logger    = Logger.get( getClass() );
     private final   Set<Listener> listeners = new CopyOnWriteArraySet<>();
@@ -152,10 +152,11 @@ public abstract class MPBasicUser<S extends MPBasicSite<?>> extends Changeable i
     }
 
     @Override
-    public void addSite(final S site) {
-        sites.put( site.getName(), site );
+    public S addSite(final S site) {
+        sites.put( site.getSiteName(), site );
 
         setChanged();
+        return site;
     }
 
     @Override
@@ -173,11 +174,12 @@ public abstract class MPBasicUser<S extends MPBasicSite<?>> extends Changeable i
 
     @Nonnull
     @Override
-    public ImmutableCollection<S> findSites(final String query) {
+    public ImmutableCollection<S> findSites(@Nullable final String query) {
         ImmutableSortedSet.Builder<S> results = ImmutableSortedSet.naturalOrder();
-        for (final S site : getSites())
-            if (site.getName().startsWith( query ))
-                results.add( site );
+        if (query != null)
+            for (final S site : getSites())
+                if (site.getSiteName().startsWith( query ))
+                    results.add( site );
 
         return results.build();
     }
@@ -211,7 +213,7 @@ public abstract class MPBasicUser<S extends MPBasicSite<?>> extends Changeable i
     }
 
     @Override
-    public int compareTo(final MPUser<?> o) {
+    public int compareTo(@Nonnull final MPUser<?> o) {
         return getFullName().compareTo( o.getFullName() );
     }
 

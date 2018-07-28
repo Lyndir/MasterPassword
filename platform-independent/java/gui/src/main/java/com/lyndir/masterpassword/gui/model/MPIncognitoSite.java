@@ -29,25 +29,15 @@ import javax.annotation.Nullable;
 /**
  * @author lhunath, 14-12-16
  */
-public class MPIncognitoSite extends MPBasicSite<MPIncognitoQuestion> {
+public class MPIncognitoSite extends MPBasicSite<MPIncognitoUser, MPIncognitoQuestion> {
 
-    private final MPIncognitoUser user;
-
-    public MPIncognitoSite(final MPIncognitoUser user, final String name) {
-        this( user, name, null, null, null, null );
+    public MPIncognitoSite(final MPIncognitoUser user, final String siteName) {
+        this( user, siteName, null, null, null, null );
     }
 
-    public MPIncognitoSite(final MPIncognitoUser user, final String name,
+    public MPIncognitoSite(final MPIncognitoUser user, final String siteName,
                            @Nullable final MPAlgorithm algorithm, @Nullable final UnsignedInteger counter,
                            @Nullable final MPResultType resultType, @Nullable final MPResultType loginType) {
-        super( name, (algorithm == null)? user.getAlgorithm(): algorithm, counter, resultType, loginType );
-
-        this.user = user;
-    }
-
-    @Nonnull
-    @Override
-    public MPIncognitoUser getUser() {
-        return user;
+        super( user, siteName, (algorithm == null)? user.getAlgorithm(): algorithm, counter, resultType, loginType );
     }
 }

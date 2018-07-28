@@ -23,6 +23,7 @@ import com.lyndir.masterpassword.model.MPIncorrectMasterPasswordException;
 import com.lyndir.masterpassword.model.MPUser;
 import java.io.File;
 import java.io.IOException;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.joda.time.Instant;
 import org.joda.time.ReadableInstant;
@@ -164,6 +165,11 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
     }
 
     @Override
+    public MPFileSite addSite(final String siteName) {
+        return addSite( new MPFileSite( this, siteName ) );
+    }
+
+    @Override
     protected void onChanged() {
         try {
             if (isComplete())
@@ -180,7 +186,7 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
     }
 
     @Override
-    public int compareTo(final MPUser<?> o) {
+    public int compareTo(@Nonnull final MPUser<?> o) {
         int comparison = (o instanceof MPFileUser)? ((MPFileUser) o).getLastUsed().compareTo( getLastUsed() ): 0;
         if (comparison != 0)
             return comparison;

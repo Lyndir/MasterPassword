@@ -23,34 +23,36 @@ import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.masterpassword.*;
-import com.lyndir.masterpassword.model.MPQuestion;
-import com.lyndir.masterpassword.model.MPSite;
+import com.lyndir.masterpassword.model.*;
 import java.util.*;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import org.jetbrains.annotations.NotNull;
 
 
 /**
  * @author lhunath, 14-12-16
  */
-public abstract class MPBasicSite<Q extends MPQuestion> extends Changeable implements MPSite<Q> {
+public abstract class MPBasicSite<U extends MPUser<?>, Q extends MPQuestion> extends Changeable
+        implements MPSite<Q> {
 
-    private String          name;
+    private final Collection<Q> questions = new LinkedHashSet<>();
+    private final U             user;
+    private final String        siteName;
+
     private MPAlgorithm     algorithm;
     private UnsignedInteger counter;
     private MPResultType    resultType;
     private MPResultType    loginType;
 
-    private final Collection<Q> questions = new LinkedHashSet<>();
-
-    protected MPBasicSite(final String name, final MPAlgorithm algorithm) {
-        this( name, algorithm, null, null, null );
+    protected MPBasicSite(final U user, final String siteName, final MPAlgorithm algorithm) {
+        this( user, siteName, algorithm, null, null, null );
     }
 
-    protected MPBasicSite(final String name, final MPAlgorithm algorithm, @Nullable final UnsignedInteger counter,
+    protected MPBasicSite(final U user, final String siteName, final MPAlgorithm algorithm,
+                          @Nullable final UnsignedInteger counter,
                           @Nullable final MPResultType resultType, @Nullable final MPResultType loginType) {
-        this.name = name;
+        this.user = user;
+        this.siteName = siteName;
         this.algorithm = algorithm;
         this.counter = (counter == null)? algorithm.mpw_default_counter(): counter;
         this.resultType = (resultType == null)? algorithm.mpw_default_result_type(): resultType;
@@ -59,8 +61,8 @@ public abstract class MPBasicSite<Q extends MPQuestion> extends Changeable imple
 
     @Nonnull
     @Override
-    public String getName() {
-        return name;
+    public String getSiteName() {
+        return siteName;
     }
 
     @Nonnull
@@ -128,7 +130,7 @@ public abstract class MPBasicSite<Q extends MPQuestion> extends Changeable imple
             throws MPKeyUnavailableException, MPAlgorithmException {
 
         return getUser().getMasterKey().siteResult(
-                getName(), getAlgorithm(), ifNotNullElse( counter, getAlgorithm().mpw_default_counter() ),
+                getSiteName(), getAlgorithm(), ifNotNullElse( counter, getAlgorithm().mpw_default_counter() ),
                 keyPurpose, keyContext, type, state );
     }
 
@@ -137,7 +139,7 @@ public abstract class MPBasicSite<Q extends MPQuestion> extends Changeable imple
             throws MPKeyUnavailableException, MPAlgorithmException {
 
         return getUser().getMasterKey().siteState(
-                getName(), getAlgorithm(), ifNotNullElse( counter, getAlgorithm().mpw_default_counter() ),
+                getSiteName(), getAlgorithm(), ifNotNullElse( counter, getAlgorithm().mpw_default_counter() ),
                 keyPurpose, keyContext, type, state );
     }
 
@@ -171,32 +173,35 @@ public abstract class MPBasicSite<Q extends MPQuestion> extends Changeable imple
 
     @Nonnull
     @Override
-    public abstract MPBasicUser<?> getUser();
+    public U getUser() {
+        return user;
+    }
 
     @Override
     protected void onChanged() {
         super.onChanged();
 
-        getUser().setChanged();
+        if (user instanceof Changeable)
+            ((Changeable) user).setChanged();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode( getName() );
+        return Objects.hashCode( getSiteName() );
     }
 
     @Override
     public boolean equals(final Object obj) {
-        return (this == obj) || ((obj instanceof MPSite) && Objects.equals( getName(), ((MPSite<?>) obj).getName() ));
+        return (this == obj) || ((obj instanceof MPSite) && Objects.equals( getSiteName(), ((MPSite<?>) obj).getSiteName() ));
     }
 
     @Override
-    public int compareTo(@NotNull final MPSite<?> o) {
-        return getName().compareTo( o.getName() );
+    public int compareTo(@Nonnull final MPSite<?> o) {
+        return getSiteName().compareTo( o.getSiteName() );
     }
 
     @Override
     public String toString() {
-        return strf( "{%s: %s}", getClass().getSimpleName(), getName() );
+        return strf( "{%s: %s}", getClass().getSimpleName(), getSiteName() );
     }
 }

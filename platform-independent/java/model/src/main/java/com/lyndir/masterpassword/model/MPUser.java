@@ -20,8 +20,6 @@ package com.lyndir.masterpassword.model;
 
 import com.google.common.collect.ImmutableCollection;
 import com.lyndir.masterpassword.*;
-import com.lyndir.masterpassword.model.impl.MPBasicSite;
-import com.lyndir.masterpassword.model.impl.MPBasicUser;
 import java.util.Collection;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -87,7 +85,10 @@ public interface MPUser<S extends MPSite<?>> extends Comparable<MPUser<?>> {
 
     // - Relations
 
-    void addSite(S site);
+    S addSite(String siteName);
+
+    @Nonnull
+    S addSite(S site);
 
     void deleteSite(S site);
 
@@ -95,7 +96,7 @@ public interface MPUser<S extends MPSite<?>> extends Comparable<MPUser<?>> {
     Collection<S> getSites();
 
     @Nonnull
-    ImmutableCollection<S> findSites(String query);
+    ImmutableCollection<S> findSites(@Nullable String query);
 
     boolean addListener(Listener listener);
 

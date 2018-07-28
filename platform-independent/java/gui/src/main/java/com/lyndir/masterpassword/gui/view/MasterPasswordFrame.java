@@ -32,7 +32,6 @@ public class MasterPasswordFrame extends JFrame implements FilesPanel.Listener, 
         setDefaultCloseOperation( DISPOSE_ON_CLOSE );
         setContentPane( root = Components.borderPanel( Res.colors().frameBg(), BoxLayout.PAGE_AXIS ) );
         root.add( filesPanel );
-        root.add( new JSeparator( SwingConstants.HORIZONTAL ) );
         root.add( Components.strut() );
         root.add( Components.borderPanel(
                 BorderFactory.createBevelBorder( BevelBorder.RAISED, Res.colors().controlBorder(), Res.colors().frameBg() ),

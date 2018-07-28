@@ -90,7 +90,7 @@ public class MPJSONFile extends MPJSONAnyObject {
                 // Clear Text
                 content = modelSite.getResult();
                 loginContent = modelUser.getMasterKey().siteResult(
-                        modelSite.getName(), modelSite.getAlgorithm(), modelSite.getAlgorithm().mpw_default_counter(),
+                        modelSite.getSiteName(), modelSite.getAlgorithm(), modelSite.getAlgorithm().mpw_default_counter(),
                         MPKeyPurpose.Identification, null, modelSite.getLoginType(), modelSite.getLoginState() );
             } else {
                 // Redacted
@@ -100,9 +100,9 @@ public class MPJSONFile extends MPJSONAnyObject {
                     loginContent = modelSite.getLoginState();
             }
 
-            Site site = sites.get( modelSite.getName() );
+            Site site = sites.get( modelSite.getSiteName() );
             if (site == null)
-                sites.put( modelSite.getName(), site = new Site() );
+                sites.put( modelSite.getSiteName(), site = new Site() );
             site.type = modelSite.getResultType();
             site.counter = modelSite.getCounter().longValue();
             site.algorithm = modelSite.getAlgorithm().version();

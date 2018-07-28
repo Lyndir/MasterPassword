@@ -33,7 +33,7 @@ public interface MPSite<Q extends MPQuestion> extends Comparable<MPSite<?>> {
     // - Meta
 
     @Nonnull
-    String getName();
+    String getSiteName();
 
     // - Algorithm
 
@@ -57,9 +57,33 @@ public interface MPSite<Q extends MPQuestion> extends Comparable<MPSite<?>> {
 
     void setLoginType(@Nullable MPResultType loginType);
 
+    default String getResult()
+            throws MPKeyUnavailableException, MPAlgorithmException {
+
+        return getResult( MPKeyPurpose.Authentication );
+    }
+
+    @Nonnull
+    default String getResult(final MPKeyPurpose keyPurpose)
+            throws MPKeyUnavailableException, MPAlgorithmException {
+        return getResult( keyPurpose, null );
+    }
+
+    @Nonnull
+    default String getResult(final MPKeyPurpose keyPurpose, @Nullable final String keyContext)
+            throws MPKeyUnavailableException, MPAlgorithmException {
+        return getResult( keyPurpose, keyContext, null );
+    }
+
     @Nonnull
     String getResult(MPKeyPurpose keyPurpose, @Nullable String keyContext, @Nullable String state)
             throws MPKeyUnavailableException, MPAlgorithmException;
+
+    @Nonnull
+    default String getLogin()
+            throws MPKeyUnavailableException, MPAlgorithmException {
+        return getLogin( null );
+    }
 
     @Nonnull
     String getLogin(@Nullable String state)

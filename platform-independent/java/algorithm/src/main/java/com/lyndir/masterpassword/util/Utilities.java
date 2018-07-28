@@ -2,6 +2,7 @@ package com.lyndir.masterpassword.util;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 
@@ -14,6 +15,14 @@ public final class Utilities {
     public static <T, R> R ifNotNull(@Nullable final T value, final Function<T, R> consumer) {
         if (value == null)
             return null;
+
+        return consumer.apply( value );
+    }
+
+    @Nonnull
+    public static <T, R> R ifNotNullElse(@Nullable final T value, final Function<T, R> consumer, @Nonnull final R nullValue) {
+        if (value == null)
+            return nullValue;
 
         return consumer.apply( value );
     }

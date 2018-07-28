@@ -6,7 +6,7 @@ description = 'Master Password Algorithm Implementation'
 
 tasks.withType( JavaCompile ) {
     // Native headers
-    options.compilerArgs += ["-h", new File( new File( project( ':masterpassword-core' ).projectDir, 'src' ), 'java' ).absolutePath]
+    options.compilerArgs += ["-h", new File( new File( project.project( ':masterpassword-core' ).projectDir, 'src' ), 'java' ).absolutePath]
 }
 
 configurations {

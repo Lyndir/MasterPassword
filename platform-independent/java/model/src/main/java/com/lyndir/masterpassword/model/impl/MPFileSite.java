@@ -31,9 +31,7 @@ import org.joda.time.ReadableInstant;
  * @author lhunath, 14-12-05
  */
 @SuppressWarnings("ComparableImplementedButEqualsNotOverridden")
-public class MPFileSite extends MPBasicSite<MPFileQuestion> {
-
-    private final MPFileUser user;
+public class MPFileSite extends MPBasicSite<MPFileUser, MPFileQuestion> {
 
     @Nullable
     private String          url;
@@ -61,10 +59,9 @@ public class MPFileSite extends MPBasicSite<MPFileQuestion> {
                          @Nullable final MPResultType resultType, @Nullable final String resultState,
                          @Nullable final MPResultType loginType, @Nullable final String loginState,
                          @Nullable final String url, final int uses, final ReadableInstant lastUsed) {
-        super( name, (algorithm == null)? user.getAlgorithm(): algorithm, counter,
+        super( user, name, (algorithm == null)? user.getAlgorithm(): algorithm, counter,
                (resultType == null)? user.getDefaultType(): resultType, loginType );
 
-        this.user = user;
         this.resultState = resultState;
         this.loginState = loginState;
         this.url = url;
@@ -94,23 +91,21 @@ public class MPFileSite extends MPBasicSite<MPFileQuestion> {
     public void use() {
         uses++;
         lastUsed = new Instant();
-        user.use();
+        getUser().use();
 
         setChanged();
     }
 
-    public String getResult()
-            throws MPKeyUnavailableException, MPAlgorithmException {
-
-        return getResult( MPKeyPurpose.Authentication, null );
-    }
-
+    @Nonnull
+    @Override
     public String getResult(final MPKeyPurpose keyPurpose, @Nullable final String keyContext)
             throws MPKeyUnavailableException, MPAlgorithmException {
 
         return getResult( keyPurpose, keyContext, getResultState() );
     }
 
+    @Nonnull
+    @Override
     public String getLogin()
             throws MPKeyUnavailableException, MPAlgorithmException {
 
@@ -153,14 +148,8 @@ public class MPFileSite extends MPBasicSite<MPFileQuestion> {
         setChanged();
     }
 
-    @Nonnull
     @Override
-    public MPFileUser getUser() {
-        return user;
-    }
-
-    @Override
-    public int compareTo(final MPSite<?> o) {
+    public int compareTo(@Nonnull final MPSite<?> o) {
         int comparison = (o instanceof MPFileSite)? ((MPFileSite) o).getLastUsed().compareTo( getLastUsed() ): 0;
         if (comparison != 0)
             return comparison;

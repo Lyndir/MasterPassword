@@ -47,8 +47,8 @@ public class GUI {
     private final MasterPasswordFrame frame = new MasterPasswordFrame();
 
     public static void main(final String... args) {
-        Thread.setDefaultUncaughtExceptionHandler(
-                (t, e) -> logger.bug( e, "Uncaught: %s", e.getLocalizedMessage() ) );
+//        Thread.setDefaultUncaughtExceptionHandler(
+//                (t, e) -> logger.bug( e, "Uncaught: %s", e.getLocalizedMessage() ) );
 
         if (Config.get().checkForUpdates())
             checkUpdate();

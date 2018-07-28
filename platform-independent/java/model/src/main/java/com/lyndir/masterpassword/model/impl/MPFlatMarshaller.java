@@ -79,7 +79,7 @@ public class MPFlatMarshaller implements MPMarshaller {
                                         site.getAlgorithm().version().toInt(), // algorithm
                                         site.getCounter().intValue() ), // counter
                                   ifNotNullElse( loginName, "" ), // loginName
-                                  site.getName(), // siteName
+                                  site.getSiteName(), // siteName
                                   ifNotNullElse( password, "" ) // password
             ) );
         }

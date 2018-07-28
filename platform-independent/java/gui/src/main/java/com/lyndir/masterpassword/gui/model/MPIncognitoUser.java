@@ -37,4 +37,9 @@ public class MPIncognitoUser extends MPBasicUser<MPIncognitoSite> {
     public byte[] getKeyID() {
         return null;
     }
+
+    @Override
+    public MPIncognitoSite addSite(final String siteName) {
+        return addSite( new MPIncognitoSite( this, siteName ) );
+    }
 }

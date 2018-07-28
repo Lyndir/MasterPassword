@@ -34,6 +34,9 @@ import java.util.concurrent.*;
 import javax.annotation.Nullable;
 import javax.swing.*;
 import org.jetbrains.annotations.NonNls;
+import org.joda.time.ReadableInstant;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 
 /**
@@ -103,6 +106,10 @@ public abstract class Res {
         return colors;
     }
 
+    public static String format(final ReadableInstant instant) {
+        return DateTimeFormat.mediumDateTime().print( instant );
+    }
+
     public static final class Icons {
 
         public Icon add() {
@@ -119,6 +126,10 @@ public abstract class Res {
 
         public Icon user() {
             return icon( "media/icon_user.png" );
+        }
+
+        public Icon settings() {
+            return icon( "media/icon_settings.png" );
         }
 
         public Icon avatar(final int index) {
