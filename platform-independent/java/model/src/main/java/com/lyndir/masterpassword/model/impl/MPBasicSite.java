@@ -204,7 +204,7 @@ public abstract class MPBasicSite<U extends MPUser<?>, Q extends MPQuestion> ext
 
     @Override
     public boolean equals(final Object obj) {
-        return (this == obj) || ((obj instanceof MPSite) && Objects.equals( getSiteName(), ((MPSite<?>) obj).getSiteName() ));
+        return obj == this;
     }
 
     @Override

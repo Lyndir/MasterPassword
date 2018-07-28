@@ -56,7 +56,11 @@ public class MPJSONUnmarshaller implements MPUnmarshaller {
             throws IOException, MPMarshalException, MPIncorrectMasterPasswordException, MPKeyUnavailableException, MPAlgorithmException {
 
         try {
-            objectMapper.readValue( user.getFile(), MPJSONFile.class ).readSites( user );
+            user.ignoreChanges();
+            if (user.getFile().exists())
+                objectMapper.readValue( user.getFile(), MPJSONFile.class ).readSites( user );
+            user.setComplete();
+            user.endChanges();
         }
         catch (final JsonParseException e) {
             throw new MPMarshalException( "Couldn't parse JSON.", e );

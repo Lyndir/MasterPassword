@@ -431,8 +431,9 @@ public class UserContentPanel extends JPanel implements FilesPanel.Listener, MPU
                 Toolkit.getDefaultToolkit().getSystemClipboard().setContents( clipboardContents, null );
 
                 Res.ui( () -> {
-                    Window window = SwingUtilities.windowForComponent( this );
-                    window.dispatchEvent( new WindowEvent( window, WindowEvent.WINDOW_CLOSING ) );
+                    Window window = SwingUtilities.windowForComponent( UserContentPanel.this );
+                    if (window != null)
+                        window.dispatchEvent( new WindowEvent( window, WindowEvent.WINDOW_CLOSING ) );
                 } );
             } );
         }

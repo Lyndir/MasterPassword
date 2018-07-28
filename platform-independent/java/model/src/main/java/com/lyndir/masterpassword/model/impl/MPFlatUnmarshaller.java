@@ -104,89 +104,90 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
             throws IOException, MPMarshalException, MPIncorrectMasterPasswordException, MPKeyUnavailableException, MPAlgorithmException {
         user.ignoreChanges();
 
-        try (Reader reader = new InputStreamReader( new FileInputStream( user.getFile() ), Charsets.UTF_8 )) {
-            byte[]       keyID        = null;
-            String       fullName     = null;
-            int          mpVersion    = 0, importFormat = 0, avatar = 0;
-            boolean      clearContent = false, headerStarted = false, headerEnded = false;
-            MPResultType defaultType  = null;
+        if (user.getFile().exists())
+            try (Reader reader = new InputStreamReader( new FileInputStream( user.getFile() ), Charsets.UTF_8 )) {
+                byte[]       keyID        = null;
+                String       fullName     = null;
+                int          mpVersion    = 0, importFormat = 0, avatar = 0;
+                boolean      clearContent = false, headerStarted = false, headerEnded = false;
+                MPResultType defaultType  = null;
 
-            //noinspection HardcodedLineSeparator
-            for (final String line : CharStreams.readLines( reader ))
-                // Header delimitor.
-                if (line.startsWith( "##" )) {
-                    if (!headerStarted)
-                        // Starts the header.
-                        headerStarted = true;
-                    else
-                        // Ends the header.
-                        headerEnded = true;
-                }
+                //noinspection HardcodedLineSeparator
+                for (final String line : CharStreams.readLines( reader ))
+                    // Header delimitor.
+                    if (line.startsWith( "##" )) {
+                        if (!headerStarted)
+                            // Starts the header.
+                            headerStarted = true;
+                        else
+                            // Ends the header.
+                            headerEnded = true;
+                    }
 
-                // Comment.
-                else if (line.startsWith( "#" )) {
-                    if (headerStarted && !headerEnded) {
-                        // In header.
-                        Matcher headerMatcher = headerFormat.matcher( line );
-                        if (headerMatcher.matches()) {
-                            String name = headerMatcher.group( 1 ), value = headerMatcher.group( 2 );
-                            if ("Format".equalsIgnoreCase( name ))
-                                importFormat = ConversionUtils.toIntegerNN( value );
-                            else if ("Passwords".equalsIgnoreCase( name ))
-                                clearContent = "visible".equalsIgnoreCase( value );
+                    // Comment.
+                    else if (line.startsWith( "#" )) {
+                        if (headerStarted && !headerEnded) {
+                            // In header.
+                            Matcher headerMatcher = headerFormat.matcher( line );
+                            if (headerMatcher.matches()) {
+                                String name = headerMatcher.group( 1 ), value = headerMatcher.group( 2 );
+                                if ("Format".equalsIgnoreCase( name ))
+                                    importFormat = ConversionUtils.toIntegerNN( value );
+                                else if ("Passwords".equalsIgnoreCase( name ))
+                                    clearContent = "visible".equalsIgnoreCase( value );
+                            }
                         }
                     }
-                }
 
-                // No comment.
-                else if (headerEnded) {
-                    Matcher siteMatcher = unmarshallFormats[importFormat].matcher( line );
-                    if (!siteMatcher.matches()) {
-                        logger.wrn( "Couldn't parse line: %s, skipping.", line );
-                        continue;
+                    // No comment.
+                    else if (headerEnded) {
+                        Matcher siteMatcher = unmarshallFormats[importFormat].matcher( line );
+                        if (!siteMatcher.matches()) {
+                            logger.wrn( "Couldn't parse line: %s, skipping.", line );
+                            continue;
+                        }
+
+                        MPFileSite site;
+                        switch (importFormat) {
+                            case 0:
+                                site = new MPFileSite( user, //
+                                                       siteMatcher.group( 5 ), MPAlgorithm.Version.fromInt( ConversionUtils.toIntegerNN(
+                                        colon.matcher( siteMatcher.group( 4 ) ).replaceAll( "" ) ) ).getAlgorithm(),
+                                                       user.getAlgorithm().mpw_default_counter(),
+                                                       MPResultType.forType( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ),
+                                                       clearContent? null: siteMatcher.group( 6 ),
+                                                       null, null, null, ConversionUtils.toIntegerNN( siteMatcher.group( 2 ) ),
+                                                       MPConstants.dateTimeFormatter.parseDateTime( siteMatcher.group( 1 ) ).toInstant() );
+                                if (clearContent)
+                                    site.setSitePassword( site.getResultType(), siteMatcher.group( 6 ) );
+                                break;
+
+                            case 1:
+                                site = new MPFileSite( user, //
+                                                       siteMatcher.group( 7 ), MPAlgorithm.Version.fromInt( ConversionUtils.toIntegerNN(
+                                        colon.matcher( siteMatcher.group( 4 ) ).replaceAll( "" ) ) ).getAlgorithm(),
+                                                       UnsignedInteger.valueOf( colon.matcher( siteMatcher.group( 5 ) ).replaceAll( "" ) ),
+                                                       MPResultType.forType( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ),
+                                                       clearContent? null: siteMatcher.group( 8 ),
+                                                       MPResultType.GeneratedName, clearContent? null: siteMatcher.group( 6 ), null,
+                                                       ConversionUtils.toIntegerNN( siteMatcher.group( 2 ) ),
+                                                       MPConstants.dateTimeFormatter.parseDateTime( siteMatcher.group( 1 ) ).toInstant() );
+                                if (clearContent) {
+                                    site.setSitePassword( site.getResultType(), siteMatcher.group( 8 ) );
+                                    site.setLoginName( MPResultType.StoredPersonal, siteMatcher.group( 6 ) );
+                                }
+                                break;
+
+                            default:
+                                throw new MPMarshalException( "Unexpected format: " + importFormat );
+                        }
+
+                        user.addSite( site );
                     }
 
-                    MPFileSite site;
-                    switch (importFormat) {
-                        case 0:
-                            site = new MPFileSite( user, //
-                                                   siteMatcher.group( 5 ), MPAlgorithm.Version.fromInt( ConversionUtils.toIntegerNN(
-                                    colon.matcher( siteMatcher.group( 4 ) ).replaceAll( "" ) ) ).getAlgorithm(),
-                                                   user.getAlgorithm().mpw_default_counter(),
-                                                   MPResultType.forType( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ),
-                                                   clearContent? null: siteMatcher.group( 6 ),
-                                                   null, null, null, ConversionUtils.toIntegerNN( siteMatcher.group( 2 ) ),
-                                                   MPConstants.dateTimeFormatter.parseDateTime( siteMatcher.group( 1 ) ).toInstant() );
-                            if (clearContent)
-                                site.setSitePassword( site.getResultType(), siteMatcher.group( 6 ) );
-                            break;
-
-                        case 1:
-                            site = new MPFileSite( user, //
-                                                   siteMatcher.group( 7 ), MPAlgorithm.Version.fromInt( ConversionUtils.toIntegerNN(
-                                    colon.matcher( siteMatcher.group( 4 ) ).replaceAll( "" ) ) ).getAlgorithm(),
-                                                   UnsignedInteger.valueOf( colon.matcher( siteMatcher.group( 5 ) ).replaceAll( "" ) ),
-                                                   MPResultType.forType( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ),
-                                                   clearContent? null: siteMatcher.group( 8 ),
-                                                   MPResultType.GeneratedName, clearContent? null: siteMatcher.group( 6 ), null,
-                                                   ConversionUtils.toIntegerNN( siteMatcher.group( 2 ) ),
-                                                   MPConstants.dateTimeFormatter.parseDateTime( siteMatcher.group( 1 ) ).toInstant() );
-                            if (clearContent) {
-                                site.setSitePassword( site.getResultType(), siteMatcher.group( 8 ) );
-                                site.setLoginName( MPResultType.StoredPersonal, siteMatcher.group( 6 ) );
-                            }
-                            break;
-
-                        default:
-                            throw new MPMarshalException( "Unexpected format: " + importFormat );
-                    }
-
-                    user.addSite( site );
-                }
-
-            if (user == null)
-                throw new MPMarshalException( "No full header found in import file." );
-        }
+                if (user == null)
+                    throw new MPMarshalException( "No full header found in import file." );
+            }
 
         user.setComplete();
         user.endChanges();

@@ -90,7 +90,7 @@ public class CollectionListModel<E> extends AbstractListModel<E>
     @Override
     @SuppressWarnings({ "unchecked", "SuspiciousMethodCalls" })
     public synchronized void setSelectedItem(@Nullable final Object newSelectedItem) {
-        if (!Objects.equals( selectedItem, newSelectedItem ) && model.contains( newSelectedItem )) {
+        if (!Objects.equals( selectedItem, newSelectedItem )) {
             selectedItem = (E) newSelectedItem;
 
             fireContentsChanged( this, -1, -1 );

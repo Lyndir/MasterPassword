@@ -88,7 +88,7 @@ public abstract class MPBasicQuestion extends Changeable implements MPQuestion {
 
     @Override
     public boolean equals(final Object obj) {
-        return (this == obj) || ((obj instanceof MPQuestion) && Objects.equals( getKeyword(), ((MPQuestion) obj).getKeyword() ));
+        return this == obj;
     }
 
     @Override

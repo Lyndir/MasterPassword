@@ -60,10 +60,10 @@ public class MPJSONFile extends MPJSONAnyObject {
         objectMapper.setVisibility( PropertyAccessor.FIELD, JsonAutoDetect.Visibility.NON_PRIVATE );
     }
 
-    public MPJSONFile() {
+    MPJSONFile() {
     }
 
-    public MPJSONFile(final MPFileUser modelUser)
+    MPJSONFile(final MPFileUser modelUser)
             throws MPAlgorithmException, MPKeyUnavailableException {
 
         // Section: "export"
@@ -135,7 +135,7 @@ public class MPJSONFile extends MPJSONAnyObject {
         }
     }
 
-    public MPFileUser readUser(final File file) {
+    MPFileUser readUser(final File file) {
         MPAlgorithm algorithm = ifNotNullElse( user.algorithm, MPAlgorithm.Version.CURRENT ).getAlgorithm();
 
         return new MPFileUser(
@@ -147,10 +147,8 @@ public class MPJSONFile extends MPJSONAnyObject {
         );
     }
 
-    public void readSites(final MPFileUser user)
+    void readSites(final MPFileUser user)
             throws MPIncorrectMasterPasswordException, MPKeyUnavailableException, MPAlgorithmException {
-        user.ignoreChanges();
-
         for (final Map.Entry<String, Site> siteEntry : sites.entrySet()) {
             String siteName = siteEntry.getKey();
             Site   fileSite = siteEntry.getValue();
@@ -184,9 +182,6 @@ public class MPJSONFile extends MPJSONAnyObject {
 
             user.addSite( site );
         }
-
-        user.setComplete();
-        user.endChanges();
     }
 
     // -- Data

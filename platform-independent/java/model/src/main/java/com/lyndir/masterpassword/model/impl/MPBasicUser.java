@@ -226,7 +226,7 @@ public abstract class MPBasicUser<S extends MPBasicSite<?, ?>> extends Changeabl
 
     @Override
     public boolean equals(final Object obj) {
-        return (this == obj) || ((obj instanceof MPUser) && Objects.equals( getFullName(), ((MPUser<?>) obj).getFullName() ));
+        return this == obj;
     }
 
     @Override
