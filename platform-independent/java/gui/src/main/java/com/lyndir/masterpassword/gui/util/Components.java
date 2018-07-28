@@ -235,7 +235,7 @@ public abstract class Components {
         } );
     }
 
-    public static JButton button(final Icon icon, @Nullable final ActionListener actionListener) {
+    public static JButton button(final Icon icon, @Nullable final ActionListener actionListener, @Nullable String toolTip) {
         JButton iconButton = button( new AbstractAction( null, icon ) {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -248,6 +248,7 @@ public abstract class Components {
                 return actionListener != null;
             }
         } );
+        iconButton.setToolTipText( toolTip );
         iconButton.setFocusable( false );
 
         return iconButton;

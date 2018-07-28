@@ -3,9 +3,7 @@ package com.lyndir.masterpassword.gui.view;
 import static com.lyndir.masterpassword.util.Utilities.*;
 
 import com.google.common.collect.ImmutableSortedSet;
-import com.lyndir.masterpassword.gui.util.Res;
-import com.lyndir.masterpassword.gui.util.CollectionListModel;
-import com.lyndir.masterpassword.gui.util.Components;
+import com.lyndir.masterpassword.gui.util.*;
 import com.lyndir.masterpassword.model.MPUser;
 import com.lyndir.masterpassword.model.impl.MPFileUser;
 import com.lyndir.masterpassword.model.impl.MPFileUserManager;
@@ -24,7 +22,8 @@ public class FilesPanel extends JPanel implements MPFileUserManager.Listener {
 
     private final Collection<Listener> listeners = new CopyOnWriteArraySet<>();
 
-    private final JButton avatarButton = Components.button( Res.icons().avatar( 0 ), event -> setAvatar() );
+    private final JButton avatarButton = Components.button( Res.icons().avatar( 0 ), event -> setAvatar(),
+                                                            "Click to change the user's avatar." );
 
     private final CollectionListModel<MPUser<?>> usersModel =
             CollectionListModel.<MPUser<?>>copy( MPFileUserManager.get().getFiles() ).selection( this::setUser );
@@ -43,7 +42,6 @@ public class FilesPanel extends JPanel implements MPFileUserManager.Listener {
         add( avatarButton );
         avatarButton.setHorizontalAlignment( SwingConstants.CENTER );
         avatarButton.setMaximumSize( new Dimension( Integer.MAX_VALUE, 0 ) );
-        avatarButton.setToolTipText( "The avatar for your user.  Click to change it." );
 
         // -
         add( Components.strut( Components.margin() ) );

@@ -35,7 +35,10 @@ public class UserContentPanel extends JPanel implements FilesPanel.Listener, MPU
 
     private static final Random  random     = new Random();
     private static final Logger  logger     = Logger.get( UserContentPanel.class );
-    private static final JButton iconButton = Components.button( Res.icons().user(), null );
+    private static final JButton iconButton = Components.button( Res.icons().user(), null, null );
+
+    private final JButton addButton    = Components.button( Res.icons().add(), event -> addUser(),
+                                                            "Add a new user to Master Password." );
 
     private final JPanel userToolbar = Components.panel( BoxLayout.PAGE_AXIS );
     private final JPanel siteToolbar = Components.panel( BoxLayout.PAGE_AXIS );
@@ -108,10 +111,22 @@ public class UserContentPanel extends JPanel implements FilesPanel.Listener, MPU
         } );
     }
 
+    private void addUser() {
+        Object fullName = JOptionPane.showInputDialog(
+                this, strf( "<html>Enter your full legal name:</html>" ), "Add User",
+                JOptionPane.QUESTION_MESSAGE, null, null, "Robert Lee Mitchell" );
+        if (fullName == null)
+            return;
+
+        setUser( MPFileUserManager.get().add( fullName.toString() ) );
+    }
+
     private final class NoUserPanel extends JPanel {
 
         private NoUserPanel() {
             setLayout( new BoxLayout( this, BoxLayout.PAGE_AXIS ) );
+
+            userToolbar.add( addButton );
 
             add( Box.createGlue() );
             add( Components.heading( "Select a user to proceed." ) );
@@ -125,8 +140,8 @@ public class UserContentPanel extends JPanel implements FilesPanel.Listener, MPU
         @Nonnull
         private final MPUser<?> user;
 
-        private final JButton addButton    = Components.button( Res.icons().add(), event -> addUser() );
-        private final JButton deleteButton = Components.button( Res.icons().delete(), event -> deleteUser() );
+        private final JButton deleteButton = Components.button( Res.icons().delete(), event -> deleteUser(),
+                                                                "Delete this user from Master Password." );
 
         private final JPasswordField masterPasswordField = Components.passwordField();
         private final JLabel         errorLabel          = Components.label();
@@ -157,16 +172,6 @@ public class UserContentPanel extends JPanel implements FilesPanel.Listener, MPU
             add( errorLabel );
             errorLabel.setForeground( Res.colors().errorFg() );
             add( Box.createGlue() );
-        }
-
-        private void addUser() {
-            Object fullName = JOptionPane.showInputDialog(
-                    this, strf( "<html>Enter your full legal name:</html>" ), "Add User",
-                    JOptionPane.QUESTION_MESSAGE, null, null, "Robert Lee Mitchell" );
-            if (fullName == null)
-                return;
-
-            setUser( MPFileUserManager.get().add( fullName.toString() ) );
         }
 
         private void deleteUser() {
@@ -248,11 +253,16 @@ public class UserContentPanel extends JPanel implements FilesPanel.Listener, MPU
 
         public static final int SIZE_RESULT = 48;
 
-        private final JButton userButton      = Components.button( Res.icons().user(), event -> showUserPreferences() );
-        private final JButton logoutButton    = Components.button( Res.icons().lock(), event -> logoutUser() );
-        private final JButton settingsButton  = Components.button( Res.icons().settings(), event -> showSiteSettings() );
-        private final JButton questionsButton = Components.button( Res.icons().question(), null );
-        private final JButton deleteButton    = Components.button( Res.icons().delete(), event -> deleteSite() );
+        private final JButton userButton      = Components.button( Res.icons().user(), event -> showUserPreferences(),
+                                                                   "Show user preferences." );
+        private final JButton logoutButton    = Components.button( Res.icons().lock(), event -> logoutUser(),
+                                                                   "Sign out and lock user." );
+        private final JButton settingsButton  = Components.button( Res.icons().settings(), event -> showSiteSettings(),
+                                                                   "Show site settings." );
+        private final JButton questionsButton = Components.button( Res.icons().question(), null,
+                                                                   "Show site recovery questions." );
+        private final JButton deleteButton    = Components.button( Res.icons().delete(), event -> deleteSite(),
+                                                                   "Delete the site from the user." );
 
         @Nonnull
         private final MPUser<?>                      user;
@@ -272,6 +282,7 @@ public class UserContentPanel extends JPanel implements FilesPanel.Listener, MPU
 
             this.user = user;
 
+            userToolbar.add( addButton );
             userToolbar.add( userButton );
             userToolbar.add( logoutButton );
 
@@ -279,6 +290,7 @@ public class UserContentPanel extends JPanel implements FilesPanel.Listener, MPU
             siteToolbar.add( questionsButton );
             siteToolbar.add( deleteButton );
             settingsButton.setEnabled( false );
+            deleteButton.setEnabled( false );
 
             add( Components.heading( user.getFullName(), SwingConstants.CENTER ) );
 
@@ -366,7 +378,10 @@ public class UserContentPanel extends JPanel implements FilesPanel.Listener, MPU
             if (site == null)
                 return;
 
-            user.deleteSite( site );
+            if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(
+                    this, strf( "<html>Forget the site <strong>%s</strong>?</html>", site.getSiteName() ),
+                    "Delete Site", JOptionPane.YES_NO_OPTION ))
+                user.deleteSite( site );
         }
 
         private String getSiteDescription(@Nonnull final MPSite<?> site) {
@@ -434,6 +449,7 @@ public class UserContentPanel extends JPanel implements FilesPanel.Listener, MPU
                     passwordLabel.setText( " " );
                     passwordField.setText( " " );
                     settingsButton.setEnabled( false );
+                    deleteButton.setEnabled( false );
                 } );
                 return;
             }
@@ -448,6 +464,7 @@ public class UserContentPanel extends JPanel implements FilesPanel.Listener, MPU
                         passwordLabel.setText( strf( "Your password for %s:", site.getSiteName() ) );
                         passwordField.setText( result );
                         settingsButton.setEnabled( true );
+                        deleteButton.setEnabled( true );
                     } );
                 }
                 catch (final MPKeyUnavailableException | MPAlgorithmException e) {
