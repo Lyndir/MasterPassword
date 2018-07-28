@@ -11,8 +11,7 @@ import com.lyndir.masterpassword.*;
 import com.lyndir.masterpassword.gui.model.MPNewSite;
 import com.lyndir.masterpassword.gui.util.*;
 import com.lyndir.masterpassword.model.*;
-import com.lyndir.masterpassword.model.impl.MPFileSite;
-import com.lyndir.masterpassword.model.impl.MPFileUser;
+import com.lyndir.masterpassword.model.impl.*;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
@@ -32,44 +31,38 @@ import javax.swing.event.DocumentListener;
  * @author lhunath, 2018-07-14
  */
 @SuppressWarnings("SerializableStoresNonSerializable")
-public class UserPanel extends Components.GradientPanel implements MPUser.Listener {
+public class UserContentPanel extends JPanel implements FilesPanel.Listener, MPUser.Listener {
 
-    private static final Logger logger = Logger.get( UserPanel.class );
+    private static final Random  random     = new Random();
+    private static final Logger  logger     = Logger.get( UserContentPanel.class );
+    private static final JButton iconButton = Components.button( Res.icons().user(), null );
+
+    private final JPanel userToolbar = Components.panel( BoxLayout.PAGE_AXIS );
+    private final JPanel siteToolbar = Components.panel( BoxLayout.PAGE_AXIS );
 
     @Nullable
-    private MPUser<?> user;
+    private MPUser<?> listeningUser;
 
-    public UserPanel() {
-        super( new BorderLayout( Components.margin(), Components.margin() ), null );
+    public UserContentPanel() {
+        userToolbar.setPreferredSize( iconButton.getPreferredSize() );
+        siteToolbar.setPreferredSize( iconButton.getPreferredSize() );
+
+        setLayout( new BoxLayout( this, BoxLayout.PAGE_AXIS ) );
         setBorder( Components.marginBorder() );
         setUser( null );
     }
 
-    public void setUser(@Nullable final MPUser<?> user) {
-        if ((this.user != null) && !Objects.equals( this.user, user ))
-            this.user.removeListener( this );
+    protected JComponent getUserToolbar() {
+        return userToolbar;
+    }
 
-        this.user = user;
+    protected JComponent getSiteToolbar() {
+        return siteToolbar;
+    }
 
-        if (this.user != null)
-            this.user.addListener( this );
-
-        Res.ui( () -> {
-            removeAll();
-            if (this.user == null)
-                add( new NoUserPanel(), BorderLayout.CENTER );
-
-            else {
-                if (!this.user.isMasterKeyAvailable())
-                    add( new AuthenticateUserPanel( this.user ), BorderLayout.CENTER );
-
-                else
-                    add( new AuthenticatedUserPanel( this.user ), BorderLayout.CENTER );
-            }
-
-            revalidate();
-            transferFocus();
-        } );
+    @Override
+    public void onUserSelected(@Nullable final MPUser<?> user) {
+        setUser( user );
     }
 
     @Override
@@ -82,7 +75,40 @@ public class UserPanel extends Components.GradientPanel implements MPUser.Listen
         setUser( user );
     }
 
-    private static final class NoUserPanel extends JPanel {
+    @Override
+    public void onUserInvalidated(final MPUser<?> user) {
+        setUser( user );
+    }
+
+    private void setUser(@Nullable final MPUser<?> user) {
+        Res.ui( () -> {
+            if (listeningUser != null)
+                listeningUser.removeListener( this );
+            listeningUser = user;
+
+            userToolbar.removeAll();
+            siteToolbar.removeAll();
+            removeAll();
+
+            if (user == null)
+                add( new NoUserPanel() );
+
+            else {
+                user.addListener( this );
+
+                if (!user.isMasterKeyAvailable())
+                    add( new AuthenticateUserPanel( user ) );
+
+                else
+                    add( new AuthenticatedUserPanel( user ) );
+            }
+
+            revalidate();
+            transferFocus();
+        } );
+    }
+
+    private final class NoUserPanel extends JPanel {
 
         private NoUserPanel() {
             setLayout( new BoxLayout( this, BoxLayout.PAGE_AXIS ) );
@@ -94,12 +120,13 @@ public class UserPanel extends Components.GradientPanel implements MPUser.Listen
     }
 
 
-    private static final class AuthenticateUserPanel extends JPanel implements ActionListener, DocumentListener {
-
-        private static final Random random = new Random();
+    private final class AuthenticateUserPanel extends JPanel implements ActionListener, DocumentListener {
 
         @Nonnull
         private final MPUser<?> user;
+
+        private final JButton addButton    = Components.button( Res.icons().add(), event -> addUser() );
+        private final JButton deleteButton = Components.button( Res.icons().delete(), event -> deleteUser() );
 
         private final JPasswordField masterPasswordField = Components.passwordField();
         private final JLabel         errorLabel          = Components.label();
@@ -112,7 +139,14 @@ public class UserPanel extends Components.GradientPanel implements MPUser.Listen
 
             this.user = user;
 
+            userToolbar.add( addButton );
+            userToolbar.add( deleteButton );
+
             add( Components.heading( user.getFullName(), SwingConstants.CENTER ) );
+            add( Components.strut() );
+
+            add( identiconLabel );
+            identiconLabel.setFont( Res.fonts().emoticonsFont( Components.TEXT_SIZE_CONTROL ) );
             add( Box.createGlue() );
 
             add( Components.label( "Master Password:" ) );
@@ -122,12 +156,29 @@ public class UserPanel extends Components.GradientPanel implements MPUser.Listen
             masterPasswordField.getDocument().addDocumentListener( this );
             add( errorLabel );
             errorLabel.setForeground( Res.colors().errorFg() );
-
-            add( Components.strut() );
-            add( identiconLabel );
-            identiconLabel.setFont( Res.fonts().emoticonsFont( Components.TEXT_SIZE_CONTROL ) );
-
             add( Box.createGlue() );
+        }
+
+        private void addUser() {
+            Object fullName = JOptionPane.showInputDialog(
+                    this, strf( "<html>Enter your full legal name:</html>" ), "Add User",
+                    JOptionPane.QUESTION_MESSAGE, null, null, "Robert Lee Mitchell" );
+            if (fullName == null)
+                return;
+
+            setUser( MPFileUserManager.get().add( fullName.toString() ) );
+        }
+
+        private void deleteUser() {
+            MPFileUser fileUser = (user instanceof MPFileUser)? (MPFileUser) user: null;
+            if (fileUser == null)
+                return;
+
+            if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(
+                    this, strf( "<html>Delete the user <strong>%s</strong>?<br><br><em>%s</em></html>",
+                                fileUser.getFullName(), fileUser.getFile().getName() ),
+                    "Delete User", JOptionPane.YES_NO_OPTION ))
+                MPFileUserManager.get().delete( fileUser );
         }
 
         @Override
@@ -193,21 +244,25 @@ public class UserPanel extends Components.GradientPanel implements MPUser.Listen
     }
 
 
-    private static final class AuthenticatedUserPanel extends JPanel implements KeyListener {
+    private final class AuthenticatedUserPanel extends JPanel implements KeyListener {
 
         public static final int SIZE_RESULT = 48;
 
+        private final JButton userButton      = Components.button( Res.icons().user(), event -> showUserPreferences() );
+        private final JButton logoutButton    = Components.button( Res.icons().lock(), event -> logoutUser() );
+        private final JButton settingsButton  = Components.button( Res.icons().settings(), event -> showSiteSettings() );
+        private final JButton questionsButton = Components.button( Res.icons().question(), null );
+        private final JButton deleteButton    = Components.button( Res.icons().delete(), event -> deleteSite() );
+
         @Nonnull
         private final MPUser<?>                      user;
-        private final JLabel                         passwordLabel  = Components.label( SwingConstants.CENTER );
-        private final JLabel                         passwordField  = Components.heading( SwingConstants.CENTER );
-        private final JButton                        passwordButton =
-                Components.button( Res.icons().settings(), event -> showSiteSettings() );
-        private final JLabel                         queryLabel     = Components.label();
-        private final JTextField                     queryField     = Components.textField( null, this::updateSites );
-        private final CollectionListModel<MPSite<?>> sitesModel     =
+        private final JLabel                         passwordLabel = Components.label( SwingConstants.CENTER );
+        private final JLabel                         passwordField = Components.heading( SwingConstants.CENTER );
+        private final JLabel                         queryLabel    = Components.label();
+        private final JTextField                     queryField    = Components.textField( null, this::updateSites );
+        private final CollectionListModel<MPSite<?>> sitesModel    =
                 new CollectionListModel<MPSite<?>>().selection( this::showSiteResult );
-        private final JList<MPSite<?>>               sitesList      =
+        private final JList<MPSite<?>>               sitesList     =
                 Components.list( sitesModel, this::getSiteDescription );
 
         private Future<?> updateSitesJob;
@@ -217,23 +272,20 @@ public class UserPanel extends Components.GradientPanel implements MPUser.Listen
 
             this.user = user;
 
-            add( Components.panel(
-                    Components.heading( user.getFullName(), SwingConstants.CENTER ),
-                    Components.panel(
-                            BoxLayout.LINE_AXIS,
-                            Box.createGlue(),
-                            Components.button( Res.icons().user(), event -> showUserPreferences() ) ) ) );
+            userToolbar.add( userButton );
+            userToolbar.add( logoutButton );
+
+            siteToolbar.add( settingsButton );
+            siteToolbar.add( questionsButton );
+            siteToolbar.add( deleteButton );
+            settingsButton.setEnabled( false );
+
+            add( Components.heading( user.getFullName(), SwingConstants.CENTER ) );
 
             add( passwordLabel );
-            add( Components.panel(
-                    passwordField,
-                    Components.panel(
-                            BoxLayout.LINE_AXIS,
-                            Box.createGlue(),
-                            passwordButton ) ) );
+            add( passwordField );
             passwordField.setForeground( Res.colors().highlightFg() );
             passwordField.setFont( Res.fonts().bigValueFont( SIZE_RESULT ) );
-            passwordButton.setVisible( false );
             add( Box.createGlue() );
             add( Components.strut() );
 
@@ -269,13 +321,16 @@ public class UserPanel extends Components.GradientPanel implements MPUser.Listen
                     BoxLayout.PAGE_AXIS, components.build().toArray( new Component[0] ) ) ) );
         }
 
-        public void showSiteSettings() {
-            ImmutableList.Builder<Component> components = ImmutableList.builder();
+        public void logoutUser() {
+            user.invalidate();
+        }
 
+        public void showSiteSettings() {
             MPSite<?> site = sitesModel.getSelectedItem();
             if (site == null)
                 return;
 
+            ImmutableList.Builder<Component> components = ImmutableList.builder();
             components.add( Components.label( "Algorithm:" ),
                             Components.comboBox( MPAlgorithm.Version.values(), MPAlgorithm.Version::name,
                                                  site.getAlgorithm().version(),
@@ -306,6 +361,14 @@ public class UserPanel extends Components.GradientPanel implements MPUser.Listen
                     BoxLayout.PAGE_AXIS, components.build().toArray( new Component[0] ) ) ) );
         }
 
+        public void deleteSite() {
+            MPSite<?> site = sitesModel.getSelectedItem();
+            if (site == null)
+                return;
+
+            user.deleteSite( site );
+        }
+
         private String getSiteDescription(@Nonnull final MPSite<?> site) {
             if (site instanceof MPNewSite)
                 return strf( "<html><strong>%s</strong> &lt;Add new site&gt;</html>", queryField.getText() );
@@ -334,7 +397,7 @@ public class UserPanel extends Components.GradientPanel implements MPUser.Listen
             MPSite<?> site = sitesModel.getSelectedItem();
             if (site instanceof MPNewSite) {
                 if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(
-                        this, strf( "<html>Remember the site [<strong>%s</strong>]?</html>", site.getSiteName() ),
+                        this, strf( "<html>Remember the site <strong>%s</strong>?</html>", site.getSiteName() ),
                         "New Site", JOptionPane.YES_NO_OPTION )) {
                     sitesModel.setSelectedItem( user.addSite( site.getSiteName() ) );
                     useSite();
@@ -370,7 +433,7 @@ public class UserPanel extends Components.GradientPanel implements MPUser.Listen
                 Res.ui( () -> {
                     passwordLabel.setText( " " );
                     passwordField.setText( " " );
-                    passwordButton.setVisible( false );
+                    settingsButton.setEnabled( false );
                 } );
                 return;
             }
@@ -384,7 +447,7 @@ public class UserPanel extends Components.GradientPanel implements MPUser.Listen
                     Res.ui( () -> {
                         passwordLabel.setText( strf( "Your password for %s:", site.getSiteName() ) );
                         passwordField.setText( result );
-                        passwordButton.setVisible( true );
+                        settingsButton.setEnabled( true );
                     } );
                 }
                 catch (final MPKeyUnavailableException | MPAlgorithmException e) {

@@ -94,9 +94,9 @@ public interface MPSite<Q extends MPQuestion> extends Comparable<MPSite<?>> {
     @Nonnull
     MPUser<?> getUser();
 
-    void addQuestion(Q question);
+    boolean addQuestion(Q question);
 
-    void deleteQuestion(Q question);
+    boolean deleteQuestion(Q question);
 
     @Nonnull
     Collection<Q> getQuestions();

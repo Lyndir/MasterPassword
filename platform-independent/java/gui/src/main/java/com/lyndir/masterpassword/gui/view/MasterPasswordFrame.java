@@ -1,13 +1,12 @@
 package com.lyndir.masterpassword.gui.view;
 
 import com.lyndir.lhunath.opal.system.logging.Logger;
-import com.lyndir.masterpassword.gui.util.Res;
 import com.lyndir.masterpassword.gui.util.Components;
-import com.lyndir.masterpassword.model.MPUser;
+import com.lyndir.masterpassword.gui.util.Res;
+import com.lyndir.masterpassword.model.impl.MPFileUserManager;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import javax.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 
@@ -16,57 +15,48 @@ import javax.swing.border.BevelBorder;
  * @author lhunath, 2018-07-14
  */
 @SuppressWarnings("serial")
-public class MasterPasswordFrame extends JFrame implements FilesPanel.Listener, ComponentListener {
+public class MasterPasswordFrame extends JFrame {
 
     private static final Logger logger = Logger.get( MasterPasswordFrame.class );
 
     @SuppressWarnings("FieldCanBeLocal")
-    private final Components.GradientPanel root;
-    private final FilesPanel               filesPanel = new FilesPanel();
-    private final UserPanel                userPanel  = new UserPanel();
+    private final Components.GradientPanel root        = Components.borderPanel( Res.colors().frameBg(), BoxLayout.PAGE_AXIS );
+    private final FilesPanel               filesPanel  = new FilesPanel();
+    private final JPanel                   userPanel   = Components.panel( new BorderLayout( 0, 0 ) );
+    private final UserContentPanel         userContent = new UserContentPanel();
 
     @SuppressWarnings("MagicNumber")
     public MasterPasswordFrame() {
         super( "Master Password" );
 
-        setDefaultCloseOperation( DISPOSE_ON_CLOSE );
-        setContentPane( root = Components.borderPanel( Res.colors().frameBg(), BoxLayout.PAGE_AXIS ) );
+        setContentPane( root );
         root.add( filesPanel );
         root.add( Components.strut() );
-        root.add( Components.borderPanel(
+        root.add( userPanel );
+
+        userPanel.add( userContent.getUserToolbar(), BorderLayout.LINE_START );
+        userPanel.add( userContent.getSiteToolbar(), BorderLayout.LINE_END );
+        userPanel.add( Components.borderPanel(
                 BorderFactory.createBevelBorder( BevelBorder.RAISED, Res.colors().controlBorder(), Res.colors().frameBg() ),
-                Res.colors().controlBg(), BoxLayout.PAGE_AXIS, userPanel ) );
+                Res.colors().controlBg(), BoxLayout.PAGE_AXIS, userContent ), BorderLayout.CENTER );
 
-        filesPanel.addListener( this );
-        filesPanel.reload();
+        filesPanel.addListener( userContent );
 
-        addComponentListener( this );
-        setPreferredSize( new Dimension( 640, 480 ) );
+        addComponentListener( new ComponentHandler() );
+        setPreferredSize( new Dimension( 800, 560 ) );
+        setDefaultCloseOperation( DISPOSE_ON_CLOSE );
         pack();
 
         setLocationRelativeTo( null );
         setLocationByPlatform( true );
     }
 
-    @Override
-    public void onUserSelected(@Nullable final MPUser<?> user) {
-        userPanel.setUser( user );
-    }
+    private class ComponentHandler extends ComponentAdapter {
 
-    @Override
-    public void componentResized(final ComponentEvent e) {
-    }
-
-    @Override
-    public void componentMoved(final ComponentEvent e) {
-    }
-
-    @Override
-    public void componentShown(final ComponentEvent e) {
-        userPanel.transferFocus();
-    }
-
-    @Override
-    public void componentHidden(final ComponentEvent e) {
+        @Override
+        public void componentShown(final ComponentEvent e) {
+            MPFileUserManager.get().reload();
+            userContent.transferFocus();
+        }
     }
 }

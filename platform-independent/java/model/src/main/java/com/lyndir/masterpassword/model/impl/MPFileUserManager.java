@@ -25,8 +25,8 @@ import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.masterpassword.model.MPConstants;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 
 /**
@@ -52,6 +52,7 @@ public class MPFileUserManager {
         }
     }
 
+    private final Collection<Listener>    listeners  = new CopyOnWriteArraySet<>();
     private final Map<String, MPFileUser> userByName = new HashMap<>();
     private final File                    path;
 
@@ -67,13 +68,13 @@ public class MPFileUserManager {
         this.path = path;
     }
 
-    public ImmutableSortedSet<MPFileUser> reload() {
+    public void reload() {
         userByName.clear();
 
         File[] pathFiles;
         if ((!path.exists() && !path.mkdirs()) || ((pathFiles = path.listFiles()) == null)) {
             logger.err( "Couldn't create directory for user files: %s", path );
-            return getFiles();
+            return;
         }
 
         for (final File file : pathFiles)
@@ -90,12 +91,14 @@ public class MPFileUserManager {
                         logger.err( e, "Couldn't read user from: %s", file );
                     }
 
-        return getFiles();
+        fireUpdated();
     }
 
     public MPFileUser add(final String fullName) {
         MPFileUser user = new MPFileUser( fullName );
         userByName.put( user.getFullName(), user );
+        fireUpdated();
+
         return user;
     }
 
@@ -104,8 +107,8 @@ public class MPFileUserManager {
         File userFile = user.getFile();
         if (userFile.exists() && !userFile.delete())
             logger.err( "Couldn't delete file: %s", userFile );
-        else
-            userByName.values().remove( user );
+        else if (userByName.values().remove( user ))
+            fireUpdated();
     }
 
     public File getPath() {
@@ -114,5 +117,28 @@ public class MPFileUserManager {
 
     public ImmutableSortedSet<MPFileUser> getFiles() {
         return ImmutableSortedSet.copyOf( userByName.values() );
+    }
+
+    public boolean addListener(final Listener listener) {
+        return listeners.add( listener );
+    }
+
+    public boolean removeListener(final Listener listener) {
+        return listeners.remove( listener );
+    }
+
+    private void fireUpdated() {
+        if (listeners.isEmpty())
+            return;
+
+        ImmutableSortedSet<MPFileUser> files = getFiles();
+
+        for (final Listener listener : listeners)
+            listener.onFilesUpdated( files );
+    }
+
+    public interface Listener {
+
+        void onFilesUpdated(ImmutableSortedSet<MPFileUser> files);
     }
 }

@@ -83,6 +83,10 @@ public abstract class Components {
         return box;
     }
 
+    public static GradientPanel panel(@Nullable final LayoutManager layout) {
+        return panel( layout, null );
+    }
+
     public static GradientPanel panel(@Nullable final LayoutManager layout, @Nullable final Color color) {
         return new GradientPanel( layout, color );
     }
@@ -223,6 +227,11 @@ public abstract class Components {
                 if (actionListener != null)
                     actionListener.actionPerformed( e );
             }
+
+            @Override
+            public boolean isEnabled() {
+                return actionListener != null;
+            }
         } );
     }
 
@@ -232,6 +241,11 @@ public abstract class Components {
             public void actionPerformed(final ActionEvent e) {
                 if (actionListener != null)
                     actionListener.actionPerformed( e );
+            }
+
+            @Override
+            public boolean isEnabled() {
+                return actionListener != null;
             }
         } );
         iconButton.setFocusable( false );
@@ -441,6 +455,9 @@ public abstract class Components {
 
         public GradientPanel(@Nullable final LayoutManager layout, @Nullable final Color gradientColor) {
             super( layout );
+            if (getLayout() == null)
+                setLayout( new BoxLayout( this, BoxLayout.PAGE_AXIS ) );
+
             setGradientColor( gradientColor );
             setBackground( null );
             setAlignmentX( LEFT_ALIGNMENT );
@@ -459,7 +476,7 @@ public abstract class Components {
         @Override
         public void setBackground(@Nullable final Color bg) {
             super.setBackground( bg );
-            updatePaint();
+            setOpaque( bg != null );
         }
 
         @Override
@@ -469,8 +486,6 @@ public abstract class Components {
         }
 
         private void updatePaint() {
-            setOpaque( (getGradientColor() != null) || (getBackground() != null) );
-
             if (gradientColor == null) {
                 paint = null;
                 return;

@@ -73,8 +73,10 @@ public abstract class MPBasicSite<U extends MPUser<?>, Q extends MPQuestion> ext
 
     @Override
     public void setAlgorithm(final MPAlgorithm algorithm) {
-        this.algorithm = algorithm;
+        if (Objects.equals(this.algorithm, algorithm))
+            return;
 
+        this.algorithm = algorithm;
         setChanged();
     }
 
@@ -86,8 +88,10 @@ public abstract class MPBasicSite<U extends MPUser<?>, Q extends MPQuestion> ext
 
     @Override
     public void setCounter(final UnsignedInteger counter) {
-        this.counter = counter;
+        if (Objects.equals(this.counter, counter))
+            return;
 
+        this.counter = counter;
         setChanged();
     }
 
@@ -99,8 +103,10 @@ public abstract class MPBasicSite<U extends MPUser<?>, Q extends MPQuestion> ext
 
     @Override
     public void setResultType(final MPResultType resultType) {
-        this.resultType = resultType;
+        if (Objects.equals(this.resultType, resultType))
+            return;
 
+        this.resultType = resultType;
         setChanged();
     }
 
@@ -112,8 +118,10 @@ public abstract class MPBasicSite<U extends MPUser<?>, Q extends MPQuestion> ext
 
     @Override
     public void setLoginType(@Nullable final MPResultType loginType) {
-        this.loginType = ifNotNullElse( loginType, getAlgorithm().mpw_default_login_type() );
+        if (Objects.equals(this.loginType, loginType))
+            return;
 
+        this.loginType = ifNotNullElse( loginType, getAlgorithm().mpw_default_login_type() );
         setChanged();
     }
 
@@ -152,17 +160,21 @@ public abstract class MPBasicSite<U extends MPUser<?>, Q extends MPQuestion> ext
     }
 
     @Override
-    public void addQuestion(final Q question) {
-        questions.add( question );
+    public boolean addQuestion(final Q question) {
+        if (!questions.add( question ))
+            return false;
 
         setChanged();
+        return true;
     }
 
     @Override
-    public void deleteQuestion(final Q question) {
-        questions.remove( question );
+    public boolean deleteQuestion(final Q question) {
+        if (!questions.remove( question ))
+            return false;
 
         setChanged();
+        return true;
     }
 
     @Nonnull

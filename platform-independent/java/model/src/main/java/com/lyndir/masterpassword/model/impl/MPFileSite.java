@@ -21,6 +21,7 @@ package com.lyndir.masterpassword.model.impl;
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.masterpassword.*;
 import com.lyndir.masterpassword.model.MPSite;
+import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.joda.time.Instant;
@@ -75,8 +76,10 @@ public class MPFileSite extends MPBasicSite<MPFileUser, MPFileQuestion> {
     }
 
     public void setUrl(@Nullable final String url) {
-        this.url = url;
+        if (Objects.equals( this.url, url))
+            return;
 
+        this.url = url;
         setChanged();
     }
 
@@ -92,7 +95,6 @@ public class MPFileSite extends MPBasicSite<MPFileUser, MPFileQuestion> {
         uses++;
         lastUsed = new Instant();
         getUser().use();
-
         setChanged();
     }
 

@@ -25,8 +25,7 @@ import com.google.common.collect.ImmutableSortedSet;
 import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.masterpassword.*;
-import com.lyndir.masterpassword.model.MPIncorrectMasterPasswordException;
-import com.lyndir.masterpassword.model.MPUser;
+import com.lyndir.masterpassword.model.*;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
 import javax.annotation.Nonnull;
@@ -66,8 +65,10 @@ public abstract class MPBasicUser<S extends MPBasicSite<?, ?>> extends Changeabl
 
     @Override
     public void setAvatar(final int avatar) {
-        this.avatar = avatar;
+        if (Objects.equals(this.avatar, avatar))
+            return;
 
+        this.avatar = avatar;
         setChanged();
     }
 
@@ -85,8 +86,10 @@ public abstract class MPBasicUser<S extends MPBasicSite<?, ?>> extends Changeabl
 
     @Override
     public void setAlgorithm(final MPAlgorithm algorithm) {
-        this.algorithm = algorithm;
+        if (Objects.equals(this.algorithm, algorithm))
+            return;
 
+        this.algorithm = algorithm;
         setChanged();
     }
 
@@ -137,6 +140,17 @@ public abstract class MPBasicUser<S extends MPBasicSite<?, ?>> extends Changeabl
     }
 
     @Override
+    public void invalidate() {
+        if (masterKey == null)
+            return;
+        
+        this.masterKey = null;
+
+        for (final Listener listener : listeners)
+            listener.onUserInvalidated( this );
+    }
+
+    @Override
     public boolean isMasterKeyAvailable() {
         return masterKey != null;
     }
@@ -151,6 +165,7 @@ public abstract class MPBasicUser<S extends MPBasicSite<?, ?>> extends Changeabl
         return masterKey;
     }
 
+    @Nonnull
     @Override
     public S addSite(final S site) {
         sites.put( site.getSiteName(), site );
@@ -160,10 +175,12 @@ public abstract class MPBasicUser<S extends MPBasicSite<?, ?>> extends Changeabl
     }
 
     @Override
-    public void deleteSite(final S site) {
-        sites.values().remove( site );
+    public boolean deleteSite(final MPSite<?> site) {
+        if (!sites.values().remove( site ))
+            return false;
 
         setChanged();
+        return true;
     }
 
     @Nonnull

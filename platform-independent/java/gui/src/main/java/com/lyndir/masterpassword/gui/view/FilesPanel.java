@@ -2,10 +2,12 @@ package com.lyndir.masterpassword.gui.view;
 
 import static com.lyndir.masterpassword.util.Utilities.*;
 
+import com.google.common.collect.ImmutableSortedSet;
 import com.lyndir.masterpassword.gui.util.Res;
 import com.lyndir.masterpassword.gui.util.CollectionListModel;
 import com.lyndir.masterpassword.gui.util.Components;
 import com.lyndir.masterpassword.model.MPUser;
+import com.lyndir.masterpassword.model.impl.MPFileUser;
 import com.lyndir.masterpassword.model.impl.MPFileUserManager;
 import java.awt.*;
 import java.util.Collection;
@@ -18,7 +20,7 @@ import javax.swing.*;
  * @author lhunath, 2018-07-14
  */
 @SuppressWarnings("serial")
-public class FilesPanel extends JPanel {
+public class FilesPanel extends JPanel implements MPFileUserManager.Listener {
 
     private final Collection<Listener> listeners = new CopyOnWriteArraySet<>();
 
@@ -48,11 +50,8 @@ public class FilesPanel extends JPanel {
 
         // User Selection
         add( userField );
-    }
 
-    public void reload() {
-        // TODO: Should we use a listener here instead?
-        usersModel.set( MPFileUserManager.get().reload() );
+        MPFileUserManager.get().addListener( this );
     }
 
     public boolean addListener(final Listener listener) {
@@ -73,6 +72,11 @@ public class FilesPanel extends JPanel {
 
         for (final Listener listener : listeners)
             listener.onUserSelected( user );
+    }
+
+    @Override
+    public void onFilesUpdated(final ImmutableSortedSet<MPFileUser> files) {
+        usersModel.set( files );
     }
 
     public interface Listener {

@@ -55,8 +55,10 @@ public abstract class MPBasicQuestion extends Changeable implements MPQuestion {
 
     @Override
     public void setType(final MPResultType type) {
-        this.type = type;
+        if (Objects.equals(this.type, type))
+            return;
 
+        this.type = type;
         setChanged();
     }
 

@@ -77,6 +77,8 @@ public interface MPUser<S extends MPSite<?>> extends Comparable<MPUser<?>> {
     void authenticate(MPMasterKey masterKey)
             throws MPIncorrectMasterPasswordException, MPKeyUnavailableException, MPAlgorithmException;
 
+    void invalidate();
+
     boolean isMasterKeyAvailable();
 
     @Nonnull
@@ -90,7 +92,7 @@ public interface MPUser<S extends MPSite<?>> extends Comparable<MPUser<?>> {
     @Nonnull
     S addSite(S site);
 
-    void deleteSite(S site);
+    boolean deleteSite(MPSite<?> site);
 
     @Nonnull
     Collection<S> getSites();
@@ -107,5 +109,7 @@ public interface MPUser<S extends MPSite<?>> extends Comparable<MPUser<?>> {
         void onUserUpdated(MPUser<?> user);
 
         void onUserAuthenticated(MPUser<?> user);
+
+        void onUserInvalidated(MPUser<?> user);
     }
 }

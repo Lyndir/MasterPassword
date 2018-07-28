@@ -23,6 +23,7 @@ import com.lyndir.masterpassword.model.MPIncorrectMasterPasswordException;
 import com.lyndir.masterpassword.model.MPUser;
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.joda.time.Instant;
@@ -98,8 +99,10 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
     }
 
     public void setFormat(final MPMarshalFormat format) {
-        this.format = format;
+        if (Objects.equals(this.format, format))
+            return;
 
+        this.format = format;
         setChanged();
     }
 
@@ -108,8 +111,10 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
     }
 
     public void setContentMode(final MPMarshaller.ContentMode contentMode) {
-        this.contentMode = contentMode;
+        if (Objects.equals(this.contentMode, contentMode))
+            return;
 
+        this.contentMode = contentMode;
         setChanged();
     }
 
@@ -118,8 +123,10 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
     }
 
     public void setDefaultType(final MPResultType defaultType) {
-        this.defaultType = defaultType;
+        if (Objects.equals(this.defaultType, defaultType))
+            return;
 
+        this.defaultType = defaultType;
         setChanged();
     }
 
@@ -129,7 +136,6 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
 
     public void use() {
         lastUsed = new Instant();
-
         setChanged();
     }
 
@@ -159,7 +165,6 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
 
         if (keyID == null) {
             keyID = masterKey.getKeyID( getAlgorithm() );
-
             setChanged();
         }
     }

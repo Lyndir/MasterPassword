@@ -128,6 +128,10 @@ public abstract class Res {
             return icon( "media/icon_user.png" );
         }
 
+        public Icon lock() {
+            return icon( "media/icon_lock.png" );
+        }
+
         public Icon settings() {
             return icon( "media/icon_settings.png" );
         }
