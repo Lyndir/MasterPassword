@@ -170,6 +170,13 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
     }
 
     @Override
+    public void reset() {
+        keyID = null;
+
+        super.reset();
+    }
+
+    @Override
     public MPFileSite addSite(final String siteName) {
         return addSite( new MPFileSite( this, siteName ) );
     }

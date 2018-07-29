@@ -37,8 +37,8 @@ public class UserContentPanel extends JPanel implements FilesPanel.Listener, MPU
     private static final Logger  logger     = Logger.get( UserContentPanel.class );
     private static final JButton iconButton = Components.button( Res.icons().user(), null, null );
 
-    private final JButton addButton    = Components.button( Res.icons().add(), event -> addUser(),
-                                                            "Add a new user to Master Password." );
+    private final JButton addButton = Components.button( Res.icons().add(), event -> addUser(),
+                                                         "Add a new user to Master Password." );
 
     private final JPanel userToolbar = Components.panel( BoxLayout.PAGE_AXIS );
     private final JPanel siteToolbar = Components.panel( BoxLayout.PAGE_AXIS );
@@ -142,6 +142,8 @@ public class UserContentPanel extends JPanel implements FilesPanel.Listener, MPU
 
         private final JButton deleteButton = Components.button( Res.icons().delete(), event -> deleteUser(),
                                                                 "Delete this user from Master Password." );
+        private final JButton resetButton  = Components.button( Res.icons().reset(), event -> resetUser(),
+                                                                "Change the master password for this user." );
 
         private final JPasswordField masterPasswordField = Components.passwordField();
         private final JLabel         errorLabel          = Components.label();
@@ -156,6 +158,7 @@ public class UserContentPanel extends JPanel implements FilesPanel.Listener, MPU
 
             userToolbar.add( addButton );
             userToolbar.add( deleteButton );
+            userToolbar.add( resetButton );
 
             add( Components.heading( user.getFullName(), SwingConstants.CENTER ) );
             add( Components.strut() );
@@ -180,10 +183,46 @@ public class UserContentPanel extends JPanel implements FilesPanel.Listener, MPU
                 return;
 
             if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(
-                    this, strf( "<html>Delete the user <strong>%s</strong>?<br><br><em>%s</em></html>",
-                                fileUser.getFullName(), fileUser.getFile().getName() ),
+                    SwingUtilities.windowForComponent( this ), strf( "<html>Delete the user <strong>%s</strong>?<br><br><em>%s</em></html>",
+                                                                     fileUser.getFullName(), fileUser.getFile().getName() ),
                     "Delete User", JOptionPane.YES_NO_OPTION ))
                 MPFileUserManager.get().delete( fileUser );
+        }
+
+        private void resetUser() {
+            JPasswordField passwordField = Components.passwordField();
+            if (JOptionPane.OK_OPTION == Components.showDialog( this, "Reset User", new JOptionPane( Components.panel(
+                    BoxLayout.PAGE_AXIS,
+                    Components.label( strf( "<html>Enter the new master password for <strong>%s</strong>:</html>",
+                                            user.getFullName() ) ),
+                    Components.strut(),
+                    passwordField,
+                    Components.strut(),
+                    Components.label( strf( "<html><em><strong>Note:</strong><br>Changing the master password "
+                                            + "will change all of the user's passwords.<br>"
+                                            + "Changing back to the original master password will also restore<br>"
+                                            + "the user's original passwords.</em></html>",
+                                            user.getFullName() ) ) ), JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION ) {
+                @Override
+                public void selectInitialValue() {
+                    passwordField.requestFocusInWindow();
+                }
+            } )) {
+                char[] masterPassword = passwordField.getPassword();
+                if ((masterPassword != null) && (masterPassword.length > 0))
+                    try {
+                        user.reset();
+                        user.authenticate( masterPassword );
+                    }
+                    catch (final MPIncorrectMasterPasswordException e) {
+                        errorLabel.setText( e.getLocalizedMessage() );
+                        throw logger.bug( e );
+                    }
+                    catch (final MPAlgorithmException e) {
+                        logger.err( e, "While resetting master password." );
+                        errorLabel.setText( e.getLocalizedMessage() );
+                    }
+            }
         }
 
         @Override

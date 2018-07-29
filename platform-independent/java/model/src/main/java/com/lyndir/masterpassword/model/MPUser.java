@@ -77,7 +77,17 @@ public interface MPUser<S extends MPSite<?>> extends Comparable<MPUser<?>> {
     void authenticate(MPMasterKey masterKey)
             throws MPIncorrectMasterPasswordException, MPKeyUnavailableException, MPAlgorithmException;
 
+    /**
+     * Clear all authentication tokens and secrets from memory, effectively logging the user out.
+     */
     void invalidate();
+
+    /**
+     * Wipe the key ID, allowing the user to {@link #authenticate(char[])} with any master password.
+     *
+     * Note: Authenticating with a different master password will cause all of the user's results to change.
+     */
+    void reset();
 
     boolean isMasterKeyAvailable();
 

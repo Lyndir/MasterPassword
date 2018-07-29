@@ -21,6 +21,7 @@ package com.lyndir.masterpassword.gui.util;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -91,11 +92,21 @@ public abstract class Components {
         return new GradientPanel( layout, color );
     }
 
-    public static JDialog showDialog(@Nullable final Component owner, @Nullable final String title, final JOptionPane pane) {
+    public static int showDialog(@Nullable final Component owner, @Nullable final String title, final JOptionPane pane) {
         JDialog dialog = pane.createDialog( owner, title );
         dialog.setModalityType( Dialog.ModalityType.DOCUMENT_MODAL );
+        showDialog( dialog );
 
-        return showDialog( dialog );
+        Object selectedValue = pane.getValue();
+        if(selectedValue == null)
+            return JOptionPane.CLOSED_OPTION;
+
+        Object[] options = pane.getOptions();
+        if(options == null)
+            return (selectedValue instanceof Integer)? (Integer) selectedValue: JOptionPane.CLOSED_OPTION;
+
+        int option = Arrays.binarySearch( options, selectedValue );
+        return (option < 0)? JOptionPane.CLOSED_OPTION: option;
     }
 
     public static JDialog showDialog(@Nullable final Component owner, @Nullable final String title, final Container content) {

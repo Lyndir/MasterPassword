@@ -82,11 +82,15 @@ public class MPMasterKey {
         Arrays.fill( masterPassword, (char) 0 );
     }
 
+    public boolean isValid() {
+        return !invalidated;
+    }
+
     private byte[] masterKey(final MPAlgorithm algorithm)
             throws MPKeyUnavailableException, MPAlgorithmException {
         Preconditions.checkArgument( masterPassword.length > 0 );
 
-        if (invalidated)
+        if (!isValid())
             throw new MPKeyUnavailableException( "Master key was invalidated." );
 
         byte[] masterKey = keyByVersion.get( algorithm.version() );

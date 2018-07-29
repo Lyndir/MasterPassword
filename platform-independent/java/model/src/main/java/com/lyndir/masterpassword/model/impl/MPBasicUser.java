@@ -97,12 +97,14 @@ public abstract class MPBasicUser<S extends MPBasicSite<?, ?>> extends Changeabl
     @Override
     public byte[] getKeyID() {
         try {
-            return getMasterKey().getKeyID( getAlgorithm() );
+            if (isMasterKeyAvailable())
+                return getMasterKey().getKeyID( getAlgorithm() );
         }
         catch (final MPException e) {
             logger.wrn( e, "While deriving key ID for user: %s", this );
-            return null;
         }
+
+        return null;
     }
 
     @Nullable
@@ -143,23 +145,29 @@ public abstract class MPBasicUser<S extends MPBasicSite<?, ?>> extends Changeabl
     public void invalidate() {
         if (masterKey == null)
             return;
-        
-        this.masterKey = null;
+
+        masterKey.invalidate();
+        masterKey = null;
 
         for (final Listener listener : listeners)
             listener.onUserInvalidated( this );
     }
 
     @Override
+    public void reset() {
+        invalidate();
+    }
+
+    @Override
     public boolean isMasterKeyAvailable() {
-        return masterKey != null;
+        return (masterKey != null) && masterKey.isValid();
     }
 
     @Nonnull
     @Override
     public MPMasterKey getMasterKey()
             throws MPKeyUnavailableException {
-        if (masterKey == null)
+        if ((masterKey == null) || !masterKey.isValid())
             throw new MPKeyUnavailableException( "Master key was not yet set for: " + this );
 
         return masterKey;

@@ -132,6 +132,10 @@ public abstract class Res {
             return icon( "media/icon_lock.png" );
         }
 
+        public Icon reset() {
+            return icon( "media/icon_reset.png" );
+        }
+
         public Icon settings() {
             return icon( "media/icon_settings.png" );
         }
