@@ -2,11 +2,11 @@ package com.lyndir.masterpassword.gui.view;
 
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
-import com.google.common.base.Joiner;
-import com.google.common.base.Strings;
+import com.google.common.base.*;
 import com.google.common.collect.ImmutableList;
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.logging.Logger;
+import com.lyndir.lhunath.opal.system.util.ObjectUtils;
 import com.lyndir.masterpassword.*;
 import com.lyndir.masterpassword.gui.model.MPNewSite;
 import com.lyndir.masterpassword.gui.util.*;
@@ -44,7 +44,8 @@ public class UserContentPanel extends JPanel implements FilesPanel.Listener, MPU
     private final JPanel siteToolbar = Components.panel( BoxLayout.PAGE_AXIS );
 
     @Nullable
-    private MPUser<?> listeningUser;
+    private MPUser<?>   activeUser;
+    private ContentMode contentMode;
 
     public UserContentPanel() {
         userToolbar.setPreferredSize( iconButton.getPreferredSize() );
@@ -85,29 +86,32 @@ public class UserContentPanel extends JPanel implements FilesPanel.Listener, MPU
 
     private void setUser(@Nullable final MPUser<?> user) {
         Res.ui( () -> {
-            if (listeningUser != null)
-                listeningUser.removeListener( this );
-            listeningUser = user;
+            if (activeUser != null)
+                activeUser.removeListener( this );
 
-            userToolbar.removeAll();
-            siteToolbar.removeAll();
-            removeAll();
-
-            if (user == null)
-                add( new NoUserPanel() );
-
-            else {
-                user.addListener( this );
-
-                if (!user.isMasterKeyAvailable())
-                    add( new AuthenticateUserPanel( user ) );
-
-                else
-                    add( new AuthenticatedUserPanel( user ) );
+            ContentMode newContentMode = ContentMode.getContentMode( user );
+            if ((newContentMode != contentMode) || !ObjectUtils.equals( activeUser, user )) {
+                userToolbar.removeAll();
+                siteToolbar.removeAll();
+                removeAll();
+                activeUser = user;
+                switch (contentMode = newContentMode) {
+                    case NO_USER:
+                        add( new NoUserPanel() );
+                        break;
+                    case AUTHENTICATE:
+                        add( new AuthenticateUserPanel( Preconditions.checkNotNull( activeUser ) ) );
+                        break;
+                    case AUTHENTICATED:
+                        add( new AuthenticatedUserPanel( Preconditions.checkNotNull( activeUser ) ) );
+                        break;
+                }
+                revalidate();
+                transferFocus();
             }
 
-            revalidate();
-            transferFocus();
+            if (activeUser != null)
+                activeUser.addListener( this );
         } );
     }
 
@@ -120,6 +124,22 @@ public class UserContentPanel extends JPanel implements FilesPanel.Listener, MPU
 
         setUser( MPFileUserManager.get().add( fullName.toString() ) );
     }
+
+    private enum ContentMode {
+        NO_USER,
+        AUTHENTICATE,
+        AUTHENTICATED;
+
+        static ContentMode getContentMode(@Nullable final MPUser<?> user) {
+            if (user == null)
+                return NO_USER;
+            else if (!user.isMasterKeyAvailable())
+                return AUTHENTICATE;
+            else
+                return AUTHENTICATED;
+        }
+    }
+
 
     private final class NoUserPanel extends JPanel {
 
@@ -288,7 +308,7 @@ public class UserContentPanel extends JPanel implements FilesPanel.Listener, MPU
     }
 
 
-    private final class AuthenticatedUserPanel extends JPanel implements KeyListener {
+    private final class AuthenticatedUserPanel extends JPanel implements KeyListener, MPUser.Listener {
 
         public static final int SIZE_RESULT = 48;
 
@@ -351,6 +371,8 @@ public class UserContentPanel extends JPanel implements FilesPanel.Listener, MPU
             add( Components.scrollPane( sitesList ) );
             sitesModel.registerList( sitesList );
             add( Box.createGlue() );
+
+            user.addListener( this );
         }
 
         public void showUserPreferences() {
@@ -544,6 +566,20 @@ public class UserContentPanel extends JPanel implements FilesPanel.Listener, MPU
 
                 Res.ui( () -> sitesModel.set( sites ) );
             } );
+        }
+
+        @Override
+        public void onUserUpdated(final MPUser<?> user) {
+            updateSites( queryField.getText() );
+            showSiteResult( sitesModel.getSelectedItem() );
+        }
+
+        @Override
+        public void onUserAuthenticated(final MPUser<?> user) {
+        }
+
+        @Override
+        public void onUserInvalidated(final MPUser<?> user) {
         }
     }
 }
