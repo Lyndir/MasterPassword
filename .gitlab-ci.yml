@@ -14,5 +14,5 @@ build_project:
     - "( xcodebuild -workspace platform-darwin/MasterPassword.xcworkspace -configuration 'Test' -scheme 'MasterPassword macOS' clean build )"
   tags:
     - brew
-    - java
+    - java_9
     - xcode_9
