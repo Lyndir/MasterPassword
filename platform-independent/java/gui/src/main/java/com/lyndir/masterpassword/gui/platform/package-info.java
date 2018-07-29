@@ -20,6 +20,6 @@
  * @author lhunath, 2018-04-26
  */
 @ParametersAreNonnullByDefault
-package com.lyndir.masterpassword.gui.platform.macos;
+package com.lyndir.masterpassword.gui.platform;
 
 import javax.annotation.ParametersAreNonnullByDefault;

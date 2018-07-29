@@ -16,29 +16,34 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-package com.lyndir.masterpassword.gui.platform.macos;
+package com.lyndir.masterpassword.gui.platform;
 
 import com.apple.eawt.*;
 import com.google.common.base.Preconditions;
-import com.lyndir.masterpassword.gui.GUI;
+import com.lyndir.masterpassword.gui.view.MasterPasswordFrame;
+import javax.swing.*;
 
 
 /**
  * @author lhunath, 2014-06-10
  */
-public class AppleGUI extends GUI {
+public class AppleGUI extends BaseGUI {
 
-    static Application application;
-
-    static {
-        application = Preconditions.checkNotNull( Application.getApplication(), "Not an Apple Java application." );
-    }
+    static Application application = Preconditions.checkNotNull(
+            Application.getApplication(), "Not an Apple Java application." );
 
     public AppleGUI() {
-        application.addAppEventListener( new ApplicationListener() );
+        application.addAppEventListener( new AppEventHandler() );
     }
 
-    private class ApplicationListener implements AppForegroundListener, AppReOpenedListener {
+    @Override
+    protected MasterPasswordFrame createFrame() {
+        MasterPasswordFrame frame = super.createFrame();
+        frame.setDefaultCloseOperation( WindowConstants.HIDE_ON_CLOSE );
+        return frame;
+    }
+
+    private class AppEventHandler implements AppForegroundListener, AppReOpenedListener {
 
         @Override
         public void appMovedToBackground(final AppEvent.AppForegroundEvent arg0) {

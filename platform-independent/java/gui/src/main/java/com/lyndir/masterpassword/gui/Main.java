@@ -23,14 +23,10 @@ import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 import com.google.common.base.Charsets;
 import com.google.common.io.ByteSource;
 import com.lyndir.lhunath.opal.system.logging.Logger;
-import com.lyndir.lhunath.opal.system.util.TypeUtils;
-import com.lyndir.masterpassword.gui.util.Res;
-import com.lyndir.masterpassword.gui.view.MasterPasswordFrame;
+import com.lyndir.masterpassword.gui.platform.BaseGUI;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.net.*;
-import java.util.Optional;
 import javax.swing.*;
 
 
@@ -39,19 +35,14 @@ import javax.swing.*;
  *
  * @author mbillemo
  */
-public class GUI {
+public final class Main {
 
     @SuppressWarnings("UnusedDeclaration")
-    private static final Logger logger = Logger.get( GUI.class );
-
-    private final MasterPasswordFrame frame = new MasterPasswordFrame();
+    private static final Logger logger = Logger.get( Main.class );
 
     public static void main(final String... args) {
 //        Thread.setDefaultUncaughtExceptionHandler(
 //                (t, e) -> logger.bug( e, "Uncaught: %s", e.getLocalizedMessage() ) );
-
-        if (Config.get().checkForUpdates())
-            checkUpdate();
 
         // Try and set the system look & feel, if available.
         try {
@@ -60,29 +51,17 @@ public class GUI {
         catch (final UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException ignored) {
         }
 
-        create().open();
-    }
+        // Check online to see if this version has been superseded.
+        if (Config.get().checkForUpdates())
+            checkUpdate();
 
-    private static GUI create() {
-        try {
-            // AppleGUI adds support for macOS features.
-            Optional<Class<GUI>> appleGUI = TypeUtils.loadClass( "com.lyndir.masterpassword.gui.platform.mac.AppleGUI" );
-            if (appleGUI.isPresent())
-                return appleGUI.get().getConstructor().newInstance();
-        }
-        catch (@SuppressWarnings("ErrorNotRethrown") final LinkageError ignored) {
-        }
-        catch (final IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
-            throw logger.bug( e );
-        }
-
-        // Use platform-independent GUI.
-        return new GUI();
+        // Create a platform-specific GUI and open it.
+        BaseGUI.createPlatformGUI().open();
     }
 
     private static void checkUpdate() {
         try {
-            String implementationVersion = GUI.class.getPackage().getImplementationVersion();
+            String implementationVersion = Main.class.getPackage().getImplementationVersion();
             String latestVersion = new ByteSource() {
                 @Override
                 public InputStream openStream()
@@ -110,11 +89,5 @@ public class GUI {
         catch (final IOException e) {
             logger.wrn( e, "Couldn't check for version update." );
         }
-    }
-
-    protected void open() {
-        Res.ui( () -> {
-            frame.setVisible( true );
-        } );
     }
 }
