@@ -44,19 +44,20 @@ public abstract class MPBasicSite<U extends MPUser<?>, Q extends MPQuestion> ext
     private MPResultType    resultType;
     private MPResultType    loginType;
 
-    protected MPBasicSite(final U user, final String siteName, final MPAlgorithm algorithm) {
-        this( user, siteName, algorithm, null, null, null );
+    protected MPBasicSite(final U user, final String siteName) {
+        this( user, siteName, null, null, null, null );
     }
 
-    protected MPBasicSite(final U user, final String siteName, final MPAlgorithm algorithm,
-                          @Nullable final UnsignedInteger counter,
+    protected MPBasicSite(final U user, final String siteName,
+                          @Nullable final MPAlgorithm algorithm, @Nullable final UnsignedInteger counter,
                           @Nullable final MPResultType resultType, @Nullable final MPResultType loginType) {
         this.user = user;
         this.siteName = siteName;
-        this.algorithm = algorithm;
-        this.counter = (counter == null)? algorithm.mpw_default_counter(): counter;
-        this.resultType = (resultType == null)? algorithm.mpw_default_result_type(): resultType;
-        this.loginType = (loginType == null)? algorithm.mpw_default_login_type(): loginType;
+        this.algorithm = (algorithm != null)? algorithm: this.user.getAlgorithm();
+        this.counter = (counter != null)? counter: this.algorithm.mpw_default_counter();
+        this.resultType = (resultType != null)? resultType:
+                ifNotNullElse( this.user.getDefaultType(), this.algorithm.mpw_default_result_type() );
+        this.loginType = (loginType != null)? loginType: this.algorithm.mpw_default_login_type();
     }
 
     @Nonnull
@@ -73,7 +74,7 @@ public abstract class MPBasicSite<U extends MPUser<?>, Q extends MPQuestion> ext
 
     @Override
     public void setAlgorithm(final MPAlgorithm algorithm) {
-        if (Objects.equals(this.algorithm, algorithm))
+        if (Objects.equals( this.algorithm, algorithm ))
             return;
 
         this.algorithm = algorithm;
@@ -88,7 +89,7 @@ public abstract class MPBasicSite<U extends MPUser<?>, Q extends MPQuestion> ext
 
     @Override
     public void setCounter(final UnsignedInteger counter) {
-        if (Objects.equals(this.counter, counter))
+        if (Objects.equals( this.counter, counter ))
             return;
 
         this.counter = counter;
@@ -103,7 +104,7 @@ public abstract class MPBasicSite<U extends MPUser<?>, Q extends MPQuestion> ext
 
     @Override
     public void setResultType(final MPResultType resultType) {
-        if (Objects.equals(this.resultType, resultType))
+        if (Objects.equals( this.resultType, resultType ))
             return;
 
         this.resultType = resultType;
@@ -118,7 +119,7 @@ public abstract class MPBasicSite<U extends MPUser<?>, Q extends MPQuestion> ext
 
     @Override
     public void setLoginType(@Nullable final MPResultType loginType) {
-        if (Objects.equals(this.loginType, loginType))
+        if (Objects.equals( this.loginType, loginType ))
             return;
 
         this.loginType = ifNotNullElse( loginType, getAlgorithm().mpw_default_login_type() );

@@ -10,6 +10,6 @@ import com.lyndir.masterpassword.model.impl.*;
 public class MPNewSite extends MPBasicSite<MPUser<?>, MPQuestion> {
 
     public MPNewSite(final MPUser<?> user, final String siteName) {
-        super( user, siteName, user.getAlgorithm() );
+        super( user, siteName );
     }
 }

@@ -135,6 +135,7 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
         setChanged();
     }
 
+    @Override
     public MPResultType getDefaultType() {
         return defaultType;
     }

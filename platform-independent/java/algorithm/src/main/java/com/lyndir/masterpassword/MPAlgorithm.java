@@ -28,6 +28,7 @@ import com.lyndir.lhunath.opal.system.MessageDigests;
 import com.lyndir.masterpassword.impl.*;
 import java.nio.ByteOrder;
 import java.nio.charset.Charset;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 
@@ -88,46 +89,55 @@ public abstract class MPAlgorithm {
     /**
      * The linear version identifier of this algorithm's implementation.
      */
+    @Nonnull
     public abstract Version version();
 
     /**
      * mpw: defaults: initial counter value.
      */
+    @Nonnull
     public abstract UnsignedInteger mpw_default_counter();
 
     /**
      * mpw: defaults: password result type.
      */
+    @Nonnull
     public abstract MPResultType mpw_default_result_type();
 
     /**
      * mpw: defaults: login result type.
      */
+    @Nonnull
     public abstract MPResultType mpw_default_login_type();
 
     /**
      * mpw: defaults: answer result type.
      */
+    @Nonnull
     public abstract MPResultType mpw_default_answer_type();
 
     /**
      * mpw: Input character encoding.
      */
+    @Nonnull
     public abstract Charset mpw_charset();
 
     /**
      * mpw: Platform-agnostic byte order.
      */
+    @Nonnull
     public abstract ByteOrder mpw_byteOrder();
 
     /**
      * mpw: Key ID hash.
      */
+    @Nonnull
     public abstract MessageDigests mpw_hash();
 
     /**
      * mpw: Site digest.
      */
+    @Nonnull
     public abstract MessageAuthenticationDigests mpw_digest();
 
     /**
@@ -167,12 +177,16 @@ public abstract class MPAlgorithm {
 
     // Utilities
 
+    @Nonnull
     protected abstract byte[] toBytes(int number);
 
+    @Nonnull
     protected abstract byte[] toBytes(UnsignedInteger number);
 
+    @Nonnull
     protected abstract byte[] toBytes(char[] characters);
 
+    @Nonnull
     protected abstract byte[] toID(byte[] bytes);
 
     @Override

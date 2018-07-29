@@ -47,6 +47,11 @@ public interface MPUser<S extends MPSite<?>> extends Comparable<MPUser<?>> {
     void setAlgorithm(MPAlgorithm algorithm);
 
     @Nullable
+    default MPResultType getDefaultType() {
+        return null;
+    }
+
+    @Nullable
     byte[] getKeyID();
 
     @Nullable

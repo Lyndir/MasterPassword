@@ -472,16 +472,11 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
             sitesModel.registerList( sitesList );
             add( Box.createGlue() );
 
-            addComponentListener( new ComponentAdapter() {
-                @Override
-                public void componentShown(final ComponentEvent e) {
-                    user.addListener( AuthenticatedUserPanel.this );
-                }
-
-                @Override
-                public void componentHidden(final ComponentEvent e) {
-                    user.removeListener( AuthenticatedUserPanel.this );
-                }
+            addHierarchyListener( e -> {
+                if (null != SwingUtilities.windowForComponent( this ))
+                    user.addListener( this );
+                else
+                    user.removeListener( this );
             } );
         }
 

@@ -27,6 +27,7 @@ import com.lyndir.masterpassword.*;
 import java.nio.*;
 import java.nio.charset.*;
 import java.util.Arrays;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 
@@ -122,46 +123,55 @@ public class MPAlgorithmV0 extends MPAlgorithm {
 
     // Configuration
 
+    @Nonnull
     @Override
     public Version version() {
         return MPAlgorithm.Version.V0;
     }
 
+    @Nonnull
     @Override
     public UnsignedInteger mpw_default_counter() {
         return UnsignedInteger.ONE;
     }
 
+    @Nonnull
     @Override
     public MPResultType mpw_default_result_type() {
         return MPResultType.GeneratedLong;
     }
 
+    @Nonnull
     @Override
     public MPResultType mpw_default_login_type() {
         return MPResultType.GeneratedName;
     }
 
+    @Nonnull
     @Override
     public MPResultType mpw_default_answer_type() {
         return MPResultType.GeneratedPhrase;
     }
 
+    @Nonnull
     @Override
     public Charset mpw_charset() {
         return Charsets.UTF_8;
     }
 
+    @Nonnull
     @Override
     public ByteOrder mpw_byteOrder() {
         return ByteOrder.BIG_ENDIAN;
     }
 
+    @Nonnull
     @Override
     public MessageDigests mpw_hash() {
         return MessageDigests.SHA256;
     }
 
+    @Nonnull
     @Override
     public MessageAuthenticationDigests mpw_digest() {
         return MessageAuthenticationDigests.HmacSHA256;
@@ -211,16 +221,19 @@ public class MPAlgorithmV0 extends MPAlgorithm {
 
     // Utilities
 
+    @Nonnull
     @Override
     public byte[] toBytes(final int number) {
         return ByteBuffer.allocate( Integer.SIZE / Byte.SIZE ).order( mpw_byteOrder() ).putInt( number ).array();
     }
 
+    @Nonnull
     @Override
     public byte[] toBytes(final UnsignedInteger number) {
         return ByteBuffer.allocate( Integer.SIZE / Byte.SIZE ).order( mpw_byteOrder() ).putInt( number.intValue() ).array();
     }
 
+    @Nonnull
     @Override
     public byte[] toBytes(final char[] characters) {
         ByteBuffer byteBuffer = mpw_charset().encode( CharBuffer.wrap( characters ) );
@@ -232,6 +245,7 @@ public class MPAlgorithmV0 extends MPAlgorithm {
         return bytes;
     }
 
+    @Nonnull
     @Override
     public byte[] toID(final byte[] bytes) {
         return mpw_hash().of( bytes );

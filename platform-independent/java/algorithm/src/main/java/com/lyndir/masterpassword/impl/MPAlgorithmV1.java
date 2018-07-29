@@ -19,6 +19,7 @@
 package com.lyndir.masterpassword.impl;
 
 import com.lyndir.masterpassword.*;
+import javax.annotation.Nonnull;
 
 
 /**
@@ -29,6 +30,7 @@ public class MPAlgorithmV1 extends MPAlgorithmV0 {
 
     // Configuration
 
+    @Nonnull
     @Override
     public Version version() {
         return MPAlgorithm.Version.V1;

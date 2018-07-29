@@ -45,14 +45,8 @@ public class MPFileSite extends MPBasicSite<MPFileUser, MPFileQuestion> {
     private String loginState;
 
     public MPFileSite(final MPFileUser user, final String name) {
-        this( user, name, null, null, null );
-    }
-
-    public MPFileSite(final MPFileUser user, final String name,
-                      @Nullable final MPAlgorithm algorithm, @Nullable final UnsignedInteger counter,
-                      @Nullable final MPResultType resultType) {
-        this( user, name, algorithm, counter, resultType, null,
-              null, null, null, 0, new Instant() );
+        this( user, name, null, null, null, null, null, null,
+              null, 0, new Instant() );
     }
 
     protected MPFileSite(final MPFileUser user, final String name,
@@ -60,8 +54,7 @@ public class MPFileSite extends MPBasicSite<MPFileUser, MPFileQuestion> {
                          @Nullable final MPResultType resultType, @Nullable final String resultState,
                          @Nullable final MPResultType loginType, @Nullable final String loginState,
                          @Nullable final String url, final int uses, final ReadableInstant lastUsed) {
-        super( user, name, (algorithm == null)? user.getAlgorithm(): algorithm, counter,
-               (resultType == null)? user.getDefaultType(): resultType, loginType );
+        super( user, name, algorithm, counter, resultType, loginType );
 
         this.resultState = resultState;
         this.loginState = loginState;
