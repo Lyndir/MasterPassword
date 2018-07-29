@@ -9,6 +9,7 @@ import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.ObjectUtils;
 import com.lyndir.masterpassword.*;
 import com.lyndir.masterpassword.gui.MasterPassword;
+import com.lyndir.masterpassword.gui.model.MPIncognitoUser;
 import com.lyndir.masterpassword.gui.model.MPNewSite;
 import com.lyndir.masterpassword.gui.util.*;
 import com.lyndir.masterpassword.gui.util.Platform;
@@ -127,13 +128,29 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
     }
 
     private void addUser() {
-        Object fullName = JOptionPane.showInputDialog(
-                this, strf( "<html>Enter your full legal name:</html>" ), "Add User",
-                JOptionPane.QUESTION_MESSAGE, null, null, "Robert Lee Mitchell" );
-        if (fullName == null)
+        JTextField nameField = Components.textField( "Robert Lee Mitchell", null );
+        JCheckBox  incognitoField = Components.checkBox( "<html>Incognito <em>(Do not save this user to disk)</em></html>" );
+        if (JOptionPane.OK_OPTION != Components.showDialog( this, "Add User", new JOptionPane( Components.panel(
+                BoxLayout.PAGE_AXIS,
+                Components.label( "<html>Enter your full legal name:</html>" ),
+                Components.strut(),
+                nameField,
+                Components.strut(),
+                incognitoField ), JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION ) {
+            @Override
+            public void selectInitialValue() {
+                nameField.requestFocusInWindow();
+            }
+        } ))
+            return;
+        String fullName = nameField.getText();
+        if (Strings.isNullOrEmpty( fullName ))
             return;
 
-        MasterPassword.get().activateUser( MPFileUserManager.get().add( fullName.toString() ) );
+        if (incognitoField.isSelected())
+            MasterPassword.get().activateUser( new MPIncognitoUser( fullName ) );
+        else
+            MasterPassword.get().activateUser( MPFileUserManager.get().add( fullName ) );
     }
 
     private void importUser() {
