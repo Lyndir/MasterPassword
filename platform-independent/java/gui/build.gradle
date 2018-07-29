@@ -5,7 +5,7 @@ plugins {
 }
 
 description = 'Master Password GUI'
-mainClassName = 'com.lyndir.masterpassword.gui.Main'
+mainClassName = 'com.lyndir.masterpassword.gui.MasterPassword'
 
 dependencies {
     implementation group: 'com.lyndir.lhunath.opal', name: 'opal-system', version: '1.7-p2'

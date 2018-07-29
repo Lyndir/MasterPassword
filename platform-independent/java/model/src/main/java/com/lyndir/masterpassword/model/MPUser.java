@@ -55,12 +55,11 @@ public interface MPUser<S extends MPSite<?>> extends Comparable<MPUser<?>> {
     /**
      * Performs an authentication attempt against the keyID for this user.
      *
-     * Note: If a keyID is not set, authentication will always succeed and the keyID will be set to match the given master password.
-     *
      * @param masterPassword The password to authenticate with.
-     *                       You cannot re-use this array after passing it in, authentication will destroy its contents.
      *
      * @throws MPIncorrectMasterPasswordException If authentication fails due to the given master password not matching the user's keyID.
+     * @apiNote If a keyID is not set, authentication will always succeed and the keyID will be set to match the given master password.
+     * <b>This method destroys the contents of the {@code masterPassword} array.</b>
      */
     void authenticate(char[] masterPassword)
             throws MPIncorrectMasterPasswordException, MPAlgorithmException;
@@ -68,11 +67,10 @@ public interface MPUser<S extends MPSite<?>> extends Comparable<MPUser<?>> {
     /**
      * Performs an authentication attempt against the keyID for this user.
      *
-     * Note: If a keyID is not set, authentication will always succeed and the keyID will be set to match the given key.
-     *
      * @param masterKey The master key to authenticate with.
      *
      * @throws MPIncorrectMasterPasswordException If authentication fails due to the given master password not matching the user's keyID.
+     * @apiNote If a keyID is not set, authentication will always succeed and the keyID will be set to match the given key.
      */
     void authenticate(MPMasterKey masterKey)
             throws MPIncorrectMasterPasswordException, MPKeyUnavailableException, MPAlgorithmException;

@@ -136,6 +136,14 @@ public abstract class Res {
             return icon( "media/icon_reset.png" );
         }
 
+        public Icon import_() {
+            return icon( "media/icon_import.png" );
+        }
+
+        public Icon export() {
+            return icon( "media/icon_export.png" );
+        }
+
         public Icon settings() {
             return icon( "media/icon_settings.png" );
         }

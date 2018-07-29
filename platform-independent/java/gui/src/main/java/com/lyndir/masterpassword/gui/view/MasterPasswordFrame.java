@@ -3,10 +3,12 @@ package com.lyndir.masterpassword.gui.view;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.masterpassword.gui.util.Components;
 import com.lyndir.masterpassword.gui.util.Res;
+import com.lyndir.masterpassword.model.MPUser;
 import com.lyndir.masterpassword.model.impl.MPFileUserManager;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import javax.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 
@@ -39,8 +41,6 @@ public class MasterPasswordFrame extends JFrame {
         userPanel.add( Components.borderPanel(
                 BorderFactory.createBevelBorder( BevelBorder.RAISED, Res.colors().controlBorder(), Res.colors().frameBg() ),
                 Res.colors().controlBg(), BoxLayout.PAGE_AXIS, userContent ), BorderLayout.CENTER );
-
-        filesPanel.addListener( userContent );
 
         addComponentListener( new ComponentHandler() );
         setPreferredSize( new Dimension( 800, 560 ) );

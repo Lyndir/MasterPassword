@@ -3,6 +3,7 @@ package com.lyndir.masterpassword.gui.view;
 import static com.lyndir.masterpassword.util.Utilities.*;
 
 import com.google.common.collect.ImmutableSortedSet;
+import com.lyndir.masterpassword.gui.MasterPassword;
 import com.lyndir.masterpassword.gui.util.*;
 import com.lyndir.masterpassword.model.MPUser;
 import com.lyndir.masterpassword.model.impl.MPFileUser;
@@ -18,15 +19,13 @@ import javax.swing.*;
  * @author lhunath, 2018-07-14
  */
 @SuppressWarnings("serial")
-public class FilesPanel extends JPanel implements MPFileUserManager.Listener {
-
-    private final Collection<Listener> listeners = new CopyOnWriteArraySet<>();
+public class FilesPanel extends JPanel implements MPFileUserManager.Listener, MasterPassword.Listener {
 
     private final JButton avatarButton = Components.button( Res.icons().avatar( 0 ), event -> setAvatar(),
                                                             "Click to change the user's avatar." );
 
     private final CollectionListModel<MPUser<?>> usersModel =
-            CollectionListModel.<MPUser<?>>copy( MPFileUserManager.get().getFiles() ).selection( this::setUser );
+            CollectionListModel.<MPUser<?>>copy( MPFileUserManager.get().getFiles() ).selection( MasterPassword.get()::activateUser );
     private final JComboBox<? extends MPUser<?>> userField  =
             Components.comboBox( usersModel, user -> ifNotNull( user, MPUser::getFullName ) );
 
@@ -50,10 +49,7 @@ public class FilesPanel extends JPanel implements MPFileUserManager.Listener {
         add( userField );
 
         MPFileUserManager.get().addListener( this );
-    }
-
-    public boolean addListener(final Listener listener) {
-        return listeners.add( listener );
+        MasterPassword.get().addListener( this );
     }
 
     private void setAvatar() {
@@ -65,20 +61,14 @@ public class FilesPanel extends JPanel implements MPFileUserManager.Listener {
         avatarButton.setIcon( Res.icons().avatar( selectedUser.getAvatar() ) );
     }
 
-    public void setUser(@Nullable final MPUser<?> user) {
-        avatarButton.setIcon( Res.icons().avatar( (user == null)? 0: user.getAvatar() ) );
-
-        for (final Listener listener : listeners)
-            listener.onUserSelected( user );
-    }
-
     @Override
     public void onFilesUpdated(final ImmutableSortedSet<MPFileUser> files) {
         usersModel.set( files );
     }
 
-    public interface Listener {
-
-        void onUserSelected(@Nullable MPUser<?> user);
+    @Override
+    public void onUserSelected(@Nullable final MPUser<?> user) {
+        usersModel.setSelectedItem( user );
+        avatarButton.setIcon( Res.icons().avatar( (user == null)? 0: user.getAvatar() ) );
     }
 }

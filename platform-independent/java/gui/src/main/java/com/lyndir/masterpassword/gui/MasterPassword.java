@@ -23,10 +23,14 @@ import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 import com.google.common.base.Charsets;
 import com.google.common.io.ByteSource;
 import com.lyndir.lhunath.opal.system.logging.Logger;
-import com.lyndir.masterpassword.gui.platform.BaseGUI;
+import com.lyndir.lhunath.opal.system.util.ObjectUtils;
+import com.lyndir.masterpassword.model.MPUser;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.*;
+import java.util.Collection;
+import java.util.concurrent.CopyOnWriteArraySet;
+import javax.annotation.Nullable;
 import javax.swing.*;
 
 
@@ -35,33 +39,42 @@ import javax.swing.*;
  *
  * @author mbillemo
  */
-public final class Main {
+public final class MasterPassword {
 
     @SuppressWarnings("UnusedDeclaration")
-    private static final Logger logger = Logger.get( Main.class );
+    private static final Logger logger = Logger.get( MasterPassword.class );
 
-    public static void main(final String... args) {
-//        Thread.setDefaultUncaughtExceptionHandler(
-//                (t, e) -> logger.bug( e, "Uncaught: %s", e.getLocalizedMessage() ) );
+    private static final MasterPassword instance = new MasterPassword();
 
-        // Try and set the system look & feel, if available.
-        try {
-            UIManager.setLookAndFeel( UIManager.getSystemLookAndFeelClassName() );
-        }
-        catch (final UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException ignored) {
-        }
+    private final Collection<Listener> listeners = new CopyOnWriteArraySet<>();
 
-        // Check online to see if this version has been superseded.
-        if (Config.get().checkForUpdates())
-            checkUpdate();
+    @Nullable
+    private MPUser<?> activeUser;
 
-        // Create a platform-specific GUI and open it.
-        BaseGUI.createPlatformGUI().open();
+    public static MasterPassword get() {
+        return instance;
+    }
+
+    public boolean addListener(final Listener listener) {
+        return listeners.add( listener );
+    }
+
+    public boolean removeListener(final Listener listener) {
+        return listeners.remove( listener );
+    }
+
+    public void activateUser(final MPUser<?> user) {
+        if (ObjectUtils.equals( activeUser, user ))
+            return;
+
+        activeUser = user;
+        for (final Listener listener : listeners)
+            listener.onUserSelected( activeUser );
     }
 
     private static void checkUpdate() {
         try {
-            String implementationVersion = Main.class.getPackage().getImplementationVersion();
+            String implementationVersion = MasterPassword.class.getPackage().getImplementationVersion();
             String latestVersion = new ByteSource() {
                 @Override
                 public InputStream openStream()
@@ -89,5 +102,28 @@ public final class Main {
         catch (final IOException e) {
             logger.wrn( e, "Couldn't check for version update." );
         }
+    }
+
+    public static void main(final String... args) {
+        //        Thread.setDefaultUncaughtExceptionHandler(
+        //                (t, e) -> logger.bug( e, "Uncaught: %s", e.getLocalizedMessage() ) );
+
+        // Try and set the system look & feel, if available.
+        try {
+            UIManager.setLookAndFeel( UIManager.getSystemLookAndFeelClassName() );
+        }
+        catch (final UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException ignored) {
+        }
+
+        // Check online to see if this version has been superseded.
+        if (Config.get().checkForUpdates())
+            checkUpdate();
+
+        // Create a platform-specific GUI and open it.
+        new GUI().open();
+    }
+
+    public interface Listener {
+        void onUserSelected(@Nullable MPUser<?> user);
     }
 }

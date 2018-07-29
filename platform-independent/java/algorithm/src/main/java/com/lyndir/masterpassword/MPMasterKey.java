@@ -44,7 +44,8 @@ public class MPMasterKey {
 
     /**
      * @param masterPassword The characters of the user's master password.
-     *                       <b>Note: this method destroys the contents of the array.</b>
+     *
+     * @apiNote This method destroys the contents of the {@code masterPassword} array.
      */
     @SuppressWarnings("AssignmentToCollectionOrArrayFieldFromParameter")
     public MPMasterKey(final String fullName, final char[] masterPassword) {

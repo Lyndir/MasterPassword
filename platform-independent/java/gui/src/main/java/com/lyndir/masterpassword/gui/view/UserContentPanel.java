@@ -8,15 +8,22 @@ import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.ObjectUtils;
 import com.lyndir.masterpassword.*;
+import com.lyndir.masterpassword.gui.MasterPassword;
 import com.lyndir.masterpassword.gui.model.MPNewSite;
 import com.lyndir.masterpassword.gui.util.*;
+import com.lyndir.masterpassword.gui.util.Platform;
 import com.lyndir.masterpassword.model.*;
 import com.lyndir.masterpassword.model.impl.*;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
+import java.util.Optional;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
@@ -31,20 +38,22 @@ import javax.swing.event.DocumentListener;
  * @author lhunath, 2018-07-14
  */
 @SuppressWarnings("SerializableStoresNonSerializable")
-public class UserContentPanel extends JPanel implements FilesPanel.Listener, MPUser.Listener {
+public class UserContentPanel extends JPanel implements MasterPassword.Listener, MPUser.Listener {
 
     private static final Random  random     = new Random();
     private static final Logger  logger     = Logger.get( UserContentPanel.class );
     private static final JButton iconButton = Components.button( Res.icons().user(), null, null );
 
-    private final JButton addButton = Components.button( Res.icons().add(), event -> addUser(),
-                                                         "Add a new user to Master Password." );
+    private final JButton addButton    = Components.button( Res.icons().add(), event -> addUser(),
+                                                            "Add a new user to Master Password." );
+    private final JButton importButton = Components.button( Res.icons().import_(), event -> importUser(),
+                                                            "Import a user from a backup file into Master Password." );
 
     private final JPanel userToolbar = Components.panel( BoxLayout.PAGE_AXIS );
     private final JPanel siteToolbar = Components.panel( BoxLayout.PAGE_AXIS );
 
     @Nullable
-    private MPUser<?>   activeUser;
+    private MPUser<?>   showingUser;
     private ContentMode contentMode;
 
     public UserContentPanel() {
@@ -53,7 +62,9 @@ public class UserContentPanel extends JPanel implements FilesPanel.Listener, MPU
 
         setLayout( new BoxLayout( this, BoxLayout.PAGE_AXIS ) );
         setBorder( Components.marginBorder() );
-        setUser( null );
+        showUser( null );
+
+        MasterPassword.get().addListener( this );
     }
 
     protected JComponent getUserToolbar() {
@@ -66,52 +77,52 @@ public class UserContentPanel extends JPanel implements FilesPanel.Listener, MPU
 
     @Override
     public void onUserSelected(@Nullable final MPUser<?> user) {
-        setUser( user );
+        showUser( user );
     }
 
     @Override
     public void onUserUpdated(final MPUser<?> user) {
-        setUser( user );
+        showUser( user );
     }
 
     @Override
     public void onUserAuthenticated(final MPUser<?> user) {
-        setUser( user );
+        showUser( user );
     }
 
     @Override
     public void onUserInvalidated(final MPUser<?> user) {
-        setUser( user );
+        showUser( user );
     }
 
-    private void setUser(@Nullable final MPUser<?> user) {
+    private void showUser(@Nullable final MPUser<?> user) {
         Res.ui( () -> {
-            if (activeUser != null)
-                activeUser.removeListener( this );
+            if (showingUser != null)
+                showingUser.removeListener( this );
 
             ContentMode newContentMode = ContentMode.getContentMode( user );
-            if ((newContentMode != contentMode) || !ObjectUtils.equals( activeUser, user )) {
+            if ((newContentMode != contentMode) || !ObjectUtils.equals( showingUser, user )) {
                 userToolbar.removeAll();
                 siteToolbar.removeAll();
                 removeAll();
-                activeUser = user;
+                showingUser = user;
                 switch (contentMode = newContentMode) {
                     case NO_USER:
                         add( new NoUserPanel() );
                         break;
                     case AUTHENTICATE:
-                        add( new AuthenticateUserPanel( Preconditions.checkNotNull( activeUser ) ) );
+                        add( new AuthenticateUserPanel( Preconditions.checkNotNull( showingUser ) ) );
                         break;
                     case AUTHENTICATED:
-                        add( new AuthenticatedUserPanel( Preconditions.checkNotNull( activeUser ) ) );
+                        add( new AuthenticatedUserPanel( Preconditions.checkNotNull( showingUser ) ) );
                         break;
                 }
                 revalidate();
                 transferFocus();
             }
 
-            if (activeUser != null)
-                activeUser.addListener( this );
+            if (showingUser != null)
+                showingUser.addListener( this );
         } );
     }
 
@@ -122,7 +133,70 @@ public class UserContentPanel extends JPanel implements FilesPanel.Listener, MPU
         if (fullName == null)
             return;
 
-        setUser( MPFileUserManager.get().add( fullName.toString() ) );
+        MasterPassword.get().activateUser( MPFileUserManager.get().add( fullName.toString() ) );
+    }
+
+    private void importUser() {
+        File importFile = Components.showLoadDialog( this, "Import User File" );
+        if (importFile == null)
+            return;
+
+        try {
+            MPFileUser importUser = MPFileUser.load( importFile );
+            if (importUser == null) {
+                JOptionPane.showMessageDialog(
+                        this, "Not a Master Password file.",
+                        "Import Failed", JOptionPane.ERROR_MESSAGE );
+                return;
+            }
+
+            JPasswordField passwordField = Components.passwordField();
+            if (JOptionPane.OK_OPTION == Components.showDialog( this, "Import User", new JOptionPane( Components.panel(
+                    BoxLayout.PAGE_AXIS,
+                    Components.label( strf( "<html>Enter the master password to import <strong>%s</strong>:</html>",
+                                            importUser.getFullName() ) ),
+                    Components.strut(),
+                    passwordField ), JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION ) {
+                @Override
+                public void selectInitialValue() {
+                    passwordField.requestFocusInWindow();
+                }
+            } )) {
+                try {
+                    importUser.authenticate( passwordField.getPassword() );
+                    Optional<MPFileUser> existingUser = MPFileUserManager.get().getFiles().stream().filter(
+                            user -> user.getFullName().equalsIgnoreCase( importUser.getFullName() ) ).findFirst();
+                    if (existingUser.isPresent() && (JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(
+                            this,
+                            strf( "<html>Importing user <strong>%s</strong> from this file will replace the existing user with the imported one.<br>"
+                                  + "Are you sure?<br><br>"
+                                  + "<em>Existing user last modified: %s<br>Imported user last modified: %s</em></html>",
+                                  importUser.getFullName(),
+                                  Res.format( existingUser.get().getLastUsed() ),
+                                  Res.format( importUser.getLastUsed() ) ) )))
+                        return;
+
+                    MasterPassword.get().activateUser( MPFileUserManager.get().add( importUser ) );
+                }
+                catch (final MPIncorrectMasterPasswordException | MPAlgorithmException e) {
+                    JOptionPane.showMessageDialog(
+                            this, e.getLocalizedMessage(),
+                            "Import Failed", JOptionPane.ERROR_MESSAGE );
+                }
+            }
+        }
+        catch (final IOException e) {
+            logger.err( e, "While reading user import file." );
+            JOptionPane.showMessageDialog(
+                    this, strf( "<html>Couldn't read import file:<br><pre>%s</pre></html>.", e.getLocalizedMessage() ),
+                    "Import Failed", JOptionPane.ERROR_MESSAGE );
+        }
+        catch (MPMarshalException e) {
+            logger.err( e, "While parsing user import file." );
+            JOptionPane.showMessageDialog(
+                    this, strf( "<html>Couldn't parse import file:<br><pre>%s</pre></html>.", e.getLocalizedMessage() ),
+                    "Import Failed", JOptionPane.ERROR_MESSAGE );
+        }
     }
 
     private enum ContentMode {
@@ -147,6 +221,7 @@ public class UserContentPanel extends JPanel implements FilesPanel.Listener, MPU
             setLayout( new BoxLayout( this, BoxLayout.PAGE_AXIS ) );
 
             userToolbar.add( addButton );
+            userToolbar.add( importButton );
 
             add( Box.createGlue() );
             add( Components.heading( "Select a user to proceed." ) );
@@ -160,6 +235,8 @@ public class UserContentPanel extends JPanel implements FilesPanel.Listener, MPU
         @Nonnull
         private final MPUser<?> user;
 
+        private final JButton exportButton = Components.button( Res.icons().export(), event -> exportUser(),
+                                                                "Export this user to a backup file." );
         private final JButton deleteButton = Components.button( Res.icons().delete(), event -> deleteUser(),
                                                                 "Delete this user from Master Password." );
         private final JButton resetButton  = Components.button( Res.icons().reset(), event -> resetUser(),
@@ -177,6 +254,8 @@ public class UserContentPanel extends JPanel implements FilesPanel.Listener, MPU
             this.user = user;
 
             userToolbar.add( addButton );
+            userToolbar.add( importButton );
+            userToolbar.add( exportButton );
             userToolbar.add( deleteButton );
             userToolbar.add( resetButton );
 
@@ -195,6 +274,27 @@ public class UserContentPanel extends JPanel implements FilesPanel.Listener, MPU
             add( errorLabel );
             errorLabel.setForeground( Res.colors().errorFg() );
             add( Box.createGlue() );
+        }
+
+        private void exportUser() {
+            MPFileUser fileUser = (user instanceof MPFileUser)? (MPFileUser) user: null;
+            if (fileUser == null)
+                return;
+
+            File exportFile = Components.showSaveDialog( this, "Export User File", fileUser.getFile().getName() );
+            if (exportFile == null)
+                return;
+
+            try {
+                Platform.get().show(
+                        Files.copy( fileUser.getFile().toPath(), exportFile.toPath(),
+                                    StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES ).toFile() );
+            }
+            catch (final IOException e) {
+                JOptionPane.showMessageDialog(
+                        this, e.getLocalizedMessage(),
+                        "Export Failed", JOptionPane.ERROR_MESSAGE );
+            }
         }
 
         private void deleteUser() {
@@ -372,7 +472,17 @@ public class UserContentPanel extends JPanel implements FilesPanel.Listener, MPU
             sitesModel.registerList( sitesList );
             add( Box.createGlue() );
 
-            user.addListener( this );
+            addComponentListener( new ComponentAdapter() {
+                @Override
+                public void componentShown(final ComponentEvent e) {
+                    user.addListener( AuthenticatedUserPanel.this );
+                }
+
+                @Override
+                public void componentHidden(final ComponentEvent e) {
+                    user.removeListener( AuthenticatedUserPanel.this );
+                }
+            } );
         }
 
         public void showUserPreferences() {

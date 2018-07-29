@@ -18,6 +18,7 @@
 
 package com.lyndir.masterpassword.model.impl;
 
+import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.masterpassword.*;
 import com.lyndir.masterpassword.model.MPIncorrectMasterPasswordException;
 import com.lyndir.masterpassword.model.MPUser;
@@ -36,6 +37,8 @@ import org.joda.time.ReadableInstant;
 @SuppressWarnings("ComparableImplementedButEqualsNotOverridden")
 public class MPFileUser extends MPBasicUser<MPFileSite> {
 
+    private static final Logger logger = Logger.get( MPFileUser.class );
+
     @Nullable
     private byte[]                   keyID;
     private File                     path;
@@ -46,13 +49,23 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
     private ReadableInstant lastUsed;
     private boolean         complete;
 
-    public MPFileUser(final String fullName) {
-        this( fullName, null, MPAlgorithm.Version.CURRENT.getAlgorithm() );
+    @Nullable
+    public static MPFileUser load(final File file)
+            throws IOException, MPMarshalException {
+        for (final MPMarshalFormat format : MPMarshalFormat.values())
+            if (file.getName().endsWith( format.fileSuffix() ))
+                    return format.unmarshaller().readUser( file );
+
+        return null;
     }
 
-    public MPFileUser(final String fullName, @Nullable final byte[] keyID, final MPAlgorithm algorithm) {
+    public MPFileUser(final String fullName, final File path) {
+        this( fullName, null, MPAlgorithm.Version.CURRENT.getAlgorithm(), path );
+    }
+
+    public MPFileUser(final String fullName, @Nullable final byte[] keyID, final MPAlgorithm algorithm, final File path) {
         this( fullName, keyID, algorithm, 0, null, new Instant(),
-              MPMarshaller.ContentMode.PROTECTED, MPMarshalFormat.DEFAULT, MPFileUserManager.get().getPath() );
+              MPMarshaller.ContentMode.PROTECTED, MPMarshalFormat.DEFAULT, path );
     }
 
     public MPFileUser(final String fullName, @Nullable final byte[] keyID, final MPAlgorithm algorithm,
@@ -72,6 +85,10 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
     @Override
     public byte[] getKeyID() {
         return (keyID == null)? null: keyID.clone();
+    }
+
+    public void setPath(final File path) {
+        this.path = path;
     }
 
     @Override
@@ -99,7 +116,7 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
     }
 
     public void setFormat(final MPMarshalFormat format) {
-        if (Objects.equals(this.format, format))
+        if (Objects.equals( this.format, format ))
             return;
 
         this.format = format;
@@ -111,7 +128,7 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
     }
 
     public void setContentMode(final MPMarshaller.ContentMode contentMode) {
-        if (Objects.equals(this.contentMode, contentMode))
+        if (Objects.equals( this.contentMode, contentMode ))
             return;
 
         this.contentMode = contentMode;
@@ -123,7 +140,7 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
     }
 
     public void setDefaultType(final MPResultType defaultType) {
-        if (Objects.equals(this.defaultType, defaultType))
+        if (Objects.equals( this.defaultType, defaultType ))
             return;
 
         this.defaultType = defaultType;
@@ -169,6 +186,19 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
         }
     }
 
+    public void save() {
+        try {
+            if (isComplete())
+                getFormat().marshaller().marshall( this );
+        }
+        catch (final MPKeyUnavailableException e) {
+            logger.wrn( e, "Cannot write out changes for unauthenticated user: %s.", this );
+        }
+        catch (final IOException | MPMarshalException | MPAlgorithmException e) {
+            logger.err( e, "Unable to write out changes for user: %s", this );
+        }
+    }
+
     @Override
     public void reset() {
         keyID = null;
@@ -183,16 +213,7 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
 
     @Override
     protected void onChanged() {
-        try {
-            if (isComplete())
-                getFormat().marshaller().marshall( this );
-        }
-        catch (final MPKeyUnavailableException e) {
-            logger.wrn( e, "Cannot write out changes for unauthenticated user: %s.", this );
-        }
-        catch (final IOException | MPMarshalException | MPAlgorithmException e) {
-            logger.err( e, "Unable to write out changes for user: %s", this );
-        }
+        save();
 
         super.onChanged();
     }

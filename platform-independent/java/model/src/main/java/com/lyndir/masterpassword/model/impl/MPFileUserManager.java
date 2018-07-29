@@ -78,31 +78,40 @@ public class MPFileUserManager {
         }
 
         for (final File file : pathFiles)
-            for (final MPMarshalFormat format : MPMarshalFormat.values())
-                if (file.getName().endsWith( format.fileSuffix() ))
-                    try {
-                        MPFileUser user         = format.unmarshaller().readUser( file );
-                        MPFileUser previousUser = userByName.put( user.getFullName(), user );
-                        if ((previousUser != null) && (previousUser.getFormat().ordinal() > user.getFormat().ordinal()))
-                            userByName.put( previousUser.getFullName(), previousUser );
-                        break;
-                    }
-                    catch (final IOException | MPMarshalException e) {
-                        logger.err( e, "Couldn't read user from: %s", file );
-                    }
+            try {
+                MPFileUser user = MPFileUser.load( file );
+                if (user != null) {
+                    MPFileUser previousUser = userByName.put( user.getFullName(), user );
+                    if ((previousUser != null) && (previousUser.getFormat().ordinal() > user.getFormat().ordinal()))
+                        userByName.put( previousUser.getFullName(), previousUser );
+                }
+            }
+            catch (final IOException | MPMarshalException e) {
+                logger.err( e, "Couldn't read user from: %s", file );
+            }
 
         fireUpdated();
     }
 
     public MPFileUser add(final String fullName) {
-        MPFileUser user = new MPFileUser( fullName );
-        userByName.put( user.getFullName(), user );
+        return add( new MPFileUser( fullName, getPath() ) );
+    }
+
+    public MPFileUser add(final MPFileUser user) {
+        user.setPath( getPath() );
+        user.save();
+
+        MPFileUser oldUser = userByName.put( user.getFullName(), user );
+        if (oldUser != null)
+            oldUser.invalidate();
         fireUpdated();
 
         return user;
     }
 
     public void delete(final MPFileUser user) {
+        user.invalidate();
+
         // Remove deleted users.
         File userFile = user.getFile();
         if (userFile.exists() && !userFile.delete())

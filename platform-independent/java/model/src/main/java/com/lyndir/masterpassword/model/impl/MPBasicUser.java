@@ -37,8 +37,9 @@ import javax.annotation.Nullable;
  */
 public abstract class MPBasicUser<S extends MPBasicSite<?, ?>> extends Changeable implements MPUser<S> {
 
-    protected final Logger        logger    = Logger.get( getClass() );
-    private final   Set<Listener> listeners = new CopyOnWriteArraySet<>();
+    private static final Logger logger = Logger.get( MPBasicUser.class );
+
+    private final Set<Listener> listeners = new CopyOnWriteArraySet<>();
 
     private       int         avatar;
     private final String      fullName;
@@ -65,7 +66,7 @@ public abstract class MPBasicUser<S extends MPBasicSite<?, ?>> extends Changeabl
 
     @Override
     public void setAvatar(final int avatar) {
-        if (Objects.equals(this.avatar, avatar))
+        if (Objects.equals( this.avatar, avatar ))
             return;
 
         this.avatar = avatar;
@@ -86,7 +87,7 @@ public abstract class MPBasicUser<S extends MPBasicSite<?, ?>> extends Changeabl
 
     @Override
     public void setAlgorithm(final MPAlgorithm algorithm) {
-        if (Objects.equals(this.algorithm, algorithm))
+        if (Objects.equals( this.algorithm, algorithm ))
             return;
 
         this.algorithm = algorithm;

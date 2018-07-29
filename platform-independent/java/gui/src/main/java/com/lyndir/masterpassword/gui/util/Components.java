@@ -21,6 +21,7 @@ package com.lyndir.masterpassword.gui.util;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.function.Consumer;
@@ -108,6 +109,29 @@ public abstract class Components {
 
         int option = Arrays.binarySearch( options, selectedValue );
         return (option < 0)? JOptionPane.CLOSED_OPTION: option;
+    }
+
+    @Nullable
+    public static File showLoadDialog(@Nullable final Component owner, final String title) {
+        return showFileDialog( owner, title, FileDialog.LOAD, null );
+    }
+
+    @Nullable
+    public static File showSaveDialog(@Nullable final Component owner, final String title, final String fileName) {
+        return showFileDialog( owner, title, FileDialog.SAVE, fileName );
+    }
+
+    @Nullable
+    private static File showFileDialog(@Nullable final Component owner, final String title,
+                                       final int mode, @Nullable final String fileName) {
+        FileDialog fileDialog = new FileDialog( JOptionPane.getFrameForComponent( owner ), title, mode );
+        fileDialog.setFile( fileName );
+        fileDialog.setLocationRelativeTo( owner );
+        fileDialog.setLocationByPlatform( true );
+        fileDialog.setVisible( true );
+
+        File[] selectedFiles = fileDialog.getFiles();
+        return ((selectedFiles != null) && (selectedFiles.length > 0))? selectedFiles[0]: null;
     }
 
     public static JDialog showDialog(@Nullable final Component owner, @Nullable final String title, final Container content) {
