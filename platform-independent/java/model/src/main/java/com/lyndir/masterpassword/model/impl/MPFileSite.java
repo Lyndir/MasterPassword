@@ -75,7 +75,9 @@ public class MPFileSite extends MPBasicSite<MPFileUser, MPFileQuestion> {
         return url;
     }
 
-    public void setUrl(@Nullable final String url) {
+    public void setUrl(@Nullable String url) {
+        if ((url != null) && url.isEmpty())
+            url = null;
         if (Objects.equals( this.url, url))
             return;
 

@@ -31,6 +31,7 @@ import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.DefaultFormatterFactory;
 
 
 /**
@@ -310,6 +311,10 @@ public abstract class Components {
                 CompoundBorder editorBorder = BorderFactory.createCompoundBorder(
                         BorderFactory.createLineBorder( Res.colors().controlBorder(), 1, true ),
                         BorderFactory.createEmptyBorder( 4, 4, 4, 4 ) );
+                DefaultFormatterFactory formatterFactory = new DefaultFormatterFactory();
+                if (model instanceof UnsignedIntegerModel)
+                    formatterFactory.setDefaultFormatter( ((UnsignedIntegerModel)model).getFormatter() );
+                ((DefaultEditor) getEditor()).getTextField().setFormatterFactory( formatterFactory );
                 ((DefaultEditor) getEditor()).getTextField().setBorder( editorBorder );
                 setAlignmentX( LEFT_ALIGNMENT );
                 setBorder( null );

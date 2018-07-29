@@ -19,20 +19,18 @@
 package com.lyndir.masterpassword.gui.util;
 
 import com.google.common.primitives.UnsignedInteger;
+import java.text.ParseException;
 import java.util.function.Consumer;
 import javax.annotation.Nullable;
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 
 /**
  * @author lhunath, 2016-10-29
  */
-public class UnsignedIntegerModel extends SpinnerNumberModel
-implements Selectable<UnsignedInteger, UnsignedIntegerModel> {
-
-    private static final long serialVersionUID = 1L;
+@SuppressWarnings("serial")
+public class UnsignedIntegerModel extends SpinnerNumberModel implements Selectable<UnsignedInteger, UnsignedIntegerModel> {
 
     @Nullable
     private ChangeListener changeListener;
@@ -65,6 +63,37 @@ implements Selectable<UnsignedInteger, UnsignedIntegerModel> {
     }
 
     @Override
+    public UnsignedInteger getMinimum() {
+        return (UnsignedInteger) super.getMinimum();
+    }
+
+    @Override
+    public UnsignedInteger getMaximum() {
+        return (UnsignedInteger) super.getMaximum();
+    }
+
+    @Override
+    public UnsignedInteger getStepSize() {
+        return (UnsignedInteger) super.getStepSize();
+    }
+
+    @Override
+    public UnsignedInteger getNextValue() {
+        if ((getMaximum() == null) || (getMaximum().compareTo( getNumber() ) > 0))
+            return getNumber().plus( getStepSize() );
+
+        return getMaximum();
+    }
+
+    @Override
+    public UnsignedInteger getPreviousValue() {
+        if ((getMinimum() == null) || (getMinimum().compareTo( getNumber() ) < 0))
+            return getNumber().minus( getStepSize() );
+
+        return getMinimum();
+    }
+
+    @Override
     public UnsignedIntegerModel selection(@Nullable final Consumer<UnsignedInteger> selectionConsumer) {
         if (changeListener != null) {
             removeChangeListener( changeListener );
@@ -88,5 +117,23 @@ implements Selectable<UnsignedInteger, UnsignedIntegerModel> {
 
         setValue( selectedItem );
         return selection( selectionConsumer );
+    }
+
+    public JFormattedTextField.AbstractFormatter getFormatter() {
+        return new JFormattedTextField.AbstractFormatter() {
+            @Override
+            @Nullable
+            public Object stringToValue(@Nullable final String text)
+                    throws ParseException {
+                return (text != null)? UnsignedInteger.valueOf( text ): null;
+            }
+
+            @Override
+            @Nullable
+            public String valueToString(final Object value)
+                    throws ParseException {
+                return (value != null)? value.toString(): null;
+            }
+        };
     }
 }
