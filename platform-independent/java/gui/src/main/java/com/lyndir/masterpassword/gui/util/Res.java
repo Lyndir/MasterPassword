@@ -31,12 +31,10 @@ import java.io.IOException;
 import java.lang.ref.SoftReference;
 import java.util.Map;
 import java.util.concurrent.*;
-import javax.annotation.Nullable;
 import javax.swing.*;
 import org.jetbrains.annotations.NonNls;
-import org.joda.time.ReadableInstant;
+import org.joda.time.*;
 import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 
 /**
@@ -107,7 +105,7 @@ public abstract class Res {
     }
 
     public static String format(final ReadableInstant instant) {
-        return DateTimeFormat.mediumDateTime().print( instant );
+        return DateTimeFormat.mediumDateTime().print( new DateTime( instant, DateTimeZone.getDefault() ) );
     }
 
     public static final class Icons {
