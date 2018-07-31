@@ -650,14 +650,8 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
 
                 Res.ui( () -> {
                     Window window = SwingUtilities.windowForComponent( UserContentPanel.this );
-                    if (window instanceof Frame) {
+                    if (window instanceof Frame)
                         ((Frame) window).setExtendedState( Frame.ICONIFIED );
-                        window.dispatchEvent( new WindowEvent( window, WindowEvent.WINDOW_DEACTIVATED ) );
-                        window.dispatchEvent( new WindowEvent( window, WindowEvent.WINDOW_ICONIFIED ) );
-                        window.dispatchEvent( new WindowEvent( window, WindowEvent.WINDOW_LOST_FOCUS ) );
-                        window.dispatchEvent( new WindowEvent( window, WindowEvent.WINDOW_CLOSED ) );
-                    }
-                    //                                            window.dispatchEvent( new WindowEvent( window, WindowEvent.WINDOW_ICONIFIED ) );
                 } );
             } );
         }
