@@ -19,7 +19,7 @@
 package com.lyndir.masterpassword.gui;
 
 import com.lyndir.lhunath.opal.system.util.ConversionUtils;
-import com.lyndir.masterpassword.model.MPConstants;
+import com.lyndir.masterpassword.model.MPModelConstants;
 
 
 /**
@@ -35,6 +35,6 @@ public class Config {
     }
 
     public boolean checkForUpdates() {
-        return ConversionUtils.toBoolean( System.getenv( MPConstants.env_checkUpdates ) ).orElse( true );
+        return ConversionUtils.toBoolean( System.getenv( MPModelConstants.env_checkUpdates ) ).orElse( true );
     }
 }

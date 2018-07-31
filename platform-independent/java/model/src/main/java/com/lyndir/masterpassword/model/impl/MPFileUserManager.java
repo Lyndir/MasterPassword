@@ -22,7 +22,7 @@ import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 
 import com.google.common.collect.ImmutableSortedSet;
 import com.lyndir.lhunath.opal.system.logging.Logger;
-import com.lyndir.masterpassword.model.MPConstants;
+import com.lyndir.masterpassword.model.MPModelConstants;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -42,7 +42,7 @@ public class MPFileUserManager {
     private static final MPFileUserManager instance;
 
     static {
-        String rcDir = System.getenv( MPConstants.env_rcDir );
+        String rcDir = System.getenv( MPModelConstants.env_rcDir );
 
         if (rcDir != null)
             instance = create( new File( rcDir ) );

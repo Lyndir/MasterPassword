@@ -6,8 +6,6 @@ import com.lyndir.masterpassword.gui.util.Res;
 import com.lyndir.masterpassword.gui.view.MasterPasswordFrame;
 import com.tulskiy.keymaster.common.Provider;
 import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
 
 
 /**
@@ -23,8 +21,7 @@ public class GUI {
         Platform.get().installAppForegroundHandler( this::open );
         Platform.get().installAppReopenHandler( this::open );
 
-        KeyStroke keyStroke = KeyStroke.getKeyStroke( KeyEvent.VK_P, InputEvent.CTRL_DOWN_MASK | InputEvent.META_DOWN_MASK );
-        Provider.getCurrentProvider( true ).register( keyStroke, hotKey -> open() );
+        Provider.getCurrentProvider( true ).register( MPGuiConstants.ui_hotkey, hotKey -> open() );
     }
 
     public void open() {

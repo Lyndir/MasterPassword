@@ -479,7 +479,7 @@ public abstract class Components {
     }
 
     public static JEditorPane linkLabel(@NonNls final String html) {
-        return new JEditorPane( "text/html", "<html><body style='width:640'>" + html ) {
+        return new JEditorPane( "text/html", "<html><body style='width:640;font-family:sans-serif'>" + html ) {
             {
                 setOpaque( false );
                 setEditable( false );

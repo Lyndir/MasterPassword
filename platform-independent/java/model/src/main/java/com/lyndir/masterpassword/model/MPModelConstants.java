@@ -25,14 +25,15 @@ import org.joda.time.format.ISODateTimeFormat;
 /**
  * @author lhunath, 2016-10-29
  */
-public final class MPConstants {
+public final class MPModelConstants {
 
     /* Environment */
 
     /**
      * mpw: default path to look for run configuration files if the platform default is not desired.
      */
-    public static final String env_rcDir        = "MPW_RCDIR";
+    public static final String env_rcDir = "MPW_RCDIR";
+
     /**
      * mpw: permit automatic update checks.
      */

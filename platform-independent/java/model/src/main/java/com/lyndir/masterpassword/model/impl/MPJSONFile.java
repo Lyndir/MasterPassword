@@ -28,7 +28,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.masterpassword.*;
-import com.lyndir.masterpassword.model.MPConstants;
+import com.lyndir.masterpassword.model.MPModelConstants;
 import com.lyndir.masterpassword.model.MPIncorrectMasterPasswordException;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.File;
@@ -70,13 +70,13 @@ public class MPJSONFile extends MPJSONAnyObject {
         export = new Export();
         export.format = 1;
         export.redacted = modelUser.getContentMode().isRedacted();
-        export.date = MPConstants.dateTimeFormatter.print( new Instant() );
+        export.date = MPModelConstants.dateTimeFormatter.print( new Instant() );
 
         // Section: "user"
         user = new User();
         user.avatar = modelUser.getAvatar();
         user.full_name = modelUser.getFullName();
-        user.last_used = MPConstants.dateTimeFormatter.print( modelUser.getLastUsed() );
+        user.last_used = MPModelConstants.dateTimeFormatter.print( modelUser.getLastUsed() );
         user.key_id = modelUser.exportKeyID();
         user.algorithm = modelUser.getAlgorithm().version();
         user.default_type = modelUser.getDefaultType();
@@ -111,7 +111,7 @@ public class MPJSONFile extends MPJSONAnyObject {
             site.login_type = modelSite.getLoginType();
 
             site.uses = modelSite.getUses();
-            site.last_used = MPConstants.dateTimeFormatter.print( modelSite.getLastUsed() );
+            site.last_used = MPModelConstants.dateTimeFormatter.print( modelSite.getLastUsed() );
 
             site.questions = new LinkedHashMap<>();
             for (final MPFileQuestion question : modelSite.getQuestions())
@@ -141,7 +141,7 @@ public class MPJSONFile extends MPJSONAnyObject {
         return new MPFileUser(
                 user.full_name, CodeUtils.decodeHex( user.key_id ), algorithm, user.avatar,
                 (user.default_type != null)? user.default_type: algorithm.mpw_default_result_type(),
-                (user.last_used != null)? MPConstants.dateTimeFormatter.parseDateTime( user.last_used ): new Instant(),
+                (user.last_used != null)? MPModelConstants.dateTimeFormatter.parseDateTime( user.last_used ): new Instant(),
                 export.redacted? MPMarshaller.ContentMode.PROTECTED: MPMarshaller.ContentMode.VISIBLE,
                 MPMarshalFormat.JSON, file.getParentFile()
         );
@@ -157,7 +157,7 @@ public class MPJSONFile extends MPJSONAnyObject {
                     fileSite.type, export.redacted? fileSite.password: null,
                     fileSite.login_type, export.redacted? fileSite.login_name: null,
                     (fileSite._ext_mpw != null)? fileSite._ext_mpw.url: null, fileSite.uses,
-                    (fileSite.last_used != null)? MPConstants.dateTimeFormatter.parseDateTime( fileSite.last_used ): new Instant() );
+                    (fileSite.last_used != null)? MPModelConstants.dateTimeFormatter.parseDateTime( fileSite.last_used ): new Instant() );
 
             if (!export.redacted) {
                 if (fileSite.password != null)

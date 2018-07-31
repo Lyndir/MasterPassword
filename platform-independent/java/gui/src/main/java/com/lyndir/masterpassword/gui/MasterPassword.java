@@ -24,6 +24,7 @@ import com.google.common.base.Charsets;
 import com.google.common.io.ByteSource;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.ObjectUtils;
+import com.lyndir.masterpassword.gui.util.Components;
 import com.lyndir.masterpassword.model.MPUser;
 import java.io.IOException;
 import java.io.InputStream;
@@ -72,9 +73,14 @@ public final class MasterPassword {
             listener.onUserSelected( activeUser );
     }
 
-    private static void checkUpdate() {
+    @Nullable
+    public String version() {
+        return MasterPassword.class.getPackage().getImplementationVersion();
+    }
+
+    public void checkUpdate() {
         try {
-            String implementationVersion = MasterPassword.class.getPackage().getImplementationVersion();
+            String implementationVersion = version();
             String latestVersion = new ByteSource() {
                 @Override
                 public InputStream openStream()
@@ -86,16 +92,14 @@ public final class MasterPassword {
                 }
             }.asCharSource( Charsets.UTF_8 ).readFirstLine();
 
-            if ((implementationVersion != null) && (latestVersion != null) &&
-                !implementationVersion.equalsIgnoreCase( latestVersion )) {
+            if ((implementationVersion != null) && !implementationVersion.equalsIgnoreCase( latestVersion )) {
                 logger.inf( "Implementation: <%s>", implementationVersion );
                 logger.inf( "Latest        : <%s>", latestVersion );
                 logger.wrn( "You are not running the current official version.  Please update from:%n%s",
                             "https://masterpassword.app/masterpassword-gui.jar" );
-                JOptionPane.showMessageDialog( null,
-                                               strf( "A new version of Master Password is available.%n "
-                                                     + "Please download the latest version from %s",
-                                                     "https://masterpassword.app" ),
+                JOptionPane.showMessageDialog( null, Components.linkLabel( strf(
+                        "A new version of Master Password is available."
+                        + "<p>Please download the latest version from <a href='https://masterpassword.app'>https://masterpassword.app</a>." ) ),
                                                "Update Available", JOptionPane.INFORMATION_MESSAGE );
             }
         }
@@ -105,8 +109,8 @@ public final class MasterPassword {
     }
 
     public static void main(final String... args) {
-        //        Thread.setDefaultUncaughtExceptionHandler(
-        //                (t, e) -> logger.bug( e, "Uncaught: %s", e.getLocalizedMessage() ) );
+        //Thread.setDefaultUncaughtExceptionHandler(
+        //        (t, e) -> logger.bug( e, "Uncaught: %s", e.getLocalizedMessage() ) );
 
         // Try and set the system look & feel, if available.
         try {
@@ -115,15 +119,16 @@ public final class MasterPassword {
         catch (final UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException ignored) {
         }
 
-        // Check online to see if this version has been superseded.
-        if (Config.get().checkForUpdates())
-            checkUpdate();
-
         // Create a platform-specific GUI and open it.
         new GUI().open();
+
+        // Check online to see if this version has been superseded.
+        if (Config.get().checkForUpdates())
+            get().checkUpdate();
     }
 
     public interface Listener {
+
         void onUserSelected(@Nullable MPUser<?> user);
     }
 }

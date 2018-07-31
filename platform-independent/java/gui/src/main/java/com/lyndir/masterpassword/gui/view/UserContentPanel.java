@@ -8,6 +8,7 @@ import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.ObjectUtils;
 import com.lyndir.masterpassword.*;
+import com.lyndir.masterpassword.gui.MPGuiConstants;
 import com.lyndir.masterpassword.gui.MasterPassword;
 import com.lyndir.masterpassword.gui.model.MPIncognitoUser;
 import com.lyndir.masterpassword.gui.model.MPNewSite;
@@ -220,14 +221,14 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
 
     private void showHelp() {
         JOptionPane.showMessageDialog( this, Components.linkLabel( strf(
-                "<h1>Master Password</h1>"
+                "<h1>Master Password - v%s</h1>"
                 + "<p>The primary goal of this application is to provide a reliable security solution that also "
                 + "makes you independent from your computer.  If you lose access to this computer or your data, "
                 + "the application can regenerate all your secrets from scratch on any new device.</p>"
                 + "<h2>Opening Master Password</h2>"
                 + "<p>To use Master Password, simply open the application on your computer. "
                 + "Once running, you can bring up the user interface at any time by pressing the keys "
-                + "<strong><code>%s + %s + p</code></strong>."
+                + "<strong><code>%s+%s</code></strong>."
                 + "<h2>Persistence</h2>"
                 + "<p>Though at the core, Master Password does not require the use of any form of data "
                 + "storage, the application does remember the names of the sites you've used in the past to "
@@ -237,8 +238,9 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
                 + "Some people even configure this location to be synced between their different computers "
                 + "using services such as those provided by SpiderOak or Dropbox.</p>"
                 + "<hr><p><a href='https://masterpassword.app'>https://masterpassword.app</a> — by Maarten Billemont</p>",
-                KeyEvent.getKeyText( KeyEvent.VK_CONTROL ),
-                KeyEvent.getKeyText( KeyEvent.VK_META ),
+                MasterPassword.get().version(),
+                InputEvent.getModifiersExText( MPGuiConstants.ui_hotkey.getModifiers() ),
+                KeyEvent.getKeyText( MPGuiConstants.ui_hotkey.getKeyCode() ),
                 MPFileUserManager.get().getPath().getAbsolutePath() ) ),
                                        "About Master Password", JOptionPane.INFORMATION_MESSAGE );
     }

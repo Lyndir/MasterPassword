@@ -20,6 +20,14 @@ public final class Utilities {
     }
 
     @Nonnull
+    public static <T> T ifNotNullElse(@Nullable final T value, @Nonnull final T nullValue) {
+        if (value == null)
+            return nullValue;
+
+        return value;
+    }
+
+    @Nonnull
     public static <T, R> R ifNotNullElse(@Nullable final T value, final Function<T, R> consumer, @Nonnull final R nullValue) {
         if (value == null)
             return nullValue;
