@@ -34,7 +34,7 @@
 char *mpw_get_token(
         const char **in, const char *eol, char *delim);
 /** Convert an RFC 3339 time string into epoch time. */
-time_t mpw_mktime(
+time_t mpw_timegm(
         const char *time);
 
 /// JSON parsing.

@@ -407,7 +407,7 @@ static void mpw_marshal_read_flat_info(
             if (strcmp( headerName, "Passwords" ) == 0)
                 info->redacted = strcmp( headerValue, "VISIBLE" ) != 0;
             if (strcmp( headerName, "Date" ) == 0)
-                info->date = mpw_mktime( headerValue );
+                info->date = mpw_timegm( headerValue );
 
             mpw_free_strings( &headerName, &headerValue, NULL );
             continue;
@@ -580,7 +580,7 @@ static MPMarshalledUser *mpw_marshal_read_flat(
                 return NULL;
             }
             MPAlgorithmVersion siteAlgorithm = (MPAlgorithmVersion)value;
-            time_t siteLastUsed = mpw_mktime( str_lastUsed );
+            time_t siteLastUsed = mpw_timegm( str_lastUsed );
             if (!siteLastUsed) {
                 *error = (MPMarshalError){ MPMarshalErrorIllegal, mpw_str( "Invalid site last used: %s: %s", siteName, str_lastUsed ) };
                 return NULL;
@@ -650,7 +650,7 @@ static void mpw_marshal_read_json_info(
     if (fileFormat < 1)
         return;
     info->redacted = mpw_get_json_boolean( json_file, "export.redacted", true );
-    info->date = mpw_mktime( mpw_get_json_string( json_file, "export.date", NULL ) );
+    info->date = mpw_timegm( mpw_get_json_string( json_file, "export.date", NULL ) );
 
     // Section: "user"
     info->algorithm = (MPAlgorithmVersion)mpw_get_json_int( json_file, "user.algorithm", MPAlgorithmVersionCurrent );
@@ -707,7 +707,7 @@ static MPMarshalledUser *mpw_marshal_read_json(
         *error = (MPMarshalError){ MPMarshalErrorIllegal, mpw_str( "Invalid user default type: %u", defaultType ) };
         return NULL;
     }
-    time_t lastUsed = mpw_mktime( str_lastUsed );
+    time_t lastUsed = mpw_timegm( str_lastUsed );
     if (!lastUsed) {
         *error = (MPMarshalError){ MPMarshalErrorIllegal, mpw_str( "Invalid user last used: %s", str_lastUsed ) };
         return NULL;
@@ -760,7 +760,7 @@ static MPMarshalledUser *mpw_marshal_read_json(
         MPResultType siteLoginType = (MPResultType)mpw_get_json_int( json_site.val, "login_type", MPResultTypeTemplateName );
         unsigned int siteUses = (unsigned int)mpw_get_json_int( json_site.val, "uses", 0 );
         str_lastUsed = mpw_get_json_string( json_site.val, "last_used", NULL );
-        time_t siteLastUsed = mpw_mktime( str_lastUsed );
+        time_t siteLastUsed = mpw_timegm( str_lastUsed );
         if (!siteLastUsed) {
             *error = (MPMarshalError){ MPMarshalErrorIllegal, mpw_str( "Invalid site last used: %s: %s", siteName, str_lastUsed ) };
             return NULL;

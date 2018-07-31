@@ -35,10 +35,11 @@ char *mpw_get_token(const char **in, const char *eol, char *delim) {
     return token;
 }
 
-time_t mpw_mktime(
+time_t mpw_timegm(
         const char *time) {
 
     // TODO: Support for parsing non-UTC time strings
+    // Parse time as a UTC timestamp, into a tm.
     struct tm tm = { .tm_isdst = -1 };
     if (time && sscanf( time, "%4d-%2d-%2dT%2d:%2d:%2dZ",
             &tm.tm_year, &tm.tm_mon, &tm.tm_mday,
@@ -46,8 +47,9 @@ time_t mpw_mktime(
         tm.tm_year -= 1900; // tm_year 0 = rfc3339 year  1900
         tm.tm_mon -= 1;     // tm_mon  0 = rfc3339 month 1
 
-        // mktime converts tm to local, setting tm_gmtoff; use it to offset the result back to UTC.
-        return mktime( &tm ) + tm.tm_gmtoff;
+        // mktime interprets tm as being local, we need to offset back to UTC (timegm/tm_gmtoff are non-standard).
+        time_t local_time = mktime( &tm ), local_dst = tm.tm_isdst > 0? 3600: 0;
+        return local_time + local_dst - mktime( gmtime( &local_time ) );
     }
 
     return false;
