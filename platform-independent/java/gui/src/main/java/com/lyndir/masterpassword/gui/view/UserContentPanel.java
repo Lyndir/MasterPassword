@@ -49,6 +49,8 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
                                                             "Add a new user to Master Password." );
     private final JButton importButton = Components.button( Res.icons().import_(), event -> importUser(),
                                                             "Import a user from a backup file into Master Password." );
+    private final JButton helpButton   = Components.button( Res.icons().help(), event -> showHelp(),
+                                                            "Show information on how to use Master Password." );
 
     private final JPanel userToolbar = Components.panel( BoxLayout.PAGE_AXIS );
     private final JPanel siteToolbar = Components.panel( BoxLayout.PAGE_AXIS );
@@ -128,7 +130,7 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
     }
 
     private void addUser() {
-        JTextField nameField = Components.textField( "Robert Lee Mitchell", null );
+        JTextField nameField      = Components.textField( "Robert Lee Mitchell", null );
         JCheckBox  incognitoField = Components.checkBox( "<html>Incognito <em>(Do not save this user to disk)</em></html>" );
         if (JOptionPane.OK_OPTION != Components.showDialog( this, "Add User", new JOptionPane( Components.panel(
                 BoxLayout.PAGE_AXIS,
@@ -208,12 +210,37 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
                     this, strf( "<html>Couldn't read import file:<br><pre>%s</pre></html>.", e.getLocalizedMessage() ),
                     "Import Failed", JOptionPane.ERROR_MESSAGE );
         }
-        catch (MPMarshalException e) {
+        catch (final MPMarshalException e) {
             logger.err( e, "While parsing user import file." );
             JOptionPane.showMessageDialog(
                     this, strf( "<html>Couldn't parse import file:<br><pre>%s</pre></html>.", e.getLocalizedMessage() ),
                     "Import Failed", JOptionPane.ERROR_MESSAGE );
         }
+    }
+
+    private void showHelp() {
+        JOptionPane.showMessageDialog( this, Components.linkLabel( strf(
+                "<h1>Master Password</h1>"
+                + "<p>The primary goal of this application is to provide a reliable security solution that also "
+                + "makes you independent from your computer.  If you lose access to this computer or your data, "
+                + "the application can regenerate all your secrets from scratch on any new device.</p>"
+                + "<h2>Opening Master Password</h2>"
+                + "<p>To use Master Password, simply open the application on your computer. "
+                + "Once running, you can bring up the user interface at any time by pressing the keys "
+                + "<strong><code>%s + %s + p</code></strong>."
+                + "<h2>Persistence</h2>"
+                + "<p>Though at the core, Master Password does not require the use of any form of data "
+                + "storage, the application does remember the names of the sites you've used in the past to "
+                + "make it easier for you to use them again in the future.  All user information is saved in "
+                + "files on your computer at the following location:<br><pre>%s</pre></p>"
+                + "<p>You can read, modify, backup or place new files in this location as you see fit. "
+                + "Some people even configure this location to be synced between their different computers "
+                + "using services such as those provided by SpiderOak or Dropbox.</p>"
+                + "<hr><p><a href='https://masterpassword.app'>https://masterpassword.app</a> — by Maarten Billemont</p>",
+                KeyEvent.getKeyText( KeyEvent.VK_CONTROL ),
+                KeyEvent.getKeyText( KeyEvent.VK_META ),
+                MPFileUserManager.get().getPath().getAbsolutePath() ) ),
+                                       "About Master Password", JOptionPane.INFORMATION_MESSAGE );
     }
 
     private enum ContentMode {
@@ -239,6 +266,8 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
 
             userToolbar.add( addButton );
             userToolbar.add( importButton );
+            userToolbar.add( Box.createGlue() );
+            userToolbar.add( helpButton );
 
             add( Box.createGlue() );
             add( Components.heading( "Select a user to proceed." ) );
@@ -275,6 +304,8 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
             userToolbar.add( exportButton );
             userToolbar.add( deleteButton );
             userToolbar.add( resetButton );
+            userToolbar.add( Box.createGlue() );
+            userToolbar.add( helpButton );
 
             add( Components.heading( user.getFullName(), SwingConstants.CENTER ) );
             add( Components.strut() );
@@ -461,6 +492,8 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
             userToolbar.add( addButton );
             userToolbar.add( userButton );
             userToolbar.add( logoutButton );
+            userToolbar.add( Box.createGlue() );
+            userToolbar.add( helpButton );
 
             siteToolbar.add( settingsButton );
             siteToolbar.add( questionsButton );
@@ -615,8 +648,14 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
 
                 Res.ui( () -> {
                     Window window = SwingUtilities.windowForComponent( UserContentPanel.this );
-                    if (window != null)
-                        window.dispatchEvent( new WindowEvent( window, WindowEvent.WINDOW_CLOSING ) );
+                    if (window instanceof Frame) {
+                        ((Frame) window).setExtendedState( Frame.ICONIFIED );
+                        window.dispatchEvent( new WindowEvent( window, WindowEvent.WINDOW_DEACTIVATED ) );
+                        window.dispatchEvent( new WindowEvent( window, WindowEvent.WINDOW_ICONIFIED ) );
+                        window.dispatchEvent( new WindowEvent( window, WindowEvent.WINDOW_LOST_FOCUS ) );
+                        window.dispatchEvent( new WindowEvent( window, WindowEvent.WINDOW_CLOSED ) );
+                    }
+                    //                                            window.dispatchEvent( new WindowEvent( window, WindowEvent.WINDOW_ICONIFIED ) );
                 } );
             } );
         }

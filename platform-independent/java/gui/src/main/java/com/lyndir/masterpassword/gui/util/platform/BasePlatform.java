@@ -1,6 +1,7 @@
 package com.lyndir.masterpassword.gui.util.platform;
 
 import java.io.File;
+import java.net.URI;
 
 
 /**
@@ -19,7 +20,17 @@ public class BasePlatform implements IPlatform {
     }
 
     @Override
+    public boolean requestForeground() {
+        return false;
+    }
+
+    @Override
     public boolean show(final File file) {
+        return false;
+    }
+
+    @Override
+    public boolean open(final URI url) {
         return false;
     }
 }

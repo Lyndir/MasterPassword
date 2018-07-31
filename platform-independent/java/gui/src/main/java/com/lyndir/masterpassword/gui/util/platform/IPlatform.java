@@ -1,6 +1,8 @@
 package com.lyndir.masterpassword.gui.util.platform;
 
 import java.io.File;
+import java.net.URI;
+import java.net.URL;
 
 
 /**
@@ -12,5 +14,9 @@ public interface IPlatform {
 
     boolean installAppReopenHandler(Runnable handler);
 
+    boolean requestForeground();
+
     boolean show(File file);
+
+    boolean open(URI url);
 }

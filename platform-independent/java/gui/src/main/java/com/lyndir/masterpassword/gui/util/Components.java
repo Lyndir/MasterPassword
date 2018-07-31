@@ -18,10 +18,12 @@
 
 package com.lyndir.masterpassword.gui.util;
 
+import com.lyndir.lhunath.opal.system.logging.Logger;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.function.Consumer;
@@ -30,9 +32,9 @@ import javax.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+import javax.swing.event.*;
 import javax.swing.text.DefaultFormatterFactory;
+import org.jetbrains.annotations.NonNls;
 
 
 /**
@@ -40,6 +42,8 @@ import javax.swing.text.DefaultFormatterFactory;
  */
 @SuppressWarnings({ "SerializableStoresNonSerializable", "serial" })
 public abstract class Components {
+
+    private static final Logger logger = Logger.get( Components.class );
 
     public static final float TEXT_SIZE_HEADING = 19f;
     public static final float TEXT_SIZE_CONTROL = 13f;
@@ -100,11 +104,11 @@ public abstract class Components {
         showDialog( dialog );
 
         Object selectedValue = pane.getValue();
-        if(selectedValue == null)
+        if (selectedValue == null)
             return JOptionPane.CLOSED_OPTION;
 
         Object[] options = pane.getOptions();
-        if(options == null)
+        if (options == null)
             return (selectedValue instanceof Integer)? (Integer) selectedValue: JOptionPane.CLOSED_OPTION;
 
         int option = Arrays.binarySearch( options, selectedValue );
@@ -337,7 +341,7 @@ public abstract class Components {
                         BorderFactory.createEmptyBorder( 4, 4, 4, 4 ) );
                 DefaultFormatterFactory formatterFactory = new DefaultFormatterFactory();
                 if (model instanceof UnsignedIntegerModel)
-                    formatterFactory.setDefaultFormatter( ((UnsignedIntegerModel)model).getFormatter() );
+                    formatterFactory.setDefaultFormatter( ((UnsignedIntegerModel) model).getFormatter() );
                 ((DefaultEditor) getEditor()).getTextField().setFormatterFactory( formatterFactory );
                 ((DefaultEditor) getEditor()).getTextField().setBorder( editorBorder );
                 setAlignmentX( LEFT_ALIGNMENT );
@@ -470,6 +474,24 @@ public abstract class Components {
             @Override
             public Dimension getMaximumSize() {
                 return new Dimension( Integer.MAX_VALUE, getPreferredSize().height );
+            }
+        };
+    }
+
+    public static JEditorPane linkLabel(@NonNls final String html) {
+        return new JEditorPane( "text/html", "<html><body style='width:640'>" + html ) {
+            {
+                setOpaque( false );
+                setEditable( false );
+                addHyperlinkListener( event -> {
+                    if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED)
+                        try {
+                            Platform.get().open( event.getURL().toURI() );
+                        }
+                        catch (final URISyntaxException e) {
+                            logger.err( e, "After triggering hyperlink: %s", event );
+                        }
+                } );
             }
         };
     }

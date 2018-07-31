@@ -138,6 +138,10 @@ public abstract class Res {
             return icon( "media/icon_import.png" );
         }
 
+        public Icon help() {
+            return icon( "media/icon_help.png" );
+        }
+
         public Icon export() {
             return icon( "media/icon_export.png" );
         }

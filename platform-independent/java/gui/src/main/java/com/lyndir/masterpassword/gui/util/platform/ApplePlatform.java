@@ -3,9 +3,9 @@ package com.lyndir.masterpassword.gui.util.platform;
 import com.apple.eawt.*;
 import com.apple.eio.FileManager;
 import com.google.common.base.Preconditions;
-import com.google.common.base.Throwables;
-import java.io.File;
-import java.io.FileNotFoundException;
+import com.lyndir.lhunath.opal.system.logging.Logger;
+import java.io.*;
+import java.net.URI;
 
 
 /**
@@ -13,7 +13,8 @@ import java.io.FileNotFoundException;
  */
 public class ApplePlatform implements IPlatform {
 
-    static Application application = Preconditions.checkNotNull(
+    private static final Logger      logger      = Logger.get( ApplePlatform.class );
+    private static final Application application = Preconditions.checkNotNull(
             Application.getApplication(), "Not an Apple Java application." );
 
     @Override
@@ -38,11 +39,30 @@ public class ApplePlatform implements IPlatform {
     }
 
     @Override
+    public boolean requestForeground() {
+        application.requestForeground( true );
+        return true;
+    }
+
+    @Override
     public boolean show(final File file) {
         try {
             return FileManager.revealInFinder( file );
         }
-        catch (final FileNotFoundException ignored) {
+        catch (final FileNotFoundException e) {
+            logger.err( e, "While showing: %s", file );
+            return false;
+        }
+    }
+
+    @Override
+    public boolean open(final URI url) {
+        try {
+            FileManager.openURL( url.toString() );
+            return true;
+        }
+        catch (final IOException e) {
+            logger.err( e, "While opening: %s", url );
             return false;
         }
     }

@@ -1,8 +1,11 @@
 package com.lyndir.masterpassword.gui.util.platform;
 
+import com.lyndir.lhunath.opal.system.logging.Logger;
 import java.awt.*;
 import java.awt.desktop.*;
 import java.io.File;
+import java.io.IOException;
+import java.net.URI;
 
 
 /**
@@ -11,9 +14,12 @@ import java.io.File;
 @SuppressWarnings("Since15")
 public class JDK9Platform implements IPlatform {
 
+    private static final Logger  logger  = Logger.get( JDK9Platform.class );
+    private static final Desktop desktop = Desktop.getDesktop();
+
     @Override
     public boolean installAppForegroundHandler(final Runnable handler) {
-        Desktop.getDesktop().addAppEventListener( new AppForegroundListener() {
+        desktop.addAppEventListener( new AppForegroundListener() {
             @Override
             public void appRaisedToForeground(final AppForegroundEvent e) {
                 handler.run();
@@ -28,7 +34,13 @@ public class JDK9Platform implements IPlatform {
 
     @Override
     public boolean installAppReopenHandler(final Runnable handler) {
-        Desktop.getDesktop().addAppEventListener( (AppReopenedListener) e -> handler.run() );
+        desktop.addAppEventListener( (AppReopenedListener) e -> handler.run() );
+        return true;
+    }
+
+    @Override
+    public boolean requestForeground() {
+        desktop.requestForeground( true );
         return true;
     }
 
@@ -37,7 +49,19 @@ public class JDK9Platform implements IPlatform {
         if (!file.exists())
             return false;
 
-        Desktop.getDesktop().browseFileDirectory( file );
+        desktop.browseFileDirectory( file );
         return true;
+    }
+
+    @Override
+    public boolean open(final URI url) {
+        try {
+            desktop.browse( url );
+            return true;
+        }
+        catch (final IOException e) {
+            logger.err( e, "While opening: %s", url );
+            return false;
+        }
     }
 }
