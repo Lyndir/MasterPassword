@@ -35,7 +35,7 @@ library {
         }
         withType( GccCompatibleToolChain ) {
             eachPlatform {
-                cppCompiler.withArguments { addAll( ['-x', 'c', '-static', '-O3', '-Werror', '-DMPW_SODIUM=1'] ) }
+                cppCompiler.withArguments { addAll( ['-x', 'c', '-O3', '-Werror', '-DMPW_SODIUM=1'] ) }
             }
         }
     }

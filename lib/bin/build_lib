@@ -32,8 +32,15 @@ PATH+=:/usr/local/bin
 needs() { _needs "$@"; }
 _needs() {
     local failed=0
-    for tool; do
-        hash "$tool" || { echo >&2 "Missing: $tool.  Please install this tool."; (( failed++ )); }
+    for spec; do
+        IFS=: read pkg tools <<< "$spec"
+        IFS=, read -a tools <<< "${tools:-$pkg}"
+        for tool in "${tools[@]}"; do
+            hash "$tool" && continue 2
+        done
+
+        echo >&2 "Missing: $pkg.  Please install this package."
+        (( failed++ ))
     done
 
     return $failed
@@ -51,7 +58,7 @@ _initialize() {
 #
 # Check if all tools needed for the default implementations are available.
 #
-# By default, this will check for `libtool` (for libtoolize), `automake` (for aclocal) and `autoconf` (for autoreconf).
+# By default, this will check for `libtool` (for libtoolize), `automake` (for aclocal), `autoconf` (for autoreconf) and make.
 initialize_needs() { _initialize_needs "$@"; }
 _initialize_needs() {
     if [[ $platform = windows ]]; then
@@ -59,7 +66,7 @@ _initialize_needs() {
         export VSINSTALLDIR="${VSINSTALLDIR:-$(cd "$(cygpath -F 0x002a)/Microsoft Visual Studio"/*/*/Common7/.. && pwd)}"
         [[ -e "$VSINSTALLDIR/Common7/Tools/VsMSBuildCmd.bat" ]] || { echo >&2 "Missing: msbuild.  Please install 'Build Tools for Visual Studio'."; return 1; }
     else
-        needs libtool automake autoconf
+        needs libtool:libtoolize,glibtoolize automake autoconf make
     fi
 }
 
