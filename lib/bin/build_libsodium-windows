@@ -1,4 +1,13 @@
 #!/usr/bin/env bash
 source "${BASH_SOURCE%/*}/build_lib"
 
+finalize_merge() {
+    local prefix=$1 platform=$2; shift 2
+    local archs=( "$@" )
+
+    cp -a "src/libsodium/include" "$prefix/out"
+    
+    _finalize_merge "$prefix" "$platform" "${archs[@]}"
+}
+
 build libsodium windows

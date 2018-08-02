@@ -69,14 +69,14 @@ library {
                 }
 
                 // libjson-c
-                archive.dependsOn project.tasks.maybeCreate( "build_libjson-c-${system}", Exec ).configure {
+                /*archive.dependsOn project.tasks.maybeCreate( "build_libjson-c-${system}", Exec ).configure {
                     commandLine 'bash', "$rootDir/../lib/bin/build_libjson-c-${system}"
                     privateHeaders.from "$rootDir/../lib/libjson-c/build-${system}~/out/include"
                     add( linkLibraries.name, fileTree( "$rootDir/../lib/libjson-c/build-${system}~/out/lib" ) )
                 }
                 clean.dependsOn project.tasks.maybeCreate( "clean_libjson-c-${system}", Exec ).configure {
                     commandLine 'bash', "$rootDir/../lib/bin/build_libjson-c-${system}", 'clean'
-                }
+                }*/
             }
         }
     }

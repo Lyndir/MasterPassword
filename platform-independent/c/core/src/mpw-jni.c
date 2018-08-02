@@ -7,7 +7,7 @@
 
 // TODO: We may need to zero the jbytes safely.
 
-JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved) {
+JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved) {
     JNIEnv* env;
     if ((*vm)->GetEnv( vm, (void **)&env, JNI_VERSION_1_6 ) != JNI_OK)
         return -1;
