@@ -207,6 +207,7 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
         super.reset();
     }
 
+    @Nonnull
     @Override
     public MPFileSite addSite(final String siteName) {
         return addSite( new MPFileSite( this, siteName ) );

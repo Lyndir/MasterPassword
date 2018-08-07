@@ -36,7 +36,7 @@ _needs() {
         IFS=: read pkg tools <<< "$spec"
         IFS=, read -a tools <<< "${tools:-$pkg}"
         for tool in "${tools[@]}"; do
-            hash "$tool" && continue 2
+            hash "$tool" 2>/dev/null && continue 2
         done
 
         echo >&2 "Missing: $pkg.  Please install this package."

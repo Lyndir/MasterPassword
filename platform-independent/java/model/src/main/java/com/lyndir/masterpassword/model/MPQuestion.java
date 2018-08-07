@@ -41,6 +41,13 @@ public interface MPQuestion extends Comparable<MPQuestion> {
     void setType(MPResultType type);
 
     @Nonnull
+    default String getAnswer()
+            throws MPKeyUnavailableException, MPAlgorithmException {
+
+        return getAnswer( null );
+    }
+
+    @Nonnull
     String getAnswer(@Nullable String state)
             throws MPKeyUnavailableException, MPAlgorithmException;
 

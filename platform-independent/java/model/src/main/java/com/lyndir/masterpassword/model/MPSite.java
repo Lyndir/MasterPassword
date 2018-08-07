@@ -18,6 +18,7 @@
 
 package com.lyndir.masterpassword.model;
 
+import com.google.common.collect.ImmutableCollection;
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.masterpassword.*;
 import java.util.Collection;
@@ -57,6 +58,7 @@ public interface MPSite<Q extends MPQuestion> extends Comparable<MPSite<?>> {
 
     void setLoginType(@Nullable MPResultType loginType);
 
+    @Nonnull
     default String getResult()
             throws MPKeyUnavailableException, MPAlgorithmException {
 
@@ -80,6 +82,16 @@ public interface MPSite<Q extends MPQuestion> extends Comparable<MPSite<?>> {
             throws MPKeyUnavailableException, MPAlgorithmException;
 
     @Nonnull
+    String getResult(MPKeyPurpose keyPurpose, @Nullable String keyContext,
+                     @Nullable UnsignedInteger counter, MPResultType type, @Nullable String state)
+            throws MPKeyUnavailableException, MPAlgorithmException;
+
+    @Nonnull
+    String getState(MPKeyPurpose keyPurpose, @Nullable String keyContext,
+                    @Nullable UnsignedInteger counter, MPResultType type, String state)
+            throws MPKeyUnavailableException, MPAlgorithmException;
+
+    @Nonnull
     default String getLogin()
             throws MPKeyUnavailableException, MPAlgorithmException {
         return getLogin( null );
@@ -94,10 +106,17 @@ public interface MPSite<Q extends MPQuestion> extends Comparable<MPSite<?>> {
     @Nonnull
     MPUser<?> getUser();
 
-    boolean addQuestion(Q question);
+    @Nonnull
+    Q addQuestion(String keyword);
+
+    @Nonnull
+    Q addQuestion(Q question);
 
     boolean deleteQuestion(Q question);
 
     @Nonnull
     Collection<Q> getQuestions();
+
+    @Nonnull
+    ImmutableCollection<Q> findQuestions(@Nullable String query);
 }

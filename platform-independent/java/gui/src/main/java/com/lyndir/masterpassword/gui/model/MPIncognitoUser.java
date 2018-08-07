@@ -20,6 +20,7 @@ package com.lyndir.masterpassword.gui.model;
 
 import com.lyndir.masterpassword.MPAlgorithm;
 import com.lyndir.masterpassword.model.impl.MPBasicUser;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 
@@ -38,6 +39,7 @@ public class MPIncognitoUser extends MPBasicUser<MPIncognitoSite> {
         return null;
     }
 
+    @Nonnull
     @Override
     public MPIncognitoSite addSite(final String siteName) {
         return addSite( new MPIncognitoSite( this, siteName ) );

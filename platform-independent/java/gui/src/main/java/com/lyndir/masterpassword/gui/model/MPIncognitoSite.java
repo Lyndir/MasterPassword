@@ -40,4 +40,10 @@ public class MPIncognitoSite extends MPBasicSite<MPIncognitoUser, MPIncognitoQue
                            @Nullable final MPResultType resultType, @Nullable final MPResultType loginType) {
         super( user, siteName, (algorithm == null)? user.getAlgorithm(): algorithm, counter, resultType, loginType );
     }
+
+    @Nonnull
+    @Override
+    public MPIncognitoQuestion addQuestion(final String keyword) {
+        return addQuestion( new MPIncognitoQuestion( this, keyword, null ) );
+    }
 }

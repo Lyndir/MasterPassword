@@ -100,6 +100,7 @@ public abstract class Components {
 
     public static int showDialog(@Nullable final Component owner, @Nullable final String title, final JOptionPane pane) {
         JDialog dialog = pane.createDialog( owner, title );
+        dialog.setMinimumSize( new Dimension( 520, 0 ) );
         dialog.setModalityType( Dialog.ModalityType.DOCUMENT_MODAL );
         showDialog( dialog );
 
@@ -143,7 +144,6 @@ public abstract class Components {
                                       title, Dialog.ModalityType.DOCUMENT_MODAL );
         dialog.setMinimumSize( new Dimension( 320, 0 ) );
         dialog.setLocationRelativeTo( owner );
-        dialog.setLocationByPlatform( true );
         dialog.setContentPane( content );
 
         return showDialog( dialog );
@@ -155,6 +155,7 @@ public abstract class Components {
         dialog.getRootPane().putClientProperty( "Window.style", "small" );
         dialog.pack();
 
+        dialog.setLocationByPlatform( true );
         dialog.setVisible( true );
 
         return dialog;
@@ -176,7 +177,7 @@ public abstract class Components {
         };
     }
 
-    public static JTextField textField(@Nullable final String text, @Nullable final Consumer<String> selection) {
+    public static JTextField textField(@Nullable final String text, @Nullable final Consumer<String> change) {
         return new JTextField( text ) {
             {
                 setBorder( BorderFactory.createCompoundBorder( BorderFactory.createLineBorder( Res.colors().controlBorder(), 1, true ),
@@ -184,23 +185,25 @@ public abstract class Components {
                 setFont( Res.fonts().valueFont( TEXT_SIZE_CONTROL ) );
                 setAlignmentX( LEFT_ALIGNMENT );
 
-                if (selection != null)
+                if (change != null) {
                     getDocument().addDocumentListener( new DocumentListener() {
                         @Override
                         public void insertUpdate(final DocumentEvent e) {
-                            selection.accept( getText() );
+                            change.accept( getText() );
                         }
 
                         @Override
                         public void removeUpdate(final DocumentEvent e) {
-                            selection.accept( getText() );
+                            change.accept( getText() );
                         }
 
                         @Override
                         public void changedUpdate(final DocumentEvent e) {
-                            selection.accept( getText() );
+                            change.accept( getText() );
                         }
                     } );
+                    change.accept( getText() );
+                }
             }
 
             @Override
@@ -228,6 +231,7 @@ public abstract class Components {
     public static <E> JList<E> list(final ListModel<E> model, final Function<E, String> valueTransformer) {
         return new JList<E>( model ) {
             {
+                setAlignmentX( LEFT_ALIGNMENT );
                 setFont( Res.fonts().valueFont( TEXT_SIZE_CONTROL ) );
                 setCellRenderer( new DefaultListCellRenderer() {
                     @Override
@@ -241,7 +245,9 @@ public abstract class Components {
                         return this;
                     }
                 } );
-                setAlignmentX( LEFT_ALIGNMENT );
+
+                if (model instanceof CollectionListModel)
+                    ((CollectionListModel<E>) model).registerList( this );
             }
 
             @Override

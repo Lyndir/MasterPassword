@@ -31,17 +31,7 @@ import javax.annotation.Nullable;
  */
 public class MPIncognitoQuestion extends MPBasicQuestion {
 
-    private final MPIncognitoSite site;
-
     public MPIncognitoQuestion(final MPIncognitoSite site, final String keyword, @Nullable final MPResultType type) {
-        super( keyword, ifNotNullElse( type, site.getAlgorithm().mpw_default_answer_type() ) );
-
-        this.site = site;
-    }
-
-    @Nonnull
-    @Override
-    public MPIncognitoSite getSite() {
-        return site;
+        super( site, keyword, ifNotNullElse( type, site.getAlgorithm().mpw_default_answer_type() ) );
     }
 }

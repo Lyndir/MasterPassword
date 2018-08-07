@@ -10,8 +10,7 @@ import com.lyndir.lhunath.opal.system.util.ObjectUtils;
 import com.lyndir.masterpassword.*;
 import com.lyndir.masterpassword.gui.MPGuiConstants;
 import com.lyndir.masterpassword.gui.MasterPassword;
-import com.lyndir.masterpassword.gui.model.MPIncognitoUser;
-import com.lyndir.masterpassword.gui.model.MPNewSite;
+import com.lyndir.masterpassword.gui.model.*;
 import com.lyndir.masterpassword.gui.util.*;
 import com.lyndir.masterpassword.gui.util.Platform;
 import com.lyndir.masterpassword.model.*;
@@ -290,9 +289,9 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
         private final JButton resetButton  = Components.button( Res.icons().reset(), event -> resetUser(),
                                                                 "Change the master password for this user." );
 
-        private final JPasswordField masterPasswordField = Components.passwordField();
-        private final JLabel         errorLabel          = Components.label();
-        private final JLabel         identiconLabel      = Components.label( SwingConstants.CENTER );
+        private final JPasswordField masterPasswordField;
+        private final JLabel         errorLabel;
+        private final JLabel         identiconLabel;
 
         private Future<?> identiconJob;
 
@@ -312,16 +311,16 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
             add( Components.heading( user.getFullName(), SwingConstants.CENTER ) );
             add( Components.strut() );
 
-            add( identiconLabel );
+            add( identiconLabel = Components.label( SwingConstants.CENTER ) );
             identiconLabel.setFont( Res.fonts().emoticonsFont( Components.TEXT_SIZE_CONTROL ) );
             add( Box.createGlue() );
 
             add( Components.label( "Master Password:" ) );
             add( Components.strut() );
-            add( masterPasswordField );
+            add( masterPasswordField = Components.passwordField() );
             masterPasswordField.addActionListener( this );
             masterPasswordField.getDocument().addDocumentListener( this );
-            add( errorLabel );
+            add( errorLabel = Components.label() );
             errorLabel.setForeground( Res.colors().errorFg() );
             add( Box.createGlue() );
         }
@@ -468,21 +467,20 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
                                                                    "Sign out and lock user." );
         private final JButton settingsButton  = Components.button( Res.icons().settings(), event -> showSiteSettings(),
                                                                    "Show site settings." );
-        private final JButton questionsButton = Components.button( Res.icons().question(), null,
+        private final JButton questionsButton = Components.button( Res.icons().question(), event -> showSiteQuestions(),
                                                                    "Show site recovery questions." );
         private final JButton deleteButton    = Components.button( Res.icons().delete(), event -> deleteSite(),
                                                                    "Delete the site from the user." );
 
         @Nonnull
         private final MPUser<?>                      user;
-        private final JLabel                         passwordLabel = Components.label( SwingConstants.CENTER );
-        private final JLabel                         passwordField = Components.heading( SwingConstants.CENTER );
-        private final JLabel                         queryLabel    = Components.label();
-        private final JTextField                     queryField    = Components.textField( null, this::updateSites );
-        private final CollectionListModel<MPSite<?>> sitesModel    =
-                new CollectionListModel<MPSite<?>>().selection( this::showSiteResult );
-        private final JList<MPSite<?>>               sitesList     =
-                Components.list( sitesModel, this::getSiteDescription );
+        private final JLabel                         passwordLabel;
+        private final JLabel                         passwordField;
+        private final JLabel                         answerField;
+        private final JLabel                         queryLabel;
+        private final JTextField                     queryField;
+        private final CollectionListModel<MPSite<?>> sitesModel;
+        private final JList<MPSite<?>>               sitesList;
 
         private Future<?> updateSitesJob;
 
@@ -501,27 +499,32 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
             siteToolbar.add( questionsButton );
             siteToolbar.add( deleteButton );
             settingsButton.setEnabled( false );
+            questionsButton.setEnabled( false );
             deleteButton.setEnabled( false );
 
             add( Components.heading( user.getFullName(), SwingConstants.CENTER ) );
 
-            add( passwordLabel );
-            add( passwordField );
+            add( passwordLabel = Components.label( SwingConstants.CENTER ) );
+            add( passwordField = Components.heading( SwingConstants.CENTER ) );
             passwordField.setForeground( Res.colors().highlightFg() );
             passwordField.setFont( Res.fonts().bigValueFont( SIZE_RESULT ) );
+            answerField = Components.heading( SwingConstants.CENTER );
+            answerField.setForeground( Res.colors().highlightFg() );
+            answerField.setFont( Res.fonts().bigValueFont( SIZE_RESULT ) );
             add( Box.createGlue() );
             add( Components.strut() );
 
-            add( queryLabel );
+            add( queryLabel = Components.label() );
             queryLabel.setText( strf( "%s's password for:", user.getFullName() ) );
-            add( queryField );
+            add( queryField = Components.textField( null, this::updateSites ) );
             queryField.putClientProperty( "JTextField.variant", "search" );
             queryField.addActionListener( event -> useSite() );
             queryField.addKeyListener( this );
             queryField.requestFocusInWindow();
             add( Components.strut() );
-            add( Components.scrollPane( sitesList ) );
-            sitesModel.registerList( sitesList );
+            add( Components.scrollPane( sitesList = Components.list(
+                    sitesModel = new CollectionListModel<MPSite<?>>().selection( this::showSiteResult ),
+                    this::getSiteDescription ) ) );
             add( Box.createGlue() );
 
             addHierarchyListener( e -> {
@@ -587,8 +590,54 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
                                 Components.textField( fileSite.getUrl(), fileSite::setUrl ),
                                 Components.strut() );
 
-            Components.showDialog( this, site.getSiteName(), new JOptionPane( Components.panel(
+            Components.showDialog( this, strf( "Settings for %s", site.getSiteName() ), new JOptionPane( Components.panel(
                     BoxLayout.PAGE_AXIS, components.build().toArray( new Component[0] ) ) ) );
+        }
+
+        public void showSiteQuestions() {
+            MPSite<?> site = sitesModel.getSelectedItem();
+            if (site == null)
+                return;
+
+            CollectionListModel<MPQuestion> questionsModel = new CollectionListModel<MPQuestion>().selection( this::showQuestionResult );
+            JList<MPQuestion>               questionsList  = Components.list( questionsModel, MPQuestion::getKeyword );
+            JTextField queryField = Components.textField( null, query -> Res.job( () -> {
+                Collection<MPQuestion> questions = new LinkedList<>( site.findQuestions( query ) );
+
+                if (!Strings.isNullOrEmpty( query ))
+                    if (questions.stream().noneMatch( question -> question.getKeyword().equalsIgnoreCase( query ) ))
+                        questions.add( new MPNewQuestion( site, query ) );
+
+                Res.ui( () -> questionsModel.set( questions ) );
+            } ) );
+            queryField.putClientProperty( "JTextField.variant", "search" );
+            queryField.addActionListener( event -> useQuestion( questionsModel.getSelectedItem() ) );
+            queryField.addKeyListener( new KeyAdapter() {
+                @Override
+                public void keyPressed(final KeyEvent event) {
+                    if ((event.getKeyCode() == KeyEvent.VK_UP) || (event.getKeyCode() == KeyEvent.VK_DOWN))
+                        questionsList.dispatchEvent( event );
+                }
+
+                @Override
+                public void keyReleased(final KeyEvent event) {
+                    if ((event.getKeyCode() == KeyEvent.VK_UP) || (event.getKeyCode() == KeyEvent.VK_DOWN))
+                        questionsList.dispatchEvent( event );
+                }
+            } );
+
+            Components.showDialog( this, strf( "Recovery answers for %s", site.getSiteName() ), new JOptionPane( Components.panel(
+                    BoxLayout.PAGE_AXIS,
+                    Components.label( "Security Question Keyword:" ), queryField,
+                    Components.strut(),
+                    Components.label( "Answer:" ), answerField,
+                    Components.strut(),
+                    Components.scrollPane( questionsList ) ) ) {
+                @Override
+                public void selectInitialValue() {
+                    queryField.requestFocusInWindow();
+                }
+            } );
         }
 
         public void deleteSite() {
@@ -668,6 +717,7 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
                     passwordLabel.setText( " " );
                     passwordField.setText( " " );
                     settingsButton.setEnabled( false );
+                    questionsButton.setEnabled( false );
                     deleteButton.setEnabled( false );
                 } );
                 return;
@@ -683,11 +733,72 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
                         passwordLabel.setText( strf( "Your password for %s:", site.getSiteName() ) );
                         passwordField.setText( result );
                         settingsButton.setEnabled( true );
+                        questionsButton.setEnabled( true );
                         deleteButton.setEnabled( true );
                     } );
                 }
                 catch (final MPKeyUnavailableException | MPAlgorithmException e) {
                     logger.err( e, "While resolving password for: %s", site );
+                }
+            } );
+        }
+
+        private void useQuestion(@Nullable final MPQuestion question) {
+            if (question instanceof MPNewQuestion) {
+                if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(
+                        this,
+                        strf( "<html>Remember the answer for the security question with keyword <strong>%s</strong>?</html>",
+                              question.getKeyword() ),
+                        "New Question", JOptionPane.YES_NO_OPTION )) {
+                    useQuestion( question.getSite().addQuestion( question.getKeyword() ) );
+                }
+                return;
+            }
+
+            showQuestionResult( question, result -> {
+                if (result == null)
+                    return;
+
+                if (question instanceof MPFileQuestion)
+                    ((MPFileQuestion) question).use();
+
+                Transferable clipboardContents = new StringSelection( result );
+                Toolkit.getDefaultToolkit().getSystemClipboard().setContents( clipboardContents, null );
+
+                Res.ui( () -> {
+                    Window answerDialog = SwingUtilities.windowForComponent( answerField );
+                    if (answerDialog instanceof Dialog)
+                        answerDialog.setVisible( false );
+
+                    Window window = SwingUtilities.windowForComponent( UserContentPanel.this );
+                    if (window instanceof Frame)
+                        ((Frame) window).setExtendedState( Frame.ICONIFIED );
+                } );
+            } );
+        }
+
+        private void showQuestionResult(@Nullable final MPQuestion question) {
+            showQuestionResult( question, null );
+        }
+
+        private void showQuestionResult(@Nullable final MPQuestion question, @Nullable final Consumer<String> resultCallback) {
+            if (question == null) {
+                if (resultCallback != null)
+                    resultCallback.accept( null );
+                Res.ui( () -> answerField.setText( " " ) );
+                return;
+            }
+
+            Res.job( () -> {
+                try {
+                    String answer = question.getAnswer();
+                    if (resultCallback != null)
+                        resultCallback.accept( answer );
+
+                    Res.ui( () -> answerField.setText( answer ) );
+                }
+                catch (final MPKeyUnavailableException | MPAlgorithmException e) {
+                    logger.err( e, "While resolving answer for: %s", question );
                 }
             } );
         }
@@ -713,13 +824,11 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
                 updateSitesJob.cancel( true );
 
             updateSitesJob = Res.job( () -> {
-                Collection<MPSite<?>> sites = new LinkedList<>();
-                if (!Strings.isNullOrEmpty( query )) {
-                    sites.addAll( new LinkedList<>( user.findSites( query ) ) );
+                Collection<MPSite<?>> sites = new LinkedList<>( user.findSites( query ) );
 
+                if (!Strings.isNullOrEmpty( query ))
                     if (sites.stream().noneMatch( site -> site.getSiteName().equalsIgnoreCase( query ) ))
                         sites.add( new MPNewSite( user, query ) );
-                }
 
                 Res.ui( () -> sitesModel.set( sites ) );
             } );

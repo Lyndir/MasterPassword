@@ -22,6 +22,7 @@ import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import com.lyndir.masterpassword.*;
 import com.lyndir.masterpassword.model.MPQuestion;
+import com.lyndir.masterpassword.model.MPSite;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -33,12 +34,21 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class MPBasicQuestion extends Changeable implements MPQuestion {
 
+    private final MPSite<?> site;
     private final String       keyword;
-    private       MPResultType type;
 
-    protected MPBasicQuestion(final String keyword, final MPResultType type) {
+    private MPResultType type;
+
+    protected MPBasicQuestion(final MPSite<?> site, final String keyword, final MPResultType type) {
+        this.site = site;
         this.keyword = keyword;
         this.type = type;
+    }
+
+    @Nonnull
+    @Override
+    public MPSite<?> getSite() {
+        return site;
     }
 
     @Nonnull
@@ -55,7 +65,7 @@ public abstract class MPBasicQuestion extends Changeable implements MPQuestion {
 
     @Override
     public void setType(final MPResultType type) {
-        if (Objects.equals(this.type, type))
+        if (this.type == type)
             return;
 
         this.type = type;
@@ -70,15 +80,12 @@ public abstract class MPBasicQuestion extends Changeable implements MPQuestion {
         return getSite().getResult( MPKeyPurpose.Recovery, getKeyword(), null, getType(), state );
     }
 
-    @Nonnull
-    @Override
-    public abstract MPBasicSite<?, ?> getSite();
-
     @Override
     protected void onChanged() {
         super.onChanged();
 
-        getSite().setChanged();
+        if (site instanceof Changeable)
+            ((Changeable) site).setChanged();
     }
 
     @Override

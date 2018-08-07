@@ -30,16 +30,13 @@ import javax.annotation.Nullable;
  */
 public class MPFileQuestion extends MPBasicQuestion {
 
-    private final MPFileSite site;
-
     @Nullable
     private String answerState;
 
     public MPFileQuestion(final MPFileSite site, final String keyword,
                           @Nullable final MPResultType type, @Nullable final String answerState) {
-        super( keyword, ifNotNullElse( type, site.getAlgorithm().mpw_default_answer_type() ) );
+        super( site, keyword, ifNotNullElse( type, site.getAlgorithm().mpw_default_answer_type() ) );
 
-        this.site = site;
         this.answerState = answerState;
     }
 
@@ -48,6 +45,8 @@ public class MPFileQuestion extends MPBasicQuestion {
         return answerState;
     }
 
+    @Nonnull
+    @Override
     public String getAnswer()
             throws MPKeyUnavailableException, MPAlgorithmException {
         return getAnswer( answerState );
@@ -66,9 +65,8 @@ public class MPFileQuestion extends MPBasicQuestion {
         setChanged();
     }
 
-    @Nonnull
-    @Override
-    public MPFileSite getSite() {
-        return site;
+    public void use() {
+        if (getSite() instanceof MPFileSite)
+            ((MPFileSite) getSite()).use();
     }
 }

@@ -9,8 +9,6 @@ import com.lyndir.masterpassword.model.MPUser;
 import com.lyndir.masterpassword.model.impl.MPFileUser;
 import com.lyndir.masterpassword.model.impl.MPFileUserManager;
 import java.awt.*;
-import java.util.Collection;
-import java.util.concurrent.CopyOnWriteArraySet;
 import javax.annotation.Nullable;
 import javax.swing.*;
 
@@ -26,8 +24,6 @@ public class FilesPanel extends JPanel implements MPFileUserManager.Listener, Ma
 
     private final CollectionListModel<MPUser<?>> usersModel =
             CollectionListModel.<MPUser<?>>copy( MPFileUserManager.get().getFiles() ).selection( MasterPassword.get()::activateUser );
-    private final JComboBox<? extends MPUser<?>> userField  =
-            Components.comboBox( usersModel, user -> ifNotNull( user, MPUser::getFullName ) );
 
     protected FilesPanel() {
         setOpaque( false );
@@ -46,7 +42,7 @@ public class FilesPanel extends JPanel implements MPFileUserManager.Listener, Ma
         add( Components.strut( Components.margin() ) );
 
         // User Selection
-        add( userField );
+        add( Components.comboBox( usersModel, user -> ifNotNull( user, MPUser::getFullName ) ) );
 
         MPFileUserManager.get().addListener( this );
         MasterPassword.get().addListener( this );

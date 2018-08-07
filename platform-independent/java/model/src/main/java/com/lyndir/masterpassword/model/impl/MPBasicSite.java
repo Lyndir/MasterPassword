@@ -21,6 +21,9 @@ package com.lyndir.masterpassword.model.impl;
 import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
+import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableCollection;
+import com.google.common.collect.ImmutableSortedSet;
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.masterpassword.*;
 import com.lyndir.masterpassword.model.*;
@@ -35,9 +38,9 @@ import javax.annotation.Nullable;
 public abstract class MPBasicSite<U extends MPUser<?>, Q extends MPQuestion> extends Changeable
         implements MPSite<Q> {
 
-    private final Collection<Q> questions = new LinkedHashSet<>();
     private final U             user;
     private final String        siteName;
+    private final Collection<Q> questions = new LinkedHashSet<>();
 
     private MPAlgorithm     algorithm;
     private UnsignedInteger counter;
@@ -104,7 +107,7 @@ public abstract class MPBasicSite<U extends MPUser<?>, Q extends MPQuestion> ext
 
     @Override
     public void setResultType(final MPResultType resultType) {
-        if (Objects.equals( this.resultType, resultType ))
+        if (this.resultType == resultType)
             return;
 
         this.resultType = resultType;
@@ -119,7 +122,7 @@ public abstract class MPBasicSite<U extends MPUser<?>, Q extends MPQuestion> ext
 
     @Override
     public void setLoginType(@Nullable final MPResultType loginType) {
-        if (Objects.equals( this.loginType, loginType ))
+        if (this.loginType == loginType)
             return;
 
         this.loginType = ifNotNullElse( loginType, getAlgorithm().mpw_default_login_type() );
@@ -134,8 +137,10 @@ public abstract class MPBasicSite<U extends MPUser<?>, Q extends MPQuestion> ext
         return getResult( keyPurpose, keyContext, getCounter(), getResultType(), state );
     }
 
-    protected String getResult(final MPKeyPurpose keyPurpose, @Nullable final String keyContext,
-                               @Nullable final UnsignedInteger counter, final MPResultType type, @Nullable final String state)
+    @Nonnull
+    @Override
+    public String getResult(final MPKeyPurpose keyPurpose, @Nullable final String keyContext,
+                            @Nullable final UnsignedInteger counter, final MPResultType type, @Nullable final String state)
             throws MPKeyUnavailableException, MPAlgorithmException {
 
         return getUser().getMasterKey().siteResult(
@@ -143,8 +148,10 @@ public abstract class MPBasicSite<U extends MPUser<?>, Q extends MPQuestion> ext
                 keyPurpose, keyContext, type, state );
     }
 
-    protected String getState(final MPKeyPurpose keyPurpose, @Nullable final String keyContext,
-                              @Nullable final UnsignedInteger counter, final MPResultType type, final String state)
+    @Nonnull
+    @Override
+    public String getState(final MPKeyPurpose keyPurpose, @Nullable final String keyContext,
+                           @Nullable final UnsignedInteger counter, final MPResultType type, final String state)
             throws MPKeyUnavailableException, MPAlgorithmException {
 
         return getUser().getMasterKey().siteState(
@@ -160,13 +167,13 @@ public abstract class MPBasicSite<U extends MPUser<?>, Q extends MPQuestion> ext
         return getResult( MPKeyPurpose.Identification, null, null, getLoginType(), state );
     }
 
+    @Nonnull
     @Override
-    public boolean addQuestion(final Q question) {
-        if (!questions.add( question ))
-            return false;
+    public Q addQuestion(final Q question) {
+        questions.add( question );
 
         setChanged();
-        return true;
+        return question;
     }
 
     @Override
@@ -182,6 +189,17 @@ public abstract class MPBasicSite<U extends MPUser<?>, Q extends MPQuestion> ext
     @Override
     public Collection<Q> getQuestions() {
         return Collections.unmodifiableCollection( questions );
+    }
+
+    @Nonnull
+    @Override
+    public ImmutableCollection<Q> findQuestions(@Nullable final String query) {
+        ImmutableSortedSet.Builder<Q> results = ImmutableSortedSet.naturalOrder();
+        for (final Q question : getQuestions())
+            if (Strings.isNullOrEmpty( query ) || question.getKeyword().startsWith( query ))
+                results.add( question );
+
+        return results.build();
     }
 
     @Nonnull

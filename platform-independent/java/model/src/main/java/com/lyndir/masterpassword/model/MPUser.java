@@ -100,6 +100,7 @@ public interface MPUser<S extends MPSite<?>> extends Comparable<MPUser<?>> {
 
     // - Relations
 
+    @Nonnull
     S addSite(String siteName);
 
     @Nonnull

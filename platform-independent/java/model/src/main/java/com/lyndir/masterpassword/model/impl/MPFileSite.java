@@ -145,6 +145,12 @@ public class MPFileSite extends MPBasicSite<MPFileUser, MPFileQuestion> {
         setChanged();
     }
 
+    @Nonnull
+    @Override
+    public MPFileQuestion addQuestion(final String keyword) {
+        return addQuestion( new MPFileQuestion( this, keyword, null, null ) );
+    }
+
     @Override
     public int compareTo(@Nonnull final MPSite<?> o) {
         int comparison = (o instanceof MPFileSite)? ((MPFileSite) o).getLastUsed().compareTo( getLastUsed() ): 0;
