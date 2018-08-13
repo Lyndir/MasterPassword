@@ -170,7 +170,7 @@ public class MPJSONFile extends MPJSONAnyObject {
             if (fileSite.questions != null)
                 for (final Map.Entry<String, Site.Question> questionEntry : fileSite.questions.entrySet()) {
                     Site.Question fileQuestion = questionEntry.getValue();
-                    MPFileQuestion question = new MPFileQuestion( site, questionEntry.getKey(),
+                    MPFileQuestion question = new MPFileQuestion( site, ifNotNullElse( questionEntry.getKey(), "" ),
                                                                   fileQuestion.type, export.redacted? fileQuestion.answer: null );
 
                     if (!export.redacted && (fileQuestion.answer != null))

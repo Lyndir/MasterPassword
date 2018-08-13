@@ -31,6 +31,8 @@ import java.io.IOException;
 import java.lang.ref.SoftReference;
 import java.util.Map;
 import java.util.concurrent.*;
+import java.util.function.Consumer;
+import javax.annotation.Nullable;
 import javax.swing.*;
 import org.jetbrains.annotations.NonNls;
 import org.joda.time.*;
@@ -70,6 +72,15 @@ public abstract class Res {
 
     public static <V> ListenableFuture<V> job(final Callable<V> job) {
         return job( job, 0, TimeUnit.MILLISECONDS );
+    }
+
+    public static <V> void job(final Callable<V> job, final Consumer<V> callback) {
+        Futures.addCallback( job( job, 0, TimeUnit.MILLISECONDS ), new FailableCallback<V>( logger ) {
+            @Override
+            public void onSuccess(@Nullable final V result) {
+                callback.accept( result );
+            }
+        }, uiExecutor() );
     }
 
     public static <V> ListenableFuture<V> job(final Callable<V> job, final long delay, final TimeUnit timeUnit) {

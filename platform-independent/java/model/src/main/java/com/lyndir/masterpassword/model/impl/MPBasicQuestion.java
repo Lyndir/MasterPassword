@@ -35,7 +35,7 @@ import org.jetbrains.annotations.NotNull;
 public abstract class MPBasicQuestion extends Changeable implements MPQuestion {
 
     private final MPSite<?> site;
-    private final String       keyword;
+    private final String    keyword;
 
     private MPResultType type;
 

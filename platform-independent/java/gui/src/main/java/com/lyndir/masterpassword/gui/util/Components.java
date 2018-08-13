@@ -18,7 +18,9 @@
 
 package com.lyndir.masterpassword.gui.util;
 
+import com.google.common.base.Strings;
 import com.lyndir.lhunath.opal.system.logging.Logger;
+import com.lyndir.masterpassword.util.Utilities;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -238,8 +240,9 @@ public abstract class Components {
                     @SuppressWarnings({ "unchecked", "SerializableStoresNonSerializable" })
                     public Component getListCellRendererComponent(final JList<?> list, final Object value, final int index,
                                                                   final boolean isSelected, final boolean cellHasFocus) {
+                        String label = valueTransformer.apply( (E) value );
                         super.getListCellRendererComponent(
-                                list, valueTransformer.apply( (E) value ), index, isSelected, cellHasFocus );
+                                list, Strings.isNullOrEmpty( label )? " ": label, index, isSelected, cellHasFocus );
                         setBorder( BorderFactory.createEmptyBorder( 2, 4, 2, 4 ) );
 
                         return this;
@@ -415,7 +418,7 @@ public abstract class Components {
     public static JLabel label(@Nullable final String label, final int horizontalAlignment) {
         return new JLabel( label, horizontalAlignment ) {
             {
-                setFont( Res.fonts().controlFont( TEXT_SIZE_CONTROL ) );
+                //setFont( Res.fonts().controlFont( TEXT_SIZE_CONTROL ) );
                 setAlignmentX( LEFT_ALIGNMENT );
             }
 
@@ -466,8 +469,9 @@ public abstract class Components {
                     @SuppressWarnings({ "unchecked", "SerializableStoresNonSerializable" })
                     public Component getListCellRendererComponent(final JList<?> list, final Object value, final int index,
                                                                   final boolean isSelected, final boolean cellHasFocus) {
+                        String label = valueTransformer.apply( (E) value );
                         super.getListCellRendererComponent(
-                                list, valueTransformer.apply( (E) value ), index, isSelected, cellHasFocus );
+                                list, Strings.isNullOrEmpty( label )? " ": label, index, isSelected, cellHasFocus );
                         setBorder( BorderFactory.createEmptyBorder( 0, 4, 0, 4 ) );
 
                         return this;

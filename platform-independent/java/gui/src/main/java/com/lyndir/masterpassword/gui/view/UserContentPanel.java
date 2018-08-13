@@ -15,6 +15,7 @@ import com.lyndir.masterpassword.gui.util.*;
 import com.lyndir.masterpassword.gui.util.Platform;
 import com.lyndir.masterpassword.model.*;
 import com.lyndir.masterpassword.model.impl.*;
+import com.lyndir.masterpassword.util.Utilities;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
@@ -41,9 +42,11 @@ import javax.swing.event.DocumentListener;
 @SuppressWarnings("SerializableStoresNonSerializable")
 public class UserContentPanel extends JPanel implements MasterPassword.Listener, MPUser.Listener {
 
-    private static final Random  random     = new Random();
-    private static final Logger  logger     = Logger.get( UserContentPanel.class );
-    private static final JButton iconButton = Components.button( Res.icons().user(), null, null );
+    private static final Random    random             = new Random();
+    private static final int       SIZE_RESULT        = 48;
+    private static final Logger    logger             = Logger.get( UserContentPanel.class );
+    private static final JButton   iconButton         = Components.button( Res.icons().user(), null, null );
+    private static final KeyStroke copyLoginKeyStroke = KeyStroke.getKeyStroke( KeyEvent.VK_ENTER, InputEvent.SHIFT_DOWN_MASK );
 
     private final JButton addButton    = Components.button( Res.icons().add(), event -> addUser(),
                                                             "Add a new user to Master Password." );
@@ -459,8 +462,6 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
 
     private final class AuthenticatedUserPanel extends JPanel implements KeyListener, MPUser.Listener {
 
-        public static final int SIZE_RESULT = 48;
-
         private final JButton userButton      = Components.button( Res.icons().user(), event -> showUserPreferences(),
                                                                    "Show user preferences." );
         private final JButton logoutButton    = Components.button( Res.icons().lock(), event -> logoutUser(),
@@ -476,6 +477,7 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
         private final MPUser<?>                      user;
         private final JLabel                         passwordLabel;
         private final JLabel                         passwordField;
+        private final JLabel                         answerLabel;
         private final JLabel                         answerField;
         private final JLabel                         queryLabel;
         private final JTextField                     queryField;
@@ -502,15 +504,17 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
             questionsButton.setEnabled( false );
             deleteButton.setEnabled( false );
 
+            answerLabel = Components.label( "Answer:" );
+            answerField = Components.heading( SwingConstants.CENTER );
+            answerField.setForeground( Res.colors().highlightFg() );
+            answerField.setFont( Res.fonts().bigValueFont( SIZE_RESULT ) );
+
             add( Components.heading( user.getFullName(), SwingConstants.CENTER ) );
 
             add( passwordLabel = Components.label( SwingConstants.CENTER ) );
             add( passwordField = Components.heading( SwingConstants.CENTER ) );
             passwordField.setForeground( Res.colors().highlightFg() );
             passwordField.setFont( Res.fonts().bigValueFont( SIZE_RESULT ) );
-            answerField = Components.heading( SwingConstants.CENTER );
-            answerField.setForeground( Res.colors().highlightFg() );
-            answerField.setFont( Res.fonts().bigValueFont( SIZE_RESULT ) );
             add( Box.createGlue() );
             add( Components.strut() );
 
@@ -518,14 +522,22 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
             queryLabel.setText( strf( "%s's password for:", user.getFullName() ) );
             add( queryField = Components.textField( null, this::updateSites ) );
             queryField.putClientProperty( "JTextField.variant", "search" );
-            queryField.addActionListener( event -> useSite() );
+            queryField.addActionListener( this::useSite );
+            queryField.getInputMap().put( copyLoginKeyStroke, JTextField.notifyAction );
             queryField.addKeyListener( this );
             queryField.requestFocusInWindow();
             add( Components.strut() );
+
             add( Components.scrollPane( sitesList = Components.list(
                     sitesModel = new CollectionListModel<MPSite<?>>().selection( this::showSiteResult ),
                     this::getSiteDescription ) ) );
-            add( Box.createGlue() );
+            add( Components.strut() );
+
+            add( Components.label( strf(
+                    "Press %s to copy password, %s+%s to copy login name.",
+                    KeyEvent.getKeyText( KeyEvent.VK_ENTER ),
+                    InputEvent.getModifiersExText( copyLoginKeyStroke.getModifiers() ),
+                    KeyEvent.getKeyText( copyLoginKeyStroke.getKeyCode() ) ) ) );
 
             addHierarchyListener( e -> {
                 if (null != SwingUtilities.windowForComponent( this ))
@@ -600,13 +612,12 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
                 return;
 
             CollectionListModel<MPQuestion> questionsModel = new CollectionListModel<MPQuestion>().selection( this::showQuestionResult );
-            JList<MPQuestion>               questionsList  = Components.list( questionsModel, MPQuestion::getKeyword );
+            JList<MPQuestion> questionsList = Components.list(
+                    questionsModel, question -> Strings.isNullOrEmpty( question.getKeyword() )? "<site>": question.getKeyword() );
             JTextField queryField = Components.textField( null, query -> Res.job( () -> {
                 Collection<MPQuestion> questions = new LinkedList<>( site.findQuestions( query ) );
-
-                if (!Strings.isNullOrEmpty( query ))
-                    if (questions.stream().noneMatch( question -> question.getKeyword().equalsIgnoreCase( query ) ))
-                        questions.add( new MPNewQuestion( site, query ) );
+                if (questions.stream().noneMatch( question -> question.getKeyword().equalsIgnoreCase( query ) ))
+                    questions.add( new MPNewQuestion( site, Utilities.ifNotNullElse( query, "" ) ) );
 
                 Res.ui( () -> questionsModel.set( questions ) );
             } ) );
@@ -630,7 +641,7 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
                     BoxLayout.PAGE_AXIS,
                     Components.label( "Security Question Keyword:" ), queryField,
                     Components.strut(),
-                    Components.label( "Answer:" ), answerField,
+                    answerLabel, answerField,
                     Components.strut(),
                     Components.scrollPane( questionsList ) ) ) {
                 @Override
@@ -675,80 +686,61 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
                          Joiner.on( " - " ).skipNulls().join( parameters.build() ) );
         }
 
-        private void useSite() {
+        private void useSite(final ActionEvent event) {
             MPSite<?> site = sitesModel.getSelectedItem();
             if (site instanceof MPNewSite) {
                 if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(
                         this, strf( "<html>Remember the site <strong>%s</strong>?</html>", site.getSiteName() ),
                         "New Site", JOptionPane.YES_NO_OPTION )) {
                     sitesModel.setSelectedItem( user.addSite( site.getSiteName() ) );
-                    useSite();
+                    useSite( event );
                 }
                 return;
             }
 
-            showSiteResult( site, result -> {
+            boolean loginResult = (copyLoginKeyStroke.getModifiers() & event.getModifiers()) != 0;
+            showSiteResult( site, loginResult, result -> {
                 if (result == null)
                     return;
 
                 if (site instanceof MPFileSite)
                     ((MPFileSite) site).use();
 
-                Transferable clipboardContents = new StringSelection( result );
-                Toolkit.getDefaultToolkit().getSystemClipboard().setContents( clipboardContents, null );
-
-                Res.ui( () -> {
-                    Window window = SwingUtilities.windowForComponent( UserContentPanel.this );
-                    if (window instanceof Frame)
-                        ((Frame) window).setExtendedState( Frame.ICONIFIED );
-                } );
+                copyResult( result );
             } );
         }
 
         private void showSiteResult(@Nullable final MPSite<?> site) {
-            showSiteResult( site, null );
+            showSiteResult( site, false, result -> {
+            } );
         }
 
-        private void showSiteResult(@Nullable final MPSite<?> site, @Nullable final Consumer<String> resultCallback) {
-            if (site == null) {
-                if (resultCallback != null)
-                    resultCallback.accept( null );
-                Res.ui( () -> {
-                    passwordLabel.setText( " " );
-                    passwordField.setText( " " );
-                    settingsButton.setEnabled( false );
-                    questionsButton.setEnabled( false );
-                    deleteButton.setEnabled( false );
-                } );
-                return;
-            }
-
+        private void showSiteResult(@Nullable final MPSite<?> site, final boolean loginResult, final Consumer<String> resultCallback) {
             Res.job( () -> {
                 try {
-                    String result = site.getResult();
-                    if (resultCallback != null)
-                        resultCallback.accept( result );
-
-                    Res.ui( () -> {
-                        passwordLabel.setText( strf( "Your password for %s:", site.getSiteName() ) );
-                        passwordField.setText( result );
-                        settingsButton.setEnabled( true );
-                        questionsButton.setEnabled( true );
-                        deleteButton.setEnabled( true );
-                    } );
+                    if (site != null)
+                        return loginResult? site.getLogin(): site.getResult();
                 }
                 catch (final MPKeyUnavailableException | MPAlgorithmException e) {
                     logger.err( e, "While resolving password for: %s", site );
                 }
-            } );
+
+                return null;
+            }, resultCallback.andThen( result -> Res.ui( () -> {
+                passwordLabel.setText( ((result != null) && (site != null))? strf( "Your password for %s:", site.getSiteName() ): " " );
+                passwordField.setText( (result != null)? result: " " );
+                settingsButton.setEnabled( result != null );
+                questionsButton.setEnabled( result != null );
+                deleteButton.setEnabled( result != null );
+            } ) ) );
         }
 
         private void useQuestion(@Nullable final MPQuestion question) {
             if (question instanceof MPNewQuestion) {
                 if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(
                         this,
-                        strf( "<html>Remember the answer for the security question with keyword <strong>%s</strong>?</html>",
-                              question.getKeyword() ),
+                        strf( "<html>Remember the security question with keyword <strong>%s</strong>?</html>",
+                              Strings.isNullOrEmpty( question.getKeyword() )? "<empty>": question.getKeyword() ),
                         "New Question", JOptionPane.YES_NO_OPTION )) {
                     useQuestion( question.getSite().addQuestion( question.getKeyword() ) );
                 }
@@ -762,44 +754,51 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
                 if (question instanceof MPFileQuestion)
                     ((MPFileQuestion) question).use();
 
-                Transferable clipboardContents = new StringSelection( result );
-                Toolkit.getDefaultToolkit().getSystemClipboard().setContents( clipboardContents, null );
-
-                Res.ui( () -> {
-                    Window answerDialog = SwingUtilities.windowForComponent( answerField );
-                    if (answerDialog instanceof Dialog)
-                        answerDialog.setVisible( false );
-
-                    Window window = SwingUtilities.windowForComponent( UserContentPanel.this );
-                    if (window instanceof Frame)
-                        ((Frame) window).setExtendedState( Frame.ICONIFIED );
-                } );
+                copyResult( result );
             } );
         }
 
         private void showQuestionResult(@Nullable final MPQuestion question) {
-            showQuestionResult( question, null );
+            showQuestionResult( question, answer -> {
+            } );
         }
 
-        private void showQuestionResult(@Nullable final MPQuestion question, @Nullable final Consumer<String> resultCallback) {
-            if (question == null) {
-                if (resultCallback != null)
-                    resultCallback.accept( null );
-                Res.ui( () -> answerField.setText( " " ) );
-                return;
-            }
-
+        private void showQuestionResult(@Nullable final MPQuestion question, final Consumer<String> resultCallback) {
             Res.job( () -> {
                 try {
-                    String answer = question.getAnswer();
-                    if (resultCallback != null)
-                        resultCallback.accept( answer );
-
-                    Res.ui( () -> answerField.setText( answer ) );
+                    if (question != null)
+                        return question.getAnswer();
                 }
                 catch (final MPKeyUnavailableException | MPAlgorithmException e) {
                     logger.err( e, "While resolving answer for: %s", question );
                 }
+
+                return null;
+            }, resultCallback.andThen( answer -> Res.ui( () -> {
+                if ((answer == null) || (question == null))
+                    answerLabel.setText( " " );
+                else
+                    answerLabel.setText(
+                            Strings.isNullOrEmpty( question.getKeyword() )?
+                                    strf( "<html>Answer for site <b>%s</b>:", question.getSite().getSiteName() ):
+                                    strf( "<html>Answer for site <b>%s</b>, of question with keyword <b>%s</b>:",
+                                          question.getSite().getSiteName(), question.getKeyword() ) );
+                answerField.setText( (answer != null)? answer: " " );
+            } ) ) );
+        }
+
+        private void copyResult(final String result) {
+            Transferable clipboardContents = new StringSelection( result );
+            Toolkit.getDefaultToolkit().getSystemClipboard().setContents( clipboardContents, null );
+
+            Res.ui( () -> {
+                Window answerDialog = SwingUtilities.windowForComponent( answerField );
+                if (answerDialog instanceof Dialog)
+                    answerDialog.setVisible( false );
+
+                Window window = SwingUtilities.windowForComponent( UserContentPanel.this );
+                if (window instanceof Frame)
+                    ((Frame) window).setExtendedState( Frame.ICONIFIED );
             } );
         }
 
