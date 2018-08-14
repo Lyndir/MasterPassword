@@ -306,7 +306,6 @@ public abstract class Components {
     public static JButton button(final Action action) {
         return new JButton( action ) {
             {
-                setFont( Res.fonts().controlFont( TEXT_SIZE_CONTROL ) );
                 setAlignmentX( LEFT_ALIGNMENT );
 
                 if (getText() == null) {
@@ -383,7 +382,7 @@ public abstract class Components {
     public static JLabel heading(@Nullable final String heading, final int horizontalAlignment) {
         return new JLabel( heading, horizontalAlignment ) {
             {
-                setFont( Res.fonts().controlFont( TEXT_SIZE_HEADING ).deriveFont( Font.BOLD ) );
+                setFont( getFont().deriveFont( Font.BOLD, TEXT_SIZE_HEADING ) );
                 setAlignmentX( LEFT_ALIGNMENT );
             }
 
@@ -418,7 +417,6 @@ public abstract class Components {
     public static JLabel label(@Nullable final String label, final int horizontalAlignment) {
         return new JLabel( label, horizontalAlignment ) {
             {
-                //setFont( Res.fonts().controlFont( TEXT_SIZE_CONTROL ) );
                 setAlignmentX( LEFT_ALIGNMENT );
             }
 
@@ -432,7 +430,6 @@ public abstract class Components {
     public static JCheckBox checkBox(final String label) {
         return new JCheckBox( label ) {
             {
-                setFont( Res.fonts().controlFont( TEXT_SIZE_CONTROL ) );
                 setBackground( null );
                 setAlignmentX( LEFT_ALIGNMENT );
             }

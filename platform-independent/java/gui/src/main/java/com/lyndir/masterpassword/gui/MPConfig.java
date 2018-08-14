@@ -26,11 +26,11 @@ import com.lyndir.masterpassword.model.MPModelConstants;
  * @author lhunath, 2014-08-31
  */
 @SuppressWarnings("CallToSystemGetenv")
-public class Config {
+public class MPConfig {
 
-    private static final Config instance = new Config();
+    private static final MPConfig instance = new MPConfig();
 
-    public static Config get() {
+    public static MPConfig get() {
         return instance;
     }
 

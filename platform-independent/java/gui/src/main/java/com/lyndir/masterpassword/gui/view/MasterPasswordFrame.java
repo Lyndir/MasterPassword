@@ -19,25 +19,24 @@ public class MasterPasswordFrame extends JFrame {
 
     private static final Logger logger = Logger.get( MasterPasswordFrame.class );
 
-    @SuppressWarnings("FieldCanBeLocal")
-    private final Components.GradientPanel root        = Components.borderPanel( Res.colors().frameBg(), BoxLayout.PAGE_AXIS );
-    private final UserContentPanel         userContent = new UserContentPanel();
+    private final UserContentPanel         userContent;
 
     @SuppressWarnings("MagicNumber")
     public MasterPasswordFrame() {
         super( "Master Password" );
 
-        setContentPane( root );
+        JPanel root, userPanel;
+        setContentPane( root = Components.borderPanel( Res.colors().frameBg(), BoxLayout.PAGE_AXIS ) );
+
         root.add( new FilesPanel() );
         root.add( Components.strut() );
+        root.add( userPanel = Components.panel( new BorderLayout( 0, 0 ) ) );
 
-        JPanel userPanel = Components.panel( new BorderLayout( 0, 0 ) );
-        userPanel.add( userContent.getUserToolbar(), BorderLayout.LINE_START );
-        userPanel.add( userContent.getSiteToolbar(), BorderLayout.LINE_END );
         userPanel.add( Components.borderPanel(
                 BorderFactory.createBevelBorder( BevelBorder.RAISED, Res.colors().controlBorder(), Res.colors().frameBg() ),
-                Res.colors().controlBg(), BoxLayout.PAGE_AXIS, userContent ), BorderLayout.CENTER );
-        root.add( userPanel );
+                Res.colors().controlBg(), BoxLayout.PAGE_AXIS, userContent = new UserContentPanel() ), BorderLayout.CENTER );
+        userPanel.add( userContent.getUserToolbar(), BorderLayout.LINE_START );
+        userPanel.add( userContent.getSiteToolbar(), BorderLayout.LINE_END );
 
         addComponentListener( new ComponentHandler() );
         setPreferredSize( new Dimension( 800, 560 ) );

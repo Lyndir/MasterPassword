@@ -25,7 +25,6 @@ import com.google.common.io.Resources;
 import com.google.common.util.concurrent.*;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.masterpassword.MPIdenticon;
-import com.lyndir.masterpassword.gui.SwingExecutorService;
 import java.awt.*;
 import java.io.IOException;
 import java.lang.ref.SoftReference;

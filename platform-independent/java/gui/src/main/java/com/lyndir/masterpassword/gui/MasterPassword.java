@@ -24,8 +24,11 @@ import com.google.common.base.Charsets;
 import com.google.common.io.ByteSource;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.ObjectUtils;
-import com.lyndir.masterpassword.gui.util.Components;
+import com.lyndir.masterpassword.gui.util.*;
+import com.lyndir.masterpassword.gui.view.MasterPasswordFrame;
 import com.lyndir.masterpassword.model.MPUser;
+import com.tulskiy.keymaster.common.Provider;
+import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.*;
@@ -48,6 +51,7 @@ public final class MasterPassword {
     private static final MasterPassword instance = new MasterPassword();
 
     private final Collection<Listener> listeners = new CopyOnWriteArraySet<>();
+    private final MasterPasswordFrame frame = new MasterPasswordFrame();
 
     @Nullable
     private MPUser<?> activeUser;
@@ -76,6 +80,16 @@ public final class MasterPassword {
     @Nullable
     public String version() {
         return MasterPassword.class.getPackage().getImplementationVersion();
+    }
+
+    public void open() {
+        Res.ui( () -> {
+            frame.setAlwaysOnTop( true );
+            frame.setVisible( true );
+            frame.setExtendedState( Frame.NORMAL );
+            Platform.get().requestForeground();
+            frame.setAlwaysOnTop( false );
+        } );
     }
 
     public void checkUpdate() {
@@ -115,18 +129,22 @@ public final class MasterPassword {
         // Try and set the system look & feel, if available.
         try {
             UIManager.setLookAndFeel( UIManager.getSystemLookAndFeelClassName() );
+            Platform.get().installAppForegroundHandler( get()::open );
+            Platform.get().installAppReopenHandler( get()::open );
+            Provider.getCurrentProvider( true ).register( MPGuiConstants.ui_hotkey, hotKey -> get().open() );
         }
         catch (final UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException ignored) {
         }
 
         // Create a platform-specific GUI and open it.
-        new GUI().open();
+        get().open();
 
         // Check online to see if this version has been superseded.
-        if (Config.get().checkForUpdates())
+        if (MPConfig.get().checkForUpdates())
             get().checkUpdate();
     }
 
+    @SuppressWarnings("InterfaceMayBeAnnotatedFunctional")
     public interface Listener {
 
         void onUserSelected(@Nullable MPUser<?> user);

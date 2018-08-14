@@ -1,4 +1,4 @@
-package com.lyndir.masterpassword.gui;
+package com.lyndir.masterpassword.gui.util;
 
 import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 
@@ -29,9 +29,9 @@ public class SwingExecutorService extends AbstractExecutorService {
 
     @Override
     public void shutdown() {
-        shutdown = true;
-
         synchronized (pendingCommands) {
+            shutdown = true;
+
             if (pendingCommands.isEmpty())
                 terminated.add( true );
         }
@@ -49,7 +49,9 @@ public class SwingExecutorService extends AbstractExecutorService {
 
     @Override
     public boolean isShutdown() {
-        return shutdown;
+        synchronized (pendingCommands) {
+            return shutdown;
+        }
     }
 
     @Override
@@ -65,10 +67,10 @@ public class SwingExecutorService extends AbstractExecutorService {
 
     @Override
     public void execute(@NotNull final Runnable command) {
-        if (shutdown)
-            throw new RejectedExecutionException( "Executor is shut down." );
-
         synchronized (pendingCommands) {
+            if (shutdown)
+                throw new RejectedExecutionException( "Executor is shut down." );
+
             pendingCommands.add( command );
         }
 
