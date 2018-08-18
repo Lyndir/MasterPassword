@@ -114,9 +114,9 @@ public interface MPUser<S extends MPSite<?>> extends Comparable<MPUser<?>> {
     @Nonnull
     ImmutableCollection<S> findSites(@Nullable String query);
 
-    boolean addListener(Listener listener);
+    void addListener(Listener listener);
 
-    boolean removeListener(Listener listener);
+    void removeListener(Listener listener);
 
     interface Listener {
 

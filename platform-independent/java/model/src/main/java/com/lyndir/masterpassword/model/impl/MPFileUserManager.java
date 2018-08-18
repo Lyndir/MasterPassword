@@ -66,6 +66,7 @@ public class MPFileUserManager {
 
     protected MPFileUserManager(final File path) {
         this.path = path;
+        reload();
     }
 
     public void reload() {
@@ -128,12 +129,13 @@ public class MPFileUserManager {
         return ImmutableSortedSet.copyOf( userByName.values() );
     }
 
-    public boolean addListener(final Listener listener) {
-        return listeners.add( listener );
+    public void addListener(final Listener listener) {
+        if (listeners.add( listener ))
+            listener.onFilesUpdated( getFiles() );
     }
 
-    public boolean removeListener(final Listener listener) {
-        return listeners.remove( listener );
+    public void removeListener(final Listener listener) {
+        listeners.remove( listener );
     }
 
     private void fireUpdated() {
@@ -141,7 +143,6 @@ public class MPFileUserManager {
             return;
 
         ImmutableSortedSet<MPFileUser> files = getFiles();
-
         for (final Listener listener : listeners)
             listener.onFilesUpdated( files );
     }

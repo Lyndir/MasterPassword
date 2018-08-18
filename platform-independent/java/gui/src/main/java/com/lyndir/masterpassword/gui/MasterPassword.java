@@ -51,21 +51,23 @@ public final class MasterPassword {
     private static final MasterPassword instance = new MasterPassword();
 
     private final Collection<Listener> listeners = new CopyOnWriteArraySet<>();
-    private final MasterPasswordFrame frame = new MasterPasswordFrame();
 
     @Nullable
-    private MPUser<?> activeUser;
+    private MasterPasswordFrame frame;
+    @Nullable
+    private MPUser<?>           activeUser;
 
     public static MasterPassword get() {
         return instance;
     }
 
-    public boolean addListener(final Listener listener) {
-        return listeners.add( listener );
+    public void addListener(final Listener listener) {
+        if (listeners.add( listener ))
+            listener.onUserSelected( activeUser );
     }
 
-    public boolean removeListener(final Listener listener) {
-        return listeners.remove( listener );
+    public void removeListener(final Listener listener) {
+        listeners.remove( listener );
     }
 
     public void activateUser(final MPUser<?> user) {
@@ -84,6 +86,9 @@ public final class MasterPassword {
 
     public void open() {
         Res.ui( () -> {
+            if (frame == null)
+                frame = new MasterPasswordFrame();
+
             frame.setAlwaysOnTop( true );
             frame.setVisible( true );
             frame.setExtendedState( Frame.NORMAL );

@@ -211,13 +211,13 @@ public abstract class MPBasicUser<S extends MPBasicSite<?, ?>> extends Changeabl
     }
 
     @Override
-    public boolean addListener(final Listener listener) {
-        return listeners.add( listener );
+    public void addListener(final Listener listener) {
+        listeners.add( listener );
     }
 
     @Override
-    public boolean removeListener(final Listener listener) {
-        return listeners.remove( listener );
+    public void removeListener(final Listener listener) {
+        listeners.remove( listener );
     }
 
     @Override
