@@ -93,7 +93,7 @@ public class MPFileSite extends MPBasicSite<MPFileUser, MPFileQuestion> {
         setChanged();
     }
 
-    @Nonnull
+    @Nullable
     @Override
     public String getResult(final MPKeyPurpose keyPurpose, @Nullable final String keyContext)
             throws MPKeyUnavailableException, MPAlgorithmException {

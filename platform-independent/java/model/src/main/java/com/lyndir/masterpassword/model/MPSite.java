@@ -58,30 +58,29 @@ public interface MPSite<Q extends MPQuestion> extends Comparable<MPSite<?>> {
 
     void setLoginType(@Nullable MPResultType loginType);
 
-    @Nonnull
+    @Nullable
     default String getResult()
             throws MPKeyUnavailableException, MPAlgorithmException {
-
         return getResult( MPKeyPurpose.Authentication );
     }
 
-    @Nonnull
+    @Nullable
     default String getResult(final MPKeyPurpose keyPurpose)
             throws MPKeyUnavailableException, MPAlgorithmException {
         return getResult( keyPurpose, null );
     }
 
-    @Nonnull
+    @Nullable
     default String getResult(final MPKeyPurpose keyPurpose, @Nullable final String keyContext)
             throws MPKeyUnavailableException, MPAlgorithmException {
         return getResult( keyPurpose, keyContext, null );
     }
 
-    @Nonnull
+    @Nullable
     String getResult(MPKeyPurpose keyPurpose, @Nullable String keyContext, @Nullable String state)
             throws MPKeyUnavailableException, MPAlgorithmException;
 
-    @Nonnull
+    @Nullable
     String getResult(MPKeyPurpose keyPurpose, @Nullable String keyContext,
                      @Nullable UnsignedInteger counter, MPResultType type, @Nullable String state)
             throws MPKeyUnavailableException, MPAlgorithmException;

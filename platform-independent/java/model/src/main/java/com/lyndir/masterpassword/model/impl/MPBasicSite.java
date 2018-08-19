@@ -129,7 +129,7 @@ public abstract class MPBasicSite<U extends MPUser<?>, Q extends MPQuestion> ext
         setChanged();
     }
 
-    @Nonnull
+    @Nullable
     @Override
     public String getResult(final MPKeyPurpose keyPurpose, @Nullable final String keyContext, @Nullable final String state)
             throws MPKeyUnavailableException, MPAlgorithmException {
@@ -137,7 +137,7 @@ public abstract class MPBasicSite<U extends MPUser<?>, Q extends MPQuestion> ext
         return getResult( keyPurpose, keyContext, getCounter(), getResultType(), state );
     }
 
-    @Nonnull
+    @Nullable
     @Override
     public String getResult(final MPKeyPurpose keyPurpose, @Nullable final String keyContext,
                             @Nullable final UnsignedInteger counter, final MPResultType type, @Nullable final String state)

@@ -66,6 +66,7 @@ public class MPMasterKey {
      *
      * @throws MPKeyUnavailableException {@link #invalidate()} has been called on this object.
      */
+    @Nonnull
     public byte[] getKeyID(final MPAlgorithm algorithm)
             throws MPKeyUnavailableException, MPAlgorithmException {
 
@@ -87,6 +88,7 @@ public class MPMasterKey {
         return !invalidated;
     }
 
+    @Nonnull
     private byte[] masterKey(final MPAlgorithm algorithm)
             throws MPKeyUnavailableException, MPAlgorithmException {
         Preconditions.checkArgument( masterPassword.length > 0 );
@@ -109,6 +111,7 @@ public class MPMasterKey {
         return masterKey;
     }
 
+    @Nonnull
     private byte[] siteKey(final String siteName, final MPAlgorithm algorithm, final UnsignedInteger siteCounter,
                            final MPKeyPurpose keyPurpose, @Nullable final String keyContext)
             throws MPKeyUnavailableException, MPAlgorithmException {
@@ -141,12 +144,18 @@ public class MPMasterKey {
      *                    In the case of {@link MPResultTypeClass#Stateful} types, the result of
      *                    {@link #siteState(String, MPAlgorithm, UnsignedInteger, MPKeyPurpose, String, MPResultType, String)}.
      *
+     * @return {@code null} if the result type is missing a required parameter.
+     *
      * @throws MPKeyUnavailableException {@link #invalidate()} has been called on this object.
      */
+    @Nullable
     public String siteResult(final String siteName, final MPAlgorithm algorithm, final UnsignedInteger siteCounter,
                              final MPKeyPurpose keyPurpose, @Nullable final String keyContext,
                              final MPResultType resultType, @Nullable final String resultParam)
             throws MPKeyUnavailableException, MPAlgorithmException {
+
+        if ((resultType.getTypeClass() == MPResultTypeClass.Stateful) && (resultParam == null))
+            return null;
 
         byte[] masterKey = masterKey( algorithm );
         byte[] siteKey   = siteKey( siteName, algorithm, siteCounter, keyPurpose, keyContext );
@@ -176,6 +185,7 @@ public class MPMasterKey {
      *
      * @throws MPKeyUnavailableException {@link #invalidate()} has been called on this object.
      */
+    @Nonnull
     public String siteState(final String siteName, final MPAlgorithm algorithm, final UnsignedInteger siteCounter,
                             final MPKeyPurpose keyPurpose, @Nullable final String keyContext,
                             final MPResultType resultType, final String resultParam)

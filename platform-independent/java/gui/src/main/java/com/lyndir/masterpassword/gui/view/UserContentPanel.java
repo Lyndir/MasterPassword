@@ -470,6 +470,8 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
                                                                    "Show site settings." );
         private final JButton questionsButton = Components.button( Res.icons().question(), event -> showSiteQuestions(),
                                                                    "Show site recovery questions." );
+        private final JButton editButton      = Components.button( Res.icons().edit(), event -> showEditSite(),
+                                                                   "Set/save personal password/login." );
         private final JButton deleteButton    = Components.button( Res.icons().delete(), event -> deleteSite(),
                                                                    "Delete the site from the user." );
 
@@ -499,6 +501,7 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
 
             siteToolbar.add( settingsButton );
             siteToolbar.add( questionsButton );
+            siteToolbar.add( editButton );
             siteToolbar.add( deleteButton );
             settingsButton.setEnabled( false );
             questionsButton.setEnabled( false );
@@ -587,12 +590,14 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
                             Components.strut() );
 
             components.add( Components.label( "Password Type:" ),
-                            Components.comboBox( MPResultType.values(), MPResultType::getLongName,
+                            Components.comboBox( MPResultType.values(), type -> getTypeDescription(
+                                    type, user.getDefaultType(), user.getAlgorithm().mpw_default_result_type() ),
                                                  site.getResultType(), site::setResultType ),
                             Components.strut() );
 
             components.add( Components.label( "Login Type:" ),
-                            Components.comboBox( MPResultType.values(), MPResultType::getLongName,
+                            Components.comboBox( MPResultType.values(), type -> getTypeDescription(
+                                    type, user.getAlgorithm().mpw_default_login_type() ),
                                                  site.getLoginType(), site::setLoginType ),
                             Components.strut() );
 
@@ -604,6 +609,15 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
 
             Components.showDialog( this, strf( "Settings for %s", site.getSiteName() ), new JOptionPane( Components.panel(
                     BoxLayout.PAGE_AXIS, components.build().toArray( new Component[0] ) ) ) );
+        }
+
+        private String getTypeDescription(final MPResultType type, final MPResultType... defaults) {
+            boolean isDefault = false;
+            for (final MPResultType d : defaults)
+                if (isDefault = type == d)
+                    break;
+
+            return strf( "<html>%s%s%s, %s", isDefault? "<b>": "", type.getLongName(), isDefault? "</b>": "", type.getDescription() );
         }
 
         public void showSiteQuestions() {
@@ -649,6 +663,51 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
                     queryField.requestFocusInWindow();
                 }
             } );
+        }
+
+        public void showEditSite() {
+            MPSite<?> site = sitesModel.getSelectedItem();
+            if (site == null)
+                return;
+
+            try {
+                JTextField passwordField = Components.textField( site.getResult(), null );
+                JTextField loginField    = Components.textField( site.getLogin(), null );
+                passwordField.setEditable( site.getResultType().getTypeClass() == MPResultTypeClass.Stateful );
+                loginField.setEditable( site.getLoginType().getTypeClass() == MPResultTypeClass.Stateful );
+
+                if (JOptionPane.OK_OPTION == Components.showDialog( this, site.getSiteName(), new JOptionPane(
+                        Components.panel(
+                                BoxLayout.PAGE_AXIS,
+                                Components.label( strf( "<html>Site Login (currently set to: <b>%s</b>):",
+                                                        getTypeDescription( site.getLoginType() ) ) ),
+                                loginField,
+                                Components.strut(),
+                                Components.label( strf( "<html>Site Password (currently set to: <b>%s</b>):",
+                                                        getTypeDescription( site.getResultType() ) ) ),
+                                passwordField,
+                                Components.strut(),
+                                Components.label( "<html>To save a personal value in these fields,\n" +
+                                                  "change the type to <b>Saved</b> in the site's settings." ) ),
+                        JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION ) {
+                    @Override
+                    public void selectInitialValue() {
+                        passwordField.requestFocusInWindow();
+                    }
+                } )) {
+                    if (site instanceof MPFileSite) {
+                        MPFileSite fileSite = (MPFileSite) site;
+
+                        if (site.getResultType().getTypeClass() == MPResultTypeClass.Stateful)
+                            fileSite.setSitePassword( site.getResultType(), passwordField.getText() );
+                        if (site.getLoginType().getTypeClass() == MPResultTypeClass.Stateful)
+                            fileSite.setLoginName( site.getLoginType(), loginField.getText() );
+                    }
+                }
+            }
+            catch (final MPKeyUnavailableException | MPAlgorithmException e) {
+                logger.err( e, "While computing site edit results." );
+            }
         }
 
         public void deleteSite() {
