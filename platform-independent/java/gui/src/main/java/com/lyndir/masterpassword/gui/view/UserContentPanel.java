@@ -34,6 +34,7 @@ import javax.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.PlainDocument;
 
 
 /**
@@ -470,8 +471,10 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
                                                                    "Show site settings." );
         private final JButton questionsButton = Components.button( Res.icons().question(), event -> showSiteQuestions(),
                                                                    "Show site recovery questions." );
-        private final JButton editButton      = Components.button( Res.icons().edit(), event -> showEditSite(),
+        private final JButton editButton      = Components.button( Res.icons().edit(), event -> showSiteValues(),
                                                                    "Set/save personal password/login." );
+        private final JButton keyButton       = Components.button( Res.icons().key(), event -> showSiteKeys(),
+                                                                   "Cryptographic site keys." );
         private final JButton deleteButton    = Components.button( Res.icons().delete(), event -> deleteSite(),
                                                                    "Delete the site from the user." );
 
@@ -502,9 +505,12 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
             siteToolbar.add( settingsButton );
             siteToolbar.add( questionsButton );
             siteToolbar.add( editButton );
+            siteToolbar.add( keyButton );
             siteToolbar.add( deleteButton );
             settingsButton.setEnabled( false );
             questionsButton.setEnabled( false );
+            editButton.setEnabled( false );
+            keyButton.setEnabled( false );
             deleteButton.setEnabled( false );
 
             answerLabel = Components.label( "Answer:" );
@@ -665,7 +671,7 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
             } );
         }
 
-        public void showEditSite() {
+        public void showSiteValues() {
             MPSite<?> site = sitesModel.getSelectedItem();
             if (site == null)
                 return;
@@ -708,6 +714,76 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
             catch (final MPKeyUnavailableException | MPAlgorithmException e) {
                 logger.err( e, "While computing site edit results." );
             }
+        }
+
+        public void showSiteKeys() {
+            MPSite<?> site = sitesModel.getSelectedItem();
+            if (site == null)
+                return;
+
+            JTextArea resultField = Components.textArea();
+            resultField.setEnabled( false );
+
+            CollectionListModel<MPKeyPurpose> purposeModel = new CollectionListModel<>( MPKeyPurpose.values() );
+            DocumentModel                     contextModel = new DocumentModel( new PlainDocument() );
+            UnsignedIntegerModel              counterModel = new UnsignedIntegerModel( UnsignedInteger.ONE );
+            CollectionListModel<MPResultType> typeModel    = new CollectionListModel<>( MPResultType.values() );
+            DocumentModel                     stateModel   = new DocumentModel( new PlainDocument() );
+
+            Runnable trigger = () -> Res.job( () -> {
+                try {
+                    MPKeyPurpose purpose = purposeModel.getSelectedItem();
+                    MPResultType type    = typeModel.getSelectedItem();
+
+                    String result = ((purpose == null) || (type == null))? null:
+                            site.getResult( purpose, contextModel.getText(), counterModel.getNumber(), type, stateModel.getText() );
+
+                    Res.ui( () -> resultField.setText( result ) );
+                }
+                catch (final MPKeyUnavailableException | MPAlgorithmException e) {
+                    logger.err( e, "While computing site edit results." );
+                }
+            } );
+
+            purposeModel.selection( MPKeyPurpose.Authentication, p -> trigger.run() );
+            contextModel.selection( c -> trigger.run() );
+            counterModel.selection( c -> trigger.run() );
+            typeModel.selection( MPResultType.DeriveKey, t -> {
+                switch (t) {
+                    case DeriveKey:
+                        stateModel.setText( Integer.toString( site.getAlgorithm().mpw_keySize_min() ) );
+                        break;
+
+                    default:
+                        stateModel.setText( null );
+                }
+
+                trigger.run();
+            } );
+            stateModel.selection( c -> trigger.run() );
+
+            if (JOptionPane.OK_OPTION == Components.showDialog( this, site.getSiteName(), new JOptionPane( Components.panel(
+                    BoxLayout.PAGE_AXIS,
+                    Components.heading( "Key Calculator" ),
+                    Components.label( "Purpose:" ),
+                    Components.comboBox( purposeModel, MPKeyPurpose::getShortName ),
+                    Components.strut(),
+                    Components.label( "Context:" ),
+                    Components.textField( contextModel.getDocument() ),
+                    Components.label( "Counter:" ),
+                    Components.spinner( counterModel ),
+                    Components.label( "Type:" ),
+                    Components.comboBox( typeModel, this::getTypeDescription ),
+                    Components.label( "State:" ),
+                    Components.scrollPane( Components.textField( stateModel.getDocument() ) ),
+                    Components.strut(),
+                    resultField ) ) {
+                {
+                    setOptions( new Object[]{ "Copy", "Cancel" } );
+                    setInitialValue( getOptions()[0] );
+                }
+            } ))
+                copyResult( resultField.getText() );
         }
 
         public void deleteSite() {
@@ -790,6 +866,8 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
                 passwordField.setText( (result != null)? result: " " );
                 settingsButton.setEnabled( result != null );
                 questionsButton.setEnabled( result != null );
+                editButton.setEnabled( result != null );
+                keyButton.setEnabled( result != null );
                 deleteButton.setEnabled( result != null );
             } ) ) );
         }

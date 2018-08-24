@@ -20,7 +20,6 @@ package com.lyndir.masterpassword.gui.util;
 
 import com.google.common.base.Strings;
 import com.lyndir.lhunath.opal.system.logging.Logger;
-import com.lyndir.masterpassword.util.Utilities;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,8 +33,8 @@ import javax.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
-import javax.swing.event.*;
-import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.text.*;
 import org.jetbrains.annotations.NonNls;
 
 
@@ -114,8 +113,13 @@ public abstract class Components {
         if (options == null)
             return (selectedValue instanceof Integer)? (Integer) selectedValue: JOptionPane.CLOSED_OPTION;
 
-        int option = Arrays.binarySearch( options, selectedValue );
-        return (option < 0)? JOptionPane.CLOSED_OPTION: option;
+        try {
+            int option = Arrays.binarySearch( options, selectedValue );
+            return (option < 0)? JOptionPane.CLOSED_OPTION: option;
+        }
+        catch (final ClassCastException ignored) {
+            return JOptionPane.CLOSED_OPTION;
+        }
     }
 
     @Nullable
@@ -164,7 +168,11 @@ public abstract class Components {
     }
 
     public static JTextField textField() {
-        return new JTextField() {
+        return textField( null );
+    }
+
+    public static JTextField textField(@Nullable final Document document) {
+        return new JTextField( document, null, 0 ) {
             {
                 setBorder( BorderFactory.createCompoundBorder( BorderFactory.createLineBorder( Res.colors().controlBorder(), 1, true ),
                                                                BorderFactory.createEmptyBorder( 4, 4, 4, 4 ) ) );
@@ -174,43 +182,30 @@ public abstract class Components {
 
             @Override
             public Dimension getMaximumSize() {
-                return new Dimension( Integer.MAX_VALUE, getPreferredSize().height );
+                return new Dimension( Integer.MAX_VALUE, Integer.MAX_VALUE );
             }
         };
     }
 
     public static JTextField textField(@Nullable final String text, @Nullable final Consumer<String> change) {
-        return new JTextField( text ) {
+        return textField( new DocumentModel( new PlainDocument() ).selection( text, change ).getDocument() );
+    }
+
+    public static JTextArea textArea() {
+        return new JTextArea() {
             {
                 setBorder( BorderFactory.createCompoundBorder( BorderFactory.createLineBorder( Res.colors().controlBorder(), 1, true ),
                                                                BorderFactory.createEmptyBorder( 4, 4, 4, 4 ) ) );
                 setFont( Res.fonts().valueFont( TEXT_SIZE_CONTROL ) );
                 setAlignmentX( LEFT_ALIGNMENT );
 
-                if (change != null) {
-                    getDocument().addDocumentListener( new DocumentListener() {
-                        @Override
-                        public void insertUpdate(final DocumentEvent e) {
-                            change.accept( getText() );
-                        }
-
-                        @Override
-                        public void removeUpdate(final DocumentEvent e) {
-                            change.accept( getText() );
-                        }
-
-                        @Override
-                        public void changedUpdate(final DocumentEvent e) {
-                            change.accept( getText() );
-                        }
-                    } );
-                    change.accept( getText() );
-                }
+                setLineWrap( true );
+                setRows( 3 );
             }
 
             @Override
             public Dimension getMaximumSize() {
-                return new Dimension( Integer.MAX_VALUE, getPreferredSize().height );
+                return new Dimension( Integer.MAX_VALUE, Integer.MAX_VALUE );
             }
         };
     }
@@ -443,17 +438,17 @@ public abstract class Components {
 
     public static <E> JComboBox<E> comboBox(final E[] values, final Function<E, String> valueTransformer,
                                             @Nullable final E selectedItem, @Nullable final Consumer<E> selectionConsumer) {
-        return comboBox( CollectionListModel.copy( values ).selection( selectedItem, selectionConsumer ), valueTransformer );
+        return comboBox( new CollectionListModel<>( values ).selection( selectedItem, selectionConsumer ), valueTransformer );
     }
 
     public static <E> JComboBox<E> comboBox(final Collection<E> values, final Function<E, String> valueTransformer,
                                             @Nullable final Consumer<E> selectionConsumer) {
-        return comboBox( CollectionListModel.copy( values ).selection( selectionConsumer ), valueTransformer );
+        return comboBox( new CollectionListModel<>( values ).selection( selectionConsumer ), valueTransformer );
     }
 
     public static <E> JComboBox<E> comboBox(final Collection<E> values, final Function<E, String> valueTransformer,
                                             @Nullable final E selectedItem, @Nullable final Consumer<E> selectionConsumer) {
-        return comboBox( CollectionListModel.copy( values ).selection( selectedItem, selectionConsumer ), valueTransformer );
+        return comboBox( new CollectionListModel<>( values ).selection( selectedItem, selectionConsumer ), valueTransformer );
     }
 
     public static <E> JComboBox<E> comboBox(final ComboBoxModel<E> model, final Function<E, String> valueTransformer) {

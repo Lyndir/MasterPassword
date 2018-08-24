@@ -23,7 +23,7 @@ public class FilesPanel extends JPanel implements MPFileUserManager.Listener, Ma
                                                             "Click to change the user's avatar." );
 
     private final CollectionListModel<MPUser<?>> usersModel =
-            CollectionListModel.<MPUser<?>>copy( MPFileUserManager.get().getFiles() ).selection( MasterPassword.get()::activateUser );
+            new CollectionListModel<MPUser<?>>( MPFileUserManager.get().getFiles() ).selection( MasterPassword.get()::activateUser );
 
     protected FilesPanel() {
         setOpaque( false );

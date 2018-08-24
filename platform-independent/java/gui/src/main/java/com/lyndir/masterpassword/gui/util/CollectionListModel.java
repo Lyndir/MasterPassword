@@ -1,6 +1,5 @@
 package com.lyndir.masterpassword.gui.util;
 
-import com.google.common.collect.ImmutableList;
 import java.util.*;
 import java.util.function.Consumer;
 import javax.annotation.Nullable;
@@ -18,25 +17,21 @@ public class CollectionListModel<E> extends AbstractListModel<E>
 
     private final List<E>     model = new LinkedList<>();
     @Nullable
-    private       E           selectedItem;
     private       JList<E>    list;
+    @Nullable
+    private       E           selectedItem;
     @Nullable
     private       Consumer<E> selectionConsumer;
 
     @SafeVarargs
-    public static <E> CollectionListModel<E> copy(final E... elements) {
-        return copy( Arrays.asList( elements ) );
+    public CollectionListModel(final E... elements) {
+        this( Arrays.asList( elements ) );
     }
 
-    public static <E> CollectionListModel<E> copy(final Collection<? extends E> elements) {
-        CollectionListModel<E> model = new CollectionListModel<>();
-        synchronized (model) {
-            model.model.addAll( elements );
-            model.selectedItem = model.getElementAt( 0 );
-            model.fireIntervalAdded( model, 0, model.model.size() );
-
-            return model;
-        }
+    public CollectionListModel(final Collection<? extends E> elements) {
+        model.addAll( elements );
+        selectedItem = getElementAt( 0 );
+        fireIntervalAdded( this, 0, model.size() );
     }
 
     @Override
@@ -44,8 +39,8 @@ public class CollectionListModel<E> extends AbstractListModel<E>
         return model.size();
     }
 
-    @Override
     @Nullable
+    @Override
     public synchronized E getElementAt(final int index) {
         return (index < model.size())? model.get( index ): null;
     }
@@ -107,6 +102,11 @@ public class CollectionListModel<E> extends AbstractListModel<E>
     @Override
     public synchronized E getSelectedItem() {
         return selectedItem;
+    }
+
+    public CollectionListModel<E> select(final E selectedItem) {
+        setSelectedItem( selectedItem );
+        return this;
     }
 
     public synchronized void registerList(final JList<E> list) {

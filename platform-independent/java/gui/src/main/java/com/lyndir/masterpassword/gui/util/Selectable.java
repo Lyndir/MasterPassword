@@ -11,5 +11,5 @@ public interface Selectable<E, T> {
 
     T selection(@Nullable Consumer<E> selectionConsumer);
 
-    T selection(E selectedItem, @Nullable Consumer<E> selectionConsumer);
+    T selection(@Nullable E selectedItem, @Nullable Consumer<E> selectionConsumer);
 }

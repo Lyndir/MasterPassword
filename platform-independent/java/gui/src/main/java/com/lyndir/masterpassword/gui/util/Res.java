@@ -164,6 +164,10 @@ public abstract class Res {
             return icon( "media/icon_edit.png" );
         }
 
+        public Icon key() {
+            return icon( "media/icon_key.png" );
+        }
+
         public Icon avatar(final int index) {
             return icon( strf( "media/avatar-%d.png", index % avatars() ) );
         }

@@ -109,13 +109,14 @@ public class UnsignedIntegerModel extends SpinnerNumberModel implements Selectab
     }
 
     @Override
-    public UnsignedIntegerModel selection(final UnsignedInteger selectedItem, @Nullable final Consumer<UnsignedInteger> selectionConsumer) {
+    public UnsignedIntegerModel selection(@Nullable final UnsignedInteger selectedItem,
+                                          @Nullable final Consumer<UnsignedInteger> selectionConsumer) {
         if (changeListener != null) {
             removeChangeListener( changeListener );
             changeListener = null;
         }
 
-        setValue( selectedItem );
+        setValue( (selectedItem != null)? selectedItem: getMinimum() );
         return selection( selectionConsumer );
     }
 
