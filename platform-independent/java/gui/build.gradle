@@ -24,8 +24,6 @@ shadowJar {
         attributes 'Implementation-Version': version
     }
     doLast {
-        println("doLast: ${System.env.KEY_PW_DESKTOP}");
-        println("doLast: "+System.getenv( 'KEY_PW_DESKTOP' ));
         if (System.getenv( 'KEY_PW_DESKTOP' ) != null)
             ant.signjar( jar: archivePath,
                          alias: 'masterpassword-desktop',

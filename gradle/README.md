@@ -2,11 +2,11 @@ To build a release distribution:
 
 Desktop:
 
-    STORE_PW=$(mpw masterpassword.keystore) KEY_PW_DESKTOP=$(mpw masterpassword-desktop) gradle clean masterpassword-gui:shadowJar
+    STORE_PW=$(mpw masterpassword.keystore) KEY_PW_DESKTOP=$(mpw masterpassword-desktop) gradle --no-daemon clean masterpassword-gui:shadowJar
 
 Android:
 
-    STORE_PW=$(mpw masterpassword.keystore) KEY_PW_ANDROID=$(mpw masterpassword-android) gradle clean masterpassword-android:assembleRelease
+    STORE_PW=$(mpw masterpassword.keystore) KEY_PW_ANDROID=$(mpw masterpassword-android) gradle --no-daemon clean masterpassword-android:assembleRelease
 
 
 Note:
