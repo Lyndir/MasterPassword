@@ -64,7 +64,7 @@ _initialize_needs() {
     if [[ $platform = windows ]]; then
         needs cmd
         export VSINSTALLDIR="${VSINSTALLDIR:-$(cd "$(cygpath -F 0x002a)/Microsoft Visual Studio"/*/*/Common7/.. && pwd)}"
-        [[ -e "$VSINSTALLDIR/Common7/Tools/VsMSBuildCmd.bat" ]] || { echo >&2 "Missing: msbuild.  Please install 'Build Tools for Visual Studio'."; return 1; }
+        [[ -e "$VSINSTALLDIR/Common7/Tools/VsMSBuildCmd.bat" ]] || { echo >&2 "Missing: msbuild.  Please install 'Build Tools for Visual Studio'.  See https://visualstudio.microsoft.com/downloads/?q=build+tools"; return 1; }
     else
         needs libtool:libtoolize,glibtoolize automake autoconf make
     fi
@@ -202,7 +202,7 @@ _target_build() {
 
     if [[ $platform = windows ]]; then
         # I cannot for the life of me figure out how to pass this command directly into cmd.
-        printf '"%%VSINSTALLDIR%%\Common7\Tools\VsMSBuildCmd.bat" && msbuild /t:Rebuild /p:Configuration=ReleaseDLL;Platform=%s;OutDir=%s' "$arch" "$(cygpath -w "${prefix##$PWD/}/$arch/")" > .build.bat
+        printf '"%%VSINSTALLDIR%%\Common7\Tools\VsMSBuildCmd.bat" && msbuild /t:Rebuild /p:Configuration=Release;Platform=%s;OutDir=%s' "$arch" "$(cygpath -w "${prefix##$PWD/}/$arch/")" > .build.bat
         cmd //c .build.bat
         rm -f .build.bat
     else
@@ -278,7 +278,10 @@ _finalize_merge() {
 # By default, this will run `make clean`.
 finalize_clean() { _finalize_clean "$@"; }
 _finalize_clean() {
-    [[ ! -e Makefile ]] || make -s clean
+    if [[ $platform = windows ]]; then :
+    else
+        [[ ! -e Makefile ]] || make -s clean
+    fi
 }
 
 # build <name> [<platform>]
