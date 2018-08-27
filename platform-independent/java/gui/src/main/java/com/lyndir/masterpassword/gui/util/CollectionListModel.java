@@ -1,5 +1,10 @@
 package com.lyndir.masterpassword.gui.util;
 
+import com.google.common.base.Predicates;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
+import com.lyndir.lhunath.opal.system.logging.Logger;
+import com.lyndir.lhunath.opal.system.util.ObjectUtils;
 import java.util.*;
 import java.util.function.Consumer;
 import javax.annotation.Nullable;
@@ -14,6 +19,8 @@ import javax.swing.event.ListSelectionListener;
 @SuppressWarnings("serial")
 public class CollectionListModel<E> extends AbstractListModel<E>
         implements ComboBoxModel<E>, ListSelectionListener, Selectable<E, CollectionListModel<E>> {
+
+    private static final Logger logger = Logger.get( CollectionListModel.class );
 
     private final List<E>     model = new LinkedList<>();
     @Nullable
@@ -51,16 +58,11 @@ public class CollectionListModel<E> extends AbstractListModel<E>
      * This operation will mutate the internal model to reflect the given model.
      * The given model will remain untouched and independent from this object.
      */
-    @SuppressWarnings({ "unchecked", "SuspiciousToArrayCall" })
-    public synchronized void set(final Collection<? extends E> elements) {
-        set( (E[]) elements.toArray( new Object[0] ) );
-    }
-
-    @SuppressWarnings("AssignmentToForLoopParameter")
-    public synchronized void set(final E... elements) {
+    @SuppressWarnings({ "Guava", "AssignmentToForLoopParameter" })
+    public synchronized void set(final Iterable<? extends E> elements) {
         ListIterator<E> oldIt = model.listIterator();
         for (int from = 0; oldIt.hasNext(); ++from) {
-            int to = Arrays.binarySearch( elements, oldIt.next() );
+            int to   = Iterables.indexOf( elements, Predicates.equalTo( oldIt.next() ) );
 
             if (to != from) {
                 oldIt.remove();
@@ -69,17 +71,23 @@ public class CollectionListModel<E> extends AbstractListModel<E>
             }
         }
 
-        for (int to = 0; to < elements.length; ++to) {
-            E newSite = elements[to];
-
+        int to = 0;
+        for (final E newSite : elements) {
             if ((to >= model.size()) || !Objects.equals( model.get( to ), newSite )) {
                 model.add( to, newSite );
                 fireIntervalAdded( this, to, to );
             }
+
+            ++to;
         }
 
         if ((selectedItem == null) || !model.contains( selectedItem ))
             setSelectedItem( getElementAt( 0 ) );
+    }
+
+    @SafeVarargs
+    public final synchronized void set(final E... elements) {
+        set( ImmutableList.copyOf( elements ) );
     }
 
     @Override
