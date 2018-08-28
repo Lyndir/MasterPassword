@@ -31,7 +31,7 @@ shadowJar {
                          storepass: System.getenv( 'STORE_PW' ),
                          keypass: System.getenv( 'KEY_PW_DESKTOP' ),
                          preservelastmodified: 'true',
-                         destdir: '.' )
+                         signedJar: "${rootDir}/../public/site/${project.name}-${project.version}.jar" )
     }
 }
 
