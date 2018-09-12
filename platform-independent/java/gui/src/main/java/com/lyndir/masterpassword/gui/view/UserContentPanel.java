@@ -15,7 +15,6 @@ import com.lyndir.masterpassword.gui.util.*;
 import com.lyndir.masterpassword.gui.util.Platform;
 import com.lyndir.masterpassword.model.*;
 import com.lyndir.masterpassword.model.impl.*;
-import com.lyndir.masterpassword.util.Utilities;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
@@ -479,15 +478,16 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
                                                                    "Delete the site from the user." );
 
         @Nonnull
-        private final MPUser<?>                      user;
-        private final JLabel                         passwordLabel;
-        private final JLabel                         passwordField;
-        private final JLabel                         answerLabel;
-        private final JLabel                         answerField;
-        private final JLabel                         queryLabel;
-        private final JTextField                     queryField;
-        private final CollectionListModel<MPSite<?>> sitesModel;
-        private final JList<MPSite<?>>               sitesList;
+        private final MPUser<?>                                                 user;
+        private final JLabel                                                    passwordLabel;
+        private final JLabel                                                    passwordField;
+        private final JLabel                                                    answerLabel;
+        private final JLabel                                                    answerField;
+        private final JLabel                                                    queryLabel;
+        private final JTextField                                                queryField;
+        private final CollectionListModel<MPQuery.Result<? extends MPSite<?>>>  sitesModel;
+        private final CollectionListModel<MPQuery.Result<? extends MPQuestion>> questionsModel;
+        private final JList<MPQuery.Result<? extends MPSite<?>>>                sitesList;
 
         private Future<?> updateSitesJob;
 
@@ -517,6 +517,7 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
             answerField = Components.heading( SwingConstants.CENTER );
             answerField.setForeground( Res.colors().highlightFg() );
             answerField.setFont( Res.fonts().bigValueFont( SIZE_RESULT ) );
+            questionsModel = new CollectionListModel<MPQuery.Result<? extends MPQuestion>>().selection( this::showQuestionItem );
 
             add( Components.heading( user.getFullName(), SwingConstants.CENTER ) );
 
@@ -538,7 +539,7 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
             add( Components.strut() );
 
             add( Components.scrollPane( sitesList = Components.list(
-                    sitesModel = new CollectionListModel<MPSite<?>>().selection( this::showSiteResult ),
+                    sitesModel = new CollectionListModel<MPQuery.Result<? extends MPSite<?>>>().selection( this::showSiteItem ),
                     this::getSiteDescription ) ) );
             add( Components.strut() );
 
@@ -580,7 +581,7 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
         }
 
         public void showSiteSettings() {
-            MPSite<?> site = sitesModel.getSelectedItem();
+            MPSite<?> site = getSite();
             if (site == null)
                 return;
 
@@ -627,22 +628,22 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
         }
 
         public void showSiteQuestions() {
-            MPSite<?> site = sitesModel.getSelectedItem();
+            MPSite<?> site = getSite();
             if (site == null)
                 return;
 
-            CollectionListModel<MPQuestion> questionsModel = new CollectionListModel<MPQuestion>().selection( this::showQuestionResult );
-            JList<MPQuestion> questionsList = Components.list(
-                    questionsModel, question -> Strings.isNullOrEmpty( question.getKeyword() )? "<site>": question.getKeyword() );
-            JTextField queryField = Components.textField( null, query -> Res.job( () -> {
-                Collection<MPQuestion> questions = new LinkedList<>( site.findQuestions( query ) );
-                if (questions.stream().noneMatch( question -> question.getKeyword().equalsIgnoreCase( query ) ))
-                    questions.add( new MPNewQuestion( site, Utilities.ifNotNullElse( query, "" ) ) );
+            JList<MPQuery.Result<? extends MPQuestion>> questionsList =
+                    Components.list( questionsModel, this::getQuestionDescription );
+            JTextField queryField = Components.textField( null, queryText -> Res.job( () -> {
+                MPQuery                                          query         = new MPQuery( queryText );
+                Collection<MPQuery.Result<? extends MPQuestion>> questionItems = new LinkedList<>( site.findQuestions( query ) );
+                if (questionItems.stream().noneMatch( MPQuery.Result::isExact ))
+                    questionItems.add( MPQuery.Result.allOf( new MPNewQuestion( site, query.getQuery() ), query.getQuery() ) );
 
-                Res.ui( () -> questionsModel.set( questions ) );
+                Res.ui( () -> questionsModel.set( questionItems ) );
             } ) );
             queryField.putClientProperty( "JTextField.variant", "search" );
-            queryField.addActionListener( event -> useQuestion( questionsModel.getSelectedItem() ) );
+            queryField.addActionListener( this::useQuestion );
             queryField.addKeyListener( new KeyAdapter() {
                 @Override
                 public void keyPressed(final KeyEvent event) {
@@ -672,7 +673,7 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
         }
 
         public void showSiteValues() {
-            MPSite<?> site = sitesModel.getSelectedItem();
+            MPSite<?> site = getSite();
             if (site == null)
                 return;
 
@@ -717,7 +718,7 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
         }
 
         public void showSiteKeys() {
-            MPSite<?> site = sitesModel.getSelectedItem();
+            MPSite<?> site = getSite();
             if (site == null)
                 return;
 
@@ -787,7 +788,7 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
         }
 
         public void deleteSite() {
-            MPSite<?> site = sitesModel.getSelectedItem();
+            MPSite<?> site = getSite();
             if (site == null)
                 return;
 
@@ -797,55 +798,62 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
                 user.deleteSite( site );
         }
 
-        private String getSiteDescription(@Nonnull final MPSite<?> site) {
+        private String getSiteDescription(@Nullable final MPQuery.Result<? extends MPSite<?>> item) {
+            MPSite<?> site = (item != null)? item.getOption(): null;
+            if (site == null)
+                return " ";
             if (site instanceof MPNewSite)
-                return strf( "<html><strong>%s</strong> &lt;Add new site&gt;</html>", queryField.getText() );
+                return strf( "<html><strong>%s</strong> &lt;Add new site&gt;</html>", item.getKeyAsHTML() );
 
             ImmutableList.Builder<Object> parameters = ImmutableList.builder();
-            try {
-                MPFileSite fileSite = (site instanceof MPFileSite)? (MPFileSite) site: null;
-                if (fileSite != null)
-                    parameters.add( Res.format( fileSite.getLastUsed() ) );
-                parameters.add( site.getAlgorithm().version() );
-                parameters.add( strf( "#%d", site.getCounter().longValue() ) );
-                parameters.add( strf( "<em>%s</em>", site.getLogin() ) );
-                if ((fileSite != null) && (fileSite.getUrl() != null))
-                    parameters.add( fileSite.getUrl() );
-            }
-            catch (final MPAlgorithmException | MPKeyUnavailableException e) {
-                logger.err( e, "While generating site description." );
-                parameters.add( e.getLocalizedMessage() );
-            }
+            MPFileSite                    fileSite   = (site instanceof MPFileSite)? (MPFileSite) site: null;
+            if (fileSite != null)
+                parameters.add( Res.format( fileSite.getLastUsed() ) );
+            parameters.add( site.getAlgorithm().version() );
+            parameters.add( strf( "#%d", site.getCounter().longValue() ) );
+            if ((fileSite != null) && (fileSite.getUrl() != null))
+                parameters.add( fileSite.getUrl() );
 
-            return strf( "<html><strong>%s</strong> (%s)</html>", site.getSiteName(),
+            return strf( "<html><strong>%s</strong> (%s)</html>", item.getKeyAsHTML(),
                          Joiner.on( " - " ).skipNulls().join( parameters.build() ) );
         }
 
+        private String getQuestionDescription(@Nullable final MPQuery.Result<? extends MPQuestion> item) {
+            MPQuestion question = (item != null)? item.getOption(): null;
+            if (question == null)
+                return "<site>";
+            if (question instanceof MPNewQuestion)
+                return strf( "<html>%s &lt;Add new question&gt;</html>", item.getKeyAsHTML() );
+
+            return strf( "<html>%s</html>", item.getKeyAsHTML() );
+        }
+
         private void useSite(final ActionEvent event) {
-            MPSite<?> site = sitesModel.getSelectedItem();
+            MPSite<?> site = getSite();
             if (site instanceof MPNewSite) {
-                if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(
+                if (JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(
                         this, strf( "<html>Remember the site <strong>%s</strong>?</html>", site.getSiteName() ),
-                        "New Site", JOptionPane.YES_NO_OPTION )) {
-                    sitesModel.setSelectedItem( user.addSite( site.getSiteName() ) );
-                    useSite( event );
-                }
-                return;
+                        "New Site", JOptionPane.YES_NO_OPTION ))
+                    return;
+
+                site = user.addSite( site.getSiteName() );
             }
 
-            boolean loginResult = (copyLoginKeyStroke.getModifiers() & event.getModifiers()) != 0;
+            boolean   loginResult = (copyLoginKeyStroke.getModifiers() & event.getModifiers()) != 0;
+            MPSite<?> fsite       = site;
             showSiteResult( site, loginResult, result -> {
                 if (result == null)
                     return;
 
-                if (site instanceof MPFileSite)
-                    ((MPFileSite) site).use();
+                if (fsite instanceof MPFileSite)
+                    ((MPFileSite) fsite).use();
 
                 copyResult( result );
             } );
         }
 
-        private void showSiteResult(@Nullable final MPSite<?> site) {
+        private void showSiteItem(@Nullable final MPQuery.Result<? extends MPSite<?>> item) {
+            MPSite<?> site = (item != null)? item.getOption(): null;
             showSiteResult( site, false, result -> {
             } );
         }
@@ -862,8 +870,11 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
 
                 return null;
             }, resultCallback.andThen( result -> Res.ui( () -> {
-                passwordLabel.setText( ((result != null) && (site != null))? strf( "Your password for %s:", site.getSiteName() ): " " );
-                passwordField.setText( (result != null)? result: " " );
+                if (!loginResult && (site != null)) {
+                    passwordLabel.setText( (result != null)? strf( "Your password for %s:", site.getSiteName() ): " " );
+                    passwordField.setText( (result != null)? result: " " );
+                }
+
                 settingsButton.setEnabled( result != null );
                 questionsButton.setEnabled( result != null );
                 editButton.setEnabled( result != null );
@@ -872,30 +883,33 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
             } ) ) );
         }
 
-        private void useQuestion(@Nullable final MPQuestion question) {
+        private void useQuestion(final ActionEvent event) {
+            MPQuestion question = getQuestion();
             if (question instanceof MPNewQuestion) {
-                if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(
+                if (JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(
                         this,
                         strf( "<html>Remember the security question with keyword <strong>%s</strong>?</html>",
                               Strings.isNullOrEmpty( question.getKeyword() )? "<empty>": question.getKeyword() ),
-                        "New Question", JOptionPane.YES_NO_OPTION )) {
-                    useQuestion( question.getSite().addQuestion( question.getKeyword() ) );
-                }
-                return;
+                        "New Question", JOptionPane.YES_NO_OPTION ))
+                    return;
+
+                question = question.getSite().addQuestion( question.getKeyword() );
             }
 
+            MPQuestion fquestion = question;
             showQuestionResult( question, result -> {
                 if (result == null)
                     return;
 
-                if (question instanceof MPFileQuestion)
-                    ((MPFileQuestion) question).use();
+                if (fquestion instanceof MPFileQuestion)
+                    ((MPFileQuestion) fquestion).use();
 
                 copyResult( result );
             } );
         }
 
-        private void showQuestionResult(@Nullable final MPQuestion question) {
+        private void showQuestionItem(@Nullable final MPQuery.Result<? extends MPQuestion> item) {
+            MPQuestion question = (item != null)? item.getOption(): null;
             showQuestionResult( question, answer -> {
             } );
         }
@@ -939,6 +953,24 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
             } );
         }
 
+        @Nullable
+        private MPSite<?> getSite() {
+            MPQuery.Result<? extends MPSite<?>> selectedSite = sitesModel.getSelectedItem();
+            if (selectedSite == null)
+                return null;
+
+            return selectedSite.getOption();
+        }
+
+        @Nullable
+        private MPQuestion getQuestion() {
+            MPQuery.Result<? extends MPQuestion> selectedQuestion = questionsModel.getSelectedItem();
+            if (selectedQuestion == null)
+                return null;
+
+            return selectedQuestion.getOption();
+        }
+
         @Override
         public void keyTyped(final KeyEvent event) {
         }
@@ -955,25 +987,27 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
                 sitesList.dispatchEvent( event );
         }
 
-        private synchronized void updateSites(@Nullable final String query) {
+        private synchronized void updateSites(@Nullable final String queryText) {
             if (updateSitesJob != null)
                 updateSitesJob.cancel( true );
 
             updateSitesJob = Res.job( () -> {
-                Collection<MPSite<?>> sites = new LinkedList<>( user.findSites( query ) );
+                MPQuery query = new MPQuery( queryText );
+                Collection<MPQuery.Result<? extends MPSite<?>>> siteItems =
+                        new LinkedList<>( user.findSites( query ) );
 
-                if (!Strings.isNullOrEmpty( query ))
-                    if (sites.stream().noneMatch( site -> site.getSiteName().equalsIgnoreCase( query ) ))
-                        sites.add( new MPNewSite( user, query ) );
+                if (!Strings.isNullOrEmpty( queryText ))
+                    if (siteItems.stream().noneMatch( MPQuery.Result::isExact ))
+                        siteItems.add( MPQuery.Result.allOf( new MPNewSite( user, query.getQuery() ), query.getQuery() ) );
 
-                Res.ui( () -> sitesModel.set( sites ) );
+                Res.ui( () -> sitesModel.set( siteItems ) );
             } );
         }
 
         @Override
         public void onUserUpdated(final MPUser<?> user) {
             updateSites( queryField.getText() );
-            showSiteResult( sitesModel.getSelectedItem() );
+            showSiteItem( sitesModel.getSelectedItem() );
         }
 
         @Override

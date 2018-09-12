@@ -112,7 +112,7 @@ public interface MPUser<S extends MPSite<?>> extends Comparable<MPUser<?>> {
     Collection<S> getSites();
 
     @Nonnull
-    ImmutableCollection<S> findSites(@Nullable String query);
+    ImmutableCollection<MPQuery.Result<S>> findSites(MPQuery query);
 
     void addListener(Listener listener);
 

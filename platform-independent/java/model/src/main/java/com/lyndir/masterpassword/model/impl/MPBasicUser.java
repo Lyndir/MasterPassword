@@ -20,7 +20,6 @@ package com.lyndir.masterpassword.model.impl;
 
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
-import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableSortedSet;
 import com.lyndir.lhunath.opal.system.CodeUtils;
@@ -201,11 +200,10 @@ public abstract class MPBasicUser<S extends MPBasicSite<?, ?>> extends Changeabl
 
     @Nonnull
     @Override
-    public ImmutableCollection<S> findSites(@Nullable final String query) {
-        ImmutableSortedSet.Builder<S> results = ImmutableSortedSet.naturalOrder();
-        for (final S site : getSites())
-            if (Strings.isNullOrEmpty( query ) || site.getSiteName().startsWith( query ))
-                results.add( site );
+    public ImmutableCollection<MPQuery.Result<S>> findSites(final MPQuery query) {
+        ImmutableSortedSet.Builder<MPQuery.Result<S>> results = ImmutableSortedSet.naturalOrder();
+        for (final S site : sites.values())
+            query.find( site, MPSite::getSiteName ).ifPresent( results::add );
 
         return results.build();
     }

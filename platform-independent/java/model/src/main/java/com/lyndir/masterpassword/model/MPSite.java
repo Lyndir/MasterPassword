@@ -117,5 +117,5 @@ public interface MPSite<Q extends MPQuestion> extends Comparable<MPSite<?>> {
     Collection<Q> getQuestions();
 
     @Nonnull
-    ImmutableCollection<Q> findQuestions(@Nullable String query);
+    ImmutableCollection<MPQuery.Result<Q>> findQuestions(MPQuery query);
 }

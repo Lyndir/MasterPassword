@@ -27,6 +27,13 @@ public final class Utilities {
         return value;
     }
 
+    public static String ifNotNullOrEmptyElse(@Nullable final String value, @Nonnull final String emptyValue) {
+        if ((value == null) || value.isEmpty())
+            return emptyValue;
+
+        return value;
+    }
+
     @Nonnull
     public static <T, R> R ifNotNullElse(@Nullable final T value, final Function<T, R> consumer, @Nonnull final R nullValue) {
         if (value == null)

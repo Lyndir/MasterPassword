@@ -1,10 +1,11 @@
 package com.lyndir.masterpassword.gui.util;
 
+import static com.google.common.base.Preconditions.*;
+
 import com.google.common.base.Predicates;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.lyndir.lhunath.opal.system.logging.Logger;
-import com.lyndir.lhunath.opal.system.util.ObjectUtils;
 import java.util.*;
 import java.util.function.Consumer;
 import javax.annotation.Nullable;
@@ -62,7 +63,7 @@ public class CollectionListModel<E> extends AbstractListModel<E>
     public synchronized void set(final Iterable<? extends E> elements) {
         ListIterator<E> oldIt = model.listIterator();
         for (int from = 0; oldIt.hasNext(); ++from) {
-            int to   = Iterables.indexOf( elements, Predicates.equalTo( oldIt.next() ) );
+            int to = Iterables.indexOf( elements, Predicates.equalTo( oldIt.next() ) );
 
             if (to != from) {
                 oldIt.remove();
@@ -82,7 +83,7 @@ public class CollectionListModel<E> extends AbstractListModel<E>
         }
 
         if ((selectedItem == null) || !model.contains( selectedItem ))
-            setSelectedItem( getElementAt( 0 ) );
+            selectItem( getElementAt( 0 ) );
     }
 
     @SafeVarargs
@@ -91,30 +92,32 @@ public class CollectionListModel<E> extends AbstractListModel<E>
     }
 
     @Override
-    @SuppressWarnings({ "unchecked", "SuspiciousMethodCalls" })
-    public synchronized void setSelectedItem(@Nullable final Object newSelectedItem) {
-        if (!Objects.equals( selectedItem, newSelectedItem )) {
-            selectedItem = (E) newSelectedItem;
+    @Deprecated
+    @SuppressWarnings("unchecked")
+    public synchronized void setSelectedItem(@Nullable final Object/* E */ newSelectedItem) {
+        selectItem( (E) newSelectedItem );
+    }
 
-            fireContentsChanged( this, -1, -1 );
-            //noinspection ObjectEquality
-            if ((list != null) && (list.getModel() == this))
-                list.setSelectedValue( selectedItem, true );
+    public synchronized CollectionListModel<E> selectItem(@Nullable final E newSelectedItem) {
+        if (Objects.equals( selectedItem, newSelectedItem ))
+            return this;
 
-            if (selectionConsumer != null)
-                selectionConsumer.accept( selectedItem );
-        }
+        selectedItem = newSelectedItem;
+
+        fireContentsChanged( this, -1, -1 );
+        //noinspection ObjectEquality
+        if ((list != null) && (list.getModel() == this))
+            list.setSelectedValue( selectedItem, true );
+
+        if (selectionConsumer != null)
+            selectionConsumer.accept( selectedItem );
+        return this;
     }
 
     @Nullable
     @Override
     public synchronized E getSelectedItem() {
         return selectedItem;
-    }
-
-    public CollectionListModel<E> select(final E selectedItem) {
-        setSelectedItem( selectedItem );
-        return this;
     }
 
     public synchronized void registerList(final JList<E> list) {
@@ -139,7 +142,7 @@ public class CollectionListModel<E> extends AbstractListModel<E>
     @Override
     public synchronized CollectionListModel<E> selection(@Nullable final E selectedItem, @Nullable final Consumer<E> selectionConsumer) {
         this.selectionConsumer = null;
-        setSelectedItem( selectedItem );
+        selectItem( selectedItem );
 
         return selection( selectionConsumer );
     }
@@ -147,7 +150,7 @@ public class CollectionListModel<E> extends AbstractListModel<E>
     @Override
     public synchronized void valueChanged(final ListSelectionEvent event) {
         //noinspection ObjectEquality
-        if (!event.getValueIsAdjusting() && (event.getSource() == list) && (list.getModel() == this)) {
+        if (!event.getValueIsAdjusting() && (event.getSource() == list) && (checkNotNull( list ).getModel() == this)) {
             selectedItem = list.getSelectedValue();
 
             if (selectionConsumer != null)

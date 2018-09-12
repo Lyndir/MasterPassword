@@ -64,7 +64,7 @@ public class FilesPanel extends JPanel implements MPFileUserManager.Listener, Ma
 
     @Override
     public void onUserSelected(@Nullable final MPUser<?> user) {
-        usersModel.setSelectedItem( user );
+        usersModel.selectItem( user );
         avatarButton.setIcon( Res.icons().avatar( (user == null)? 0: user.getAvatar() ) );
     }
 }

@@ -21,7 +21,6 @@ package com.lyndir.masterpassword.model.impl;
 import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
-import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableSortedSet;
 import com.google.common.primitives.UnsignedInteger;
@@ -193,11 +192,10 @@ public abstract class MPBasicSite<U extends MPUser<?>, Q extends MPQuestion> ext
 
     @Nonnull
     @Override
-    public ImmutableCollection<Q> findQuestions(@Nullable final String query) {
-        ImmutableSortedSet.Builder<Q> results = ImmutableSortedSet.naturalOrder();
-        for (final Q question : getQuestions())
-            if (Strings.isNullOrEmpty( query ) || question.getKeyword().startsWith( query ))
-                results.add( question );
+    public ImmutableCollection<MPQuery.Result<Q>> findQuestions(final MPQuery query) {
+        ImmutableSortedSet.Builder<MPQuery.Result<Q>> results = ImmutableSortedSet.naturalOrder();
+        for (final Q question : questions)
+            query.find( question, MPQuestion::getKeyword ).ifPresent( results::add );
 
         return results.build();
     }
