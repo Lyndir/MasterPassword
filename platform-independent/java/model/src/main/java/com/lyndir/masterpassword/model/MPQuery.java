@@ -1,5 +1,7 @@
 package com.lyndir.masterpassword.model;
 
+import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
+
 import java.util.*;
 import java.util.function.Function;
 import javax.annotation.Nonnull;
@@ -145,6 +147,11 @@ public class MPQuery {
         @Override
         public int hashCode() {
             return getOption().hashCode();
+        }
+
+        @Override
+        public String toString() {
+            return strf( "{Result: %s}", key );
         }
     }
 }

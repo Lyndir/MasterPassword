@@ -5,6 +5,7 @@ import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 import com.google.common.base.*;
 import com.google.common.collect.ImmutableList;
 import com.google.common.primitives.UnsignedInteger;
+import com.google.common.util.concurrent.ListenableFuture;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.ObjectUtils;
 import com.lyndir.masterpassword.*;
@@ -27,7 +28,6 @@ import java.util.*;
 import java.util.Optional;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.swing.*;
@@ -460,7 +460,7 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
     }
 
 
-    private final class AuthenticatedUserPanel extends JPanel implements KeyListener, MPUser.Listener {
+    private final class AuthenticatedUserPanel extends JPanel implements KeyListener, MPUser.Listener, KeyEventDispatcher {
 
         private final JButton userButton      = Components.button( Res.icons().user(), event -> showUserPreferences(),
                                                                    "Show user preferences." );
@@ -479,8 +479,8 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
 
         @Nonnull
         private final MPUser<?>                                                 user;
-        private final JLabel                                                    passwordLabel;
-        private final JLabel                                                    passwordField;
+        private final JLabel                                                    resultLabel;
+        private final JLabel                                                    resultField;
         private final JLabel                                                    answerLabel;
         private final JLabel                                                    answerField;
         private final JLabel                                                    queryLabel;
@@ -489,6 +489,7 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
         private final CollectionListModel<MPQuery.Result<? extends MPQuestion>> questionsModel;
         private final JList<MPQuery.Result<? extends MPSite<?>>>                sitesList;
 
+        private boolean   showLogin;
         private Future<?> updateSitesJob;
 
         private AuthenticatedUserPanel(@Nonnull final MPUser<?> user) {
@@ -521,10 +522,10 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
 
             add( Components.heading( user.getFullName(), SwingConstants.CENTER ) );
 
-            add( passwordLabel = Components.label( SwingConstants.CENTER ) );
-            add( passwordField = Components.heading( SwingConstants.CENTER ) );
-            passwordField.setForeground( Res.colors().highlightFg() );
-            passwordField.setFont( Res.fonts().bigValueFont( SIZE_RESULT ) );
+            add( resultLabel = Components.label( SwingConstants.CENTER ) );
+            add( resultField = Components.heading( SwingConstants.CENTER ) );
+            resultField.setForeground( Res.colors().highlightFg() );
+            resultField.setFont( Res.fonts().bigValueFont( SIZE_RESULT ) );
             add( Box.createGlue() );
             add( Components.strut() );
 
@@ -550,10 +551,15 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
                     KeyEvent.getKeyText( copyLoginKeyStroke.getKeyCode() ) ) ) );
 
             addHierarchyListener( e -> {
-                if (null != SwingUtilities.windowForComponent( this ))
-                    user.addListener( this );
-                else
-                    user.removeListener( this );
+                if (HierarchyEvent.DISPLAYABILITY_CHANGED == (e.getChangeFlags() & HierarchyEvent.DISPLAYABILITY_CHANGED)) {
+                    if (null != SwingUtilities.windowForComponent( this )) {
+                        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher( this );
+                        user.addListener( this );
+                    } else {
+                        KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher( this );
+                        user.removeListener( this );
+                    }
+                }
             } );
         }
 
@@ -841,7 +847,7 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
 
             boolean   loginResult = (copyLoginKeyStroke.getModifiers() & event.getModifiers()) != 0;
             MPSite<?> fsite       = site;
-            showSiteResult( site, loginResult, result -> {
+            Res.ui( getSiteResult( site, loginResult ), result -> {
                 if (result == null)
                     return;
 
@@ -852,14 +858,33 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
             } );
         }
 
+        private void setShowLogin(final boolean showLogin) {
+            if (showLogin == this.showLogin)
+                return;
+
+            this.showLogin = showLogin;
+            showSiteItem( sitesModel.getSelectedItem() );
+        }
+
         private void showSiteItem(@Nullable final MPQuery.Result<? extends MPSite<?>> item) {
             MPSite<?> site = (item != null)? item.getOption(): null;
-            showSiteResult( site, false, result -> {
+            Res.ui( getSiteResult( site, showLogin ), result -> {
+                if (!showLogin && (site != null))
+                    resultLabel.setText( (result != null)? strf( "Your password for %s:", site.getSiteName() ): " " );
+                else if (showLogin && (site != null))
+                    resultLabel.setText( (result != null)? strf( "Your login for %s:", site.getSiteName() ): " " );
+
+                resultField.setText( (result != null)? result: " " );
+                settingsButton.setEnabled( result != null );
+                questionsButton.setEnabled( result != null );
+                editButton.setEnabled( result != null );
+                keyButton.setEnabled( result != null );
+                deleteButton.setEnabled( result != null );
             } );
         }
 
-        private void showSiteResult(@Nullable final MPSite<?> site, final boolean loginResult, final Consumer<String> resultCallback) {
-            Res.job( () -> {
+        private ListenableFuture<String> getSiteResult(@Nullable final MPSite<?> site, final boolean loginResult) {
+            return Res.job( () -> {
                 try {
                     if (site != null)
                         return loginResult? site.getLogin(): site.getResult();
@@ -869,18 +894,7 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
                 }
 
                 return null;
-            }, resultCallback.andThen( result -> Res.ui( () -> {
-                if (!loginResult && (site != null)) {
-                    passwordLabel.setText( (result != null)? strf( "Your password for %s:", site.getSiteName() ): " " );
-                    passwordField.setText( (result != null)? result: " " );
-                }
-
-                settingsButton.setEnabled( result != null );
-                questionsButton.setEnabled( result != null );
-                editButton.setEnabled( result != null );
-                keyButton.setEnabled( result != null );
-                deleteButton.setEnabled( result != null );
-            } ) ) );
+            } );
         }
 
         private void useQuestion(final ActionEvent event) {
@@ -897,7 +911,7 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
             }
 
             MPQuestion fquestion = question;
-            showQuestionResult( question, result -> {
+            Res.ui( getQuestionResult( question ), result -> {
                 if (result == null)
                     return;
 
@@ -910,22 +924,7 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
 
         private void showQuestionItem(@Nullable final MPQuery.Result<? extends MPQuestion> item) {
             MPQuestion question = (item != null)? item.getOption(): null;
-            showQuestionResult( question, answer -> {
-            } );
-        }
-
-        private void showQuestionResult(@Nullable final MPQuestion question, final Consumer<String> resultCallback) {
-            Res.job( () -> {
-                try {
-                    if (question != null)
-                        return question.getAnswer();
-                }
-                catch (final MPKeyUnavailableException | MPAlgorithmException e) {
-                    logger.err( e, "While resolving answer for: %s", question );
-                }
-
-                return null;
-            }, resultCallback.andThen( answer -> Res.ui( () -> {
+            Res.ui( getQuestionResult( question ), answer -> {
                 if ((answer == null) || (question == null))
                     answerLabel.setText( " " );
                 else
@@ -935,7 +934,21 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
                                     strf( "<html>Answer for site <b>%s</b>, of question with keyword <b>%s</b>:",
                                           question.getSite().getSiteName(), question.getKeyword() ) );
                 answerField.setText( (answer != null)? answer: " " );
-            } ) ) );
+            } );
+        }
+
+        private ListenableFuture<String> getQuestionResult(@Nullable final MPQuestion question) {
+            return Res.job( () -> {
+                try {
+                    if (question != null)
+                        return question.getAnswer();
+                }
+                catch (final MPKeyUnavailableException | MPAlgorithmException e) {
+                    logger.err( e, "While resolving answer for: %s", question );
+                }
+
+                return null;
+            } );
         }
 
         private void copyResult(final String result) {
@@ -950,6 +963,8 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
                 Window window = SwingUtilities.windowForComponent( UserContentPanel.this );
                 if (window instanceof Frame)
                     ((Frame) window).setExtendedState( Frame.ICONIFIED );
+
+                setShowLogin( false );
             } );
         }
 
@@ -1000,7 +1015,9 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
                     if (siteItems.stream().noneMatch( MPQuery.Result::isExact ))
                         siteItems.add( MPQuery.Result.allOf( new MPNewSite( user, query.getQuery() ), query.getQuery() ) );
 
-                Res.ui( () -> sitesModel.set( siteItems ) );
+                Res.ui( () -> {
+                    sitesModel.set( siteItems );
+                } );
             } );
         }
 
@@ -1016,6 +1033,14 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
 
         @Override
         public void onUserInvalidated(final MPUser<?> user) {
+        }
+
+        @Override
+        public boolean dispatchKeyEvent(final KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_SHIFT)
+                setShowLogin( e.isShiftDown() );
+
+            return false;
         }
     }
 }

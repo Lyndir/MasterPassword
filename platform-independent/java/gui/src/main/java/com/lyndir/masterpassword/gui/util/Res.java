@@ -73,21 +73,21 @@ public abstract class Res {
         return job( job, 0, TimeUnit.MILLISECONDS );
     }
 
-    public static <V> void job(final Callable<V> job, final Consumer<V> callback) {
-        Futures.addCallback( job( job, 0, TimeUnit.MILLISECONDS ), new FailableCallback<V>( logger ) {
-            @Override
-            public void onSuccess(@Nullable final V result) {
-                callback.accept( result );
-            }
-        }, uiExecutor() );
-    }
-
     public static <V> ListenableFuture<V> job(final Callable<V> job, final long delay, final TimeUnit timeUnit) {
         return jobExecutor.schedule( job, delay, timeUnit );
     }
 
     public static void ui(final Runnable job) {
         ui( true, job );
+    }
+
+    public static <V> void ui(final ListenableFuture<V> future, final Consumer<V> job) {
+        Futures.addCallback( future, new FailableCallback<V>( logger ) {
+            @Override
+            public void onSuccess(@Nullable final V result) {
+                job.accept( result );
+            }
+        }, uiExecutor() );
     }
 
     public static void ui(final boolean immediate, final Runnable job) {
