@@ -243,6 +243,9 @@ public abstract class Components {
                         return this;
                     }
                 } );
+                Dimension cellSize = getCellRenderer().getListCellRendererComponent( this, null, 0, false, false ).getPreferredSize();
+                setFixedCellWidth( cellSize.width );
+                setFixedCellHeight( cellSize.height );
 
                 if (model instanceof CollectionListModel)
                     ((CollectionListModel<E>) model).registerList( this );
