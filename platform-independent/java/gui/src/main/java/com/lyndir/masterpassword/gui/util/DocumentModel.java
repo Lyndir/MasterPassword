@@ -87,8 +87,11 @@ public class DocumentModel implements Selectable<String, DocumentModel> {
 
     @Override
     public DocumentModel selection(@Nullable final String selectedItem, @Nullable final Consumer<String> selectionConsumer) {
-        selection( selectionConsumer );
         setText( selectedItem );
+        selection( selectionConsumer );
+
+        if (selectionConsumer != null)
+            selectionConsumer.accept( selectedItem );
 
         return this;
     }

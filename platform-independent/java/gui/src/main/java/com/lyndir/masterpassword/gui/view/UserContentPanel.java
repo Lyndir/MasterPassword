@@ -542,6 +542,10 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
             add( Components.scrollPane( sitesList = Components.list(
                     sitesModel = new CollectionListModel<MPQuery.Result<? extends MPSite<?>>>().selection( this::showSiteItem ),
                     this::getSiteDescription ) ) );
+            sitesList.registerKeyboardAction( this::useSite, KeyStroke.getKeyStroke( KeyEvent.VK_ENTER, 0 ),
+                                              JComponent.WHEN_FOCUSED );
+            sitesList.registerKeyboardAction( this::useSite, KeyStroke.getKeyStroke( KeyEvent.VK_ENTER, InputEvent.SHIFT_DOWN_MASK ),
+                                              JComponent.WHEN_FOCUSED );
             add( Components.strut() );
 
             add( Components.label( strf(
@@ -1015,9 +1019,7 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
                     if (siteItems.stream().noneMatch( MPQuery.Result::isExact ))
                         siteItems.add( MPQuery.Result.allOf( new MPNewSite( user, query.getQuery() ), query.getQuery() ) );
 
-                Res.ui( () -> {
-                    sitesModel.set( siteItems );
-                } );
+                Res.ui( () -> sitesModel.set( siteItems ) );
             } );
         }
 
