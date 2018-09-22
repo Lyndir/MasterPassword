@@ -1,9 +1,13 @@
 #!/usr/bin/env bash
 #
 # USAGE
-#   [targets='...'] [mpw_feature=0|1 ...] [CFLAGS='...'] [LDFLAGS='...'] ./build [cc arguments ...]
+#   [targets='...'] [mpw_feature=0|1 ...] [CFLAGS='...'] [LDFLAGS='...'] ./build [-v|-d|-h|--] [cc arguments ...]
 #
 #   By default, you should only need to run ./build
+#
+#   -v: verbose mode, outputs state information and compiler commands.
+#   -d: debug build, modifies default build flags to produce binaries best suited for debugging.
+#   -h: show this usage information.
 #
 #   You can customize the targets that are built using targets='...'. Use targets='all' to build all targets.
 #   By default, we only build the 'mpw' target.  
@@ -27,29 +31,53 @@ set -e
 
 
 ### CONFIGURATION
-# Targets to build.
+verbose=0
+
+# Options
+while getopts :vdh opt; do
+    case $opt in
+        v)      verbose=1 ;;
+        d)      debug=1 ;;
+        h|?)    sed -n '/^[^#]/q;p' "${BASH_SOURCE##*/}"; exit ;;
+    esac
+done
+shift "$(( OPTIND - 1 ))"
+
+# Targets to build
 targets_all=(
     mpw                     # C CLI version of Master Password (needs: mpw_sodium, optional: mpw_color, mpw_json).
     mpw-bench               # C CLI Master Password benchmark utility (needs: mpw_sodium).
     mpw-tests               # C Master Password algorithm test suite (needs: mpw_sodium, mpw_xml).
 )
 targets_default='mpw'       # Override with: targets='...' ./build
+targets=${targets[*]:-$targets_default} 
 
-# Features.
+# Features
 mpw_sodium=${mpw_sodium:-1} # Implement crypto functions with sodium (depends on libsodium).
 mpw_json=${mpw_json:-1}     # Support JSON-based user configuration format (depends on libjson-c).
 mpw_color=${mpw_color:-1}   # Colorized identicon (depends on libncurses).
 mpw_xml=${mpw_xml:-1}       # XML parsing (depends on libxml2).
 
-# Default build flags.
-cflags=( -O3 $CFLAGS )
-ldflags=( $LDFLAGS )
+# Default build flags
+cflags=( -O3 $CFLAGS ); unset CFLAGS
+ldflags=( $LDFLAGS ); unset LDFLAGS
+if (( debug )); then
+    cflags+=( -O0 -g )
+fi
 
-# Version.
+# Version
 if { mpw_version=$(git describe --match '*-cli*' --long --dirty) || mpw_version=$(<VERSION); } 2>/dev/null; then
     cflags+=( -D"MP_VERSION=$mpw_version" )
 fi
-echo 2>&1 "Current mpw source version ${mpw_version:-<unknown>}..."
+echo "Current mpw source version ${mpw_version:-<unknown>}..."
+
+# Meta
+if (( verbose )); then
+    echo "mpw_sodium=${mpw_sodium}, mpw_json=${mpw_json}, mpw_color=${mpw_color}, mpw_xml=${mpw_xml}"
+    echo "CFLAGS: ${cflags[*]}"
+    echo "LDFLAGS: ${ldflags[*]}"
+    echo "targets: ${targets[*]}"
+fi
 
 
 ### TARGET: MPW
@@ -132,18 +160,20 @@ mpw-tests() {
 haslib() {
     cc -x c "${ldflags[@]}" -l"$1" -o /dev/null - <<< 'int main() { return 0; }' &>/dev/null
 }
-cc() {
-    if hash llvm-gcc 2>/dev/null; then
+cc() (
+    (( verbose )) && set -x
+
+    if { hash llvm-gcc; } 2>/dev/null; then
         llvm-gcc "$@"
-    elif hash gcc 2>/dev/null; then
+    elif { hash gcc; } 2>/dev/null; then
         gcc -std=c11 "$@"
-    elif hash clang 2>/dev/null; then
+    elif { hash clang; } 2>/dev/null; then
         clang "$@"
     else
         echo >&2 "Need a compiler.  Please install GCC or LLVM."
         exit 1
     fi
-}
+)
 
 
 ### DEPENDENCIES
@@ -156,7 +186,7 @@ use() {
             for lib in "$lib" "$@"; do
                 haslib "$lib" && ldflags+=( -l"$lib" )
             done
-            echo >&2 "INFO:     Enabled $option (lib$lib)."
+            echo "INFO:     Enabled $option (lib$lib)."
             return 0
 
         elif [[ $requisite == required ]]; then
@@ -174,7 +204,7 @@ use() {
         exit 1
 
     else
-        echo >&2 "INFO:     $option is supported but not enabled."
+        echo "INFO:     $option is supported but not enabled."
         return 1
     fi
 }
@@ -198,7 +228,7 @@ use_mpw_xml() {
 
 ### BUILD TARGETS
 for target in "${targets_all[@]}"; do
-    if [[ ${targets:-$targets_default} == 'all' || " ${targets:-$targets_default} " = *" $target "*  ]]; then
+    if [[ $targets == 'all' || " $targets " = *" $target "*  ]]; then
         echo
         echo "Building target: $target..."
         ( "$target" "$@" )
