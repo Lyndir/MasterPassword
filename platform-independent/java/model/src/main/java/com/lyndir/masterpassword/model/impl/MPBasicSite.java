@@ -62,11 +62,15 @@ public abstract class MPBasicSite<U extends MPUser<?>, Q extends MPQuestion> ext
         this.loginType = (loginType != null)? loginType: this.algorithm.mpw_default_login_type();
     }
 
+    // - Meta
+
     @Nonnull
     @Override
     public String getSiteName() {
         return siteName;
     }
+
+    // - Algorithm
 
     @Nonnull
     @Override
@@ -158,12 +162,20 @@ public abstract class MPBasicSite<U extends MPUser<?>, Q extends MPQuestion> ext
                 keyPurpose, keyContext, type, state );
     }
 
-    @Nonnull
+    @Nullable
     @Override
     public String getLogin(@Nullable final String state)
             throws MPKeyUnavailableException, MPAlgorithmException {
 
         return getResult( MPKeyPurpose.Identification, null, null, getLoginType(), state );
+    }
+
+    // - Relations
+
+    @Nonnull
+    @Override
+    public U getUser() {
+        return user;
     }
 
     @Nonnull
@@ -198,12 +210,6 @@ public abstract class MPBasicSite<U extends MPUser<?>, Q extends MPQuestion> ext
             query.find( question, MPQuestion::getKeyword ).ifPresent( results::add );
 
         return results.build();
-    }
-
-    @Nonnull
-    @Override
-    public U getUser() {
-        return user;
     }
 
     @Override

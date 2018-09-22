@@ -80,6 +80,9 @@ public interface MPSite<Q extends MPQuestion> extends Comparable<MPSite<?>> {
     String getResult(MPKeyPurpose keyPurpose, @Nullable String keyContext, @Nullable String state)
             throws MPKeyUnavailableException, MPAlgorithmException;
 
+    /**
+     * @see MPMasterKey#siteResult(String, MPAlgorithm, UnsignedInteger, MPKeyPurpose, String, MPResultType, String)
+     */
     @Nullable
     String getResult(MPKeyPurpose keyPurpose, @Nullable String keyContext,
                      @Nullable UnsignedInteger counter, MPResultType type, @Nullable String state)
@@ -90,13 +93,13 @@ public interface MPSite<Q extends MPQuestion> extends Comparable<MPSite<?>> {
                     @Nullable UnsignedInteger counter, MPResultType type, String state)
             throws MPKeyUnavailableException, MPAlgorithmException;
 
-    @Nonnull
+    @Nullable
     default String getLogin()
             throws MPKeyUnavailableException, MPAlgorithmException {
         return getLogin( null );
     }
 
-    @Nonnull
+    @Nullable
     String getLogin(@Nullable String state)
             throws MPKeyUnavailableException, MPAlgorithmException;
 

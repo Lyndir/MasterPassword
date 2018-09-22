@@ -147,6 +147,7 @@ public class MPMasterKey {
      * @return {@code null} if the result type is missing a required parameter.
      *
      * @throws MPKeyUnavailableException {@link #invalidate()} has been called on this object.
+     * @throws MPAlgorithmException An internal system or algorithm error has occurred.
      */
     @Nullable
     public String siteResult(final String siteName, final MPAlgorithm algorithm, final UnsignedInteger siteCounter,
@@ -184,6 +185,7 @@ public class MPMasterKey {
      *                    {@link #siteResult(String, MPAlgorithm, UnsignedInteger, MPKeyPurpose, String, MPResultType, String)}.
      *
      * @throws MPKeyUnavailableException {@link #invalidate()} has been called on this object.
+     * @throws MPAlgorithmException An internal system or algorithm error has occurred.
      */
     @Nonnull
     public String siteState(final String siteName, final MPAlgorithm algorithm, final UnsignedInteger siteCounter,

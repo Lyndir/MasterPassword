@@ -101,7 +101,7 @@ public class MPFileSite extends MPBasicSite<MPFileUser, MPFileQuestion> {
         return getResult( keyPurpose, keyContext, getResultState() );
     }
 
-    @Nonnull
+    @Nullable
     @Override
     public String getLogin()
             throws MPKeyUnavailableException, MPAlgorithmException {
