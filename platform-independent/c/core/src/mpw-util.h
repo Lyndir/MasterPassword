@@ -115,6 +115,8 @@ bool mpw_string_pushf(
 /** Push an integer onto a buffer.  reallocs the given buffer and appends the given integer. */
 bool mpw_push_int(
         uint8_t **buffer, size_t *bufferSize, const uint32_t pushInt);
+
+// These defines merely exist to force the void** cast (& do type-checking), since void** casts are not automatic.
 /** Reallocate the given buffer from the given size by adding the delta size.
   * On success, the buffer size pointer will be updated to the buffer's new size
   * and the buffer pointer may be updated to a new memory address.
@@ -124,29 +126,25 @@ bool mpw_push_int(
   * @param deltaSize The amount to increase the buffer's size by.
   * @return true if successful, false if reallocation failed.
   */
-#define mpw_realloc(buffer, bufferSize, deltaSize) \
+#define mpw_realloc( \
+        /* const void** */buffer, /* size_t* */bufferSize, /* const size_t */deltaSize) \
         ({ __typeof__(buffer) _b = buffer; const void *__b = *_b; (void)__b; __mpw_realloc( (const void **)_b, bufferSize, deltaSize ); })
-bool __mpw_realloc(const void **buffer, size_t *bufferSize, const size_t deltaSize);
-void mpw_zero(
-        void *buffer, size_t bufferSize);
 /** Free a buffer after zero'ing its contents, then set the reference to NULL. */
-#define mpw_free(buffer, bufferSize) \
+#define mpw_free( \
+        /* void** */buffer, /* size_t */ bufferSize) \
         ({ __typeof__(buffer) _b = buffer; const void *__b = *_b; (void)__b; __mpw_free( (void **)_b, bufferSize ); })
-bool __mpw_free(
-        void **buffer, size_t bufferSize);
 /** Free a string after zero'ing its contents, then set the reference to NULL. */
-#define mpw_free_string(string) \
+#define mpw_free_string( \
+        /* char** */string) \
         ({ __typeof__(string) _s = string; const char *__s = *_s; (void)__s; __mpw_free_string( (char **)_s ); })
-bool __mpw_free_string(
-        char **string);
 /** Free strings after zero'ing their contents, then set the references to NULL.  Terminate the va_list with NULL. */
-#define mpw_free_strings(strings, ...) \
+#define mpw_free_strings( \
+        /* char** */strings, ...) \
         ({ __typeof__(strings) _s = strings; const char *__s = *_s; (void)__s; __mpw_free_strings( (char **)_s, __VA_ARGS__ ); })
-bool __mpw_free_strings(
-        char **strings, ...);
 /** Free a string after zero'ing its contents, then set the reference to the replacement string.
   * The replacement string is generated before the original is freed; it may be a derivative of the original. */
-#define mpw_replace_string(string, replacement) \
+#define mpw_replace_string( \
+        /* char* */string, /* char* */replacement) \
         do { const char *replacement_ = replacement; mpw_free_string( &string ); string = replacement_; } while (0)
 #ifdef _MSC_VER
 #undef mpw_realloc
@@ -162,6 +160,16 @@ bool __mpw_free_strings(
 #define mpw_free_strings(strings, ...) \
         __mpw_free_strings( (char **)strings, __VA_ARGS__ )
 #endif
+bool __mpw_realloc(
+        const void **buffer, size_t *bufferSize, const size_t deltaSize);
+bool __mpw_free(
+        void **buffer, size_t bufferSize);
+bool __mpw_free_string(
+        char **string);
+bool __mpw_free_strings(
+        char **strings, ...);
+void mpw_zero(
+        void *buffer, size_t bufferSize);
 
 //// Cryptographic functions.
 
