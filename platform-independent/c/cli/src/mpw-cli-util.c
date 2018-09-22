@@ -104,64 +104,67 @@ static const char *_mpw_getline(const char *prompt, bool silent) {
 #if MPW_COLOR
     // Initialize a curses screen.
     SCREEN *screen = newterm( NULL, stderr, stdin );
-    start_color();
-    init_pair( 1, COLOR_WHITE, COLOR_BLUE );
-    init_pair( 2, COLOR_BLACK, COLOR_WHITE );
-    int rows, cols;
-    getmaxyx( stdscr, rows, cols );
+    if (screen) {
+        start_color();
+        init_pair( 1, COLOR_WHITE, COLOR_BLUE );
+        init_pair( 2, COLOR_BLACK, COLOR_WHITE );
+        int rows, cols;
+        getmaxyx( stdscr, rows, cols );
 
-    // Display a dialog box.
-    int width = max( prompt? (int)strlen( prompt ): 0, MPW_MAX_INPUT ) + 6;
-    char *version = "mpw v" stringify_def( MP_VERSION );
-    mvprintw( rows - 1, (cols - (int)strlen( version )) / 2, "%s", version );
-    attron( A_BOLD );
-    color_set( 2, NULL );
-    mvprintw( rows / 2 - 1, (cols - width) / 2, "%s%*s%s", "*", width - 2, "", "*" );
-    mvprintw( rows / 2 - 1, (cols - (int)strlen( prompt )) / 2, "%s", prompt );
-    color_set( 1, NULL );
-    mvprintw( rows / 2 + 0, (cols - width) / 2, "%s%*s%s", "|", width - 2, "", "|" );
-    mvprintw( rows / 2 + 1, (cols - width) / 2, "%s%*s%s", "|", width - 2, "", "|" );
-    mvprintw( rows / 2 + 2, (cols - width) / 2, "%s%*s%s", "|", width - 2, "", "|" );
+        // Display a dialog box.
+        int width = max( prompt? (int)strlen( prompt ): 0, MPW_MAX_INPUT ) + 6;
+        char *version = "mpw v" stringify_def( MP_VERSION );
+        mvprintw( rows - 1, (cols - (int)strlen( version )) / 2, "%s", version );
+        attron( A_BOLD );
+        color_set( 2, NULL );
+        mvprintw( rows / 2 - 1, (cols - width) / 2, "%s%*s%s", "*", width - 2, "", "*" );
+        mvprintw( rows / 2 - 1, (cols - (int)strlen( prompt )) / 2, "%s", prompt );
+        color_set( 1, NULL );
+        mvprintw( rows / 2 + 0, (cols - width) / 2, "%s%*s%s", "|", width - 2, "", "|" );
+        mvprintw( rows / 2 + 1, (cols - width) / 2, "%s%*s%s", "|", width - 2, "", "|" );
+        mvprintw( rows / 2 + 2, (cols - width) / 2, "%s%*s%s", "|", width - 2, "", "|" );
 
-    // Read response.
-    color_set( 2, NULL );
-    attron( A_STANDOUT );
-    int result = ERR;
-    char str[MPW_MAX_INPUT + 1];
-    if (silent) {
-        mvprintw( rows / 2 + 1, (cols - 5) / 2, "[ * ]" );
-        refresh();
+        // Read response.
+        color_set( 2, NULL );
+        attron( A_STANDOUT );
+        int result = ERR;
+        char str[MPW_MAX_INPUT + 1];
+        if (silent) {
+            mvprintw( rows / 2 + 1, (cols - 5) / 2, "[ * ]" );
+            refresh();
 
-        noecho();
-        result = mvgetnstr( rows / 2 + 1, (cols - 1) / 2, str, MPW_MAX_INPUT );
-        echo();
-    } else {
-        mvprintw( rows / 2 + 1, (cols - (MPW_MAX_INPUT + 2)) / 2, "%*s", MPW_MAX_INPUT + 2, "" );
-        refresh();
+            noecho();
+            result = mvgetnstr( rows / 2 + 1, (cols - 1) / 2, str, MPW_MAX_INPUT );
+            echo();
+        }
+        else {
+            mvprintw( rows / 2 + 1, (cols - (MPW_MAX_INPUT + 2)) / 2, "%*s", MPW_MAX_INPUT + 2, "" );
+            refresh();
 
-        echo();
-        result = mvgetnstr( rows / 2 + 1, (cols - MPW_MAX_INPUT) / 2, str, MPW_MAX_INPUT );
+            echo();
+            result = mvgetnstr( rows / 2 + 1, (cols - MPW_MAX_INPUT) / 2, str, MPW_MAX_INPUT );
+        }
+        attrset( 0 );
+        endwin();
+        delscreen( screen );
+
+        return result == ERR? NULL: mpw_strndup( str, MPW_MAX_INPUT );
     }
-    attrset( 0 );
-    endwin();
-    delscreen( screen );
+#endif
 
-    return result == ERR? NULL: mpw_strndup( str, MPW_MAX_INPUT );
-#else
     // Get password from terminal.
     fprintf( stderr, "%s ", prompt );
 
     size_t bufSize = 0;
-    ssize_t lineSize = getline( &answer, &bufSize, stdin );
+    ssize_t lineSize = getline( (char **)&answer, &bufSize, stdin );
     if (lineSize <= 1) {
         mpw_free_string( &answer );
         return NULL;
     }
 
     // Remove trailing newline.
-    answer[lineSize - 1] = '\0';
+    mpw_replace_string( answer, mpw_strndup( answer, (size_t)lineSize - 1 ) );
     return answer;
-#endif
 }
 
 const char *mpw_getline(const char *prompt) {
