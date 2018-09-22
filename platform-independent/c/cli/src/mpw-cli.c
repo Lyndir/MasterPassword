@@ -476,8 +476,8 @@ void cli_user(Arguments *args, Operation *operation) {
 
     else {
         // Read file.
-        char *sitesInputData = mpw_read_file( sitesFile );
-        if (ferror( sitesFile ))
+        const char *sitesInputData = mpw_read_file( sitesFile );
+        if (!sitesInputData || ferror( sitesFile ))
             wrn( "Error while reading configuration file:\n  %s: %d", operation->sitesPath, ferror( sitesFile ) );
         fclose( sitesFile );
 

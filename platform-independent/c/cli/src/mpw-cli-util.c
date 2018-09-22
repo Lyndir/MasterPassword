@@ -43,7 +43,7 @@ const char *mpw_getenv(const char *variableName) {
     return envBuf? mpw_strdup( envBuf ): NULL;
 }
 
-char *mpw_askpass(const char *prompt) {
+const char *mpw_askpass(const char *prompt) {
 
     const char *askpass = mpw_getenv( MP_ENV_askpass );
     if (!askpass)
@@ -74,7 +74,7 @@ char *mpw_askpass(const char *prompt) {
     }
 
     close( pipes[1] );
-    char *answer = mpw_read_fd( pipes[0] );
+    const char *answer = mpw_read_fd( pipes[0] );
     close( pipes[0] );
     int status;
     if (waitpid( pid, &status, 0 ) == ERR) {
@@ -86,7 +86,7 @@ char *mpw_askpass(const char *prompt) {
     if (WIFEXITED( status ) && WEXITSTATUS( status ) == EXIT_SUCCESS && answer && strlen( answer )) {
         // Remove trailing newline.
         if (answer[strlen( answer ) - 1] == '\n')
-            answer[strlen( answer ) - 1] = '\0';
+            mpw_replace_string( answer, mpw_strndup( answer, strlen( answer ) - 1 ) );
         return answer;
     }
 
@@ -97,7 +97,7 @@ char *mpw_askpass(const char *prompt) {
 static const char *_mpw_getline(const char *prompt, bool silent) {
 
     // Get answer from askpass.
-    char *answer = mpw_askpass( prompt );
+    const char *answer = mpw_askpass( prompt );
     if (answer)
         return answer;
 
@@ -250,7 +250,7 @@ bool mpw_mkdirs(const char *filePath) {
     return success;
 }
 
-char *mpw_read_fd(int fd) {
+const char *mpw_read_fd(int fd) {
 
     char *buf = NULL;
     size_t blockSize = 4096, bufSize = 0, bufOffset = 0;
@@ -263,7 +263,7 @@ char *mpw_read_fd(int fd) {
     return buf;
 }
 
-char *mpw_read_file(FILE *file) {
+const char *mpw_read_file(FILE *file) {
 
     if (!file)
         return NULL;

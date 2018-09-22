@@ -36,7 +36,7 @@ const char *mpw_getenv(const char *variableName);
 
 /** Use the askpass program to prompt the user.
   * @return A newly allocated string or NULL if askpass is not supported or an error occurred. */
-char *mpw_askpass(const char *prompt);
+const char *mpw_askpass(const char *prompt);
 
 /** Ask the user a question.
   * @return A newly allocated string or NULL if an error occurred trying to read from the user. */
@@ -58,11 +58,11 @@ bool mpw_mkdirs(const char *filePath);
 
 /** Read until EOF from the given file descriptor.
   * @return A newly allocated string or NULL the read buffer couldn't be allocated. */
-char *mpw_read_fd(int fd);
+const char *mpw_read_fd(int fd);
 
 /** Read the file contents of a given file.
   * @return A newly allocated string or NULL the read buffer couldn't be allocated. */
-char *mpw_read_file(FILE *file);
+const char *mpw_read_file(FILE *file);
 
 /** Encode a visual fingerprint for a user.
   * @return A newly allocated string. */

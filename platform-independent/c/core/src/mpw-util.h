@@ -144,6 +144,10 @@ bool __mpw_free_string(
         ({ __typeof__(strings) _s = strings; const char *__s = *_s; (void)__s; __mpw_free_strings( (char **)_s, __VA_ARGS__ ); })
 bool __mpw_free_strings(
         char **strings, ...);
+/** Free a string after zero'ing its contents, then set the reference to the replacement string.
+  * The replacement string is generated before the original is freed; it may be a derivative of the original. */
+#define mpw_replace_string(string, replacement) \
+        do { const char *replacement_ = replacement; mpw_free_string( &string ); string = replacement_; } while (0)
 #ifdef _MSC_VER
 #undef mpw_realloc
 #define mpw_realloc(buffer, bufferSize, deltaSize) \
