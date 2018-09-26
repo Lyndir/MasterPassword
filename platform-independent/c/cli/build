@@ -222,7 +222,7 @@ use_mpw_json() {
 }
 use_mpw_xml() {
     local requisite=$1
-    use mpw_xml "$requisite" xml2 && cflags+=( -D"MPW_XML=1" -I"/usr/include/libxml2" -I"/usr/local/include/libxml2" ) ||:
+    use mpw_xml "$requisite" xml2 && cflags+=( $(xml2-config --cflags) ) ldflags+=( $(xml2-config --libs) ) ||:
 }
 
 
