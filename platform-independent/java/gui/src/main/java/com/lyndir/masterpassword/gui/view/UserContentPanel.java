@@ -28,6 +28,7 @@ import java.util.*;
 import java.util.Optional;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.swing.*;
@@ -47,6 +48,7 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
     private static final Logger    logger             = Logger.get( UserContentPanel.class );
     private static final JButton   iconButton         = Components.button( Res.icons().user(), null, null );
     private static final KeyStroke copyLoginKeyStroke = KeyStroke.getKeyStroke( KeyEvent.VK_ENTER, InputEvent.SHIFT_DOWN_MASK );
+    private static final Pattern   EACH_CHARACTER     = Pattern.compile( "." );
 
     private final JButton addButton    = Components.button( Res.icons().add(), event -> addUser(),
                                                             "Add a new user to Master Password." );
@@ -570,17 +572,20 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
         public void showUserPreferences() {
             ImmutableList.Builder<Component> components = ImmutableList.builder();
 
+            components.add( Components.label( "Default Algorithm:" ),
+                            Components.comboBox( MPAlgorithm.Version.values(), MPAlgorithm.Version::name,
+                                                 user.getAlgorithm().version(),
+                                                 version -> user.setAlgorithm( version.getAlgorithm() ) ) );
+
             MPFileUser fileUser = (user instanceof MPFileUser)? (MPFileUser) user: null;
-            if (fileUser != null)
+            if (fileUser != null) {
                 components.add( Components.label( "Default Password Type:" ),
                                 Components.comboBox( MPResultType.values(), MPResultType::getLongName,
                                                      fileUser.getDefaultType(), fileUser::setDefaultType ),
                                 Components.strut() );
 
-            components.add( Components.label( "Default Algorithm:" ),
-                            Components.comboBox( MPAlgorithm.Version.values(), MPAlgorithm.Version::name,
-                                                 user.getAlgorithm().version(),
-                                                 version -> user.setAlgorithm( version.getAlgorithm() ) ) );
+                components.add( Components.checkBox( "Hide Passwords", fileUser.isHidePasswords(), fileUser::setHidePasswords ) );
+            }
 
             Components.showDialog( this, user.getFullName(), new JOptionPane( Components.panel(
                     BoxLayout.PAGE_AXIS, components.build().toArray( new Component[0] ) ) ) );
@@ -846,7 +851,7 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
                         "New Site", JOptionPane.YES_NO_OPTION ))
                     return;
 
-                site = user.addSite( site.getSiteName() );
+                site = ((MPNewSite) site).addTo( user );
             }
 
             boolean   loginResult = (copyLoginKeyStroke.getModifiers() & event.getModifiers()) != 0;
@@ -878,7 +883,12 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
                 else if (showLogin && (site != null))
                     resultLabel.setText( (result != null)? strf( "Your login for %s:", site.getSiteName() ): " " );
 
-                resultField.setText( (result != null)? result: " " );
+                if ((result == null) || result.isEmpty())
+                    resultField.setText( " " );
+                else if (!showLogin && (user instanceof MPFileUser) && ((MPFileUser) user).isHidePasswords())
+                    resultField.setText( EACH_CHARACTER.matcher( result ).replaceAll( "•" ) );
+                else
+                    resultField.setText( result );
                 settingsButton.setEnabled( result != null );
                 questionsButton.setEnabled( result != null );
                 editButton.setEnabled( result != null );
@@ -1016,8 +1026,14 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
                         new LinkedList<>( user.findSites( query ) );
 
                 if (!Strings.isNullOrEmpty( queryText ))
-                    if (siteItems.stream().noneMatch( MPQuery.Result::isExact ))
-                        siteItems.add( MPQuery.Result.allOf( new MPNewSite( user, query.getQuery() ), query.getQuery() ) );
+                    if (siteItems.stream().noneMatch( MPQuery.Result::isExact )) {
+                        MPQuery.Result<? extends MPSite<?>> selectedItem = sitesModel.getSelectedItem();
+                        if ((selectedItem != null) && user.equals( selectedItem.getOption().getUser() ) &&
+                            queryText.equals( selectedItem.getOption().getSiteName() ))
+                            siteItems.add( selectedItem );
+                        else
+                            siteItems.add( MPQuery.Result.allOf( new MPNewSite( user, query.getQuery() ), query.getQuery() ) );
+                    }
 
                 Res.ui( () -> sitesModel.set( siteItems ) );
             } );

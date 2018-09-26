@@ -47,6 +47,7 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
 
     private MPResultType    defaultType;
     private ReadableInstant lastUsed;
+    private boolean         hidePasswords;
     private boolean         complete;
 
     @Nullable
@@ -54,7 +55,7 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
             throws IOException, MPMarshalException {
         for (final MPMarshalFormat format : MPMarshalFormat.values())
             if (file.getName().endsWith( format.fileSuffix() ))
-                    return format.unmarshaller().readUser( file );
+                return format.unmarshaller().readUser( file );
 
         return null;
     }
@@ -64,18 +65,19 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
     }
 
     public MPFileUser(final String fullName, @Nullable final byte[] keyID, final MPAlgorithm algorithm, final File path) {
-        this( fullName, keyID, algorithm, 0, null, new Instant(),
+        this( fullName, keyID, algorithm, 0, null, new Instant(), false,
               MPMarshaller.ContentMode.PROTECTED, MPMarshalFormat.DEFAULT, path );
     }
 
-    public MPFileUser(final String fullName, @Nullable final byte[] keyID, final MPAlgorithm algorithm,
-                      final int avatar, @Nullable final MPResultType defaultType, final ReadableInstant lastUsed,
+    public MPFileUser(final String fullName, @Nullable final byte[] keyID, final MPAlgorithm algorithm, final int avatar,
+                      @Nullable final MPResultType defaultType, final ReadableInstant lastUsed, final boolean hidePasswords,
                       final MPMarshaller.ContentMode contentMode, final MPMarshalFormat format, final File path) {
         super( avatar, fullName, algorithm );
 
         this.keyID = (keyID != null)? keyID.clone(): null;
         this.defaultType = (defaultType != null)? defaultType: algorithm.mpw_default_result_type();
         this.lastUsed = lastUsed;
+        this.hidePasswords = hidePasswords;
         this.path = path;
         this.format = format;
         this.contentMode = contentMode;
@@ -154,6 +156,18 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
 
     public void use() {
         lastUsed = new Instant();
+        setChanged();
+    }
+
+    public boolean isHidePasswords() {
+        return hidePasswords;
+    }
+
+    public void setHidePasswords(final boolean hidePasswords) {
+        if (Objects.equals( this.hidePasswords, hidePasswords ))
+            return;
+
+        this.hidePasswords = hidePasswords;
         setChanged();
     }
 

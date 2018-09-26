@@ -28,8 +28,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.masterpassword.*;
-import com.lyndir.masterpassword.model.MPModelConstants;
 import com.lyndir.masterpassword.model.MPIncorrectMasterPasswordException;
+import com.lyndir.masterpassword.model.MPModelConstants;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.File;
 import java.util.LinkedHashMap;
@@ -77,6 +77,7 @@ public class MPJSONFile extends MPJSONAnyObject {
         user.avatar = modelUser.getAvatar();
         user.full_name = modelUser.getFullName();
         user.last_used = MPModelConstants.dateTimeFormatter.print( modelUser.getLastUsed() );
+        user.hide_passwords = modelUser.isHidePasswords();
         user.key_id = modelUser.exportKeyID();
         user.algorithm = modelUser.getAlgorithm().version();
         user.default_type = modelUser.getDefaultType();
@@ -142,7 +143,7 @@ public class MPJSONFile extends MPJSONAnyObject {
                 user.full_name, CodeUtils.decodeHex( user.key_id ), algorithm, user.avatar,
                 (user.default_type != null)? user.default_type: algorithm.mpw_default_result_type(),
                 (user.last_used != null)? MPModelConstants.dateTimeFormatter.parseDateTime( user.last_used ): new Instant(),
-                export.redacted? MPMarshaller.ContentMode.PROTECTED: MPMarshaller.ContentMode.VISIBLE,
+                user.hide_passwords, export.redacted? MPMarshaller.ContentMode.PROTECTED: MPMarshaller.ContentMode.VISIBLE,
                 MPMarshalFormat.JSON, file.getParentFile()
         );
     }
@@ -202,9 +203,10 @@ public class MPJSONFile extends MPJSONAnyObject {
 
     public static class User extends MPJSONAnyObject {
 
-        int    avatar;
-        String full_name;
-        String last_used;
+        int     avatar;
+        String  full_name;
+        String  last_used;
+        boolean hide_passwords;
         @Nullable
         String              key_id;
         @Nullable

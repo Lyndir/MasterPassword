@@ -67,7 +67,7 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
                     else if ((fullName != null) && (keyID != null))
                         // Ends the header.
                         return new MPFileUser( fullName, keyID, MPAlgorithm.Version.fromInt( mpVersion ).getAlgorithm(),
-                                               avatar, defaultType, new Instant( 0 ),
+                                               avatar, defaultType, new Instant( 0 ), false,
                                                clearContent? MPMarshaller.ContentMode.VISIBLE: MPMarshaller.ContentMode.PROTECTED,
                                                MPMarshalFormat.Flat, file.getParentFile() );
                 }

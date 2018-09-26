@@ -426,10 +426,18 @@ public abstract class Components {
     }
 
     public static JCheckBox checkBox(final String label) {
+        return checkBox( label, false, null );
+    }
+
+    public static JCheckBox checkBox(final String label, final boolean selected, @Nullable final Consumer<Boolean> selectionConsumer) {
         return new JCheckBox( label ) {
             {
                 setBackground( null );
                 setAlignmentX( LEFT_ALIGNMENT );
+                setSelected( selected );
+
+                if (selectionConsumer != null)
+                    addItemListener( e -> selectionConsumer.accept( isSelected() ) );
             }
         };
     }
