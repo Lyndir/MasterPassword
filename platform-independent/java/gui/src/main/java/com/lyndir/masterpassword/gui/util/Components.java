@@ -46,10 +46,10 @@ public abstract class Components {
 
     private static final Logger logger = Logger.get( Components.class );
 
-    public static final float TEXT_SIZE_HEADING = 19f;
-    public static final float TEXT_SIZE_CONTROL = 13f;
-    public static final int   SIZE_MARGIN       = 12;
-    public static final int   SIZE_PADDING      = 8;
+    public static final int TEXT_SIZE_HEADING = 19;
+    public static final int TEXT_SIZE_CONTROL = 13;
+    public static final int SIZE_MARGIN       = 12;
+    public static final int SIZE_PADDING      = 8;
 
     public static GradientPanel panel(final Component... components) {
         GradientPanel panel = panel( BoxLayout.LINE_AXIS, null, components );

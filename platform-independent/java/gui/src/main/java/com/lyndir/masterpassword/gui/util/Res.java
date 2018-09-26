@@ -20,15 +20,12 @@ package com.lyndir.masterpassword.gui.util;
 
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
-import com.google.common.collect.Maps;
 import com.google.common.io.Resources;
 import com.google.common.util.concurrent.*;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.masterpassword.MPIdenticon;
 import java.awt.*;
 import java.io.IOException;
-import java.lang.ref.SoftReference;
-import java.util.Map;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
 import javax.annotation.Nullable;
@@ -184,88 +181,67 @@ public abstract class Res {
 
     public static final class Fonts {
 
-        public Font emoticonsFont(final float size) {
-            return emoticonsRegular().deriveFont( size );
+        public Font emoticonsFont(final int size) {
+            return MPFont.emoticonsRegular.get( size );
         }
 
-        public Font controlFont(final float size) {
-            return exoRegular().deriveFont( size );
+        public Font controlFont(final int size) {
+            return MPFont.exoRegular.get( size );
         }
 
-        public Font valueFont(final float size) {
-            return sourceSansProRegular().deriveFont( size );
+        public Font valueFont(final int size) {
+            return MPFont.sourceSansProRegular.get( size );
         }
 
-        public Font bigValueFont(final float size) {
-            return sourceSansProBlack().deriveFont( size );
+        public Font bigValueFont(final int size) {
+            return MPFont.sourceSansProBlack.get( size );
         }
 
-        public Font emoticonsRegular() {
-            return font( "fonts/Emoticons-Regular.otf" );
-        }
+        private enum MPFont {
+            emoticonsRegular( "Emoticons", "fonts/Emoticons-Regular.otf" ),
+            sourceCodeProRegular( "Source Code Pro", "fonts/SourceCodePro-Regular.otf" ),
+            sourceCodeProBlack( "Source Code Pro Bold", "fonts/SourceCodePro-Bold.otf" ),
+            sourceSansProRegular( "Source Sans Pro", "fonts/SourceSansPro-Regular.otf" ),
+            sourceSansProBlack( "Source Sans Pro Bold", "fonts/SourceSansPro-Bold.otf" ),
+            exoBold( "Exo 2.0 Bold", "fonts/Exo2.0-Bold.otf" ),
+            exoExtraBold( "Exo 2.0 Extra Bold", "fonts/Exo2.0-ExtraBold.otf" ),
+            exoRegular( "Exo 2.0", "fonts/Exo2.0-Regular.otf" ),
+            exoThin( "Exo 2.0 Thin", "fonts/Exo2.0-Thin.otf" ),
+            arimoBold( "Arimo Bold", "fonts/Arimo-Bold.ttf" ),
+            arimoBoldItalic( "Arimo Bold Italic", "fonts/Arimo-BoldItalic.ttf" ),
+            arimoItalic( "Arimo Italic", "fonts/Arimo-Italic.ttf" ),
+            arimoRegular( "Arimo", "fonts/Arimo-Regular.ttf" );
 
-        public Font sourceCodeProRegular() {
-            return font( "fonts/SourceCodePro-Regular.otf" );
-        }
+            private final String  fontName;
+            private final String  resourceName;
+            private       boolean registered;
 
-        public Font sourceCodeProBlack() {
-            return font( "fonts/SourceCodePro-Bold.otf" );
-        }
+            MPFont(final String fontName, final String resourceName) {
+                this.fontName = fontName;
+                this.resourceName = resourceName;
+            }
 
-        public Font sourceSansProRegular() {
-            return font( "fonts/SourceSansPro-Regular.otf" );
-        }
+            Font get(final int size) {
+                return get( Font.PLAIN, size );
+            }
 
-        public Font sourceSansProBlack() {
-            return font( "fonts/SourceSansPro-Bold.otf" );
-        }
+            Font get(final int style, final int size) {
+                if (!registered)
+                    register();
 
-        public Font exoBold() {
-            return font( "fonts/Exo2.0-Bold.otf" );
-        }
+                return new Font( fontName, style, size );
+            }
 
-        public Font exoExtraBold() {
-            return font( "fonts/Exo2.0-ExtraBold.otf" );
-        }
-
-        public Font exoRegular() {
-            return font( "fonts/Exo2.0-Regular.otf" );
-        }
-
-        public Font exoThin() {
-            return font( "fonts/Exo2.0-Thin.otf" );
-        }
-
-        public Font arimoBold() {
-            return font( "fonts/Arimo-Bold.ttf" );
-        }
-
-        public Font arimoBoldItalic() {
-            return font( "fonts/Arimo-BoldItalic.ttf" );
-        }
-
-        public Font arimoItalic() {
-            return font( "fonts/Arimo-Italic.ttf" );
-        }
-
-        public Font arimoRegular() {
-            return font( "fonts/Arimo-Regular.ttf" );
-        }
-
-        private static Font font(@NonNls final String fontResourceName) {
-            Map<String, SoftReference<Font>> fontsByResourceName = Maps.newHashMap();
-            SoftReference<Font>              fontRef             = fontsByResourceName.get( fontResourceName );
-            Font                             font                = (fontRef == null)? null: fontRef.get();
-            if (font == null)
+            private void register() {
                 try {
-                    fontsByResourceName.put( fontResourceName, new SoftReference<>(
-                            font = Font.createFont( Font.TRUETYPE_FONT, Resources.getResource( fontResourceName ).openStream() ) ) );
+                    Font font = Font.createFont( Font.TRUETYPE_FONT, Resources.getResource( resourceName ).openStream() );
+                    GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont( font );
+                    registered = true;
                 }
                 catch (final FontFormatException | IOException e) {
                     throw logger.bug( e );
                 }
-
-            return font;
+            }
         }
     }
 
