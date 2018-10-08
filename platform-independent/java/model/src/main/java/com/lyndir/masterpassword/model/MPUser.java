@@ -18,7 +18,6 @@
 
 package com.lyndir.masterpassword.model;
 
-import com.google.common.collect.ImmutableCollection;
 import com.lyndir.masterpassword.*;
 import java.util.Collection;
 import javax.annotation.Nonnull;
@@ -110,9 +109,6 @@ public interface MPUser<S extends MPSite<?>> extends Comparable<MPUser<?>> {
 
     @Nonnull
     Collection<S> getSites();
-
-    @Nonnull
-    ImmutableCollection<MPQuery.Result<S>> findSites(MPQuery query);
 
     void addListener(Listener listener);
 

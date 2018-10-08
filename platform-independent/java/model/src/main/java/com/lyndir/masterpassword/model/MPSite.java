@@ -18,7 +18,6 @@
 
 package com.lyndir.masterpassword.model;
 
-import com.google.common.collect.ImmutableCollection;
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.masterpassword.*;
 import java.util.Collection;
@@ -118,7 +117,4 @@ public interface MPSite<Q extends MPQuestion> extends Comparable<MPSite<?>> {
 
     @Nonnull
     Collection<Q> getQuestions();
-
-    @Nonnull
-    ImmutableCollection<MPQuery.Result<Q>> findQuestions(MPQuery query);
 }

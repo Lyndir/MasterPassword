@@ -3,7 +3,7 @@ package com.lyndir.masterpassword.gui.view;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import com.google.common.base.*;
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.*;
 import com.google.common.primitives.UnsignedInteger;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.lyndir.lhunath.opal.system.logging.Logger;
@@ -650,8 +650,10 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
             JList<MPQuery.Result<? extends MPQuestion>> questionsList =
                     Components.list( questionsModel, this::getQuestionDescription );
             JTextField queryField = Components.textField( null, queryText -> Res.job( () -> {
-                MPQuery                                          query         = new MPQuery( queryText );
-                Collection<MPQuery.Result<? extends MPQuestion>> questionItems = new LinkedList<>( site.findQuestions( query ) );
+                MPQuery query = new MPQuery( queryText );
+                Collection<MPQuery.Result<? extends MPQuestion>> questionItems = new LinkedList<MPQuery.Result<? extends MPQuestion>>(
+                        query.find( site.getQuestions(), MPQuestion::getKeyword ) );
+
                 if (questionItems.stream().noneMatch( MPQuery.Result::isExact ))
                     questionItems.add( MPQuery.Result.allOf( new MPNewQuestion( site, query.getQuery() ), query.getQuery() ) );
 
@@ -814,7 +816,7 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
         }
 
         private String getSiteDescription(@Nullable final MPQuery.Result<? extends MPSite<?>> item) {
-            MPSite<?> site = (item != null)? item.getOption(): null;
+            MPSite<?> site = (item != null)? item.getValue(): null;
             if (site == null)
                 return " ";
             if (site instanceof MPNewSite)
@@ -834,7 +836,7 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
         }
 
         private String getQuestionDescription(@Nullable final MPQuery.Result<? extends MPQuestion> item) {
-            MPQuestion question = (item != null)? item.getOption(): null;
+            MPQuestion question = (item != null)? item.getValue(): null;
             if (question == null)
                 return "<site>";
             if (question instanceof MPNewQuestion)
@@ -876,7 +878,7 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
         }
 
         private void showSiteItem(@Nullable final MPQuery.Result<? extends MPSite<?>> item) {
-            MPSite<?> site = (item != null)? item.getOption(): null;
+            MPSite<?> site = (item != null)? item.getValue(): null;
             Res.ui( getSiteResult( site, showLogin ), result -> {
                 if (!showLogin && (site != null))
                     resultLabel.setText( (result != null)? strf( "Your password for %s:", site.getSiteName() ): " " );
@@ -937,7 +939,7 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
         }
 
         private void showQuestionItem(@Nullable final MPQuery.Result<? extends MPQuestion> item) {
-            MPQuestion question = (item != null)? item.getOption(): null;
+            MPQuestion question = (item != null)? item.getValue(): null;
             Res.ui( getQuestionResult( question ), answer -> {
                 if ((answer == null) || (question == null))
                     answerLabel.setText( " " );
@@ -988,7 +990,7 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
             if (selectedSite == null)
                 return null;
 
-            return selectedSite.getOption();
+            return selectedSite.getValue();
         }
 
         @Nullable
@@ -997,7 +999,7 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
             if (selectedQuestion == null)
                 return null;
 
-            return selectedQuestion.getOption();
+            return selectedQuestion.getValue();
         }
 
         @Override
@@ -1022,8 +1024,8 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
 
             updateSitesJob = Res.job( () -> {
                 MPQuery query = new MPQuery( queryText );
-                Collection<MPQuery.Result<? extends MPSite<?>>> siteItems =
-                        new LinkedList<>( user.findSites( query ) );
+                Collection<MPQuery.Result<? extends MPSite<?>>> siteItems = new LinkedList<MPQuery.Result<? extends MPSite<?>>>(
+                        query.find( user.getSites(), MPSite::getSiteName ) );
 
                 if (!Strings.isNullOrEmpty( queryText ))
                     if (siteItems.stream().noneMatch( MPQuery.Result::isExact )) {

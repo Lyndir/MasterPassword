@@ -1,12 +1,13 @@
 package com.lyndir.masterpassword.model;
 
-import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
+import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
+import com.google.common.collect.ImmutableCollection;
+import com.google.common.collect.ImmutableList;
 import java.util.*;
 import java.util.function.Function;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -30,9 +31,8 @@ public class MPQuery {
      * @return {@code true} if this query is contained wholly inside the given {@code key}.
      */
     @Nonnull
-    public <T extends Comparable<? super T>> Optional<Result<T>> find(final T option, final Function<T, CharSequence> keyForOption) {
-        CharSequence key    = keyForOption.apply( option );
-        Result<T>    result = Result.noneOf( option, key );
+    public <V> Optional<Result<V>> matches(final V value, final CharSequence key) {
+        Result<V> result = Result.noneOf( value, key );
         if (query.isEmpty())
             return Optional.of( result );
         if (key.length() == 0)
@@ -49,36 +49,49 @@ public class MPQuery {
             ++k;
         }
 
-        // If query is consumed, the result is a hit.
-        return (q >= query.length())? Optional.of( result ): Optional.empty();
+        // If the match against the query broke before the end of the query, it failed.
+        return (q < query.length())? Optional.empty(): Optional.of( result );
     }
 
-    public static class Result<T extends Comparable<? super T>> implements Comparable<Result<T>> {
+    /**
+     * @return Results for values that matched against the query, in the original values' order.
+     */
+    @Nonnull
+    public <V> ImmutableCollection<Result<? extends V>> find(final Iterable<? extends V> values,
+                                                             final Function<V, CharSequence> valueToKey) {
+        ImmutableList.Builder<Result<? extends V>> results = ImmutableList.builder();
+        for (final V value : values)
+            matches( value, valueToKey.apply( value ) ).ifPresent( results::add );
 
-        private final T            option;
+        return results.build();
+    }
+
+    public static class Result<V> {
+
+        private final V            value;
         private final CharSequence key;
         private final boolean[]    keyMatches;
 
-        Result(final T option, final CharSequence key) {
-            this.option = option;
+        Result(final V value, final CharSequence key) {
+            this.value = value;
             this.key = key;
 
             keyMatches = new boolean[key.length()];
         }
 
-        public static <T extends Comparable<? super T>> Result<T> noneOf(final T option, final CharSequence key) {
-            return new Result<>( option, key );
+        public static <T> Result<T> noneOf(final T value, final CharSequence key) {
+            return new Result<>( value, key );
         }
 
-        public static <T extends Comparable<? super T>> Result<T> allOf(final T option, final CharSequence key) {
-            Result<T> result = noneOf( option, key );
+        public static <T> Result<T> allOf(final T value, final CharSequence key) {
+            Result<T> result = noneOf( value, key );
             Arrays.fill( result.keyMatches, true );
             return result;
         }
 
         @Nonnull
-        public T getOption() {
-            return option;
+        public V getValue() {
+            return value;
         }
 
         @Nonnull
@@ -131,22 +144,17 @@ public class MPQuery {
         }
 
         @Override
-        public int compareTo(@NotNull final Result<T> o) {
-            return getOption().compareTo( o.getOption() );
-        }
-
-        @Override
         public boolean equals(final Object o) {
             if (!(o instanceof Result))
                 return false;
 
             Result<?> r = (Result<?>) o;
-            return Objects.equals( option, r.option ) && Objects.equals( key, r.key ) && Arrays.equals( keyMatches, r.keyMatches );
+            return Objects.equals( value, r.value ) && Objects.equals( key, r.key ) && Arrays.equals( keyMatches, r.keyMatches );
         }
 
         @Override
         public int hashCode() {
-            return getOption().hashCode();
+            return getValue().hashCode();
         }
 
         @Override

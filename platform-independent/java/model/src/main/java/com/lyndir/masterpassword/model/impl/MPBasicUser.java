@@ -20,8 +20,6 @@ package com.lyndir.masterpassword.model.impl;
 
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
-import com.google.common.collect.ImmutableCollection;
-import com.google.common.collect.ImmutableSortedSet;
 import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.masterpassword.*;
@@ -47,7 +45,7 @@ public abstract class MPBasicUser<S extends MPBasicSite<?, ?>> extends Changeabl
     @Nullable
     protected     MPMasterKey masterKey;
 
-    private final Map<String, S> sites = new LinkedHashMap<>();
+    private final Set<S> sites = new TreeSet<>();
 
     protected MPBasicUser(final String fullName, final MPAlgorithm algorithm) {
         this( 0, fullName, algorithm );
@@ -177,7 +175,7 @@ public abstract class MPBasicUser<S extends MPBasicSite<?, ?>> extends Changeabl
     @Nonnull
     @Override
     public S addSite(final S site) {
-        sites.put( site.getSiteName(), site );
+        sites.add( site );
 
         setChanged();
         return site;
@@ -185,7 +183,7 @@ public abstract class MPBasicUser<S extends MPBasicSite<?, ?>> extends Changeabl
 
     @Override
     public boolean deleteSite(final MPSite<?> site) {
-        if (!sites.values().remove( site ))
+        if (!sites.remove( site ))
             return false;
 
         setChanged();
@@ -195,17 +193,7 @@ public abstract class MPBasicUser<S extends MPBasicSite<?, ?>> extends Changeabl
     @Nonnull
     @Override
     public Collection<S> getSites() {
-        return Collections.unmodifiableCollection( sites.values() );
-    }
-
-    @Nonnull
-    @Override
-    public ImmutableCollection<MPQuery.Result<S>> findSites(final MPQuery query) {
-        ImmutableSortedSet.Builder<MPQuery.Result<S>> results = ImmutableSortedSet.naturalOrder();
-        for (final S site : sites.values())
-            query.find( site, MPSite::getSiteName ).ifPresent( results::add );
-
-        return results.build();
+        return Collections.unmodifiableCollection( sites );
     }
 
     @Override

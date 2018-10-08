@@ -21,8 +21,6 @@ package com.lyndir.masterpassword.model.impl;
 import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
-import com.google.common.collect.ImmutableCollection;
-import com.google.common.collect.ImmutableSortedSet;
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.masterpassword.*;
 import com.lyndir.masterpassword.model.*;
@@ -39,7 +37,7 @@ public abstract class MPBasicSite<U extends MPUser<?>, Q extends MPQuestion> ext
 
     private final U             user;
     private final String        siteName;
-    private final Collection<Q> questions = new LinkedHashSet<>();
+    private final Collection<Q> questions = new TreeSet<>();
 
     private MPAlgorithm     algorithm;
     private UnsignedInteger counter;
@@ -200,16 +198,6 @@ public abstract class MPBasicSite<U extends MPUser<?>, Q extends MPQuestion> ext
     @Override
     public Collection<Q> getQuestions() {
         return Collections.unmodifiableCollection( questions );
-    }
-
-    @Nonnull
-    @Override
-    public ImmutableCollection<MPQuery.Result<Q>> findQuestions(final MPQuery query) {
-        ImmutableSortedSet.Builder<MPQuery.Result<Q>> results = ImmutableSortedSet.naturalOrder();
-        for (final Q question : questions)
-            query.find( question, MPQuestion::getKeyword ).ifPresent( results::add );
-
-        return results.build();
     }
 
     @Override
