@@ -9,7 +9,7 @@ build_project:
     - "( ./lib/bin/build_libsodium-macos clean && ./lib/bin/build_libsodium-macos )"
     - "( ./lib/bin/build_libjson-c-macos clean && ./lib/bin/build_libjson-c-macos )"
     - "( cd ./platform-independent/c/cli && ./clean && targets=all ./build && ./mpw-tests && ./mpw-cli-tests )"
-    - "( cd ./gradle && ./gradlew --stacktrace clean test )"
+    - "( export JAVA_HOME=$(java_home -Fv 10 || java_home -Fv 9* ) && cd ./gradle && ./gradlew --stacktrace clean test )"
     - "( xcodebuild -workspace platform-darwin/MasterPassword.xcworkspace -configuration 'Test' -scheme 'MasterPassword iOS' -sdk iphonesimulator clean build )"
     - "( xcodebuild -workspace platform-darwin/MasterPassword.xcworkspace -configuration 'Test' -scheme 'MasterPassword macOS' clean build )"
   tags:
