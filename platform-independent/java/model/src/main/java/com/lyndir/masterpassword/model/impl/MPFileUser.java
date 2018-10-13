@@ -24,7 +24,6 @@ import com.lyndir.masterpassword.model.MPIncorrectMasterPasswordException;
 import com.lyndir.masterpassword.model.MPUser;
 import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.joda.time.Instant;
@@ -41,7 +40,7 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
 
     @Nullable
     private byte[]                   keyID;
-    private File                     path;
+    private File                     file;
     private MPMarshalFormat          format;
     private MPMarshaller.ContentMode contentMode;
 
@@ -54,43 +53,43 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
     public static MPFileUser load(final File file)
             throws IOException, MPMarshalException {
         for (final MPMarshalFormat format : MPMarshalFormat.values())
-            if (file.getName().endsWith( format.fileSuffix() ))
+            if (format.matches(file))
                 return format.unmarshaller().readUser( file );
 
         return null;
     }
 
-    public MPFileUser(final String fullName, final File path) {
-        this( fullName, null, MPAlgorithm.Version.CURRENT.getAlgorithm(), path );
+    public MPFileUser(final String fullName, final File location) {
+        this( fullName, null, MPAlgorithm.Version.CURRENT.getAlgorithm(), location );
     }
 
-    public MPFileUser(final String fullName, @Nullable final byte[] keyID, final MPAlgorithm algorithm, final File path) {
+    public MPFileUser(final String fullName, @Nullable final byte[] keyID, final MPAlgorithm algorithm, final File location) {
         this( fullName, keyID, algorithm, 0, null, new Instant(), false,
-              MPMarshaller.ContentMode.PROTECTED, MPMarshalFormat.DEFAULT, path );
+              MPMarshaller.ContentMode.PROTECTED, MPMarshalFormat.DEFAULT, location );
     }
 
     public MPFileUser(final String fullName, @Nullable final byte[] keyID, final MPAlgorithm algorithm, final int avatar,
                       @Nullable final MPResultType defaultType, final ReadableInstant lastUsed, final boolean hidePasswords,
-                      final MPMarshaller.ContentMode contentMode, final MPMarshalFormat format, final File path) {
+                      final MPMarshaller.ContentMode contentMode, final MPMarshalFormat format, final File location) {
         super( avatar, fullName, algorithm );
 
         this.keyID = (keyID != null)? keyID.clone(): null;
         this.defaultType = (defaultType != null)? defaultType: algorithm.mpw_default_result_type();
         this.lastUsed = lastUsed;
         this.hidePasswords = hidePasswords;
-        this.path = path;
         this.format = format;
         this.contentMode = contentMode;
+
+        if (location.isDirectory())
+            this.file = new File( location, getFullName() + getFormat().fileSuffix() );
+        else
+            this.file = location;
     }
 
     @Nullable
     @Override
     public byte[] getKeyID() {
         return (keyID == null)? null: keyID.clone();
-    }
-
-    public void setPath(final File path) {
-        this.path = path;
     }
 
     @Override
@@ -117,20 +116,12 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
         return format;
     }
 
-    public void setFormat(final MPMarshalFormat format) {
-        if (Objects.equals( this.format, format ))
-            return;
-
-        this.format = format;
-        setChanged();
-    }
-
     public MPMarshaller.ContentMode getContentMode() {
         return contentMode;
     }
 
     public void setContentMode(final MPMarshaller.ContentMode contentMode) {
-        if (Objects.equals( this.contentMode, contentMode ))
+        if (this.contentMode == contentMode)
             return;
 
         this.contentMode = contentMode;
@@ -143,7 +134,7 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
     }
 
     public void setDefaultType(final MPResultType defaultType) {
-        if (Objects.equals( this.defaultType, defaultType ))
+        if (this.defaultType == defaultType)
             return;
 
         this.defaultType = defaultType;
@@ -180,7 +171,47 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
     }
 
     public File getFile() {
-        return new File( path, getFullName() + getFormat().fileSuffix() );
+        return file;
+    }
+
+    public void migrateTo(final MPMarshalFormat format) {
+        if (this.format == format)
+            return;
+
+        migrateTo( file.getParentFile(), format );
+    }
+
+    public void migrateTo(final File path) {
+        migrateTo( path, format );
+    }
+
+    /**
+     * Move the file for this user to the given path using a standard user-derived filename (ie. {@code [full name].[format suffix]})
+     *
+     * The user's old file is either moved to the new or deleted.  If the user's file was already at the destination, it doesn't change.
+     * If a file already exists at the destination, it is overwritten.
+     */
+    public void migrateTo(final File path, final MPMarshalFormat newFormat) {
+        MPMarshalFormat oldFormat = format;
+        File oldFile = file, newFile = new File( path, getFullName() + newFormat.fileSuffix() );
+
+        // If the format hasn't changed, migrate by moving the file: the contents doesn't need to change.
+        if ((oldFormat == newFormat) && !oldFile.equals( newFile ) && oldFile.exists())
+            if (!oldFile.renameTo( newFile ))
+                logger.wrn( "Couldn't move %s to %s for migration.", oldFile, newFile );
+
+        this.format = newFormat;
+        this.file = newFile;
+
+        // If the format has changed, save the new format into the new file and delete the old file.  Revert if the user cannot be saved.
+        if ((oldFormat != newFormat) && !oldFile.equals( newFile ))
+            if (save()) {
+                if (oldFile.exists() && !oldFile.delete())
+                    logger.wrn( "Couldn't delete %s after migration.", oldFile );
+            } else {
+                this.format = oldFormat;
+                this.file = oldFile;
+            }
     }
 
     @Override
@@ -201,10 +232,16 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
         }
     }
 
-    public void save() {
+    /**
+     * @return {@code false} if the user is not fully loaded (complete), authenticated, or an issue prevented the marshalling.
+     */
+    public boolean save() {
+        if (!isComplete())
+            return false;
+
         try {
-            if (isComplete())
-                getFormat().marshaller().marshall( this );
+            getFormat().marshaller().marshall( this );
+            return true;
         }
         catch (final MPKeyUnavailableException e) {
             logger.wrn( e, "Cannot write out changes for unauthenticated user: %s.", this );
@@ -212,6 +249,8 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
         catch (final IOException | MPMarshalException | MPAlgorithmException e) {
             logger.err( e, "Unable to write out changes for user: %s", this );
         }
+
+        return false;
     }
 
     @Override

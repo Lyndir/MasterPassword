@@ -78,18 +78,17 @@ public class MPFileUserManager {
             return;
         }
 
-        for (final File file : pathFiles)
-            try {
-                MPFileUser user = MPFileUser.load( file );
-                if (user != null) {
-                    MPFileUser previousUser = userByName.put( user.getFullName(), user );
-                    if ((previousUser != null) && (previousUser.getFormat().ordinal() > user.getFormat().ordinal()))
-                        userByName.put( previousUser.getFullName(), previousUser );
-                }
-            }
-            catch (final IOException | MPMarshalException e) {
-                logger.err( e, "Couldn't read user from: %s", file );
-            }
+        for (final MPMarshalFormat format : MPMarshalFormat.values())
+            for (final File file : pathFiles)
+                if (format.matches( file ))
+                    try {
+                        MPFileUser user = MPFileUser.load( file );
+                        if (user != null)
+                            add( user );
+                    }
+                    catch (final IOException | MPMarshalException e) {
+                        logger.err( e, "Couldn't read user from: %s", file );
+                    }
 
         fireUpdated();
     }
@@ -99,12 +98,19 @@ public class MPFileUserManager {
     }
 
     public MPFileUser add(final MPFileUser user) {
-        user.setPath( getPath() );
-        user.save();
+        // We migrate in two steps to allow the first to complete even if the user is not in the right state to complete the latter.
+        user.migrateTo( getPath() );
+        user.migrateTo( MPMarshalFormat.DEFAULT );
 
         MPFileUser oldUser = userByName.put( user.getFullName(), user );
-        if (oldUser != null)
+        if (oldUser != null) {
             oldUser.invalidate();
+
+            // Delete old user, it is replaced by the new one.
+            if (!oldUser.getFile().equals( user.getFile() ) && oldUser.getFile().exists())
+                if (!oldUser.getFile().delete())
+                    logger.err( "Couldn't delete file: %s, after replacing with: %s", oldUser.getFile(), user.getFile() );
+        }
         fireUpdated();
 
         return user;

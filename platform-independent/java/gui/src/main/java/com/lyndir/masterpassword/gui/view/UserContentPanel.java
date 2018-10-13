@@ -3,7 +3,7 @@ package com.lyndir.masterpassword.gui.view;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import com.google.common.base.*;
-import com.google.common.collect.*;
+import com.google.common.collect.ImmutableList;
 import com.google.common.primitives.UnsignedInteger;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.lyndir.lhunath.opal.system.logging.Logger;
@@ -407,6 +407,9 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
             Res.job( () -> {
                 try {
                     user.authenticate( masterPassword );
+
+                    if (user instanceof MPFileUser)
+                        ((MPFileUser) user).migrateTo( MPMarshalFormat.DEFAULT );
                 }
                 catch (final MPIncorrectMasterPasswordException e) {
                     logger.wrn( e, "During user authentication for: %s", user );

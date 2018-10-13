@@ -18,6 +18,9 @@
 
 package com.lyndir.masterpassword.model.impl;
 
+import java.io.File;
+
+
 /**
  * @author lhunath, 2017-09-20
  *
@@ -72,4 +75,8 @@ public enum MPMarshalFormat {
 
     @SuppressWarnings("MethodReturnAlwaysConstant")
     public abstract String fileSuffix();
+
+    public boolean matches(final File file) {
+        return file.getName().endsWith( fileSuffix() );
+    }
 }

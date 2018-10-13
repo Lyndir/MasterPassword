@@ -25,8 +25,8 @@ import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.ConversionUtils;
 import com.lyndir.masterpassword.*;
-import com.lyndir.masterpassword.model.MPModelConstants;
 import com.lyndir.masterpassword.model.MPIncorrectMasterPasswordException;
+import com.lyndir.masterpassword.model.MPModelConstants;
 import java.io.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -56,6 +56,7 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
             int          mpVersion    = 0, avatar = 0;
             boolean      clearContent = false, headerStarted = false;
             MPResultType defaultType  = null;
+            Instant      date         = null;
 
             //noinspection HardcodedLineSeparator
             for (final String line : CharStreams.readLines( reader ))
@@ -66,10 +67,11 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
                         headerStarted = true;
                     else if ((fullName != null) && (keyID != null))
                         // Ends the header.
-                        return new MPFileUser( fullName, keyID, MPAlgorithm.Version.fromInt( mpVersion ).getAlgorithm(),
-                                               avatar, defaultType, new Instant( 0 ), false,
-                                               clearContent? MPMarshaller.ContentMode.VISIBLE: MPMarshaller.ContentMode.PROTECTED,
-                                               MPMarshalFormat.Flat, file.getParentFile() );
+                        return new MPFileUser(
+                                fullName, keyID, MPAlgorithm.Version.fromInt( mpVersion ).getAlgorithm(), avatar, defaultType,
+                                date, false, clearContent? MPMarshaller.ContentMode.VISIBLE: MPMarshaller.ContentMode.PROTECTED,
+                                MPMarshalFormat.Flat, file
+                        );
                 }
 
                 // Comment.
@@ -91,6 +93,8 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
                                 clearContent = "visible".equalsIgnoreCase( value );
                             else if ("Default Type".equalsIgnoreCase( name ))
                                 defaultType = MPResultType.forType( ConversionUtils.toIntegerNN( value ) );
+                            else if ("Date".equalsIgnoreCase( name ))
+                                date = MPModelConstants.dateTimeFormatter.parseDateTime( value ).toInstant();
                         }
                     }
                 }
@@ -150,28 +154,32 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
                         MPFileSite site;
                         switch (importFormat) {
                             case 0:
-                                site = new MPFileSite( user, //
-                                                       siteMatcher.group( 5 ), MPAlgorithm.Version.fromInt( ConversionUtils.toIntegerNN(
-                                        colon.matcher( siteMatcher.group( 4 ) ).replaceAll( "" ) ) ).getAlgorithm(),
-                                                       user.getAlgorithm().mpw_default_counter(),
-                                                       MPResultType.forType( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ),
-                                                       clearContent? null: siteMatcher.group( 6 ),
-                                                       null, null, null, ConversionUtils.toIntegerNN( siteMatcher.group( 2 ) ),
-                                                       MPModelConstants.dateTimeFormatter.parseDateTime( siteMatcher.group( 1 ) ).toInstant() );
+                                site = new MPFileSite(
+                                        user, siteMatcher.group( 5 ),
+                                        MPAlgorithm.Version.fromInt( ConversionUtils.toIntegerNN(
+                                                colon.matcher( siteMatcher.group( 4 ) ).replaceAll( "" ) ) ).getAlgorithm(),
+                                        user.getAlgorithm().mpw_default_counter(),
+                                        MPResultType.forType( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ),
+                                        clearContent? null: siteMatcher.group( 6 ),
+                                        null, null, null, ConversionUtils.toIntegerNN( siteMatcher.group( 2 ) ),
+                                        MPModelConstants.dateTimeFormatter.parseDateTime( siteMatcher.group( 1 ) ).toInstant() );
                                 if (clearContent)
                                     site.setSitePassword( site.getResultType(), siteMatcher.group( 6 ) );
                                 break;
 
                             case 1:
-                                site = new MPFileSite( user, //
-                                                       siteMatcher.group( 7 ), MPAlgorithm.Version.fromInt( ConversionUtils.toIntegerNN(
-                                        colon.matcher( siteMatcher.group( 4 ) ).replaceAll( "" ) ) ).getAlgorithm(),
-                                                       UnsignedInteger.valueOf( colon.matcher( siteMatcher.group( 5 ) ).replaceAll( "" ) ),
-                                                       MPResultType.forType( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ),
-                                                       clearContent? null: siteMatcher.group( 8 ),
-                                                       MPResultType.GeneratedName, clearContent? null: siteMatcher.group( 6 ), null,
-                                                       ConversionUtils.toIntegerNN( siteMatcher.group( 2 ) ),
-                                                       MPModelConstants.dateTimeFormatter.parseDateTime( siteMatcher.group( 1 ) ).toInstant() );
+                                site = new MPFileSite(
+                                        user, siteMatcher.group( 7 ),
+                                        MPAlgorithm.Version.fromInt( ConversionUtils.toIntegerNN(
+                                                colon.matcher( siteMatcher.group( 4 ) ).replaceAll( "" ) ) ).getAlgorithm(),
+                                        UnsignedInteger.valueOf(
+                                                colon.matcher( siteMatcher.group( 5 ) ).replaceAll( "" ) ),
+                                        MPResultType.forType( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ),
+                                        clearContent? null: siteMatcher.group( 8 ),
+                                        MPResultType.GeneratedName,
+                                        clearContent? null: siteMatcher.group( 6 ),
+                                        null, ConversionUtils.toIntegerNN( siteMatcher.group( 2 ) ),
+                                        MPModelConstants.dateTimeFormatter.parseDateTime( siteMatcher.group( 1 ) ).toInstant() );
                                 if (clearContent) {
                                     site.setSitePassword( site.getResultType(), siteMatcher.group( 8 ) );
                                     site.setLoginName( MPResultType.StoredPersonal, siteMatcher.group( 6 ) );

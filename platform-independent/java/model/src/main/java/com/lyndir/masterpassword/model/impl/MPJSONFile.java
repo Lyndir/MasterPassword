@@ -144,7 +144,7 @@ public class MPJSONFile extends MPJSONAnyObject {
                 (user.default_type != null)? user.default_type: algorithm.mpw_default_result_type(),
                 (user.last_used != null)? MPModelConstants.dateTimeFormatter.parseDateTime( user.last_used ): new Instant(),
                 user.hide_passwords, export.redacted? MPMarshaller.ContentMode.PROTECTED: MPMarshaller.ContentMode.VISIBLE,
-                MPMarshalFormat.JSON, file.getParentFile()
+                MPMarshalFormat.JSON, file
         );
     }
 
