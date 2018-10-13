@@ -20,8 +20,7 @@ package com.lyndir.masterpassword.model.impl;
 
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.masterpassword.*;
-import com.lyndir.masterpassword.model.MPIncorrectMasterPasswordException;
-import com.lyndir.masterpassword.model.MPUser;
+import com.lyndir.masterpassword.model.*;
 import java.io.File;
 import java.io.IOException;
 import javax.annotation.Nonnull;
@@ -43,17 +42,16 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
     private File                     file;
     private MPMarshalFormat          format;
     private MPMarshaller.ContentMode contentMode;
+    private ReadableInstant          lastUsed;
+    private boolean                  complete;
 
-    private MPResultType    defaultType;
-    private ReadableInstant lastUsed;
-    private boolean         hidePasswords;
-    private boolean         complete;
+    private final MPFileUserPreferences preferences;
 
     @Nullable
     public static MPFileUser load(final File file)
             throws IOException, MPMarshalException {
         for (final MPMarshalFormat format : MPMarshalFormat.values())
-            if (format.matches(file))
+            if (format.matches( file ))
                 return format.unmarshaller().readUser( file );
 
         return null;
@@ -74,9 +72,8 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
         super( avatar, fullName, algorithm );
 
         this.keyID = (keyID != null)? keyID.clone(): null;
-        this.defaultType = (defaultType != null)? defaultType: algorithm.mpw_default_result_type();
         this.lastUsed = lastUsed;
-        this.hidePasswords = hidePasswords;
+        this.preferences = new MPFileUserPreferences( this, defaultType, hidePasswords );
         this.format = format;
         this.contentMode = contentMode;
 
@@ -90,6 +87,12 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
     @Override
     public byte[] getKeyID() {
         return (keyID == null)? null: keyID.clone();
+    }
+
+    @Nonnull
+    @Override
+    public MPUserPreferences getPreferences() {
+        return preferences;
     }
 
     @Override
@@ -128,37 +131,12 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
         setChanged();
     }
 
-    @Override
-    public MPResultType getDefaultType() {
-        return defaultType;
-    }
-
-    public void setDefaultType(final MPResultType defaultType) {
-        if (this.defaultType == defaultType)
-            return;
-
-        this.defaultType = defaultType;
-        setChanged();
-    }
-
     public ReadableInstant getLastUsed() {
         return lastUsed;
     }
 
     public void use() {
         lastUsed = new Instant();
-        setChanged();
-    }
-
-    public boolean isHidePasswords() {
-        return hidePasswords;
-    }
-
-    public void setHidePasswords(final boolean hidePasswords) {
-        if (Objects.equals( this.hidePasswords, hidePasswords ))
-            return;
-
-        this.hidePasswords = hidePasswords;
         setChanged();
     }
 
@@ -193,7 +171,7 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
      */
     public void migrateTo(final File path, final MPMarshalFormat newFormat) {
         MPMarshalFormat oldFormat = format;
-        File oldFile = file, newFile = new File( path, getFullName() + newFormat.fileSuffix() );
+        File            oldFile   = file, newFile = new File( path, getFullName() + newFormat.fileSuffix() );
 
         // If the format hasn't changed, migrate by moving the file: the contents doesn't need to change.
         if ((oldFormat == newFormat) && !oldFile.equals( newFile ) && oldFile.exists())

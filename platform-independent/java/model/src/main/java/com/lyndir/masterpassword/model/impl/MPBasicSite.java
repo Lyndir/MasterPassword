@@ -55,8 +55,7 @@ public abstract class MPBasicSite<U extends MPUser<?>, Q extends MPQuestion> ext
         this.siteName = siteName;
         this.algorithm = (algorithm != null)? algorithm: this.user.getAlgorithm();
         this.counter = (counter != null)? counter: this.algorithm.mpw_default_counter();
-        this.resultType = (resultType != null)? resultType:
-                ifNotNullElse( this.user.getDefaultType(), this.algorithm.mpw_default_result_type() );
+        this.resultType = (resultType != null)? resultType: this.user.getPreferences().getDefaultType();
         this.loginType = (loginType != null)? loginType: this.algorithm.mpw_default_login_type();
     }
 

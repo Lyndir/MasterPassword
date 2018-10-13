@@ -77,10 +77,10 @@ public class MPJSONFile extends MPJSONAnyObject {
         user.avatar = modelUser.getAvatar();
         user.full_name = modelUser.getFullName();
         user.last_used = MPModelConstants.dateTimeFormatter.print( modelUser.getLastUsed() );
-        user.hide_passwords = modelUser.isHidePasswords();
         user.key_id = modelUser.exportKeyID();
         user.algorithm = modelUser.getAlgorithm().version();
-        user.default_type = modelUser.getDefaultType();
+        user.default_type = modelUser.getPreferences().getDefaultType();
+        user.hide_passwords = modelUser.getPreferences().isHidePasswords();
 
         // Section "sites"
         sites = new LinkedHashMap<>();

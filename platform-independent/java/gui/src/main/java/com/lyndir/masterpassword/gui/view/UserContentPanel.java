@@ -584,10 +584,13 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
             if (fileUser != null) {
                 components.add( Components.label( "Default Password Type:" ),
                                 Components.comboBox( MPResultType.values(), MPResultType::getLongName,
-                                                     fileUser.getDefaultType(), fileUser::setDefaultType ),
+                                                     fileUser.getPreferences().getDefaultType(),
+                                                     fileUser.getPreferences()::setDefaultType ),
                                 Components.strut() );
 
-                components.add( Components.checkBox( "Hide Passwords", fileUser.isHidePasswords(), fileUser::setHidePasswords ) );
+                components.add( Components.checkBox( "Hide Passwords",
+                                                     fileUser.getPreferences().isHidePasswords(),
+                                                     fileUser.getPreferences()::setHidePasswords ) );
             }
 
             Components.showDialog( this, user.getFullName(), new JOptionPane( Components.panel(
@@ -615,14 +618,14 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
                             Components.strut() );
 
             components.add( Components.label( "Password Type:" ),
-                            Components.comboBox( MPResultType.values(), type -> getTypeDescription(
-                                    type, user.getDefaultType(), user.getAlgorithm().mpw_default_result_type() ),
+                            Components.comboBox( MPResultType.values(), type ->
+                                                         getTypeDescription( type, user.getPreferences().getDefaultType() ),
                                                  site.getResultType(), site::setResultType ),
                             Components.strut() );
 
             components.add( Components.label( "Login Type:" ),
-                            Components.comboBox( MPResultType.values(), type -> getTypeDescription(
-                                    type, user.getAlgorithm().mpw_default_login_type() ),
+                            Components.comboBox( MPResultType.values(), type ->
+                                                         getTypeDescription( type, user.getAlgorithm().mpw_default_login_type() ),
                                                  site.getLoginType(), site::setLoginType ),
                             Components.strut() );
 
@@ -890,7 +893,7 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
 
                 if ((result == null) || result.isEmpty())
                     resultField.setText( " " );
-                else if (!showLogin && (user instanceof MPFileUser) && ((MPFileUser) user).isHidePasswords())
+                else if (!showLogin && user.getPreferences().isHidePasswords())
                     resultField.setText( EACH_CHARACTER.matcher( result ).replaceAll( "•" ) );
                 else
                     resultField.setText( result );
@@ -1033,8 +1036,8 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
                 if (!Strings.isNullOrEmpty( queryText ))
                     if (siteItems.stream().noneMatch( MPQuery.Result::isExact )) {
                         MPQuery.Result<? extends MPSite<?>> selectedItem = sitesModel.getSelectedItem();
-                        if ((selectedItem != null) && user.equals( selectedItem.getOption().getUser() ) &&
-                            queryText.equals( selectedItem.getOption().getSiteName() ))
+                        if ((selectedItem != null) && user.equals( selectedItem.getValue().getUser() ) &&
+                            queryText.equals( selectedItem.getValue().getSiteName() ))
                             siteItems.add( selectedItem );
                         else
                             siteItems.add( MPQuery.Result.allOf( new MPNewSite( user, query.getQuery() ), query.getQuery() ) );

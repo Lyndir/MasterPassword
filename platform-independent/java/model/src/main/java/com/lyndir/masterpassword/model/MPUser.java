@@ -38,17 +38,15 @@ public interface MPUser<S extends MPSite<?>> extends Comparable<MPUser<?>> {
     @Nonnull
     String getFullName();
 
+    @Nonnull
+    MPUserPreferences getPreferences();
+
     // - Algorithm
 
     @Nonnull
     MPAlgorithm getAlgorithm();
 
     void setAlgorithm(MPAlgorithm algorithm);
-
-    @Nullable
-    default MPResultType getDefaultType() {
-        return null;
-    }
 
     @Nullable
     byte[] getKeyID();

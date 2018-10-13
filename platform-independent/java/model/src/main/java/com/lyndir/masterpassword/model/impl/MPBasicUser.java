@@ -79,6 +79,12 @@ public abstract class MPBasicUser<S extends MPBasicSite<?, ?>> extends Changeabl
 
     @Nonnull
     @Override
+    public MPUserPreferences getPreferences() {
+        return new MPBasicUserPreferences<MPBasicUser<?>>( this );
+    }
+
+    @Nonnull
+    @Override
     public MPAlgorithm getAlgorithm() {
         return algorithm;
     }
