@@ -7,7 +7,7 @@ import java.util.concurrent.Executors;
 /**
  * @author lhunath, 2018-07-08
  */
-public class Changeable {
+public abstract class Changeable {
 
     private static final ExecutorService changeExecutor = Executors.newSingleThreadExecutor();
 
@@ -15,7 +15,9 @@ public class Changeable {
     private       Grouping grouping = Grouping.APPLY;
     private       boolean  changed;
 
-    void setChanged() {
+    protected abstract void onChanged();
+
+    public void setChanged() {
         synchronized (mutex) {
             if (changed)
                 return;
@@ -35,9 +37,6 @@ public class Changeable {
 
             onChanged();
         } );
-    }
-
-    protected void onChanged() {
     }
 
     public void beginChanges() {

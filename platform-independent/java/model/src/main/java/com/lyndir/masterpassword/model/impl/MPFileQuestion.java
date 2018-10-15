@@ -21,7 +21,6 @@ package com.lyndir.masterpassword.model.impl;
 import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 
 import com.lyndir.masterpassword.*;
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 
@@ -33,6 +32,7 @@ public class MPFileQuestion extends MPBasicQuestion {
     @Nullable
     private String answerState;
 
+    @SuppressWarnings("TypeMayBeWeakened")
     public MPFileQuestion(final MPFileSite site, final String keyword,
                           @Nullable final MPResultType type, @Nullable final String answerState) {
         super( site, keyword, ifNotNullElse( type, site.getAlgorithm().mpw_default_answer_type() ) );
@@ -45,7 +45,7 @@ public class MPFileQuestion extends MPBasicQuestion {
         return answerState;
     }
 
-    @Nonnull
+    @Nullable
     @Override
     public String getAnswer()
             throws MPKeyUnavailableException, MPAlgorithmException {

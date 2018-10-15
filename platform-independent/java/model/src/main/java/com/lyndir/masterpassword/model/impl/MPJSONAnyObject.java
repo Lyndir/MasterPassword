@@ -19,6 +19,9 @@
 package com.lyndir.masterpassword.model.impl;
 
 import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
+import com.fasterxml.jackson.core.util.Separators;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.*;
 
@@ -27,31 +30,59 @@ import java.util.*;
  * @author lhunath, 2018-05-14
  */
 @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = MPJSONAnyObject.MPJSONEmptyValue.class)
-class MPJSONAnyObject {
+public class MPJSONAnyObject {
+
+    @SuppressWarnings("serial")
+    protected static final ObjectMapper objectMapper = new ObjectMapper() {
+        {
+            setDefaultPrettyPrinter( new DefaultPrettyPrinter() {
+                @Override
+                public DefaultPrettyPrinter withSeparators(final Separators separators) {
+                    super.withSeparators( separators );
+                    _objectFieldValueSeparatorWithSpaces = separators.getObjectFieldValueSeparator() + " ";
+                    return this;
+                }
+            } );
+            setVisibility( PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE );
+            setVisibility( PropertyAccessor.FIELD, JsonAutoDetect.Visibility.NON_PRIVATE );
+        }
+    };
 
     @JsonAnySetter
     final Map<String, Object> any = new LinkedHashMap<>();
 
     @JsonAnyGetter
-    public Map<String, Object> getAny() {
+    public Map<String, Object> any() {
         return Collections.unmodifiableMap( any );
+    }
+
+    @SuppressWarnings("unchecked")
+    public <V> V any(final String key) {
+        return (V) any.get( key );
     }
 
     @SuppressWarnings("EqualsAndHashcode")
     public static class MPJSONEmptyValue {
 
         @Override
-        @SuppressWarnings({ "ChainOfInstanceofChecks", "Contract" })
+        @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
         @SuppressFBWarnings({ "EQ_UNUSUAL", "EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS", "HE_EQUALS_USE_HASHCODE" })
         public boolean equals(final Object obj) {
+            return isEmpty( obj );
+        }
+
+        @SuppressWarnings({ "ChainOfInstanceofChecks", "ConstantConditions" })
+        private static boolean isEmpty(final Object obj) {
+            if (obj == null)
+                return true;
             if (obj instanceof Collection<?>)
                 return ((Collection<?>) obj).isEmpty();
             if (obj instanceof Map<?, ?>)
                 return ((Map<?, ?>) obj).isEmpty();
-            if (obj instanceof MPJSONFile.Site.Ext)
-                return ((MPJSONAnyObject) obj).any.isEmpty();
+            if (obj instanceof MPJSONAnyObject)
+                return ((MPJSONAnyObject) obj).any.isEmpty() && (objectMapper.valueToTree( obj ).size() == 0);
 
-            return obj == null;
+            return false;
         }
     }
 }

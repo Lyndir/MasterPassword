@@ -17,24 +17,49 @@ public class JDK9Platform implements IPlatform {
     private static final Logger  logger  = Logger.get( JDK9Platform.class );
     private static final Desktop desktop = Desktop.getDesktop();
 
+    private AppForegroundListener appForegroundHandler;
+    private AppReopenedListener   appReopenHandler;
+
     @Override
     public boolean installAppForegroundHandler(final Runnable handler) {
-        desktop.addAppEventListener( new AppForegroundListener() {
-            @Override
-            public void appRaisedToForeground(final AppForegroundEvent e) {
-                handler.run();
-            }
+        if (appForegroundHandler == null)
+            desktop.addAppEventListener( appForegroundHandler = new AppForegroundListener() {
+                @Override
+                public void appRaisedToForeground(final AppForegroundEvent e) {
+                    handler.run();
+                }
 
-            @Override
-            public void appMovedToBackground(final AppForegroundEvent e) {
-            }
-        } );
+                @Override
+                public void appMovedToBackground(final AppForegroundEvent e) {
+                }
+            } );
+
+        return true;
+    }
+
+    @Override
+    public boolean removeAppForegroundHandler() {
+        if (appForegroundHandler == null)
+            return false;
+
+        desktop.removeAppEventListener( appForegroundHandler );
         return true;
     }
 
     @Override
     public boolean installAppReopenHandler(final Runnable handler) {
-        desktop.addAppEventListener( (AppReopenedListener) e -> handler.run() );
+        if (appReopenHandler == null)
+            desktop.addAppEventListener( appReopenHandler = e -> handler.run() );
+
+        return true;
+    }
+
+    @Override
+    public boolean removeAppReopenHandler() {
+        if (appReopenHandler == null)
+            return false;
+
+        desktop.removeAppEventListener( appReopenHandler );
         return true;
     }
 

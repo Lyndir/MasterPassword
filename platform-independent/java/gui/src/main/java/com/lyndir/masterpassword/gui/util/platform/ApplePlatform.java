@@ -17,24 +17,47 @@ public class ApplePlatform implements IPlatform {
     private static final Application application = Preconditions.checkNotNull(
             Application.getApplication(), "Not an Apple Java application." );
 
+    private AppForegroundListener appForegroundHandler;
+    private AppReOpenedListener appReopenHandler;
+
     @Override
     public boolean installAppForegroundHandler(final Runnable handler) {
-        application.addAppEventListener( new AppForegroundListener() {
-            @Override
-            public void appMovedToBackground(final AppEvent.AppForegroundEvent e) {
-            }
+        if (appForegroundHandler == null)
+            application.addAppEventListener( appForegroundHandler = new AppForegroundListener() {
+                @Override
+                public void appMovedToBackground(final AppEvent.AppForegroundEvent e) {
+                }
 
-            @Override
-            public void appRaisedToForeground(final AppEvent.AppForegroundEvent e) {
-                handler.run();
-            }
-        } );
+                @Override
+                public void appRaisedToForeground(final AppEvent.AppForegroundEvent e) {
+                    handler.run();
+                }
+            } );
+
+        return true;
+    }
+
+    @Override
+    public boolean removeAppForegroundHandler() {
+        if (appForegroundHandler == null)
+            return false;
+
+        application.removeAppEventListener( appForegroundHandler );
         return true;
     }
 
     @Override
     public boolean installAppReopenHandler(final Runnable handler) {
-        application.addAppEventListener( (AppReOpenedListener) e -> handler.run() );
+        application.addAppEventListener( appReopenHandler = e -> handler.run() );
+        return true;
+    }
+
+    @Override
+    public boolean removeAppReopenHandler() {
+        if (appReopenHandler == null)
+            return false;
+
+        application.removeAppEventListener( appReopenHandler );
         return true;
     }
 

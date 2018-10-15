@@ -1,12 +1,12 @@
 package com.lyndir.masterpassword.gui.view;
 
 import com.lyndir.lhunath.opal.system.logging.Logger;
+import com.lyndir.masterpassword.gui.MPGuiConfig;
 import com.lyndir.masterpassword.gui.util.Components;
 import com.lyndir.masterpassword.gui.util.Res;
 import com.lyndir.masterpassword.model.impl.MPFileUserManager;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
+import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 
@@ -19,7 +19,7 @@ public class MasterPasswordFrame extends JFrame {
 
     private static final Logger logger = Logger.get( MasterPasswordFrame.class );
 
-    private final UserContentPanel         userContent;
+    private final UserContentPanel userContent;
 
     @SuppressWarnings("MagicNumber")
     public MasterPasswordFrame() {
@@ -39,6 +39,7 @@ public class MasterPasswordFrame extends JFrame {
         userPanel.add( userContent.getSiteToolbar(), BorderLayout.LINE_END );
 
         addComponentListener( new ComponentHandler() );
+        addWindowListener( new WindowHandler() );
         setPreferredSize( new Dimension( 800, 560 ) );
         setDefaultCloseOperation( DISPOSE_ON_CLOSE );
         pack();
@@ -53,6 +54,16 @@ public class MasterPasswordFrame extends JFrame {
         public void componentShown(final ComponentEvent e) {
             MPFileUserManager.get().reload();
             userContent.transferFocus();
+        }
+    }
+
+
+    private static class WindowHandler extends WindowAdapter {
+
+        @Override
+        public void windowClosed(final WindowEvent e) {
+            if (!MPGuiConfig.get().stayResident())
+                System.exit( 0 );
         }
     }
 }

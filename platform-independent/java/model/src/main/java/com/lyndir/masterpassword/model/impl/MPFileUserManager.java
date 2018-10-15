@@ -18,11 +18,9 @@
 
 package com.lyndir.masterpassword.model.impl;
 
-import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
-
 import com.google.common.collect.ImmutableSortedSet;
 import com.lyndir.lhunath.opal.system.logging.Logger;
-import com.lyndir.masterpassword.model.MPModelConstants;
+import com.lyndir.masterpassword.model.MPConfig;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -38,19 +36,8 @@ import java.util.concurrent.CopyOnWriteArraySet;
 public class MPFileUserManager {
 
     @SuppressWarnings("UnusedDeclaration")
-    private static final Logger            logger = Logger.get( MPFileUserManager.class );
-    private static final MPFileUserManager instance;
-
-    static {
-        String rcDir = System.getenv( MPModelConstants.env_rcDir );
-
-        if (rcDir != null)
-            instance = create( new File( rcDir ) );
-        else {
-            String home = ifNotNullElseNullable( System.getProperty( "user.home" ), System.getenv( "HOME" ) );
-            instance = create( new File( home, ".mpw.d" ) );
-        }
-    }
+    private static final Logger            logger   = Logger.get( MPFileUserManager.class );
+    private static final MPFileUserManager instance = create( MPConfig.get().rcDir() );
 
     private final Collection<Listener>    listeners  = new CopyOnWriteArraySet<>();
     private final Map<String, MPFileUser> userByName = new HashMap<>();

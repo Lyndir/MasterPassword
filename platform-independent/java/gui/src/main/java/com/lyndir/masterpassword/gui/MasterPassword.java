@@ -46,10 +46,10 @@ import javax.swing.*;
 public final class MasterPassword {
 
     @SuppressWarnings("UnusedDeclaration")
-    private static final Logger logger = Logger.get( MasterPassword.class );
-
+    private static final Logger         logger   = Logger.get( MasterPassword.class );
     private static final MasterPassword instance = new MasterPassword();
 
+    private final Provider             keyMaster = Provider.getCurrentProvider( true );
     private final Collection<Listener> listeners = new CopyOnWriteArraySet<>();
 
     @Nullable
@@ -97,7 +97,29 @@ public final class MasterPassword {
         } );
     }
 
-    public void checkUpdate() {
+    public static void main(final String... args) {
+        //Thread.setDefaultUncaughtExceptionHandler(
+        //        (t, e) -> logger.bug( e, "Uncaught: %s", e.getLocalizedMessage() ) );
+
+        // Set the system look & feel, if available.
+        try {
+            UIManager.setLookAndFeel( UIManager.getSystemLookAndFeelClassName() );
+        }
+        catch (final UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException ignored) {
+        }
+
+        // Create and open the UI.
+        get().open();
+
+        // UI features.
+        get().updateResidence();
+        get().updateCheck();
+    }
+
+    public void updateCheck() {
+        if (!MPGuiConfig.get().checkForUpdates())
+            return;
+
         try {
             String implementationVersion = version();
             String latestVersion = new ByteSource() {
@@ -127,26 +149,10 @@ public final class MasterPassword {
         }
     }
 
-    public static void main(final String... args) {
-        //Thread.setDefaultUncaughtExceptionHandler(
-        //        (t, e) -> logger.bug( e, "Uncaught: %s", e.getLocalizedMessage() ) );
-
-        // Try and set the system look & feel, if available.
-        try {
-            UIManager.setLookAndFeel( UIManager.getSystemLookAndFeelClassName() );
-            Platform.get().installAppForegroundHandler( get()::open );
-            Platform.get().installAppReopenHandler( get()::open );
-            Provider.getCurrentProvider( true ).register( MPGuiConstants.ui_hotkey, hotKey -> get().open() );
-        }
-        catch (final UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException ignored) {
-        }
-
-        // Create a platform-specific GUI and open it.
-        get().open();
-
-        // Check online to see if this version has been superseded.
-        if (MPConfig.get().checkForUpdates())
-            get().checkUpdate();
+    public void updateResidence() {
+        Platform.get().installAppForegroundHandler( get()::open );
+        Platform.get().installAppReopenHandler( get()::open );
+        keyMaster.register( MPGuiConstants.ui_hotkey, hotKey -> get().open() );
     }
 
     @SuppressWarnings("InterfaceMayBeAnnotatedFunctional")

@@ -44,22 +44,6 @@ import org.joda.time.Instant;
 @SuppressFBWarnings("URF_UNREAD_FIELD")
 public class MPJSONFile extends MPJSONAnyObject {
 
-    protected static final ObjectMapper objectMapper = new ObjectMapper();
-
-    static {
-        objectMapper.setDefaultPrettyPrinter( new DefaultPrettyPrinter() {
-            private static final long serialVersionUID = 1;
-
-            @Override
-            public DefaultPrettyPrinter withSeparators(final Separators separators) {
-                super.withSeparators( separators );
-                _objectFieldValueSeparatorWithSpaces = separators.getObjectFieldValueSeparator() + " ";
-                return this;
-            }
-        } );
-        objectMapper.setVisibility( PropertyAccessor.FIELD, JsonAutoDetect.Visibility.NON_PRIVATE );
-    }
-
     MPJSONFile() {
     }
 
@@ -79,8 +63,12 @@ public class MPJSONFile extends MPJSONAnyObject {
         user.last_used = MPModelConstants.dateTimeFormatter.print( modelUser.getLastUsed() );
         user.key_id = modelUser.exportKeyID();
         user.algorithm = modelUser.getAlgorithm().version();
-        user.default_type = modelUser.getPreferences().getDefaultType();
-        user.hide_passwords = modelUser.getPreferences().isHidePasswords();
+        user._ext_mpw = new User.Ext() {
+            {
+                default_type = modelUser.getPreferences().getDefaultType();
+                hide_passwords = modelUser.getPreferences().isHidePasswords();
+            }
+        };
 
         // Section "sites"
         sites = new LinkedHashMap<>();
@@ -131,8 +119,11 @@ public class MPJSONFile extends MPJSONAnyObject {
                     }
                 } );
 
-            site._ext_mpw = new Site.Ext();
-            site._ext_mpw.url = modelSite.getUrl();
+            site._ext_mpw = new Site.Ext() {
+                {
+                    url = modelSite.getUrl();
+                }
+            };
         }
     }
 
@@ -141,9 +132,10 @@ public class MPJSONFile extends MPJSONAnyObject {
 
         return new MPFileUser(
                 user.full_name, CodeUtils.decodeHex( user.key_id ), algorithm, user.avatar,
-                (user.default_type != null)? user.default_type: algorithm.mpw_default_result_type(),
+                (user._ext_mpw != null)? user._ext_mpw.default_type: null,
                 (user.last_used != null)? MPModelConstants.dateTimeFormatter.parseDateTime( user.last_used ): new Instant(),
-                user.hide_passwords, export.redacted? MPMarshaller.ContentMode.PROTECTED: MPMarshaller.ContentMode.VISIBLE,
+                (user._ext_mpw != null) && user._ext_mpw.hide_passwords,
+                export.redacted? MPMarshaller.ContentMode.PROTECTED: MPMarshaller.ContentMode.VISIBLE,
                 MPMarshalFormat.JSON, file
         );
     }
@@ -203,16 +195,24 @@ public class MPJSONFile extends MPJSONAnyObject {
 
     public static class User extends MPJSONAnyObject {
 
-        int     avatar;
-        String  full_name;
-        String  last_used;
-        boolean hide_passwords;
+        int    avatar;
+        String full_name;
+        String last_used;
         @Nullable
         String              key_id;
         @Nullable
         MPAlgorithm.Version algorithm;
+
         @Nullable
-        MPResultType        default_type;
+        Ext _ext_mpw;
+
+
+        public static class Ext extends MPJSONAnyObject {
+
+            @Nullable
+            MPResultType default_type;
+            boolean hide_passwords;
+        }
     }
 
 

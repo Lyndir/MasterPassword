@@ -214,8 +214,6 @@ public abstract class MPBasicUser<S extends MPBasicSite<?, ?>> extends Changeabl
 
     @Override
     protected void onChanged() {
-        super.onChanged();
-
         for (final Listener listener : listeners)
             listener.onUserUpdated( this );
     }

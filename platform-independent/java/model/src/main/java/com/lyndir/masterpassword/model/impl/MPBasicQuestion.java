@@ -72,7 +72,7 @@ public abstract class MPBasicQuestion extends Changeable implements MPQuestion {
         setChanged();
     }
 
-    @Nonnull
+    @Nullable
     @Override
     public String getAnswer(@Nullable final String state)
             throws MPKeyUnavailableException, MPAlgorithmException {
@@ -82,8 +82,6 @@ public abstract class MPBasicQuestion extends Changeable implements MPQuestion {
 
     @Override
     protected void onChanged() {
-        super.onChanged();
-
         if (site instanceof Changeable)
             ((Changeable) site).setChanged();
     }

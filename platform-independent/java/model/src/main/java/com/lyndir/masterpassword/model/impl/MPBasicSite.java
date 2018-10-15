@@ -201,8 +201,6 @@ public abstract class MPBasicSite<U extends MPUser<?>, Q extends MPQuestion> ext
 
     @Override
     protected void onChanged() {
-        super.onChanged();
-
         if (user instanceof Changeable)
             ((Changeable) user).setChanged();
     }

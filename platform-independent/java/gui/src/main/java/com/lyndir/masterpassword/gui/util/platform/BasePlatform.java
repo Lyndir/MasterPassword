@@ -15,7 +15,17 @@ public class BasePlatform implements IPlatform {
     }
 
     @Override
+    public boolean removeAppForegroundHandler() {
+        return false;
+    }
+
+    @Override
     public boolean installAppReopenHandler(final Runnable handler) {
+        return false;
+    }
+
+    @Override
+    public boolean removeAppReopenHandler() {
         return false;
     }
 

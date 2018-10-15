@@ -19,6 +19,7 @@
 package com.lyndir.masterpassword.gui;
 
 import com.lyndir.lhunath.opal.system.util.ConversionUtils;
+import com.lyndir.masterpassword.model.MPConfig;
 import com.lyndir.masterpassword.model.MPModelConstants;
 
 
@@ -26,15 +27,32 @@ import com.lyndir.masterpassword.model.MPModelConstants;
  * @author lhunath, 2014-08-31
  */
 @SuppressWarnings("CallToSystemGetenv")
-public class MPConfig {
+public class MPGuiConfig extends MPConfig {
 
-    private static final MPConfig instance = new MPConfig();
-
-    public static MPConfig get() {
-        return instance;
+    public static MPGuiConfig get() {
+        return get( MPGuiConfig.class );
     }
 
+    Boolean checkForUpdates;
+    Boolean stayResident;
+
     public boolean checkForUpdates() {
-        return ConversionUtils.toBoolean( System.getenv( MPModelConstants.env_checkUpdates ) ).orElse( true );
+        return (checkForUpdates != null)? checkForUpdates:
+                ConversionUtils.toBoolean( System.getenv( MPModelConstants.env_checkUpdates ) ).orElse( true );
+    }
+
+    public void setCheckForUpdates(final boolean checkForUpdates) {
+        this.checkForUpdates = checkForUpdates;
+        MasterPassword.get().updateCheck();
+        setChanged();
+    }
+
+    public boolean stayResident() {
+        return (stayResident != null)? stayResident: false;
+    }
+
+    public void setStayResident(final boolean stayResident) {
+        this.stayResident = stayResident;
+        setChanged();
     }
 }

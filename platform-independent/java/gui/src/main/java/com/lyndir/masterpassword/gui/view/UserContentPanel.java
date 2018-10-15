@@ -9,8 +9,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.ObjectUtils;
 import com.lyndir.masterpassword.*;
-import com.lyndir.masterpassword.gui.MPGuiConstants;
-import com.lyndir.masterpassword.gui.MasterPassword;
+import com.lyndir.masterpassword.gui.*;
 import com.lyndir.masterpassword.gui.model.*;
 import com.lyndir.masterpassword.gui.util.*;
 import com.lyndir.masterpassword.gui.util.Platform;
@@ -577,21 +576,25 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
 
             components.add( Components.label( "Default Algorithm:" ),
                             Components.comboBox( MPAlgorithm.Version.values(), MPAlgorithm.Version::name,
-                                                 user.getAlgorithm().version(),
-                                                 version -> user.setAlgorithm( version.getAlgorithm() ) ) );
+                                                 user.getAlgorithm().version(), version -> user.setAlgorithm( version.getAlgorithm() ) ) );
 
-            MPFileUser fileUser = (user instanceof MPFileUser)? (MPFileUser) user: null;
-            if (fileUser != null) {
-                components.add( Components.label( "Default Password Type:" ),
-                                Components.comboBox( MPResultType.values(), MPResultType::getLongName,
-                                                     fileUser.getPreferences().getDefaultType(),
-                                                     fileUser.getPreferences()::setDefaultType ),
-                                Components.strut() );
+            components.add( Components.label( "Default Password Type:" ),
+                            Components.comboBox( MPResultType.values(), MPResultType::getLongName,
+                                                 user.getPreferences().getDefaultType(), user.getPreferences()::setDefaultType ),
+                            Components.strut() );
 
-                components.add( Components.checkBox( "Hide Passwords",
-                                                     fileUser.getPreferences().isHidePasswords(),
-                                                     fileUser.getPreferences()::setHidePasswords ) );
-            }
+            components.add( Components.checkBox( "Hide Passwords",
+                                                 user.getPreferences().isHidePasswords(), user.getPreferences()::setHidePasswords ) );
+
+            components.add( new JSeparator() );
+
+            components.add( Components.checkBox( "Check For Updates",
+                                                 MPGuiConfig.get().checkForUpdates(), MPGuiConfig.get()::setCheckForUpdates ) );
+
+            components.add( Components.checkBox( strf( "<html>Stay Resident (reactivate with <strong><code>%s+%s</code></strong>)",
+                                                       InputEvent.getModifiersExText( MPGuiConstants.ui_hotkey.getModifiers() ),
+                                                       KeyEvent.getKeyText( MPGuiConstants.ui_hotkey.getKeyCode() ) ),
+                                                 MPGuiConfig.get().stayResident(), MPGuiConfig.get()::setStayResident ) );
 
             Components.showDialog( this, user.getFullName(), new JOptionPane( Components.panel(
                     BoxLayout.PAGE_AXIS, components.build().toArray( new Component[0] ) ) ) );

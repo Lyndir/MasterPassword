@@ -12,7 +12,11 @@ public interface IPlatform {
 
     boolean installAppForegroundHandler(Runnable handler);
 
+    boolean removeAppForegroundHandler();
+
     boolean installAppReopenHandler(Runnable handler);
+
+    boolean removeAppReopenHandler();
 
     boolean requestForeground();
 
