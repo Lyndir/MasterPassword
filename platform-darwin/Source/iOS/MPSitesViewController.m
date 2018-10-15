@@ -179,7 +179,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
 
-    MPSiteCell *cell = [MPSiteCell dequeueCellFromCollectionView:collectionView indexPath:indexPath];
+    MPSiteCell *cell = [MPSiteCell dequeueFromCollectionView:collectionView indexPath:indexPath];
     [cell setFuzzyGroups:self.fuzzyGroups];
     id item = self.dataSource[(NSUInteger)indexPath.section][(NSUInteger)indexPath.item];
     if ([item isKindOfClass:[MPSiteEntity class]])

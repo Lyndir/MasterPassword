@@ -3917,7 +3917,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = "/bin/sh -e";
-			shellScript = "exec Scripts/genassets";
+			shellScript = "exec Scripts/genassets\n";
 			showEnvVarsInLog = 0;
 		};
 		DAB7AE4C1F3D56AD00C856B1 /* ShellScript */ = {

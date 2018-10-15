@@ -102,9 +102,9 @@ PearlEnum( MPDevelopmentFuelConsumption,
         SKProduct *product = content;
         MPStoreProductCell *cell;
         if ([product.productIdentifier isEqualToString:MPProductFuel])
-            cell = [MPStoreFuelProductCell dequeueCellFromTableView:tableView indexPath:indexPath];
+            cell = [MPStoreFuelProductCell dequeueFromTableView:tableView indexPath:indexPath];
         else
-            cell = [MPStoreProductCell dequeueCellFromTableView:tableView indexPath:indexPath];
+            cell = [MPStoreProductCell dequeueFromTableView:tableView indexPath:indexPath];
         [cell updateWithProduct:product transaction:self.transactions[product.productIdentifier]];
 
         return cell;

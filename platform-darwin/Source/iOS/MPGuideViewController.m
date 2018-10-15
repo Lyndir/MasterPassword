@@ -150,7 +150,7 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
 
-    MPGuideStepCell *cell = [MPGuideStepCell dequeueCellFromCollectionView:collectionView indexPath:indexPath];
+    MPGuideStepCell *cell = [MPGuideStepCell dequeueFromCollectionView:collectionView indexPath:indexPath];
     cell.imageView.image = ((MPGuideStep *)self.steps[indexPath.item]).image;
     cell.contentView.frame = cell.bounds;
 

@@ -120,21 +120,21 @@
     MPSiteEntity *site = [self siteInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]];
     if (indexPath.section == 0) {
         if (indexPath.item == 0) {
-            MPGlobalAnswersCell *cell = [MPGlobalAnswersCell dequeueCellFromTableView:tableView indexPath:indexPath];
+            MPGlobalAnswersCell *cell = [MPGlobalAnswersCell dequeueFromTableView:tableView indexPath:indexPath];
             [cell setSite:site];
             return cell;
         }
         if (indexPath.item == 1)
-            return [MPSendAnswersCell dequeueCellFromTableView:tableView indexPath:indexPath];
+            return [MPSendAnswersCell dequeueFromTableView:tableView indexPath:indexPath];
         if (indexPath.item == 2) {
-            MPMultipleAnswersCell *cell = [MPMultipleAnswersCell dequeueCellFromTableView:tableView indexPath:indexPath];
+            MPMultipleAnswersCell *cell = [MPMultipleAnswersCell dequeueFromTableView:tableView indexPath:indexPath];
             cell.accessoryType = self.multiple? UITableViewCellAccessoryCheckmark: UITableViewCellAccessoryNone;
             return cell;
         }
         Throw( @"Unsupported row index: %@", indexPath );
     }
 
-    MPAnswersQuestionCell *cell = [MPAnswersQuestionCell dequeueCellFromTableView:tableView indexPath:indexPath];
+    MPAnswersQuestionCell *cell = [MPAnswersQuestionCell dequeueFromTableView:tableView indexPath:indexPath];
     MPSiteQuestionEntity *question = nil;
     if ([site.questions count] > indexPath.item)
         question = site.questions[indexPath.item];
