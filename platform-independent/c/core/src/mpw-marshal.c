@@ -482,7 +482,7 @@ static MPMarshalledUser *mpw_marshal_read_flat(
             }
             if (strcmp( headerName, "Default Type" ) == 0) {
                 int value = atoi( headerValue );
-                if (!mpw_nameForType( (MPResultType)value )) {
+                if (!mpw_shortNameForType( (MPResultType)value )) {
                     *error = (MPMarshalError){ MPMarshalErrorIllegal, mpw_str( "Invalid user default type: %s", headerValue ) };
                     return NULL;
                 }
@@ -564,7 +564,7 @@ static MPMarshalledUser *mpw_marshal_read_flat(
 
         if (siteName && str_type && str_counter && str_algorithm && str_uses && str_lastUsed) {
             MPResultType siteType = (MPResultType)atoi( str_type );
-            if (!mpw_nameForType( siteType )) {
+            if (!mpw_shortNameForType( siteType )) {
                 *error = (MPMarshalError){ MPMarshalErrorIllegal, mpw_str( "Invalid site type: %s: %s", siteName, str_type ) };
                 return NULL;
             }
@@ -703,7 +703,7 @@ static MPMarshalledUser *mpw_marshal_read_json(
     }
     MPAlgorithmVersion algorithm = (MPAlgorithmVersion)value;
     MPResultType defaultType = (MPResultType)mpw_get_json_int( json_file, "user.default_type", MPResultTypeDefault );
-    if (!mpw_nameForType( defaultType )) {
+    if (!mpw_shortNameForType( defaultType )) {
         *error = (MPMarshalError){ MPMarshalErrorIllegal, mpw_str( "Invalid user default type: %u", defaultType ) };
         return NULL;
     }
@@ -745,7 +745,7 @@ static MPMarshalledUser *mpw_marshal_read_json(
         }
         MPAlgorithmVersion siteAlgorithm = (MPAlgorithmVersion)value;
         MPResultType siteType = (MPResultType)mpw_get_json_int( json_site.val, "type", (int32_t)user->defaultType );
-        if (!mpw_nameForType( siteType )) {
+        if (!mpw_shortNameForType( siteType )) {
             *error = (MPMarshalError){ MPMarshalErrorIllegal, mpw_str( "Invalid site type: %s: %u", siteName, siteType ) };
             return NULL;
         }

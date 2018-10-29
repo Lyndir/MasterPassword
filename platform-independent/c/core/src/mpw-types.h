@@ -147,9 +147,13 @@ const char *mpw_scopeForPurpose(MPKeyPurpose purpose);
  */
 const MPResultType mpw_typeWithName(const char *typeName);
 /**
- * @return The standard name for the given password type.
+ * @return The standard identifying name for the given password type.
  */
-const char *mpw_nameForType(MPResultType resultType);
+const char *mpw_shortNameForType(MPResultType resultType);
+/**
+ * @return The descriptive name for the given password type.
+ */
+const char *mpw_longNameForType(MPResultType resultType);
 
 /**
  * @return A newly allocated array of internal strings that express the templates to use for the given type.

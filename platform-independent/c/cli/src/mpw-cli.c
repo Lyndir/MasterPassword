@@ -238,7 +238,7 @@ int main(const int argc, char *const argv[]) {
     if (operation.site) {
         dbg( "siteName         : %s", operation.site->name );
         dbg( "siteCounter      : %u", operation.siteCounter );
-        dbg( "resultType       : %s (%u)", mpw_nameForType( operation.resultType ), operation.resultType );
+        dbg( "resultType       : %s (%u)", mpw_shortNameForType( operation.resultType ), operation.resultType );
         dbg( "resultParam      : %s", operation.resultParam );
         dbg( "keyPurpose       : %s (%u)", mpw_nameForPurpose( operation.keyPurpose ), operation.keyPurpose );
         dbg( "keyContext       : %s", operation.keyContext );

@@ -96,7 +96,7 @@ const char *mpw_siteResult(
         return NULL;
 
     trc( "-- mpw_siteResult (algorithm: %u)", algorithmVersion );
-    trc( "resultType: %d (%s)", resultType, mpw_nameForType( resultType ) );
+    trc( "resultType: %d (%s)", resultType, mpw_shortNameForType( resultType ) );
     trc( "resultParam: %s", resultParam );
 
     char *sitePassword = NULL;
@@ -168,7 +168,7 @@ const char *mpw_siteState(
         return NULL;
 
     trc( "-- mpw_siteState (algorithm: %u)", algorithmVersion );
-    trc( "resultType: %d (%s)", resultType, mpw_nameForType( resultType ) );
+    trc( "resultType: %d (%s)", resultType, mpw_shortNameForType( resultType ) );
     trc( "resultParam: %zu bytes = %s", sizeof( resultParam ), resultParam );
     if (!masterKey || !resultParam)
         return NULL;

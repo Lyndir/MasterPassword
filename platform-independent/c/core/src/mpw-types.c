@@ -54,34 +54,34 @@ const MPResultType mpw_typeWithName(const char *typeName) {
     }
 
     // Find what password type is represented by the type name.
-    if (mpw_strncasecmp( mpw_nameForType( MPResultTypeTemplateMaximum ), typeName, strlen( typeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_shortNameForType( MPResultTypeTemplateMaximum ), typeName, strlen( typeName ) ) == 0)
         return MPResultTypeTemplateMaximum;
-    if (mpw_strncasecmp( mpw_nameForType( MPResultTypeTemplateLong ), typeName, strlen( typeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_shortNameForType( MPResultTypeTemplateLong ), typeName, strlen( typeName ) ) == 0)
         return MPResultTypeTemplateLong;
-    if (mpw_strncasecmp( mpw_nameForType( MPResultTypeTemplateMedium ), typeName, strlen( typeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_shortNameForType( MPResultTypeTemplateMedium ), typeName, strlen( typeName ) ) == 0)
         return MPResultTypeTemplateMedium;
-    if (mpw_strncasecmp( mpw_nameForType( MPResultTypeTemplateBasic ), typeName, strlen( typeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_shortNameForType( MPResultTypeTemplateBasic ), typeName, strlen( typeName ) ) == 0)
         return MPResultTypeTemplateBasic;
-    if (mpw_strncasecmp( mpw_nameForType( MPResultTypeTemplateShort ), typeName, strlen( typeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_shortNameForType( MPResultTypeTemplateShort ), typeName, strlen( typeName ) ) == 0)
         return MPResultTypeTemplateShort;
-    if (mpw_strncasecmp( mpw_nameForType( MPResultTypeTemplatePIN ), typeName, strlen( typeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_shortNameForType( MPResultTypeTemplatePIN ), typeName, strlen( typeName ) ) == 0)
         return MPResultTypeTemplatePIN;
-    if (mpw_strncasecmp( mpw_nameForType( MPResultTypeTemplateName ), typeName, strlen( typeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_shortNameForType( MPResultTypeTemplateName ), typeName, strlen( typeName ) ) == 0)
         return MPResultTypeTemplateName;
-    if (mpw_strncasecmp( mpw_nameForType( MPResultTypeTemplatePhrase ), typeName, strlen( typeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_shortNameForType( MPResultTypeTemplatePhrase ), typeName, strlen( typeName ) ) == 0)
         return MPResultTypeTemplatePhrase;
-    if (mpw_strncasecmp( mpw_nameForType( MPResultTypeStatefulPersonal ), typeName, strlen( typeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_shortNameForType( MPResultTypeStatefulPersonal ), typeName, strlen( typeName ) ) == 0)
         return MPResultTypeStatefulPersonal;
-    if (mpw_strncasecmp( mpw_nameForType( MPResultTypeStatefulDevice ), typeName, strlen( typeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_shortNameForType( MPResultTypeStatefulDevice ), typeName, strlen( typeName ) ) == 0)
         return MPResultTypeStatefulDevice;
-    if (mpw_strncasecmp( mpw_nameForType( MPResultTypeDeriveKey ), typeName, strlen( typeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_shortNameForType( MPResultTypeDeriveKey ), typeName, strlen( typeName ) ) == 0)
         return MPResultTypeDeriveKey;
 
     dbg( "Not a generated type name: %s", typeName );
     return (MPResultType)ERR;
 }
 
-const char *mpw_nameForType(MPResultType resultType) {
+const char *mpw_shortNameForType(MPResultType resultType) {
 
     switch (resultType) {
         case MPResultTypeTemplateMaximum:
@@ -106,6 +106,38 @@ const char *mpw_nameForType(MPResultType resultType) {
             return "device";
         case MPResultTypeDeriveKey:
             return "key";
+        default: {
+            dbg( "Unknown password type: %d", resultType );
+            return NULL;
+        }
+    }
+}
+
+const char *mpw_longNameForType(MPResultType resultType) {
+
+    switch (resultType) {
+        case MPResultTypeTemplateMaximum:
+            return "Maximum Security Password";
+        case MPResultTypeTemplateLong:
+            return "Long Password";
+        case MPResultTypeTemplateMedium:
+            return "Medium Password";
+        case MPResultTypeTemplateBasic:
+            return "Basic Password";
+        case MPResultTypeTemplateShort:
+            return "Short Password";
+        case MPResultTypeTemplatePIN:
+            return "PIN";
+        case MPResultTypeTemplateName:
+            return "Name";
+        case MPResultTypeTemplatePhrase:
+            return "Phrase";
+        case MPResultTypeStatefulPersonal:
+            return "Personal Password";
+        case MPResultTypeStatefulDevice:
+            return "Device Private Password";
+        case MPResultTypeDeriveKey:
+            return "Crypto Key";
         default: {
             dbg( "Unknown password type: %d", resultType );
             return NULL;
