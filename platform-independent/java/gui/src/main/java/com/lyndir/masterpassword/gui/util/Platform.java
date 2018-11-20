@@ -22,9 +22,6 @@ public final class Platform {
         if (null != (tryPlatform = construct( "com.lyndir.masterpassword.gui.util.platform.JDK9Platform" )))
             activePlatform = tryPlatform;
 
-        else if (null != (tryPlatform = construct( "com.lyndir.masterpassword.gui.util.platform.ApplePlatform" )))
-            activePlatform = tryPlatform;
-
         else
             activePlatform = new BasePlatform();
     }
