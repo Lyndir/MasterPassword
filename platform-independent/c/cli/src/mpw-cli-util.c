@@ -51,13 +51,13 @@ const char *mpw_askpass(const char *prompt) {
 
     int pipes[2];
     if (pipe( pipes ) == ERR) {
-        wrn( "Couldn't pipe: %s", strerror( errno ) );
+        wrn( "Couldn't create pipes for askpass: %s", strerror( errno ) );
         return NULL;
     }
 
     pid_t pid = fork();
     if (pid == ERR) {
-        wrn( "Couldn't fork for askpass:\n  %s: %s", askpass, strerror( errno ) );
+        wrn( "Couldn't fork for askpass: %s", askpass, strerror( errno ) );
         return NULL;
     }
 
@@ -83,15 +83,16 @@ const char *mpw_askpass(const char *prompt) {
         return NULL;
     }
 
-    if (WIFEXITED( status ) && WEXITSTATUS( status ) == EXIT_SUCCESS && answer && strlen( answer )) {
-        // Remove trailing newline.
-        if (answer[strlen( answer ) - 1] == '\n')
-            mpw_replace_string( answer, mpw_strndup( answer, strlen( answer ) - 1 ) );
-        return answer;
+    if (!WIFEXITED( status ) || WEXITSTATUS( status ) != EXIT_SUCCESS || !answer || !strlen( answer )) {
+        // askpass failed.
+        mpw_free_string( &answer );
+        return NULL;
     }
 
-    mpw_free_string( &answer );
-    return NULL;
+    // Remove trailing newline.
+    if (answer[strlen( answer ) - 1] == '\n')
+        mpw_replace_string( answer, mpw_strndup( answer, strlen( answer ) - 1 ) );
+    return answer;
 }
 
 static const char *_mpw_getline(const char *prompt, bool silent) {
