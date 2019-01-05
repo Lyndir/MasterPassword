@@ -57,7 +57,7 @@ const char *mpw_askpass(const char *prompt) {
 
     pid_t pid = fork();
     if (pid == ERR) {
-        wrn( "Couldn't fork for askpass: %s", askpass, strerror( errno ) );
+        wrn( "Couldn't fork for askpass:\n  %s: %s", askpass, strerror( errno ) );
         return NULL;
     }
 

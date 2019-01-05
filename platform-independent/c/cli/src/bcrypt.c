@@ -74,7 +74,7 @@ bcrypt_initsalt(int log_rounds, uint8_t *salt, size_t saltbuflen) {
 
     // Switching to PRNG rand() for portability.  Do not use in production code.
     //arc4random_buf( csalt, sizeof( csalt ) );
-    srand( time() );
+    srand( time( NULL ) );
     for (int s = 0; s < sizeof( csalt ); ++s)
         csalt[s] = (uint8_t)rand();
 
