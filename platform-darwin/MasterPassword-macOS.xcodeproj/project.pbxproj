@@ -439,8 +439,8 @@
 		DA3B8455190FC89700246EEA /* MPFixable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPFixable.h; sourceTree = "<group>"; };
 		DA3BCFCC19BD09E0006B2681 /* SourceCodePro-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceCodePro-Regular.otf"; sourceTree = "<group>"; };
 		DA456CA21F5307B700D54152 /* blf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = blf.h; sourceTree = "<group>"; };
-		DA4571171F552C9500D54152 /* bcrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bcrypt.h; sourceTree = "<group>"; };
-		DA4571181F552C9500D54152 /* blowfish.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = blowfish.h; sourceTree = "<group>"; };
+		DA4571171F552C9500D54152 /* bcrypt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = bcrypt.c; sourceTree = "<group>"; };
+		DA4571181F552C9500D54152 /* blowfish.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = blowfish.c; sourceTree = "<group>"; };
 		DA45711E1F572F3200D54152 /* PearlCryptUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlCryptUtils.m; sourceTree = "<group>"; };
 		DA45711F1F572F3200D54152 /* PearlCryptUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlCryptUtils.h; sourceTree = "<group>"; };
 		DA4DAE911A7D8117003E5423 /* MPAlgorithmV3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAlgorithmV3.h; sourceTree = "<group>"; };
@@ -1212,9 +1212,9 @@
 		DA1C7AB71F1A8F6E009A3551 /* cli */ = {
 			isa = PBXGroup;
 			children = (
-				DA4571171F552C9500D54152 /* bcrypt.h */,
+				DA4571171F552C9500D54152 /* bcrypt.c */,
 				DA456CA21F5307B700D54152 /* blf.h */,
-				DA4571181F552C9500D54152 /* blowfish.h */,
+				DA4571181F552C9500D54152 /* blowfish.c */,
 				DA1C7AB81F1A8F6E009A3551 /* mpw-bench.c */,
 				DAAF16631F5897EA0013B8AE /* mpw-cli-util.c */,
 				DAAF16641F5897EA0013B8AE /* mpw-cli-util.h */,

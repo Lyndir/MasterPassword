@@ -40,7 +40,7 @@
 #include <time.h>
 
 #include "blf.h"
-#include "blowfish.h"
+#include "blowfish.c"
 #include "mpw-util.h"
 
 /* This implementation is adaptable to current computing power.
@@ -72,7 +72,11 @@ bcrypt_initsalt(int log_rounds, uint8_t *salt, size_t saltbuflen) {
         return -1;
     }
 
-    arc4random_buf( csalt, sizeof( csalt ) );
+    // Switching to PRNG rand() for portability.  Do not use in production code.
+    //arc4random_buf( csalt, sizeof( csalt ) );
+    srand( time() );
+    for (int s = 0; s < sizeof( csalt ); ++s)
+        csalt[s] = (uint8_t)rand();
 
     if (log_rounds < 4)
         log_rounds = 4;

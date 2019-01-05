@@ -31,7 +31,7 @@
 #include <errno.h>
 #include <sys/time.h>
 
-#include "bcrypt.h"
+#include "bcrypt.c"
 
 #include "mpw-algorithm.h"
 #include "mpw-util.h"

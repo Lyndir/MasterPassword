@@ -62,14 +62,14 @@ typedef struct BlowfishContext {
 void Blowfish_encipher(blf_ctx *, uint32_t *, uint32_t *);
 void Blowfish_decipher(blf_ctx *, uint32_t *, uint32_t *);
 void Blowfish_initstate(blf_ctx *);
-void Blowfish_expand0state(blf_ctx *, const uint8_t *, u_int16_t);
-void Blowfish_expandstate(blf_ctx *, const uint8_t *, u_int16_t, const uint8_t *, u_int16_t);
+void Blowfish_expand0state(blf_ctx *, const uint8_t *, uint16_t);
+void Blowfish_expandstate(blf_ctx *, const uint8_t *, uint16_t, const uint8_t *, uint16_t);
 
 /* Standard Blowfish */
 
-void blf_key(blf_ctx *, const uint8_t *, u_int16_t);
-void blf_enc(blf_ctx *, uint32_t *, u_int16_t);
-void blf_dec(blf_ctx *, uint32_t *, u_int16_t);
+void blf_key(blf_ctx *, const uint8_t *, uint16_t);
+void blf_enc(blf_ctx *, uint32_t *, uint16_t);
+void blf_dec(blf_ctx *, uint32_t *, uint16_t);
 
 void blf_ecb_encrypt(blf_ctx *, uint8_t *, uint32_t);
 void blf_ecb_decrypt(blf_ctx *, uint8_t *, uint32_t);
@@ -78,6 +78,6 @@ void blf_cbc_encrypt(blf_ctx *, uint8_t *, uint8_t *, uint32_t);
 void blf_cbc_decrypt(blf_ctx *, uint8_t *, uint8_t *, uint32_t);
 
 /* Converts uint8_t to uint32_t */
-uint32_t Blowfish_stream2word(const uint8_t *, u_int16_t, u_int16_t *);
+uint32_t Blowfish_stream2word(const uint8_t *, uint16_t, uint16_t *);
 
 #endif
