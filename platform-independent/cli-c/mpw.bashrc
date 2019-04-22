@@ -6,6 +6,8 @@ mpw() {
             pbcopy
         elif hash xclip 2>/dev/null; then
             xclip -selection clip
+        elif hash wl-copy 2>/dev/null; then 
+            wl-copy
         else
             cat; echo 2>/dev/null
             return
