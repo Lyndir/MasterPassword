@@ -81,6 +81,38 @@ const MPResultType mpw_typeWithName(const char *typeName) {
     return (MPResultType)ERR;
 }
 
+const char *mpw_abbreviationForType(MPResultType resultType) {
+
+    switch (resultType) {
+        case MPResultTypeTemplateMaximum:
+            return "max";
+        case MPResultTypeTemplateLong:
+            return "long";
+        case MPResultTypeTemplateMedium:
+            return "med";
+        case MPResultTypeTemplateBasic:
+            return "basic";
+        case MPResultTypeTemplateShort:
+            return "short";
+        case MPResultTypeTemplatePIN:
+            return "pin";
+        case MPResultTypeTemplateName:
+            return "name";
+        case MPResultTypeTemplatePhrase:
+            return "phrase";
+        case MPResultTypeStatefulPersonal:
+            return "own";
+        case MPResultTypeStatefulDevice:
+            return "dev";
+        case MPResultTypeDeriveKey:
+            return "key";
+        default: {
+            dbg( "Unknown password type: %d", resultType );
+            return NULL;
+        }
+    }
+}
+
 const char *mpw_shortNameForType(MPResultType resultType) {
 
     switch (resultType) {

@@ -149,6 +149,10 @@ const MPResultType mpw_typeWithName(const char *typeName);
 /**
  * @return The standard identifying name for the given password type.
  */
+const char *mpw_abbreviationForType(MPResultType resultType);
+/**
+ * @return The standard identifying name for the given password type.
+ */
 const char *mpw_shortNameForType(MPResultType resultType);
 /**
  * @return The descriptive name for the given password type.
