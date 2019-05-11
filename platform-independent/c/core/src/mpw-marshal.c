@@ -26,15 +26,15 @@
 #include "mpw-marshal-util.h"
 
 MPMarshalledUser *mpw_marshal_user(
-        const char *fullName, const char *masterPassword, const MPAlgorithmVersion algorithmVersion) {
+        const char *fullName, MPMasterKeyProvider masterKeyProvider, const MPAlgorithmVersion algorithmVersion) {
 
     MPMarshalledUser *user;
-    if (!fullName || !masterPassword || !(user = malloc( sizeof( MPMarshalledUser ) )))
+    if (!fullName || !masterKeyProvider || !(user = malloc( sizeof( MPMarshalledUser ) )))
         return NULL;
 
     *user = (MPMarshalledUser){
             .fullName = mpw_strdup( fullName ),
-            .masterPassword = mpw_strdup( masterPassword ),
+            .masterKeyProvider = masterKeyProvider,
             .algorithm = algorithmVersion,
             .redacted = true,
 
@@ -113,7 +113,7 @@ bool mpw_marshal_free(
         return true;
 
     bool success = true;
-    success &= mpw_free_strings( &(*user)->fullName, &(*user)->masterPassword, NULL );
+    success &= mpw_free_strings( &(*user)->fullName, NULL );
 
     for (size_t s = 0; s < (*user)->sites_count; ++s) {
         MPMarshalledSite *site = &(*user)->sites[s];
@@ -140,13 +140,8 @@ static bool mpw_marshal_write_flat(
         *error = (MPMarshalError){ MPMarshalErrorMissing, "Missing full name." };
         return false;
     }
-    if (!user->masterPassword || !strlen( user->masterPassword )) {
-        *error = (MPMarshalError){ MPMarshalErrorMasterPassword, "Missing master password." };
-        return false;
-    }
-    MPMasterKey masterKey = NULL;
-    MPAlgorithmVersion masterKeyAlgorithm = user->algorithm - 1;
-    if (!mpw_update_masterKey( &masterKey, &masterKeyAlgorithm, user->algorithm, user->fullName, user->masterPassword )) {
+    MPMasterKey masterKey = user->masterKeyProvider( user->algorithm, user->fullName );
+    if (!masterKey) {
         *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't derive master key." };
         return false;
     }
@@ -185,7 +180,8 @@ static bool mpw_marshal_write_flat(
         const char *content = NULL, *loginContent = NULL;
         if (!user->redacted) {
             // Clear Text
-            if (!mpw_update_masterKey( &masterKey, &masterKeyAlgorithm, site->algorithm, user->fullName, user->masterPassword )) {
+            mpw_free( &masterKey, MPMasterKeySize );
+            if (!(masterKey = user->masterKeyProvider( user->algorithm, user->fullName ))) {
                 *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't derive master key." };
                 return false;
             }
@@ -224,13 +220,8 @@ static bool mpw_marshal_write_json(
         *error = (MPMarshalError){ MPMarshalErrorMissing, "Missing full name." };
         return false;
     }
-    if (!user->masterPassword || !strlen( user->masterPassword )) {
-        *error = (MPMarshalError){ MPMarshalErrorMasterPassword, "Missing master password." };
-        return false;
-    }
-    MPMasterKey masterKey = NULL;
-    MPAlgorithmVersion masterKeyAlgorithm = user->algorithm - 1;
-    if (!mpw_update_masterKey( &masterKey, &masterKeyAlgorithm, user->algorithm, user->fullName, user->masterPassword )) {
+    MPMasterKey masterKey = user->masterKeyProvider( user->algorithm, user->fullName );
+    if (!masterKey) {
         *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't derive master key." };
         return false;
     }
@@ -271,7 +262,8 @@ static bool mpw_marshal_write_json(
         const char *content = NULL, *loginContent = NULL;
         if (!user->redacted) {
             // Clear Text
-            if (!mpw_update_masterKey( &masterKey, &masterKeyAlgorithm, site->algorithm, user->fullName, user->masterPassword )) {
+            mpw_free( &masterKey, MPMasterKeySize );
+            if (!(masterKey = user->masterKeyProvider( user->algorithm, user->fullName ))) {
                 *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't derive master key." };
                 return false;
             }
@@ -341,8 +333,8 @@ static bool mpw_marshal_write_json(
 
     mpw_string_pushf( out, "%s\n", json_object_to_json_string_ext( json_file,
             JSON_C_TO_STRING_PRETTY | JSON_C_TO_STRING_SPACED | JSON_C_TO_STRING_NOSLASHESCAPE ) );
-    mpw_free( &masterKey, MPMasterKeySize );
     json_object_put( json_file );
+    mpw_free( &masterKey, MPMasterKeySize );
 
     *error = (MPMarshalError){ .type = MPMarshalSuccess };
     return true;
@@ -416,7 +408,7 @@ static void mpw_marshal_read_flat_info(
 }
 
 static MPMarshalledUser *mpw_marshal_read_flat(
-        const char *in, const char *masterPassword, MPMarshalError *error) {
+        const char *in, MPMasterKeyProvider masterKeyProvider, MPMarshalError *error) {
 
     *error = (MPMarshalError){ MPMarshalErrorInternal, "Unexpected internal error." };
     if (!in || !strlen( in )) {
@@ -430,7 +422,7 @@ static MPMarshalledUser *mpw_marshal_read_flat(
     MPMarshalledUser *user = NULL;
     unsigned int format = 0, avatar = 0;
     char *fullName = NULL, *keyID = NULL;
-    MPAlgorithmVersion algorithm = MPAlgorithmVersionCurrent, masterKeyAlgorithm = (MPAlgorithmVersion)-1;
+    MPAlgorithmVersion algorithm = MPAlgorithmVersionCurrent;
     MPResultType defaultType = MPResultTypeDefault;
     bool headerStarted = false, headerEnded = false, importRedacted = false;
     for (const char *endOfLine, *positionInLine = in; (endOfLine = strstr( positionInLine, "\n" )); positionInLine = endOfLine + 1) {
@@ -504,7 +496,8 @@ static MPMarshalledUser *mpw_marshal_read_flat(
             continue;
 
         if (!user) {
-            if (!mpw_update_masterKey( &masterKey, &masterKeyAlgorithm, algorithm, fullName, masterPassword )) {
+            mpw_free( &masterKey, MPMasterKeySize );
+            if (!(masterKey = masterKeyProvider( algorithm, fullName ))) {
                 *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't derive master key." };
                 return NULL;
             }
@@ -512,7 +505,7 @@ static MPMarshalledUser *mpw_marshal_read_flat(
                 *error = (MPMarshalError){ MPMarshalErrorMasterPassword, "Master password doesn't match key ID." };
                 return NULL;
             }
-            if (!(user = mpw_marshal_user( fullName, masterPassword, algorithm ))) {
+            if (!(user = mpw_marshal_user( fullName, masterKeyProvider, algorithm ))) {
                 *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't allocate a new user." };
                 return NULL;
             }
@@ -597,7 +590,8 @@ static MPMarshalledUser *mpw_marshal_read_flat(
             site->lastUsed = siteLastUsed;
             if (!user->redacted) {
                 // Clear Text
-                if (!mpw_update_masterKey( &masterKey, &masterKeyAlgorithm, site->algorithm, fullName, masterPassword )) {
+                mpw_free( &masterKey, MPMasterKeySize );
+                if (!(masterKey = masterKeyProvider( user->algorithm, user->fullName ))) {
                     *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't derive master key." };
                     return NULL;
                 }
@@ -661,7 +655,7 @@ static void mpw_marshal_read_json_info(
 }
 
 static MPMarshalledUser *mpw_marshal_read_json(
-        const char *in, const char *masterPassword, MPMarshalError *error) {
+        const char *in, MPMasterKeyProvider masterKeyProvider, MPMarshalError *error) {
 
     *error = (MPMarshalError){ MPMarshalErrorInternal, "Unexpected internal error." };
     if (!in || !strlen( in )) {
@@ -680,7 +674,6 @@ static MPMarshalledUser *mpw_marshal_read_json(
 
     // Parse import data.
     MPMasterKey masterKey = NULL;
-    MPAlgorithmVersion masterKeyAlgorithm = (MPAlgorithmVersion)-1;
     MPMarshalledUser *user = NULL;
 
     // Section: "export"
@@ -716,7 +709,7 @@ static MPMarshalledUser *mpw_marshal_read_json(
         *error = (MPMarshalError){ MPMarshalErrorMissing, "Missing value for full name." };
         return NULL;
     }
-    if (!mpw_update_masterKey( &masterKey, &masterKeyAlgorithm, algorithm, fullName, masterPassword )) {
+    if (!(masterKey = masterKeyProvider( user->algorithm, user->fullName ))) {
         *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't derive master key." };
         return NULL;
     }
@@ -724,7 +717,7 @@ static MPMarshalledUser *mpw_marshal_read_json(
         *error = (MPMarshalError){ MPMarshalErrorMasterPassword, "Master password doesn't match key ID." };
         return NULL;
     }
-    if (!(user = mpw_marshal_user( fullName, masterPassword, algorithm ))) {
+    if (!(user = mpw_marshal_user( fullName, masterKeyProvider, algorithm ))) {
         *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't allocate a new user." };
         return NULL;
     }
@@ -781,7 +774,8 @@ static MPMarshalledUser *mpw_marshal_read_json(
         site->lastUsed = siteLastUsed;
         if (!user->redacted) {
             // Clear Text
-            if (!mpw_update_masterKey( &masterKey, &masterKeyAlgorithm, site->algorithm, fullName, masterPassword )) {
+            mpw_free( &masterKey, MPMasterKeySize );
+            if (!(masterKey = masterKeyProvider( user->algorithm, user->fullName ))) {
                 *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't derive master key." };
                 return NULL;
             }
@@ -824,6 +818,7 @@ static MPMarshalledUser *mpw_marshal_read_json(
         }
     }
     json_object_put( json_file );
+    mpw_free( &masterKey, MPMasterKeySize );
 
     *error = (MPMarshalError){ .type = MPMarshalSuccess };
     return user;
@@ -853,17 +848,17 @@ MPMarshalInfo *mpw_marshal_read_info(
 }
 
 MPMarshalledUser *mpw_marshal_read(
-        const char *in, const MPMarshalFormat inFormat, const char *masterPassword, MPMarshalError *error) {
+        const char *in, const MPMarshalFormat inFormat, MPMasterKeyProvider masterKeyProvider, MPMarshalError *error) {
 
     switch (inFormat) {
         case MPMarshalFormatNone:
             *error = (MPMarshalError){ .type = MPMarshalSuccess };
             return false;
         case MPMarshalFormatFlat:
-            return mpw_marshal_read_flat( in, masterPassword, error );
+            return mpw_marshal_read_flat( in, masterKeyProvider, error );
 #if MPW_JSON
         case MPMarshalFormatJSON:
-            return mpw_marshal_read_json( in, masterPassword, error );
+            return mpw_marshal_read_json( in, masterKeyProvider, error );
 #endif
         default:
             *error = (MPMarshalError){ MPMarshalErrorFormat, mpw_str( "Unsupported input format: %u", inFormat ) };

@@ -29,6 +29,7 @@
 #include "mpw-algorithm.h"
 #include "mpw-util.h"
 #include "mpw-marshal.h"
+#include "mpw-marshal-util.h"
 
 /** Output the program's usage documentation. */
 static void usage() {
@@ -182,6 +183,9 @@ void cli_sitesRedacted(Arguments *args, Operation *operation);
 void cli_mpw(Arguments *args, Operation *operation);
 void cli_save(Arguments *args, Operation *operation);
 
+MPMasterKeyProvider cli_masterKeyProvider_op(Operation *operation);
+MPMasterKeyProvider cli_masterKeyProvider_str(const char *masterPassword);
+
 /** ========================================================================
  *  MAIN                                                                     */
 int main(const int argc, char *const argv[]) {
@@ -230,7 +234,6 @@ int main(const int argc, char *const argv[]) {
     dbg( "-----------------" );
     if (operation.user) {
         dbg( "fullName         : %s", operation.user->fullName );
-        trc( "masterPassword   : %s", operation.user->masterPassword );
         dbg( "identicon        : %s", operation.identicon );
         dbg( "sitesFormat      : %s%s", mpw_nameForFormat( operation.sitesFormat ), operation.sitesFormatFixed? " (fixed)": "" );
         dbg( "sitesPath        : %s", operation.sitesPath );
@@ -247,11 +250,11 @@ int main(const int argc, char *const argv[]) {
     dbg( "-----------------" );
 
     // Finally ready to perform the actual operation.
-    cli_mpw( &args, &operation );
+    cli_mpw( NULL, &operation );
 
     // Save changes and clean up.
-    cli_save( &args, &operation );
-    cli_free( &args, &operation );
+    cli_save( NULL, &operation );
+    cli_free( NULL, &operation );
 
     return EX_OK;
 }
@@ -487,7 +490,7 @@ void cli_user(Arguments *args, Operation *operation) {
         MPMarshalError marshalError = { .type = MPMarshalSuccess };
         mpw_marshal_info_free( &sitesInputInfo );
         mpw_marshal_free( &operation->user );
-        operation->user = mpw_marshal_read( sitesInputData, sitesInputFormat, operation->masterPassword, &marshalError );
+        operation->user = mpw_marshal_read( sitesInputData, sitesInputFormat, cli_masterKeyProvider_op( operation ), &marshalError );
         if (marshalError.type == MPMarshalErrorMasterPassword && operation->allowPasswordUpdate) {
             // Update master password in mpsites.
             while (marshalError.type == MPMarshalErrorMasterPassword) {
@@ -499,12 +502,10 @@ void cli_user(Arguments *args, Operation *operation) {
                     importMasterPassword = mpw_getpass( "Old master password: " );
 
                 mpw_marshal_free( &operation->user );
-                operation->user = mpw_marshal_read( sitesInputData, sitesInputFormat, importMasterPassword, &marshalError );
+                operation->user = mpw_marshal_read( sitesInputData, sitesInputFormat, cli_masterKeyProvider_str( importMasterPassword ), &marshalError );
                 mpw_free_string( &importMasterPassword );
-            }
-            if (operation->user) {
-                mpw_free_string( &operation->user->masterPassword );
-                operation->user->masterPassword = mpw_strdup( operation->masterPassword );
+                
+                operation->user->masterKeyProvider = cli_masterKeyProvider_op( operation );
             }
         }
         mpw_free_string( &sitesInputData );
@@ -527,7 +528,7 @@ void cli_user(Arguments *args, Operation *operation) {
     // If no user from mpsites, create a new one.
     if (!operation->user)
         operation->user = mpw_marshal_user(
-                operation->fullName, operation->masterPassword, MPAlgorithmVersionCurrent );
+                operation->fullName, cli_masterKeyProvider_op( operation ), MPAlgorithmVersionCurrent );
 }
 
 void cli_site(Arguments *args, Operation *operation) {
@@ -572,7 +573,7 @@ void cli_question(Arguments *args, Operation *operation) {
 void cli_operation(Arguments *args, Operation *operation) {
 
     mpw_free_string( &operation->identicon );
-    operation->identicon = mpw_identicon_str( mpw_identicon( operation->user->fullName, operation->user->masterPassword ) );
+    operation->identicon = mpw_identicon_str( mpw_identicon( operation->user->fullName, operation->masterPassword ) );
 
     if (!operation->site)
         abort();
@@ -702,8 +703,7 @@ void cli_mpw(Arguments *args, Operation *operation) {
                 operation->user->fullName, operation->purposeResult, operation->site->name, operation->identicon );
 
     // Determine master key.
-    MPMasterKey masterKey = mpw_masterKey(
-            operation->user->fullName, operation->user->masterPassword, operation->site->algorithm );
+    MPMasterKey masterKey = operation->user->masterKeyProvider( operation->site->algorithm, operation->user->fullName );
     if (!masterKey) {
         ftl( "Couldn't derive master key." );
         cli_free( args, operation );
@@ -798,4 +798,33 @@ void cli_save(Arguments *args, Operation *operation) {
 
     mpw_free_string( &buf );
     fclose( sitesFile );
+}
+
+static MPMasterKey __cli_masterKeyProvider_currentKey;
+static MPAlgorithmVersion __cli_masterKeyProvider_currentAlgorithm;
+static const char *__cli_masterKeyProvider_currentPassword;
+static Operation *__cli_masterKeyProvider_currentOperation;
+static MPMasterKey __cli_masterKeyProvider_op(MPAlgorithmVersion algorithm, const char *fullName) {
+    if (mpw_update_masterKey(&__cli_masterKeyProvider_currentKey, &__cli_masterKeyProvider_currentAlgorithm,
+                             algorithm, fullName, __cli_masterKeyProvider_currentOperation->masterPassword))
+        return __cli_masterKeyProvider_currentKey;
+    
+    return NULL;
+}
+static MPMasterKey __cli_masterKeyProvider_str(MPAlgorithmVersion algorithm, const char *fullName) {
+    if (mpw_update_masterKey(&__cli_masterKeyProvider_currentKey, &__cli_masterKeyProvider_currentAlgorithm,
+                             algorithm, fullName, __cli_masterKeyProvider_currentPassword))
+        return __cli_masterKeyProvider_currentKey;
+    
+    return NULL;
+}
+
+MPMasterKeyProvider cli_masterKeyProvider_op(Operation *operation) {
+    __cli_masterKeyProvider_currentOperation = operation;
+    return __cli_masterKeyProvider_op;
+}
+
+MPMasterKeyProvider cli_masterKeyProvider_str(const char *masterPassword) {
+    __cli_masterKeyProvider_currentPassword = masterPassword;
+    return __cli_masterKeyProvider_str;
 }

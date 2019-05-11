@@ -56,6 +56,9 @@ typedef mpw_enum( unsigned int, MPMarshalErrorType ) {
     /** An internal system error interrupted marshalling. */
             MPMarshalErrorInternal,
 };
+
+typedef MPMasterKey (*MPMasterKeyProvider)(MPAlgorithmVersion algorithm, const char *fullName);
+
 typedef struct MPMarshalError {
     MPMarshalErrorType type;
     const char *description;
@@ -87,7 +90,7 @@ typedef struct MPMarshalledSite {
 
 typedef struct MPMarshalledUser {
     const char *fullName;
-    const char *masterPassword;
+    MPMasterKeyProvider masterKeyProvider;
     MPAlgorithmVersion algorithm;
     bool redacted;
 
@@ -118,13 +121,13 @@ MPMarshalInfo *mpw_marshal_read_info(
         const char *in);
 /** Unmarshall sites in the given input buffer by parsing it using the given marshalling format. */
 MPMarshalledUser *mpw_marshal_read(
-        const char *in, const MPMarshalFormat inFormat, const char *masterPassword, MPMarshalError *error);
+        const char *in, const MPMarshalFormat inFormat, MPMasterKeyProvider masterKeyProvider, MPMarshalError *error);
 
 //// Utilities.
 
 /** Create a new user object ready for marshalling. */
 MPMarshalledUser *mpw_marshal_user(
-        const char *fullName, const char *masterPassword, const MPAlgorithmVersion algorithmVersion);
+        const char *fullName, MPMasterKeyProvider masterKeyProvider, const MPAlgorithmVersion algorithmVersion);
 /** Create a new site attached to the given user object, ready for marshalling. */
 MPMarshalledSite *mpw_marshal_site(
         MPMarshalledUser *user,

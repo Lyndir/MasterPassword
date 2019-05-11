@@ -106,7 +106,7 @@ bool mpw_get_json_boolean(
 bool mpw_update_masterKey(MPMasterKey *masterKey, MPAlgorithmVersion *masterKeyAlgorithm, MPAlgorithmVersion targetKeyAlgorithm,
         const char *fullName, const char *masterPassword) {
 
-    if (*masterKeyAlgorithm != targetKeyAlgorithm) {
+    if (masterKey && (!*masterKey || *masterKeyAlgorithm != targetKeyAlgorithm)) {
         mpw_free( masterKey, MPMasterKeySize );
         *masterKeyAlgorithm = targetKeyAlgorithm;
         *masterKey = mpw_masterKey( fullName, masterPassword, *masterKeyAlgorithm );
