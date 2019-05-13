@@ -444,6 +444,22 @@ static MPMarshalledUser *mpw_marshal_read_flat(
             if (*positionInLine == '#') {
                 // ## ends header
                 headerEnded = true;
+                mpw_free( &masterKey, MPMasterKeySize );
+                if (!(masterKey = masterKeyProvider( algorithm, fullName ))) {
+                    *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't derive master key." };
+                    return NULL;
+                }
+                if (keyID && !mpw_id_buf_equals( keyID, mpw_id_buf( masterKey, MPMasterKeySize ) )) {
+                    *error = (MPMarshalError){ MPMarshalErrorMasterPassword, "Master password doesn't match key ID." };
+                    return NULL;
+                }
+                if (!user && !(user = mpw_marshal_user( fullName, masterKeyProvider, algorithm ))) {
+                    *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't allocate a new user." };
+                    return NULL;
+                }
+                user->redacted = importRedacted;
+                user->avatar = avatar;
+                user->defaultType = defaultType;
                 continue;
             }
 
@@ -494,26 +510,6 @@ static MPMarshalledUser *mpw_marshal_read_flat(
         }
         if (positionInLine >= endOfLine)
             continue;
-
-        if (!user) {
-            mpw_free( &masterKey, MPMasterKeySize );
-            if (!(masterKey = masterKeyProvider( algorithm, fullName ))) {
-                *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't derive master key." };
-                return NULL;
-            }
-            if (keyID && !mpw_id_buf_equals( keyID, mpw_id_buf( masterKey, MPMasterKeySize ) )) {
-                *error = (MPMarshalError){ MPMarshalErrorMasterPassword, "Master password doesn't match key ID." };
-                return NULL;
-            }
-            if (!(user = mpw_marshal_user( fullName, masterKeyProvider, algorithm ))) {
-                *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't allocate a new user." };
-                return NULL;
-            }
-
-            user->redacted = importRedacted;
-            user->avatar = avatar;
-            user->defaultType = defaultType;
-        }
 
         // Site
         char *siteLoginName = NULL, *siteName = NULL, *siteContent = NULL;
