@@ -110,6 +110,11 @@ prepare_clean() { _prepare_clean "$@"; }
 _prepare_clean() {
     local prefix=$1 platform=$2; shift 2
 
+    if [[ $platform = windows ]]; then :
+    else
+        [[ ! -e Makefile ]] || make -s clean || git clean -fdx
+    fi
+
     rm -rf "$prefix"
     install -d "$prefix/out"
 }
