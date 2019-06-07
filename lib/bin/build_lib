@@ -132,8 +132,10 @@ _prepare_config() {
 
     if [[ $platform = windows ]]; then :
     else
+        # autoreconf installs a useless INSTALL documentation stub that can overwrite repo docs.
+        [[ -e INSTALL ]] && mv INSTALL{,~}
         autoreconf --verbose --install --force 2> >(sed 's/^\([^:]*\):[0-9]\{1,\}: /\1: /')
-        [[ -e .git ]] && git checkout @ -- INSTALL # autoreconf installs a useless INSTALL documentation stub that can overwrite repo docs.
+        [[ -e INSTALL~ ]] && mv INSTALL{~,}
     fi
 
     touch "$prefix/out/.prepared"
