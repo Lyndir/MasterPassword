@@ -90,12 +90,12 @@ typedef struct MPMarshalledSite {
 } MPMarshalledSite;
 
 typedef struct MPMarshalledUser {
-    const char *fullName;
     MPMasterKeyProvider masterKeyProvider;
     MPAlgorithmVersion algorithm;
     bool redacted;
 
     unsigned int avatar;
+    const char *fullName;
     MPResultType defaultType;
     time_t lastUsed;
 
@@ -105,11 +105,14 @@ typedef struct MPMarshalledUser {
 
 typedef struct MPMarshalInfo {
     MPMarshalFormat format;
+    time_t exportDate;
+    bool redacted;
+
     MPAlgorithmVersion algorithm;
+    unsigned int avatar;
     const char *fullName;
     const char *keyID;
-    bool redacted;
-    time_t date;
+    time_t lastUsed;
 } MPMarshalInfo;
 
 //// Marshalling.

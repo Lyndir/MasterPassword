@@ -390,16 +390,18 @@ static void mpw_marshal_read_flat_info(
             if (!headerName || !headerValue)
                 continue;
 
+            if (strcmp( headerName, "Date" ) == 0)
+                info->exportDate = info->lastUsed = mpw_timegm( headerValue );
+            if (strcmp( headerName, "Passwords" ) == 0)
+                info->redacted = strcmp( headerValue, "VISIBLE" ) != 0;
             if (strcmp( headerName, "Algorithm" ) == 0)
                 info->algorithm = (MPAlgorithmVersion)atoi( headerValue );
+            if (strcmp( headerName, "Avatar" ) == 0)
+                info->avatar = (unsigned int)atoi( headerValue );
             if (strcmp( headerName, "Full Name" ) == 0 || strcmp( headerName, "User Name" ) == 0)
                 info->fullName = mpw_strdup( headerValue );
             if (strcmp( headerName, "Key ID" ) == 0)
                 info->keyID = mpw_strdup( headerValue );
-            if (strcmp( headerName, "Passwords" ) == 0)
-                info->redacted = strcmp( headerValue, "VISIBLE" ) != 0;
-            if (strcmp( headerName, "Date" ) == 0)
-                info->date = mpw_timegm( headerValue );
 
             mpw_free_strings( &headerName, &headerValue, NULL );
             continue;
@@ -424,6 +426,7 @@ static MPMarshalledUser *mpw_marshal_read_flat(
     char *fullName = NULL, *keyID = NULL;
     MPAlgorithmVersion algorithm = MPAlgorithmVersionCurrent;
     MPResultType defaultType = MPResultTypeDefault;
+    time_t exportDate = 0;
     bool headerStarted = false, headerEnded = false, importRedacted = false;
     for (const char *endOfLine, *positionInLine = in; (endOfLine = strstr( positionInLine, "\n" )); positionInLine = endOfLine + 1) {
 
@@ -460,6 +463,7 @@ static MPMarshalledUser *mpw_marshal_read_flat(
                 user->redacted = importRedacted;
                 user->avatar = avatar;
                 user->defaultType = defaultType;
+                user->lastUsed = exportDate;
                 continue;
             }
 
@@ -474,12 +478,10 @@ static MPMarshalledUser *mpw_marshal_read_flat(
 
             if (strcmp( headerName, "Format" ) == 0)
                 format = (unsigned int)atoi( headerValue );
-            if (strcmp( headerName, "Full Name" ) == 0 || strcmp( headerName, "User Name" ) == 0)
-                fullName = mpw_strdup( headerValue );
-            if (strcmp( headerName, "Avatar" ) == 0)
-                avatar = (unsigned int)atoi( headerValue );
-            if (strcmp( headerName, "Key ID" ) == 0)
-                keyID = mpw_strdup( headerValue );
+            if (strcmp( headerName, "Date" ) == 0)
+                exportDate = mpw_timegm( headerValue );
+            if (strcmp( headerName, "Passwords" ) == 0)
+                importRedacted = strcmp( headerValue, "VISIBLE" ) != 0;
             if (strcmp( headerName, "Algorithm" ) == 0) {
                 int value = atoi( headerValue );
                 if (value < MPAlgorithmVersionFirst || value > MPAlgorithmVersionLast) {
@@ -488,6 +490,12 @@ static MPMarshalledUser *mpw_marshal_read_flat(
                 }
                 algorithm = (MPAlgorithmVersion)value;
             }
+            if (strcmp( headerName, "Avatar" ) == 0)
+                avatar = (unsigned int)atoi( headerValue );
+            if (strcmp( headerName, "Full Name" ) == 0 || strcmp( headerName, "User Name" ) == 0)
+                fullName = mpw_strdup( headerValue );
+            if (strcmp( headerName, "Key ID" ) == 0)
+                keyID = mpw_strdup( headerValue );
             if (strcmp( headerName, "Default Type" ) == 0) {
                 int value = atoi( headerValue );
                 if (!mpw_shortNameForType( (MPResultType)value )) {
@@ -496,8 +504,6 @@ static MPMarshalledUser *mpw_marshal_read_flat(
                 }
                 defaultType = (MPResultType)value;
             }
-            if (strcmp( headerName, "Passwords" ) == 0)
-                importRedacted = strcmp( headerValue, "VISIBLE" ) != 0;
 
             mpw_free_strings( &headerName, &headerValue, NULL );
             continue;
@@ -639,13 +645,15 @@ static void mpw_marshal_read_json_info(
     int64_t fileFormat = mpw_get_json_int( json_file, "export.format", 0 );
     if (fileFormat < 1)
         return;
+    info->exportDate = mpw_timegm( mpw_get_json_string( json_file, "export.date", NULL ) );
     info->redacted = mpw_get_json_boolean( json_file, "export.redacted", true );
-    info->date = mpw_timegm( mpw_get_json_string( json_file, "export.date", NULL ) );
 
     // Section: "user"
     info->algorithm = (MPAlgorithmVersion)mpw_get_json_int( json_file, "user.algorithm", MPAlgorithmVersionCurrent );
+    info->avatar = (unsigned int)mpw_get_json_int( json_file, "user.avatar", 0 );
     info->fullName = mpw_strdup( mpw_get_json_string( json_file, "user.full_name", NULL ) );
     info->keyID = mpw_strdup( mpw_get_json_string( json_file, "user.key_id", NULL ) );
+    info->lastUsed = mpw_timegm( mpw_get_json_string( json_file, "user.last_used", NULL ) );
 
     json_object_put( json_file );
 }
