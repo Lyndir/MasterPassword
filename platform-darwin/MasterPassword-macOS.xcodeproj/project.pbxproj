@@ -2688,7 +2688,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = "/bin/sh -e";
-			shellScript = "exec Scripts/updatePlist";
+			shellScript = "exec Scripts/updatePlist\n";
 		};
 		DAD3125D155288AA00A3F9ED /* Run Script: Fabric */ = {
 			isa = PBXShellScriptBuildPhase;

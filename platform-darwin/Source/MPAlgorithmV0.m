@@ -128,7 +128,7 @@ static NSOperationQueue *_mpwQueue = nil;
     __block NSData *keyData;
     [self mpw_perform:^{
         NSDate *start = [NSDate date];
-        MPMasterKey masterKey = mpw_masterKey( fullName.UTF8String, masterPassword.UTF8String, [self version] );
+        MPMasterKey masterKey = mpw_master_key( fullName.UTF8String, masterPassword.UTF8String, [self version] );
         if (masterKey) {
             keyData = [NSData dataWithBytes:masterKey length:MPMasterKeySize];
             trc( @"User: %@, password: %@ derives to key ID: %@ (took %0.2fs)", //
@@ -365,7 +365,7 @@ static NSOperationQueue *_mpwQueue = nil;
     __block NSString *result = nil;
     [self mpw_perform:^{
         NSData *masterKey = [key keyForAlgorithm:self];
-        char const *resultBytes = mpw_siteResult( masterKey.bytes, name.UTF8String,
+        char const *resultBytes = mpw_site_result( masterKey.bytes, name.UTF8String,
                 counter, purpose, context.UTF8String, type, parameter.UTF8String, [self version] );
         if (resultBytes) {
             result = [NSString stringWithCString:resultBytes encoding:NSUTF8StringEncoding];
@@ -394,7 +394,7 @@ static NSOperationQueue *_mpwQueue = nil;
     if (plainText)
         [self mpw_perform:^{
             NSData *masterKey = [key keyForAlgorithm:self];
-            char const *stateBytes = mpw_siteState( masterKey.bytes, site.name.UTF8String,
+            char const *stateBytes = mpw_site_state( masterKey.bytes, site.name.UTF8String,
                     MPCounterValueInitial, MPKeyPurposeAuthentication, NULL, site.type, plainText.UTF8String, [self version] );
             if (stateBytes) {
                 state = [[NSString stringWithCString:stateBytes encoding:NSUTF8StringEncoding] decodeBase64];
@@ -612,7 +612,7 @@ static NSOperationQueue *_mpwQueue = nil;
     if (!(type & MPResultTypeClassTemplate))
         return NO;
     size_t count = 0;
-    const char **templates = mpw_templatesForType( type, &count );
+    const char **templates = mpw_type_templates( type, &count );
     if (!templates)
         return NO;
 
@@ -623,7 +623,7 @@ static NSOperationQueue *_mpwQueue = nil;
 
         for (NSUInteger c = 0; c < strlen( template ); ++c)
             templatePermutations = [templatePermutations decimalNumberByMultiplyingBy:
-                    (id)[[NSDecimalNumber alloc] initWithUnsignedLong:strlen( mpw_charactersInClass( template[c] ) )]];
+                    (id)[[NSDecimalNumber alloc] initWithUnsignedLong:strlen( mpw_class_characters( template[c] ) )]];
 
         permutations = [permutations decimalNumberByAdding:templatePermutations];
     }
@@ -641,7 +641,7 @@ static NSOperationQueue *_mpwQueue = nil;
 
         unsigned long characterEntropy = 0;
         for (NSString *characterClass in @[ @"v", @"c", @"a", @"x" ]) {
-            char const *charactersForClass = mpw_charactersInClass( characterClass.UTF8String[0] );
+            char const *charactersForClass = mpw_class_characters( characterClass.UTF8String[0] );
 
             if (strchr( charactersForClass, passwordCharacter )) {
                 // Found class for password character.
