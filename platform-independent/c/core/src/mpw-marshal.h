@@ -65,7 +65,7 @@ typedef MPMasterKey (*MPMasterKeyProvider)(MPAlgorithmVersion algorithm, const c
 
 typedef struct MPMarshalError {
     MPMarshalErrorType type;
-    const char *description;
+    const char *message;
 } MPMarshalError;
 
 typedef struct MPMarshalledQuestion {
@@ -101,6 +101,7 @@ typedef struct MPMarshalledUser {
     unsigned int avatar;
     const char *fullName;
     MPIdenticon identicon;
+    const char *keyID;
     MPResultType defaultType;
     time_t lastUsed;
 

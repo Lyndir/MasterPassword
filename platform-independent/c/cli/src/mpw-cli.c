@@ -526,23 +526,24 @@ void cli_user(Arguments *args, Operation *operation) {
 
         // Incorrect master password.
         if (marshalError.type == MPMarshalErrorMasterPassword) {
-            ftl( "Incorrect master password according to configuration:\n  %s: %s", operation->sitesPath, marshalError.description );
+            ftl( "Incorrect master password according to configuration:\n  %s: %s", operation->sitesPath, marshalError.message );
             cli_free( args, operation );
             exit( EX_DATAERR );
         }
 
         // Any other parse error.
         if (!operation->user || marshalError.type != MPMarshalSuccess) {
-            err( "Couldn't parse configuration file:\n  %s: %s", operation->sitesPath, marshalError.description );
+            err( "Couldn't parse configuration file:\n  %s: %s", operation->sitesPath, marshalError.message );
             cli_free( args, operation );
             exit( EX_DATAERR );
         }
     }
 
     // If no user from mpsites, create a new one.
-    if (!operation->user)
+    if (!operation->user) {
         operation->user = mpw_marshal_user(
                 operation->fullName, cli_masterKeyProvider_op( operation ), MPAlgorithmVersionCurrent );
+    }
 }
 
 void cli_site(Arguments *args, Operation *operation) {
@@ -726,6 +727,14 @@ void cli_mpw(Arguments *args, Operation *operation) {
         cli_free( args, operation );
         exit( EX_SOFTWARE );
     }
+    MPKeyID keyID = mpw_id_buf( masterKey, MPMasterKeySize );
+    if (!operation->user->keyID)
+        operation->user->keyID = mpw_strdup( keyID );
+    else if (!mpw_id_buf_equals( keyID, operation->user->keyID )) {
+        ftl( "Master key mismatch." );
+        cli_free( args, operation );
+        exit( EX_SOFTWARE );
+    }
 
     // Update state from resultParam if stateful.
     if (operation->resultParam && operation->resultType & MPResultTypeClassStateful) {
@@ -811,7 +820,7 @@ void cli_save(Arguments *args, Operation *operation) {
     MPMarshalError marshalError = { .type = MPMarshalSuccess };
     const char *buf = mpw_marshal_write( operation->sitesFormat, operation->user, &marshalError );
     if (!buf || marshalError.type != MPMarshalSuccess)
-        wrn( "Couldn't encode updated configuration file:\n  %s: %s", operation->sitesPath, marshalError.description );
+        wrn( "Couldn't encode updated configuration file:\n  %s: %s", operation->sitesPath, marshalError.message );
 
     else if (fwrite( buf, sizeof( char ), strlen( buf ), sitesFile ) != strlen( buf ))
         wrn( "Error while writing updated configuration file:\n  %s: %d", operation->sitesPath, ferror( sitesFile ) );
