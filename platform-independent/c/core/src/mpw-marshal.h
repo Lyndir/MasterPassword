@@ -68,6 +68,19 @@ typedef struct MPMarshalError {
     const char *message;
 } MPMarshalError;
 
+typedef struct MPMarshalInfo {
+    MPMarshalFormat format;
+    time_t exportDate;
+    bool redacted;
+
+    MPAlgorithmVersion algorithm;
+    unsigned int avatar;
+    const char *fullName;
+    MPIdenticon identicon;
+    const char *keyID;
+    time_t lastUsed;
+} MPMarshalInfo;
+
 typedef struct MPMarshalledQuestion {
     const char *keyword;
     MPResultType type;
@@ -109,33 +122,44 @@ typedef struct MPMarshalledUser {
     MPMarshalledSite *sites;
 } MPMarshalledUser;
 
-typedef struct MPMarshalInfo {
-    MPMarshalFormat format;
-    time_t exportDate;
-    bool redacted;
+typedef struct MPMarshalledData {
+    // If data is held in a parent object.
+    const char *key;
+    // If data is held in a parent array.
+    unsigned int index;
 
-    MPAlgorithmVersion algorithm;
-    unsigned int avatar;
-    const char *fullName;
-    MPIdenticon identicon;
-    const char *keyID;
-    time_t lastUsed;
-} MPMarshalInfo;
+    // If data is a string.
+    const char *str_value;
+    // If data is a boolean.
+    bool bool_value;
+    // If data is a number.
+    double num_value;
+
+    // If data is an object or array.
+    struct MPMarshalledData **obj_children;
+    size_t obj_children_count;
+} MPMarshalledData;
+
+typedef struct MPMarshalledFile {
+    MPMarshalInfo *info;
+    MPMarshalledUser *user;
+    MPMarshalledData *data;
+} MPMarshalledFile;
 
 //// Marshalling.
 
 /** Write the user and all associated data out using the given marshalling format.
  * @return A string (allocated), or NULL if the format is unrecognized, does not support marshalling or a format error occurred. */
 const char *mpw_marshal_write(
-        const MPMarshalFormat outFormat, const MPMarshalledUser *user, MPMarshalError *error);
+        const MPMarshalFormat outFormat, const MPMarshalledFile *file, MPMarshalError *error);
 /** Best effort parse of metadata on the sites in the input buffer.  Fields that could not be parsed remain at their type's initial value.
  * @return A metadata object (allocated); NULL if the object could not be allocated or the format was not understood. */
 MPMarshalInfo *mpw_marshal_read_info(
         const char *in);
 /** Unmarshall sites in the given input buffer by parsing it using the given marshalling format.
  * @return A user object (allocated), or NULL if the format provides no marshalling or a format error occurred. */
-MPMarshalledUser *mpw_marshal_read(
-        const char *in, const MPMarshalFormat inFormat, MPMasterKeyProvider masterKeyProvider, MPMarshalError *error);
+MPMarshalledFile *mpw_marshal_read(
+        const char *in, MPMasterKeyProvider masterKeyProvider, MPMarshalError *error);
 
 //// Utilities.
 
@@ -152,12 +176,16 @@ MPMarshalledSite *mpw_marshal_site(
  * @return A question object (allocated), or NULL if the marshalled question couldn't be allocated. */
 MPMarshalledQuestion *mpw_marshal_question(
         MPMarshalledSite *site, const char *keyword);
+/** Create a new file to marshal a user into.
+ * @return A file object (allocated), or NULL if the user is missing or the marshalled file couldn't be allocated. */
+MPMarshalledFile *mpw_marshal_file(
+        MPMarshalledUser *user);
 
 /** Free the given user object and all associated data. */
 bool mpw_marshal_info_free(
         MPMarshalInfo **info);
 bool mpw_marshal_free(
-        MPMarshalledUser **user);
+        MPMarshalledFile **user);
 
 //// Format.
 

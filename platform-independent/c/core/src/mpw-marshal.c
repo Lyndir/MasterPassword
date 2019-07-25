@@ -98,6 +98,21 @@ MPMarshalledQuestion *mpw_marshal_question(
     return question;
 }
 
+MPMarshalledFile *mpw_marshal_file(
+        MPMarshalledUser *user) {
+
+    MPMarshalledFile *file;
+    if (!user || !(file = malloc( sizeof( MPMarshalledFile ) )))
+        return NULL;
+
+    *file = (MPMarshalledFile){
+            .info = NULL,
+            .data = NULL,
+            .user = user,
+    };
+    return file;
+}
+
 bool mpw_marshal_info_free(
         MPMarshalInfo **info) {
 
@@ -111,15 +126,13 @@ bool mpw_marshal_info_free(
     return success;
 }
 
-bool mpw_marshal_free(
+static bool mpw_marshal_user_free(
         MPMarshalledUser **user) {
 
     if (!user || !*user)
         return true;
 
-    bool success = true;
-    success &= mpw_free_strings( &(*user)->fullName, NULL );
-    success &= mpw_free_strings( &(*user)->keyID, NULL );
+    bool success = mpw_free_strings( &(*user)->fullName, &(*user)->keyID, NULL );
 
     for (size_t s = 0; s < (*user)->sites_count; ++s) {
         MPMarshalledSite *site = &(*user)->sites[s];
@@ -138,10 +151,45 @@ bool mpw_marshal_free(
     return success;
 }
 
+static bool mpw_marshal_data_free(
+        MPMarshalledData **data) {
+
+    if (!data || !*data)
+        return true;
+
+    bool success = mpw_free_strings( &(*data)->key, &(*data)->str_value, NULL );
+    for (unsigned int c = 0; c < (*data)->obj_children_count; ++c)
+        success &= mpw_marshal_data_free( &(*data)->obj_children[c] );
+    success &= mpw_free( data, sizeof( MPMarshalledData ) );
+
+    return success;
+}
+
+bool mpw_marshal_free(
+        MPMarshalledFile **file) {
+
+    if (!file || !*file)
+        return true;
+
+    bool success = true;
+
+    success &= mpw_marshal_info_free( &(*file)->info );
+    success &= mpw_marshal_user_free( &(*file)->user );
+    success &= mpw_marshal_data_free( &(*file)->data );
+    success &= mpw_free( file, sizeof( MPMarshalledFile ) );
+
+    return success;
+}
+
 static const char *mpw_marshal_write_flat(
-        const MPMarshalledUser *user, MPMarshalError *error) {
+        const MPMarshalledFile *file, MPMarshalError *error) {
 
     *error = (MPMarshalError){ MPMarshalErrorInternal, "Unexpected internal error." };
+    MPMarshalledUser *user = file->user;
+    if (!user) {
+        *error = (MPMarshalError){ MPMarshalErrorMissing, "Missing user." };
+        return NULL;
+    }
     if (!user->fullName || !strlen( user->fullName )) {
         *error = (MPMarshalError){ MPMarshalErrorMissing, "Missing full name." };
         return NULL;
@@ -225,9 +273,14 @@ static const char *mpw_marshal_write_flat(
 #if MPW_JSON
 
 static const char *mpw_marshal_write_json(
-        const MPMarshalledUser *user, MPMarshalError *error) {
+        const MPMarshalledFile *file, MPMarshalError *error) {
 
     *error = (MPMarshalError){ MPMarshalErrorInternal, "Unexpected internal error." };
+    MPMarshalledUser *user = file->user;
+    if (!user) {
+        *error = (MPMarshalError){ MPMarshalErrorMissing, "Missing user." };
+        return NULL;
+    }
     if (!user->fullName || !strlen( user->fullName )) {
         *error = (MPMarshalError){ MPMarshalErrorMissing, "Missing full name." };
         return NULL;
@@ -361,17 +414,17 @@ static const char *mpw_marshal_write_json(
 #endif
 
 const char *mpw_marshal_write(
-        const MPMarshalFormat outFormat, const MPMarshalledUser *user, MPMarshalError *error) {
+        const MPMarshalFormat outFormat, const MPMarshalledFile *file, MPMarshalError *error) {
 
     switch (outFormat) {
         case MPMarshalFormatNone:
             *error = (MPMarshalError){ .type = MPMarshalSuccess };
             return NULL;
         case MPMarshalFormatFlat:
-            return mpw_marshal_write_flat( user, error );
+            return mpw_marshal_write_flat( file, error );
 #if MPW_JSON
         case MPMarshalFormatJSON:
-            return mpw_marshal_write_json( user, error );
+            return mpw_marshal_write_json( file, error );
 #endif
         default:
             *error = (MPMarshalError){ MPMarshalErrorFormat, mpw_str( "Unsupported output format: %u", outFormat ) };
@@ -430,7 +483,7 @@ static void mpw_marshal_read_flat_info(
     }
 }
 
-static MPMarshalledUser *mpw_marshal_read_flat(
+static MPMarshalledFile *mpw_marshal_read_flat(
         const char *in, MPMasterKeyProvider masterKeyProvider, MPMarshalError *error) {
 
     *error = (MPMarshalError){ MPMarshalErrorInternal, "Unexpected internal error." };
@@ -474,23 +527,23 @@ static MPMarshalledUser *mpw_marshal_read_flat(
                     *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't derive master key." };
                     mpw_free_strings( &fullName, &keyID, NULL );
                     mpw_free( &masterKey, MPMasterKeySize );
-                    mpw_marshal_free( &user );
+                    mpw_marshal_user_free( &user );
                     return NULL;
                 }
                 if (keyID && masterKey && !mpw_id_buf_equals( keyID, mpw_id_buf( masterKey, MPMasterKeySize ) )) {
                     *error = (MPMarshalError){ MPMarshalErrorMasterPassword, "Master key doesn't match key ID." };
                     mpw_free_strings( &fullName, &keyID, NULL );
                     mpw_free( &masterKey, MPMasterKeySize );
-                    mpw_marshal_free( &user );
+                    mpw_marshal_user_free( &user );
                     return NULL;
                 }
 
-                mpw_marshal_free( &user );
+                mpw_marshal_user_free( &user );
                 if (!(user = mpw_marshal_user( fullName, masterKeyProvider, algorithm ))) {
                     *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't allocate a new user." };
                     mpw_free_strings( &fullName, &keyID, NULL );
                     mpw_free( &masterKey, MPMasterKeySize );
-                    mpw_marshal_free( &user );
+                    mpw_marshal_user_free( &user );
                     return NULL;
                 }
 
@@ -512,7 +565,7 @@ static MPMarshalledUser *mpw_marshal_read_flat(
                 mpw_free_strings( &headerName, &headerValue, NULL );
                 mpw_free_strings( &fullName, &keyID, NULL );
                 mpw_free( &masterKey, MPMasterKeySize );
-                mpw_marshal_free( &user );
+                mpw_marshal_user_free( &user );
                 return NULL;
             }
 
@@ -529,7 +582,7 @@ static MPMarshalledUser *mpw_marshal_read_flat(
                     mpw_free_strings( &headerName, &headerValue, NULL );
                     mpw_free_strings( &fullName, &keyID, NULL );
                     mpw_free( &masterKey, MPMasterKeySize );
-                    mpw_marshal_free( &user );
+                    mpw_marshal_user_free( &user );
                     return NULL;
                 }
                 algorithm = (MPAlgorithmVersion)value;
@@ -549,7 +602,7 @@ static MPMarshalledUser *mpw_marshal_read_flat(
                     mpw_free_strings( &headerName, &headerValue, NULL );
                     mpw_free_strings( &fullName, &keyID, NULL );
                     mpw_free( &masterKey, MPMasterKeySize );
-                    mpw_marshal_free( &user );
+                    mpw_marshal_user_free( &user );
                     return NULL;
                 }
                 defaultType = (MPResultType)value;
@@ -564,7 +617,7 @@ static MPMarshalledUser *mpw_marshal_read_flat(
             *error = (MPMarshalError){ MPMarshalErrorMissing, "Missing header: Full Name" };
             mpw_free_strings( &fullName, &keyID, NULL );
             mpw_free( &masterKey, MPMasterKeySize );
-            mpw_marshal_free( &user );
+            mpw_marshal_user_free( &user );
             return NULL;
         }
         if (positionInLine >= endOfLine)
@@ -608,7 +661,7 @@ static MPMarshalledUser *mpw_marshal_read_flat(
                 *error = (MPMarshalError){ MPMarshalErrorFormat, mpw_str( "Unexpected import format: %u", format ) };
                 mpw_free_strings( &fullName, &keyID, NULL );
                 mpw_free( &masterKey, MPMasterKeySize );
-                mpw_marshal_free( &user );
+                mpw_marshal_user_free( &user );
                 return NULL;
             }
         }
@@ -621,7 +674,7 @@ static MPMarshalledUser *mpw_marshal_read_flat(
                 mpw_free_strings( &siteLoginState, &siteName, &siteResultState, NULL );
                 mpw_free_strings( &fullName, &keyID, NULL );
                 mpw_free( &masterKey, MPMasterKeySize );
-                mpw_marshal_free( &user );
+                mpw_marshal_user_free( &user );
                 return NULL;
             }
             long long int value = atoll( str_counter );
@@ -631,7 +684,7 @@ static MPMarshalledUser *mpw_marshal_read_flat(
                 mpw_free_strings( &siteLoginState, &siteName, &siteResultState, NULL );
                 mpw_free_strings( &fullName, &keyID, NULL );
                 mpw_free( &masterKey, MPMasterKeySize );
-                mpw_marshal_free( &user );
+                mpw_marshal_user_free( &user );
                 return NULL;
             }
             MPCounterValue siteCounter = (MPCounterValue)value;
@@ -642,7 +695,7 @@ static MPMarshalledUser *mpw_marshal_read_flat(
                 mpw_free_strings( &siteLoginState, &siteName, &siteResultState, NULL );
                 mpw_free_strings( &fullName, &keyID, NULL );
                 mpw_free( &masterKey, MPMasterKeySize );
-                mpw_marshal_free( &user );
+                mpw_marshal_user_free( &user );
                 return NULL;
             }
             MPAlgorithmVersion siteAlgorithm = (MPAlgorithmVersion)value;
@@ -653,7 +706,7 @@ static MPMarshalledUser *mpw_marshal_read_flat(
                 mpw_free_strings( &siteLoginState, &siteName, &siteResultState, NULL );
                 mpw_free_strings( &fullName, &keyID, NULL );
                 mpw_free( &masterKey, MPMasterKeySize );
-                mpw_marshal_free( &user );
+                mpw_marshal_user_free( &user );
                 return NULL;
             }
 
@@ -664,7 +717,7 @@ static MPMarshalledUser *mpw_marshal_read_flat(
                 mpw_free_strings( &siteLoginState, &siteName, &siteResultState, NULL );
                 mpw_free_strings( &fullName, &keyID, NULL );
                 mpw_free( &masterKey, MPMasterKeySize );
-                mpw_marshal_free( &user );
+                mpw_marshal_user_free( &user );
                 return NULL;
             }
 
@@ -679,7 +732,7 @@ static MPMarshalledUser *mpw_marshal_read_flat(
                     mpw_free_strings( &siteLoginState, &siteName, &siteResultState, NULL );
                     mpw_free_strings( &fullName, &keyID, NULL );
                     mpw_free( &masterKey, MPMasterKeySize );
-                    mpw_marshal_free( &user );
+                    mpw_marshal_user_free( &user );
                     return NULL;
                 }
 
@@ -707,7 +760,7 @@ static MPMarshalledUser *mpw_marshal_read_flat(
             mpw_free_strings( &siteLoginState, &siteName, &siteResultState, NULL );
             mpw_free_strings( &fullName, &keyID, NULL );
             mpw_free( &masterKey, MPMasterKeySize );
-            mpw_marshal_free( &user );
+            mpw_marshal_user_free( &user );
             return NULL;
         }
 
@@ -717,8 +770,15 @@ static MPMarshalledUser *mpw_marshal_read_flat(
     mpw_free_strings( &fullName, &keyID, NULL );
     mpw_free( &masterKey, MPMasterKeySize );
 
+    MPMarshalledFile *file = mpw_marshal_file( user );
+    if (!file) {
+        *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't allocate a new marshal file." };
+        mpw_marshal_user_free( &user );
+        return NULL;
+    }
+
     *error = (MPMarshalError){ .type = MPMarshalSuccess };
-    return user;
+    return file;
 }
 
 #if MPW_JSON
@@ -750,7 +810,7 @@ static void mpw_marshal_read_json_info(
     json_object_put( json_file );
 }
 
-static MPMarshalledUser *mpw_marshal_read_json(
+static MPMarshalledFile *mpw_marshal_read_json(
         const char *in, MPMasterKeyProvider masterKeyProvider, MPMarshalError *error) {
 
     *error = (MPMarshalError){ MPMarshalErrorInternal, "Unexpected internal error." };
@@ -827,7 +887,7 @@ static MPMarshalledUser *mpw_marshal_read_json(
     if (!(user = mpw_marshal_user( fullName, masterKeyProvider, algorithm ))) {
         *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't allocate a new user." };
         mpw_free( &masterKey, MPMasterKeySize );
-        mpw_marshal_free( &user );
+        mpw_marshal_user_free( &user );
         json_object_put( json_file );
         return NULL;
     }
@@ -848,7 +908,7 @@ static MPMarshalledUser *mpw_marshal_read_json(
         if (value < MPAlgorithmVersionFirst || value > MPAlgorithmVersionLast) {
             *error = (MPMarshalError){ MPMarshalErrorIllegal, mpw_str( "Invalid site algorithm version: %s: %d", siteName, value ) };
             mpw_free( &masterKey, MPMasterKeySize );
-            mpw_marshal_free( &user );
+            mpw_marshal_user_free( &user );
             json_object_put( json_file );
             return NULL;
         }
@@ -857,7 +917,7 @@ static MPMarshalledUser *mpw_marshal_read_json(
         if (value < MPCounterValueFirst || value > MPCounterValueLast) {
             *error = (MPMarshalError){ MPMarshalErrorIllegal, mpw_str( "Invalid site counter: %s: %d", siteName, value ) };
             mpw_free( &masterKey, MPMasterKeySize );
-            mpw_marshal_free( &user );
+            mpw_marshal_user_free( &user );
             json_object_put( json_file );
             return NULL;
         }
@@ -866,7 +926,7 @@ static MPMarshalledUser *mpw_marshal_read_json(
         if (!mpw_type_short_name( siteType )) {
             *error = (MPMarshalError){ MPMarshalErrorIllegal, mpw_str( "Invalid site type: %s: %u", siteName, siteType ) };
             mpw_free( &masterKey, MPMasterKeySize );
-            mpw_marshal_free( &user );
+            mpw_marshal_user_free( &user );
             json_object_put( json_file );
             return NULL;
         }
@@ -875,7 +935,7 @@ static MPMarshalledUser *mpw_marshal_read_json(
         if (!mpw_type_short_name( siteLoginType )) {
             *error = (MPMarshalError){ MPMarshalErrorIllegal, mpw_str( "Invalid site login type: %s: %u", siteName, siteLoginType ) };
             mpw_free( &masterKey, MPMasterKeySize );
-            mpw_marshal_free( &user );
+            mpw_marshal_user_free( &user );
             json_object_put( json_file );
             return NULL;
         }
@@ -886,7 +946,7 @@ static MPMarshalledUser *mpw_marshal_read_json(
         if (!siteLastUsed) {
             *error = (MPMarshalError){ MPMarshalErrorIllegal, mpw_str( "Invalid site last used: %s: %s", siteName, str_lastUsed ) };
             mpw_free( &masterKey, MPMasterKeySize );
-            mpw_marshal_free( &user );
+            mpw_marshal_user_free( &user );
             json_object_put( json_file );
             return NULL;
         }
@@ -898,7 +958,7 @@ static MPMarshalledUser *mpw_marshal_read_json(
         if (!site) {
             *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't allocate a new site." };
             mpw_free( &masterKey, MPMasterKeySize );
-            mpw_marshal_free( &user );
+            mpw_marshal_user_free( &user );
             json_object_put( json_file );
             return NULL;
         }
@@ -913,7 +973,7 @@ static MPMarshalledUser *mpw_marshal_read_json(
             if (!masterKeyProvider || !(masterKey = masterKeyProvider( site->algorithm, user->fullName ))) {
                 *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't derive master key." };
                 mpw_free( &masterKey, MPMasterKeySize );
-                mpw_marshal_free( &user );
+                mpw_marshal_user_free( &user );
                 json_object_put( json_file );
                 return NULL;
             }
@@ -958,8 +1018,15 @@ static MPMarshalledUser *mpw_marshal_read_json(
     mpw_free( &masterKey, MPMasterKeySize );
     json_object_put( json_file );
 
+    MPMarshalledFile *file = mpw_marshal_file( user );
+    if (!file) {
+        *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't allocate a new marshal file." };
+        mpw_marshal_user_free( &user );
+        return NULL;
+    }
+
     *error = (MPMarshalError){ .type = MPMarshalSuccess };
-    return user;
+    return file;
 }
 
 #endif
@@ -993,23 +1060,31 @@ MPMarshalInfo *mpw_marshal_read_info(
     return info;
 }
 
-MPMarshalledUser *mpw_marshal_read(
-        const char *in, const MPMarshalFormat inFormat, MPMasterKeyProvider masterKeyProvider, MPMarshalError *error) {
+MPMarshalledFile *mpw_marshal_read(
+        const char *in, MPMasterKeyProvider masterKeyProvider, MPMarshalError *error) {
 
-    switch (inFormat) {
+    MPMarshalInfo *info = mpw_marshal_read_info( in );
+    MPMarshalledFile *file = NULL;
+    switch (info->format) {
         case MPMarshalFormatNone:
             *error = (MPMarshalError){ .type = MPMarshalSuccess };
-            return NULL;
+            break;
         case MPMarshalFormatFlat:
-            return mpw_marshal_read_flat( in, masterKeyProvider, error );
+            file = mpw_marshal_read_flat( in, masterKeyProvider, error );
+            break;
 #if MPW_JSON
         case MPMarshalFormatJSON:
-            return mpw_marshal_read_json( in, masterKeyProvider, error );
+            file = mpw_marshal_read_json( in, masterKeyProvider, error );
+            break;
 #endif
         default:
-            *error = (MPMarshalError){ MPMarshalErrorFormat, mpw_str( "Unsupported input format: %u", inFormat ) };
-            return NULL;
+            *error = (MPMarshalError){ MPMarshalErrorFormat, mpw_str( "Unsupported input format: %u", info->format ) };
+            break;
     }
+    if (file)
+        file->info = info;
+
+    return file;
 }
 
 const MPMarshalFormat mpw_format_named(

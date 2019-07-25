@@ -36,6 +36,12 @@ MP_LIBS_END
 #define mpw_enum(_type, _name) _type _name; enum
 #endif
 
+#ifdef NS_OPTIONS
+#define mpw_opts(_type, _name) NS_OPTIONS(_type, _name)
+#else
+#define mpw_opts(_type, _name) _type _name; enum
+#endif
+
 //// Types.
 
 extern const size_t MPMasterKeySize, MPSiteKeySize; /* bytes */
@@ -52,7 +58,7 @@ typedef mpw_enum( uint8_t, MPKeyPurpose ) {
 };
 
 // bit 4 - 9
-typedef mpw_enum( uint16_t, MPResultTypeClass ) {
+typedef mpw_opts( uint16_t, MPResultTypeClass ) {
     /** Use the site key to generate a password from a template. */
             MPResultTypeClassTemplate = 1 << 4,
     /** Use the site key to encrypt and decrypt a stateful entity. */
@@ -62,7 +68,7 @@ typedef mpw_enum( uint16_t, MPResultTypeClass ) {
 };
 
 // bit 10 - 15
-typedef mpw_enum( uint16_t, MPSiteFeature ) {
+typedef mpw_opts( uint16_t, MPSiteFeature ) {
     /** Export the key-protected content data. */
             MPSiteFeatureExportContent = 1 << 10,
     /** Never export content. */
