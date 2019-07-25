@@ -99,7 +99,7 @@ MPMarshalledQuestion *mpw_marshal_question(
 }
 
 MPMarshalledFile *mpw_marshal_file(
-        MPMarshalledUser *user) {
+        MPMarshalledUser *user, MPMarshalledData *data) {
 
     MPMarshalledFile *file;
     if (!user || !(file = malloc( sizeof( MPMarshalledFile ) )))
@@ -107,8 +107,8 @@ MPMarshalledFile *mpw_marshal_file(
 
     *file = (MPMarshalledFile){
             .info = NULL,
-            .data = NULL,
             .user = user,
+            .data = data,
     };
     return file;
 }
@@ -770,7 +770,7 @@ static MPMarshalledFile *mpw_marshal_read_flat(
     mpw_free_strings( &fullName, &keyID, NULL );
     mpw_free( &masterKey, MPMasterKeySize );
 
-    MPMarshalledFile *file = mpw_marshal_file( user );
+    MPMarshalledFile *file = mpw_marshal_file( user, NULL );
     if (!file) {
         *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't allocate a new marshal file." };
         mpw_marshal_user_free( &user );
@@ -1018,7 +1018,7 @@ static MPMarshalledFile *mpw_marshal_read_json(
     mpw_free( &masterKey, MPMasterKeySize );
     json_object_put( json_file );
 
-    MPMarshalledFile *file = mpw_marshal_file( user );
+    MPMarshalledFile *file = mpw_marshal_file( user, NULL );
     if (!file) {
         *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't allocate a new marshal file." };
         mpw_marshal_user_free( &user );

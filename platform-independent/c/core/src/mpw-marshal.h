@@ -179,7 +179,7 @@ MPMarshalledQuestion *mpw_marshal_question(
 /** Create a new file to marshal a user into.
  * @return A file object (allocated), or NULL if the user is missing or the marshalled file couldn't be allocated. */
 MPMarshalledFile *mpw_marshal_file(
-        MPMarshalledUser *user);
+        MPMarshalledUser *user, MPMarshalledData *data);
 
 /** Free the given user object and all associated data. */
 bool mpw_marshal_info_free(
