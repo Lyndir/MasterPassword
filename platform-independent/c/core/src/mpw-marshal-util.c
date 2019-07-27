@@ -58,26 +58,27 @@ time_t mpw_timegm(const char *time) {
 }
 
 #if MPW_JSON
-json_object *mpw_get_json_section(
-        json_object *obj, const char *section) {
 
-    json_object *json_value = obj;
-    char *sectionTokenizer = mpw_strdup( section ), *sectionToken = sectionTokenizer;
-    for (sectionToken = strtok( sectionToken, "." ); sectionToken; sectionToken = strtok( NULL, "." ))
-        if (!json_object_object_get_ex( json_value, sectionToken, &json_value ) || !json_value) {
-            trc( "While resolving: %s: Missing value for: %s", section, sectionToken );
+json_object *mpw_get_json_object(
+        json_object *obj, const char *key, bool create) {
+
+    if (!obj)
+        return NULL;
+
+    json_object *json_value = NULL;
+    if (!json_object_object_get_ex( obj, key, &json_value ) || !json_value)
+        if (!create || json_object_object_add( obj, key, json_value = json_object_new_object() ) != OK) {
+            trc( "Missing value for: %s", key );
             json_value = NULL;
-            break;
         }
-    free( sectionTokenizer );
 
     return json_value;
 }
 
 const char *mpw_get_json_string(
-        json_object *obj, const char *section, const char *defaultValue) {
+        json_object *obj, const char *key, const char *defaultValue) {
 
-    json_object *json_value = mpw_get_json_section( obj, section );
+    json_object *json_value = mpw_get_json_object( obj, key, false );
     if (!json_value)
         return defaultValue;
 
@@ -85,9 +86,9 @@ const char *mpw_get_json_string(
 }
 
 int64_t mpw_get_json_int(
-        json_object *obj, const char *section, int64_t defaultValue) {
+        json_object *obj, const char *key, int64_t defaultValue) {
 
-    json_object *json_value = mpw_get_json_section( obj, section );
+    json_object *json_value = mpw_get_json_object( obj, key, false );
     if (!json_value)
         return defaultValue;
 
@@ -95,14 +96,15 @@ int64_t mpw_get_json_int(
 }
 
 bool mpw_get_json_boolean(
-        json_object *obj, const char *section, bool defaultValue) {
+        json_object *obj, const char *key, bool defaultValue) {
 
-    json_object *json_value = mpw_get_json_section( obj, section );
+    json_object *json_value = mpw_get_json_object( obj, key, false );
     if (!json_value)
         return defaultValue;
 
     return json_object_get_boolean( json_value ) == true;
 }
+
 #endif
 
 bool mpw_update_master_key(MPMasterKey *masterKey, MPAlgorithmVersion *masterKeyAlgorithm, MPAlgorithmVersion targetKeyAlgorithm,

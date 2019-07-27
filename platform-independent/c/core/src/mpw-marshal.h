@@ -126,18 +126,20 @@ typedef struct MPMarshalledData {
     // If data is held in a parent object.
     const char *key;
     // If data is held in a parent array.
-    unsigned int index;
+    size_t index;
 
+    // If data is a null.
+    bool is_null;
+    // If data is a boolean.
+    bool is_bool;
     // If data is a string.
     const char *str_value;
-    // If data is a boolean.
-    bool bool_value;
     // If data is a number.
     double num_value;
 
     // If data is an object or array.
-    struct MPMarshalledData **obj_children;
-    size_t obj_children_count;
+    size_t children_count;
+    struct MPMarshalledData *children;
 } MPMarshalledData;
 
 typedef struct MPMarshalledFile {
@@ -151,7 +153,7 @@ typedef struct MPMarshalledFile {
 /** Write the user and all associated data out using the given marshalling format.
  * @return A string (allocated), or NULL if the format is unrecognized, does not support marshalling or a format error occurred. */
 const char *mpw_marshal_write(
-        const MPMarshalFormat outFormat, const MPMarshalledFile *file, MPMarshalError *error);
+        const MPMarshalFormat outFormat, MPMarshalledFile *file, MPMarshalError *error);
 /** Best effort parse of metadata on the sites in the input buffer.  Fields that could not be parsed remain at their type's initial value.
  * @return A metadata object (allocated); NULL if the object could not be allocated or the format was not understood. */
 MPMarshalInfo *mpw_marshal_read_info(

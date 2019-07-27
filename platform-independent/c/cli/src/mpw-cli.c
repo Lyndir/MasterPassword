@@ -489,7 +489,7 @@ void cli_user(Arguments *args, Operation *operation) {
         mpw_free_string( &operation->sitesPath );
         mpw_marshal_free( &operation->file );
         operation->file = mpw_marshal_file( mpw_marshal_user(
-                operation->fullName, cli_masterKeyProvider_op( operation ), MPAlgorithmVersionCurrent ) );
+                operation->fullName, cli_masterKeyProvider_op( operation ), MPAlgorithmVersionCurrent ), NULL );
     }
 
     else {
@@ -550,7 +550,7 @@ void cli_site(Arguments *args, Operation *operation) {
     // Load the site object from mpsites.
     MPMarshalledUser *user = operation->file->user;
     for (size_t s = 0; !operation->site && s < user->sites_count; ++s)
-        if (strcmp( operation->siteName, (&user->sites[s])->siteName ) == 0)
+        if (strcmp( operation->siteName, (&user->sites[s])->siteName ) == OK)
             operation->site = &user->sites[s];
 
     // If no site from mpsites, create a new one.
@@ -571,8 +571,11 @@ void cli_question(Arguments *args, Operation *operation) {
             break;
         case MPKeyPurposeRecovery:
             for (size_t q = 0; !operation->question && q < operation->site->questions_count; ++q)
-                if ((!operation->keyContext && !strlen( (&operation->site->questions[q])->keyword )) ||
-                    (operation->keyContext && strcmp( (&operation->site->questions[q])->keyword, operation->keyContext ) == 0))
+                if (operation->keyContext == (&operation->site->questions[q])->keyword ||
+                    (!operation->keyContext && !strlen( (&operation->site->questions[q])->keyword )) ||
+                    (!(&operation->site->questions[q])->keyword && !strlen( operation->keyContext )) ||
+                    ((operation->keyContext && (&operation->site->questions[q])->keyword) &&
+                     strcmp( (&operation->site->questions[q])->keyword, operation->keyContext ) == OK))
                     operation->question = &operation->site->questions[q];
 
             // If no question from mpsites, create a new one.
@@ -700,7 +703,7 @@ void cli_algorithmVersion(Arguments *args, Operation *operation) {
 void cli_sitesRedacted(Arguments *args, Operation *operation) {
 
     if (args->sitesRedacted)
-        operation->file->user->redacted = strcmp( args->sitesRedacted, "1" ) == 0;
+        operation->file->user->redacted = strcmp( args->sitesRedacted, "1" ) == OK;
 
     else if (!operation->file->user->redacted)
         wrn( "Sites configuration is not redacted.  Use -R 1 to change this." );

@@ -63,27 +63,27 @@ const MPResultType mpw_type_named(const char *typeName) {
     }
 
     // Find what password type is represented by the type name.
-    if (mpw_strncasecmp( mpw_type_short_name( MPResultTypeTemplateMaximum ), typeName, strlen( typeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_type_short_name( MPResultTypeTemplateMaximum ), typeName, strlen( typeName ) ) == OK)
         return MPResultTypeTemplateMaximum;
-    if (mpw_strncasecmp( mpw_type_short_name( MPResultTypeTemplateLong ), typeName, strlen( typeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_type_short_name( MPResultTypeTemplateLong ), typeName, strlen( typeName ) ) == OK)
         return MPResultTypeTemplateLong;
-    if (mpw_strncasecmp( mpw_type_short_name( MPResultTypeTemplateMedium ), typeName, strlen( typeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_type_short_name( MPResultTypeTemplateMedium ), typeName, strlen( typeName ) ) == OK)
         return MPResultTypeTemplateMedium;
-    if (mpw_strncasecmp( mpw_type_short_name( MPResultTypeTemplateBasic ), typeName, strlen( typeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_type_short_name( MPResultTypeTemplateBasic ), typeName, strlen( typeName ) ) == OK)
         return MPResultTypeTemplateBasic;
-    if (mpw_strncasecmp( mpw_type_short_name( MPResultTypeTemplateShort ), typeName, strlen( typeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_type_short_name( MPResultTypeTemplateShort ), typeName, strlen( typeName ) ) == OK)
         return MPResultTypeTemplateShort;
-    if (mpw_strncasecmp( mpw_type_short_name( MPResultTypeTemplatePIN ), typeName, strlen( typeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_type_short_name( MPResultTypeTemplatePIN ), typeName, strlen( typeName ) ) == OK)
         return MPResultTypeTemplatePIN;
-    if (mpw_strncasecmp( mpw_type_short_name( MPResultTypeTemplateName ), typeName, strlen( typeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_type_short_name( MPResultTypeTemplateName ), typeName, strlen( typeName ) ) == OK)
         return MPResultTypeTemplateName;
-    if (mpw_strncasecmp( mpw_type_short_name( MPResultTypeTemplatePhrase ), typeName, strlen( typeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_type_short_name( MPResultTypeTemplatePhrase ), typeName, strlen( typeName ) ) == OK)
         return MPResultTypeTemplatePhrase;
-    if (mpw_strncasecmp( mpw_type_short_name( MPResultTypeStatefulPersonal ), typeName, strlen( typeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_type_short_name( MPResultTypeStatefulPersonal ), typeName, strlen( typeName ) ) == OK)
         return MPResultTypeStatefulPersonal;
-    if (mpw_strncasecmp( mpw_type_short_name( MPResultTypeStatefulDevice ), typeName, strlen( typeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_type_short_name( MPResultTypeStatefulDevice ), typeName, strlen( typeName ) ) == OK)
         return MPResultTypeStatefulDevice;
-    if (mpw_strncasecmp( mpw_type_short_name( MPResultTypeDeriveKey ), typeName, strlen( typeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_type_short_name( MPResultTypeDeriveKey ), typeName, strlen( typeName ) ) == OK)
         return MPResultTypeDeriveKey;
 
     dbg( "Not a generated type name: %s", typeName );
@@ -243,11 +243,11 @@ const char *mpw_type_template(MPResultType type, uint8_t templateIndex) {
 
 const MPKeyPurpose mpw_purpose_named(const char *purposeName) {
 
-    if (mpw_strncasecmp( mpw_purpose_name( MPKeyPurposeAuthentication ), purposeName, strlen( purposeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_purpose_name( MPKeyPurposeAuthentication ), purposeName, strlen( purposeName ) ) == OK)
         return MPKeyPurposeAuthentication;
-    if (mpw_strncasecmp( mpw_purpose_name( MPKeyPurposeIdentification ), purposeName, strlen( purposeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_purpose_name( MPKeyPurposeIdentification ), purposeName, strlen( purposeName ) ) == OK)
         return MPKeyPurposeIdentification;
-    if (mpw_strncasecmp( mpw_purpose_name( MPKeyPurposeRecovery ), purposeName, strlen( purposeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_purpose_name( MPKeyPurposeRecovery ), purposeName, strlen( purposeName ) ) == OK)
         return MPKeyPurposeRecovery;
 
     dbg( "Not a purpose name: %s", purposeName );

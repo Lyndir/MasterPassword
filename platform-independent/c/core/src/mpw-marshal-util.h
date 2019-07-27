@@ -43,26 +43,27 @@ time_t mpw_timegm(
 /// JSON parsing.
 
 #if MPW_JSON
-/** Search for a JSON child object in a JSON object tree.
- * @param section A dot-delimited list of JSON object keys to walk toward the child object.
- * @return A JSON object (shared) or NULL if one of the section's object keys was not found in the source object's tree. */
-json_object *mpw_get_json_section(
-        json_object *obj, const char *section);
+/** Search for an object in a JSON object tree.
+ * @param key A JSON object key for the child in this object.
+ * @param create If true, create and insert new objects for any missing path components.
+ * @return An object (shared) or a new object (shared) installed in the tree if the path's object path was not found. */
+json_object *mpw_get_json_object(
+        json_object *obj, const char *key, bool create);
 /** Search for a string in a JSON object tree.
- * @param section A dot-delimited list of JSON object keys to walk toward the child object.
- * @return A string (shared) or defaultValue if one of the section's object keys was not found in the source object's tree. */
+ * @param key A dot-delimited list of JSON object keys to walk toward the child object.
+ * @return A string (shared) or defaultValue if one of the path's object keys was not found in the source object's tree. */
 const char *mpw_get_json_string(
-        json_object *obj, const char *section, const char *defaultValue);
+        json_object *obj, const char *key, const char *defaultValue);
 /** Search for an integer in a JSON object tree.
- * @param section A dot-delimited list of JSON object keys to walk toward the child object.
- * @return The integer value or defaultValue if one of the section's object keys was not found in the source object's tree. */
+ * @param key A dot-delimited list of JSON object keys to walk toward the child object.
+ * @return The integer value or defaultValue if one of the path's object keys was not found in the source object's tree. */
 int64_t mpw_get_json_int(
-        json_object *obj, const char *section, int64_t defaultValue);
+        json_object *obj, const char *key, int64_t defaultValue);
 /** Search for a boolean in a JSON object tree.
- * @param section A dot-delimited list of JSON object keys to walk toward the child object.
- * @return The boolean value or defaultValue if one of the section's object keys was not found in the source object's tree. */
+ * @param key A dot-delimited list of JSON object keys to walk toward the child object.
+ * @return The boolean value or defaultValue if one of the path's object keys was not found in the source object's tree. */
 bool mpw_get_json_boolean(
-        json_object *obj, const char *section, bool defaultValue);
+        json_object *obj, const char *key, bool defaultValue);
 #endif
 
 /// mpw.

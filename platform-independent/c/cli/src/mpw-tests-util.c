@@ -45,18 +45,21 @@ static xmlChar const *mpw_xmlPath(xmlNodePtr context) {
 
 xmlNodePtr mpw_xmlTestCaseNode(xmlNodePtr testCaseNode, const char *nodeName) {
 
+    if (!nodeName)
+        return NULL;
+
     // Try to find an attribute node.
     for (xmlAttrPtr child = testCaseNode->properties; child; child = child->next)
-        if (xmlStrcmp( child->name, BAD_CAST nodeName ) == 0)
+        if (xmlStrcmp( child->name, BAD_CAST nodeName ) == OK)
             return (xmlNodePtr)child;
 
     // Try to find an element node.
     for (xmlNodePtr child = testCaseNode->children; child; child = child->next)
-        if (xmlStrcmp( child->name, BAD_CAST nodeName ) == 0)
+        if (xmlStrcmp( child->name, BAD_CAST nodeName ) == OK)
             return child;
 
     // Missing content, try to find parent case.
-    if (strcmp( nodeName, "parent" ) == 0)
+    if (strcmp( nodeName, "parent" ) == OK)
         // Was just searching for testCaseNode's parent, none found.
         return NULL;
     xmlChar *parentId = mpw_xmlTestCaseString( testCaseNode, "parent" );
@@ -66,7 +69,7 @@ xmlNodePtr mpw_xmlTestCaseNode(xmlNodePtr testCaseNode, const char *nodeName) {
 
     for (xmlNodePtr otherTestCaseNode = testCaseNode->parent->children; otherTestCaseNode; otherTestCaseNode = otherTestCaseNode->next) {
         xmlChar *id = mpw_xmlTestCaseString( otherTestCaseNode, "id" );
-        int foundParent = id && xmlStrcmp( id, parentId ) == 0;
+        int foundParent = id && xmlStrcmp( id, parentId ) == OK;
         xmlFree( id );
 
         if (foundParent) {
@@ -81,11 +84,17 @@ xmlNodePtr mpw_xmlTestCaseNode(xmlNodePtr testCaseNode, const char *nodeName) {
 
 xmlChar *mpw_xmlTestCaseString(xmlNodePtr context, const char *nodeName) {
 
+    if (!nodeName)
+        return NULL;
+
     xmlNodePtr child = mpw_xmlTestCaseNode( context, nodeName );
     return child? xmlNodeGetContent( child ): NULL;
 }
 
 uint32_t mpw_xmlTestCaseInteger(xmlNodePtr context, const char *nodeName) {
+
+    if (!nodeName)
+        return 0;
 
     xmlChar *string = mpw_xmlTestCaseString( context, nodeName );
     uint32_t integer = string? (uint32_t)atol( (char *)string ): 0;
