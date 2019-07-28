@@ -676,7 +676,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
         return nil;
     }
     @finally {
-        mpw_marshal_free( &importUser );
+        mpw_marshal_file_free( &importUser );
     }
 }
 
