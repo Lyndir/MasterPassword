@@ -174,13 +174,14 @@ MPMarshalledData *mpw_marshal_data_new() {
     MPMarshalledData *data = malloc( sizeof( MPMarshalledData ) );
     *data = (MPMarshalledData){};
     mpw_marshal_data_set_null( data, NULL );
+    data->is_null = false;
     return data;
 }
 
 MPMarshalledData *mpw_marshal_data_vget(
         MPMarshalledData *data, va_list nodes) {
 
-    MPMarshalledData *parent = data, *child;
+    MPMarshalledData *parent = data, *child = parent;
     for (const char *node; parent && (node = va_arg( nodes, const char * )); parent = child) {
         child = NULL;
 
@@ -203,7 +204,7 @@ MPMarshalledData *mpw_marshal_data_vget(
         }
     }
 
-    return parent;
+    return child;
 }
 
 MPMarshalledData *mpw_marshal_data_get(
@@ -220,7 +221,7 @@ MPMarshalledData *mpw_marshal_data_get(
 const MPMarshalledData *mpw_marshal_data_vfind(
         const MPMarshalledData *data, va_list nodes) {
 
-    const MPMarshalledData *parent = data, *child;
+    const MPMarshalledData *parent = data, *child = parent;
     for (const char *node; parent && (node = va_arg( nodes, const char * )); parent = child) {
         child = NULL;
 
@@ -236,7 +237,7 @@ const MPMarshalledData *mpw_marshal_data_vfind(
             break;
     }
 
-    return parent;
+    return child;
 }
 
 const MPMarshalledData *mpw_marshal_data_find(
