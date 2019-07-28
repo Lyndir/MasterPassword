@@ -38,20 +38,20 @@ typedef mpw_enum( unsigned int, MPAlgorithmVersion ) {
 
 /** Derive the master key for a user based on their name and master password.
  * @return A buffer (allocated, MPMasterKeySize) or NULL if the fullName or masterPassword is missing, the algorithm is unknown, or an algorithm error occurred. */
-MPMasterKey mpw_master_key(
+const MPMasterKey mpw_master_key(
         const char *fullName, const char *masterPassword, const MPAlgorithmVersion algorithmVersion);
 
 /** Derive the site key for a user's site from the given master key and site parameters.
  * @return A buffer (allocated, MPSiteKeySize) or NULL if the masterKey or siteName is missing, the algorithm is unknown, or an algorithm error occurred. */
-MPSiteKey mpw_site_key(
-        MPMasterKey masterKey, const char *siteName, const MPCounterValue siteCounter,
+const MPSiteKey mpw_site_key(
+        const MPMasterKey masterKey, const char *siteName, const MPCounterValue siteCounter,
         const MPKeyPurpose keyPurpose, const char *keyContext, const MPAlgorithmVersion algorithmVersion);
 
 /** Generate a site result token from the given parameters.
  * @param resultParam A parameter for the resultType.  For stateful result types, the output of mpw_site_state.
  * @return A string (allocated) or NULL if the masterKey or siteName is missing, the algorithm is unknown, or an algorithm error occurred. */
 const char *mpw_site_result(
-        MPMasterKey masterKey, const char *siteName, const MPCounterValue siteCounter,
+        const MPMasterKey masterKey, const char *siteName, const MPCounterValue siteCounter,
         const MPKeyPurpose keyPurpose, const char *keyContext,
         const MPResultType resultType, const char *resultParam,
         const MPAlgorithmVersion algorithmVersion);
@@ -60,19 +60,19 @@ const char *mpw_site_result(
  * @param resultParam A parameter for the resultType.  For stateful result types, the desired mpw_site_result.
  * @return A string (allocated) or NULL if the masterKey, siteName or resultParam is missing, the algorithm is unknown, or an algorithm error occurred. */
 const char *mpw_site_state(
-        MPMasterKey masterKey, const char *siteName, const MPCounterValue siteCounter,
+        const MPMasterKey masterKey, const char *siteName, const MPCounterValue siteCounter,
         const MPKeyPurpose keyPurpose, const char *keyContext,
         const MPResultType resultType, const char *resultParam,
         const MPAlgorithmVersion algorithmVersion);
 
 /** @return An identicon (static) that represents the user's identity. */
-MPIdenticon mpw_identicon(
+const MPIdenticon mpw_identicon(
         const char *fullName, const char *masterPassword);
 /** @return An encoded representation (shared) of the given identicon or an empty string if the identicon is unset. */
 const char *mpw_identicon_encode(
-        MPIdenticon identicon);
+        const MPIdenticon identicon);
 /** @return An identicon (static) decoded from the given encoded identicon representation or an identicon with empty fields if the identicon could not be parsed. */
-MPIdenticon mpw_identicon_encoded(
+const MPIdenticon mpw_identicon_encoded(
         const char *encoding);
 
 #endif // _MPW_ALGORITHM_H

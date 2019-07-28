@@ -22,7 +22,7 @@
 #include "mpw-algorithm_v2.c"
 #include "mpw-algorithm_v3.c"
 
-MPMasterKey mpw_master_key(const char *fullName, const char *masterPassword, const MPAlgorithmVersion algorithmVersion) {
+const MPMasterKey mpw_master_key(const char *fullName, const char *masterPassword, const MPAlgorithmVersion algorithmVersion) {
 
     if (fullName && !strlen( fullName ))
         fullName = NULL;
@@ -56,8 +56,8 @@ MPMasterKey mpw_master_key(const char *fullName, const char *masterPassword, con
     }
 }
 
-MPSiteKey mpw_site_key(
-        MPMasterKey masterKey, const char *siteName, const MPCounterValue siteCounter,
+const MPSiteKey mpw_site_key(
+        const MPMasterKey masterKey, const char *siteName, const MPCounterValue siteCounter,
         const MPKeyPurpose keyPurpose, const char *keyContext, const MPAlgorithmVersion algorithmVersion) {
 
     if (keyContext && !strlen( keyContext ))
@@ -93,7 +93,7 @@ MPSiteKey mpw_site_key(
 }
 
 const char *mpw_site_result(
-        MPMasterKey masterKey, const char *siteName, const MPCounterValue siteCounter,
+        const MPMasterKey masterKey, const char *siteName, const MPCounterValue siteCounter,
         const MPKeyPurpose keyPurpose, const char *keyContext,
         const MPResultType resultType, const char *resultParam,
         const MPAlgorithmVersion algorithmVersion) {
@@ -171,7 +171,7 @@ const char *mpw_site_result(
 }
 
 const char *mpw_site_state(
-        MPMasterKey masterKey, const char *siteName, const MPCounterValue siteCounter,
+        const MPMasterKey masterKey, const char *siteName, const MPCounterValue siteCounter,
         const MPKeyPurpose keyPurpose, const char *keyContext,
         const MPResultType resultType, const char *resultParam,
         const MPAlgorithmVersion algorithmVersion) {
@@ -223,7 +223,7 @@ static const char *mpw_identicon_accessories[] = {
         "♨", "♩", "♪", "♫", "⚐", "⚑", "⚔", "⚖", "⚙", "⚠", "⌘", "⏎", "✄", "✆", "✈", "✉", "✌"
 };
 
-MPIdenticon mpw_identicon(const char *fullName, const char *masterPassword) {
+const MPIdenticon mpw_identicon(const char *fullName, const char *masterPassword) {
 
     const uint8_t *seed = NULL;
     if (fullName && strlen( fullName ) && masterPassword && strlen( masterPassword ))
@@ -246,7 +246,7 @@ MPIdenticon mpw_identicon(const char *fullName, const char *masterPassword) {
 }
 
 const char *mpw_identicon_encode(
-        MPIdenticon identicon) {
+        const MPIdenticon identicon) {
 
     if (identicon.color == MPIdenticonColorUnset)
         return "";
@@ -255,7 +255,7 @@ const char *mpw_identicon_encode(
             identicon.color, identicon.leftArm, identicon.body, identicon.rightArm, identicon.accessory );
 }
 
-MPIdenticon mpw_identicon_encoded(
+const MPIdenticon mpw_identicon_encoded(
         const char *encoding) {
 
     MPIdenticon identicon = MPIdenticonUnset;

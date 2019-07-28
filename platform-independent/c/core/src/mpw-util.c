@@ -175,7 +175,7 @@ bool __mpw_free(void **buffer, const size_t bufferSize) {
 
 bool __mpw_free_string(char **string) {
 
-    return *string && __mpw_free( (void **)string, strlen( *string ) );
+    return string && *string && __mpw_free( (void **)string, strlen( *string ) );
 }
 
 bool __mpw_free_strings(char **strings, ...) {
@@ -193,7 +193,7 @@ bool __mpw_free_strings(char **strings, ...) {
 }
 
 uint8_t const *mpw_kdf_scrypt(const size_t keySize, const uint8_t *secret, const size_t secretSize, const uint8_t *salt, const size_t saltSize,
-        uint64_t N, uint32_t r, uint32_t p) {
+        const uint64_t N, const uint32_t r, const uint32_t p) {
 
     if (!secret || !salt || !secretSize || !saltSize)
         return NULL;
@@ -367,7 +367,7 @@ const char *mpw_hotp(const uint8_t *key, size_t keySize, uint64_t movingFactor, 
 }
 #endif
 
-MPKeyID mpw_id_buf(const void *buf, size_t length) {
+const MPKeyID mpw_id_buf(const void *buf, const size_t length) {
 
     if (!buf)
         return NULL;
@@ -443,7 +443,7 @@ const char *mpw_vstr(const char *format, va_list args) {
     return str_str[str_str_i];
 }
 
-const char *mpw_hex(const void *buf, size_t length) {
+const char *mpw_hex(const void *buf, const size_t length) {
 
     if (!buf || !length)
         return NULL;
@@ -461,7 +461,7 @@ const char *mpw_hex(const void *buf, size_t length) {
     return mpw_hex_buf[mpw_hex_buf_i];
 }
 
-const char *mpw_hex_l(uint32_t number) {
+const char *mpw_hex_l(const uint32_t number) {
 
     uint8_t buf[4 /* 32 / 8 */];
     buf[0] = (uint8_t)((number >> 24) & UINT8_MAX);
@@ -496,7 +496,7 @@ size_t mpw_utf8_strchars(const char *utf8String) {
     return strchars;
 }
 
-void *mpw_memdup(const void *src, size_t len) {
+void *mpw_memdup(const void *src, const size_t len) {
 
     if (!src)
         return NULL;
@@ -517,7 +517,7 @@ char *mpw_strdup(const char *src) {
     return mpw_memdup( src, len + 1 );
 }
 
-char *mpw_strndup(const char *src, size_t max) {
+char *mpw_strndup(const char *src, const size_t max) {
 
     if (!src)
         return NULL;
@@ -525,8 +525,7 @@ char *mpw_strndup(const char *src, size_t max) {
     size_t len = 0;
     for (; len < max && src[len] != '\0'; ++len);
 
-    char *dst = malloc( len + 1 );
-    memcpy( dst, src, len );
+    char *dst = mpw_memdup( src, len + 1 );
     dst[len] = '\0';
 
     return dst;

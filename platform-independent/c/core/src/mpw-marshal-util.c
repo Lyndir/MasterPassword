@@ -23,7 +23,7 @@ MP_LIBS_BEGIN
 #include <string.h>
 MP_LIBS_END
 
-char *mpw_get_token(const char **in, const char *eol, char *delim) {
+char *mpw_get_token(const char **in, const char *eol, const char *delim) {
 
     // Skip leading spaces.
     for (; **in == ' '; ++*in);
@@ -60,7 +60,7 @@ time_t mpw_timegm(const char *time) {
 #if MPW_JSON
 
 json_object *mpw_get_json_object(
-        json_object *obj, const char *key, bool create) {
+        json_object *obj, const char *key, const bool create) {
 
     if (!obj)
         return NULL;
@@ -86,7 +86,7 @@ const char *mpw_get_json_string(
 }
 
 int64_t mpw_get_json_int(
-        json_object *obj, const char *key, int64_t defaultValue) {
+        json_object *obj, const char *key, const int64_t defaultValue) {
 
     json_object *json_value = mpw_get_json_object( obj, key, false );
     if (!json_value)
@@ -96,7 +96,7 @@ int64_t mpw_get_json_int(
 }
 
 bool mpw_get_json_boolean(
-        json_object *obj, const char *key, bool defaultValue) {
+        json_object *obj, const char *key, const bool defaultValue) {
 
     json_object *json_value = mpw_get_json_object( obj, key, false );
     if (!json_value)
@@ -107,7 +107,7 @@ bool mpw_get_json_boolean(
 
 #endif
 
-bool mpw_update_master_key(MPMasterKey *masterKey, MPAlgorithmVersion *masterKeyAlgorithm, MPAlgorithmVersion targetKeyAlgorithm,
+bool mpw_update_master_key(MPMasterKey *masterKey, MPAlgorithmVersion *masterKeyAlgorithm, const MPAlgorithmVersion targetKeyAlgorithm,
         const char *fullName, const char *masterPassword) {
 
     if (masterKey && (!*masterKey || *masterKeyAlgorithm != targetKeyAlgorithm)) {

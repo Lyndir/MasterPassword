@@ -152,11 +152,11 @@ const MPKeyPurpose mpw_purpose_named(const char *purposeName);
 /**
  * @return The standard name (static) for the given purpose or NULL if the purpose is not known.
  */
-const char *mpw_purpose_name(MPKeyPurpose purpose);
+const char *mpw_purpose_name(const MPKeyPurpose purpose);
 /**
  * @return The scope identifier (static) to apply when encoding for the given purpose or NULL if the purpose is not known.
  */
-const char *mpw_purpose_scope(MPKeyPurpose purpose);
+const char *mpw_purpose_scope(const MPKeyPurpose purpose);
 
 /**
  * @return The password type represented by the given name or ERR if the name does not represent a known type.
@@ -165,34 +165,34 @@ const MPResultType mpw_type_named(const char *typeName);
 /**
  * @return The standard identifying name (static) for the given password type or NULL if the type is not known.
  */
-const char *mpw_type_abbreviation(MPResultType resultType);
+const char *mpw_type_abbreviation(const MPResultType resultType);
 /**
  * @return The standard identifying name (static) for the given password type or NULL if the type is not known.
  */
-const char *mpw_type_short_name(MPResultType resultType);
+const char *mpw_type_short_name(const MPResultType resultType);
 /**
  * @return The descriptive name (static) for the given password type or NULL if the type is not known.
  */
-const char *mpw_type_long_name(MPResultType resultType);
+const char *mpw_type_long_name(const MPResultType resultType);
 
 /**
  * @return An array (allocated, count) of strings (static) that express the templates to use for the given type.
  *         NULL if the type is not known or is not a MPResultTypeClassTemplate.
  */
-const char **mpw_type_templates(MPResultType type, size_t *count);
+const char **mpw_type_templates(const MPResultType type, size_t *count);
 /**
  * @return A string (static) that contains the password encoding template of the given type for a seed that starts with the given byte.
  *         NULL if the type is not known or is not a MPResultTypeClassTemplate.
  */
-const char *mpw_type_template(MPResultType type, uint8_t templateIndex);
+const char *mpw_type_template(const MPResultType type, const uint8_t templateIndex);
 
 /**
  * @return An string (static) with all the characters in the given character class or NULL if the character class is not known.
  */
-const char *mpw_class_characters(char characterClass);
+const char *mpw_class_characters(const char characterClass);
 /**
  * @return A character from given character class that encodes the given byte or NUL if the character class is not known or is empty.
  */
-const char mpw_class_character(char characterClass, uint8_t seedByte);
+const char mpw_class_character(const char characterClass, const uint8_t seedByte);
 
 #endif // _MPW_TYPES_H

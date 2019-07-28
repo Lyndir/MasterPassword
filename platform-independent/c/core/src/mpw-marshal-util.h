@@ -34,7 +34,7 @@ MP_LIBS_END
  * The input string reference is advanced beyond the token delimitor if one is found.
  * @return A string (allocated) containing the token or NULL if the delim wasn't found before eol. */
 char *mpw_get_token(
-        const char **in, const char *eol, char *delim);
+        const char **in, const char *eol, const char *delim);
 /** Convert an RFC 3339 time string into epoch time.
  * @return ERR if the string could not be parsed. */
 time_t mpw_timegm(
@@ -48,7 +48,7 @@ time_t mpw_timegm(
  * @param create If true, create and insert new objects for any missing path components.
  * @return An object (shared) or a new object (shared) installed in the tree if the path's object path was not found. */
 json_object *mpw_get_json_object(
-        json_object *obj, const char *key, bool create);
+        json_object *obj, const char *key, const bool create);
 /** Search for a string in a JSON object tree.
  * @param key A dot-delimited list of JSON object keys to walk toward the child object.
  * @return A string (shared) or defaultValue if one of the path's object keys was not found in the source object's tree. */
@@ -58,12 +58,12 @@ const char *mpw_get_json_string(
  * @param key A dot-delimited list of JSON object keys to walk toward the child object.
  * @return The integer value or defaultValue if one of the path's object keys was not found in the source object's tree. */
 int64_t mpw_get_json_int(
-        json_object *obj, const char *key, int64_t defaultValue);
+        json_object *obj, const char *key, const int64_t defaultValue);
 /** Search for a boolean in a JSON object tree.
  * @param key A dot-delimited list of JSON object keys to walk toward the child object.
  * @return The boolean value or defaultValue if one of the path's object keys was not found in the source object's tree. */
 bool mpw_get_json_boolean(
-        json_object *obj, const char *key, bool defaultValue);
+        json_object *obj, const char *key, const bool defaultValue);
 #endif
 
 /// mpw.
@@ -72,7 +72,7 @@ bool mpw_get_json_boolean(
  * @param masterKey A buffer (allocated, MPMasterKeySize).
  * @return false if an error occurred during the derivation of the master key. */
 bool mpw_update_master_key(
-        MPMasterKey *masterKey, MPAlgorithmVersion *masterKeyAlgorithm, MPAlgorithmVersion targetKeyAlgorithm,
+        MPMasterKey *masterKey, MPAlgorithmVersion *masterKeyAlgorithm, const MPAlgorithmVersion targetKeyAlgorithm,
         const char *fullName, const char *masterPassword);
 
 #endif // _MPW_MARSHAL_UTIL_H

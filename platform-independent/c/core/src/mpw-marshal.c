@@ -120,75 +120,309 @@ MPMarshalledFile *mpw_marshal_file(
     return file;
 }
 
-bool mpw_marshal_info_free(
+void mpw_marshal_info_free(
         MPMarshalInfo **info) {
 
     if (!info || !*info)
-        return true;
+        return;
 
-    bool success = true;
-    success &= mpw_free_strings( &(*info)->fullName, &(*info)->keyID, NULL );
-    success &= mpw_free( info, sizeof( MPMarshalInfo ) );
-
-    return success;
+    mpw_free_strings( &(*info)->fullName, &(*info)->keyID, NULL );
+    mpw_free( info, sizeof( MPMarshalInfo ) );
 }
 
-static bool mpw_marshal_user_free(
+void mpw_marshal_user_free(
         MPMarshalledUser **user) {
 
     if (!user || !*user)
-        return true;
+        return;
 
-    bool success = mpw_free_strings( &(*user)->fullName, &(*user)->keyID, NULL );
+    mpw_free_strings( &(*user)->fullName, &(*user)->keyID, NULL );
 
     for (size_t s = 0; s < (*user)->sites_count; ++s) {
         MPMarshalledSite *site = &(*user)->sites[s];
-        success &= mpw_free_strings( &site->siteName, &site->resultState, &site->loginState, &site->url, NULL );
+        mpw_free_strings( &site->siteName, &site->resultState, &site->loginState, &site->url, NULL );
 
         for (size_t q = 0; q < site->questions_count; ++q) {
             MPMarshalledQuestion *question = &site->questions[q];
-            success &= mpw_free_strings( &question->keyword, &question->state, NULL );
+            mpw_free_strings( &question->keyword, &question->state, NULL );
         }
-        success &= mpw_free( &site->questions, sizeof( MPMarshalledQuestion ) * site->questions_count );
+        mpw_free( &site->questions, sizeof( MPMarshalledQuestion ) * site->questions_count );
     }
 
-    success &= mpw_free( &(*user)->sites, sizeof( MPMarshalledSite ) * (*user)->sites_count );
-    success &= mpw_free( user, sizeof( MPMarshalledUser ) );
-
-    return success;
+    mpw_free( &(*user)->sites, sizeof( MPMarshalledSite ) * (*user)->sites_count );
+    mpw_free( user, sizeof( MPMarshalledUser ) );
 }
 
-static bool mpw_marshal_data_null(
-        MPMarshalledData *data) {
-
-    if (!data)
-        return true;
-
-    bool success = mpw_free_strings( &data->key, &data->str_value, NULL );
-    for (unsigned int c = 0; c < data->children_count; ++c)
-        success &= mpw_marshal_data_null( &data->children[c] );
-    success &= mpw_free( &data->children, sizeof( MPMarshalledData ) * data->children_count );
-    data->children_count = 0;
-    data->num_value = NAN;
-    data->is_bool = false;
-    data->is_null = true;
-
-    return success;
-}
-
-bool mpw_marshal_free(
+void mpw_marshal_file_free(
         MPMarshalledFile **file) {
 
     if (!file || !*file)
-        return true;
+        return;
 
-    bool success = true;
+    mpw_marshal_info_free( &(*file)->info );
+    mpw_marshal_user_free( &(*file)->user );
+    if ((*file)->data) {
+        mpw_marshal_data_set_null( (*file)->data, NULL );
+        mpw_free_string( &(*file)->data->key );
+        mpw_free( &(*file)->data, sizeof( MPMarshalledData ) );
+    }
+    mpw_free( file, sizeof( MPMarshalledFile ) );
+}
 
-    success &= mpw_marshal_info_free( &(*file)->info );
-    success &= mpw_marshal_user_free( &(*file)->user );
-    success &= mpw_marshal_data_null( (*file)->data );
-    success &= mpw_free( &(*file)->data, sizeof( MPMarshalledData ) );
-    success &= mpw_free( file, sizeof( MPMarshalledFile ) );
+MPMarshalledData *mpw_marshal_data_new() {
+
+    MPMarshalledData *data = malloc( sizeof( MPMarshalledData ) );
+    *data = (MPMarshalledData){};
+    mpw_marshal_data_set_null( data, NULL );
+    return data;
+}
+
+MPMarshalledData *mpw_marshal_data_vget(
+        MPMarshalledData *data, va_list nodes) {
+
+    MPMarshalledData *parent = data, *child;
+    for (const char *node; parent && (node = va_arg( nodes, const char * )); parent = child) {
+        child = NULL;
+
+        for (size_t c = 0; c < parent->children_count; ++c) {
+            const char *key = parent->children[c].key;
+            if (key && strcmp( node, key ) == OK) {
+                child = &parent->children[c];
+                break;
+            }
+        }
+
+        if (!child) {
+            if (!mpw_realloc( &parent->children, NULL, sizeof( MPMarshalledData ) * ++parent->children_count )) {
+                --parent->children_count;
+                break;
+            }
+            *(child = &parent->children[parent->children_count - 1]) = (MPMarshalledData){ .key = mpw_strdup( node ) };
+            mpw_marshal_data_set_null( child, NULL );
+            child->is_null = false;
+        }
+    }
+
+    return parent;
+}
+
+MPMarshalledData *mpw_marshal_data_get(
+        MPMarshalledData *data, ...) {
+
+    va_list nodes;
+    va_start( nodes, data );
+    MPMarshalledData *child = mpw_marshal_data_vget( data, nodes );
+    va_end( nodes );
+
+    return child;
+}
+
+const MPMarshalledData *mpw_marshal_data_vfind(
+        const MPMarshalledData *data, va_list nodes) {
+
+    const MPMarshalledData *parent = data, *child;
+    for (const char *node; parent && (node = va_arg( nodes, const char * )); parent = child) {
+        child = NULL;
+
+        for (size_t c = 0; c < parent->children_count; ++c) {
+            const char *key = parent->children[c].key;
+            if (key && strcmp( node, key ) == OK) {
+                child = &parent->children[c];
+                break;
+            }
+        }
+
+        if (!child)
+            break;
+    }
+
+    return parent;
+}
+
+const MPMarshalledData *mpw_marshal_data_find(
+        const MPMarshalledData *data, ...) {
+
+    va_list nodes;
+    va_start( nodes, data );
+    const MPMarshalledData *child = mpw_marshal_data_vfind( data, nodes );
+    va_end( nodes );
+
+    return child;
+}
+
+bool mpw_marshal_data_vis_null(
+        const MPMarshalledData *data, va_list nodes) {
+
+    const MPMarshalledData *child = mpw_marshal_data_vfind( data, nodes );
+    return !child || child->is_null;
+}
+
+bool mpw_marshal_data_is_null(
+        const MPMarshalledData *data, ...) {
+
+    va_list nodes;
+    va_start( nodes, data );
+    bool value = mpw_marshal_data_vis_null( data, nodes );
+    va_end( nodes );
+
+    return value;
+}
+
+bool mpw_marshal_data_vset_null(
+        MPMarshalledData *data, va_list nodes) {
+
+    MPMarshalledData *child = mpw_marshal_data_vget( data, nodes );
+    if (!child)
+        return false;
+
+    mpw_free_string( &child->str_value );
+    for (unsigned int c = 0; c < child->children_count; ++c) {
+        mpw_marshal_data_set_null( &child->children[c], NULL );
+        mpw_free_string( &child->children[c].key );
+    }
+    mpw_free( &child->children, sizeof( MPMarshalledData ) * child->children_count );
+    child->children_count = 0;
+    child->num_value = NAN;
+    child->is_bool = false;
+    child->is_null = true;
+    return true;
+}
+
+bool mpw_marshal_data_set_null(
+        MPMarshalledData *data, ...) {
+
+    va_list nodes;
+    va_start( nodes, data );
+    bool success = mpw_marshal_data_vset_null( data, nodes );
+    va_end( nodes );
+
+    return success;
+}
+
+bool mpw_marshal_data_vget_bool(
+        const MPMarshalledData *data, va_list nodes) {
+
+    const MPMarshalledData *child = mpw_marshal_data_vfind( data, nodes );
+    return child && child->is_bool && child->num_value != false;
+}
+
+bool mpw_marshal_data_get_bool(
+        const MPMarshalledData *data, ...) {
+
+    va_list nodes;
+    va_start( nodes, data );
+    bool value = mpw_marshal_data_vget_bool( data, nodes );
+    va_end( nodes );
+
+    return value;
+}
+
+bool mpw_marshal_data_vset_bool(
+        const bool value, MPMarshalledData *data, va_list nodes) {
+
+    MPMarshalledData *child = mpw_marshal_data_vget( data, nodes );
+    if (!child || !mpw_marshal_data_set_null( child, NULL ))
+        return false;
+
+    child->is_null = false;
+    child->is_bool = true;
+    child->num_value = value != false;
+    return true;
+}
+
+bool mpw_marshal_data_set_bool(
+        const bool value, MPMarshalledData *data, ...) {
+
+    va_list nodes;
+    va_start( nodes, data );
+    bool success = mpw_marshal_data_vset_bool( value, data, nodes );
+    va_end( nodes );
+
+    return success;
+}
+
+double mpw_marshal_data_vget_num(
+        const MPMarshalledData *data, va_list nodes) {
+
+    const MPMarshalledData *child = mpw_marshal_data_vfind( data, nodes );
+    return child == NULL? NAN: child->num_value;
+}
+
+double mpw_marshal_data_get_num(
+        const MPMarshalledData *data, ...) {
+
+    va_list nodes;
+    va_start( nodes, data );
+    double value = mpw_marshal_data_vget_num( data, nodes );
+    va_end( nodes );
+
+    return value;
+}
+
+bool mpw_marshal_data_vset_num(
+        const double value, MPMarshalledData *data, va_list nodes) {
+
+    MPMarshalledData *child = mpw_marshal_data_vget( data, nodes );
+    if (!child || !mpw_marshal_data_set_null( child, NULL ))
+        return false;
+
+    child->is_null = false;
+    child->num_value = value;
+    child->str_value = mpw_strdup( mpw_str( "%g", value ) );
+    return true;
+}
+
+bool mpw_marshal_data_set_num(
+        const double value, MPMarshalledData *data, ...) {
+
+    va_list nodes;
+    va_start( nodes, data );
+    bool success = mpw_marshal_data_vset_num( value, data, nodes );
+    va_end( nodes );
+
+    return success;
+}
+
+const char *mpw_marshal_data_vget_str(
+        const MPMarshalledData *data, va_list nodes) {
+
+    const MPMarshalledData *child = mpw_marshal_data_vfind( data, nodes );
+    return child == NULL? NULL: mpw_strdup( child->str_value );
+}
+
+const char *mpw_marshal_data_get_str(
+        const MPMarshalledData *data, ...) {
+
+    va_list nodes;
+    va_start( nodes, data );
+    const char *value = mpw_marshal_data_vget_str( data, nodes );
+    va_end( nodes );
+
+    return value;
+}
+
+bool mpw_marshal_data_vset_str(
+        const char *value, MPMarshalledData *data, va_list nodes) {
+
+    MPMarshalledData *child = mpw_marshal_data_vget( data, nodes );
+    if (!child || !mpw_marshal_data_set_null( child, NULL ))
+        return false;
+
+    if (value) {
+        child->is_null = false;
+        child->str_value = mpw_strdup( value );
+    }
+
+    return true;
+}
+
+bool mpw_marshal_data_set_str(
+        const char *value, MPMarshalledData *data, ...) {
+
+    va_list nodes;
+    va_start( nodes, data );
+    bool success = mpw_marshal_data_vset_str( value, data, nodes );
+    va_end( nodes );
 
     return success;
 }
@@ -285,20 +519,24 @@ static const char *mpw_marshal_write_flat(
 #if MPW_JSON
 
 static json_object *mpw_get_json_data(
-        MPMarshalledData *data) {
+        const MPMarshalledData *data) {
 
     if (!data || data->is_null)
         return NULL;
     if (data->is_bool)
         return json_object_new_boolean( data->num_value != false );
-    if (!isnan( data->num_value ))
-        return json_object_new_double_s( data->num_value, data->str_value );
+    if (!isnan( data->num_value )) {
+        if (data->str_value)
+            return json_object_new_double_s( data->num_value, data->str_value );
+        else
+            return json_object_new_double( data->num_value );
+    }
     if (data->str_value)
         return json_object_new_string( data->str_value );
 
     json_object *obj = NULL;
-    for (size_t index = 0; index < data->children_count; ++index) {
-        MPMarshalledData *child = &data->children[index];
+    for (size_t c = 0; c < data->children_count; ++c) {
+        MPMarshalledData *child = &data->children[c];
         if (!obj) {
             if (child->key)
                 obj = json_object_new_object();
@@ -505,8 +743,8 @@ static void mpw_marshal_read_flat_info(
                 break;
 
             // Header
-            char *headerName = mpw_get_token( &positionInLine, endOfLine, ":\n" );
-            char *headerValue = mpw_get_token( &positionInLine, endOfLine, "\n" );
+            const char *headerName = mpw_get_token( &positionInLine, endOfLine, ":\n" );
+            const char *headerValue = mpw_get_token( &positionInLine, endOfLine, "\n" );
             if (!headerName || !headerValue)
                 continue;
 
@@ -605,8 +843,8 @@ static MPMarshalledFile *mpw_marshal_read_flat(
             }
 
             // Header
-            char *headerName = mpw_get_token( &positionInLine, endOfLine, ":\n" );
-            char *headerValue = mpw_get_token( &positionInLine, endOfLine, "\n" );
+            const char *headerName = mpw_get_token( &positionInLine, endOfLine, ":\n" );
+            const char *headerValue = mpw_get_token( &positionInLine, endOfLine, "\n" );
             if (!headerName || !headerValue) {
                 error->type = MPMarshalErrorStructure;
                 error->message = mpw_str( "Invalid header: %s", mpw_strndup( positionInLine, (size_t)(endOfLine - positionInLine) ) );
@@ -672,8 +910,8 @@ static MPMarshalledFile *mpw_marshal_read_flat(
             continue;
 
         // Site
-        char *siteName = NULL, *siteResultState = NULL, *siteLoginState = NULL;
-        char *str_lastUsed = NULL, *str_uses = NULL, *str_type = NULL, *str_algorithm = NULL, *str_counter = NULL;
+        const char *siteName = NULL, *siteResultState = NULL, *siteLoginState = NULL;
+        const char *str_lastUsed = NULL, *str_uses = NULL, *str_type = NULL, *str_algorithm = NULL, *str_counter = NULL;
         switch (format) {
             case 0: {
                 str_lastUsed = mpw_get_token( &positionInLine, endOfLine, " \t\n" );
@@ -834,6 +1072,9 @@ static MPMarshalledFile *mpw_marshal_read_flat(
 static void mpw_set_json_data(
         MPMarshalledData *data, json_object *obj) {
 
+    if (!data)
+        return;
+
     json_type type = json_object_get_type( obj );
     data->is_null = type == json_type_null;
     data->is_bool = type == json_type_boolean;
@@ -860,16 +1101,15 @@ static void mpw_set_json_data(
     size_t newChildrenCount = 0;
     for (size_t c = 0; c < data->children_count; ++c) {
         MPMarshalledData *child = &data->children[c];
-        if ((type != json_type_object && type != json_type_array) ||
-            (child->key && type != json_type_object) || (!isnan( child->index ) && type != json_type_array)) {
-            mpw_marshal_data_null( child );
-            if (!newChildren) {
-                newChildren = malloc( sizeof( MPMarshalledData ) * newChildrenCount );
-                if (newChildren)
-                    memcpy( newChildren, data->children, sizeof( MPMarshalledData ) * newChildrenCount );
-            }
+        if ((type != json_type_object && type != json_type_array) || (child->key && type != json_type_object)) {
+            // Not a valid child in this object, remove it.
+            mpw_marshal_data_set_null( child, NULL );
+            mpw_free_string( &child->key );
+            if (!newChildren)
+                newChildren = mpw_memdup( data->children, sizeof( MPMarshalledData ) * newChildrenCount );
         }
         else {
+            // Valid child in this object, keep it.
             ++newChildrenCount;
             if (newChildren) {
                 if (!mpw_realloc( &newChildren, NULL, sizeof( MPMarshalledData ) * newChildrenCount )) {
@@ -896,7 +1136,7 @@ static void mpw_set_json_data(
             // Find existing child.
             for (size_t c = 0; c < data->children_count; ++c)
                 if (data->children[c].key == entry.key ||
-                    (data->children[c].key && entry.key && strcmp( data->children[c].key, entry.key )) == OK) {
+                    (data->children[c].key && entry.key && strcmp( data->children[c].key, entry.key ) == OK)) {
                     child = &data->children[c];
                     break;
                 }
@@ -965,7 +1205,7 @@ static void mpw_marshal_read_json_info(
 }
 
 static MPMarshalledFile *mpw_marshal_read_json(
-        const char *in, MPMasterKeyProvider masterKeyProvider, MPMarshalError *error) {
+        const char *in, const MPMasterKeyProvider masterKeyProvider, MPMarshalError *error) {
 
     *error = (MPMarshalError){ MPMarshalErrorInternal, "Unexpected internal error." };
     if (!in || !strlen( in )) {
@@ -1173,11 +1413,8 @@ static MPMarshalledFile *mpw_marshal_read_json(
     }
     mpw_free( &masterKey, MPMasterKeySize );
 
-    MPMarshalledData *data = malloc( sizeof( MPMarshalledData ) );
-    if (data) {
-        *data = (MPMarshalledData){};
-        mpw_set_json_data( data, json_file );
-    }
+    MPMarshalledData *data = mpw_marshal_data_new();
+    mpw_set_json_data( data, json_file );
     json_object_put( json_file );
 
     MPMarshalledFile *file = mpw_marshal_file( user, data );
@@ -1223,7 +1460,7 @@ MPMarshalInfo *mpw_marshal_read_info(
 }
 
 MPMarshalledFile *mpw_marshal_read(
-        const char *in, MPMasterKeyProvider masterKeyProvider, MPMarshalError *error) {
+        const char *in, const MPMasterKeyProvider masterKeyProvider, MPMarshalError *error) {
 
     MPMarshalInfo *info = mpw_marshal_read_info( in );
     if (!info)
@@ -1314,10 +1551,10 @@ const char **mpw_marshal_format_extensions(
             return NULL;
         case MPMarshalFormatFlat:
             return mpw_strings( count,
-                    mpw_marshal_format_extension( format ), "mpsites.txt", "txt" );
+                    mpw_marshal_format_extension( format ), "mpsites.txt", "txt", NULL );
         case MPMarshalFormatJSON:
             return mpw_strings( count,
-                    mpw_marshal_format_extension( format ), "mpsites.json", "json" );
+                    mpw_marshal_format_extension( format ), "mpsites.json", "json", NULL );
         default: {
             dbg( "Unknown format: %d", format );
             return NULL;

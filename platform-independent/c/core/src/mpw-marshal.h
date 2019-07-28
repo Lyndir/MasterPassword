@@ -23,6 +23,7 @@
 
 MP_LIBS_BEGIN
 #include <time.h>
+#include <stdarg.h>
 MP_LIBS_END
 
 //// Types.
@@ -161,14 +162,14 @@ MPMarshalInfo *mpw_marshal_read_info(
 /** Unmarshall sites in the given input buffer by parsing it using the given marshalling format.
  * @return A user object (allocated), or NULL if the format provides no marshalling or a format error occurred. */
 MPMarshalledFile *mpw_marshal_read(
-        const char *in, MPMasterKeyProvider masterKeyProvider, MPMarshalError *error);
+        const char *in, const MPMasterKeyProvider masterKeyProvider, MPMarshalError *error);
 
-//// Utilities.
+//// Creating.
 
 /** Create a new user object ready for marshalling.
  * @return A user object (allocated), or NULL if the fullName is missing or the marshalled user couldn't be allocated. */
 MPMarshalledUser *mpw_marshal_user(
-        const char *fullName, MPMasterKeyProvider masterKeyProvider, const MPAlgorithmVersion algorithmVersion);
+        const char *fullName, const MPMasterKeyProvider masterKeyProvider, const MPAlgorithmVersion algorithmVersion);
 /** Create a new site attached to the given user object, ready for marshalling.
  * @return A site object (allocated), or NULL if the siteName is missing or the marshalled site couldn't be allocated. */
 MPMarshalledSite *mpw_marshal_site(
@@ -183,11 +184,77 @@ MPMarshalledQuestion *mpw_marshal_question(
 MPMarshalledFile *mpw_marshal_file(
         MPMarshalledUser *user, MPMarshalledData *data);
 
+//// Disposing.
+
 /** Free the given user object and all associated data. */
-bool mpw_marshal_info_free(
+void mpw_marshal_info_free(
         MPMarshalInfo **info);
-bool mpw_marshal_free(
-        MPMarshalledFile **user);
+void mpw_marshal_user_free(
+        MPMarshalledUser **user);
+void mpw_marshal_file_free(
+        MPMarshalledFile **file);
+
+//// Exploring.
+
+/** Create a null value.
+ * @return A new data value (allocated), initialized to a null value, or NULL if the value couldn't be allocated. */
+MPMarshalledData *mpw_marshal_data_new(void);
+/** Get or create a value for the given path in the data store.
+ * @return The value at this path (shared), or NULL if the value didn't exist and couldn't be created. */
+MPMarshalledData *mpw_marshal_data_get(
+        MPMarshalledData *data, ...);
+MPMarshalledData *mpw_marshal_data_vget(
+        MPMarshalledData *data, va_list nodes);
+/** Look up the value at the given path in the data store.
+ * @return The value at this path (shared), or NULL if there is no value at this path. */
+const MPMarshalledData *mpw_marshal_data_find(
+        const MPMarshalledData *data, ...);
+const MPMarshalledData *mpw_marshal_data_vfind(
+        const MPMarshalledData *data, va_list nodes);
+/** Check if the data represents a NULL value.
+ * @return true if the value at this path is null or is missing, false if it is a non-null type. */
+bool mpw_marshal_data_is_null(
+        const MPMarshalledData *data, ...);
+bool mpw_marshal_data_vis_null(
+        const MPMarshalledData *data, va_list nodes);
+/** Set a null value at the given path in the data store.
+ * @return true if the object was successfully modified. */
+bool mpw_marshal_data_set_null(
+        MPMarshalledData *data, ...);
+bool mpw_marshal_data_vset_null(
+        MPMarshalledData *data, va_list nodes);
+/** Look up the boolean value at the given path in the data store.
+ * @return true if the value at this path is true, false if it is not or there is no boolean value at this path. */
+bool mpw_marshal_data_get_bool(
+        const MPMarshalledData *data, ...);
+bool mpw_marshal_data_vget_bool(
+        const MPMarshalledData *data, va_list nodes);
+/** Set a boolean value at the given path in the data store.
+ * @return true if the object was successfully modified. */
+bool mpw_marshal_data_set_bool(
+        const bool value, MPMarshalledData *data, ...);
+bool mpw_marshal_data_vset_bool(
+        const bool value, MPMarshalledData *data, va_list nodes);
+/** Look up the numeric value at the given path in the data store.
+ * @return A number or NAN if there is no numeric value at this path. */
+double mpw_marshal_data_get_num(
+        const MPMarshalledData *data, ...);
+double mpw_marshal_data_vget_num(
+        const MPMarshalledData *data, va_list nodes);
+bool mpw_marshal_data_set_num(
+        const double value, MPMarshalledData *data, ...);
+bool mpw_marshal_data_vset_num(
+        const double value, MPMarshalledData *data, va_list nodes);
+/** Look up the string value at the given path in the data store.
+ * @return The string value (allocated) or string representation of the number at this path; NULL if there is no such value at this path. */
+const char *mpw_marshal_data_get_str(
+        const MPMarshalledData *data, ...);
+const char *mpw_marshal_data_vget_str(
+        const MPMarshalledData *data, va_list nodes);
+bool mpw_marshal_data_set_str(
+        const char *value, MPMarshalledData *data, ...);
+bool mpw_marshal_data_vset_str(
+        const char *value, MPMarshalledData *data, va_list nodes);
 
 //// Format.
 

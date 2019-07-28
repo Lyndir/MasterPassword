@@ -272,7 +272,7 @@ void cli_free(Arguments *args, Operation *operation) {
         mpw_free_strings( &operation->fullName, &operation->masterPassword, &operation->siteName, NULL );
         mpw_free_strings( &operation->keyContext, &operation->resultState, &operation->resultParam, NULL );
         mpw_free_strings( &operation->identicon, &operation->sitesPath, NULL );
-        mpw_marshal_free( &operation->file );
+        mpw_marshal_file_free( &operation->file );
         operation->site = NULL;
         operation->question = NULL;
         cli_masterKeyProvider_free();
@@ -487,7 +487,7 @@ void cli_user(Arguments *args, Operation *operation) {
     if (!sitesFile) {
         // If no user from mpsites, create a new one.
         mpw_free_string( &operation->sitesPath );
-        mpw_marshal_free( &operation->file );
+        mpw_marshal_file_free( &operation->file );
         operation->file = mpw_marshal_file( mpw_marshal_user(
                 operation->fullName, cli_masterKeyProvider_op( operation ), MPAlgorithmVersionCurrent ), NULL );
     }
@@ -501,7 +501,7 @@ void cli_user(Arguments *args, Operation *operation) {
 
         // Parse file.
         MPMarshalError marshalError = { .type = MPMarshalSuccess };
-        mpw_marshal_free( &operation->file );
+        mpw_marshal_file_free( &operation->file );
         operation->file = mpw_marshal_read( sitesInputData,
                 cli_masterKeyProvider_op( operation ), &marshalError );
         if (marshalError.type == MPMarshalErrorMasterPassword && operation->allowPasswordUpdate) {
@@ -516,7 +516,7 @@ void cli_user(Arguments *args, Operation *operation) {
                     importMasterPassword = mpw_getpass( "Old master password: " );
                 }
 
-                mpw_marshal_free( &operation->file );
+                mpw_marshal_file_free( &operation->file );
                 operation->file = mpw_marshal_read( sitesInputData,
                         cli_masterKeyProvider_str( importMasterPassword ), &marshalError );
                 if (operation->file && operation->file->user)

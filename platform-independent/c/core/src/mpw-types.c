@@ -90,7 +90,7 @@ const MPResultType mpw_type_named(const char *typeName) {
     return (MPResultType)ERR;
 }
 
-const char *mpw_type_abbreviation(MPResultType resultType) {
+const char *mpw_type_abbreviation(const MPResultType resultType) {
 
     switch (resultType) {
         case MPResultTypeTemplateMaximum:
@@ -122,7 +122,7 @@ const char *mpw_type_abbreviation(MPResultType resultType) {
     }
 }
 
-const char *mpw_type_short_name(MPResultType resultType) {
+const char *mpw_type_short_name(const MPResultType resultType) {
 
     switch (resultType) {
         case MPResultTypeTemplateMaximum:
@@ -154,7 +154,7 @@ const char *mpw_type_short_name(MPResultType resultType) {
     }
 }
 
-const char *mpw_type_long_name(MPResultType resultType) {
+const char *mpw_type_long_name(const MPResultType resultType) {
 
     switch (resultType) {
         case MPResultTypeTemplateMaximum:
@@ -186,7 +186,7 @@ const char *mpw_type_long_name(MPResultType resultType) {
     }
 }
 
-const char **mpw_type_templates(MPResultType type, size_t *count) {
+const char **mpw_type_templates(const MPResultType type, size_t *count) {
 
     if (!(type & MPResultTypeClassTemplate)) {
         dbg( "Not a generated type: %d", type );
@@ -231,7 +231,7 @@ const char **mpw_type_templates(MPResultType type, size_t *count) {
     }
 }
 
-const char *mpw_type_template(MPResultType type, uint8_t templateIndex) {
+const char *mpw_type_template(const MPResultType type, const uint8_t templateIndex) {
 
     size_t count = 0;
     const char **templates = mpw_type_templates( type, &count );
@@ -254,7 +254,7 @@ const MPKeyPurpose mpw_purpose_named(const char *purposeName) {
     return (MPKeyPurpose)ERR;
 }
 
-const char *mpw_purpose_name(MPKeyPurpose purpose) {
+const char *mpw_purpose_name(const MPKeyPurpose purpose) {
 
     switch (purpose) {
         case MPKeyPurposeAuthentication:
@@ -270,7 +270,7 @@ const char *mpw_purpose_name(MPKeyPurpose purpose) {
     }
 }
 
-const char *mpw_purpose_scope(MPKeyPurpose purpose) {
+const char *mpw_purpose_scope(const MPKeyPurpose purpose) {
 
     switch (purpose) {
         case MPKeyPurposeAuthentication:
@@ -286,7 +286,7 @@ const char *mpw_purpose_scope(MPKeyPurpose purpose) {
     }
 }
 
-const char *mpw_class_characters(char characterClass) {
+const char *mpw_class_characters(const char characterClass) {
 
     switch (characterClass) {
         case 'V':
@@ -316,7 +316,7 @@ const char *mpw_class_characters(char characterClass) {
     }
 }
 
-const char mpw_class_character(char characterClass, uint8_t seedByte) {
+const char mpw_class_character(const char characterClass, const uint8_t seedByte) {
 
     const char *classCharacters = mpw_class_characters( characterClass );
     if (!classCharacters || !strlen( classCharacters ))

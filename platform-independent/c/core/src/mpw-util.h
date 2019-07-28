@@ -122,7 +122,7 @@ bool mpw_string_push(
 bool mpw_string_pushf(
         char **string, const char *pushFormat, ...);
 
-// These defines merely exist to force the void** cast (& do type-checking), since void** casts are not automatic.
+// These defines merely exist to do type-checking, force the void** cast & drop any const qualifier.
 /** Reallocate the given buffer from the given size by adding the delta size.
  * On success, the buffer size pointer will be updated to the buffer's new size
  * and the buffer pointer may be updated to a new memory address.
@@ -176,7 +176,7 @@ bool __mpw_free_string(
 bool __mpw_free_strings(
         char **strings, ...);
 void mpw_zero(
-        void *buffer, size_t bufferSize);
+        void *buffer, const size_t bufferSize);
 
 //// Cryptographic functions.
 
@@ -184,7 +184,7 @@ void mpw_zero(
  * @return A buffer (allocated, keySize) containing the key or NULL if secret or salt is missing, key could not be allocated or the KDF failed. */
 uint8_t const *mpw_kdf_scrypt(
         const size_t keySize, const uint8_t *secret, const size_t secretSize, const uint8_t *salt, const size_t saltSize,
-        uint64_t N, uint32_t r, uint32_t p);
+        const uint64_t N, const uint32_t r, const uint32_t p);
 /** Derive a subkey from the given key using the blake2b KDF.
  * @return A buffer (allocated, keySize) containing the key or NULL if the key or subkeySize is missing, the key sizes are out of bounds, the subkey could not be allocated or derived. */
 uint8_t const *mpw_kdf_blake2b(
@@ -217,11 +217,11 @@ const char *mpw_str(const char *format, ...);
 const char *mpw_vstr(const char *format, va_list args);
 /** Encode a buffer as a string of hexadecimal characters.
  * @return A string (shared); or NULL if the buffer is missing or the result could not be allocated. */
-const char *mpw_hex(const void *buf, size_t length);
-const char *mpw_hex_l(uint32_t number);
+const char *mpw_hex(const void *buf, const size_t length);
+const char *mpw_hex_l(const uint32_t number);
 /** Encode a fingerprint for a buffer.
  * @return A string (shared); or NULL if the buffer is missing or the result could not be allocated. */
-MPKeyID mpw_id_buf(const void *buf, size_t length);
+const MPKeyID mpw_id_buf(const void *buf, const size_t length);
 /** Compare two fingerprints for equality.
  * @return true if the buffers represent identical fingerprints or are both NULL. */
 bool mpw_id_buf_equals(const char *id1, const char *id2);
@@ -234,14 +234,14 @@ size_t mpw_utf8_charlen(const char *utf8String);
 size_t mpw_utf8_strchars(const char *utf8String);
 /** Drop-in for memdup(3).
  * @return A buffer (allocated, len) with len bytes copied from src or NULL if src is missing or the buffer could not be allocated. */
-void *mpw_memdup(const void *src, size_t len);
+void *mpw_memdup(const void *src, const size_t len);
 /** Drop-in for POSIX strdup(3).
  * @return A string (allocated) copied from src or NULL if src is missing or the buffer could not be allocated. */
 char *mpw_strdup(const char *src);
 /** Drop-in for POSIX strndup(3).
  * @return A string (allocated) with no more than max bytes copied from src or NULL if src is missing or the buffer could not be allocated. */
-char *mpw_strndup(const char *src, size_t max);
+char *mpw_strndup(const char *src, const size_t max);
 /** Drop-in for POSIX strncasecmp(3). */
-int mpw_strncasecmp(const char *s1, const char *s2, size_t max);
+int mpw_strncasecmp(const char *s1, const char *s2, const size_t max);
 
 #endif // _MPW_UTIL_H
