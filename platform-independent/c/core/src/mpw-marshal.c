@@ -106,17 +106,28 @@ MPMarshalledQuestion *mpw_marshal_question(
 }
 
 MPMarshalledFile *mpw_marshal_file(
-        MPMarshalledUser *user, MPMarshalledData *data) {
+        MPMarshalledFile *file, MPMarshalledUser *user, MPMarshalledData *data, MPMarshalInfo *info) {
 
-    MPMarshalledFile *file;
-    if (!user || !(file = malloc( sizeof( MPMarshalledFile ) )))
-        return NULL;
+    if (!file) {
+        if (!(file = malloc( sizeof( MPMarshalledFile ) )))
+            return NULL;
 
-    *file = (MPMarshalledFile){
-            .info = NULL,
-            .user = user,
-            .data = data,
-    };
+        *file = (MPMarshalledFile){};
+    }
+
+    if (user && user != file->user) {
+        mpw_marshal_user_free( &file->user );
+        file->user = user;
+    }
+    if (data && data != file->data) {
+        mpw_marshal_data_free( &file->data );
+        file->data = data;
+    }
+    if (info && info != file->info) {
+        mpw_marshal_info_free( &file->info );
+        file->info = info;
+    }
+
     return file;
 }
 
@@ -153,6 +164,17 @@ void mpw_marshal_user_free(
     mpw_free( user, sizeof( MPMarshalledUser ) );
 }
 
+void mpw_marshal_data_free(
+        MPMarshalledData **data) {
+
+    if (!data || !*data)
+        return;
+
+    mpw_marshal_data_set_null( *data, NULL );
+    mpw_free_string( &(*data)->key );
+    mpw_free( data, sizeof( MPMarshalledData ) );
+}
+
 void mpw_marshal_file_free(
         MPMarshalledFile **file) {
 
@@ -160,12 +182,8 @@ void mpw_marshal_file_free(
         return;
 
     mpw_marshal_info_free( &(*file)->info );
+    mpw_marshal_data_free( &(*file)->data );
     mpw_marshal_user_free( &(*file)->user );
-    if ((*file)->data) {
-        mpw_marshal_data_set_null( (*file)->data, NULL );
-        mpw_free_string( &(*file)->data->key );
-        mpw_free( &(*file)->data, sizeof( MPMarshalledData ) );
-    }
     mpw_free( file, sizeof( MPMarshalledFile ) );
 }
 
@@ -694,6 +712,16 @@ static const char *mpw_marshal_write_json(
 const char *mpw_marshal_write(
         const MPMarshalFormat outFormat, MPMarshalledFile *file, MPMarshalError *error) {
 
+    if (!file) {
+        *error = (MPMarshalError){ .type = MPMarshalErrorMissing, "No file to marshal." };
+        return NULL;
+    }
+    if (file->data && file->data->key) {
+        *error = (MPMarshalError){ .type = MPMarshalErrorInternal, "Illegal file data." };
+        ftl( "Unexpected non-root file data." );
+        return NULL;
+    }
+
     const char *out = NULL;
     switch (outFormat) {
         case MPMarshalFormatNone:
@@ -711,10 +739,7 @@ const char *mpw_marshal_write(
             *error = (MPMarshalError){ MPMarshalErrorFormat, mpw_str( "Unsupported output format: %u", outFormat ) };
             break;
     }
-    if (file) {
-        mpw_marshal_info_free( &file->info );
-        file->info = mpw_marshal_read_info( out );
-    }
+    mpw_marshal_file( file, NULL, NULL, mpw_marshal_read_info( out ) );
 
     return out;
 }
@@ -1057,7 +1082,7 @@ static MPMarshalledFile *mpw_marshal_read_flat(
     mpw_free_strings( &fullName, &keyID, NULL );
     mpw_free( &masterKey, MPMasterKeySize );
 
-    MPMarshalledFile *file = mpw_marshal_file( user, NULL );
+    MPMarshalledFile *file = mpw_marshal_file( NULL, user, NULL, NULL );
     if (!file) {
         *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't allocate a new marshal file." };
         mpw_marshal_user_free( &user );
@@ -1418,9 +1443,10 @@ static MPMarshalledFile *mpw_marshal_read_json(
     mpw_set_json_data( data, json_file );
     json_object_put( json_file );
 
-    MPMarshalledFile *file = mpw_marshal_file( user, data );
+    MPMarshalledFile *file = mpw_marshal_file( NULL, user, data, NULL );
     if (!file) {
         *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't allocate a new marshal file." };
+        mpw_marshal_data_free( &data );
         mpw_marshal_user_free( &user );
         return NULL;
     }
@@ -1484,12 +1510,8 @@ MPMarshalledFile *mpw_marshal_read(
             *error = (MPMarshalError){ MPMarshalErrorFormat, mpw_str( "Unsupported input format: %u", info->format ) };
             break;
     }
-    if (file) {
-        mpw_marshal_info_free( &(file->info) );
-        file->info = info;
-    }
 
-    return file;
+    return mpw_marshal_file( file, NULL, NULL, info );
 }
 
 const MPMarshalFormat mpw_format_named(

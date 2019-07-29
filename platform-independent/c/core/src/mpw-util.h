@@ -37,9 +37,13 @@ extern int mpw_verbosity;
 
 #ifndef mpw_log
 #define mpw_log(level, format, ...) do { \
-    if (mpw_verbosity >= level) { \
-        mpw_log_do( level, format, ##__VA_ARGS__ ); \
-    }; } while (0)
+        if (mpw_verbosity >= level) { \
+            mpw_log_do( level, format, ##__VA_ARGS__ ); \
+        } \
+        if (level <= -2) { \
+            abort(); \
+        } \
+    } while (0)
 #endif
 
 /** Logging internal state. */

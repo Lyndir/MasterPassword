@@ -179,10 +179,10 @@ MPMarshalledSite *mpw_marshal_site(
  * @return A question object (allocated), or NULL if the marshalled question couldn't be allocated. */
 MPMarshalledQuestion *mpw_marshal_question(
         MPMarshalledSite *site, const char *keyword);
-/** Create a new file to marshal a user into.
- * @return A file object (allocated), or NULL if the user is missing or the marshalled file couldn't be allocated. */
+/** Create or update a marshal file descriptor.
+ * @return The given file or new (allocated) if file is NULL; or NULL if the user is missing or the file couldn't be allocated. */
 MPMarshalledFile *mpw_marshal_file(
-        MPMarshalledUser *user, MPMarshalledData *data);
+        MPMarshalledFile *const file, MPMarshalledUser *user, MPMarshalledData *data, MPMarshalInfo *info);
 
 //// Disposing.
 
@@ -191,6 +191,8 @@ void mpw_marshal_info_free(
         MPMarshalInfo **info);
 void mpw_marshal_user_free(
         MPMarshalledUser **user);
+void mpw_marshal_data_free(
+        MPMarshalledData **data);
 void mpw_marshal_file_free(
         MPMarshalledFile **file);
 
