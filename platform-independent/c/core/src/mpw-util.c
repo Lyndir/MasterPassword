@@ -310,8 +310,10 @@ static uint8_t const *mpw_aes(bool encrypt, const uint8_t *key, const size_t key
     memcpy( aesBuf, buf, *bufSize );
     memset( aesBuf + *bufSize, aesSize - *bufSize, aesSize - *bufSize );
     uint8_t *resultBuf = malloc( aesSize );
-    if (!resultBuf)
+    if (!resultBuf) {
+        mpw_free( &aesBuf, aesSize );
         return NULL;
+    }
 
     if (encrypt)
         AES_CBC_encrypt_buffer( resultBuf, aesBuf, aesSize, key, iv );
