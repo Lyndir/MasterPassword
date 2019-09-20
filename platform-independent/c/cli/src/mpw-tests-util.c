@@ -32,17 +32,6 @@
 
 #include "mpw-tests-util.h"
 
-static xmlChar const *mpw_xmlPath(xmlNodePtr context) {
-
-    if (context->parent) {
-        char *string = calloc( 256, 1 );
-        snprintf( string, 256, "%s/%s", mpw_xmlPath( context->parent ), context->name );
-        return BAD_CAST string;
-    }
-
-    return context->name? context->name: (xmlChar const *)"";
-}
-
 xmlNodePtr mpw_xmlTestCaseNode(xmlNodePtr testCaseNode, const char *nodeName) {
 
     if (!nodeName)
