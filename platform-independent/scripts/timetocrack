@@ -14,7 +14,7 @@ a="$V$v$C$c"
 n="0123456789"
 o="&@%?,=[]_:-+*\$#!'^~;()/."
 x="$a$n$o"
-w="@~/.dictionary"
+w="@words.txt"
 
 ## METRICS
 # Last update: 2016-09
@@ -31,9 +31,6 @@ w="@~/.dictionary"
 #hardwareName='GTX Titan X (HMAC-SHA-256 @ 20M$)'   hardwareSpeed='403M * 20M / 950'
 #hardwareName='GTX Titan X (HMAC-SHA-256 @ 5B$)'    hardwareSpeed='403M * 5B / 950'
 
-# mpw-bench
-#hardwareName='2.3 GHz i7, 8GB (MPW)'               hardwareSpeed=7.46
-
 # ASICs
  hardwareName='AntMiner L3+ (scrypt)'               hardwareSpeed='1M'
 #hardwareName='AntMiner L3+ (scrypt @ 5k$)'         hardwareSpeed='1M * 5k / 2500'
@@ -45,6 +42,9 @@ w="@~/.dictionary"
 #hardwareName='AntMiner S9 (SHA256 @ 20k$)'         hardwareSpeed='14T * 20k / 1288'
 #hardwareName='AntMiner S9 (SHA256 @ 20M$)'         hardwareSpeed='14T * 20M / 1288'
 #hardwareName='AntMiner S9 (SHA256 @ 5B$)'          hardwareSpeed='14T * 5B / 1288'
+
+# mpw-bench
+#hardwareName='2.3 GHz i7, 8GB (MPW)'               hardwareSpeed=7.46
 
 second='1'
 secondsInHour='3600'
@@ -64,6 +64,9 @@ for _c in V C v c A a n o x w; do
     cc=${!_c}
     if [[ $cc = @* ]]; then
         file=${cc#@} file=${file/#~\//$HOME\/}
+        if [[ ! -e $file && -e "${BASH_SOURCE%/*}/$file" ]]; then
+            file="${BASH_SOURCE%/*}/$file"
+        fi
         read cs < <(wc -l < "$file")
     else
         cs=${#cc}
