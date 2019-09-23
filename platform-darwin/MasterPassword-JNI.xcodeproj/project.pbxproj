@@ -75,7 +75,7 @@
 			buildPhases = (
 			);
 			buildToolPath = gradle;
-			buildWorkingDirectory = /Users/lhunath/Documents/workspace/lyndir/MasterPassword/gradle;
+			buildWorkingDirectory = /Users/lhunath/Documents/workspace/lyndir/MasterPassword;
 			dependencies = (
 			);
 			name = "MasterPassword-JNI";

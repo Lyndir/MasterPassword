@@ -1,17 +1,21 @@
 plugins {
     id 'java'
+    id 'com.github.spotbugs' version '2.0.0'
 }
 
 description = 'Master Password Test Suite'
 
 dependencies {
     implementation group: 'com.lyndir.lhunath.opal', name: 'opal-system', version: '1.7-p2'
+    implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
 
     implementation project( ':masterpassword-algorithm' )
     implementation project( ':masterpassword-model' )
 
     testImplementation group: 'org.testng', name: 'testng', version: '6.8.5'
     testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.2'
+
+    runtime group: 'org.glassfish.jaxb', name: 'jaxb-runtime', version: '2.3.1'
 }
 
 test.useTestNG()

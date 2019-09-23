@@ -24,7 +24,7 @@ buildscript {
     }
 
     dependencies {
-        classpath group: 'com.android.tools.build', name: 'gradle', version: '3.1.0'
+        classpath group: 'com.android.tools.build', name: 'gradle', version: '3.5.0'
     }
 }
 

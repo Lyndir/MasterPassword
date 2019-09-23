@@ -2,8 +2,8 @@ import org.gradle.internal.jvm.Jvm
 
 
 plugins {
-    id 'cpp-library'
     id 'base'
+    id 'cpp-library'
 }
 
 description = 'Master Password Algorithm Implementation'
@@ -16,7 +16,7 @@ artifacts {
         components.withType( ComponentWithRuntimeFile ) {
             if (optimized)
                 from runtimeFile, {
-                    into standardOperatingSystem( targetPlatform ) + '/' + standardArchitecture( targetPlatform )
+                    into targetMachine.getOperatingSystemFamily().getName() + '/' + targetMachine.getArchitecture().getName()
                 }
         }
     }
@@ -25,6 +25,7 @@ artifacts {
 library {
     baseName.set( 'mpw' )
     linkage.set( [Linkage.SHARED] )
+    source.from fileTree( 'src' )
 
     // Reconfigure the toolchain from C++ to C.
     toolChains {
@@ -42,75 +43,43 @@ library {
 
     // Cross-compile for these host platforms.
     // TODO: Cross-compiling, blocked by: https://github.com/gradle/gradle-native/issues/169 - CppLibraryPlugin.java:163
-    operatingSystems.set( [objects.named( OperatingSystemFamily, OperatingSystemFamily.LINUX ),
-                           objects.named( OperatingSystemFamily, OperatingSystemFamily.MAC_OS ),
-                           objects.named( OperatingSystemFamily, OperatingSystemFamily.WINDOWS )] )
+//    operatingSystems.set( [objects.named( OperatingSystemFamily, OperatingSystemFamily.LINUX ),
+//                           objects.named( OperatingSystemFamily, OperatingSystemFamily.MAC_OS ),
+//                           objects.named( OperatingSystemFamily, OperatingSystemFamily.WINDOWS )] )
+    targetMachines.set( [
+            machines.linux.x86_64,
+            machines.windows.x86, machines.windows.x86_64,
+            machines.macOS.x86_64
+    ] )
 
     components.withType( CppComponent ) {
-        cppSource.from fileTree( 'src' )
-
-        privateHeaders {
-            // JDK for JNI support.
-            from files( new File( Jvm.current().javaHome, 'include' ) ) { first().eachDir { from it } }
-        }
+        // JDK for JNI support.
+        privateHeaders.from files( new File( Jvm.current().javaHome, 'include' ) ) { first().eachDir { from it } }
 
         binaries.whenElementFinalized {
             project.dependencies {
-                def system = standardOperatingSystem( targetPlatform )
+                def system = targetMachine.getOperatingSystemFamily().getName()
 
                 // libsodium
                 archive.dependsOn project.tasks.maybeCreate( "build_libsodium-${system}", Exec ).configure {
-                    commandLine 'bash', "$rootDir/../lib/bin/build_libsodium-${system}"
-                    privateHeaders.from "$rootDir/../lib/libsodium/build-${system}~/out/include"
-                    add( linkLibraries.name, fileTree( "$rootDir/../lib/libsodium/build-${system}~/out/lib" ) )
+                    commandLine 'bash', "$rootDir/lib/bin/build_libsodium-${system}"
+                    privateHeaders.from "$rootDir/lib/libsodium/build-${system}~/out/include"
+                    add( linkLibraries.name, fileTree( "$rootDir/lib/libsodium/build-${system}~/out/lib" ) )
                 }
                 clean.dependsOn project.tasks.maybeCreate( "clean_libsodium-${system}", Exec ).configure {
-                    commandLine 'bash', "$rootDir/../lib/bin/build_libsodium-${system}", 'clean'
+                    commandLine 'bash', "$rootDir/lib/bin/build_libsodium-${system}", 'clean'
                 }
 
                 // libjson-c
                 /*archive.dependsOn project.tasks.maybeCreate( "build_libjson-c-${system}", Exec ).configure {
-                    commandLine 'bash', "$rootDir/../lib/bin/build_libjson-c-${system}"
-                    privateHeaders.from "$rootDir/../lib/libjson-c/build-${system}~/out/include"
-                    add( linkLibraries.name, fileTree( "$rootDir/../lib/libjson-c/build-${system}~/out/lib" ) )
+                    commandLine 'bash', "$rootDir/lib/bin/build_libjson-c-${system}"
+                    privateHeaders.from "$rootDir/lib/libjson-c/build-${system}~/out/include"
+                    add( linkLibraries.name, fileTree( "$rootDir/lib/libjson-c/build-${system}~/out/lib" ) )
                 }
                 clean.dependsOn project.tasks.maybeCreate( "clean_libjson-c-${system}", Exec ).configure {
-                    commandLine 'bash', "$rootDir/../lib/bin/build_libjson-c-${system}", 'clean'
+                    commandLine 'bash', "$rootDir/lib/bin/build_libjson-c-${system}", 'clean'
                 }*/
             }
         }
     }
-}
-
-static String standardOperatingSystem(NativePlatform platform) {
-    OperatingSystem os = platform.getOperatingSystem()
-    if (os.isWindows())
-        return OperatingSystemFamily.WINDOWS
-
-    else if (os.isMacOsX())
-        return OperatingSystemFamily.MAC_OS
-
-    else if (os.isLinux())
-        return OperatingSystemFamily.LINUX
-
-    // Other systems will need to use a Linux compatibility layer.
-    return OperatingSystemFamily.LINUX
-}
-
-static String standardArchitecture(NativePlatform platform) {
-    Architecture arch = platform.getArchitecture()
-    if (arch.isArm())
-        return 'arm'
-
-    else if (arch.name.toLowerCase( Locale.ROOT ).startsWith( 'arm' ))
-        return 'arm64'
-
-    else if (arch.isAmd64())
-        return 'x86_64'
-
-    else if (arch.isI386())
-        return 'x86'
-
-    // Other systems will need to be compatible with the x86 architecture.
-    return 'x86'
 }

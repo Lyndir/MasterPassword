@@ -29,7 +29,7 @@ public abstract class Changeable {
         }
 
         changeExecutor.submit( () -> {
-            synchronized (changeExecutor) {
+            synchronized (mutex) {
                 if (grouping != Grouping.APPLY)
                     return;
                 changed = false;

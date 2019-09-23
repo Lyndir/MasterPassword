@@ -1,5 +1,6 @@
 plugins {
     id 'java-library'
+    id 'com.github.spotbugs' version '2.0.0'
 }
 
 description = 'Master Password Algorithm Implementation'
@@ -16,10 +17,8 @@ configurations {
 dependencies {
     implementation group: 'com.lyndir.lhunath.opal', name: 'opal-system', version: '1.7-p2'
 
-    api group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.5'
-    api group: 'org.jetbrains', name: 'annotations', version: '13.0'
-    api group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
-    api group: 'com.google.code.findbugs', name: 'findbugs-annotations', version: '3.0.1'
+    api group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.8'
+    api group: 'org.jetbrains', name: 'annotations', version: '16.0.2'
 
     lib project( path: ':masterpassword-core', configuration: 'default' )
 }

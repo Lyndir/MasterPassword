@@ -1,7 +1,8 @@
 plugins {
     id 'java'
     id 'application'
-    id 'com.github.johnrengelman.shadow' version '2.0.4'
+    id 'com.github.spotbugs' version '2.0.0'
+    id 'com.github.johnrengelman.shadow' version '5.1.0'
 }
 
 description = 'Master Password GUI'
@@ -31,7 +32,7 @@ shadowJar {
                          storepass: System.getenv( 'STORE_PW' ),
                          keypass: System.getenv( 'KEY_PW_DESKTOP' ),
                          preservelastmodified: 'true',
-                         signedJar: "${rootDir}/../public/site/${project.name}-${project.version}.jar" )
+                         signedJar: "${rootDir}/public/site/${project.name}-${project.version}.jar" )
     }
 }
 

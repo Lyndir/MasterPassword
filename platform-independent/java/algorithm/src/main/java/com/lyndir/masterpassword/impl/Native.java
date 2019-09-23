@@ -199,5 +199,11 @@ public final class Native {
 
             return x86;
         }
+
+
+        @Override
+        public String toString() {
+            return name().replace('_', '-' );
+        }
     }
 }

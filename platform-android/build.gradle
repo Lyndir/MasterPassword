@@ -1,13 +1,15 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+    id 'com.github.spotbugs' version '2.0.0'
+}
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '27.0.3'
+    compileSdkVersion 28
 
     defaultConfig {
         applicationId 'com.lyndir.masterpassword'
-        minSdkVersion 19
-        targetSdkVersion 25
+        minSdkVersion 24
+        targetSdkVersion 28
         versionCode 20701
         versionName '2.7.1'
     }
@@ -22,8 +24,8 @@ android {
     }
     sourceSets {
         main {
-            jniLibs.srcDirs "$rootDir/../lib/libsodium/build-android~/out/lib",
-                            "$rootDir/../lib/libjson-c/build-android~/out/lib"
+            jniLibs.srcDirs "$rootDir/lib/libsodium/build-android~/out/lib",
+                            "$rootDir/lib/libjson-c/build-android~/out/lib"
         }
     }
 
@@ -50,28 +52,28 @@ dependencies {
     implementation group: 'com.lyndir.lhunath.opal', name: 'opal-system', version: '1.7-p2'
 
     implementation group: 'org.slf4j', name: 'slf4j-android', version: '1.7.13-underscore'
-    implementation group: 'com.jakewharton', name: 'butterknife', version: '8.5.1'
-    annotationProcessor group: 'com.jakewharton', name: 'butterknife-compiler', version: '8.5.1'
+    implementation group: 'com.jakewharton', name: 'butterknife', version: '10.2.0'
+    annotationProcessor group: 'com.jakewharton', name: 'butterknife-compiler', version: '10.2.0'
 }
 
 preBuild {
     dependsOn task( type: Exec, 'build_libsodium-android', {
-        commandLine 'bash', "$rootDir/../lib/bin/build_libsodium-android"
+        commandLine 'bash', "$rootDir/lib/bin/build_libsodium-android"
         environment 'ANDROID_NDK_HOME', android.ndkDirectory
     } )
     dependsOn task( type: Exec, 'build_libjson-c-android', {
-        commandLine 'bash', "$rootDir/../lib/bin/build_libjson-c-android"
+        commandLine 'bash', "$rootDir/lib/bin/build_libjson-c-android"
         environment 'ANDROID_NDK_HOME', android.ndkDirectory
     } )
 }
 
 clean {
     dependsOn task( type: Exec, 'clean_libsodium-android', {
-        commandLine 'bash', "$rootDir/../lib/bin/build_libsodium-android", 'clean'
+        commandLine 'bash', "$rootDir/lib/bin/build_libsodium-android", 'clean'
         environment 'ANDROID_NDK_HOME', android.ndkDirectory
     } )
     dependsOn task( type: Exec, 'clean_libjson-c-android', {
-        commandLine 'bash', "$rootDir/../lib/bin/build_libjson-c-android", 'clean'
+        commandLine 'bash', "$rootDir/lib/bin/build_libjson-c-android", 'clean'
         environment 'ANDROID_NDK_HOME', android.ndkDirectory
     } )
 }
