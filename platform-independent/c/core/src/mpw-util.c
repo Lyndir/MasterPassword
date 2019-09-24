@@ -34,9 +34,53 @@ MP_LIBS_BEGIN
 #include "aes.h"
 MP_LIBS_END
 
-#ifdef inf_level
-int mpw_verbosity = inf_level;
-#endif
+int mpw_verbosity = LogLevelInfo;
+FILE *mpw_log_cli_file;
+
+void mpw_log_cli(LogLevel level, const char *format, ...) {
+    va_list args;
+    va_start( args, format );
+    mpw_vlog_cli( level, format, args );
+    va_end( args );
+}
+void mpw_vlog_cli(LogLevel level, const char *format, va_list args) {
+    if (!mpw_log_cli_file)
+        mpw_log_cli_file = stderr;
+
+    if (mpw_verbosity >= level) {
+        if (mpw_verbosity >= LogLevelDebug) {
+            switch (level) {
+                case LogLevelTrace:
+                    fprintf( mpw_log_cli_file, "[TRC] " );
+                    break;
+                case LogLevelDebug:
+                    fprintf( mpw_log_cli_file, "[DBG] " );
+                    break;
+                case LogLevelInfo:
+                    fprintf( mpw_log_cli_file, "[INF] " );
+                    break;
+                case LogLevelWarning:
+                    fprintf( mpw_log_cli_file, "[WRN] " );
+                    break;
+                case LogLevelError:
+                    fprintf( mpw_log_cli_file, "[ERR] " );
+                    break;
+                case LogLevelFatal:
+                    fprintf( mpw_log_cli_file, "[FTL] " );
+                    break;
+                default:
+                    fprintf( mpw_log_cli_file, "[???] " );
+                    break;
+            }
+        }
+
+        vfprintf( mpw_log_cli_file, format, args );
+        fprintf( mpw_log_cli_file, "\n" );
+    }
+
+    if (level <= LogLevelFatal)
+        abort();
+}
 
 void mpw_uint16(const uint16_t number, uint8_t buf[2]) {
 

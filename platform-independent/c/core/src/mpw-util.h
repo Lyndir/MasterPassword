@@ -27,48 +27,42 @@ MP_LIBS_BEGIN
 MP_LIBS_END
 
 //// Logging.
+typedef mpw_enum(int, LogLevel) {
+    /** Logging internal state. */
+    LogLevelTrace = 3,
+    /** Logging state and events interesting when investigating issues. */
+    LogLevelDebug = 2,
+    /** User messages. */
+    LogLevelInfo = 1,
+    /** Recoverable issues and user suggestions. */
+    LogLevelWarning = 0,
+    /** Unrecoverable issues. */
+    LogLevelError = -1,
+    /** Issues that lead to abortion. */
+    LogLevelFatal = -2,
+};
+LogLevel mpw_verbosity;
+
+/** mpw_log_cli is a sink that writes log messages to the mpw_log_cli_file, which defaults to stderr. */
+FILE *mpw_log_cli_file;
+void mpw_log_cli(LogLevel level, const char *format, ...);
+void mpw_vlog_cli(LogLevel level, const char *format, va_list args);
+
+/** mpw_log_app is a sink placeholder that an application can implement to consume log messages. */
+void mpw_log_app(LogLevel level, const char *format, ...);
+
+/** The sink you want to channel the log messages into, defaults to mpw_log_cli. */
+#ifndef MPW_LOG
+#define MPW_LOG mpw_log_cli
+#endif
+
 #ifndef trc
-extern int mpw_verbosity;
-
-#ifndef mpw_log_do
-#define mpw_log_do(level, format, ...) \
-    fprintf( stderr, format "\n", ##__VA_ARGS__ )
-#endif
-
-#ifndef mpw_log
-#define mpw_log(level, format, ...) do { \
-        if (mpw_verbosity >= level) { \
-            mpw_log_do( level, format, ##__VA_ARGS__ ); \
-        } \
-        if (level <= -2) { \
-            abort(); \
-        } \
-    } while (0)
-#endif
-
-/** Logging internal state. */
-#define trc_level 3
-#define trc(format, ...) mpw_log( trc_level, format, ##__VA_ARGS__ )
-
-/** Logging state and events interesting when investigating issues. */
-#define dbg_level 2
-#define dbg(format, ...) mpw_log( dbg_level, format, ##__VA_ARGS__ )
-
-/** User messages. */
-#define inf_level 1
-#define inf(format, ...) mpw_log( inf_level, format, ##__VA_ARGS__ )
-
-/** Recoverable issues and user suggestions. */
-#define wrn_level 0
-#define wrn(format, ...) mpw_log( wrn_level, format, ##__VA_ARGS__ )
-
-/** Unrecoverable issues. */
-#define err_level -1
-#define err(format, ...) mpw_log( err_level, format, ##__VA_ARGS__ )
-
-/** Issues that lead to abortion. */
-#define ftl_level -2
-#define ftl(format, ...) mpw_log( ftl_level, format, ##__VA_ARGS__ )
+#define trc(format, ...) MPW_LOG( LogLevelTrace, format, ##__VA_ARGS__ )
+#define dbg(format, ...) MPW_LOG( LogLevelDebug, format, ##__VA_ARGS__ )
+#define inf(format, ...) MPW_LOG( LogLevelInfo, format, ##__VA_ARGS__ )
+#define wrn(format, ...) MPW_LOG( LogLevelWarning, format, ##__VA_ARGS__ )
+#define err(format, ...) MPW_LOG( LogLevelError, format, ##__VA_ARGS__ )
+#define ftl(format, ...) MPW_LOG( LogLevelFatal, format, ##__VA_ARGS__ )
 #endif
 
 #ifndef min

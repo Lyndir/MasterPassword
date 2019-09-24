@@ -714,7 +714,7 @@ void cli_mpw(Arguments *args, Operation *operation) {
     if (!operation->site)
         abort();
 
-    if (mpw_verbosity >= inf_level)
+    if (mpw_verbosity >= LogLevelInfo)
         fprintf( stderr, "%s's %s for %s:\n[ %s ]: ",
                 operation->file->user->fullName, operation->purposeResult, operation->site->siteName, operation->identicon );
 

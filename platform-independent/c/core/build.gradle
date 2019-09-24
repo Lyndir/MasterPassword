@@ -31,12 +31,12 @@ library {
     toolChains {
         withType( VisualCpp ) {
             eachPlatform {
-                cppCompiler.withArguments { addAll( ['/TC', '/MT', '/Ox', '/DMPW_SODIUM=1', '/DSODIUM_STATIC', '/DSODIUM_EXPORT='] ) }
+                cppCompiler.withArguments { addAll( ['/TC', '/MT', '/Ox', '/DMPW_SODIUM=1', '/DSODIUM_STATIC', '/DSODIUM_EXPORT=', '/DMPW_LOG=mpw_log_app'] ) }
             }
         }
         withType( GccCompatibleToolChain ) {
             eachPlatform {
-                cppCompiler.withArguments { addAll( ['-x', 'c', '-O3', '-Werror', '-DMPW_SODIUM=1'] ) }
+                cppCompiler.withArguments { addAll( ['-x', 'c', '-O3', '-Werror', '-DMPW_SODIUM=1', '-DMPW_LOG=mpw_log_app'] ) }
             }
         }
     }

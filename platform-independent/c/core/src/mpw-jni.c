@@ -7,10 +7,66 @@
 
 // TODO: We may need to zero the jbytes safely.
 
+static jobject logger;
+static JNIEnv *env;
+
+void mpw_log_app(LogLevel level, const char *format, ...) {
+    jmethodID method = NULL;
+    jclass class = (*env)->GetObjectClass( env, logger );
+    if (level >= LogLevelTrace)
+        method = (*env)->GetMethodID( env, class, "trace", "(Ljava/lang/String;)V" );
+    else if (level == LogLevelDebug)
+        method = (*env)->GetMethodID( env, class, "debug", "(Ljava/lang/String;)V" );
+    else if (level == LogLevelInfo)
+        method = (*env)->GetMethodID( env, class, "info", "(Ljava/lang/String;)V" );
+    else if (level == LogLevelWarning)
+        method = (*env)->GetMethodID( env, class, "warn", "(Ljava/lang/String;)V" );
+    else if (level <= LogLevelError)
+        method = (*env)->GetMethodID( env, class, "error", "(Ljava/lang/String;)V" );
+
+    va_list args;
+    va_start( args, format );
+
+    if (class && method && logger) {
+        char *message = NULL;
+        int length = vasprintf(&message, format, args);
+        if (length > 0)
+            (*env)->CallVoidMethod(env, logger, method, (*env)->NewStringUTF( env, message ));
+        if (message)
+            mpw_free(&message, (size_t) length);
+    }
+    else
+        // Can't log via slf4j, fall back to cli logger.
+        mpw_vlog_cli( level, format, args );
+
+    va_end( args );
+}
+
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved) {
-    JNIEnv* env;
     if ((*vm)->GetEnv( vm, (void **)&env, JNI_VERSION_1_6 ) != JNI_OK)
         return -1;
+
+    jclass class = (*env)->FindClass( env, "org/slf4j/LoggerFactory" );
+    jmethodID method = (*env)->GetStaticMethodID( env, class, "getLogger", "(Ljava/lang/String;)Lorg/slf4j/Logger;" );
+    jstring name = (*env)->NewStringUTF( env, "com.lyndir.masterpassword.algorithm" );
+    if (class && method && name)
+        logger = (*env)->CallStaticObjectMethod( env, class, method, name );
+    else
+        wrn( "Couldn't initialize JNI logger." );
+
+    class = (*env)->GetObjectClass( env, logger );
+    if ((*env)->CallBooleanMethod( env, logger, (*env)->GetMethodID( env, class, "isTraceEnabled", "()Z" ) ))
+        mpw_verbosity = LogLevelTrace;
+    else if ((*env)->CallBooleanMethod( env, logger, (*env)->GetMethodID( env, class, "isDebugEnabled", "()Z" ) ))
+        mpw_verbosity = LogLevelDebug;
+    else if ((*env)->CallBooleanMethod( env, logger, (*env)->GetMethodID( env, class, "isInfoEnabled", "()Z" ) ))
+        mpw_verbosity = LogLevelInfo;
+    else if ((*env)->CallBooleanMethod( env, logger, (*env)->GetMethodID( env, class, "isWarnEnabled", "()Z" ) ))
+        mpw_verbosity = LogLevelWarning;
+    else if ((*env)->CallBooleanMethod( env, logger, (*env)->GetMethodID( env, class, "isErrorEnabled", "()Z" ) ))
+        mpw_verbosity = LogLevelError;
+    else
+        mpw_verbosity = LogLevelFatal;
 
     return JNI_VERSION_1_6;
 }
