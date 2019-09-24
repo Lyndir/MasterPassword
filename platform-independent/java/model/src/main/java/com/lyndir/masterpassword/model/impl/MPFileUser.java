@@ -21,6 +21,7 @@ package com.lyndir.masterpassword.model.impl;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.masterpassword.*;
 import com.lyndir.masterpassword.model.*;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.File;
 import java.io.IOException;
 import javax.annotation.Nonnull;
@@ -66,6 +67,7 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
               MPMarshaller.ContentMode.PROTECTED, MPMarshalFormat.DEFAULT, location );
     }
 
+    @SuppressFBWarnings("PATH_TRAVERSAL_IN")
     public MPFileUser(final String fullName, @Nullable final byte[] keyID, final MPAlgorithm algorithm, final int avatar,
                       @Nullable final MPResultType defaultType, final ReadableInstant lastUsed, final boolean hidePasswords,
                       final MPMarshaller.ContentMode contentMode, final MPMarshalFormat format, final File location) {
@@ -169,6 +171,7 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
      * The user's old file is either moved to the new or deleted.  If the user's file was already at the destination, it doesn't change.
      * If a file already exists at the destination, it is overwritten.
      */
+    @SuppressFBWarnings("PATH_TRAVERSAL_IN")
     public void migrateTo(final File path, final MPMarshalFormat newFormat) {
         MPMarshalFormat oldFormat = format;
         File            oldFile   = file, newFile = new File( path, getFullName() + newFormat.fileSuffix() );

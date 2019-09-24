@@ -1,38 +1,43 @@
-allprojects {
-    apply plugin: 'findbugs'
+buildscript {
+    repositories {
+        google()
+        jcenter()
+        gradlePluginPortal()
+    }
 
+    dependencies {
+        classpath group: 'com.android.tools.build', name: 'gradle', version: '3.5.0'
+        classpath group: 'gradle.plugin.com.github.spotbugs', name: 'spotbugs-gradle-plugin', version: '2.0.0'
+    }
+}
+
+allprojects {
     group = 'com.lyndir.masterpassword'
     version = '2.7.10'
+}
+
+subprojects {
+    apply plugin: 'com.github.spotbugs'
+
+    repositories {
+        google()
+        jcenter()
+        mavenCentral()
+        maven { url 'https://maven.lyndir.com' }
+    }
+    dependencies {
+        spotbugsPlugins group: 'com.h3xstream.findsecbugs', name: 'findsecbugs-plugin', version: '1.9.0'
+    }
 
     tasks.withType( JavaCompile ) {
         options.encoding = 'UTF-8'
         sourceCompatibility = '1.8'
         targetCompatibility = '1.8'
     }
-    tasks.withType( FindBugs ) {
+    tasks.withType( com.github.spotbugs.SpotBugsTask ) {
         reports {
             xml.enabled = false
             html.enabled = true
         }
-    }
-}
-
-buildscript {
-    repositories {
-        google()
-        jcenter()
-    }
-
-    dependencies {
-        classpath group: 'com.android.tools.build', name: 'gradle', version: '3.5.0'
-    }
-}
-
-subprojects {
-    repositories {
-        google()
-        jcenter()
-        mavenCentral()
-        maven { url 'https://maven.lyndir.com' }
     }
 }

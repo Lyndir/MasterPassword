@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.security.SecureRandom;
 import java.util.*;
 import java.util.Optional;
 import java.util.concurrent.Future;
@@ -42,7 +43,7 @@ import javax.swing.text.PlainDocument;
 @SuppressWarnings("SerializableStoresNonSerializable")
 public class UserContentPanel extends JPanel implements MasterPassword.Listener, MPUser.Listener {
 
-    private static final Random    random             = new Random();
+    private static final Random    random             = new SecureRandom();
     private static final int       SIZE_RESULT        = 48;
     private static final Logger    logger             = Logger.get( UserContentPanel.class );
     private static final JButton   iconButton         = Components.button( Res.icons().user(), null, null );

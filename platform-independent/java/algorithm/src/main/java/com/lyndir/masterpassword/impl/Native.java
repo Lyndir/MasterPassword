@@ -23,6 +23,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.io.ByteStreams;
 import com.lyndir.lhunath.opal.system.logging.Logger;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.*;
 import java.util.*;
 import java.util.function.Predicate;
@@ -42,6 +43,7 @@ public final class Native {
     private static final char   EXTENSION_SEPARATOR = '.';
     private static final String NATIVES_PATH        = "lib";
 
+    @SuppressFBWarnings("PATH_TRAVERSAL_IN")
     @SuppressWarnings({ "HardcodedFileSeparator", "LoadLibraryWithNonConstantString" })
     public static boolean load(final Class<?> context, final String name) {
 

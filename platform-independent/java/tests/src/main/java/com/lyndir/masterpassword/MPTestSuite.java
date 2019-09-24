@@ -23,13 +23,15 @@ import com.google.common.collect.Lists;
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.ConversionUtils;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
 import java.util.concurrent.Callable;
+import javax.xml.XMLConstants;
 import javax.xml.parsers.*;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
+import org.xml.sax.*;
 import org.xml.sax.ext.DefaultHandler2;
 
 
@@ -40,8 +42,18 @@ import org.xml.sax.ext.DefaultHandler2;
 public class MPTestSuite implements Callable<Boolean> {
 
     @SuppressWarnings("UnusedDeclaration")
-    private static final Logger logger                = Logger.get( MPTestSuite.class );
-    private static final String DEFAULT_RESOURCE_NAME = "mpw_tests.xml";
+    private static final Logger           logger                = Logger.get( MPTestSuite.class );
+    private static final String           DEFAULT_RESOURCE_NAME = "mpw_tests.xml";
+    private static final SAXParserFactory factory               = SAXParserFactory.newInstance();
+
+    static {
+        try {
+            factory.setFeature( XMLConstants.FEATURE_SECURE_PROCESSING, true );
+        }
+        catch (ParserConfigurationException | SAXNotRecognizedException | SAXNotSupportedException e) {
+            throw new UnsupportedOperationException( e );
+        }
+    }
 
     private final MPTests  tests;
     private       Listener listener;
@@ -51,14 +63,18 @@ public class MPTestSuite implements Callable<Boolean> {
         this( DEFAULT_RESOURCE_NAME );
     }
 
+    @SuppressFBWarnings("XXE_SAXPARSER")
     public MPTestSuite(final String resourceName)
             throws UnavailableException {
         try {
             tests = new MPTests();
             tests.cases = Lists.newLinkedList();
-            SAXParser        parser    = SAXParserFactory.newInstance().newSAXParser();
-            Enumeration<URL> resources = Thread.currentThread().getContextClassLoader().getResources( "." );
-            parser.parse( Thread.currentThread().getContextClassLoader().getResourceAsStream( resourceName ), new DefaultHandler2() {
+            SAXParser   parser         = factory.newSAXParser();
+            InputStream resourceStream = Thread.currentThread().getContextClassLoader().getResourceAsStream( resourceName );
+            if (resourceStream == null)
+                throw new UnavailableException( new NullPointerException( "Missing resource: " + resourceName ) );
+
+            parser.parse( resourceStream, new DefaultHandler2() {
                 private final Deque<String> currentTags = Lists.newLinkedList();
                 private final Deque<StringBuilder> currentTexts = Lists.newLinkedList();
                 private MPTests.Case currentCase;

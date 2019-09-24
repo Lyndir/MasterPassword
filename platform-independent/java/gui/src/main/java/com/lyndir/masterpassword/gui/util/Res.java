@@ -24,6 +24,7 @@ import com.google.common.io.Resources;
 import com.google.common.util.concurrent.*;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.masterpassword.MPIdenticon;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.awt.*;
 import java.io.IOException;
 import java.util.concurrent.*;
@@ -232,6 +233,7 @@ public abstract class Res {
                 return new Font( fontName, style, size );
             }
 
+            @SuppressFBWarnings("URLCONNECTION_SSRF_FD")
             private void register() {
                 try {
                     Font font = Font.createFont( Font.TRUETYPE_FONT, Resources.getResource( resourceName ).openStream() );

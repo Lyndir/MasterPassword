@@ -22,6 +22,7 @@ import static org.testng.Assert.*;
 
 import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.lhunath.opal.system.logging.Logger;
+import java.security.SecureRandom;
 import java.util.Random;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -31,6 +32,7 @@ public class MPMasterKeyTest {
 
     @SuppressWarnings("UnusedDeclaration")
     private static final Logger logger = Logger.get( MPMasterKeyTest.class );
+    private static final Random random = new SecureRandom();
 
     private MPTestSuite testSuite;
 
@@ -121,7 +123,6 @@ public class MPMasterKeyTest {
     }
 
     private static String randomString(int length) {
-        Random        random  = new Random();
         StringBuilder builder = new StringBuilder();
 
         while (length > 0) {

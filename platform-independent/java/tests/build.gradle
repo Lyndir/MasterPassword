@@ -1,6 +1,5 @@
 plugins {
     id 'java'
-    id 'com.github.spotbugs' version '2.0.0'
 }
 
 description = 'Master Password Test Suite'
@@ -8,6 +7,7 @@ description = 'Master Password Test Suite'
 dependencies {
     implementation group: 'com.lyndir.lhunath.opal', name: 'opal-system', version: '1.7-p2'
     implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
+    implementation group: 'com.github.spotbugs', name: 'spotbugs-annotations', version: '4.0.0-beta4'
 
     implementation project( ':masterpassword-algorithm' )
     implementation project( ':masterpassword-model' )
