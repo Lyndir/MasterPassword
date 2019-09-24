@@ -19,6 +19,7 @@
 package com.lyndir.masterpassword.gui;
 
 import com.lyndir.lhunath.opal.system.util.ConversionUtils;
+import com.lyndir.masterpassword.gui.util.State;
 import com.lyndir.masterpassword.model.MPConfig;
 import com.lyndir.masterpassword.model.MPModelConstants;
 
@@ -43,7 +44,7 @@ public class MPGuiConfig extends MPConfig {
 
     public void setCheckForUpdates(final boolean checkForUpdates) {
         this.checkForUpdates = checkForUpdates;
-        MasterPassword.get().updateCheck();
+        State.get().updateCheck();
         setChanged();
     }
 

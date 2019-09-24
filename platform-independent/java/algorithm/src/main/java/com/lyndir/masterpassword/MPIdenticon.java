@@ -24,6 +24,7 @@ import com.google.common.base.Charsets;
 import com.google.common.primitives.UnsignedBytes;
 import com.lyndir.lhunath.opal.system.MessageAuthenticationDigests;
 import com.lyndir.lhunath.opal.system.logging.Logger;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.nio.*;
 import java.nio.charset.Charset;
 import java.util.Arrays;
@@ -57,6 +58,7 @@ public class MPIdenticon {
         this( fullName, masterPassword.toCharArray() );
     }
 
+    @SuppressFBWarnings("CLI_CONSTANT_LIST_INDEX")
     @SuppressWarnings("MethodCanBeVariableArityMethod")
     public MPIdenticon(final String fullName, final char[] masterPassword) {
         this.fullName = fullName;

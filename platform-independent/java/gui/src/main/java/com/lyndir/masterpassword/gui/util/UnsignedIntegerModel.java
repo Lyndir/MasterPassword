@@ -124,15 +124,13 @@ public class UnsignedIntegerModel extends SpinnerNumberModel implements Selectab
         return new JFormattedTextField.AbstractFormatter() {
             @Override
             @Nullable
-            public Object stringToValue(@Nullable final String text)
-                    throws ParseException {
+            public Object stringToValue(@Nullable final String text) {
                 return (text != null)? UnsignedInteger.valueOf( text ): null;
             }
 
             @Override
             @Nullable
-            public String valueToString(final Object value)
-                    throws ParseException {
+            public String valueToString(final Object value) {
                 return (value != null)? value.toString(): null;
             }
         };

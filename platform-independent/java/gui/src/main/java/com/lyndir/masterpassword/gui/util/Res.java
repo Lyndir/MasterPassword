@@ -226,7 +226,7 @@ public abstract class Res {
                 return get( Font.PLAIN, size );
             }
 
-            Font get(final int style, final int size) {
+            synchronized Font get(final int style, final int size) {
                 if (!registered)
                     register();
 
@@ -234,7 +234,7 @@ public abstract class Res {
             }
 
             @SuppressFBWarnings("URLCONNECTION_SSRF_FD")
-            private void register() {
+            private synchronized void register() {
                 try {
                     Font font = Font.createFont( Font.TRUETYPE_FONT, Resources.getResource( resourceName ).openStream() );
                     GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont( font );

@@ -145,17 +145,15 @@ public abstract class Components {
         return ((selectedFiles != null) && (selectedFiles.length > 0))? selectedFiles[0]: null;
     }
 
-    public static JDialog showDialog(@Nullable final Component owner, @Nullable final String title, final Container content) {
+    public static void showDialog(@Nullable final Component owner, @Nullable final String title, final Container content) {
         JDialog dialog = new JDialog( (owner != null)? SwingUtilities.windowForComponent( owner ): null,
                                       title, Dialog.ModalityType.DOCUMENT_MODAL );
         dialog.setMinimumSize( new Dimension( 320, 0 ) );
         dialog.setLocationRelativeTo( owner );
         dialog.setContentPane( content );
-
-        return showDialog( dialog );
     }
 
-    private static JDialog showDialog(final JDialog dialog) {
+    private static void showDialog(final JDialog dialog) {
         // OpenJDK does not correctly implement this setting in native code.
         dialog.getRootPane().putClientProperty( "apple.awt.documentModalSheet", Boolean.TRUE );
         dialog.getRootPane().putClientProperty( "Window.style", "small" );
@@ -163,8 +161,6 @@ public abstract class Components {
 
         dialog.setLocationByPlatform( true );
         dialog.setVisible( true );
-
-        return dialog;
     }
 
     public static JTextField textField() {

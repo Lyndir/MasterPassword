@@ -17,13 +17,13 @@ import javax.swing.*;
  * @author lhunath, 2018-07-14
  */
 @SuppressWarnings("serial")
-public class FilesPanel extends JPanel implements MPFileUserManager.Listener, MasterPassword.Listener {
+public class FilesPanel extends JPanel implements MPFileUserManager.Listener, State.Listener {
 
     private final JButton avatarButton = Components.button( Res.icons().avatar( 0 ), event -> setAvatar(),
                                                             "Click to change the user's avatar." );
 
     private final CollectionListModel<MPUser<?>> usersModel =
-            new CollectionListModel<MPUser<?>>( MPFileUserManager.get().getFiles() ).selection( MasterPassword.get()::activateUser );
+            new CollectionListModel<MPUser<?>>( MPFileUserManager.get().getFiles() ).selection( State.get()::activateUser );
 
     protected FilesPanel() {
         setOpaque( false );
@@ -45,7 +45,7 @@ public class FilesPanel extends JPanel implements MPFileUserManager.Listener, Ma
         add( Components.comboBox( usersModel, user -> ifNotNull( user, MPUser::getFullName ) ) );
 
         MPFileUserManager.get().addListener( this );
-        MasterPassword.get().addListener( this );
+        State.get().addListener( this );
     }
 
     private void setAvatar() {

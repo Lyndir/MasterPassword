@@ -22,7 +22,6 @@ import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 
 import com.lyndir.masterpassword.MPResultType;
 import com.lyndir.masterpassword.model.impl.MPBasicQuestion;
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 

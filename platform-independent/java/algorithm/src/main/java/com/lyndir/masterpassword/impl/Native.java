@@ -43,7 +43,7 @@ public final class Native {
     private static final char   EXTENSION_SEPARATOR = '.';
     private static final String NATIVES_PATH        = "lib";
 
-    @SuppressFBWarnings("PATH_TRAVERSAL_IN")
+    @SuppressFBWarnings({"PATH_TRAVERSAL_IN", "IOI_USE_OF_FILE_STREAM_CONSTRUCTORS", "EXS_EXCEPTION_SOFTENING_RETURN_FALSE"})
     @SuppressWarnings({ "HardcodedFileSeparator", "LoadLibraryWithNonConstantString" })
     public static boolean load(final Class<?> context, final String name) {
 
@@ -89,7 +89,7 @@ public final class Native {
                 return true;
             }
             catch (@SuppressWarnings("ErrorNotRethrown") final IOException | UnsatisfiedLinkError e) {
-                logger.dbg( e, "Couldn't load library: %s", libraryResource );
+                logger.wrn( e, "Couldn't load library: %s", libraryResource );
 
                 if (libraryFile != null)
                     if (libraryFile.exists() && !libraryFile.delete())

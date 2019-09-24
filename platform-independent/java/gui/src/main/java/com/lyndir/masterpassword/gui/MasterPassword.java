@@ -50,38 +50,12 @@ public final class MasterPassword {
     private static final MasterPassword instance = new MasterPassword();
 
     private final Provider             keyMaster = Provider.getCurrentProvider( true );
-    private final Collection<Listener> listeners = new CopyOnWriteArraySet<>();
 
     @Nullable
     private MasterPasswordFrame frame;
-    @Nullable
-    private MPUser<?>           activeUser;
 
     public static MasterPassword get() {
         return instance;
-    }
-
-    public void addListener(final Listener listener) {
-        if (listeners.add( listener ))
-            listener.onUserSelected( activeUser );
-    }
-
-    public void removeListener(final Listener listener) {
-        listeners.remove( listener );
-    }
-
-    public void activateUser(final MPUser<?> user) {
-        if (ObjectUtils.equals( activeUser, user ))
-            return;
-
-        activeUser = user;
-        for (final Listener listener : listeners)
-            listener.onUserSelected( activeUser );
-    }
-
-    @Nullable
-    public String version() {
-        return MasterPassword.class.getPackage().getImplementationVersion();
     }
 
     public void open() {
@@ -110,54 +84,15 @@ public final class MasterPassword {
 
         // Create and open the UI.
         get().open();
-
-        // UI features.
         get().updateResidence();
-        get().updateCheck();
-    }
 
-    public void updateCheck() {
-        if (!MPGuiConfig.get().checkForUpdates())
-            return;
-
-        try {
-            String implementationVersion = version();
-            String latestVersion = new ByteSource() {
-                @Override
-                public InputStream openStream()
-                        throws IOException {
-                    URL           url  = URI.create( "https://masterpassword.app/masterpassword-gui.jar.rev" ).toURL();
-                    URLConnection conn = url.openConnection();
-                    conn.addRequestProperty( "User-Agent", "masterpassword-gui" );
-                    return conn.getInputStream();
-                }
-            }.asCharSource( Charsets.UTF_8 ).readFirstLine();
-
-            if ((implementationVersion != null) && !implementationVersion.equalsIgnoreCase( latestVersion )) {
-                logger.inf( "Implementation: <%s>", implementationVersion );
-                logger.inf( "Latest        : <%s>", latestVersion );
-                logger.wrn( "You are not running the current official version.  Please update from:%n%s",
-                            "https://masterpassword.app/masterpassword-gui.jar" );
-                JOptionPane.showMessageDialog( null, Components.linkLabel( strf(
-                        "A new version of Master Password is available."
-                        + "<p>Please download the latest version from <a href='https://masterpassword.app'>https://masterpassword.app</a>." ) ),
-                                               "Update Available", JOptionPane.INFORMATION_MESSAGE );
-            }
-        }
-        catch (final IOException e) {
-            logger.wrn( e, "Couldn't check for version update." );
-        }
+        // Background.
+        State.get().updateCheck();
     }
 
     public void updateResidence() {
         Platform.get().installAppForegroundHandler( get()::open );
         Platform.get().installAppReopenHandler( get()::open );
         keyMaster.register( MPGuiConstants.ui_hotkey, hotKey -> get().open() );
-    }
-
-    @SuppressWarnings("InterfaceMayBeAnnotatedFunctional")
-    public interface Listener {
-
-        void onUserSelected(@Nullable MPUser<?> user);
     }
 }

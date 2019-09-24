@@ -60,16 +60,13 @@ public class MPAlgorithmV0 extends MPAlgorithm {
             ByteBuffer masterPasswordBuffer = ByteBuffer.wrap( masterPasswordBytes );
 
             CoderResult result = encoder.encode( CharBuffer.wrap( masterPassword ), masterPasswordBuffer, true );
-            if (!result.isUnderflow())
-                result.throwException();
+            if (result.isError())
+                throw new IllegalStateException( result.toString() );
             result = encoder.flush( masterPasswordBuffer );
-            if (!result.isUnderflow())
-                result.throwException();
+            if (result.isError())
+                throw new IllegalStateException( result.toString() );
 
             return _masterKey( fullName, masterPasswordBytes, version().toInt() );
-        }
-        catch (final CharacterCodingException e) {
-            throw new IllegalStateException( e );
         }
         finally {
             Arrays.fill( masterPasswordBytes, (byte) 0 );

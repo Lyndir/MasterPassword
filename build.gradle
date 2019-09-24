@@ -1,3 +1,6 @@
+import com.github.spotbugs.SpotBugsTask
+
+
 buildscript {
     repositories {
         google()
@@ -27,14 +30,23 @@ subprojects {
     }
     dependencies {
         spotbugsPlugins group: 'com.h3xstream.findsecbugs', name: 'findsecbugs-plugin', version: '1.9.0'
+        //spotbugsPlugins group: 'com.mebigfatguy.sb-contrib', name: 'sb-contrib', version: '7.4.6'
+    }
+    spotbugs {
+        effort 'max'
+        showProgress true
     }
 
     tasks.withType( JavaCompile ) {
         options.encoding = 'UTF-8'
         sourceCompatibility = '1.8'
         targetCompatibility = '1.8'
+        options.compilerArgs << '-Xlint:unchecked'
+        if (it.name != JavaPlugin.COMPILE_JAVA_TASK_NAME) {
+            options.compilerArgs << '-Xlint:deprecation'
+        }
     }
-    tasks.withType( com.github.spotbugs.SpotBugsTask ) {
+    tasks.withType( SpotBugsTask ) {
         reports {
             xml.enabled = false
             html.enabled = true

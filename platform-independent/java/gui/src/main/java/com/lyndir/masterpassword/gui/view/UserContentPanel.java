@@ -41,7 +41,7 @@ import javax.swing.text.PlainDocument;
  * @author lhunath, 2018-07-14
  */
 @SuppressWarnings("SerializableStoresNonSerializable")
-public class UserContentPanel extends JPanel implements MasterPassword.Listener, MPUser.Listener {
+public class UserContentPanel extends JPanel implements State.Listener, MPUser.Listener {
 
     private static final Random    random             = new SecureRandom();
     private static final int       SIZE_RESULT        = 48;
@@ -72,7 +72,7 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
         setBorder( Components.marginBorder() );
         showUser( null );
 
-        MasterPassword.get().addListener( this );
+        State.get().addListener( this );
     }
 
     protected JComponent getUserToolbar() {
@@ -155,9 +155,9 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
             return;
 
         if (incognitoField.isSelected())
-            MasterPassword.get().activateUser( new MPIncognitoUser( fullName ) );
+            State.get().activateUser( new MPIncognitoUser( fullName ) );
         else
-            MasterPassword.get().activateUser( MPFileUserManager.get().add( fullName ) );
+            State.get().activateUser( MPFileUserManager.get().add( fullName ) );
     }
 
     private void importUser() {
@@ -200,7 +200,7 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
                                   Res.format( importUser.getLastUsed() ) ) )))
                         return;
 
-                    MasterPassword.get().activateUser( MPFileUserManager.get().add( importUser ) );
+                    State.get().activateUser( MPFileUserManager.get().add( importUser ) );
                 }
                 catch (final MPIncorrectMasterPasswordException | MPAlgorithmException e) {
                     JOptionPane.showMessageDialog(
@@ -242,7 +242,7 @@ public class UserContentPanel extends JPanel implements MasterPassword.Listener,
                 + "Some people even configure this location to be synced between their different computers "
                 + "using services such as those provided by SpiderOak or Dropbox.</p>"
                 + "<hr><p><a href='https://masterpassword.app'>https://masterpassword.app</a> — by Maarten Billemont</p>",
-                MasterPassword.get().version(),
+                State.get().version(),
                 InputEvent.getModifiersExText( MPGuiConstants.ui_hotkey.getModifiers() ),
                 KeyEvent.getKeyText( MPGuiConstants.ui_hotkey.getKeyCode() ),
                 MPFileUserManager.get().getPath().getAbsolutePath() ) ),
