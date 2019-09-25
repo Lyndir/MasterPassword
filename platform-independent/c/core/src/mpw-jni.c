@@ -9,35 +9,39 @@
 
 static jobject logger;
 static JNIEnv *env;
+static int counter;
 
 void mpw_log_app(LogLevel level, const char *format, ...) {
-    jmethodID method = NULL;
-    jclass class = (*env)->GetObjectClass( env, logger );
-    if (level >= LogLevelTrace)
-        method = (*env)->GetMethodID( env, class, "trace", "(Ljava/lang/String;)V" );
-    else if (level == LogLevelDebug)
-        method = (*env)->GetMethodID( env, class, "debug", "(Ljava/lang/String;)V" );
-    else if (level == LogLevelInfo)
-        method = (*env)->GetMethodID( env, class, "info", "(Ljava/lang/String;)V" );
-    else if (level == LogLevelWarning)
-        method = (*env)->GetMethodID( env, class, "warn", "(Ljava/lang/String;)V" );
-    else if (level <= LogLevelError)
-        method = (*env)->GetMethodID( env, class, "error", "(Ljava/lang/String;)V" );
-
     va_list args;
     va_start( args, format );
 
-    if (class && method && logger) {
+    if (logger && (*env)->PushLocalFrame( env, 16 ) == OK) {
+        jmethodID method = NULL;
+        jclass class = (*env)->GetObjectClass( env, logger );
+        if (level >= LogLevelTrace)
+            method = (*env)->GetMethodID( env, class, "trace", "(Ljava/lang/String;)V" );
+        else if (level == LogLevelDebug)
+            method = (*env)->GetMethodID( env, class, "debug", "(Ljava/lang/String;)V" );
+        else if (level == LogLevelInfo)
+            method = (*env)->GetMethodID( env, class, "info", "(Ljava/lang/String;)V" );
+        else if (level == LogLevelWarning)
+            method = (*env)->GetMethodID( env, class, "warn", "(Ljava/lang/String;)V" );
+        else if (level <= LogLevelError)
+            method = (*env)->GetMethodID( env, class, "error", "(Ljava/lang/String;)V" );
+
         char *message = NULL;
-        int length = vasprintf(&message, format, args);
-        if (length > 0)
-            (*env)->CallVoidMethod(env, logger, method, (*env)->NewStringUTF( env, message ));
-        if (message)
-            mpw_free(&message, (size_t) length);
+        int length = vasprintf( &message, format, args );
+        if (message) {
+            (*env)->CallVoidMethod( env, logger, method, (*env)->NewStringUTF( env, message ) );
+            mpw_free( &message, (size_t)max( 0, length ) );
+        }
+
+        (*env)->PopLocalFrame( env, NULL );
+        return;
     }
-    else
-        // Can't log via slf4j, fall back to cli logger.
-        mpw_vlog_cli( level, format, args );
+
+    // Can't log via slf4j, fall back to cli logger.
+    mpw_vlog_cli( level, format, args );
 
     va_end( args );
 }
@@ -50,7 +54,7 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved) {
     jmethodID method = (*env)->GetStaticMethodID( env, class, "getLogger", "(Ljava/lang/String;)Lorg/slf4j/Logger;" );
     jstring name = (*env)->NewStringUTF( env, "com.lyndir.masterpassword.algorithm" );
     if (class && method && name)
-        logger = (*env)->CallStaticObjectMethod( env, class, method, name );
+        logger = (*env)->NewGlobalRef( env, (*env)->CallStaticObjectMethod( env, class, method, name ) );
     else
         wrn( "Couldn't initialize JNI logger." );
 
