@@ -29,10 +29,11 @@ void mpw_log_app(LogLevel level, const char *format, ...) {
         else if (level <= LogLevelError)
             method = (*env)->GetMethodID( env, class, "error", "(Ljava/lang/String;)V" );
 
-        char *message = NULL;
-        int length = vasprintf( &message, format, args );
-        if (message) {
-            (*env)->CallVoidMethod( env, logger, method, (*env)->NewStringUTF( env, message ) );
+        int length = vsnprintf( NULL, 0, format, args );
+        if (length > 0) {
+            char *message = malloc( length + 1 );
+            if (message && (length = vsnprintf( message, length, format, args )) > 0);
+                (*env)->CallVoidMethod( env, logger, method, (*env)->NewStringUTF( env, message ) );
             mpw_free( &message, (size_t)max( 0, length ) );
         }
 
