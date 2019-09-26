@@ -41,10 +41,10 @@ typedef mpw_enum(int, LogLevel) {
     /** Issues that lead to abortion. */
     LogLevelFatal = -2,
 };
-LogLevel mpw_verbosity;
+extern LogLevel mpw_verbosity;
 
 /** mpw_log_cli is a sink that writes log messages to the mpw_log_cli_file, which defaults to stderr. */
-FILE *mpw_log_cli_file;
+extern FILE *mpw_log_cli_file;
 void mpw_log_cli(LogLevel level, const char *format, ...);
 void mpw_vlog_cli(LogLevel level, const char *format, va_list args);
 
