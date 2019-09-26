@@ -180,26 +180,21 @@ _target_configure() {
     local prefix=$1 platform=$2 arch=$3; shift 3
 
     local host=$arch build=
+    [[ $arch = *arm* ]] && host=arm
     [[ -x build-aux/config.guess ]] && build=$(build-aux/config.guess)
 
     case "$platform" in
         'windows')
+            # doesn't use ./configure
             return
         ;;
         'android')
             host=( "$SDKROOT"/*-android* ) host=${host##*/}
-
             set -- --with-sysroot="$SDKROOT/sysroot" "$@"
-        ;;
-        'macos'|'ios')
-            [[ $arch = *arm* ]] && host=arm
-            host+=-apple
-
-            set -- --disable-shared "$@"
         ;;
     esac
 
-    ./configure ${build:+--build="$build"} ${host:+--host="$host"} --enable-pic --disable-pie --prefix="$prefix/$arch" "$@"
+    ./configure ${build:+--build="$build"} ${host:+--host="$host"} --prefix="$prefix/$arch" --enable-static --disable-shared --enable-pic --disable-pie "$@"
 }
 
 # target_build <prefix> <platform> <arch>
@@ -346,25 +341,22 @@ _build() {
             'macos')
                 SDKROOT="$(xcrun --show-sdk-path --sdk macosx)"
                 export PATH="$(xcrun --show-sdk-platform-path --sdk macosx)/usr/bin:$PATH"
-                export CFLAGS="-arch $arch -flto -O2 -g -isysroot $SDKROOT -mmacosx-version-min=${MACOSX_DEPLOYMENT_TARGET:-10.8} $CFLAGS"
+                export CPPFLAGS="-arch $arch -flto -O2 -g -isysroot $SDKROOT -mmacosx-version-min=${MACOSX_DEPLOYMENT_TARGET:-10.8} $CPPFLAGS"
                 export LDFLAGS="-arch $arch -flto -isysroot $SDKROOT -mmacosx-version-min=${MACOSX_DEPLOYMENT_TARGET:-10.8} $LDFLAGS"
-                export CPPFLAGS="$CFLAGS $CPPFLAGS"
             ;;
             'ios')
                 case "$arch" in
                     *'arm'*)
                         SDKROOT="$(xcrun --show-sdk-path --sdk iphoneos)"
                         export PATH="$(xcrun --show-sdk-platform-path --sdk iphoneos)/usr/bin:$PATH"
-                        export CFLAGS="-arch $arch -mthumb -fembed-bitcode -flto -O2 -g -isysroot $SDKROOT -mios-version-min=${IPHONEOS_DEPLOYMENT_TARGET:-8.0} $CFLAGS"
+                        export CPPFLAGS="-arch $arch -mthumb -fembed-bitcode -flto -O2 -g -isysroot $SDKROOT -mios-version-min=${IPHONEOS_DEPLOYMENT_TARGET:-8.0} $CPPFLAGS"
                         export LDFLAGS="-arch $arch -mthumb -fembed-bitcode -flto -isysroot $SDKROOT -mios-version-min=${IPHONEOS_DEPLOYMENT_TARGET:-8.0} $LDFLAGS"
-                        export CPPFLAGS="$CFLAGS $CPPFLAGS"
                     ;;
                     *)
                         SDKROOT="$(xcrun --show-sdk-path --sdk iphonesimulator)"
                         export PATH="$(xcrun --show-sdk-platform-path --sdk iphonesimulator)/usr/bin:$PATH"
-                        export CFLAGS="-arch $arch -flto -O2 -g -isysroot $SDKROOT -mios-simulator-version-min=${IPHONEOS_DEPLOYMENT_TARGET:-8.0} $CFLAGS"
+                        export CPPFLAGS="-arch $arch -flto -O2 -g -isysroot $SDKROOT -mios-simulator-version-min=${IPHONEOS_DEPLOYMENT_TARGET:-8.0} $CPPFLAGS"
                         export LDFLAGS="-arch $arch -flto -isysroot $SDKROOT -mios-simulator-version-min=${IPHONEOS_DEPLOYMENT_TARGET:-8.0} $LDFLAGS"
-                        export CPPFLAGS="$CFLAGS $CPPFLAGS"
                     ;;
                 esac
             ;;
@@ -375,7 +367,7 @@ _build() {
                 # Platform 21 is lowest that supports x86_64
                 "$ANDROID_NDK_HOME/build/tools/make-standalone-toolchain.sh" --force --install-dir="$SDKROOT" --platform='android-21' --arch="$arch"
                 export PATH="$SDKROOT/bin:$PATH"
-                export CFLAGS="-O2 -g $CFLAGS"
+                export CPPFLAGS="-O2 -g $CPPFLAGS"
                 export LDFLAGS="-avoid-version $LDFLAGS"
                 export CC='clang'
 
@@ -388,10 +380,10 @@ _build() {
             *)
                 case "$arch" in
                     i686)
-                        export CFLAGS="-m32 $CFLAGS" CXXFLAGS="-m32 $CXXFLAGS" LDFLAGS="-m32 $LDFLAGS"
+                        export CPPFLAGS="-m32 $CPPFLAGS" LDFLAGS="-m32 $LDFLAGS"
                     ;;
                     x86_64)
-                        export CFLAGS="-m64 $CFLAGS" CXXFLAGS="-m64 $CXXFLAGS" LDFLAGS="-m64 $LDFLAGS"
+                        export CPPFLAGS="-m64 $CPPFLAGS" LDFLAGS="-m64 $LDFLAGS"
                     ;;
                 esac
             ;;
