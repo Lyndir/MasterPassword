@@ -105,14 +105,14 @@ _prepare() {
 #
 # Perform any necessary clean-up of the library code prior to building.
 #
-# By default, this will wipe and re-create the prefix.
+# By default, this will wipe the build configuration and re-create the prefix.
 prepare_clean() { _prepare_clean "$@"; }
 _prepare_clean() {
     local prefix=$1 platform=$2; shift 2
 
     if [[ $platform = windows ]]; then :
     else
-        [[ ! -e Makefile ]] || make -s clean || git clean -fdx
+        [[ ! -e Makefile ]] || make -s distclean || git clean -fdx
     fi
 
     rm -rf "$prefix"
@@ -181,6 +181,7 @@ _target_configure() {
 
     local host=$arch build=
     [[ $arch = *arm* ]] && host=arm
+    [[ -x config.guess ]] && build=$(./config.guess)
     [[ -x build-aux/config.guess ]] && build=$(build-aux/config.guess)
 
     case "$platform" in
@@ -188,13 +189,26 @@ _target_configure() {
             # doesn't use ./configure
             return
         ;;
+        'ios'|'macos')
+            host+=-apple
+            set -- --enable-static --disable-shared 
+        ;;
         'android')
-            host=( "$SDKROOT"/*-android* ) host=${host##*/}
-            set -- --with-sysroot="$SDKROOT/sysroot" "$@"
+            case "$arch" in
+                'arm')    host='arm' ;;
+                'arm64')  host='aarch64' ;;
+                'x86')    host='i686' ;;
+                'x86_64') host='x86_64' ;;
+            esac
+            host=( "$SDKROOT/$host"*-android* ) host=${host##*/}
+            set -- --disable-static --enable-shared --with-sysroot="$SDKROOT/sysroot" "$@"
+        ;;
+        *)
+            set -- --enable-static --disable-shared 
         ;;
     esac
 
-    ./configure ${build:+--build="$build"} ${host:+--host="$host"} --prefix="$prefix/$arch" --enable-static --disable-shared --enable-pic --disable-pie "$@"
+    ./configure ${build:+--build="$build"} ${host:+--host="$host"} --prefix="$prefix/$arch" --enable-pic --disable-pie "$@"
 }
 
 # target_build <prefix> <platform> <arch>
@@ -237,7 +251,7 @@ _finalize_merge() {
     local prefix=$1 platform=$2; shift 2
     local archs=( "$@" )
 
-    [[ -e "$prefix/$archs/include" ]] && mv -f -- "$prefix/$archs/include" "$prefix/out/"
+    [[ -e "$prefix/$archs/include" ]] && cp -a -- "$prefix/$archs/include" "$prefix/out/"
 
     install -d "$prefix/out/lib"
     case "$platform" in
@@ -254,12 +268,12 @@ _finalize_merge() {
             done
         ;;
         'macos'|'ios')
-            for lib in "$prefix/$archs/lib/"*; do
-                if lipo -info "$lib" >/dev/null 2>&1; then
-                    local lib=("${lib##*/}") libs=("${archs[@]/#/$prefix/}") libs=("${libs[@]/%//lib/$lib}")
-                    lipo -create "${libs[@]}" -output "$prefix/out/lib/$lib"
-                fi
+            for arch in "${archs[@]}"; do
+                install -d "$prefix/out/lib/$arch"
+                install -p "$prefix/$arch/lib/"*.a "$prefix/out/lib/$arch/"
             done
+            local libs=( "$prefix/out/lib/"*/* )
+            lipo -create "${libs[@]}" -output "$prefix/out/lib/${libs##*/}"
         ;;
         'android')
             for arch in "${archs[@]}"; do
@@ -269,7 +283,7 @@ _finalize_merge() {
                     'arm64')    abi='arm64-v8a' ;;
                 esac
                 install -d "$prefix/out/lib/$abi"
-                install -p "$prefix/$arch/lib/"*.so "$prefix/out/lib/$abi"
+                install -p "$prefix/$arch/lib/"*.so "$prefix/out/lib/$abi/"
             done
         ;;
     esac
@@ -316,6 +330,7 @@ _build() {
     fi
 
     local prefix="$PWD/build-$platform~"
+    echo
     echo " # $name ($platform: ${archs[*]}) into $prefix ..."
     initialize "$prefix" "$platform"
 
@@ -333,6 +348,8 @@ _build() {
 
     # Repeat the build for each individual architecture.
     for arch in "${archs[@]}"; do (
+        echo
+        echo " # $name ($platform: $arch) ..."
 
         # Set up a base environment for the platform.
         case "$platform" in
@@ -370,12 +387,6 @@ _build() {
                 export CPPFLAGS="-O2 -g $CPPFLAGS"
                 export LDFLAGS="-avoid-version $LDFLAGS"
                 export CC='clang'
-
-                # For GCC:
-                # arm    CFLAGS="-march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -mthumb" LDFLAGS="-Wl,--fix-cortex-a8"
-                # arm64  CFLAGS="-march=armv8-a"
-                # x86    CFLAGS="-march=i686 -mtune=intel -mssse3 -mfpmath=sse -m32"
-                # x86_64 CFLAGS="-march=x86-64 -msse4.2 -mpopcnt -m64 -mtune=intel"
             ;;
             *)
                 case "$arch" in
@@ -389,7 +400,6 @@ _build() {
             ;;
         esac
 
-        echo " # $name ($platform: $arch) ..."
         target "$prefix" "$platform" "$arch"
     ); done
 
