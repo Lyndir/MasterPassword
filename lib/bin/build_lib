@@ -169,7 +169,10 @@ _target_prepare() {
 # --enable-pic --disable-pie to ensure the resulting library can be linked again.
 target_configure() { _target_configure "$@"; }
 _target_configure() {
-    local prefix=$1 platform=$2 arch=$3 host=$arch-$platform; shift 3
+    local prefix=$1 platform=$2 arch=$3; shift 3
+
+    local host=$arch build=
+    [[ -x build-aux/config.guess ]] && build=$(build-aux/config.guess)
 
     case "$platform" in
         'windows')
@@ -180,15 +183,15 @@ _target_configure() {
 
             set -- --with-sysroot="$SDKROOT/sysroot" "$@"
         ;;
-        'ios')
-            [[ $arch = *arm* ]] && host=arm || host=$arch
+        'macos'|'ios')
+            [[ $arch = *arm* ]] && host=arm
             host+=-apple
 
             set -- --disable-shared "$@"
         ;;
     esac
 
-    ./configure --build="$(./build-aux/config.guess)" ${host:+--host="$host"} --enable-pic --disable-pie --prefix="$prefix/$arch" "$@"
+    ./configure ${build:+--build="$build"} ${host:+--host="$host"} --enable-pic --disable-pie --prefix="$prefix/$arch" "$@"
 }
 
 # target_build <prefix> <platform> <arch>
@@ -305,7 +308,7 @@ _build() {
             'ios') archs=( 'i386' 'x86_64' 'armv7' 'armv7s' 'arm64' ) ;;
             'android') archs=( 'arm' 'arm64' 'x86' 'x86_64' ) ;;
             'windows') archs=( 'Win32' 'x64' ) ;;
-            *) archs=( 'x86' 'x86_64' ) ;;
+            *) archs=( 'i686' 'x86_64' ) ;;
         esac
     fi
 
@@ -376,11 +379,11 @@ _build() {
             ;;
             *)
                 case "$arch" in
-                    x86)
-                        export CFLAGS="-m32"
+                    i686)
+                        export CFLAGS="-m32 $CFLAGS" CXXFLAGS="-m32 $CXXFLAGS" LDFLAGS="-m32 $LDFLAGS"
                     ;;
                     x86_64)
-                        export CFLAGS="-m64"
+                        export CFLAGS="-m64 $CFLAGS" CXXFLAGS="-m64 $CXXFLAGS" LDFLAGS="-m64 $LDFLAGS"
                     ;;
                 esac
             ;;
