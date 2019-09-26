@@ -29,20 +29,25 @@ void mpw_log_app(LogLevel level, const char *format, ...) {
         else if (level <= LogLevelError)
             method = (*env)->GetMethodID( env, class, "error", "(Ljava/lang/String;)V" );
 
-        int length = vsnprintf( NULL, 0, format, args );
+        va_list _args;
+        va_copy( _args, args );
+        int length = vsnprintf( NULL, 0, format, _args );
+        va_end( _args );
+
         if (length > 0) {
             char *message = malloc( length + 1 );
-            if (message && (length = vsnprintf( message, length, format, args )) > 0);
+            va_copy( _args, args );
+            if (message && (length = vsnprintf( message, length + 1, format, _args )) > 0);
                 (*env)->CallVoidMethod( env, logger, method, (*env)->NewStringUTF( env, message ) );
+            va_end( _args );
             mpw_free( &message, (size_t)max( 0, length ) );
         }
 
         (*env)->PopLocalFrame( env, NULL );
-        return;
     }
-
-    // Can't log via slf4j, fall back to cli logger.
-    mpw_vlog_cli( level, format, args );
+    else
+        // Can't log via slf4j, fall back to cli logger.
+        mpw_vlog_cli( level, format, args );
 
     va_end( args );
 }
