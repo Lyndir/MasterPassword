@@ -37,7 +37,7 @@ void mpw_log_app(LogLevel level, const char *format, ...) {
         if (length > 0) {
             char *message = malloc( length + 1 );
             va_copy( _args, args );
-            if (message && (length = vsnprintf( message, length + 1, format, _args )) > 0);
+            if (message && (length = vsnprintf( message, length + 1, format, _args )) > 0)
                 (*env)->CallVoidMethod( env, logger, method, (*env)->NewStringUTF( env, message ) );
             va_end( _args );
             mpw_free( &message, (size_t)max( 0, length ) );
