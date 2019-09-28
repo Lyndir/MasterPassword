@@ -17,10 +17,15 @@
 //==============================================================================
 
 #include "mpw-algorithm.h"
-#include "mpw-algorithm_v0.c"
-#include "mpw-algorithm_v1.c"
-#include "mpw-algorithm_v2.c"
-#include "mpw-algorithm_v3.c"
+#include "mpw-algorithm_v0.h"
+#include "mpw-algorithm_v1.h"
+#include "mpw-algorithm_v2.h"
+#include "mpw-algorithm_v3.h"
+#include "mpw-util.h"
+
+MP_LIBS_BEGIN
+#include <string.h>
+MP_LIBS_END
 
 const MPMasterKey mpw_master_key(const char *fullName, const char *masterPassword, const MPAlgorithmVersion algorithmVersion) {
 

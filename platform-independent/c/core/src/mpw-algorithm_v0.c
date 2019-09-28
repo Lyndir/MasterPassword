@@ -16,6 +16,7 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
+#include "mpw-algorithm_v0.h"
 #include "mpw-util.h"
 #include "base64.h"
 
@@ -31,7 +32,7 @@ MP_LIBS_END
 #define MP_otp_window       5 * 60 /* s */
 
 // Algorithm version helpers.
-static const char *mpw_type_template_v0(MPResultType type, uint16_t templateIndex) {
+const char *mpw_type_template_v0(MPResultType type, uint16_t templateIndex) {
 
     size_t count = 0;
     const char **templates = mpw_type_templates( type, &count );
@@ -40,7 +41,7 @@ static const char *mpw_type_template_v0(MPResultType type, uint16_t templateInde
     return template;
 }
 
-static const char mpw_class_character_v0(char characterClass, uint16_t classIndex) {
+const char mpw_class_character_v0(char characterClass, uint16_t classIndex) {
 
     const char *classCharacters = mpw_class_characters( characterClass );
     if (!classCharacters)
@@ -50,7 +51,7 @@ static const char mpw_class_character_v0(char characterClass, uint16_t classInde
 }
 
 // Algorithm version overrides.
-static MPMasterKey mpw_master_key_v0(
+MPMasterKey mpw_master_key_v0(
         const char *fullName, const char *masterPassword) {
 
     const char *keyScope = mpw_purpose_scope( MPKeyPurposeAuthentication );
@@ -84,7 +85,7 @@ static MPMasterKey mpw_master_key_v0(
     return masterKey;
 }
 
-static MPSiteKey mpw_site_key_v0(
+MPSiteKey mpw_site_key_v0(
         MPMasterKey masterKey, const char *siteName, MPCounterValue siteCounter,
         MPKeyPurpose keyPurpose, const char *keyContext) {
 
@@ -128,7 +129,7 @@ static MPSiteKey mpw_site_key_v0(
     return siteKey;
 }
 
-static const char *mpw_site_template_password_v0(
+const char *mpw_site_template_password_v0(
         MPMasterKey masterKey, MPSiteKey siteKey, MPResultType resultType, const char *resultParam) {
 
     const char *_siteKey = (const char *)siteKey;
@@ -158,7 +159,7 @@ static const char *mpw_site_template_password_v0(
     return sitePassword;
 }
 
-static const char *mpw_site_crypted_password_v0(
+const char *mpw_site_crypted_password_v0(
         MPMasterKey masterKey, MPSiteKey siteKey, MPResultType resultType, const char *cipherText) {
 
     if (!cipherText) {
@@ -183,12 +184,13 @@ static const char *mpw_site_crypted_password_v0(
     mpw_free( &plainBytes, bufSize );
     if (!plainText)
         err( "AES decryption error: %s", strerror( errno ) );
-    trc( "decrypted -> plainText: %zu bytes = %s = %s", strlen( plainText ), plainText, mpw_hex( plainText, strlen( plainText ) ) );
+    else
+        trc( "decrypted -> plainText: %zu bytes = %s = %s", strlen( plainText ), plainText, mpw_hex( plainText, strlen( plainText ) ) );
 
     return plainText;
 }
 
-static const char *mpw_site_derived_password_v0(
+const char *mpw_site_derived_password_v0(
         MPMasterKey masterKey, MPSiteKey siteKey, MPResultType resultType, const char *resultParam) {
 
     switch (resultType) {
@@ -233,7 +235,7 @@ static const char *mpw_site_derived_password_v0(
     }
 }
 
-static const char *mpw_site_state_v0(
+const char *mpw_site_state_v0(
         MPMasterKey masterKey, MPSiteKey siteKey, MPResultType resultType, const char *plainText) {
 
     // Encrypt

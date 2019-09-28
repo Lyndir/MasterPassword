@@ -68,6 +68,22 @@
 		DA3509FE15F101A500C14A8E /* PearlQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = DA3509FC15F101A500C14A8E /* PearlQueue.h */; };
 		DA3509FF15F101A500C14A8E /* PearlQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3509FD15F101A500C14A8E /* PearlQueue.m */; };
 		DA3B844F190FC60900246EEA /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA3B844A190FC5A900246EEA /* Crashlytics.framework */; };
+		DA35148E233EF93E00BCF504 /* mpw-algorithm_v0.c in Sources */ = {isa = PBXBuildFile; fileRef = DA831A271A6E1146000AC234 /* mpw-algorithm_v0.c */; };
+		DA35148F233EF93E00BCF504 /* mpw-algorithm_v1.c in Sources */ = {isa = PBXBuildFile; fileRef = DA831A281A6E1146000AC234 /* mpw-algorithm_v1.c */; };
+		DA351490233EF93E00BCF504 /* mpw-algorithm_v2.c in Sources */ = {isa = PBXBuildFile; fileRef = DA831A291A6E1146000AC234 /* mpw-algorithm_v2.c */; };
+		DA351491233EF93E00BCF504 /* mpw-algorithm_v3.c in Sources */ = {isa = PBXBuildFile; fileRef = DA831A2A1A6E1146000AC234 /* mpw-algorithm_v3.c */; };
+		DA351492233EF94300BCF504 /* mpw-algorithm_v0.c in Sources */ = {isa = PBXBuildFile; fileRef = DA831A271A6E1146000AC234 /* mpw-algorithm_v0.c */; };
+		DA351493233EF94300BCF504 /* mpw-algorithm_v1.c in Sources */ = {isa = PBXBuildFile; fileRef = DA831A281A6E1146000AC234 /* mpw-algorithm_v1.c */; };
+		DA351494233EF94300BCF504 /* mpw-algorithm_v2.c in Sources */ = {isa = PBXBuildFile; fileRef = DA831A291A6E1146000AC234 /* mpw-algorithm_v2.c */; };
+		DA351495233EF94300BCF504 /* mpw-algorithm_v3.c in Sources */ = {isa = PBXBuildFile; fileRef = DA831A2A1A6E1146000AC234 /* mpw-algorithm_v3.c */; };
+		DA351496233EF94300BCF504 /* mpw-algorithm_v0.c in Sources */ = {isa = PBXBuildFile; fileRef = DA831A271A6E1146000AC234 /* mpw-algorithm_v0.c */; };
+		DA351497233EF94300BCF504 /* mpw-algorithm_v1.c in Sources */ = {isa = PBXBuildFile; fileRef = DA831A281A6E1146000AC234 /* mpw-algorithm_v1.c */; };
+		DA351498233EF94300BCF504 /* mpw-algorithm_v2.c in Sources */ = {isa = PBXBuildFile; fileRef = DA831A291A6E1146000AC234 /* mpw-algorithm_v2.c */; };
+		DA351499233EF94300BCF504 /* mpw-algorithm_v3.c in Sources */ = {isa = PBXBuildFile; fileRef = DA831A2A1A6E1146000AC234 /* mpw-algorithm_v3.c */; };
+		DA35149A233EF94500BCF504 /* mpw-algorithm_v0.c in Sources */ = {isa = PBXBuildFile; fileRef = DA831A271A6E1146000AC234 /* mpw-algorithm_v0.c */; };
+		DA35149B233EF94500BCF504 /* mpw-algorithm_v1.c in Sources */ = {isa = PBXBuildFile; fileRef = DA831A281A6E1146000AC234 /* mpw-algorithm_v1.c */; };
+		DA35149C233EF94500BCF504 /* mpw-algorithm_v2.c in Sources */ = {isa = PBXBuildFile; fileRef = DA831A291A6E1146000AC234 /* mpw-algorithm_v2.c */; };
+		DA35149D233EF94500BCF504 /* mpw-algorithm_v3.c in Sources */ = {isa = PBXBuildFile; fileRef = DA831A2A1A6E1146000AC234 /* mpw-algorithm_v3.c */; };
 		DA3B8452190FC86F00246EEA /* NSManagedObject+Pearl.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3B8450190FC86F00246EEA /* NSManagedObject+Pearl.m */; };
 		DA3B8453190FC86F00246EEA /* NSManagedObject+Pearl.h in Headers */ = {isa = PBXBuildFile; fileRef = DA3B8451190FC86F00246EEA /* NSManagedObject+Pearl.h */; };
 		DA3B8456190FC89700246EEA /* MPFixable.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3B8454190FC89700246EEA /* MPFixable.m */; };
@@ -433,6 +449,10 @@
 		DA3509FC15F101A500C14A8E /* PearlQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlQueue.h; sourceTree = "<group>"; };
 		DA3509FD15F101A500C14A8E /* PearlQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlQueue.m; sourceTree = "<group>"; };
 		DA3B844A190FC5A900246EEA /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
+		DA351482233EF8E800BCF504 /* mpw-algorithm_v3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-algorithm_v3.h"; sourceTree = "<group>"; };
+		DA351483233EF8E800BCF504 /* mpw-algorithm_v0.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-algorithm_v0.h"; sourceTree = "<group>"; };
+		DA351484233EF8E800BCF504 /* mpw-algorithm_v2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-algorithm_v2.h"; sourceTree = "<group>"; };
+		DA351485233EF8E800BCF504 /* mpw-algorithm_v1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-algorithm_v1.h"; sourceTree = "<group>"; };
 		DA3B8450190FC86F00246EEA /* NSManagedObject+Pearl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObject+Pearl.m"; sourceTree = "<group>"; };
 		DA3B8451190FC86F00246EEA /* NSManagedObject+Pearl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+Pearl.h"; sourceTree = "<group>"; };
 		DA3B8454190FC89700246EEA /* MPFixable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPFixable.m; sourceTree = "<group>"; };
@@ -1805,9 +1825,13 @@
 				DA5B0B391F36467300B663F0 /* base64.h */,
 				DA1C7AB71F1A8F6E009A3551 /* cli */,
 				DA831A271A6E1146000AC234 /* mpw-algorithm_v0.c */,
+				DA351483233EF8E800BCF504 /* mpw-algorithm_v0.h */,
 				DA831A281A6E1146000AC234 /* mpw-algorithm_v1.c */,
+				DA351485233EF8E800BCF504 /* mpw-algorithm_v1.h */,
 				DA831A291A6E1146000AC234 /* mpw-algorithm_v2.c */,
+				DA351484233EF8E800BCF504 /* mpw-algorithm_v2.h */,
 				DA831A2A1A6E1146000AC234 /* mpw-algorithm_v3.c */,
+				DA351482233EF8E800BCF504 /* mpw-algorithm_v3.h */,
 				DA6773BB1A4746AF004F356A /* mpw-algorithm.c */,
 				DA6773BC1A4746AF004F356A /* mpw-algorithm.h */,
 				DA7471A01F2B71A9005F3468 /* mpw-marshal-util.c */,
@@ -2691,11 +2715,15 @@
 				DA1C7AAA1F1A8F24009A3551 /* mpw-marshal.c in Sources */,
 				DA1C7AAB1F1A8F24009A3551 /* mpw-types.c in Sources */,
 				DA5B0B3D1F36467900B663F0 /* base64.c in Sources */,
+				DA351493233EF94300BCF504 /* mpw-algorithm_v1.c in Sources */,
 				DAB07CA31F77261400CC6D43 /* aes.c in Sources */,
 				DAAF16661F5CA3240013B8AE /* mpw-cli-util.c in Sources */,
 				DA1C7AAC1F1A8F24009A3551 /* mpw-util.c in Sources */,
+				DA351495233EF94300BCF504 /* mpw-algorithm_v3.c in Sources */,
+				DA351492233EF94300BCF504 /* mpw-algorithm_v0.c in Sources */,
 				DA1C7AC31F1A8FBA009A3551 /* mpw-cli.c in Sources */,
 				DA7471A31F2B71AE005F3468 /* mpw-marshal-util.c in Sources */,
+				DA351494233EF94300BCF504 /* mpw-algorithm_v2.c in Sources */,
 				DA1C7AAD1F1A8F24009A3551 /* mpw-algorithm.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2705,10 +2733,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				DA5B0B3C1F36467900B663F0 /* base64.c in Sources */,
+				DA351499233EF94300BCF504 /* mpw-algorithm_v3.c in Sources */,
+				DA351497233EF94300BCF504 /* mpw-algorithm_v1.c in Sources */,
+				DA351496233EF94300BCF504 /* mpw-algorithm_v0.c in Sources */,
 				DA1C7ACA1F1A8FD8009A3551 /* mpw-types.c in Sources */,
 				DA1C7ACB1F1A8FD8009A3551 /* mpw-util.c in Sources */,
 				DAB07CA61F77262400CC6D43 /* aes.c in Sources */,
 				DA1C7AD71F1A8FE6009A3551 /* mpw-bench.c in Sources */,
+				DA351498233EF94300BCF504 /* mpw-algorithm_v2.c in Sources */,
 				DA1C7ACD1F1A8FD8009A3551 /* mpw-algorithm.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2722,6 +2754,7 @@
 				DA2686201EBFD7A40001E37E /* MPSiteEntity+CoreDataProperties.m in Sources */,
 				DA5E5CF71724A667003798D8 /* MPAlgorithmV0.m in Sources */,
 				DAA449D51EEC4B6B00E7BDD5 /* mpw-marshal.c in Sources */,
+				DA351491233EF93E00BCF504 /* mpw-algorithm_v3.c in Sources */,
 				DA26861E1EBFD7A40001E37E /* MPGeneratedSiteEntity+CoreDataProperties.m in Sources */,
 				DA5E5CF81724A667003798D8 /* MPAlgorithmV1.m in Sources */,
 				DA2686231EBFD7A40001E37E /* MPStoredSiteEntity+CoreDataClass.m in Sources */,
@@ -2733,14 +2766,17 @@
 				DA5180CE19FF307E00A587E9 /* MPAppDelegate_Store.m in Sources */,
 				DA5E5CFA1724A667003798D8 /* MPAppDelegate_Shared.m in Sources */,
 				DA5E5CFC1724A667003798D8 /* MPConfig.m in Sources */,
+				DA351490233EF93E00BCF504 /* mpw-algorithm_v2.c in Sources */,
 				DA5B0B3A1F36467300B663F0 /* base64.c in Sources */,
 				DA26861F1EBFD7A40001E37E /* MPSiteEntity+CoreDataClass.m in Sources */,
+				DA35148E233EF93E00BCF504 /* mpw-algorithm_v0.c in Sources */,
 				DA3B8456190FC89700246EEA /* MPFixable.m in Sources */,
 				DA5E5D001724A667003798D8 /* MPEntities.m in Sources */,
 				DA2686261EBFD7A40001E37E /* MPUserEntity+CoreDataProperties.m in Sources */,
 				DA5E5D011724A667003798D8 /* MPKey.m in Sources */,
 				DA5E5D031724A667003798D8 /* MPMacAppDelegate.m in Sources */,
 				DA5E5D041724A667003798D8 /* MPMacConfig.m in Sources */,
+				DA35148F233EF93E00BCF504 /* mpw-algorithm_v1.c in Sources */,
 				DA5E5D0C1724A667003798D8 /* main.m in Sources */,
 				93D39C5789EFA607CF788082 /* MPSiteModel.m in Sources */,
 				DA5180CA19FF2F9200A587E9 /* MPAlgorithmV2.m in Sources */,
@@ -2766,13 +2802,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA35149A233EF94500BCF504 /* mpw-algorithm_v0.c in Sources */,
 				DA1C7AD81F1A8FF4009A3551 /* mpw-tests-util.c in Sources */,
+				DA35149B233EF94500BCF504 /* mpw-algorithm_v1.c in Sources */,
 				DA6774451A474A3B004F356A /* mpw-types.c in Sources */,
 				DAB07CA51F77261C00CC6D43 /* aes.c in Sources */,
 				DA6774461A474A3B004F356A /* mpw-util.c in Sources */,
+				DA35149C233EF94500BCF504 /* mpw-algorithm_v2.c in Sources */,
 				DA1C7AD91F1A8FF4009A3551 /* mpw-tests.c in Sources */,
 				DA5B0B3B1F36467800B663F0 /* base64.c in Sources */,
 				DA6774431A474A3B004F356A /* mpw-algorithm.c in Sources */,
+				DA35149D233EF94500BCF504 /* mpw-algorithm_v3.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

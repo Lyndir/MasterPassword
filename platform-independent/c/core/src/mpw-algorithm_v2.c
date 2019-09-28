@@ -16,6 +16,7 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
+#include "mpw-algorithm_v2.h"
 #include "mpw-util.h"
 
 MP_LIBS_BEGIN
@@ -29,26 +30,14 @@ MP_LIBS_END
 #define MP_p                2U
 #define MP_otp_window       5 * 60 /* s */
 
-// Inherited functions.
-MPMasterKey mpw_master_key_v1(
-        const char *fullName, const char *masterPassword);
-const char *mpw_site_template_password_v1(
-        MPMasterKey masterKey, MPSiteKey siteKey, MPResultType resultType, const char *resultParam);
-const char *mpw_site_crypted_password_v1(
-        MPMasterKey masterKey, MPSiteKey siteKey, MPResultType resultType, const char *cipherText);
-const char *mpw_site_derived_password_v1(
-        MPMasterKey masterKey, MPSiteKey siteKey, MPResultType resultType, const char *resultParam);
-const char *mpw_site_state_v1(
-        MPMasterKey masterKey, MPSiteKey siteKey, MPResultType resultType, const char *state);
-
 // Algorithm version overrides.
-static MPMasterKey mpw_master_key_v2(
+MPMasterKey mpw_master_key_v2(
         const char *fullName, const char *masterPassword) {
 
     return mpw_master_key_v1( fullName, masterPassword );
 }
 
-static MPSiteKey mpw_site_key_v2(
+MPSiteKey mpw_site_key_v2(
         MPMasterKey masterKey, const char *siteName, MPCounterValue siteCounter,
         MPKeyPurpose keyPurpose, const char *keyContext) {
 
@@ -92,25 +81,25 @@ static MPSiteKey mpw_site_key_v2(
     return siteKey;
 }
 
-static const char *mpw_site_template_password_v2(
+const char *mpw_site_template_password_v2(
         MPMasterKey masterKey, MPSiteKey siteKey, MPResultType resultType, const char *resultParam) {
 
     return mpw_site_template_password_v1( masterKey, siteKey, resultType, resultParam );
 }
 
-static const char *mpw_site_crypted_password_v2(
+const char *mpw_site_crypted_password_v2(
         MPMasterKey masterKey, MPSiteKey siteKey, MPResultType resultType, const char *cipherText) {
 
     return mpw_site_crypted_password_v1( masterKey, siteKey, resultType, cipherText );
 }
 
-static const char *mpw_site_derived_password_v2(
+const char *mpw_site_derived_password_v2(
         MPMasterKey masterKey, MPSiteKey siteKey, MPResultType resultType, const char *resultParam) {
 
     return mpw_site_derived_password_v1( masterKey, siteKey, resultType, resultParam );
 }
 
-static const char *mpw_site_state_v2(
+const char *mpw_site_state_v2(
         MPMasterKey masterKey, MPSiteKey siteKey, MPResultType resultType, const char *state) {
 
     return mpw_site_state_v1( masterKey, siteKey, resultType, state );

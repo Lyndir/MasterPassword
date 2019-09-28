@@ -158,6 +158,10 @@
 		DA32D07C19D7D784004F3F0E /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = DA32D07919D7D784004F3F0E /* background.png */; };
 		DA3509FE15F101A500C14A8E /* PearlQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = DA3509FC15F101A500C14A8E /* PearlQueue.h */; };
 		DA3509FF15F101A500C14A8E /* PearlQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3509FD15F101A500C14A8E /* PearlQueue.m */; };
+		DA35148A233EF93400BCF504 /* mpw-algorithm_v0.c in Sources */ = {isa = PBXBuildFile; fileRef = 93D390A99850139D0FF0211E /* mpw-algorithm_v0.c */; };
+		DA35148B233EF93400BCF504 /* mpw-algorithm_v1.c in Sources */ = {isa = PBXBuildFile; fileRef = 93D396F918E6470DB846C17F /* mpw-algorithm_v1.c */; };
+		DA35148C233EF93400BCF504 /* mpw-algorithm_v2.c in Sources */ = {isa = PBXBuildFile; fileRef = 93D390A3B351FEF1B9EDAB56 /* mpw-algorithm_v2.c */; };
+		DA35148D233EF93400BCF504 /* mpw-algorithm_v3.c in Sources */ = {isa = PBXBuildFile; fileRef = 93D39D4E713564B7654341B0 /* mpw-algorithm_v3.c */; };
 		DA3BCFCB19BD09D5006B2681 /* SourceCodePro-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = DA3BCFCA19BD09D5006B2681 /* SourceCodePro-Regular.otf */; };
 		DA4522441902355C008F650A /* icon_book.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD370C1711E29500CF925C /* icon_book.png */; };
 		DA4522451902355C008F650A /* icon_book@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD370D1711E29500CF925C /* icon_book@2x.png */; };
@@ -732,6 +736,10 @@
 		DA3509FC15F101A500C14A8E /* PearlQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlQueue.h; sourceTree = "<group>"; };
 		DA3509FD15F101A500C14A8E /* PearlQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlQueue.m; sourceTree = "<group>"; };
 		DA3B844D190FC5DF00246EEA /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = ../../../External/iOS/Crashlytics.framework; sourceTree = "<group>"; };
+		DA351486233EF8FE00BCF504 /* mpw-algorithm_v2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-algorithm_v2.h"; sourceTree = "<group>"; };
+		DA351487233EF8FE00BCF504 /* mpw-algorithm_v1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-algorithm_v1.h"; sourceTree = "<group>"; };
+		DA351488233EF8FE00BCF504 /* mpw-algorithm_v3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-algorithm_v3.h"; sourceTree = "<group>"; };
+		DA351489233EF8FE00BCF504 /* mpw-algorithm_v0.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-algorithm_v0.h"; sourceTree = "<group>"; };
 		DA3BCFCA19BD09D5006B2681 /* SourceCodePro-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceCodePro-Regular.otf"; sourceTree = "<group>"; };
 		DA45711B1F572F1E00D54152 /* PearlCryptUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlCryptUtils.m; sourceTree = "<group>"; };
 		DA45711C1F572F1E00D54152 /* PearlCryptUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlCryptUtils.h; sourceTree = "<group>"; };
@@ -1770,9 +1778,13 @@
 				DA5B0B3E1F36469400B663F0 /* base64.c */,
 				DA5B0B3F1F36469400B663F0 /* base64.h */,
 				93D390A99850139D0FF0211E /* mpw-algorithm_v0.c */,
+				DA351489233EF8FE00BCF504 /* mpw-algorithm_v0.h */,
 				93D396F918E6470DB846C17F /* mpw-algorithm_v1.c */,
+				DA351487233EF8FE00BCF504 /* mpw-algorithm_v1.h */,
 				93D390A3B351FEF1B9EDAB56 /* mpw-algorithm_v2.c */,
+				DA351486233EF8FE00BCF504 /* mpw-algorithm_v2.h */,
 				93D39D4E713564B7654341B0 /* mpw-algorithm_v3.c */,
+				DA351488233EF8FE00BCF504 /* mpw-algorithm_v3.h */,
 				93D3969393A3A46BD27D7078 /* mpw-algorithm.c */,
 				93D3990D850D76A94C6B7A4D /* mpw-algorithm.h */,
 				DAB7AE981F3DDEE000C856B1 /* mpw-marshal-util.c */,
@@ -1949,11 +1961,11 @@
 			isa = PBXGroup;
 			children = (
 				93D39A2239FFFE6BEC83E191 /* core */,
-				DABD3B9F1711E2DB00CF925C /* Source */,
-				DACA23B41705DF7D002C6C22 /* Resources */,
 				DACA22121705DDC5002C6C22 /* External */,
 				DA5BFA47147E415C00F98B1E /* Frameworks */,
 				DA5BFA45147E415C00F98B1E /* Products */,
+				DACA23B41705DF7D002C6C22 /* Resources */,
+				DABD3B9F1711E2DB00CF925C /* Source */,
 			);
 			sourceTree = "<group>";
 		};
@@ -4008,6 +4020,7 @@
 				93D396D8B67DA6522CDBA142 /* MPCoachmarkViewController.m in Sources */,
 				DAADBFE01A68763B00F7A756 /* mpw-algorithm.c in Sources */,
 				DA0CC54E1EB6AD0E009A8ED9 /* MasterPassword.xcdatamodeld in Sources */,
+				DA35148D233EF93400BCF504 /* mpw-algorithm_v3.c in Sources */,
 				DAB07C9D1F7725C500CC6D43 /* aes.c in Sources */,
 				93D39EAA4D064193074D3021 /* MPFixable.m in Sources */,
 				93D394982CBD25D46692DD7C /* MPWebViewController.m in Sources */,
@@ -4021,6 +4034,9 @@
 				93D395B715D15F2B56F2A2EE /* mpw-types.c in Sources */,
 				93D39943D01E70DAC3B0DF76 /* mpw-util.c in Sources */,
 				DA5B0B401F36469400B663F0 /* base64.c in Sources */,
+				DA35148B233EF93400BCF504 /* mpw-algorithm_v1.c in Sources */,
+				DA35148A233EF93400BCF504 /* mpw-algorithm_v0.c in Sources */,
+				DA35148C233EF93400BCF504 /* mpw-algorithm_v2.c in Sources */,
 				93D39577FD8BB0945DB2F0A3 /* MPAlgorithmV3.m in Sources */,
 				93D39E5F7F6D7F5C0FAD090F /* MPTypes.m in Sources */,
 				DA0CC58C1EB6B030009A8ED9 /* MPGeneratedSiteEntity+CoreDataClass.m in Sources */,
