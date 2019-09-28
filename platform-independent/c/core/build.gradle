@@ -27,57 +27,55 @@ library {
     linkage.set( [Linkage.SHARED] )
     source.from files( 'src' )
 
-    // JDK for JNI support.
+    // JNI support requires JDK.
     privateHeaders.from files( new File( Jvm.current().javaHome, 'include' ) ) { first().eachDir { from it } }
 
-    // Cross-compile for these target platforms.
-    // TODO: Cross-compiling, blocked by: https://github.com/gradle/gradle-native/issues/1031
+    // Cross-compile for these native host platforms.
+    // TODO: blocked by: https://github.com/gradle/gradle-native/issues/1031
     targetMachines.set( [
             machines.linux.x86, machines.linux.x86_64,
             machines.windows.x86, machines.windows.x86_64,
             machines.macOS.x86_64
     ] )
 
-    tasks.withType(CppCompile).configureEach {
-        // Define a preprocessor macro for every binary
-        macros.put("MPW_SODIUM", "1")
-        macros.put("MPW_LOG", "mpw_log_app")
-
-        // Reconfigure the toolchain from C++ to C.
-        compilerArgs.addAll toolChain.map { toolChain ->
-            if (toolChain in GccCompatibleToolChain) {
-                return ['-x', 'c', '-O3', '-Werror']
-            } else if (toolChain in VisualCpp) {
-                return ['/TC', '/MT', '/Ox', '/DSODIUM_STATIC', '/DSODIUM_EXPORT=']
-            }
-            return []
-        }
-    }
-
     binaries.configureEach( CppBinary ) {
-        dependencies {
-            def arch = targetMachine.getArchitecture().getName().replace('-', '_')
-            def system = targetMachine.getOperatingSystemFamily().getName()
+        def compile = compileTask.get(), link = linkTask.get()
+        def platform = targetMachine.getOperatingSystemFamily().getName()
+        def arch = targetMachine.getArchitecture().getName().replace('-', '_')
 
+        compile.macros.put("MPW_SODIUM", "1")
+        compile.macros.put("MPW_LOG", "mpw_log_app")
+
+        dependencies {
             // libsodium
-            archive.dependsOn project.tasks.maybeCreate( "build_libsodium-${system}", Exec ).configure {
-                commandLine 'bash', "$rootDir/lib/bin/build_libsodium-${system}"
-                privateHeaders.from "$rootDir/lib/libsodium/build-${system}~/out/include"
-                implementation fileTree( "$rootDir/lib/libsodium/build-${system}~/out/lib/${arch}" )
+            compile.dependsOn tasks.maybeCreate( "build_libsodium-${platform}", Exec ).configure {
+                commandLine 'bash', "$rootDir/lib/bin/build_libsodium-${platform}"
+                privateHeaders.from "$rootDir/lib/libsodium/build-${platform}~/out/include"
+                implementation fileTree( "$rootDir/lib/libsodium/build-${platform}~/out/lib/${arch}" )
             }
-            clean.dependsOn project.tasks.maybeCreate( "clean_libsodium-${system}", Exec ).configure {
-                commandLine 'bash', "$rootDir/lib/bin/build_libsodium-${system}", 'clean'
+            clean.dependsOn tasks.maybeCreate( "clean_libsodium-${platform}", Exec ).configure {
+                commandLine 'bash', "$rootDir/lib/bin/build_libsodium-${platform}", 'clean'
             }
 
             // libjson-c
-            archive.dependsOn project.tasks.maybeCreate( "build_libjson-c-${system}", Exec ).configure {
-                commandLine 'bash', "$rootDir/lib/bin/build_libjson-c-${system}"
-                privateHeaders.from "$rootDir/lib/libjson-c/build-${system}~/out/include"
-                implementation fileTree( "$rootDir/lib/libjson-c/build-${system}~/out/lib/${arch}" )
+            compile.dependsOn tasks.maybeCreate( "build_libjson-c-${platform}", Exec ).configure {
+                commandLine 'bash', "$rootDir/lib/bin/build_libjson-c-${platform}"
+                privateHeaders.from "$rootDir/lib/libjson-c/build-${platform}~/out/include"
+                implementation fileTree( "$rootDir/lib/libjson-c/build-${platform}~/out/lib/${arch}" )
             }
-            clean.dependsOn project.tasks.maybeCreate( "clean_libjson-c-${system}", Exec ).configure {
-                commandLine 'bash', "$rootDir/lib/bin/build_libjson-c-${system}", 'clean'
+            clean.dependsOn tasks.maybeCreate( "clean_libjson-c-${platform}", Exec ).configure {
+                commandLine 'bash', "$rootDir/lib/bin/build_libjson-c-${platform}", 'clean'
             }
+        }
+
+        // Reconfigure the toolchain from C++ to C.
+        compile.source.from fileTree( "src" )
+        if (toolChain in GccCompatibleToolChain) {
+            compile.compilerArgs = ['-x', 'c', '-std=c11', '-O3', '-Werror', '-Wall']
+            link.linkerArgs = ['-lc', '-nodefaultlibs', '-flto']
+        } else if (toolChain in VisualCpp) {
+            // TODO: Should this be shared instead of static?
+            compile.compilerArgs = ['/TC', '/MT', '/Ox', '/DSODIUM_STATIC', '/DSODIUM_EXPORT=']
         }
     }
 }
