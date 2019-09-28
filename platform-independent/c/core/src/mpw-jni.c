@@ -7,27 +7,30 @@
 
 // TODO: We may need to zero the jbytes safely.
 
+static JavaVM* _vm;
 static jobject logger;
-static JNIEnv *env;
-static int counter;
 
 void mpw_log_app(LogLevel level, const char *format, ...) {
+    JNIEnv *env;
+    if ((*_vm)->GetEnv( _vm, (void **)&env, JNI_VERSION_1_6 ) != JNI_OK)
+        return;
+
     va_list args;
     va_start( args, format );
 
     if (logger && (*env)->PushLocalFrame( env, 16 ) == OK) {
         jmethodID method = NULL;
-        jclass class = (*env)->GetObjectClass( env, logger );
+        jclass Logger = (*env)->GetObjectClass( env, logger );
         if (level >= LogLevelTrace)
-            method = (*env)->GetMethodID( env, class, "trace", "(Ljava/lang/String;)V" );
+            method = (*env)->GetMethodID( env, Logger, "trace", "(Ljava/lang/String;)V" );
         else if (level == LogLevelDebug)
-            method = (*env)->GetMethodID( env, class, "debug", "(Ljava/lang/String;)V" );
+            method = (*env)->GetMethodID( env, Logger, "debug", "(Ljava/lang/String;)V" );
         else if (level == LogLevelInfo)
-            method = (*env)->GetMethodID( env, class, "info", "(Ljava/lang/String;)V" );
+            method = (*env)->GetMethodID( env, Logger, "info", "(Ljava/lang/String;)V" );
         else if (level == LogLevelWarning)
-            method = (*env)->GetMethodID( env, class, "warn", "(Ljava/lang/String;)V" );
+            method = (*env)->GetMethodID( env, Logger, "warn", "(Ljava/lang/String;)V" );
         else if (level <= LogLevelError)
-            method = (*env)->GetMethodID( env, class, "error", "(Ljava/lang/String;)V" );
+            method = (*env)->GetMethodID( env, Logger, "error", "(Ljava/lang/String;)V" );
 
         va_list _args;
         va_copy( _args, args );
@@ -35,9 +38,10 @@ void mpw_log_app(LogLevel level, const char *format, ...) {
         va_end( _args );
 
         if (length > 0) {
-            char *message = malloc( length + 1 );
+            size_t size = (size_t) (length + 1);
+            char *message = malloc( size );
             va_copy( _args, args );
-            if (message && (length = vsnprintf( message, length + 1, format, _args )) > 0)
+            if (message && (length = vsnprintf( message, size, format, _args )) > 0)
                 (*env)->CallVoidMethod( env, logger, method, (*env)->NewStringUTF( env, message ) );
             va_end( _args );
             mpw_free( &message, (size_t)max( 0, length ) );
@@ -53,27 +57,28 @@ void mpw_log_app(LogLevel level, const char *format, ...) {
 }
 
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved) {
-    if ((*vm)->GetEnv( vm, (void **)&env, JNI_VERSION_1_6 ) != JNI_OK)
+    JNIEnv *env;
+    if ((*vm)->GetEnv( _vm = vm, (void **)&env, JNI_VERSION_1_6 ) != JNI_OK)
         return -1;
 
-    jclass class = (*env)->FindClass( env, "org/slf4j/LoggerFactory" );
-    jmethodID method = (*env)->GetStaticMethodID( env, class, "getLogger", "(Ljava/lang/String;)Lorg/slf4j/Logger;" );
+    jclass LoggerFactory = (*env)->FindClass( env, "org/slf4j/LoggerFactory" );
+    jmethodID method = (*env)->GetStaticMethodID( env, LoggerFactory, "getLogger", "(Ljava/lang/String;)Lorg/slf4j/Logger;" );
     jstring name = (*env)->NewStringUTF( env, "com.lyndir.masterpassword.algorithm" );
-    if (class && method && name)
-        logger = (*env)->NewGlobalRef( env, (*env)->CallStaticObjectMethod( env, class, method, name ) );
+    if (LoggerFactory && method && name)
+        logger = (*env)->NewGlobalRef( env, (*env)->CallStaticObjectMethod( env, LoggerFactory, method, name ) );
     else
         wrn( "Couldn't initialize JNI logger." );
 
-    class = (*env)->GetObjectClass( env, logger );
-    if ((*env)->CallBooleanMethod( env, logger, (*env)->GetMethodID( env, class, "isTraceEnabled", "()Z" ) ))
+    jclass Logger = (*env)->GetObjectClass( env, logger );
+    if ((*env)->CallBooleanMethod( env, logger, (*env)->GetMethodID( env, Logger, "isTraceEnabled", "()Z" ) ))
         mpw_verbosity = LogLevelTrace;
-    else if ((*env)->CallBooleanMethod( env, logger, (*env)->GetMethodID( env, class, "isDebugEnabled", "()Z" ) ))
+    else if ((*env)->CallBooleanMethod( env, logger, (*env)->GetMethodID( env, Logger, "isDebugEnabled", "()Z" ) ))
         mpw_verbosity = LogLevelDebug;
-    else if ((*env)->CallBooleanMethod( env, logger, (*env)->GetMethodID( env, class, "isInfoEnabled", "()Z" ) ))
+    else if ((*env)->CallBooleanMethod( env, logger, (*env)->GetMethodID( env, Logger, "isInfoEnabled", "()Z" ) ))
         mpw_verbosity = LogLevelInfo;
-    else if ((*env)->CallBooleanMethod( env, logger, (*env)->GetMethodID( env, class, "isWarnEnabled", "()Z" ) ))
+    else if ((*env)->CallBooleanMethod( env, logger, (*env)->GetMethodID( env, Logger, "isWarnEnabled", "()Z" ) ))
         mpw_verbosity = LogLevelWarning;
-    else if ((*env)->CallBooleanMethod( env, logger, (*env)->GetMethodID( env, class, "isErrorEnabled", "()Z" ) ))
+    else if ((*env)->CallBooleanMethod( env, logger, (*env)->GetMethodID( env, Logger, "isErrorEnabled", "()Z" ) ))
         mpw_verbosity = LogLevelError;
     else
         mpw_verbosity = LogLevelFatal;
