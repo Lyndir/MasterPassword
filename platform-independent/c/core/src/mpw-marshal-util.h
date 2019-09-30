@@ -20,6 +20,7 @@
 #define _MPW_MARSHAL_UTIL_H
 
 #include "mpw-algorithm.h"
+#include "mpw-marshal.h"
 
 MP_LIBS_BEGIN
 #include <time.h>
@@ -39,6 +40,17 @@ char *mpw_get_token(
  * @return ERR if the string could not be parsed. */
 time_t mpw_timegm(
         const char *time);
+
+
+/// mpw.
+
+/** Calculate a master key if the target master key algorithm is different from the given master key algorithm.
+ * @param masterKey A buffer (allocated, MPMasterKeySize).
+ * @return false if an error occurred during the derivation of the master key. */
+bool mpw_update_master_key(
+        MPMasterKey *masterKey, MPAlgorithmVersion *masterKeyAlgorithm, const MPAlgorithmVersion targetKeyAlgorithm,
+        const char *fullName, const char *masterPassword);
+
 
 /// JSON parsing.
 
@@ -64,15 +76,11 @@ int64_t mpw_get_json_int(
  * @return The boolean value or defaultValue if one of the path's object keys was not found in the source object's tree. */
 bool mpw_get_json_boolean(
         json_object *obj, const char *key, const bool defaultValue);
+/** Translate a JSON object tree into a source-agnostic data object.
+ * @param data A Master Password data object or NULL.
+ * @param obj A JSON object tree or NULL. */
+void mpw_set_json_data(
+        MPMarshalledData *data, json_object *obj);
 #endif
-
-/// mpw.
-
-/** Calculate a master key if the target master key algorithm is different from the given master key algorithm.
- * @param masterKey A buffer (allocated, MPMasterKeySize).
- * @return false if an error occurred during the derivation of the master key. */
-bool mpw_update_master_key(
-        MPMasterKey *masterKey, MPAlgorithmVersion *masterKeyAlgorithm, const MPAlgorithmVersion targetKeyAlgorithm,
-        const char *fullName, const char *masterPassword);
 
 #endif // _MPW_MARSHAL_UTIL_H

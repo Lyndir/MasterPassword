@@ -565,7 +565,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
            saveInContext:(NSManagedObjectContext *)context {
 
     // Read metadata for the import file.
-    MPMarshalInfo *info = mpw_marshal_read_info( importData.UTF8String );
+    MPMarshalledInfo *info = mpw_marshal_read_info( importData.UTF8String );
     if (info->format == MPMarshalFormatNone)
         return MPError( ([NSError errorWithDomain:MPErrorDomain code:MPErrorMarshalCode userInfo:@{
                 @"type"                  : @(MPMarshalErrorFormat),

@@ -21,6 +21,7 @@
 
 MP_LIBS_BEGIN
 #include <string.h>
+#include <math.h>
 MP_LIBS_END
 
 char *mpw_get_token(const char **in, const char *eol, const char *delim) {
@@ -55,6 +56,22 @@ time_t mpw_timegm(const char *time) {
     }
 
     return ERR;
+}
+
+bool mpw_update_master_key(MPMasterKey *masterKey, MPAlgorithmVersion *masterKeyAlgorithm, const MPAlgorithmVersion targetKeyAlgorithm,
+        const char *fullName, const char *masterPassword) {
+
+    if (masterKey && (!*masterKey || *masterKeyAlgorithm != targetKeyAlgorithm)) {
+        mpw_free( masterKey, MPMasterKeySize );
+        *masterKeyAlgorithm = targetKeyAlgorithm;
+        *masterKey = mpw_master_key( fullName, masterPassword, *masterKeyAlgorithm );
+        if (!*masterKey) {
+            err( "Couldn't derive master key for user %s, algorithm %d.", fullName, *masterKeyAlgorithm );
+            return false;
+        }
+    }
+
+    return true;
 }
 
 #if MPW_JSON
@@ -105,20 +122,110 @@ bool mpw_get_json_boolean(
     return json_object_get_boolean( json_value ) == true;
 }
 
-#endif
+void mpw_set_json_data(
+        MPMarshalledData *data, json_object *obj) {
 
-bool mpw_update_master_key(MPMasterKey *masterKey, MPAlgorithmVersion *masterKeyAlgorithm, const MPAlgorithmVersion targetKeyAlgorithm,
-        const char *fullName, const char *masterPassword) {
+    if (!data)
+        return;
 
-    if (masterKey && (!*masterKey || *masterKeyAlgorithm != targetKeyAlgorithm)) {
-        mpw_free( masterKey, MPMasterKeySize );
-        *masterKeyAlgorithm = targetKeyAlgorithm;
-        *masterKey = mpw_master_key( fullName, masterPassword, *masterKeyAlgorithm );
-        if (!*masterKey) {
-            err( "Couldn't derive master key for user %s, algorithm %d.", fullName, *masterKeyAlgorithm );
-            return false;
+    json_type type = json_object_get_type( obj );
+    data->is_null = type == json_type_null;
+    data->is_bool = type == json_type_boolean;
+
+    if (type == json_type_boolean)
+        data->num_value = json_object_get_boolean( obj );
+    else if (type == json_type_double)
+        data->num_value = json_object_get_double( obj );
+    else if (type == json_type_int)
+        data->num_value = json_object_get_int64( obj );
+    else
+        data->num_value = NAN;
+
+    const char *str = NULL;
+    if (type == json_type_string || !isnan( data->num_value ))
+        str = json_object_get_string( obj );
+    if (!str || !data->str_value || strcmp( str, data->str_value ) != OK) {
+        mpw_free_string( &data->str_value );
+        data->str_value = mpw_strdup( str );
+    }
+
+    // Clean up children
+    MPMarshalledData *newChildren = NULL;
+    size_t newChildrenCount = 0;
+    for (size_t c = 0; c < data->children_count; ++c) {
+        MPMarshalledData *child = &data->children[c];
+        if ((type != json_type_object && type != json_type_array) || (child->obj_key && type != json_type_object)) {
+            // Not a valid child in this object, remove it.
+            mpw_marshal_data_set_null( child, NULL );
+            mpw_free_string( &child->obj_key );
+            if (!newChildren)
+                newChildren = mpw_memdup( data->children, sizeof( MPMarshalledData ) * newChildrenCount );
+        }
+        else {
+            // Valid child in this object, keep it.
+            ++newChildrenCount;
+            if (newChildren) {
+                if (!mpw_realloc( &newChildren, NULL, sizeof( MPMarshalledData ) * newChildrenCount )) {
+                    --newChildrenCount;
+                    continue;
+                }
+                child->arr_index = newChildrenCount - 1;
+                newChildren[child->arr_index] = *child;
+            }
+        }
+    }
+    if (newChildren) {
+        mpw_free( &data->children, sizeof( MPMarshalledData ) * data->children_count );
+        data->children = newChildren;
+        data->children_count = newChildrenCount;
+    }
+
+    // Object
+    if (type == json_type_object) {
+        json_object_iter entry;
+        json_object_object_foreachC( obj, entry ) {
+            MPMarshalledData *child = NULL;
+
+            // Find existing child.
+            for (size_t c = 0; c < data->children_count; ++c)
+                if (data->children[c].obj_key == entry.key ||
+                    (data->children[c].obj_key && entry.key && strcmp( data->children[c].obj_key, entry.key ) == OK)) {
+                    child = &data->children[c];
+                    break;
+                }
+
+            // Create new child.
+            if (!child) {
+                if (!mpw_realloc( &data->children, NULL, sizeof( MPMarshalledData ) * ++data->children_count )) {
+                    --data->children_count;
+                    continue;
+                }
+                *(child = &data->children[data->children_count - 1]) = (MPMarshalledData){ .obj_key = mpw_strdup( entry.key ) };
+            }
+
+            mpw_set_json_data( child, entry.val );
         }
     }
 
-    return true;
+    // Array
+    if (type == json_type_array) {
+        for (size_t index = 0; index < json_object_array_length( obj ); ++index) {
+            MPMarshalledData *child = NULL;
+
+            if (index < data->children_count)
+                child = &data->children[index];
+
+            else {
+                if (!mpw_realloc( &data->children, NULL, sizeof( MPMarshalledData ) * ++data->children_count )) {
+                    --data->children_count;
+                    continue;
+                }
+                *(child = &data->children[data->children_count - 1]) = (MPMarshalledData){ .arr_index = index };
+            }
+
+            mpw_set_json_data( child, json_object_array_get_idx( obj, index ) );
+        }
+    }
 }
+
+#endif

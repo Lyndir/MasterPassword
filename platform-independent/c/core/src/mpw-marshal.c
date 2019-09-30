@@ -106,7 +106,7 @@ MPMarshalledQuestion *mpw_marshal_question(
 }
 
 MPMarshalledFile *mpw_marshal_file(
-        MPMarshalledFile *file, MPMarshalledUser *user, MPMarshalledData *data, MPMarshalInfo *info) {
+        MPMarshalledFile *file, MPMarshalledUser *user, MPMarshalledData *data, MPMarshalledInfo *info) {
 
     if (!file) {
         if (!(file = malloc( sizeof( MPMarshalledFile ) )))
@@ -132,13 +132,13 @@ MPMarshalledFile *mpw_marshal_file(
 }
 
 void mpw_marshal_info_free(
-        MPMarshalInfo **info) {
+        MPMarshalledInfo **info) {
 
     if (!info || !*info)
         return;
 
     mpw_free_strings( &(*info)->fullName, &(*info)->keyID, NULL );
-    mpw_free( info, sizeof( MPMarshalInfo ) );
+    mpw_free( info, sizeof( MPMarshalledInfo ) );
 }
 
 void mpw_marshal_user_free(
@@ -171,7 +171,7 @@ void mpw_marshal_data_free(
         return;
 
     mpw_marshal_data_set_null( *data, NULL );
-    mpw_free_string( &(*data)->key );
+    mpw_free_string( &(*data)->obj_key );
     mpw_free( data, sizeof( MPMarshalledData ) );
 }
 
@@ -204,7 +204,7 @@ MPMarshalledData *mpw_marshal_data_vget(
         child = NULL;
 
         for (size_t c = 0; c < parent->children_count; ++c) {
-            const char *key = parent->children[c].key;
+            const char *key = parent->children[c].obj_key;
             if (key && strcmp( node, key ) == OK) {
                 child = &parent->children[c];
                 break;
@@ -216,7 +216,7 @@ MPMarshalledData *mpw_marshal_data_vget(
                 --parent->children_count;
                 break;
             }
-            *(child = &parent->children[parent->children_count - 1]) = (MPMarshalledData){ .key = mpw_strdup( node ) };
+            *(child = &parent->children[parent->children_count - 1]) = (MPMarshalledData){ .obj_key = mpw_strdup( node ) };
             mpw_marshal_data_set_null( child, NULL );
             child->is_null = false;
         }
@@ -244,7 +244,7 @@ const MPMarshalledData *mpw_marshal_data_vfind(
         child = NULL;
 
         for (size_t c = 0; c < parent->children_count; ++c) {
-            const char *key = parent->children[c].key;
+            const char *key = parent->children[c].obj_key;
             if (key && strcmp( node, key ) == OK) {
                 child = &parent->children[c];
                 break;
@@ -297,7 +297,7 @@ bool mpw_marshal_data_vset_null(
     mpw_free_string( &child->str_value );
     for (unsigned int c = 0; c < child->children_count; ++c) {
         mpw_marshal_data_set_null( &child->children[c], NULL );
-        mpw_free_string( &child->children[c].key );
+        mpw_free_string( &child->children[c].obj_key );
     }
     mpw_free( &child->children, sizeof( MPMarshalledData ) * child->children_count );
     child->children_count = 0;
@@ -447,7 +447,7 @@ bool mpw_marshal_data_set_str(
 }
 
 static const char *mpw_marshal_write_flat(
-        const MPMarshalledFile *file, MPMarshalError *error) {
+        MPMarshalledFile *file, MPMarshalError *error) {
 
     *error = (MPMarshalError){ MPMarshalErrorInternal, "Unexpected internal error." };
     MPMarshalledUser *user = file->user;
@@ -557,14 +557,14 @@ static json_object *mpw_get_json_data(
     for (size_t c = 0; c < data->children_count; ++c) {
         MPMarshalledData *child = &data->children[c];
         if (!obj) {
-            if (child->key)
+            if (child->obj_key)
                 obj = json_object_new_object();
             else
                 obj = json_object_new_array();
         }
 
-        if (child->key)
-            json_object_object_add( obj, child->key, mpw_get_json_data( child ) );
+        if (child->obj_key)
+            json_object_object_add( obj, child->obj_key, mpw_get_json_data( child ) );
         else
             json_object_array_add( obj, mpw_get_json_data( child ) );
     }
@@ -573,7 +573,7 @@ static json_object *mpw_get_json_data(
 }
 
 static const char *mpw_marshal_write_json(
-        const MPMarshalledFile *file, MPMarshalError *error) {
+        MPMarshalledFile *file, MPMarshalError *error) {
 
     *error = (MPMarshalError){ MPMarshalErrorInternal, "Unexpected internal error." };
     MPMarshalledUser *user = file->user;
@@ -694,6 +694,9 @@ static const char *mpw_marshal_write_json(
         mpw_free_strings( &resultState, &loginState, NULL );
     }
 
+    if (!file->data)
+        file->data = mpw_marshal_data_new();
+    mpw_set_json_data( file->data, json_file );
     const char *out = mpw_strdup( json_object_to_json_string_ext( json_file,
             JSON_C_TO_STRING_PRETTY | JSON_C_TO_STRING_SPACED | JSON_C_TO_STRING_NOSLASHESCAPE ) );
     json_object_put( json_file );
@@ -716,7 +719,7 @@ const char *mpw_marshal_write(
         *error = (MPMarshalError){ .type = MPMarshalErrorMissing, "No file to marshal." };
         return NULL;
     }
-    if (file->data && file->data->key) {
+    if (file->data && file->data->obj_key) {
         *error = (MPMarshalError){ .type = MPMarshalErrorInternal, "Illegal file data." };
         ftl( "Unexpected non-root file data." );
         return NULL;
@@ -745,7 +748,7 @@ const char *mpw_marshal_write(
 }
 
 static void mpw_marshal_read_flat_info(
-        const char *in, MPMarshalInfo *info) {
+        const char *in, MPMarshalledInfo *info) {
 
     info->algorithm = MPAlgorithmVersionCurrent;
 
@@ -1082,6 +1085,7 @@ static MPMarshalledFile *mpw_marshal_read_flat(
     mpw_free_strings( &fullName, &keyID, NULL );
     mpw_free( &masterKey, MPMasterKeySize );
 
+    // TODO: serialize data structure for this file.
     MPMarshalledFile *file = mpw_marshal_file( NULL, user, NULL, NULL );
     if (!file) {
         *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't allocate a new marshal file." };
@@ -1095,114 +1099,8 @@ static MPMarshalledFile *mpw_marshal_read_flat(
 
 #if MPW_JSON
 
-static void mpw_set_json_data(
-        MPMarshalledData *data, json_object *obj) {
-
-    if (!data)
-        return;
-
-    json_type type = json_object_get_type( obj );
-    data->is_null = type == json_type_null;
-    data->is_bool = type == json_type_boolean;
-
-    if (type == json_type_boolean)
-        data->num_value = json_object_get_boolean( obj );
-    else if (type == json_type_double)
-        data->num_value = json_object_get_double( obj );
-    else if (type == json_type_int)
-        data->num_value = json_object_get_int64( obj );
-    else
-        data->num_value = NAN;
-
-    const char *str = NULL;
-    if (type == json_type_string || !isnan( data->num_value ))
-        str = json_object_get_string( obj );
-    if (!str || !data->str_value || strcmp( str, data->str_value ) != OK) {
-        mpw_free_string( &data->str_value );
-        data->str_value = mpw_strdup( str );
-    }
-
-    // Clean up children
-    MPMarshalledData *newChildren = NULL;
-    size_t newChildrenCount = 0;
-    for (size_t c = 0; c < data->children_count; ++c) {
-        MPMarshalledData *child = &data->children[c];
-        if ((type != json_type_object && type != json_type_array) || (child->key && type != json_type_object)) {
-            // Not a valid child in this object, remove it.
-            mpw_marshal_data_set_null( child, NULL );
-            mpw_free_string( &child->key );
-            if (!newChildren)
-                newChildren = mpw_memdup( data->children, sizeof( MPMarshalledData ) * newChildrenCount );
-        }
-        else {
-            // Valid child in this object, keep it.
-            ++newChildrenCount;
-            if (newChildren) {
-                if (!mpw_realloc( &newChildren, NULL, sizeof( MPMarshalledData ) * newChildrenCount )) {
-                    --newChildrenCount;
-                    continue;
-                }
-                child->index = newChildrenCount - 1;
-                newChildren[child->index] = *child;
-            }
-        }
-    }
-    if (newChildren) {
-        mpw_free( &data->children, sizeof( MPMarshalledData ) * data->children_count );
-        data->children = newChildren;
-        data->children_count = newChildrenCount;
-    }
-
-    // Object
-    if (type == json_type_object) {
-        json_object_iter entry;
-        json_object_object_foreachC( obj, entry ) {
-            MPMarshalledData *child = NULL;
-
-            // Find existing child.
-            for (size_t c = 0; c < data->children_count; ++c)
-                if (data->children[c].key == entry.key ||
-                    (data->children[c].key && entry.key && strcmp( data->children[c].key, entry.key ) == OK)) {
-                    child = &data->children[c];
-                    break;
-                }
-
-            // Create new child.
-            if (!child) {
-                if (!mpw_realloc( &data->children, NULL, sizeof( MPMarshalledData ) * ++data->children_count )) {
-                    --data->children_count;
-                    continue;
-                }
-                *(child = &data->children[data->children_count - 1]) = (MPMarshalledData){ .key = mpw_strdup( entry.key ) };
-            }
-
-            mpw_set_json_data( child, entry.val );
-        }
-    }
-
-    // Array
-    if (type == json_type_array) {
-        for (size_t index = 0; index < json_object_array_length( obj ); ++index) {
-            MPMarshalledData *child = NULL;
-
-            if (index < data->children_count)
-                child = &data->children[index];
-
-            else {
-                if (!mpw_realloc( &data->children, NULL, sizeof( MPMarshalledData ) * ++data->children_count )) {
-                    --data->children_count;
-                    continue;
-                }
-                *(child = &data->children[data->children_count - 1]) = (MPMarshalledData){ .index = index };
-            }
-
-            mpw_set_json_data( child, json_object_array_get_idx( obj, index ) );
-        }
-    }
-}
-
 static void mpw_marshal_read_json_info(
-        const char *in, MPMarshalInfo *info) {
+        const char *in, MPMarshalledInfo *info) {
 
     // Parse JSON.
     enum json_tokener_error json_error = json_tokener_success;
@@ -1457,14 +1355,14 @@ static MPMarshalledFile *mpw_marshal_read_json(
 
 #endif
 
-MPMarshalInfo *mpw_marshal_read_info(
+MPMarshalledInfo *mpw_marshal_read_info(
         const char *in) {
 
-    MPMarshalInfo *info = malloc( sizeof( MPMarshalInfo ) );
+    MPMarshalledInfo *info = malloc( sizeof( MPMarshalledInfo ) );
     if (!info)
         return NULL;
 
-    *info = (MPMarshalInfo){ .format = MPMarshalFormatNone, .identicon = MPIdenticonUnset };
+    *info = (MPMarshalledInfo){ .format = MPMarshalFormatNone, .identicon = MPIdenticonUnset };
     if (in && strlen( in )) {
         if (in[0] == '#') {
             info->format = MPMarshalFormatFlat;
@@ -1489,7 +1387,7 @@ MPMarshalInfo *mpw_marshal_read_info(
 MPMarshalledFile *mpw_marshal_read(
         const char *in, const MPMasterKeyProvider masterKeyProvider, MPMarshalError *error) {
 
-    MPMarshalInfo *info = mpw_marshal_read_info( in );
+    MPMarshalledInfo *info = mpw_marshal_read_info( in );
     if (!info)
         return NULL;
 

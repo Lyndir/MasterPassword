@@ -489,7 +489,7 @@ void cli_user(Arguments *args, Operation *operation) {
         mpw_free_string( &operation->sitesPath );
         mpw_marshal_file_free( &operation->file );
         operation->file = mpw_marshal_file( NULL, mpw_marshal_user(
-                operation->fullName, cli_masterKeyProvider_op( operation ), MPAlgorithmVersionCurrent ), NULL, NULL );
+                operation->fullName, cli_masterKeyProvider_op( operation ), MPAlgorithmVersionCurrent ), NULL );
     }
 
     else {
