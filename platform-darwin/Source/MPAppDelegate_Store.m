@@ -565,7 +565,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
            saveInContext:(NSManagedObjectContext *)context {
 
     // Read metadata for the import file.
-    MPMarshalledInfo *info = mpw_marshal_read_info( importData.UTF8String );
+    MPMarshalledInfo *info = mpw_marshal_read( importData.UTF8String );
     if (info->format == MPMarshalFormatNone)
         return MPError( ([NSError errorWithDomain:MPErrorDomain code:MPErrorMarshalCode userInfo:@{
                 @"type"                  : @(MPMarshalErrorFormat),
@@ -589,7 +589,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
 
     // Parse import data.
     MPMarshalError importError = { .type = MPMarshalSuccess };
-    MPMarshalledUser *importUser = mpw_marshal_read( importData.UTF8String, info->format, importMasterPassword.UTF8String, &importError );
+    MPMarshalledUser *importUser = mpw_marshal_auth( importData.UTF8String, info->format, importMasterPassword.UTF8String, &importError );
     mpw_marshal_info_free( &info );
 
     @try {

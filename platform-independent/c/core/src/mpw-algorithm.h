@@ -68,7 +68,7 @@ const char *mpw_site_state(
 /** @return An identicon (static) that represents the user's identity. */
 const MPIdenticon mpw_identicon(
         const char *fullName, const char *masterPassword);
-/** @return An encoded representation (shared) of the given identicon or an empty string if the identicon is unset. */
+/** @return An encoded representation (shared) of the given identicon or NULL if the identicon is unset. */
 const char *mpw_identicon_encode(
         const MPIdenticon identicon);
 /** @return An identicon (static) decoded from the given encoded identicon representation or an identicon with empty fields if the identicon could not be parsed. */

@@ -28,6 +28,9 @@ MP_LIBS_END
 
 //// Types.
 
+#define mpw_default( __default, __value ) ({ __typeof__ (__default) _v = (__typeof__ (__default))(__value); _v = _v? _v: __default; })
+#define mpw_default_n( __default, __num ) ({ __typeof__ (__default) _n = (__typeof__ (__default))(__num); _n = !isnan( _n )? _n: __default; })
+
 typedef mpw_enum( unsigned int, MPMarshalFormat ) {
     /** Do not marshal. */
             MPMarshalFormatNone,
@@ -122,12 +125,12 @@ typedef struct MPMarshalledSite {
 
 typedef struct MPMarshalledUser {
     MPMasterKeyProvider masterKeyProvider;
-    MPAlgorithmVersion algorithm;
     bool redacted;
 
     unsigned int avatar;
     const char *fullName;
     MPIdenticon identicon;
+    MPAlgorithmVersion algorithm;
     const char *keyID;
     MPResultType defaultType;
     time_t lastUsed;
@@ -138,24 +141,24 @@ typedef struct MPMarshalledUser {
 
 typedef struct MPMarshalledFile {
     MPMarshalledInfo *info;
-    MPMarshalledUser *user;
     MPMarshalledData *data;
+    MPMarshalError error;
 } MPMarshalledFile;
 
 //// Marshalling.
 
 /** Write the user and all associated data out using the given marshalling format.
- * @return A string (allocated), or NULL if the format is unrecognized, does not support marshalling or a format error occurred. */
+ * @return A string (allocated), or NULL if the file is missing, format is unrecognized, does not support marshalling or a format error occurred. */
 const char *mpw_marshal_write(
-        const MPMarshalFormat outFormat, MPMarshalledFile *file, MPMarshalError *error);
-/** Best effort parse of metadata on the sites in the input buffer.  Fields that could not be parsed remain at their type's initial value.
- * @return A metadata object (allocated); NULL if the object could not be allocated or the format was not understood. */
-MPMarshalledInfo *mpw_marshal_read_info(
-        const char *in);
-/** Unmarshall sites in the given input buffer by parsing it using the given marshalling format.
- * @return A user object (allocated), or NULL if the format provides no marshalling or a format error occurred. */
+        const MPMarshalFormat outFormat, MPMarshalledFile *file, MPMarshalledUser *user);
+/** Parse the user configuration in the input buffer.  Fields that could not be parsed remain at their type's initial value.
+ * @return The updated file object or a new one (allocated) if none was provided; NULL if a file object could not be allocated. */
 MPMarshalledFile *mpw_marshal_read(
-        const char *in, const MPMasterKeyProvider masterKeyProvider, MPMarshalError *error);
+        MPMarshalledFile *file, const char *in);
+/** Authenticate as the user identified by the given marshalled file.
+ * @return A user object (allocated), or NULL if the file format provides no marshalling or a format error occurred. */
+MPMarshalledUser *mpw_marshal_auth(
+        MPMarshalledFile *file, const MPMasterKeyProvider masterKeyProvider);
 
 //// Creating.
 
@@ -175,7 +178,7 @@ MPMarshalledQuestion *mpw_marshal_question(
 /** Create or update a marshal file descriptor.
  * @return The given file or new (allocated) if file is NULL; or NULL if the user is missing or the file couldn't be allocated. */
 MPMarshalledFile *mpw_marshal_file(
-        MPMarshalledFile *const file, MPMarshalledUser *user, MPMarshalledData *data, MPMarshalledInfo *info);
+        MPMarshalledFile *file, MPMarshalledInfo *info, MPMarshalledData *data);
 
 //// Disposing.
 
@@ -241,7 +244,7 @@ bool mpw_marshal_data_set_num(
 bool mpw_marshal_data_vset_num(
         const double value, MPMarshalledData *data, va_list nodes);
 /** Look up the string value at the given path in the data store.
- * @return The string value (allocated) or string representation of the number at this path; NULL if there is no such value at this path. */
+ * @return The string value (shared) or string representation of the number at this path; NULL if there is no such value at this path. */
 const char *mpw_marshal_data_get_str(
         const MPMarshalledData *data, ...);
 const char *mpw_marshal_data_vget_str(

@@ -157,6 +157,7 @@ typedef struct {
     const char *resultState;
     const char *resultParam;
     MPMarshalledFile *file;
+    MPMarshalledUser *user;
     MPMarshalledSite *site;
     MPMarshalledQuestion *question;
 } Operation;
@@ -233,8 +234,8 @@ int main(const int argc, char *const argv[]) {
 
     // Operation summary.
     dbg( "-----------------" );
-    if (operation.file && operation.file->user) {
-        dbg( "fullName         : %s", operation.file->user->fullName );
+    if (operation.file && operation.user) {
+        dbg( "fullName         : %s", operation.user->fullName );
         dbg( "identicon        : %s", operation.identicon );
         dbg( "sitesFormat      : %s%s", mpw_format_name( operation.sitesFormat ), operation.sitesFormatFixed? " (fixed)": "" );
         dbg( "sitesPath        : %s", operation.sitesPath );
@@ -273,6 +274,7 @@ void cli_free(Arguments *args, Operation *operation) {
         mpw_free_strings( &operation->keyContext, &operation->resultState, &operation->resultParam, NULL );
         mpw_free_strings( &operation->identicon, &operation->sitesPath, NULL );
         mpw_marshal_file_free( &operation->file );
+        mpw_marshal_user_free( &operation->user );
         operation->site = NULL;
         operation->question = NULL;
         cli_masterKeyProvider_free();
@@ -488,8 +490,9 @@ void cli_user(Arguments *args, Operation *operation) {
         // If no user from mpsites, create a new one.
         mpw_free_string( &operation->sitesPath );
         mpw_marshal_file_free( &operation->file );
-        operation->file = mpw_marshal_file( NULL, mpw_marshal_user(
-                operation->fullName, cli_masterKeyProvider_op( operation ), MPAlgorithmVersionCurrent ), NULL );
+        mpw_marshal_user_free( &operation->user );
+        operation->file = mpw_marshal_file( NULL, NULL, NULL );
+        operation->user = mpw_marshal_user( operation->fullName, cli_masterKeyProvider_op( operation ), MPAlgorithmVersionCurrent );
     }
 
     else {
@@ -500,42 +503,44 @@ void cli_user(Arguments *args, Operation *operation) {
         fclose( sitesFile );
 
         // Parse file.
-        MPMarshalError marshalError = { .type = MPMarshalSuccess };
         mpw_marshal_file_free( &operation->file );
-        operation->file = mpw_marshal_read( sitesInputData,
-                cli_masterKeyProvider_op( operation ), &marshalError );
-        if (marshalError.type == MPMarshalErrorMasterPassword && operation->allowPasswordUpdate) {
-            // Update master password in mpsites.
-            while (marshalError.type == MPMarshalErrorMasterPassword) {
-                inf( "Given master password does not match configuration." );
-                inf( "To update the configuration with this new master password, first confirm the old master password." );
+        mpw_marshal_user_free( &operation->user );
+        operation->file = mpw_marshal_read( NULL, sitesInputData );
+        if (operation->file && operation->file->error.type == MPMarshalSuccess) {
+            operation->user = mpw_marshal_auth( operation->file, cli_masterKeyProvider_op( operation ) );
 
-                const char *importMasterPassword = NULL;
-                while (!importMasterPassword || !strlen( importMasterPassword )) {
+            if (operation->file->error.type == MPMarshalErrorMasterPassword && operation->allowPasswordUpdate) {
+                // Update master password in mpsites.
+                while (operation->file->error.type == MPMarshalErrorMasterPassword) {
+                    inf( "Given master password does not match configuration." );
+                    inf( "To update the configuration with this new master password, first confirm the old master password." );
+
+                    const char *importMasterPassword = NULL;
+                    while (!importMasterPassword || !strlen( importMasterPassword )) {
+                        mpw_free_string( &importMasterPassword );
+                        importMasterPassword = mpw_getpass( "Old master password: " );
+                    }
+
+                    mpw_marshal_user_free( &operation->user );
+                    operation->user = mpw_marshal_auth( operation->file, cli_masterKeyProvider_str( importMasterPassword ) );
+                    if (operation->file && operation->user)
+                        operation->user->masterKeyProvider = cli_masterKeyProvider_op( operation );
                     mpw_free_string( &importMasterPassword );
-                    importMasterPassword = mpw_getpass( "Old master password: " );
                 }
-
-                mpw_marshal_file_free( &operation->file );
-                operation->file = mpw_marshal_read( sitesInputData,
-                        cli_masterKeyProvider_str( importMasterPassword ), &marshalError );
-                if (operation->file && operation->file->user)
-                    operation->file->user->masterKeyProvider = cli_masterKeyProvider_op( operation );
-                mpw_free_string( &importMasterPassword );
             }
         }
         mpw_free_string( &sitesInputData );
 
         // Incorrect master password.
-        if (marshalError.type == MPMarshalErrorMasterPassword) {
-            ftl( "Incorrect master password according to configuration:\n  %s: %s", operation->sitesPath, marshalError.message );
+        if (operation->file->error.type == MPMarshalErrorMasterPassword) {
+            ftl( "Incorrect master password according to configuration:\n  %s: %s", operation->sitesPath, operation->file->error.message );
             cli_free( args, operation );
             exit( EX_DATAERR );
         }
 
         // Any other parse error.
-        if (!operation->file || !operation->file->user || marshalError.type != MPMarshalSuccess) {
-            err( "Couldn't parse configuration file:\n  %s: %s", operation->sitesPath, marshalError.message );
+        if (!operation->file || !operation->user || operation->file->error.type != MPMarshalSuccess) {
+            err( "Couldn't parse configuration file:\n  %s: %s", operation->sitesPath, operation->file->error.message );
             cli_free( args, operation );
             exit( EX_DATAERR );
         }
@@ -548,7 +553,7 @@ void cli_site(Arguments *args, Operation *operation) {
         abort();
 
     // Load the site object from mpsites.
-    MPMarshalledUser *user = operation->file->user;
+    MPMarshalledUser *user = operation->user;
     for (size_t s = 0; !operation->site && s < user->sites_count; ++s)
         if (strcmp( operation->siteName, (&user->sites[s])->siteName ) == OK)
             operation->site = &user->sites[s];
@@ -588,8 +593,8 @@ void cli_question(Arguments *args, Operation *operation) {
 void cli_operation(Arguments *args, Operation *operation) {
 
     mpw_free_string( &operation->identicon );
-    operation->file->user->identicon = mpw_identicon( operation->file->user->fullName, operation->masterPassword );
-    operation->identicon = mpw_identicon_render( operation->file->user->identicon );
+    operation->user->identicon = mpw_identicon( operation->user->fullName, operation->masterPassword );
+    operation->identicon = mpw_identicon_render( operation->user->identicon );
 
     if (!operation->site)
         abort();
@@ -703,9 +708,9 @@ void cli_algorithmVersion(Arguments *args, Operation *operation) {
 void cli_sitesRedacted(Arguments *args, Operation *operation) {
 
     if (args->sitesRedacted)
-        operation->file->user->redacted = strcmp( args->sitesRedacted, "1" ) == OK;
+        operation->user->redacted = strcmp( args->sitesRedacted, "1" ) == OK;
 
-    else if (!operation->file->user->redacted)
+    else if (!operation->user->redacted)
         wrn( "Sites configuration is not redacted.  Use -R 1 to change this." );
 }
 
@@ -716,21 +721,21 @@ void cli_mpw(Arguments *args, Operation *operation) {
 
     if (mpw_verbosity >= LogLevelInfo)
         fprintf( stderr, "%s's %s for %s:\n[ %s ]: ",
-                operation->file->user->fullName, operation->purposeResult, operation->site->siteName, operation->identicon );
+                operation->user->fullName, operation->purposeResult, operation->site->siteName, operation->identicon );
 
     // Determine master key.
     MPMasterKey masterKey = NULL;
-    if (operation->file->user->masterKeyProvider)
-        masterKey = operation->file->user->masterKeyProvider( operation->site->algorithm, operation->file->user->fullName );
+    if (operation->user->masterKeyProvider)
+        masterKey = operation->user->masterKeyProvider( operation->site->algorithm, operation->user->fullName );
     if (!masterKey) {
         ftl( "Couldn't derive master key." );
         cli_free( args, operation );
         exit( EX_SOFTWARE );
     }
     MPKeyID keyID = mpw_id_buf( masterKey, MPMasterKeySize );
-    if (!operation->file->user->keyID)
-        operation->file->user->keyID = mpw_strdup( keyID );
-    else if (!mpw_id_buf_equals( keyID, operation->file->user->keyID )) {
+    if (!operation->user->keyID)
+        operation->user->keyID = mpw_strdup( keyID );
+    else if (!mpw_id_buf_equals( keyID, operation->user->keyID )) {
         ftl( "Master key mismatch." );
         cli_free( args, operation );
         exit( EX_SOFTWARE );
@@ -792,11 +797,14 @@ void cli_mpw(Arguments *args, Operation *operation) {
     mpw_free_string( &result );
 
     // Update usage metadata.
-    operation->site->lastUsed = operation->file->user->lastUsed = time( NULL );
+    operation->site->lastUsed = operation->user->lastUsed = time( NULL );
     operation->site->uses++;
 }
 
 void cli_save(Arguments *args, Operation *operation) {
+
+    if (!operation->file || !operation->user)
+        return;
 
     if (!operation->sitesFormatFixed)
         operation->sitesFormat = MPMarshalFormatDefault;
@@ -807,7 +815,7 @@ void cli_save(Arguments *args, Operation *operation) {
         return;
 
     mpw_free_string( &operation->sitesPath );
-    operation->sitesPath = mpw_path( operation->file->user->fullName, extensions[0] );
+    operation->sitesPath = mpw_path( operation->user->fullName, extensions[0] );
     dbg( "Updating: %s (%s)", operation->sitesPath, mpw_format_name( operation->sitesFormat ) );
     mpw_free( &extensions, count * sizeof( *extensions ) );
 
@@ -817,10 +825,9 @@ void cli_save(Arguments *args, Operation *operation) {
         return;
     }
 
-    MPMarshalError marshalError = { .type = MPMarshalSuccess };
-    const char *buf = mpw_marshal_write( operation->sitesFormat, operation->file, &marshalError );
-    if (!buf || marshalError.type != MPMarshalSuccess)
-        wrn( "Couldn't encode updated configuration file:\n  %s: %s", operation->sitesPath, marshalError.message );
+    const char *buf = mpw_marshal_write( operation->sitesFormat, operation->file, operation->user );
+    if (!buf || operation->file->error.type != MPMarshalSuccess)
+        wrn( "Couldn't encode updated configuration file:\n  %s: %s", operation->sitesPath, operation->file->error.message );
 
     else if (fwrite( buf, sizeof( char ), strlen( buf ), sitesFile ) != strlen( buf ))
         wrn( "Error while writing updated configuration file:\n  %s: %d", operation->sitesPath, ferror( sitesFile ) );

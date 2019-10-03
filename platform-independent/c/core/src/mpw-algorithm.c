@@ -254,7 +254,7 @@ const char *mpw_identicon_encode(
         const MPIdenticon identicon) {
 
     if (identicon.color == MPIdenticonColorUnset)
-        return "";
+        return NULL;
 
     return mpw_str( "%hhu:%s%s%s%s",
             identicon.color, identicon.leftArm, identicon.body, identicon.rightArm, identicon.accessory );
