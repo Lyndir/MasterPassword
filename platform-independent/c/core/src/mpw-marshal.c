@@ -112,7 +112,7 @@ MPMarshalledFile *mpw_marshal_file(
         if (!(file = malloc( sizeof( MPMarshalledFile ) )))
             return NULL;
 
-        *file = (MPMarshalledFile){};
+        *file = (MPMarshalledFile){ .info = NULL, .data = NULL, .error = (MPMarshalError){ .type = MPMarshalSuccess, .message = NULL } };
     }
 
     if (data && data != file->data) {
@@ -986,8 +986,8 @@ MPMarshalledUser *mpw_marshal_auth(
     // Section: "user"
     bool fileRedacted = mpw_marshal_data_get_bool( file->data, "export", "redacted", NULL )
                         || mpw_marshal_data_is_null( file->data, "export", "redacted", NULL );
-    MPAlgorithmVersion
-            algorithm = mpw_default_n( MPAlgorithmVersionCurrent, mpw_marshal_data_get_num( file->data, "user", "algorithm", NULL ) );
+    MPAlgorithmVersion algorithm =
+            mpw_default_n( MPAlgorithmVersionCurrent, mpw_marshal_data_get_num( file->data, "user", "algorithm", NULL ) );
     if (algorithm < MPAlgorithmVersionFirst || algorithm > MPAlgorithmVersionLast) {
         file->error = (MPMarshalError){ MPMarshalErrorIllegal, mpw_str( "Invalid user algorithm: %u", algorithm ) };
         return NULL;

@@ -201,6 +201,7 @@ void mpw_set_json_data(
                     continue;
                 }
                 *(child = &data->children[data->children_count - 1]) = (MPMarshalledData){ .obj_key = mpw_strdup( entry.key ) };
+                mpw_marshal_data_set_null( child, NULL );
             }
 
             mpw_set_json_data( child, entry.val );
@@ -221,6 +222,7 @@ void mpw_set_json_data(
                     continue;
                 }
                 *(child = &data->children[data->children_count - 1]) = (MPMarshalledData){ .arr_index = index };
+                mpw_marshal_data_set_null( child, NULL );
             }
 
             mpw_set_json_data( child, json_object_array_get_idx( obj, index ) );

@@ -29,7 +29,7 @@ MP_LIBS_END
 //// Types.
 
 #define mpw_default( __default, __value ) ({ __typeof__ (__default) _v = (__typeof__ (__default))(__value); _v = _v? _v: __default; })
-#define mpw_default_n( __default, __num ) ({ __typeof__ (__default) _n = (__typeof__ (__default))(__num); _n = !isnan( _n )? _n: __default; })
+#define mpw_default_n( __default, __num ) ({ __typeof__ (__num) _n = (__num); !isnan( _n )? (__typeof__ (__default))_n: __default; })
 
 typedef mpw_enum( unsigned int, MPMarshalFormat ) {
     /** Do not marshal. */
