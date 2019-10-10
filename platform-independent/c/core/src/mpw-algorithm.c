@@ -47,13 +47,13 @@ const MPMasterKey mpw_master_key(const char *fullName, const char *masterPasswor
     }
 
     switch (algorithmVersion) {
-        case MPAlgorithmVersion0:
+        case MPAlgorithmVersionV0:
             return mpw_master_key_v0( fullName, masterPassword );
-        case MPAlgorithmVersion1:
+        case MPAlgorithmVersionV1:
             return mpw_master_key_v1( fullName, masterPassword );
-        case MPAlgorithmVersion2:
+        case MPAlgorithmVersionV2:
             return mpw_master_key_v2( fullName, masterPassword );
-        case MPAlgorithmVersion3:
+        case MPAlgorithmVersionV3:
             return mpw_master_key_v3( fullName, masterPassword );
         default:
             err( "Unsupported version: %d", algorithmVersion );
@@ -83,13 +83,13 @@ const MPSiteKey mpw_site_key(
     }
 
     switch (algorithmVersion) {
-        case MPAlgorithmVersion0:
+        case MPAlgorithmVersionV0:
             return mpw_site_key_v0( masterKey, siteName, siteCounter, keyPurpose, keyContext );
-        case MPAlgorithmVersion1:
+        case MPAlgorithmVersionV1:
             return mpw_site_key_v1( masterKey, siteName, siteCounter, keyPurpose, keyContext );
-        case MPAlgorithmVersion2:
+        case MPAlgorithmVersionV2:
             return mpw_site_key_v2( masterKey, siteName, siteCounter, keyPurpose, keyContext );
-        case MPAlgorithmVersion3:
+        case MPAlgorithmVersionV3:
             return mpw_site_key_v3( masterKey, siteName, siteCounter, keyPurpose, keyContext );
         default:
             err( "Unsupported version: %d", algorithmVersion );
@@ -125,13 +125,13 @@ const char *mpw_site_result(
     char *sitePassword = NULL;
     if (resultType & MPResultTypeClassTemplate) {
         switch (algorithmVersion) {
-            case MPAlgorithmVersion0:
+            case MPAlgorithmVersionV0:
                 return mpw_site_template_password_v0( masterKey, siteKey, resultType, resultParam );
-            case MPAlgorithmVersion1:
+            case MPAlgorithmVersionV1:
                 return mpw_site_template_password_v1( masterKey, siteKey, resultType, resultParam );
-            case MPAlgorithmVersion2:
+            case MPAlgorithmVersionV2:
                 return mpw_site_template_password_v2( masterKey, siteKey, resultType, resultParam );
-            case MPAlgorithmVersion3:
+            case MPAlgorithmVersionV3:
                 return mpw_site_template_password_v3( masterKey, siteKey, resultType, resultParam );
             default:
                 err( "Unsupported version: %d", algorithmVersion );
@@ -140,13 +140,13 @@ const char *mpw_site_result(
     }
     else if (resultType & MPResultTypeClassStateful) {
         switch (algorithmVersion) {
-            case MPAlgorithmVersion0:
+            case MPAlgorithmVersionV0:
                 return mpw_site_crypted_password_v0( masterKey, siteKey, resultType, resultParam );
-            case MPAlgorithmVersion1:
+            case MPAlgorithmVersionV1:
                 return mpw_site_crypted_password_v1( masterKey, siteKey, resultType, resultParam );
-            case MPAlgorithmVersion2:
+            case MPAlgorithmVersionV2:
                 return mpw_site_crypted_password_v2( masterKey, siteKey, resultType, resultParam );
-            case MPAlgorithmVersion3:
+            case MPAlgorithmVersionV3:
                 return mpw_site_crypted_password_v3( masterKey, siteKey, resultType, resultParam );
             default:
                 err( "Unsupported version: %d", algorithmVersion );
@@ -155,13 +155,13 @@ const char *mpw_site_result(
     }
     else if (resultType & MPResultTypeClassDerive) {
         switch (algorithmVersion) {
-            case MPAlgorithmVersion0:
+            case MPAlgorithmVersionV0:
                 return mpw_site_derived_password_v0( masterKey, siteKey, resultType, resultParam );
-            case MPAlgorithmVersion1:
+            case MPAlgorithmVersionV1:
                 return mpw_site_derived_password_v1( masterKey, siteKey, resultType, resultParam );
-            case MPAlgorithmVersion2:
+            case MPAlgorithmVersionV2:
                 return mpw_site_derived_password_v2( masterKey, siteKey, resultType, resultParam );
-            case MPAlgorithmVersion3:
+            case MPAlgorithmVersionV3:
                 return mpw_site_derived_password_v3( masterKey, siteKey, resultType, resultParam );
             default:
                 err( "Unsupported version: %d", algorithmVersion );
@@ -205,13 +205,13 @@ const char *mpw_site_state(
     }
 
     switch (algorithmVersion) {
-        case MPAlgorithmVersion0:
+        case MPAlgorithmVersionV0:
             return mpw_site_state_v0( masterKey, siteKey, resultType, resultParam );
-        case MPAlgorithmVersion1:
+        case MPAlgorithmVersionV1:
             return mpw_site_state_v1( masterKey, siteKey, resultType, resultParam );
-        case MPAlgorithmVersion2:
+        case MPAlgorithmVersionV2:
             return mpw_site_state_v2( masterKey, siteKey, resultType, resultParam );
-        case MPAlgorithmVersion3:
+        case MPAlgorithmVersionV3:
             return mpw_site_state_v3( masterKey, siteKey, resultType, resultParam );
         default:
             err( "Unsupported version: %d", algorithmVersion );

@@ -50,7 +50,7 @@ static NSOperationQueue *_mpwQueue = nil;
 
 - (MPAlgorithmVersion)version {
 
-    return MPAlgorithmVersion0;
+    return MPAlgorithmVersionV0;
 }
 
 - (NSString *)description {

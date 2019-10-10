@@ -23,17 +23,17 @@
 
 typedef mpw_enum( unsigned int, MPAlgorithmVersion ) {
     /** V0 did math with chars whose signedness was platform-dependent. */
-            MPAlgorithmVersion0,
+            MPAlgorithmVersionV0,
     /** V1 miscounted the byte-length of multi-byte site names. */
-            MPAlgorithmVersion1,
+            MPAlgorithmVersionV1,
     /** V2 miscounted the byte-length of multi-byte user names. */
-            MPAlgorithmVersion2,
+            MPAlgorithmVersionV2,
     /** V3 is the current version. */
-            MPAlgorithmVersion3,
+            MPAlgorithmVersionV3,
 
-    MPAlgorithmVersionCurrent = MPAlgorithmVersion3,
-    MPAlgorithmVersionFirst = MPAlgorithmVersion0,
-    MPAlgorithmVersionLast = MPAlgorithmVersion3,
+    MPAlgorithmVersionCurrent = MPAlgorithmVersionV3,
+    MPAlgorithmVersionFirst = MPAlgorithmVersionV0,
+    MPAlgorithmVersionLast = MPAlgorithmVersionV3,
 };
 
 /** Derive the master key for a user based on their name and master password.

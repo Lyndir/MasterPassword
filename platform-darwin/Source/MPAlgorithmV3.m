@@ -23,7 +23,7 @@
 
 - (MPAlgorithmVersion)version {
 
-    return MPAlgorithmVersion3;
+    return MPAlgorithmVersionV3;
 }
 
 - (BOOL)tryMigrateSite:(MPSiteEntity *)site explicit:(BOOL)explicit {

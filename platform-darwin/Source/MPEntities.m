@@ -136,7 +136,7 @@
 
     return MPAlgorithmForVersion(
             MIN( MPAlgorithmVersionCurrent,
-                    MAX( MPAlgorithmVersion0, (MPAlgorithmVersion)[self.version_ unsignedIntegerValue] ) ) );
+                    MAX( MPAlgorithmVersionV0, (MPAlgorithmVersion)[self.version_ unsignedIntegerValue] ) ) );
 }
 
 - (void)setAlgorithm:(id<MPAlgorithm>)algorithm {
@@ -368,7 +368,7 @@
 
     return MPAlgorithmForVersion(
             MIN( MPAlgorithmVersionCurrent,
-                    MAX( MPAlgorithmVersion0, (MPAlgorithmVersion)[self.version_ unsignedIntegerValue] ) ) );
+                    MAX( MPAlgorithmVersionV0, (MPAlgorithmVersion)[self.version_ unsignedIntegerValue] ) ) );
 }
 
 - (void)setAlgorithm:(id<MPAlgorithm>)version {
