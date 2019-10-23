@@ -122,6 +122,14 @@ bool mpw_get_json_boolean(
     return json_object_get_boolean( json_value ) == true;
 }
 
+static bool mpw_marshal_data_keep_keyed(MPMarshalledData *child, void *args) {
+    return child->obj_key != NULL;
+}
+
+static bool mpw_marshal_data_keep_unkeyed(MPMarshalledData *child, void *args) {
+    return child->obj_key == NULL;
+}
+
 void mpw_set_json_data(
         MPMarshalledData *data, json_object *obj) {
 
@@ -150,34 +158,12 @@ void mpw_set_json_data(
     }
 
     // Clean up children
-    MPMarshalledData *newChildren = NULL;
-    size_t newChildrenCount = 0;
-    for (size_t c = 0; c < data->children_count; ++c) {
-        MPMarshalledData *child = &data->children[c];
-        if ((type != json_type_object && type != json_type_array) || (child->obj_key && type != json_type_object)) {
-            // Not a valid child in this object, remove it.
-            mpw_marshal_data_set_null( child, NULL );
-            mpw_free_string( &child->obj_key );
-            if (!newChildren)
-                newChildren = mpw_memdup( data->children, sizeof( MPMarshalledData ) * newChildrenCount );
-        }
-        else {
-            // Valid child in this object, keep it.
-            ++newChildrenCount;
-            if (newChildren) {
-                if (!mpw_realloc( &newChildren, NULL, sizeof( MPMarshalledData ) * newChildrenCount )) {
-                    --newChildrenCount;
-                    continue;
-                }
-                child->arr_index = newChildrenCount - 1;
-                newChildren[child->arr_index] = *child;
-            }
-        }
-    }
-    if (newChildren) {
-        mpw_free( &data->children, sizeof( MPMarshalledData ) * data->children_count );
-        data->children = newChildren;
-        data->children_count = newChildrenCount;
+    if (type != json_type_object && type != json_type_array) {
+        mpw_marshal_data_keep( data, mpw_marshal_data_keep_none, NULL );
+    } else if (type == json_type_array) {
+        mpw_marshal_data_keep( data, mpw_marshal_data_keep_unkeyed, NULL );
+    } else /* type == json_type_object */ {
+        mpw_marshal_data_keep( data, mpw_marshal_data_keep_keyed, NULL );
     }
 
     // Object

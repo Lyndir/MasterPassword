@@ -441,10 +441,54 @@ bool mpw_marshal_data_set_str(
     return success;
 }
 
+void mpw_marshal_data_keep(
+        MPMarshalledData *data, bool (*filter)(MPMarshalledData *, void *), void *args) {
+
+    size_t children_count = 0;
+    MPMarshalledData *children = NULL;
+
+    for (size_t c = 0; c < data->children_count; ++c) {
+        MPMarshalledData *child = &data->children[c];
+        if (filter( child, args )) {
+            // Valid child in this object, keep it.
+            ++children_count;
+
+            if (children) {
+                if (!mpw_realloc( &children, NULL, sizeof( MPMarshalledData ) * children_count )) {
+                    --children_count;
+                    continue;
+                }
+                child->arr_index = children_count - 1;
+                children[child->arr_index] = *child;
+            }
+        }
+        else {
+            // Not a valid child in this object, remove it.
+            mpw_marshal_data_set_null( child, NULL );
+            mpw_free_string( &child->obj_key );
+
+            if (!children)
+                children = mpw_memdup( data->children, sizeof( MPMarshalledData ) * children_count );
+        }
+    }
+
+    if (children) {
+        mpw_free( &data->children, sizeof( MPMarshalledData ) * data->children_count );
+        data->children = children;
+        data->children_count = children_count;
+    }
+}
+
+bool mpw_marshal_data_keep_none(
+        MPMarshalledData *child, void *args) {
+
+    return false;
+}
+
 static const char *mpw_marshal_write_flat(
         MPMarshalledFile *file) {
 
-    MPMarshalledData *data = file->data;
+    const MPMarshalledData *data = file->data;
     if (!data) {
         file->error = (MPMarshalError){ MPMarshalErrorMissing, "Missing data." };
         return NULL;
@@ -566,6 +610,30 @@ static const char *mpw_marshal_write_json(
 
 #endif
 
+static bool mpw_marshal_data_keep_site_exists(
+        MPMarshalledData *child, void *args) {
+    MPMarshalledUser *user = args;
+
+    for (size_t s = 0; s < user->sites_count; ++s) {
+        if (strcmp( (&user->sites[s])->siteName, child->obj_key ) == OK)
+            return true;
+    }
+
+    return false;
+}
+
+static bool mpw_marshal_data_keep_question_exists(
+        MPMarshalledData *child, void *args) {
+    MPMarshalledSite *site = args;
+
+    for (size_t s = 0; s < site->questions_count; ++s) {
+        if (strcmp( (&site->questions[s])->keyword, child->obj_key ) == OK)
+            return true;
+    }
+
+    return false;
+}
+
 const char *mpw_marshal_write(
         const MPMarshalFormat outFormat, MPMarshalledFile *file, MPMarshalledUser *user) {
 
@@ -589,23 +657,27 @@ const char *mpw_marshal_write(
         masterKey = user->masterKeyProvider( user->algorithm, user->fullName );
 
     // Section: "export"
-    mpw_marshal_data_set_bool( user->redacted, data, "export", "redacted", NULL );
+    MPMarshalledData *data_export = mpw_marshal_data_get( data, "export", NULL );
+    mpw_marshal_data_set_bool( user->redacted, data_export, "redacted", NULL );
     char dateString[21];
     time_t now = time( NULL );
     if (strftime( dateString, sizeof( dateString ), "%FT%TZ", gmtime( &now ) ))
-        mpw_marshal_data_set_str( dateString, data, "export", "date", NULL );
+        mpw_marshal_data_set_str( dateString, data_export, "date", NULL );
 
     // Section: "user"
-    mpw_marshal_data_set_num( user->avatar, data, "user", "avatar", NULL );
-    mpw_marshal_data_set_str( user->fullName, data, "user", "full_name", NULL );
-    mpw_marshal_data_set_str( mpw_identicon_encode( user->identicon ), data, "user", "identicon", NULL );
-    mpw_marshal_data_set_num( user->algorithm, data, "user", "algorithm", NULL );
-    mpw_marshal_data_set_str( user->keyID, data, "user", "key_id", NULL );
-    mpw_marshal_data_set_num( user->defaultType, data, "user", "default_type", NULL );
+    MPMarshalledData *data_user = mpw_marshal_data_get( data, "user", NULL );
+    mpw_marshal_data_set_num( user->avatar, data_user, "avatar", NULL );
+    mpw_marshal_data_set_str( user->fullName, data_user, "full_name", NULL );
+    mpw_marshal_data_set_str( mpw_identicon_encode( user->identicon ), data_user, "identicon", NULL );
+    mpw_marshal_data_set_num( user->algorithm, data_user, "algorithm", NULL );
+    mpw_marshal_data_set_str( user->keyID, data_user, "key_id", NULL );
+    mpw_marshal_data_set_num( user->defaultType, data_user, "default_type", NULL );
     if (strftime( dateString, sizeof( dateString ), "%FT%TZ", gmtime( &user->lastUsed ) ))
-        mpw_marshal_data_set_str( dateString, data, "user", "last_used", NULL );
+        mpw_marshal_data_set_str( dateString, data_user, "last_used", NULL );
 
     // Section "sites"
+    MPMarshalledData *data_sites = mpw_marshal_data_get( data, "sites", NULL );
+    mpw_marshal_data_keep( data_sites, mpw_marshal_data_keep_site_exists, user );
     for (size_t s = 0; s < user->sites_count; ++s) {
         MPMarshalledSite *site = &user->sites[s];
         if (!site->siteName || !strlen( site->siteName ))
@@ -633,16 +705,18 @@ const char *mpw_marshal_write(
                 loginState = mpw_strdup( site->loginState );
         }
 
-        mpw_marshal_data_set_num( site->counter, data, "sites", site->siteName, "counter", NULL );
-        mpw_marshal_data_set_num( site->algorithm, data, "sites", site->siteName, "algorithm", NULL );
-        mpw_marshal_data_set_num( site->resultType, data, "sites", site->siteName, "type", NULL );
-        mpw_marshal_data_set_str( resultState, data, "sites", site->siteName, "password", NULL );
-        mpw_marshal_data_set_num( site->loginType, data, "sites", site->siteName, "login_type", NULL );
-        mpw_marshal_data_set_str( loginState, data, "sites", site->siteName, "login_name", NULL );
-        mpw_marshal_data_set_num( site->uses, data, "sites", site->siteName, "uses", NULL );
+        mpw_marshal_data_set_num( site->counter, data_sites, site->siteName, "counter", NULL );
+        mpw_marshal_data_set_num( site->algorithm, data_sites, site->siteName, "algorithm", NULL );
+        mpw_marshal_data_set_num( site->resultType, data_sites, site->siteName, "type", NULL );
+        mpw_marshal_data_set_str( resultState, data_sites, site->siteName, "password", NULL );
+        mpw_marshal_data_set_num( site->loginType, data_sites, site->siteName, "login_type", NULL );
+        mpw_marshal_data_set_str( loginState, data_sites, site->siteName, "login_name", NULL );
+        mpw_marshal_data_set_num( site->uses, data_sites, site->siteName, "uses", NULL );
         if (strftime( dateString, sizeof( dateString ), "%FT%TZ", gmtime( &site->lastUsed ) ))
-            mpw_marshal_data_set_str( dateString, data, "sites", site->siteName, "last_used", NULL );
+            mpw_marshal_data_set_str( dateString, data_sites, site->siteName, "last_used", NULL );
 
+        MPMarshalledData *data_questions = mpw_marshal_data_get( data, "sites", site->siteName, "questions", NULL );
+        mpw_marshal_data_keep( data_questions, mpw_marshal_data_keep_question_exists, site );
         for (size_t q = 0; q < site->questions_count; ++q) {
             MPMarshalledQuestion *question = &site->questions[q];
             if (!question->keyword)
@@ -660,12 +734,12 @@ const char *mpw_marshal_write(
                         MPKeyPurposeRecovery, question->keyword, question->type, question->state, site->algorithm );
             }
 
-            mpw_marshal_data_set_num( question->type, data, "sites", site->siteName, "questions", question->keyword, "type", NULL );
-            mpw_marshal_data_set_str( answer, data, "sites", site->siteName, "questions", question->keyword, "answer", NULL );
+            mpw_marshal_data_set_num( question->type, data_questions, question->keyword, "type", NULL );
+            mpw_marshal_data_set_str( answer, data_questions, question->keyword, "answer", NULL );
             mpw_free_strings( &answer, NULL );
         }
 
-        mpw_marshal_data_set_str( site->url, data, "sites", site->siteName, "_ext_mpw", "url", NULL );
+        mpw_marshal_data_set_str( site->url, data_sites, site->siteName, "_ext_mpw", "url", NULL );
         mpw_free_strings( &resultState, &loginState, NULL );
     }
 

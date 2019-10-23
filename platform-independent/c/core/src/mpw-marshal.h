@@ -253,6 +253,11 @@ bool mpw_marshal_data_set_str(
         const char *value, MPMarshalledData *data, ...);
 bool mpw_marshal_data_vset_str(
         const char *value, MPMarshalledData *data, va_list nodes);
+/** Keep only the data children that pass the filter test. */
+void mpw_marshal_data_keep(
+        MPMarshalledData *data, bool (*filter)(MPMarshalledData *child, void *args), void *args);
+bool mpw_marshal_data_keep_none(
+        MPMarshalledData *child, void *args);
 
 //// Format.
 
