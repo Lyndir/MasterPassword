@@ -59,7 +59,7 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
     }
 
     public MPFileUser(final String fullName, final File location) {
-        this( fullName, null, MPAlgorithm.Version.CURRENT.getAlgorithm(), location );
+        this( fullName, null, MPAlgorithm.Version.CURRENT, location );
     }
 
     public MPFileUser(final String fullName, @Nullable final byte[] keyID, final MPAlgorithm algorithm, final File location) {

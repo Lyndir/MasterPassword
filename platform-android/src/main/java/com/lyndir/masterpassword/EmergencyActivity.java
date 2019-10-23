@@ -316,8 +316,8 @@ public class EmergencyActivity extends Activity {
             @Override
             public void run() {
                 try {
-                    sitePassword = masterKey.siteResult( siteName, version.getAlgorithm(), counter,
-                                                         MPKeyPurpose.Authentication, null, type, null );
+                    sitePassword = masterKey.siteResult(
+                            siteName, version, counter, MPKeyPurpose.Authentication, null, type, null );
 
                     runOnUiThread( new Runnable() {
                         @Override

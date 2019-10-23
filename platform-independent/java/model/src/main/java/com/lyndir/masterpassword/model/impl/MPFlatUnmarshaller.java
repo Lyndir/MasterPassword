@@ -68,7 +68,7 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
                     else if ((fullName != null) && (keyID != null))
                         // Ends the header.
                         return new MPFileUser(
-                                fullName, keyID, MPAlgorithm.Version.fromInt( mpVersion ).getAlgorithm(), avatar, defaultType,
+                                fullName, keyID, MPAlgorithm.Version.fromInt( mpVersion ), avatar, defaultType,
                                 date, false, clearContent? MPMarshaller.ContentMode.VISIBLE: MPMarshaller.ContentMode.PROTECTED,
                                 MPMarshalFormat.Flat, file
                         );
@@ -157,7 +157,7 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
                                 site = new MPFileSite(
                                         user, siteMatcher.group( 5 ),
                                         MPAlgorithm.Version.fromInt( ConversionUtils.toIntegerNN(
-                                                colon.matcher( siteMatcher.group( 4 ) ).replaceAll( "" ) ) ).getAlgorithm(),
+                                                colon.matcher( siteMatcher.group( 4 ) ).replaceAll( "" ) ) ),
                                         user.getAlgorithm().mpw_default_counter(),
                                         MPResultType.forType( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ),
                                         clearContent? null: siteMatcher.group( 6 ),
@@ -171,7 +171,7 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
                                 site = new MPFileSite(
                                         user, siteMatcher.group( 7 ),
                                         MPAlgorithm.Version.fromInt( ConversionUtils.toIntegerNN(
-                                                colon.matcher( siteMatcher.group( 4 ) ).replaceAll( "" ) ) ).getAlgorithm(),
+                                                colon.matcher( siteMatcher.group( 4 ) ).replaceAll( "" ) ) ),
                                         UnsignedInteger.valueOf(
                                                 colon.matcher( siteMatcher.group( 5 ) ).replaceAll( "" ) ),
                                         MPResultType.forType( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ),

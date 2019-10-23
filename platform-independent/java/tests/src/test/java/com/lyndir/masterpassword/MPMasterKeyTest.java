@@ -106,9 +106,7 @@ public class MPMasterKeyTest {
 
         String       password   = randomString( 8 );
         MPResultType resultType = MPResultType.StoredPersonal;
-        for (final MPAlgorithm.Version version : MPAlgorithm.Version.values()) {
-            MPAlgorithm algorithm = version.getAlgorithm();
-
+        for (final MPAlgorithm.Version algorithm : MPAlgorithm.Version.values()) {
             // Test site state
             String state = masterKey.siteState( testCase.getSiteName(), algorithm, testCase.getSiteCounter(), testCase.getKeyPurpose(),
                                                 testCase.getKeyContext(), resultType, password );

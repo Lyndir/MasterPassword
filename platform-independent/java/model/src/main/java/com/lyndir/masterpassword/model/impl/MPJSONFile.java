@@ -128,7 +128,7 @@ public class MPJSONFile extends MPJSONAnyObject {
     }
 
     MPFileUser readUser(final File file) {
-        MPAlgorithm algorithm = ifNotNullElse( user.algorithm, MPAlgorithm.Version.CURRENT ).getAlgorithm();
+        MPAlgorithm algorithm = ifNotNullElse( user.algorithm, MPAlgorithm.Version.CURRENT );
 
         return new MPFileUser(
                 user.full_name, CodeUtils.decodeHex( user.key_id ), algorithm, user.avatar,
@@ -146,7 +146,7 @@ public class MPJSONFile extends MPJSONAnyObject {
             String siteName = siteEntry.getKey();
             Site   fileSite = siteEntry.getValue();
             MPFileSite site = new MPFileSite(
-                    user, siteName, fileSite.algorithm.getAlgorithm(), UnsignedInteger.valueOf( fileSite.counter ),
+                    user, siteName, fileSite.algorithm, UnsignedInteger.valueOf( fileSite.counter ),
                     fileSite.type, export.redacted? fileSite.password: null,
                     fileSite.login_type, export.redacted? fileSite.login_name: null,
                     (fileSite._ext_mpw != null)? fileSite._ext_mpw.url: null, fileSite.uses,

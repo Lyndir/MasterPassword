@@ -577,7 +577,7 @@ public class UserContentPanel extends JPanel implements State.Listener, MPUser.L
 
             components.add( Components.label( "Default Algorithm:" ),
                             Components.comboBox( MPAlgorithm.Version.values(), MPAlgorithm.Version::name,
-                                                 user.getAlgorithm().version(), version -> user.setAlgorithm( version.getAlgorithm() ) ) );
+                                                 user.getAlgorithm().version(), user::setAlgorithm ) );
 
             components.add( Components.label( "Default Password Type:" ),
                             Components.comboBox( MPResultType.values(), MPResultType::getLongName,
@@ -614,7 +614,7 @@ public class UserContentPanel extends JPanel implements State.Listener, MPUser.L
             components.add( Components.label( "Algorithm:" ),
                             Components.comboBox( MPAlgorithm.Version.values(), MPAlgorithm.Version::name,
                                                  site.getAlgorithm().version(),
-                                                 version -> site.setAlgorithm( version.getAlgorithm() ) ) );
+                                                 site::setAlgorithm ) );
 
             components.add( Components.label( "Counter:" ),
                             Components.spinner( new UnsignedIntegerModel( site.getCounter(), UnsignedInteger.ONE )

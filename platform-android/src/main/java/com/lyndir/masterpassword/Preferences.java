@@ -149,7 +149,7 @@ public final class Preferences {
     @Nonnull
     public MPResultType getDefaultResultType() {
         return MPResultType.values()[
-                prefs().getInt( PREF_RESULT_TYPE, getDefaultVersion().getAlgorithm().mpw_default_result_type().ordinal() )];
+                prefs().getInt( PREF_RESULT_TYPE, getDefaultVersion().mpw_default_result_type().ordinal() )];
     }
 
     public boolean setDefaultVersion(final MPAlgorithm.Version value) {
