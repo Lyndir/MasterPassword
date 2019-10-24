@@ -519,7 +519,7 @@ static const char *mpw_marshal_write_flat(
 
     // Sites.
     const MPMarshalledData *sites = mpw_marshal_data_find( data, "sites", NULL );
-    for (size_t s = 0; s < sites->children_count; ++s) {
+    for (size_t s = 0; s < (sites? sites->children_count: 0); ++s) {
         const MPMarshalledData *site = &sites->children[s];
         mpw_string_pushf( &out, "%s  %8ld  %8s  %25s\t%25s\t%s\n",
                 mpw_default( (char *)"", mpw_marshal_data_get_str( site, "last_used", NULL ) ),
@@ -1114,7 +1114,7 @@ MPMarshalledUser *mpw_marshal_auth(
 
     // Section "sites"
     const MPMarshalledData *sites = mpw_marshal_data_find( file->data, "sites", NULL );
-    for (size_t s = 0; s < sites->children_count; ++s) {
+    for (size_t s = 0; s < (sites? sites->children_count: 0); ++s) {
         const MPMarshalledData *siteData = &sites->children[s];
         const char *siteName = siteData->obj_key;
 
@@ -1201,24 +1201,22 @@ MPMarshalledUser *mpw_marshal_auth(
         }
 
         const MPMarshalledData *questions = mpw_marshal_data_find( siteData, "questions", NULL );
-        if (questions) {
-            for (size_t q = 0; q < questions->children_count; ++q) {
-                const MPMarshalledData *questionData = &questions->children[q];
-                MPMarshalledQuestion *question = mpw_marshal_question( site, questionData->obj_key );
-                const char *answerState = mpw_marshal_data_get_str( questionData, "answer", NULL );
-                question->type = mpw_default_n( MPResultTypeTemplatePhrase, mpw_marshal_data_get_num( questionData, "type", NULL ) );
+        for (size_t q = 0; q < (questions? questions->children_count: 0); ++q) {
+            const MPMarshalledData *questionData = &questions->children[q];
+            MPMarshalledQuestion *question = mpw_marshal_question( site, questionData->obj_key );
+            const char *answerState = mpw_marshal_data_get_str( questionData, "answer", NULL );
+            question->type = mpw_default_n( MPResultTypeTemplatePhrase, mpw_marshal_data_get_num( questionData, "type", NULL ) );
 
-                if (!user->redacted) {
-                    // Clear Text
-                    if (answerState && strlen( answerState ))
-                        question->state = mpw_site_state( masterKey, site->siteName, MPCounterValueInitial,
-                                MPKeyPurposeRecovery, question->keyword, question->type, answerState, site->algorithm );
-                }
-                else {
-                    // Redacted
-                    if (answerState && strlen( answerState ))
-                        question->state = mpw_strdup( answerState );
-                }
+            if (!user->redacted) {
+                // Clear Text
+                if (answerState && strlen( answerState ))
+                    question->state = mpw_site_state( masterKey, site->siteName, MPCounterValueInitial,
+                            MPKeyPurposeRecovery, question->keyword, question->type, answerState, site->algorithm );
+            }
+            else {
+                // Redacted
+                if (answerState && strlen( answerState ))
+                    question->state = mpw_strdup( answerState );
             }
         }
     }
