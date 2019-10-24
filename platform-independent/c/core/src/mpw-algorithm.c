@@ -243,7 +243,7 @@ const MPIdenticon mpw_identicon(const char *fullName, const char *masterPassword
             .body = mpw_identicon_bodies[seed[1] % (sizeof( mpw_identicon_bodies ) / sizeof( *mpw_identicon_bodies ))],
             .rightArm = mpw_identicon_rightArms[seed[2] % (sizeof( mpw_identicon_rightArms ) / sizeof( *mpw_identicon_rightArms ))],
             .accessory = mpw_identicon_accessories[seed[3] % (sizeof( mpw_identicon_accessories ) / sizeof( *mpw_identicon_accessories ))],
-            .color = (uint8_t)(seed[4] % (MPIdenticonColorLast - MPIdenticonColorFirst + 1) + MPIdenticonColorFirst),
+            .color = (MPIdenticonColor)(seed[4] % (MPIdenticonColorLast - MPIdenticonColorFirst + 1) + MPIdenticonColorFirst),
     };
     mpw_free( &seed, 32 );
 

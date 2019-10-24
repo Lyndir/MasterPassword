@@ -658,11 +658,11 @@ const char *mpw_marshal_write(
 
     // Section: "export"
     MPMarshalledData *data_export = mpw_marshal_data_get( data, "export", NULL );
-    mpw_marshal_data_set_bool( user->redacted, data_export, "redacted", NULL );
     char dateString[21];
     time_t now = time( NULL );
     if (strftime( dateString, sizeof( dateString ), "%FT%TZ", gmtime( &now ) ))
         mpw_marshal_data_set_str( dateString, data_export, "date", NULL );
+    mpw_marshal_data_set_bool( user->redacted, data_export, "redacted", NULL );
 
     // Section: "user"
     MPMarshalledData *data_user = mpw_marshal_data_get( data, "user", NULL );
