@@ -65,13 +65,9 @@ bool mpw_update_master_key(MPMasterKey *masterKey, MPAlgorithmVersion *masterKey
         mpw_free( masterKey, MPMasterKeySize );
         *masterKeyAlgorithm = targetKeyAlgorithm;
         *masterKey = mpw_master_key( fullName, masterPassword, *masterKeyAlgorithm );
-        if (!*masterKey) {
-            err( "Couldn't derive master key for user %s, algorithm %d.", fullName, *masterKeyAlgorithm );
-            return false;
-        }
     }
 
-    return true;
+    return masterKey && *masterKey != NULL;
 }
 
 #if MPW_JSON
