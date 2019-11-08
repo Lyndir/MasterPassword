@@ -22,6 +22,7 @@ MP_LIBS_BEGIN
 #include <string.h>
 #include <ctype.h>
 #include <errno.h>
+#include <libgen.h>
 
 #if MPW_CPERCIVA
 #include <scrypt/crypto_scrypt.h>
@@ -34,52 +35,111 @@ MP_LIBS_BEGIN
 #include "aes.h"
 MP_LIBS_END
 
-int mpw_verbosity = LogLevelInfo;
-FILE *mpw_log_cli_file;
+LogLevel mpw_verbosity = LogLevelInfo;
+FILE *mpw_log_sink_file_target = NULL;
 
-void mpw_log_cli(LogLevel level, const char *format, ...) {
-    va_list args;
-    va_start( args, format );
-    mpw_vlog_cli( level, format, args );
-    va_end( args );
-}
-void mpw_vlog_cli(LogLevel level, const char *format, va_list args) {
-    if (!mpw_log_cli_file)
-        mpw_log_cli_file = stderr;
+static MPLogSink **sinks;
+static size_t sinks_count;
 
-    if (mpw_verbosity >= level) {
-        if (mpw_verbosity >= LogLevelDebug) {
-            switch (level) {
-                case LogLevelTrace:
-                    fprintf( mpw_log_cli_file, "[TRC] " );
-                    break;
-                case LogLevelDebug:
-                    fprintf( mpw_log_cli_file, "[DBG] " );
-                    break;
-                case LogLevelInfo:
-                    fprintf( mpw_log_cli_file, "[INF] " );
-                    break;
-                case LogLevelWarning:
-                    fprintf( mpw_log_cli_file, "[WRN] " );
-                    break;
-                case LogLevelError:
-                    fprintf( mpw_log_cli_file, "[ERR] " );
-                    break;
-                case LogLevelFatal:
-                    fprintf( mpw_log_cli_file, "[FTL] " );
-                    break;
-                default:
-                    fprintf( mpw_log_cli_file, "[???] " );
-                    break;
-            }
-        }
+bool mpw_log_sink_register(MPLogSink *sink) {
 
-        vfprintf( mpw_log_cli_file, format, args );
-        fprintf( mpw_log_cli_file, "\n" );
+    if (!mpw_realloc( &sinks, NULL, sizeof( MPLogSink * ) * ++sinks_count )) {
+        --sinks_count;
+        return false;
     }
 
-    if (level <= LogLevelFatal)
+    sinks[sinks_count - 1] = sink;
+    return true;
+}
+
+bool mpw_log_sink_unregister(MPLogSink *sink) {
+
+    for (unsigned int r = 0; r < sinks_count; ++r) {
+        if (sinks[r] == sink) {
+            sinks[r] = NULL;
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void mpw_log_sink(LogLevel level, const char *file, int line, const char *function, const char *format, ...) {
+
+    if (mpw_verbosity < level)
+        return;
+
+    va_list args;
+    va_start( args, format );
+    mpw_log_vsink( level, file, line, function, format, args );
+    va_end( args );
+}
+
+void mpw_log_vsink(LogLevel level, const char *file, int line, const char *function, const char *format, va_list args) {
+
+    if (mpw_verbosity < level)
+        return;
+
+    return mpw_log_ssink( level, file, line, function, mpw_vstr( format, args ) );
+}
+
+void mpw_log_ssink(LogLevel level, const char *file, int line, const char *function, const char *message) {
+
+    if (mpw_verbosity < level)
+        return;
+
+    MPLogEvent record = (MPLogEvent){
+            .occurrence = time( NULL ),
+            .level = level,
+            .file = file,
+            .line = line,
+            .function = function,
+            .message = message,
+    };
+
+    for (unsigned int s = 0; s < sinks_count; ++s) {
+        MPLogSink *sink = sinks[s];
+
+        if (sink)
+            sink( &record );
+    }
+
+    if (record.level <= LogLevelFatal)
         abort();
+}
+
+void mpw_log_sink_file(const MPLogEvent *record) {
+
+    if (!mpw_log_sink_file_target)
+        mpw_log_sink_file_target = stderr;
+
+    if (mpw_verbosity >= LogLevelDebug) {
+        switch (record->level) {
+            case LogLevelTrace:
+                fprintf( mpw_log_sink_file_target, "[TRC] " );
+                break;
+            case LogLevelDebug:
+                fprintf( mpw_log_sink_file_target, "[DBG] " );
+                break;
+            case LogLevelInfo:
+                fprintf( mpw_log_sink_file_target, "[INF] " );
+                break;
+            case LogLevelWarning:
+                fprintf( mpw_log_sink_file_target, "[WRN] " );
+                break;
+            case LogLevelError:
+                fprintf( mpw_log_sink_file_target, "[ERR] " );
+                break;
+            case LogLevelFatal:
+                fprintf( mpw_log_sink_file_target, "[FTL] " );
+                break;
+            default:
+                fprintf( mpw_log_sink_file_target, "[???] " );
+                break;
+        }
+    }
+
+    fprintf( mpw_log_sink_file_target, "%s\n", record->message );
 }
 
 void mpw_uint16(const uint16_t number, uint8_t buf[2]) {
@@ -581,7 +641,7 @@ int mpw_strncasecmp(const char *s1, const char *s2, size_t max) {
 
     int cmp = 0;
     for (; !cmp && max-- > 0 && s1 && s2; ++s1, ++s2)
-        cmp = tolower( *(unsigned char *)s1 ) - tolower( *(unsigned char *)s2 );
+        cmp = tolower( (unsigned char)*s1 ) - tolower( (unsigned char)*s2 );
 
     return cmp;
 }

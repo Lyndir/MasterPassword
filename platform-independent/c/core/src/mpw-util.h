@@ -27,42 +27,57 @@ MP_LIBS_BEGIN
 MP_LIBS_END
 
 //// Logging.
-typedef mpw_enum(int, LogLevel) {
+typedef mpw_enum( int, LogLevel ) {
     /** Logging internal state. */
-    LogLevelTrace = 3,
+            LogLevelTrace = 3,
     /** Logging state and events interesting when investigating issues. */
-    LogLevelDebug = 2,
+            LogLevelDebug = 2,
     /** User messages. */
-    LogLevelInfo = 1,
+            LogLevelInfo = 1,
     /** Recoverable issues and user suggestions. */
-    LogLevelWarning = 0,
+            LogLevelWarning = 0,
     /** Unrecoverable issues. */
-    LogLevelError = -1,
+            LogLevelError = -1,
     /** Issues that lead to abortion. */
-    LogLevelFatal = -2,
+            LogLevelFatal = -2,
 };
 extern LogLevel mpw_verbosity;
 
-/** mpw_log_cli is a sink that writes log messages to the mpw_log_cli_file, which defaults to stderr. */
-extern FILE *mpw_log_cli_file;
-void mpw_log_cli(LogLevel level, const char *format, ...);
-void mpw_vlog_cli(LogLevel level, const char *format, va_list args);
+typedef struct {
+    time_t occurrence;
+    LogLevel level;
+    const char *file;
+    int line;
+    const char *function;
+    const char *message;
+} MPLogEvent;
 
-/** mpw_log_app is a sink placeholder that an application can implement to consume log messages. */
-void mpw_log_app(LogLevel level, const char *format, ...);
+/** A log sink describes a function that can receive log events when registered. */
+typedef void (MPLogSink)(const MPLogEvent *event);
+bool mpw_log_sink_register(MPLogSink *sink);
+bool mpw_log_sink_unregister(MPLogSink *sink);
 
-/** The sink you want to channel the log messages into, defaults to mpw_log_cli. */
+/** mpw_log_sink_file is a sink that writes log messages to the mpw_log_cli_file, which defaults to stderr. */
+extern MPLogSink mpw_log_sink_file;
+extern FILE *mpw_log_sink_file_target;
+
+/** These functions dispatch log events to the registered sinks. */
+void mpw_log_sink(LogLevel level, const char *file, int line, const char *function, const char *format, ...);
+void mpw_log_vsink(LogLevel level, const char *file, int line, const char *function, const char *format, va_list args);
+void mpw_log_ssink(LogLevel level, const char *file, int line, const char *function, const char *message);
+
+/** The log dispatcher you want to channel log messages into; defaults to mpw_log_sink, enabling the log sink mechanism. */
 #ifndef MPW_LOG
-#define MPW_LOG mpw_log_cli
+#define MPW_LOG mpw_log_sink
 #endif
 
 #ifndef trc
-#define trc(format, ...) MPW_LOG( LogLevelTrace, format, ##__VA_ARGS__ )
-#define dbg(format, ...) MPW_LOG( LogLevelDebug, format, ##__VA_ARGS__ )
-#define inf(format, ...) MPW_LOG( LogLevelInfo, format, ##__VA_ARGS__ )
-#define wrn(format, ...) MPW_LOG( LogLevelWarning, format, ##__VA_ARGS__ )
-#define err(format, ...) MPW_LOG( LogLevelError, format, ##__VA_ARGS__ )
-#define ftl(format, ...) MPW_LOG( LogLevelFatal, format, ##__VA_ARGS__ )
+#define trc(format, ...) MPW_LOG( LogLevelTrace, __FILE__, __LINE__, __func__, format, ##__VA_ARGS__ )
+#define dbg(format, ...) MPW_LOG( LogLevelDebug, __FILE__, __LINE__, __func__, format, ##__VA_ARGS__ )
+#define inf(format, ...) MPW_LOG( LogLevelInfo, __FILE__, __LINE__, __func__, format, ##__VA_ARGS__ )
+#define wrn(format, ...) MPW_LOG( LogLevelWarning, __FILE__, __LINE__, __func__, format, ##__VA_ARGS__ )
+#define err(format, ...) MPW_LOG( LogLevelError, __FILE__, __LINE__, __func__, format, ##__VA_ARGS__ )
+#define ftl(format, ...) MPW_LOG( LogLevelFatal, __FILE__, __LINE__, __func__, format, ##__VA_ARGS__ )
 #endif
 
 #ifndef min
