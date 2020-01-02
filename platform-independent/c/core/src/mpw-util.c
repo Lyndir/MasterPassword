@@ -398,7 +398,7 @@ uint8_t const *mpw_hash_hmac_sha256(const uint8_t *key, const size_t keySize, co
 // We do our best to not fail on odd buf's, eg. non-padded cipher texts.
 static uint8_t const *mpw_aes(bool encrypt, const uint8_t *key, const size_t keySize, const uint8_t *buf, size_t *bufSize) {
 
-    if (!key || keySize < AES_BLOCKLEN || !*bufSize)
+    if (!key || keySize < AES_BLOCKLEN || !bufSize || !*bufSize)
         return NULL;
 
     // IV = zero
@@ -409,15 +409,18 @@ static uint8_t const *mpw_aes(bool encrypt, const uint8_t *key, const size_t key
     // Add PKCS#7 padding
     uint32_t aesSize = ((uint32_t)*bufSize + AES_BLOCKLEN - 1) & -AES_BLOCKLEN; // round up to block size.
     if (encrypt && !(*bufSize % AES_BLOCKLEN)) // add pad block if plain text fits block size.
-        encrypt += AES_BLOCKLEN;
+        aesSize += AES_BLOCKLEN;
+    uint8_t *resultBuf = calloc( aesSize, sizeof( uint8_t ) );
+    if (!resultBuf)
+        return NULL;
     uint8_t *aesBuf = malloc( aesSize );
-    memcpy( aesBuf, buf, *bufSize );
-    memset( aesBuf + *bufSize, aesSize - *bufSize, aesSize - *bufSize );
-    uint8_t *resultBuf = malloc( aesSize );
-    if (!resultBuf) {
-        mpw_free( &aesBuf, aesSize );
+    if (!aesBuf) {
+        mpw_free( &resultBuf, aesSize );
         return NULL;
     }
+
+    memcpy( aesBuf, buf, *bufSize );
+    memset( aesBuf + *bufSize, (int)(aesSize - *bufSize), aesSize - *bufSize );
 
     if (encrypt)
         AES_CBC_encrypt_buffer( resultBuf, aesBuf, aesSize, key, iv );
@@ -434,14 +437,14 @@ static uint8_t const *mpw_aes(bool encrypt, const uint8_t *key, const size_t key
     return resultBuf;
 }
 
-uint8_t const *mpw_aes_encrypt(const uint8_t *key, const size_t keySize, const uint8_t *plainBuf, size_t *bufSize) {
+uint8_t const *mpw_aes_encrypt(const uint8_t *key, const size_t keySize, const uint8_t *plainBuffer, size_t *bufferSize) {
 
-    return mpw_aes( true, key, keySize, plainBuf, bufSize );
+    return mpw_aes( true, key, keySize, plainBuffer, bufferSize );
 }
 
-uint8_t const *mpw_aes_decrypt(const uint8_t *key, const size_t keySize, const uint8_t *cipherBuf, size_t *bufSize) {
+uint8_t const *mpw_aes_decrypt(const uint8_t *key, const size_t keySize, const uint8_t *cipherBuffer, size_t *bufferSize) {
 
-    return mpw_aes( false, key, keySize, cipherBuf, bufSize );
+    return mpw_aes( false, key, keySize, cipherBuffer, bufferSize );
 }
 
 #if UNUSED
@@ -562,7 +565,7 @@ const char *mpw_hex(const void *buf, const size_t length) {
         return NULL;
 
     for (size_t kH = 0; kH < length; kH++)
-        sprintf( &(mpw_hex_buf[mpw_hex_buf_i][kH * 2]), "%02X", ((const uint8_t *)buf)[kH] );
+        sprintf( &(mpw_hex_buf[mpw_hex_buf_i][kH * 2]), "%02hhX", ((const uint8_t *)buf)[kH] );
 
     return mpw_hex_buf[mpw_hex_buf_i];
 }
@@ -575,6 +578,26 @@ const char *mpw_hex_l(const uint32_t number) {
     buf[2] = (uint8_t)((number >> 8L) & UINT8_MAX);
     buf[3] = (uint8_t)((number >> 0L) & UINT8_MAX);
     return mpw_hex( &buf, sizeof( buf ) );
+}
+
+const uint8_t *mpw_unhex(const char *hex) {
+
+    if (!hex)
+        return NULL;
+
+    size_t length = strlen( hex );
+    if (length == 0 || length % 2 != 0)
+        return NULL;
+
+    size_t bytes = length / 2;
+    uint8_t *buf = malloc( bytes );
+    for (size_t b = 0; b < bytes; ++b)
+        if (sscanf( hex + b * 2, "%02hhX", &buf[b] ) != 1) {
+            mpw_free( &buf, bytes );
+            return NULL;
+        }
+    
+    return buf;
 }
 
 size_t mpw_utf8_charlen(const char *utf8String) {

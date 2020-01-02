@@ -169,7 +169,7 @@ const char *mpw_site_crypted_password_v0(
 
     // Base64-decode
     uint8_t *cipherBuf = calloc( 1, mpw_base64_decode_max( cipherText ) );
-    size_t bufSize = (size_t)mpw_base64_decode( cipherBuf, cipherText ), cipherBufSize = bufSize;
+    size_t bufSize = mpw_base64_decode( cipherBuf, cipherText ), cipherBufSize = bufSize;
     if ((int)bufSize < 0) {
         err( "Base64 decoding error." );
         mpw_free( &cipherBuf, mpw_base64_decode_max( cipherText ) );

@@ -207,14 +207,16 @@ uint8_t const *mpw_kdf_blake2b(
  * @return A buffer (allocated, 32-byte) containing the MAC or NULL if the key or message is missing, the MAC could not be allocated or generated. */
 uint8_t const *mpw_hash_hmac_sha256(
         const uint8_t *key, const size_t keySize, const uint8_t *message, const size_t messageSize);
-/** Encrypt a plainBuf with the given key using AES-128-CBC.
- * @return A buffer (allocated, bufSize) containing the cipherBuf or NULL if the key or buffer is missing, the key size is out of bounds or the result could not be allocated. */
+/** Encrypt a plainBuffer with the given key using AES-128-CBC.
+ * @param bufferSize A pointer to the size of the plain buffer on input, and the size of the returned cipher buffer on output.
+ * @return A buffer (allocated, bufferSize) containing the cipherBuffer or NULL if the key or buffer is missing, the key size is out of bounds or the result could not be allocated. */
 uint8_t const *mpw_aes_encrypt(
-        const uint8_t *key, const size_t keySize, const uint8_t *plainBuf, size_t *bufSize);
-/** Decrypt a cipherBuf with the given key using AES-128-CBC.
- * @return A buffer (allocated, bufSize) containing the plainBuf or NULL if the key or buffer is missing, the key size is out of bounds or the result could not be allocated. */
+        const uint8_t *key, const size_t keySize, const uint8_t *plainBuffer, size_t *bufferSize);
+/** Decrypt a cipherBuffer with the given key using AES-128-CBC.
+ * @param bufferSize A pointer to the size of the cipher buffer on input, and the size of the returned plain buffer on output.
+ * @return A buffer (allocated, bufferSize) containing the plainBuffer or NULL if the key or buffer is missing, the key size is out of bounds or the result could not be allocated. */
 uint8_t const *mpw_aes_decrypt(
-        const uint8_t *key, const size_t keySize, const uint8_t *cipherBuf, size_t *bufSize);
+        const uint8_t *key, const size_t keySize, const uint8_t *cipherBuffer, size_t *bufferSize);
 #if UNUSED
 /** Calculate an OTP using RFC-4226.
  * @return A string (allocated) containing exactly `digits` decimal OTP digits. */
@@ -232,6 +234,9 @@ const char *mpw_vstr(const char *format, va_list args);
  * @return A string (shared); or NULL if the buffer is missing or the result could not be allocated. */
 const char *mpw_hex(const void *buf, const size_t length);
 const char *mpw_hex_l(const uint32_t number);
+/** Decode a string of hexadecimal characters into a buffer.
+ * @return A buffer (allocated, strlen(hex) / 2); or NULL if hex is NULL, empty, or not an even-length hexadecimal string. */
+const uint8_t *mpw_unhex(const char *hex);
 /** Encode a fingerprint for a buffer.
  * @return A string (shared); or NULL if the buffer is missing or the result could not be allocated. */
 const MPKeyID mpw_id_buf(const void *buf, const size_t length);

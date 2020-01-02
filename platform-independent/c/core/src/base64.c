@@ -80,19 +80,19 @@ static const uint8_t b64ToBits[256] =
 
 size_t mpw_base64_decode_max(const char *b64Text) {
 
-    register const uint8_t *b64Cursor = (uint8_t *)b64Text;
-    while (b64ToBits[*(b64Cursor++)] <= 63);
-    int b64Size = (int)(b64Cursor - (uint8_t *)b64Text) - 1;
+    register const char *b64Cursor = b64Text;
+    for (; b64ToBits[*b64Cursor] <= 63; ++b64Cursor);
+    size_t b64Size = b64Cursor - b64Text;
 
     // Every 4 b64 chars yield 3 plain bytes => len = 3 * ceil(b64Size / 4)
-    return (size_t)(3 /*bytes*/ * ((b64Size + 4 /*chars*/ - 1) / 4 /*chars*/));
+    return 3 /*bytes*/ * ((b64Size + 4 /*chars*/ - 1) / 4 /*chars*/);
 }
 
-int mpw_base64_decode(uint8_t *plainBuf, const char *b64Text) {
+size_t mpw_base64_decode(uint8_t *plainBuf, const char *b64Text) {
 
     register const uint8_t *b64Cursor = (uint8_t *)b64Text;
-    while (b64ToBits[*(b64Cursor++)] <= 63);
-    int b64Remaining = (int)(b64Cursor - (uint8_t *)b64Text) - 1;
+    for (; b64ToBits[*b64Cursor] <= 63; ++b64Cursor);
+    size_t b64Remaining = b64Cursor - (uint8_t *)b64Text;
 
     b64Cursor = (uint8_t *)b64Text;
     register uint8_t *plainCursor = plainBuf;
@@ -112,7 +112,7 @@ int mpw_base64_decode(uint8_t *plainBuf, const char *b64Text) {
     if (b64Remaining > 3)
         *(plainCursor++) = (uint8_t)(b64ToBits[b64Cursor[2]] << 6 | b64ToBits[b64Cursor[3]]);
 
-    return (int)(plainCursor - plainBuf);
+    return plainCursor - plainBuf;
 }
 
 static const char basis_64[] =
@@ -124,7 +124,7 @@ size_t mpw_base64_encode_max(size_t plainSize) {
     return 4 /*chars*/ * (plainSize + 3 /*bytes*/ - 1) / 3 /*bytes*/;
 }
 
-int mpw_base64_encode(char *b64Text, const uint8_t *plainBuf, size_t plainSize) {
+size_t mpw_base64_encode(char *b64Text, const uint8_t *plainBuf, size_t plainSize) {
 
     size_t plainCursor = 0;
     char *b64Cursor = b64Text;
@@ -151,5 +151,5 @@ int mpw_base64_encode(char *b64Text, const uint8_t *plainBuf, size_t plainSize) 
     }
 
     *b64Cursor = '\0';
-    return (int)(b64Cursor - b64Text);
+    return b64Cursor - b64Text;
 }
