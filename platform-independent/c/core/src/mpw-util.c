@@ -395,7 +395,6 @@ uint8_t const *mpw_hash_hmac_sha256(const uint8_t *key, const size_t keySize, co
     return mac;
 }
 
-// We do our best to not fail on odd buf's, eg. non-padded cipher texts.
 static uint8_t const *mpw_aes(bool encrypt, const uint8_t *key, const size_t keySize, const uint8_t *buf, size_t *bufSize) {
 
     if (!key || keySize < AES_BLOCKLEN || !bufSize || !*bufSize)
@@ -431,7 +430,7 @@ static uint8_t const *mpw_aes(bool encrypt, const uint8_t *key, const size_t key
     // Truncate PKCS#7 padding
     if (encrypt)
         *bufSize = aesSize;
-    else if (*bufSize % AES_BLOCKLEN == 0 && resultBuf[aesSize - 1] < AES_BLOCKLEN)
+    else if (resultBuf[aesSize - 1] <= AES_BLOCKLEN)
         *bufSize -= resultBuf[aesSize - 1];
 
     return resultBuf;
@@ -596,7 +595,7 @@ const uint8_t *mpw_unhex(const char *hex) {
             mpw_free( &buf, bytes );
             return NULL;
         }
-    
+
     return buf;
 }
 
@@ -654,8 +653,9 @@ char *mpw_strndup(const char *src, const size_t max) {
     size_t len = 0;
     for (; len < max && src[len] != '\0'; ++len);
 
-    char *dst = mpw_memdup( src, len + 1 );
-    dst[len] = '\0';
+    char *dst = calloc( len + 1, sizeof( char ) );
+    if (dst)
+        memcpy( dst, src, len );
 
     return dst;
 }
