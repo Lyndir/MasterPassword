@@ -38,7 +38,7 @@ typedef NS_ENUM( NSUInteger, MPKeyOrigin ) {
                       keyOrigin:(MPKeyOrigin)origin;
 
 - (NSData *)keyIDForAlgorithm:(id<MPAlgorithm>)algorithm;
-- (MPMasterKey)keyForAlgorithm:(id<MPAlgorithm>)algorithm;
+- (NSData *)keyForAlgorithm:(id<MPAlgorithm>)algorithm;
 
 - (BOOL)isEqualToKey:(MPKey *)key;
 

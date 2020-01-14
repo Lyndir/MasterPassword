@@ -132,7 +132,7 @@ static NSOperationQueue *_mpwQueue = nil;
         if (masterKey) {
             keyData = [NSData dataWithBytes:masterKey length:MPMasterKeySize];
             trc( @"User: %@, password: %@ derives to key ID: %@ (took %0.2fs)", //
-                    fullName, masterPassword, [self keyIDForKey:masterKey], -[start timeIntervalSinceNow] );
+                    fullName, masterPassword, [self keyIDForKey:keyData], -[start timeIntervalSinceNow] );
             mpw_free( &masterKey, MPMasterKeySize );
         }
     }];
@@ -140,9 +140,9 @@ static NSOperationQueue *_mpwQueue = nil;
     return keyData;
 }
 
-- (NSData *)keyIDForKey:(MPMasterKey)masterKey {
+- (NSData *)keyIDForKey:(NSData *)masterKey {
 
-    return [[NSData dataWithBytesNoCopy:(void *)masterKey length:MPMasterKeySize] hashWith:PearlHashSHA256];
+    return [masterKey hashWith:PearlHashSHA256];
 }
 
 - (NSString *)nameOfType:(MPResultType)type {
@@ -364,8 +364,9 @@ static NSOperationQueue *_mpwQueue = nil;
 
     __block NSString *result = nil;
     [self mpw_perform:^{
-        char const *resultBytes = mpw_siteResult( [key keyForAlgorithm:self],
-                name.UTF8String, counter, purpose, context.UTF8String, type, parameter.UTF8String, [self version] );
+        NSData *masterKey = [key keyForAlgorithm:self];
+        char const *resultBytes = mpw_siteResult( masterKey.bytes, name.UTF8String,
+                counter, purpose, context.UTF8String, type, parameter.UTF8String, [self version] );
         if (resultBytes) {
             result = [NSString stringWithCString:resultBytes encoding:NSUTF8StringEncoding];
             mpw_free_string( &resultBytes );
@@ -392,7 +393,8 @@ static NSOperationQueue *_mpwQueue = nil;
     __block NSData *state = nil;
     if (plainText)
         [self mpw_perform:^{
-            char const *stateBytes = mpw_siteState( [key keyForAlgorithm:self], site.name.UTF8String,
+            NSData *masterKey = [key keyForAlgorithm:self];
+            char const *stateBytes = mpw_siteState( masterKey.bytes, site.name.UTF8String,
                     MPCounterValueInitial, MPKeyPurposeAuthentication, NULL, site.type, plainText.UTF8String, [self version] );
             if (stateBytes) {
                 state = [[NSString stringWithCString:stateBytes encoding:NSUTF8StringEncoding] decodeBase64];
@@ -499,7 +501,7 @@ static NSOperationQueue *_mpwQueue = nil;
             if (![site isKindOfClass:[MPGeneratedSiteEntity class]]) {
                 wrn( @"Site with generated type %lu is not an MPGeneratedSiteEntity, but a %@.",
                         (long)site.type, [site class] );
-                break;
+                return;
             }
 
             MPCounterValue counter = ((MPGeneratedSiteEntity *)site).counter;
@@ -507,7 +509,7 @@ static NSOperationQueue *_mpwQueue = nil;
             PearlNotMainQueue( ^{
                 resultBlock( [algorithm mpwTemplateForSiteNamed:name ofType:type withCounter:counter usingKey:key] );
             } );
-            break;
+            return;
         }
 
         case MPResultTypeStatefulPersonal:
@@ -515,7 +517,7 @@ static NSOperationQueue *_mpwQueue = nil;
             if (![site isKindOfClass:[MPStoredSiteEntity class]]) {
                 wrn( @"Site with stored type %lu is not an MPStoredSiteEntity, but a %@.",
                         (long)site.type, [site class] );
-                break;
+                return;
             }
 
             NSDictionary *siteQuery = [self queryForSite:site];
@@ -527,11 +529,11 @@ static NSOperationQueue *_mpwQueue = nil;
                                                   withCounter:MPCounterValueInitial variant:MPKeyPurposeAuthentication context:nil
                                                      usingKey:key] );
             } );
-            break;
+            return;
         }
 
         case MPResultTypeDeriveKey:
-            break;
+            return;
     }
 
     Throw( @"Type not supported: %lu", (long)type );

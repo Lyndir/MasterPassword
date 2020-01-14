@@ -56,7 +56,7 @@
     return [algorithm keyIDForKey:[self keyForAlgorithm:algorithm]];
 }
 
-- (MPMasterKey)keyForAlgorithm:(id<MPAlgorithm>)algorithm {
+- (NSData *)keyForAlgorithm:(id<MPAlgorithm>)algorithm {
 
     @synchronized (self) {
         NSData *keyData = [self.keyCache objectForKey:algorithm];
@@ -66,7 +66,7 @@
                 [self.keyCache setObject:keyData forKey:algorithm];
         }
 
-        return keyData.length == MPMasterKeySize? keyData.bytes: NULL;
+        return keyData.length == MPMasterKeySize? keyData: NULL;
     }
 }
 

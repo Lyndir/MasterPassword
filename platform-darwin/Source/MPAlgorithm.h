@@ -49,7 +49,7 @@ NSString *NSStringFromTimeToCrack(TimeToCrack timeToCrack);
 - (BOOL)tryMigrateUser:(MPUserEntity *)user inContext:(NSManagedObjectContext *)moc;
 - (BOOL)tryMigrateSite:(MPSiteEntity *)site explicit:(BOOL)explicit;
 
-- (NSData *)keyIDForKey:(MPMasterKey)masterKey;
+- (NSData *)keyIDForKey:(NSData *)masterKey;
 - (NSData *)keyDataForFullName:(NSString *)fullName withMasterPassword:(NSString *)masterPassword;
 
 - (NSString *)nameOfType:(MPResultType)type;

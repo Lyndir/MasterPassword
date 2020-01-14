@@ -95,13 +95,13 @@
 - (void)storeSavedKeyFor:(MPUserEntity *)user {
 
     if (user.saveKey) {
-        MPMasterKey masterKey = [self.key keyForAlgorithm:user.algorithm];
+        NSData *masterKey = [self.key keyForAlgorithm:user.algorithm];
         if (masterKey) {
             [self forgetSavedKeyFor:user];
 
             inf( @"Saving key in keychain for user: %@", user.userID );
             [PearlKeyChain addOrUpdateItemForQuery:[self createKeyQueryforUser:user origin:nil] withAttributes:@{
-                    (__bridge id)kSecValueData: [NSData dataWithBytesNoCopy:(void *)masterKey length:MPMasterKeySize]
+                    (__bridge id)kSecValueData: masterKey
             }];
         }
     }
