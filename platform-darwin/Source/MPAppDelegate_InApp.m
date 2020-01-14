@@ -104,24 +104,19 @@ PearlAssociatedObjectProperty( NSMutableArray*, ProductObservers, productObserve
 
 #if TARGET_OS_IPHONE
     if (![[MPAppDelegate_Shared get] canMakePayments]) {
-        [PearlAlert showAlertWithTitle:@"App Store Not Set Up" message:
+        UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"App Store Not Set Up" message:
                         @"Make sure your Apple ID is set under Settings -> iTunes & App Store, "
-                                @"you have a payment method added to the account and purchases are"
-                                @"not disabled under General -> Restrictions."
-                             viewStyle:UIAlertViewStyleDefault initAlert:nil
-                     tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                         if (buttonIndex == alert.cancelButtonIndex)
-                             // Cancel
-                             return;
-                         if (buttonIndex == alert.firstOtherButtonIndex) {
-                             // Settings
-                             [PearlLinks openSettingsStore];
-                             return;
-                         }
-
-                         // Try Anyway
-                         [self performPurchaseProductWithIdentifier:productIdentifier quantity:quantity];
-                     } cancelTitle:@"Cancel" otherTitles:@"Settings", @"Try Anyway", nil];
+                        @"you have a payment method added to the account and purchases are"
+                        @"not disabled under General -> Restrictions."
+                                                                     preferredStyle:UIAlertControllerStyleAlert];
+        [controller addAction:[UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [PearlLinks openSettingsStore];
+        }]];
+        [controller addAction:[UIAlertAction actionWithTitle:@"Try Anyway" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self performPurchaseProductWithIdentifier:productIdentifier quantity:quantity];
+        }]];
+        [controller addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+        [self.navigationController presentViewController:controller animated:YES completion:nil];
         return;
     }
 #endif
@@ -163,11 +158,12 @@ PearlAssociatedObjectProperty( NSMutableArray*, ProductObservers, productObserve
     MPError( error, @"StoreKit request (%@) failed.", request );
 
 #if TARGET_OS_IPHONE
-    [PearlAlert showAlertWithTitle:@"Purchase Failed" message:
+    UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"Purchase Failed" message:
                     strf( @"%@\n\n%@", error.localizedDescription,
                             @"Ensure you are online and try logging out and back into iTunes from your device's Settings." )
-                         viewStyle:UIAlertViewStyleDefault initAlert:nil tappedButtonBlock:nil
-                       cancelTitle:@"OK" otherTitles:nil];
+                                                                 preferredStyle:UIAlertControllerStyleAlert];
+    [controller addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
+    [self.navigationController presentViewController:controller animated:YES completion:nil];
 #else
 #endif
 }

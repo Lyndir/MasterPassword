@@ -172,23 +172,24 @@
             if (![site.questions count])
                 [self setMultiple:NO animated:YES];
 
-            else
-                [PearlAlert showAlertWithTitle:@"Remove Site Questions?" message:
+            else {
+                UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"Remove Site Questions?" message:
                                 @"Do you want to remove the questions you have configured for this site?"
-                                     viewStyle:UIAlertViewStyleDefault initAlert:nil
-                             tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                                 if (buttonIndex == [alert cancelButtonIndex])
-                                     return;
-
-                                 [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-                                     MPSiteEntity *site_ = [self siteInContext:context];
-                                     NSOrderedSet *questions = [site_.questions copy];
-                                     for (MPSiteQuestionEntity *question in questions)
-                                         [context deleteObject:question];
-                                     [context saveToStore];
-                                     [self setMultiple:NO animated:YES];
-                                 }];
-                             } cancelTitle:@"Cancel" otherTitles:@"Remove Questions", nil];
+                                                                             preferredStyle:UIAlertControllerStyleAlert];
+                [controller addAction:[UIAlertAction actionWithTitle:@"Remove Questions" style:UIAlertActionStyleDestructive handler:
+                        ^(UIAlertAction *_Nonnull action) {
+                            [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+                                MPSiteEntity *site_ = [self siteInContext:context];
+                                NSOrderedSet *questions = [site_.questions copy];
+                                for (MPSiteQuestionEntity *question in questions)
+                                    [context deleteObject:question];
+                                [context saveToStore];
+                                [self setMultiple:NO animated:YES];
+                            }];
+                        }]];
+                [controller addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+                [self presentViewController:controller animated:YES completion:nil];
+            }
         }
     }
 
@@ -197,9 +198,9 @@
         if (!self.multiple) {
             NSObject *answer = [site resolveSiteAnswerUsingKey:[MPiOSAppDelegate get].key];
             body = strf( @"Master Password generated the following security answer for your site: %@\n\n"
-                    @"%@\n"
-                    @"\n\nYou should use this as the answer to each security question the site asks you.\n"
-                    @"Do not share this answer with others!", site.name, answer );
+                         @"%@\n"
+                         @"\n\nYou should use this as the answer to each security question the site asks you.\n"
+                         @"Do not share this answer with others!", site.name, answer );
         }
         else {
             NSMutableString *bodyBuilder = [NSMutableString string];
@@ -209,7 +210,7 @@
                 [bodyBuilder appendFormat:@"For question: '%@', use answer: %@\n", question.keyword, answer];
             }
             [bodyBuilder appendFormat:@"\n\nUse the answer for the matching security question.\n"
-                    @"Do not share this answer with others!"];
+                                      @"Do not share this answer with others!"];
             body = bodyBuilder;
         }
 
@@ -225,7 +226,7 @@
 - (void)copyAnswer:(NSString *)answer {
 
     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-    if (@available(iOS 10.0, *)) {
+    if (@available( iOS 10.0, * )) {
         [pasteboard setItems:@[ @{ UIPasteboardTypeAutomatic: answer } ]
                      options:@{
                              UIPasteboardOptionLocalOnly     : @NO,

@@ -432,33 +432,27 @@ referenceSizeForFooterInSection:(NSInteger)section {
             return;
 
         NSManagedObjectID *userID = user.permanentObjectID;
-        [PearlSheet showSheetWithTitle:user.name
-                             viewStyle:UIActionSheetStyleBlackTranslucent
-                             initSheet:nil tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
-                    if (buttonIndex == [sheet cancelButtonIndex])
-                        return;
-
-                    if (buttonIndex == [sheet destructiveButtonIndex]) {
-                        // Delete User
-                        [PearlAlert showParentalGateWithTitle:@"Deleting User" message:
-                                        @"The user and its sites will be deleted.\nPlease confirm by solving:"
-                                                   completion:^(BOOL continuing) {
-                                                       if (continuing)
-                                                           [self deleteUser:userID];
-                                                   }];
-                        return;
-                    }
-
-                    if (buttonIndex == [sheet firstOtherButtonIndex])
-                        // Reset Password
-                        [PearlAlert showParentalGateWithTitle:@"Resetting User" message:
-                                        @"The user's master password will be reset.\nPlease confirm by solving:"
-                                                   completion:^(BOOL continuing) {
-                                                       if (continuing)
-                                                           [self resetUser:userID avatar:avatarCell];
-                                                   }];
-                }          cancelTitle:[PearlStrings get].commonButtonCancel
-                      destructiveTitle:@"Delete User" otherTitles:@"Reset Password", nil];
+        UIAlertController *controller = [UIAlertController alertControllerWithTitle:user.name message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+        [controller addAction:[UIAlertAction actionWithTitle:@"Delete User" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+            UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"Deleting User" message:
+                                             @"The user and its sites will be deleted." preferredStyle:UIAlertControllerStyleAlert];
+            [controller addAction:[UIAlertAction actionWithTitle:@"Delete User" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                [self deleteUser:userID];
+            }]];
+            [controller addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+            [self presentViewController:controller animated:YES completion:nil];
+        }]];
+        [controller addAction:[UIAlertAction actionWithTitle:@"Reset Password" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"Resetting User" message:
+                                             @"The user's master password will be reset." preferredStyle:UIAlertControllerStyleAlert];
+            [controller addAction:[UIAlertAction actionWithTitle:@"Reset User" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                [self resetUser:userID avatar:avatarCell];
+            }]];
+            [controller addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+            [self presentViewController:controller animated:YES completion:nil];
+        }]];
+        [controller addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+        [self presentViewController:controller animated:YES completion:nil];
     }
 }
 

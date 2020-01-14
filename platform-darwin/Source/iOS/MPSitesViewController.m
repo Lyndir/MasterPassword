@@ -447,8 +447,8 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     _active = active;
 
     [UIView animateWithDuration:animated? 0.4f: 0 animations:^{
-        [self.navigationBarToTopConstraint updatePriority:active? 1: UILayoutPriorityDefaultHigh];
-        [self.sitesToBottomConstraint updatePriority:active? 1: UILayoutPriorityDefaultHigh];
+        [self.navigationBarToTopConstraint withPriority:active? 1: UILayoutPriorityDefaultHigh];
+        [self.sitesToBottomConstraint withPriority:active? 1: UILayoutPriorityDefaultHigh];
         [self.view layoutIfNeeded];
     }                completion:completion];
 }

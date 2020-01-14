@@ -228,9 +228,9 @@ const long MPAvatarAdd = 10000;
                              case MPAvatarModeLowered: {
                                  [self.avatarSizeConstraint updateConstant:
                                          self.avatarImageView.image.size.height * (self.visibility * 0.3f + 0.7f)];
-                                 [self.avatarRaisedConstraint updatePriority:UILayoutPriorityDefaultLow];
-                                 [self.avatarToTopConstraint updatePriority:UILayoutPriorityDefaultLow];
-                                 [self.nameToCenterConstraint updatePriority:UILayoutPriorityDefaultLow];
+                                 [self.avatarRaisedConstraint withPriority:UILayoutPriorityDefaultLow];
+                                 [self.avatarToTopConstraint withPriority:UILayoutPriorityDefaultLow];
+                                 [self.nameToCenterConstraint withPriority:UILayoutPriorityDefaultLow];
                                  self.nameContainer.visible = YES;
                                  self.nameContainer.backgroundColor = [UIColor clearColor];
                                  self.avatarImageView.visible = YES;
@@ -239,9 +239,9 @@ const long MPAvatarAdd = 10000;
                              case MPAvatarModeRaisedButInactive: {
                                  [self.avatarSizeConstraint updateConstant:
                                          self.avatarImageView.image.size.height * (self.visibility * 0.7f + 0.3f)];
-                                 [self.avatarRaisedConstraint updatePriority:UILayoutPriorityDefaultHigh];
-                                 [self.avatarToTopConstraint updatePriority:UILayoutPriorityDefaultLow];
-                                 [self.nameToCenterConstraint updatePriority:UILayoutPriorityDefaultLow];
+                                 [self.avatarRaisedConstraint withPriority:UILayoutPriorityDefaultHigh];
+                                 [self.avatarToTopConstraint withPriority:UILayoutPriorityDefaultLow];
+                                 [self.nameToCenterConstraint withPriority:UILayoutPriorityDefaultLow];
                                  self.nameContainer.visible = YES;
                                  self.nameContainer.backgroundColor = [UIColor clearColor];
                                  self.avatarImageView.visible = NO;
@@ -250,9 +250,9 @@ const long MPAvatarAdd = 10000;
                              case MPAvatarModeRaisedAndActive: {
                                  [self.avatarSizeConstraint updateConstant:
                                          self.avatarImageView.image.size.height * (self.visibility * 0.7f + 0.3f)];
-                                 [self.avatarRaisedConstraint updatePriority:UILayoutPriorityDefaultHigh];
-                                 [self.avatarToTopConstraint updatePriority:UILayoutPriorityDefaultLow];
-                                 [self.nameToCenterConstraint updatePriority:UILayoutPriorityDefaultHigh];
+                                 [self.avatarRaisedConstraint withPriority:UILayoutPriorityDefaultHigh];
+                                 [self.avatarToTopConstraint withPriority:UILayoutPriorityDefaultLow];
+                                 [self.nameToCenterConstraint withPriority:UILayoutPriorityDefaultHigh];
                                  self.nameContainer.visible = YES;
                                  self.nameContainer.backgroundColor = [UIColor blackColor];
                                  self.avatarImageView.visible = YES;
@@ -261,9 +261,9 @@ const long MPAvatarAdd = 10000;
                              case MPAvatarModeRaisedAndHidden: {
                                  [self.avatarSizeConstraint updateConstant:
                                          self.avatarImageView.image.size.height * (self.visibility * 0.7f + 0.3f)];
-                                 [self.avatarRaisedConstraint updatePriority:UILayoutPriorityDefaultHigh];
-                                 [self.avatarToTopConstraint updatePriority:UILayoutPriorityDefaultLow];
-                                 [self.nameToCenterConstraint updatePriority:UILayoutPriorityDefaultHigh];
+                                 [self.avatarRaisedConstraint withPriority:UILayoutPriorityDefaultHigh];
+                                 [self.avatarToTopConstraint withPriority:UILayoutPriorityDefaultLow];
+                                 [self.nameToCenterConstraint withPriority:UILayoutPriorityDefaultHigh];
                                  self.nameContainer.visible = NO;
                                  self.nameContainer.backgroundColor = [UIColor blackColor];
                                  self.avatarImageView.visible = NO;
@@ -271,9 +271,9 @@ const long MPAvatarAdd = 10000;
                              }
                              case MPAvatarModeRaisedAndMinimized: {
                                  [self.avatarSizeConstraint updateConstant:36];
-                                 [self.avatarRaisedConstraint updatePriority:UILayoutPriorityDefaultLow];
-                                 [self.avatarToTopConstraint updatePriority:UILayoutPriorityDefaultHigh + 2];
-                                 [self.nameToCenterConstraint updatePriority:UILayoutPriorityDefaultHigh];
+                                 [self.avatarRaisedConstraint withPriority:UILayoutPriorityDefaultLow];
+                                 [self.avatarToTopConstraint withPriority:UILayoutPriorityDefaultHigh + 2];
+                                 [self.nameToCenterConstraint withPriority:UILayoutPriorityDefaultHigh];
                                  self.nameContainer.visible = NO;
                                  self.nameContainer.backgroundColor = [UIColor blackColor];
                                  self.avatarImageView.visible = YES;

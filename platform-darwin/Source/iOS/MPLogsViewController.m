@@ -56,16 +56,15 @@
 
     BOOL traceEnabled = (BOOL)self.levelControl.selectedSegmentIndex;
     if (traceEnabled) {
-        [PearlAlert showAlertWithTitle:@"Enable Trace Mode?" message:
-                        @"Trace mode will log the internal operation of the application.\n"
-                                @"Unless you're looking for the cause of a problem, you should leave this off to save memory."
-                             viewStyle:UIAlertViewStyleDefault initAlert:nil
-                     tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                         if (buttonIndex == [alert cancelButtonIndex])
-                             return;
-
-                         [MPiOSConfig get].traceMode = @YES;
-                     } cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Enable Trace", nil];
+        UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"Enable Trace Mode?" message:
+                                         @"Trace mode will log the internal operation of the application.\n"
+                                         @"Unless you're looking for the cause of a problem, you should leave this off to save memory."
+                                                                     preferredStyle:UIAlertControllerStyleAlert];
+        [controller addAction:[UIAlertAction actionWithTitle:@"Enable Trace" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [MPiOSConfig get].traceMode = @YES;
+        }]];
+        [controller addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+        [self presentViewController:controller animated:YES completion:nil];
     }
     else
         [MPiOSConfig get].traceMode = @NO;
@@ -79,13 +78,14 @@
 - (IBAction)mail:(UIBarButtonItem *)sender {
 
     if ([[MPiOSConfig get].traceMode boolValue]) {
-        [PearlAlert showAlertWithTitle:@"Hiding Trace Messages" message:
-                        @"Trace-level log messages will not be mailed. "
-                                @"These messages contain sensitive and personal information."
-                             viewStyle:UIAlertViewStyleDefault initAlert:nil
-                     tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                         [[MPiOSAppDelegate get] openFeedbackWithLogs:YES forVC:self];
-                     } cancelTitle:[PearlStrings get].commonButtonOkay otherTitles:nil];
+        UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"Hiding Trace Messages" message:
+                                         @"Trace-level log messages will not be mailed. "
+                                         @"These messages contain sensitive and personal information."
+                                                                     preferredStyle:UIAlertControllerStyleAlert];
+        [controller addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            [[MPiOSAppDelegate get] openFeedbackWithLogs:YES forVC:self];
+        }]];
+        [self presentViewController:controller animated:YES completion:nil];
     }
     else
         [[MPiOSAppDelegate get] openFeedbackWithLogs:YES forVC:self];

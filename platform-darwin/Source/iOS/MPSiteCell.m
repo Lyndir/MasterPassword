@@ -261,19 +261,20 @@
     if (!site)
         return;
 
-    [PearlSheet showSheetWithTitle:strf( @"Delete %@?", site.name ) viewStyle:UIActionSheetStyleAutomatic
-                         initSheet:nil tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
-                if (buttonIndex == [sheet cancelButtonIndex])
-                    return;
-
-                [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-                    MPSiteEntity *site_ = [self siteInContext:context];
-                    if (site_) {
-                        [context deleteObject:site_];
-                        [context saveToStore];
-                    }
-                }];
-            }          cancelTitle:@"Cancel" destructiveTitle:@"Delete Site" otherTitles:nil];
+    UIAlertController *controller = [UIAlertController alertControllerWithTitle:strf( @"Delete %@?", site.name ) message:nil
+                                                                 preferredStyle:UIAlertControllerStyleActionSheet];
+    [controller addAction:[UIAlertAction actionWithTitle:@"Delete Site" style:UIAlertActionStyleDestructive
+                                                 handler:^(UIAlertAction *_Nonnull action) {
+                                                     [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+                                                         MPSiteEntity *site_ = [self siteInContext:context];
+                                                         if (site_) {
+                                                             [context deleteObject:site_];
+                                                             [context saveToStore];
+                                                         }
+                                                     }];
+                                                 }]];
+    [controller addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+    [UIApp.keyWindow.rootViewController presentViewController:controller animated:YES completion:nil];
 }
 
 - (IBAction)doChangeType:(UIButton *)sender {
@@ -281,29 +282,24 @@
     [self setMode:MPPasswordCellModePassword animated:YES];
 
     MPSiteEntity *mainSite = [self siteInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]];
-    [PearlSheet showSheetWithTitle:@"Change Password Type" viewStyle:UIActionSheetStyleAutomatic
-                         initSheet:^(UIActionSheet *sheet) {
-                             for (NSNumber *typeNumber in [mainSite.algorithm allTypes]) {
-                                 MPResultType type = (MPResultType)[typeNumber unsignedIntegerValue];
-                                 NSString *typeName = [mainSite.algorithm nameOfType:type];
-                                 if (type == mainSite.type)
-                                     [sheet addButtonWithTitle:strf( @"● %@", typeName )];
-                                 else
-                                     [sheet addButtonWithTitle:typeName];
-                             }
-                         } tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
-                if (buttonIndex == [sheet cancelButtonIndex])
-                    return;
+    UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"Change Password Type" message:nil
+                                                                 preferredStyle:UIAlertControllerStyleActionSheet];
+    for (NSNumber *typeNumber in [mainSite.algorithm allTypes]) {
+        MPResultType type = (MPResultType)[typeNumber unsignedIntegerValue];
+        NSString *typeName = [mainSite.algorithm nameOfType:type];
+        NSString *title = type == mainSite.type? strf( @"● %@", typeName ): typeName;
 
-                MPResultType type = (MPResultType)[[mainSite.algorithm allTypes][buttonIndex] unsignedIntegerValue]?:
-                                  mainSite.user.defaultType?: mainSite.algorithm.defaultType;
-
-                [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-                    MPSiteEntity *site = [self siteInContext:context];
-                    site = [[MPiOSAppDelegate get] changeSite:site saveInContext:context toType:type];
-                    [self setSite:site animated:YES];
-                }];
-            }          cancelTitle:@"Cancel" destructiveTitle:nil otherTitles:nil];
+        [controller addAction:[UIAlertAction actionWithTitle:title style:UIAlertActionStyleDefault handler:
+                ^(UIAlertAction *_Nonnull action) {
+                    [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+                        MPSiteEntity *site = [self siteInContext:context];
+                        site = [[MPiOSAppDelegate get] changeSite:site saveInContext:context toType:type];
+                        [self setSite:site animated:YES];
+                    }];
+                }]];
+    }
+    [controller addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+    [UIApp.keyWindow.rootViewController presentViewController:controller animated:YES completion:nil];
 }
 
 - (IBAction)doEdit:(UIButton *)sender {
@@ -370,24 +366,23 @@
 
     [MPiOSAppDelegate managedObjectContextForMainThreadPerformBlock:^(NSManagedObjectContext *mainContext) {
         MPSiteEntity *mainSite = [self siteInContext:mainContext];
-        [PearlAlert showAlertWithTitle:@"Login Page" message:nil
-                             viewStyle:UIAlertViewStylePlainTextInput
-                             initAlert:^(UIAlertView *alert, UITextField *firstField) {
-                                 firstField.placeholder = strf( @"Login URL for %@", mainSite.name );
-                                 firstField.text = mainSite.url;
-                             }
-                     tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                         if (buttonIndex == alert.cancelButtonIndex)
-                             return;
-
-                         [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-                             MPSiteEntity *site = [self siteInContext:context];
-                             NSURL *url = [NSURL URLWithString:[alert textFieldAtIndex:0].text];
-                             site.url = [url.host? url: nil absoluteString];
-                             [context saveToStore];
-                         }];
-                     }
-                           cancelTitle:@"Cancel" otherTitles:@"Save", nil];
+        UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"Login Page" message:nil
+                                                                     preferredStyle:UIAlertControllerStyleAlert];
+        [controller addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+            textField.placeholder = strf( @"Login URL for %@", mainSite.name );
+            textField.text = mainSite.url;
+        }];
+        [controller addAction:[UIAlertAction actionWithTitle:@"Save" style:UIAlertActionStyleDefault
+                                                     handler:^(UIAlertAction *_Nonnull action) {
+                                                         [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+                                                             MPSiteEntity *site = [self siteInContext:context];
+                                                             NSURL *url = [NSURL URLWithString:controller.textFields.firstObject.text];
+                                                             site.url = [url.host? url: nil absoluteString];
+                                                             [context saveToStore];
+                                                         }];
+                                                     }]];
+        [controller addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+        [UIApp.keyWindow.rootViewController presentViewController:controller animated:YES completion:nil];
     }];
 }
 
@@ -446,15 +441,11 @@
 
     if (self.transientSite) {
         [[UIResponder findFirstResponder] resignFirstResponder];
-        [PearlAlert showAlertWithTitle:@"Create Site"
-                               message:strf( @"Remember site named:\n%@", self.transientSite )
-                             viewStyle:UIAlertViewStyleDefault
-                             initAlert:nil tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                    if (buttonIndex == [alert cancelButtonIndex]) {
-                        self.contentButton.selected = NO;
-                        return;
-                    }
-
+        UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"Create Site" message:
+                        strf( @"Remember site named:\n%@", self.transientSite )
+                                                                     preferredStyle:UIAlertControllerStyleActionSheet];
+        [controller addAction:[UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:
+                ^(UIAlertAction *_Nonnull action) {
                     [[MPiOSAppDelegate get]
                             addSiteNamed:self.transientSite completion:^(MPSiteEntity *site, NSManagedObjectContext *context) {
                         [self copyContentOfSite:site saveInContext:context];
@@ -465,7 +456,11 @@
                             }];
                         } );
                     }];
-                }          cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonYes, nil];
+                }]];
+        [controller addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+            self.contentButton.selected = NO;
+        }]];
+        [UIApp.keyWindow.rootViewController presentViewController:controller animated:YES completion:nil];
         return;
     }
 
@@ -677,7 +672,7 @@
         [self.window endEditing:YES];
 
         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-        if (@available(iOS 10.0, *)) {
+        if (@available( iOS 10.0, * )) {
             [pasteboard setItems:@[ @{ UIPasteboardTypeAutomatic: password } ]
                          options:@{
                                  UIPasteboardOptionLocalOnly     : @NO,

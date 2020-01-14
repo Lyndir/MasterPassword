@@ -146,15 +146,14 @@ PearlEnum( MPDevelopmentFuelConsumption,
 
 - (IBAction)restorePurchases:(id)sender {
 
-    [PearlAlert showAlertWithTitle:@"Restore Previous Purchases" message:
+    UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"Restore Previous Purchases" message:
                     @"This will check with Apple to find and activate any purchases you made from other devices."
-                         viewStyle:UIAlertViewStyleDefault initAlert:nil
-                 tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                     if (buttonIndex == [alert cancelButtonIndex])
-                         return;
-
-                     [[MPAppDelegate_Shared get] restoreCompletedTransactions];
-                 } cancelTitle:@"Cancel" otherTitles:@"Find Purchases", nil];
+                                                                 preferredStyle:UIAlertControllerStyleAlert];
+    [controller addAction:[UIAlertAction actionWithTitle:@"Find Purchases" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [[MPAppDelegate_Shared get] restoreCompletedTransactions];
+    }]];
+    [controller addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+    [self presentViewController:controller animated:YES completion:nil];
 }
 
 - (IBAction)sendThanks:(id)sender {

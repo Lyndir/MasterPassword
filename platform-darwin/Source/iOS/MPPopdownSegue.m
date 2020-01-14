@@ -41,7 +41,7 @@
 
         [UIView animateWithDuration:0.6f delay:0 usingSpringWithDamping:0.75f initialSpringVelocity:1
                             options:UIViewAnimationOptionCurveEaseOut animations:^{
-                    [[passwordsVC.popdownToTopConstraint updatePriority:1] layoutIfNeeded];
+                    [[passwordsVC.popdownToTopConstraint withPriority:1] layoutIfNeeded];
                 }        completion:^(BOOL finished) {
                     [popdownVC didMoveToParentViewController:passwordsVC];
 
@@ -63,7 +63,7 @@
         [popdownVC willMoveToParentViewController:nil];
         [UIView animateWithDuration:0.4f delay:0 options:UIViewAnimationOptionCurveEaseIn | UIViewAnimationOptionOverrideInheritedDuration
                          animations:^{
-                             [[passwordsVC.popdownToTopConstraint updatePriority:UILayoutPriorityDefaultHigh] layoutIfNeeded];
+                             [[passwordsVC.popdownToTopConstraint withPriority:UILayoutPriorityDefaultHigh] layoutIfNeeded];
                          } completion:^(BOOL finished) {
                     [popdownVC.view removeFromSuperview];
                     [popdownVC removeFromParentViewController];

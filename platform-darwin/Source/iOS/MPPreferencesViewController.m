@@ -114,11 +114,13 @@
 
     if (cell == self.checkInconsistencies)
         [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-            if ([[MPiOSAppDelegate get] findAndFixInconsistenciesSaveInContext:context] == MPFixableResultNoProblems)
-                [PearlAlert showAlertWithTitle:@"No Inconsistencies" message:
+            if ([[MPiOSAppDelegate get] findAndFixInconsistenciesSaveInContext:context] == MPFixableResultNoProblems) {
+                UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"No Inconsistencies" message:
                                 @"No inconsistencies were detected in your sites."
-                                     viewStyle:UIAlertViewStyleDefault initAlert:nil
-                             tappedButtonBlock:nil cancelTitle:[PearlStrings get].commonButtonOkay otherTitles:nil];
+                                                                             preferredStyle:UIAlertControllerStyleAlert];
+                [controller addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil]];
+                [self.navigationController presentViewController:controller animated:YES completion:nil];
+            }
         }];
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
