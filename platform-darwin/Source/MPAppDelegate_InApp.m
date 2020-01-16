@@ -149,8 +149,10 @@ PearlAssociatedObjectProperty( NSMutableArray*, ProductObservers, productObserve
         products[product.productIdentifier] = product;
     self.products = products;
 
-    for (id<MPInAppDelegate> productObserver in self.productObservers)
-        [productObserver updateWithProducts:self.products transactions:[self transactions]];
+    PearlMainQueue( ^{
+        for (id<MPInAppDelegate> productObserver in self.productObservers)
+            [productObserver updateWithProducts:self.products transactions:[self transactions]];
+    } );
 }
 
 - (void)request:(SKRequest *)request didFailWithError:(NSError *)error {
