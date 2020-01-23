@@ -336,7 +336,7 @@ static char *mpw_tputs(const char *str, int affcnt) {
 
 #endif
 
-const char *mpw_identicon_str(MPIdenticon identicon) {
+const char *mpw_identicon_render(MPIdenticon identicon) {
 
     char *colorString, *resetString;
 #ifdef MPW_COLOR

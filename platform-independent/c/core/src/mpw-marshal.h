@@ -113,6 +113,7 @@ typedef struct MPMarshalInfo {
     MPAlgorithmVersion algorithm;
     unsigned int avatar;
     const char *fullName;
+    MPIdenticon identicon;
     const char *keyID;
     time_t lastUsed;
 } MPMarshalInfo;
@@ -122,29 +123,31 @@ typedef struct MPMarshalInfo {
 /** Write the user and all associated data out to the given output buffer using the given marshalling format. */
 bool mpw_marshal_write(
         char **out, const MPMarshalFormat outFormat, const MPMarshalledUser *user, MPMarshalError *error);
-/** Try to read metadata on the sites in the input buffer. */
+/** Try to read metadata on the sites in the input buffer.
+ * @return A metadata object (allocated), or NULL if the object could not be allocated. */
 MPMarshalInfo *mpw_marshal_read_info(
         const char *in);
 /** Unmarshall sites in the given input buffer by parsing it using the given marshalling format.
- * @return NULL if the format provides no marshalling or an error occurred. */
+ * @return A user object (allocated), or NULL if the format provides no marshalling or an error occurred. */
 MPMarshalledUser *mpw_marshal_read(
         const char *in, const MPMarshalFormat inFormat, MPMasterKeyProvider masterKeyProvider, MPMarshalError *error);
 
 //// Utilities.
 
 /** Create a new user object ready for marshalling.
- * @return NULL if the fullName or masterKeyProvider is missing, or the marshalled user couldn't be allocated. */
+ * @return A user object (allocated), or NULL if the fullName or masterKeyProvider is missing, or the marshalled user couldn't be allocated. */
 MPMarshalledUser *mpw_marshal_user(
         const char *fullName, MPMasterKeyProvider masterKeyProvider, const MPAlgorithmVersion algorithmVersion);
 /** Create a new site attached to the given user object, ready for marshalling.
- * @return NULL if the siteName is missing, or the marshalled site couldn't be allocated. */
+ * @return A site object (allocated), or NULL if the siteName is missing, or the marshalled site couldn't be allocated. */
 MPMarshalledSite *mpw_marshal_site(
         MPMarshalledUser *user,
         const char *siteName, const MPResultType resultType, const MPCounterValue siteCounter, const MPAlgorithmVersion algorithmVersion);
 /** Create a new question attached to the given site object, ready for marshalling.
- * @return NULL if the marshalled question couldn't be allocated. */
+ * @return A question object (allocated), or NULL if the marshalled question couldn't be allocated. */
 MPMarshalledQuestion *mpw_marshal_question(
         MPMarshalledSite *site, const char *keyword);
+
 /** Free the given user object and all associated data. */
 bool mpw_marshal_info_free(
         MPMarshalInfo **info);
@@ -159,21 +162,21 @@ bool mpw_marshal_free(
 const MPMarshalFormat mpw_format_named(
         const char *formatName);
 /**
- * @return The standard name for the given purpose or NULL if the format was not recognized.
+ * @return The standard name (static) for the given purpose or NULL if the format was not recognized.
  */
 const char *mpw_format_name(
         const MPMarshalFormat format);
 /**
- * @return The file extension that's recommended for files that use the given marshalling format or NULL if the format was not recognized.
+ * @return The file extension (static) that's recommended for files that use the given marshalling format or NULL if the format was not recognized.
  */
 const char *mpw_marshal_format_extension(
         const MPMarshalFormat format);
 /**
- * @param extensions An array of filename extensions that are used for files of this format,
- *        the first being the currently preferred/output extension.  Free after use.
- * @return The amount of filename extensions returned in the array or 0 if the format does not support marshalling or was not recognized.
+ * @return An array (allocated, count) of filename extensions (static) that are used for files of this format,
+ *         the first being the currently preferred/output extension.
+ *         NULL if the format is unrecognized or does not support marshalling.
  */
-int mpw_marshal_format_extensions(
-        const MPMarshalFormat format, const char ***extensions);
+const char **mpw_marshal_format_extensions(
+        const MPMarshalFormat format, size_t *count);
 
 #endif // _MPW_MARSHAL_H

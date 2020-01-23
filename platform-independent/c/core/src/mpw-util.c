@@ -471,37 +471,29 @@ const char *mpw_hex_l(uint32_t number) {
     return mpw_hex( &buf, sizeof( buf ) );
 }
 
-/**
-* @return the amount of bytes used by UTF-8 to encode a single character that starts with the given byte.
-*/
-static int mpw_utf8_sizeof(unsigned char utf8Byte) {
+size_t mpw_utf8_charlen(const char *utf8String) {
 
-    if (!utf8Byte)
-        return 0;
-    if ((utf8Byte & 0x80) == 0)
-        return 1;
-    if ((utf8Byte & 0xC0) != 0xC0)
-        return 0;
-    if ((utf8Byte & 0xE0) == 0xC0)
-        return 2;
-    if ((utf8Byte & 0xF0) == 0xE0)
-        return 3;
-    if ((utf8Byte & 0xF8) == 0xF0)
-        return 4;
+    // Legal UTF-8 byte sequences: <http://www.unicode.org/unicode/uni2errata/UTF-8_Corrigendum.html>
+    unsigned char utf8Char = (unsigned char)*utf8String;
+    if (utf8Char >= 0x00 && utf8Char <= 0x7F)
+        return min( 1, strlen( utf8String ) );
+    if (utf8Char >= 0xC2 && utf8Char <= 0xDF)
+        return min( 2, strlen( utf8String ) );
+    if (utf8Char >= 0xE0 && utf8Char <= 0xEF)
+        return min( 3, strlen( utf8String ) );
+    if (utf8Char >= 0xF0 && utf8Char <= 0xF4)
+        return min( 4, strlen( utf8String ) );
 
     return 0;
 }
 
-const size_t mpw_utf8_strlen(const char *utf8String) {
+size_t mpw_utf8_strchars(const char *utf8String) {
 
-    size_t charlen = 0;
-    char *remainingString = (char *)utf8String;
-    for (int charByteSize;
-         remainingString && (charByteSize = mpw_utf8_sizeof( (unsigned char)*remainingString ));
-         remainingString += charByteSize)
-        ++charlen;
+    size_t strchars = 0, charlen;
+    for (char *remaining = (char *)utf8String; (charlen = mpw_utf8_charlen( remaining )); remaining += charlen)
+        ++strchars;
 
-    return charlen;
+    return strchars;
 }
 
 void *mpw_memdup(const void *src, size_t len) {

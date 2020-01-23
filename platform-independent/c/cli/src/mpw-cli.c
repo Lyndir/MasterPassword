@@ -459,8 +459,8 @@ void cli_user(Arguments *args, Operation *operation) {
 
     // Find mpsites file from parameters.
     FILE *sitesFile = NULL;
-    const char **extensions = NULL;
-    int count = mpw_marshal_format_extensions( operation->sitesFormat, &extensions );
+    size_t count = 0;
+    const char **extensions = mpw_marshal_format_extensions( operation->sitesFormat, &count );
     for (int e = 0; !sitesFile && e < count; ++e) {
         mpw_free_string( &operation->sitesPath );
         operation->sitesPath = mpw_path( operation->fullName, extensions[e] );
@@ -471,7 +471,8 @@ void cli_user(Arguments *args, Operation *operation) {
 
     if (!sitesFile && !operation->sitesFormatFixed)
         for (MPMarshalFormat format = MPMarshalFormatFirst; !sitesFile && format <= MPMarshalFormatLast; ++format) {
-            count = mpw_marshal_format_extensions( operation->sitesFormat, &extensions );
+            mpw_free( &extensions, count * sizeof( *extensions ) );
+            extensions = mpw_marshal_format_extensions( operation->sitesFormat, &count );
 
             for (int e = 0; !sitesFile && e < count; ++e) {
                 mpw_free_string( &operation->sitesPath );
@@ -481,7 +482,7 @@ void cli_user(Arguments *args, Operation *operation) {
                     dbg( "Couldn't open configuration file:\n  %s: %s", operation->sitesPath, strerror( errno ) );
             }
         }
-    free( extensions );
+    mpw_free( &extensions, count * sizeof( *extensions ) );
 
     // Load the user object from mpsites.
     if (!sitesFile)
@@ -586,7 +587,7 @@ void cli_question(Arguments *args, Operation *operation) {
 void cli_operation(Arguments *args, Operation *operation) {
 
     mpw_free_string( &operation->identicon );
-    operation->identicon = mpw_identicon_str( mpw_identicon( operation->user->fullName, operation->masterPassword ) );
+    operation->identicon = mpw_identicon_render( mpw_identicon( operation->user->fullName, operation->masterPassword ) );
 
     if (!operation->site)
         abort();
@@ -788,14 +789,15 @@ void cli_save(Arguments *args, Operation *operation) {
     if (!operation->sitesFormatFixed)
         operation->sitesFormat = MPMarshalFormatDefault;
 
-    const char **extensions = NULL;
-    if (!mpw_marshal_format_extensions( operation->sitesFormat, &extensions ))
+    size_t count = 0;
+    const char **extensions = mpw_marshal_format_extensions( operation->sitesFormat, &count );
+    if (!extensions || !count)
         return;
 
     mpw_free_string( &operation->sitesPath );
     operation->sitesPath = mpw_path( operation->user->fullName, extensions[0] );
     dbg( "Updating: %s (%s)", operation->sitesPath, mpw_format_name( operation->sitesFormat ) );
-    free( extensions );
+    mpw_free( &extensions, count * sizeof( *extensions ) );
 
     FILE *sitesFile = NULL;
     if (!operation->sitesPath || !mpw_mkdirs( operation->sitesPath ) || !(sitesFile = fopen( operation->sitesPath, "w" ))) {

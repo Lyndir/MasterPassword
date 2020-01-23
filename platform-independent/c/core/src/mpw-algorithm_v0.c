@@ -56,11 +56,11 @@ static MPMasterKey mpw_master_key_v0(
 
     // Calculate the master key salt.
     trc( "masterKeySalt: keyScope=%s | #fullName=%s | fullName=%s",
-            keyScope, mpw_hex_l( (uint32_t)mpw_utf8_strlen( fullName ) ), fullName );
+            keyScope, mpw_hex_l( (uint32_t)mpw_utf8_strchars( fullName ) ), fullName );
     size_t masterKeySaltSize = 0;
     uint8_t *masterKeySalt = NULL;
     mpw_push_string( &masterKeySalt, &masterKeySaltSize, keyScope );
-    mpw_push_int( &masterKeySalt, &masterKeySaltSize, (uint32_t)mpw_utf8_strlen( fullName ) );
+    mpw_push_int( &masterKeySalt, &masterKeySaltSize, (uint32_t)mpw_utf8_strchars( fullName ) );
     mpw_push_string( &masterKeySalt, &masterKeySaltSize, fullName );
     if (!masterKeySalt) {
         err( "Could not allocate master key salt: %s", strerror( errno ) );
@@ -95,16 +95,16 @@ static MPSiteKey mpw_site_key_v0(
 
     // Calculate the site seed.
     trc( "siteSalt: keyScope=%s | #siteName=%s | siteName=%s | siteCounter=%s | #keyContext=%s | keyContext=%s",
-            keyScope, mpw_hex_l( (uint32_t)mpw_utf8_strlen( siteName ) ), siteName, mpw_hex_l( siteCounter ),
-            keyContext? mpw_hex_l( (uint32_t)mpw_utf8_strlen( keyContext ) ): NULL, keyContext );
+            keyScope, mpw_hex_l( (uint32_t)mpw_utf8_strchars( siteName ) ), siteName, mpw_hex_l( siteCounter ),
+            keyContext? mpw_hex_l( (uint32_t)mpw_utf8_strchars( keyContext ) ): NULL, keyContext );
     size_t siteSaltSize = 0;
     uint8_t *siteSalt = NULL;
     mpw_push_string( &siteSalt, &siteSaltSize, keyScope );
-    mpw_push_int( &siteSalt, &siteSaltSize, (uint32_t)mpw_utf8_strlen( siteName ) );
+    mpw_push_int( &siteSalt, &siteSaltSize, (uint32_t)mpw_utf8_strchars( siteName ) );
     mpw_push_string( &siteSalt, &siteSaltSize, siteName );
     mpw_push_int( &siteSalt, &siteSaltSize, siteCounter );
     if (keyContext) {
-        mpw_push_int( &siteSalt, &siteSaltSize, (uint32_t)mpw_utf8_strlen( keyContext ) );
+        mpw_push_int( &siteSalt, &siteSaltSize, (uint32_t)mpw_utf8_strchars( keyContext ) );
         mpw_push_string( &siteSalt, &siteSaltSize, keyContext );
     }
     if (!siteSalt) {

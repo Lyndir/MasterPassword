@@ -66,4 +66,4 @@ const char *mpw_read_file(FILE *file);
 
 /** Encode a visual fingerprint for a user.
   * @return A newly allocated string or NULL if the identicon couldn't be allocated. */
-const char *mpw_identicon_str(MPIdenticon identicon);
+const char *mpw_identicon_render(MPIdenticon identicon);

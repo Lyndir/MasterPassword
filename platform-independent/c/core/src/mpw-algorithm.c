@@ -214,39 +214,98 @@ const char *mpw_site_state(
     }
 }
 
+static const char *mpw_identicon_leftArms[] = { "╔", "╚", "╰", "═" };
+static const char *mpw_identicon_bodies[] = { "█", "░", "▒", "▓", "☺", "☻" };
+static const char *mpw_identicon_rightArms[] = { "╗", "╝", "╯", "═" };
+static const char *mpw_identicon_accessories[] = {
+        "◈", "◎", "◐", "◑", "◒", "◓", "☀", "☁", "☂", "☃", "", "★", "☆", "☎", "☏", "⎈", "⌂", "☘", "☢", "☣",
+        "☕", "⌚", "⌛", "⏰", "⚡", "⛄", "⛅", "☔", "♔", "♕", "♖", "♗", "♘", "♙", "♚", "♛", "♜", "♝", "♞", "♟",
+        "♨", "♩", "♪", "♫", "⚐", "⚑", "⚔", "⚖", "⚙", "⚠", "⌘", "⏎", "✄", "✆", "✈", "✉", "✌"
+};
+
 MPIdenticon mpw_identicon(const char *fullName, const char *masterPassword) {
 
-    const char *leftArm[] = { "╔", "╚", "╰", "═" };
-    const char *rightArm[] = { "╗", "╝", "╯", "═" };
-    const char *body[] = { "█", "░", "▒", "▓", "☺", "☻" };
-    const char *accessory[] = {
-            "◈", "◎", "◐", "◑", "◒", "◓", "☀", "☁", "☂", "☃", "", "★", "☆", "☎", "☏", "⎈", "⌂", "☘", "☢", "☣",
-            "☕", "⌚", "⌛", "⏰", "⚡", "⛄", "⛅", "☔", "♔", "♕", "♖", "♗", "♘", "♙", "♚", "♛", "♜", "♝", "♞", "♟",
-            "♨", "♩", "♪", "♫", "⚐", "⚑", "⚔", "⚖", "⚙", "⚠", "⌘", "⏎", "✄", "✆", "✈", "✉", "✌"
-    };
-
-    const uint8_t *identiconSeed = NULL;
+    const uint8_t *seed = NULL;
     if (fullName && strlen( fullName ) && masterPassword && strlen( masterPassword ))
-        identiconSeed = mpw_hash_hmac_sha256(
+        seed = mpw_hash_hmac_sha256(
                 (const uint8_t *)masterPassword, strlen( masterPassword ),
                 (const uint8_t *)fullName, strlen( fullName ) );
-    if (!identiconSeed)
-        return (MPIdenticon){
-                .leftArm = "",
-                .body = "",
-                .rightArm = "",
-                .accessory = "",
-                .color = MPIdenticonColorBlack,
-        };
+    if (!seed)
+        return MPIdenticonUnset;
 
     MPIdenticon identicon = {
-            .leftArm = leftArm[identiconSeed[0] % (sizeof( leftArm ) / sizeof( *leftArm ))],
-            .body = body[identiconSeed[1] % (sizeof( body ) / sizeof( *body ))],
-            .rightArm = rightArm[identiconSeed[2] % (sizeof( rightArm ) / sizeof( *rightArm ))],
-            .accessory = accessory[identiconSeed[3] % (sizeof( accessory ) / sizeof( *accessory ))],
-            .color = (uint8_t)(identiconSeed[4] % (MPIdenticonColorLast - MPIdenticonColorFirst + 1) + MPIdenticonColorFirst),
+            .leftArm = mpw_identicon_leftArms[seed[0] % (sizeof( mpw_identicon_leftArms ) / sizeof( *mpw_identicon_leftArms ))],
+            .body = mpw_identicon_bodies[seed[1] % (sizeof( mpw_identicon_bodies ) / sizeof( *mpw_identicon_bodies ))],
+            .rightArm = mpw_identicon_rightArms[seed[2] % (sizeof( mpw_identicon_rightArms ) / sizeof( *mpw_identicon_rightArms ))],
+            .accessory = mpw_identicon_accessories[seed[3] % (sizeof( mpw_identicon_accessories ) / sizeof( *mpw_identicon_accessories ))],
+            .color = (uint8_t)(seed[4] % (MPIdenticonColorLast - MPIdenticonColorFirst + 1) + MPIdenticonColorFirst),
     };
-    mpw_free( &identiconSeed, 32 );
+    mpw_free( &seed, 32 );
 
+    return identicon;
+}
+
+const char *mpw_identicon_encode(
+        MPIdenticon identicon) {
+
+    return mpw_str( "%hhu:%s%s%s%s",
+            identicon.color, identicon.leftArm, identicon.body, identicon.rightArm, identicon.accessory );
+}
+
+MPIdenticon mpw_identicon_encoded(
+        const char *encoding) {
+
+    MPIdenticon identicon = MPIdenticonUnset;
+    char *string = calloc( strlen( encoding ), sizeof( *string ) ), *parser = string;
+    const char *leftArm = NULL, *body = NULL, *rightArm = NULL, *accessory = NULL;
+    unsigned int color;
+
+    if (encoding && string && sscanf( encoding, "%u:%s", &color, string ) == 2) {
+        if (*parser && color)
+            for (int s = 0; s < sizeof( mpw_identicon_leftArms ) / sizeof( *mpw_identicon_leftArms ); ++s) {
+                const char *limb = mpw_identicon_leftArms[s];
+                if (strncmp( parser, limb, strlen( limb ) ) == 0) {
+                    leftArm = limb;
+                    parser += strlen( limb );
+                    break;
+                }
+            }
+        if (*parser && leftArm)
+            for (int s = 0; s < sizeof( mpw_identicon_bodies ) / sizeof( *mpw_identicon_bodies ); ++s) {
+                const char *limb = mpw_identicon_bodies[s];
+                if (strncmp( parser, limb, strlen( limb ) ) == 0) {
+                    body = limb;
+                    parser += strlen( limb );
+                    break;
+                }
+            }
+        if (*parser && body)
+            for (int s = 0; s < sizeof( mpw_identicon_rightArms ) / sizeof( *mpw_identicon_rightArms ); ++s) {
+                const char *limb = mpw_identicon_rightArms[s];
+                if (strncmp( parser, limb, strlen( limb ) ) == 0) {
+                    rightArm = limb;
+                    parser += strlen( limb );
+                    break;
+                }
+            }
+        if (*parser && rightArm)
+            for (int s = 0; s < sizeof( mpw_identicon_accessories ) / sizeof( *mpw_identicon_accessories ); ++s) {
+                const char *limb = mpw_identicon_accessories[s];
+                if (strncmp( parser, limb, strlen( limb ) ) == 0) {
+                    accessory = limb;
+                    break;
+                }
+            }
+        if (leftArm && body && rightArm && color >= MPIdenticonColorFirst && color <= MPIdenticonColorLast)
+            identicon = (MPIdenticon){
+                    .leftArm = leftArm,
+                    .body = body,
+                    .rightArm = rightArm,
+                    .accessory = accessory,
+                    .color = (MPIdenticonColor)color,
+            };
+    }
+
+    mpw_free_string( &string );
     return identicon;
 }

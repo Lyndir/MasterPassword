@@ -837,15 +837,17 @@ MPMarshalInfo *mpw_marshal_read_info(
         const char *in) {
 
     MPMarshalInfo *info = malloc( sizeof( MPMarshalInfo ) );
-    *info = (MPMarshalInfo){ .format = MPMarshalFormatNone };
+    if (!info)
+        return NULL;
 
+    *info = (MPMarshalInfo){ .format = MPMarshalFormatNone, .identicon = MPIdenticonUnset };
     if (in && strlen( in )) {
         if (in[0] == '#') {
-            *info = (MPMarshalInfo){ .format = MPMarshalFormatFlat };
+            info->format = MPMarshalFormatFlat;
             mpw_marshal_read_flat_info( in, info );
         }
         else if (in[0] == '{') {
-            *info = (MPMarshalInfo){ .format = MPMarshalFormatJSON };
+            info->format = MPMarshalFormatJSON;
 #if MPW_JSON
             mpw_marshal_read_json_info( in, info );
 #endif
@@ -925,37 +927,22 @@ const char *mpw_marshal_format_extension(
     }
 }
 
-int mpw_marshal_format_extensions(
-        const MPMarshalFormat format, const char ***extensions) {
+const char **mpw_marshal_format_extensions(
+        const MPMarshalFormat format, size_t *count) {
 
-    int count = 0;
+    *count = 0;
     switch (format) {
-        case MPMarshalFormatNone: {
-            break;
-        }
-        case MPMarshalFormatFlat: {
-            *extensions = realloc( *extensions, (count = 3) * sizeof( const char * ) );
-            memcpy( *extensions, (const char *[]){
-                    mpw_marshal_format_extension( format ),
-                    "mpsites.txt",
-                    "txt",
-            }, count * sizeof( const char * ) );
-            break;
-        }
-        case MPMarshalFormatJSON: {
-            *extensions = realloc( *extensions, (count = 3) * sizeof( const char * ) );
-            memcpy( *extensions, (const char *[]){
-                    mpw_marshal_format_extension( format ),
-                    "mpsites.json",
-                    "json",
-            }, count * sizeof( const char * ) );
-            break;
-        }
+        case MPMarshalFormatNone:
+            return NULL;
+        case MPMarshalFormatFlat:
+            return mpw_strings( count,
+                    mpw_marshal_format_extension( format ), "mpsites.txt", "txt" );
+        case MPMarshalFormatJSON:
+            return mpw_strings( count,
+                    mpw_marshal_format_extension( format ), "mpsites.json", "json" );
         default: {
             dbg( "Unknown format: %d", format );
-            break;
+            return NULL;
         }
     }
-
-    return count;
 }

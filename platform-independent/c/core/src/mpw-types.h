@@ -116,6 +116,7 @@ typedef mpw_enum( uint8_t, MPIdenticonColor ) {
     MPIdenticonColorCyan,
     MPIdenticonColorWhite,
 
+    MPIdenticonColorUnset = MPIdenticonColorBlack,
     MPIdenticonColorFirst = MPIdenticonColorRed,
     MPIdenticonColorLast = MPIdenticonColorWhite,
 };
@@ -127,6 +128,7 @@ typedef struct {
     const char *accessory;
     MPIdenticonColor color;
 } MPIdenticon;
+extern const MPIdenticon MPIdenticonUnset;
 
 //// Type utilities.
 
@@ -135,11 +137,11 @@ typedef struct {
  */
 const MPKeyPurpose mpw_purpose_named(const char *purposeName);
 /**
- * @return The standard name for the given purpose or NULL if the purpose is not known.
+ * @return The standard name (static) for the given purpose or NULL if the purpose is not known.
  */
 const char *mpw_purpose_name(MPKeyPurpose purpose);
 /**
- * @return An internal string containing the scope identifier to apply when encoding for the given purpose or NULL if the purpose is not known.
+ * @return The scope identifier (static) to apply when encoding for the given purpose or NULL if the purpose is not known.
  */
 const char *mpw_purpose_scope(MPKeyPurpose purpose);
 
@@ -148,35 +150,31 @@ const char *mpw_purpose_scope(MPKeyPurpose purpose);
  */
 const MPResultType mpw_type_named(const char *typeName);
 /**
- * @return The standard identifying name for the given password type or NULL if the type is not known.
+ * @return The standard identifying name (static) for the given password type or NULL if the type is not known.
  */
 const char *mpw_type_abbreviation(MPResultType resultType);
 /**
- * @return The standard identifying name for the given password type or NULL if the type is not known.
+ * @return The standard identifying name (static) for the given password type or NULL if the type is not known.
  */
 const char *mpw_type_short_name(MPResultType resultType);
 /**
- * @return The descriptive name for the given password type or NULL if the type is not known.
+ * @return The descriptive name (static) for the given password type or NULL if the type is not known.
  */
 const char *mpw_type_long_name(MPResultType resultType);
 
 /**
- * @return A newly allocated array of internal strings that express the templates to use for the given type.
- *         The amount of elements in the array is stored in count.
- *         If an unsupported type is given, count will be 0 and will return NULL.
- *         The array needs to be free'ed, the strings themselves must not be free'ed or modified.
+ * @return An array (allocated, count) of strings (static) that express the templates to use for the given type.
  *         NULL if the type is not known or is not a MPResultTypeClassTemplate.
  */
 const char **mpw_type_templates(MPResultType type, size_t *count);
 /**
- * @return An internal string that contains the password encoding template of the given type
- *         for a seed that starts with the given byte.
+ * @return A string (static) that contains the password encoding template of the given type for a seed that starts with the given byte.
  *         NULL if the type is not known or is not a MPResultTypeClassTemplate.
  */
 const char *mpw_type_template(MPResultType type, uint8_t templateIndex);
 
 /**
- * @return An string literal with all the characters in the given character class or NULL if the character class is not known.
+ * @return An string (static) with all the characters in the given character class or NULL if the character class is not known.
  */
 const char *mpw_class_characters(char characterClass);
 /**
