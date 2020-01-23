@@ -581,15 +581,15 @@ void cli_operation(Arguments *args, Operation *operation) {
     switch (operation->keyPurpose) {
         case MPKeyPurposeAuthentication: {
             operation->purposeResult = "password";
-            operation->resultType = operation->site->type;
-            operation->resultState = operation->site->content? mpw_strdup( operation->site->content ): NULL;
+            operation->resultType = operation->site->resultType;
+            operation->resultState = operation->site->resultState? mpw_strdup( operation->site->resultState ): NULL;
             operation->siteCounter = operation->site->counter;
             break;
         }
         case MPKeyPurposeIdentification: {
             operation->purposeResult = "login";
             operation->resultType = operation->site->loginType;
-            operation->resultState = operation->site->loginContent? mpw_strdup( operation->site->loginContent ): NULL;
+            operation->resultState = operation->site->loginState? mpw_strdup( operation->site->loginState ): NULL;
             operation->siteCounter = MPCounterValueInitial;
             break;
         }
@@ -598,7 +598,7 @@ void cli_operation(Arguments *args, Operation *operation) {
             operation->purposeResult = "answer";
             operation->keyContext = operation->question->keyword? mpw_strdup( operation->question->keyword ): NULL;
             operation->resultType = operation->question->type;
-            operation->resultState = operation->question->content? mpw_strdup( operation->question->content ): NULL;
+            operation->resultState = operation->question->state? mpw_strdup( operation->question->state ): NULL;
             operation->siteCounter = MPCounterValueInitial;
             break;
         }
@@ -622,7 +622,7 @@ void cli_resultType(Arguments *args, Operation *operation) {
     if (!(operation->resultType & MPSiteFeatureAlternative)) {
         switch (operation->keyPurpose) {
             case MPKeyPurposeAuthentication:
-                operation->site->type = operation->resultType;
+                operation->site->resultType = operation->resultType;
                 break;
             case MPKeyPurposeIdentification:
                 operation->site->loginType = operation->resultType;
@@ -725,19 +725,19 @@ void cli_mpw(Arguments *args, Operation *operation) {
 
         switch (operation->keyPurpose) {
             case MPKeyPurposeAuthentication: {
-                mpw_free_string( &operation->site->content );
-                operation->site->content = mpw_strdup( operation->resultState );
+                mpw_free_string( &operation->site->resultState );
+                operation->site->resultState = mpw_strdup( operation->resultState );
                 break;
             }
             case MPKeyPurposeIdentification: {
-                mpw_free_string( &operation->site->loginContent );
-                operation->site->loginContent = mpw_strdup( operation->resultState );
+                mpw_free_string( &operation->site->loginState );
+                operation->site->loginState = mpw_strdup( operation->resultState );
                 break;
             }
 
             case MPKeyPurposeRecovery: {
-                mpw_free_string( &operation->question->content );
-                operation->question->content = mpw_strdup( operation->resultState );
+                mpw_free_string( &operation->question->state );
+                operation->question->state = mpw_strdup( operation->resultState );
                 break;
             }
         }

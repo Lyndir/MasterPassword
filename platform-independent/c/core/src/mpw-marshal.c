@@ -58,12 +58,12 @@ MPMarshalledSite *mpw_marshal_site(
     MPMarshalledSite *site = &user->sites[user->sites_count - 1];
     *site = (MPMarshalledSite){
             .name = mpw_strdup( siteName ),
-            .content = NULL,
-            .type = resultType,
+            .resultState = NULL,
+            .resultType = resultType,
             .counter = siteCounter,
             .algorithm = algorithmVersion,
 
-            .loginContent = NULL,
+            .loginState = NULL,
             .loginType = MPResultTypeTemplateName,
 
             .url = NULL,
@@ -87,7 +87,7 @@ MPMarshalledQuestion *mpw_marshal_question(
     MPMarshalledQuestion *question = &site->questions[site->questions_count - 1];
     *question = (MPMarshalledQuestion){
             .keyword = mpw_strdup( keyword ),
-            .content = NULL,
+            .state = NULL,
             .type = MPResultTypeTemplatePhrase,
     };
     return question;
@@ -117,11 +117,11 @@ bool mpw_marshal_free(
 
     for (size_t s = 0; s < (*user)->sites_count; ++s) {
         MPMarshalledSite *site = &(*user)->sites[s];
-        success &= mpw_free_strings( &site->name, &site->content, &site->loginContent, &site->url, NULL );
+        success &= mpw_free_strings( &site->name, &site->resultState, &site->loginState, &site->url, NULL );
 
         for (size_t q = 0; q < site->questions_count; ++q) {
             MPMarshalledQuestion *question = &site->questions[q];
-            success &= mpw_free_strings( &question->keyword, &question->content, NULL );
+            success &= mpw_free_strings( &question->keyword, &question->state, NULL );
         }
         success &= mpw_free( &site->questions, sizeof( MPMarshalledQuestion ) * site->questions_count );
     }
@@ -177,7 +177,7 @@ static bool mpw_marshal_write_flat(
         if (!site->name || !strlen( site->name ))
             continue;
 
-        const char *content = NULL, *loginContent = NULL;
+        const char *resultState = NULL, *loginState = NULL;
         if (!user->redacted) {
             // Clear Text
             mpw_free( &masterKey, MPMasterKeySize );
@@ -186,24 +186,24 @@ static bool mpw_marshal_write_flat(
                 return false;
             }
 
-            content = mpw_siteResult( masterKey, site->name, site->counter,
-                    MPKeyPurposeAuthentication, NULL, site->type, site->content, site->algorithm );
-            loginContent = mpw_siteResult( masterKey, site->name, MPCounterValueInitial,
-                    MPKeyPurposeIdentification, NULL, site->loginType, site->loginContent, site->algorithm );
+            resultState = mpw_siteResult( masterKey, site->name, site->counter,
+                    MPKeyPurposeAuthentication, NULL, site->resultType, site->resultState, site->algorithm );
+            loginState = mpw_siteResult( masterKey, site->name, MPCounterValueInitial,
+                    MPKeyPurposeIdentification, NULL, site->loginType, site->loginState, site->algorithm );
         }
         else {
             // Redacted
-            if (site->type & MPSiteFeatureExportContent && site->content && strlen( site->content ))
-                content = mpw_strdup( site->content );
-            if (site->loginType & MPSiteFeatureExportContent && site->loginContent && strlen( site->loginContent ))
-                loginContent = mpw_strdup( site->loginContent );
+            if (site->resultType & MPSiteFeatureExportContent && site->resultState && strlen( site->resultState ))
+                resultState = mpw_strdup( site->resultState );
+            if (site->loginType & MPSiteFeatureExportContent && site->loginState && strlen( site->loginState ))
+                loginState = mpw_strdup( site->loginState );
         }
 
         if (strftime( dateString, sizeof( dateString ), "%FT%TZ", gmtime( &site->lastUsed ) ))
             mpw_string_pushf( out, "%s  %8ld  %lu:%lu:%lu  %25s\t%25s\t%s\n",
-                    dateString, (long)site->uses, (long)site->type, (long)site->algorithm, (long)site->counter,
-                    loginContent? loginContent: "", site->name, content? content: "" );
-        mpw_free_strings( &content, &loginContent, NULL );
+                    dateString, (long)site->uses, (long)site->resultType, (long)site->algorithm, (long)site->counter,
+                    loginState? loginState: "", site->name, resultState? resultState: "" );
+        mpw_free_strings( &resultState, &loginState, NULL );
     }
     mpw_free( &masterKey, MPMasterKeySize );
 
@@ -259,7 +259,7 @@ static bool mpw_marshal_write_json(
         if (!site->name || !strlen( site->name ))
             continue;
 
-        const char *content = NULL, *loginContent = NULL;
+        const char *resultState = NULL, *loginState = NULL;
         if (!user->redacted) {
             // Clear Text
             mpw_free( &masterKey, MPMasterKeySize );
@@ -268,28 +268,28 @@ static bool mpw_marshal_write_json(
                 return false;
             }
 
-            content = mpw_siteResult( masterKey, site->name, site->counter,
-                    MPKeyPurposeAuthentication, NULL, site->type, site->content, site->algorithm );
-            loginContent = mpw_siteResult( masterKey, site->name, MPCounterValueInitial,
-                    MPKeyPurposeIdentification, NULL, site->loginType, site->loginContent, site->algorithm );
+            resultState = mpw_siteResult( masterKey, site->name, site->counter,
+                    MPKeyPurposeAuthentication, NULL, site->resultType, site->resultState, site->algorithm );
+            loginState = mpw_siteResult( masterKey, site->name, MPCounterValueInitial,
+                    MPKeyPurposeIdentification, NULL, site->loginType, site->loginState, site->algorithm );
         }
         else {
             // Redacted
-            if (site->type & MPSiteFeatureExportContent && site->content && strlen( site->content ))
-                content = mpw_strdup( site->content );
-            if (site->loginType & MPSiteFeatureExportContent && site->loginContent && strlen( site->loginContent ))
-                loginContent = mpw_strdup( site->loginContent );
+            if (site->resultType & MPSiteFeatureExportContent && site->resultState && strlen( site->resultState ))
+                resultState = mpw_strdup( site->resultState );
+            if (site->loginType & MPSiteFeatureExportContent && site->loginState && strlen( site->loginState ))
+                loginState = mpw_strdup( site->loginState );
         }
 
         json_object *json_site = json_object_new_object();
         json_object_object_add( json_sites, site->name, json_site );
-        json_object_object_add( json_site, "type", json_object_new_int( (int32_t)site->type ) );
+        json_object_object_add( json_site, "type", json_object_new_int( (int32_t)site->resultType ) );
         json_object_object_add( json_site, "counter", json_object_new_int( (int32_t)site->counter ) );
         json_object_object_add( json_site, "algorithm", json_object_new_int( (int32_t)site->algorithm ) );
-        if (content)
-            json_object_object_add( json_site, "password", json_object_new_string( content ) );
-        if (loginContent)
-            json_object_object_add( json_site, "login_name", json_object_new_string( loginContent ) );
+        if (resultState)
+            json_object_object_add( json_site, "password", json_object_new_string( resultState ) );
+        if (loginState)
+            json_object_object_add( json_site, "login_name", json_object_new_string( loginState ) );
         json_object_object_add( json_site, "login_type", json_object_new_int( (int32_t)site->loginType ) );
 
         json_object_object_add( json_site, "uses", json_object_new_int( (int32_t)site->uses ) );
@@ -310,14 +310,14 @@ static bool mpw_marshal_write_json(
 
                 if (!user->redacted) {
                     // Clear Text
-                    const char *answerContent = mpw_siteResult( masterKey, site->name, MPCounterValueInitial,
-                            MPKeyPurposeRecovery, question->keyword, question->type, question->content, site->algorithm );
-                    json_object_object_add( json_site_question, "answer", json_object_new_string( answerContent ) );
+                    const char *answerState = mpw_siteResult( masterKey, site->name, MPCounterValueInitial,
+                            MPKeyPurposeRecovery, question->keyword, question->type, question->state, site->algorithm );
+                    json_object_object_add( json_site_question, "answer", json_object_new_string( answerState ) );
                 }
                 else {
                     // Redacted
-                    if (site->type & MPSiteFeatureExportContent && question->content && strlen( question->content ))
-                        json_object_object_add( json_site_question, "answer", json_object_new_string( question->content ) );
+                    if (site->resultType & MPSiteFeatureExportContent && question->state && strlen( question->state ))
+                        json_object_object_add( json_site_question, "answer", json_object_new_string( question->state ) );
                 }
             }
         }
@@ -328,7 +328,7 @@ static bool mpw_marshal_write_json(
         if (json_object_object_length( json_site_mpw ))
             json_object_object_add( json_site, "_ext_mpw", json_site_mpw );
 
-        mpw_free_strings( &content, &loginContent, NULL );
+        mpw_free_strings( &resultState, &loginState, NULL );
     }
 
     mpw_string_pushf( out, "%s\n", json_object_to_json_string_ext( json_file,
@@ -512,7 +512,7 @@ static MPMarshalledUser *mpw_marshal_read_flat(
             continue;
 
         // Site
-        char *siteLoginName = NULL, *siteName = NULL, *siteContent = NULL;
+        char *siteName = NULL, *siteResultState = NULL, *siteLoginState = NULL;
         char *str_lastUsed = NULL, *str_uses = NULL, *str_type = NULL, *str_algorithm = NULL, *str_counter = NULL;
         switch (format) {
             case 0: {
@@ -525,9 +525,9 @@ static MPMarshalledUser *mpw_marshal_read_flat(
                     mpw_free_string( &typeAndVersion );
                 }
                 str_counter = mpw_strdup( "1" );
-                siteLoginName = NULL;
+                siteLoginState = NULL;
                 siteName = mpw_get_token( &positionInLine, endOfLine, "\t\n" );
-                siteContent = mpw_get_token( &positionInLine, endOfLine, "\n" );
+                siteResultState = mpw_get_token( &positionInLine, endOfLine, "\n" );
                 break;
             }
             case 1: {
@@ -540,9 +540,9 @@ static MPMarshalledUser *mpw_marshal_read_flat(
                     str_counter = mpw_strdup( strtok( NULL, "" ) );
                     mpw_free_string( &typeAndVersionAndCounter );
                 }
-                siteLoginName = mpw_get_token( &positionInLine, endOfLine, "\t\n" );
+                siteLoginState = mpw_get_token( &positionInLine, endOfLine, "\t\n" );
                 siteName = mpw_get_token( &positionInLine, endOfLine, "\t\n" );
-                siteContent = mpw_get_token( &positionInLine, endOfLine, "\n" );
+                siteResultState = mpw_get_token( &positionInLine, endOfLine, "\n" );
                 break;
             }
             default: {
@@ -592,31 +592,31 @@ static MPMarshalledUser *mpw_marshal_read_flat(
                     return NULL;
                 }
 
-                if (siteContent && strlen( siteContent ))
-                    site->content = mpw_siteState( masterKey, site->name, site->counter,
-                            MPKeyPurposeAuthentication, NULL, site->type, siteContent, site->algorithm );
-                if (siteLoginName && strlen( siteLoginName ))
-                    site->loginContent = mpw_siteState( masterKey, site->name, MPCounterValueInitial,
-                            MPKeyPurposeIdentification, NULL, site->loginType, siteLoginName, site->algorithm );
+                if (siteResultState && strlen( siteResultState ))
+                    site->resultState = mpw_siteState( masterKey, site->name, site->counter,
+                            MPKeyPurposeAuthentication, NULL, site->resultType, siteResultState, site->algorithm );
+                if (siteLoginState && strlen( siteLoginState ))
+                    site->loginState = mpw_siteState( masterKey, site->name, MPCounterValueInitial,
+                            MPKeyPurposeIdentification, NULL, site->loginType, siteLoginState, site->algorithm );
             }
             else {
                 // Redacted
-                if (siteContent && strlen( siteContent ))
-                    site->content = mpw_strdup( siteContent );
-                if (siteLoginName && strlen( siteLoginName ))
-                    site->loginContent = mpw_strdup( siteLoginName );
+                if (siteResultState && strlen( siteResultState ))
+                    site->resultState = mpw_strdup( siteResultState );
+                if (siteLoginState && strlen( siteLoginState ))
+                    site->loginState = mpw_strdup( siteLoginState );
             }
         }
         else {
             error->type = MPMarshalErrorMissing;
             error->description = mpw_str(
                     "Missing one of: lastUsed=%s, uses=%s, type=%s, version=%s, counter=%s, loginName=%s, siteName=%s",
-                    str_lastUsed, str_uses, str_type, str_algorithm, str_counter, siteLoginName, siteName );
+                    str_lastUsed, str_uses, str_type, str_algorithm, str_counter, siteLoginState, siteName );
             return NULL;
         }
 
         mpw_free_strings( &str_lastUsed, &str_uses, &str_type, &str_algorithm, &str_counter, NULL );
-        mpw_free_strings( &siteLoginName, &siteName, &siteContent, NULL );
+        mpw_free_strings( &siteLoginState, &siteName, &siteResultState, NULL );
     }
     mpw_free_strings( &fullName, &keyID, NULL );
     mpw_free( &masterKey, MPMasterKeySize );
@@ -744,8 +744,8 @@ static MPMarshalledUser *mpw_marshal_read_json(
             return NULL;
         }
         MPCounterValue siteCounter = (MPCounterValue)value;
-        const char *siteContent = mpw_get_json_string( json_site.val, "password", NULL );
-        const char *siteLoginName = mpw_get_json_string( json_site.val, "login_name", NULL );
+        const char *siteResultState = mpw_get_json_string( json_site.val, "password", NULL );
+        const char *siteLoginState = mpw_get_json_string( json_site.val, "login_name", NULL );
         MPResultType siteLoginType = (MPResultType)mpw_get_json_int( json_site.val, "login_type", MPResultTypeTemplateName );
         unsigned int siteUses = (unsigned int)mpw_get_json_int( json_site.val, "uses", 0 );
         str_lastUsed = mpw_get_json_string( json_site.val, "last_used", NULL );
@@ -776,19 +776,19 @@ static MPMarshalledUser *mpw_marshal_read_json(
                 return NULL;
             }
 
-            if (siteContent && strlen( siteContent ))
-                site->content = mpw_siteState( masterKey, site->name, site->counter,
-                        MPKeyPurposeAuthentication, NULL, site->type, siteContent, site->algorithm );
-            if (siteLoginName && strlen( siteLoginName ))
-                site->loginContent = mpw_siteState( masterKey, site->name, MPCounterValueInitial,
-                        MPKeyPurposeIdentification, NULL, site->loginType, siteLoginName, site->algorithm );
+            if (siteResultState && strlen( siteResultState ))
+                site->resultState = mpw_siteState( masterKey, site->name, site->counter,
+                        MPKeyPurposeAuthentication, NULL, site->resultType, siteResultState, site->algorithm );
+            if (siteLoginState && strlen( siteLoginState ))
+                site->loginState = mpw_siteState( masterKey, site->name, MPCounterValueInitial,
+                        MPKeyPurposeIdentification, NULL, site->loginType, siteLoginState, site->algorithm );
         }
         else {
             // Redacted
-            if (siteContent && strlen( siteContent ))
-                site->content = mpw_strdup( siteContent );
-            if (siteLoginName && strlen( siteLoginName ))
-                site->loginContent = mpw_strdup( siteLoginName );
+            if (siteResultState && strlen( siteResultState ))
+                site->resultState = mpw_strdup( siteResultState );
+            if (siteLoginState && strlen( siteLoginState ))
+                site->loginState = mpw_strdup( siteLoginState );
         }
 
         json_object *json_site_questions = mpw_get_json_section( json_site.val, "questions" );
@@ -796,19 +796,19 @@ static MPMarshalledUser *mpw_marshal_read_json(
             json_object_iter json_site_question;
             json_object_object_foreachC( json_site_questions, json_site_question ) {
                 MPMarshalledQuestion *question = mpw_marshal_question( site, json_site_question.key );
-                const char *answerContent = mpw_get_json_string( json_site_question.val, "answer", NULL );
+                const char *answerState = mpw_get_json_string( json_site_question.val, "answer", NULL );
                 question->type = (MPResultType)mpw_get_json_int( json_site_question.val, "type", MPResultTypeTemplatePhrase );
 
                 if (!user->redacted) {
                     // Clear Text
-                    if (answerContent && strlen( answerContent ))
-                        question->content = mpw_siteState( masterKey, site->name, MPCounterValueInitial,
-                                MPKeyPurposeRecovery, question->keyword, question->type, answerContent, site->algorithm );
+                    if (answerState && strlen( answerState ))
+                        question->state = mpw_siteState( masterKey, site->name, MPCounterValueInitial,
+                                MPKeyPurposeRecovery, question->keyword, question->type, answerState, site->algorithm );
                 }
                 else {
                     // Redacted
-                    if (answerContent && strlen( answerContent ))
-                        question->content = mpw_strdup( answerContent );
+                    if (answerState && strlen( answerState ))
+                        question->state = mpw_strdup( answerState );
                 }
             }
         }
