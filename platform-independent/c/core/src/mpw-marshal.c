@@ -181,7 +181,7 @@ static bool mpw_marshal_write_flat(
         if (!user->redacted) {
             // Clear Text
             mpw_free( &masterKey, MPMasterKeySize );
-            if (!(masterKey = user->masterKeyProvider( user->algorithm, user->fullName ))) {
+            if (!(masterKey = user->masterKeyProvider( site->algorithm, user->fullName ))) {
                 *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't derive master key." };
                 return false;
             }
@@ -212,6 +212,7 @@ static bool mpw_marshal_write_flat(
 }
 
 #if MPW_JSON
+
 static bool mpw_marshal_write_json(
         char **out, const MPMarshalledUser *user, MPMarshalError *error) {
 
@@ -263,7 +264,7 @@ static bool mpw_marshal_write_json(
         if (!user->redacted) {
             // Clear Text
             mpw_free( &masterKey, MPMasterKeySize );
-            if (!(masterKey = user->masterKeyProvider( user->algorithm, user->fullName ))) {
+            if (!(masterKey = user->masterKeyProvider( site->algorithm, user->fullName ))) {
                 *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't derive master key." };
                 return false;
             }
@@ -339,6 +340,7 @@ static bool mpw_marshal_write_json(
     *error = (MPMarshalError){ .type = MPMarshalSuccess };
     return true;
 }
+
 #endif
 
 bool mpw_marshal_write(
@@ -593,7 +595,7 @@ static MPMarshalledUser *mpw_marshal_read_flat(
             if (!user->redacted) {
                 // Clear Text
                 mpw_free( &masterKey, MPMasterKeySize );
-                if (!(masterKey = masterKeyProvider( user->algorithm, user->fullName ))) {
+                if (!(masterKey = masterKeyProvider( site->algorithm, user->fullName ))) {
                     *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't derive master key." };
                     return NULL;
                 }
@@ -632,6 +634,7 @@ static MPMarshalledUser *mpw_marshal_read_flat(
 }
 
 #if MPW_JSON
+
 static void mpw_marshal_read_json_info(
         const char *in, MPMarshalInfo *info) {
 
@@ -713,7 +716,7 @@ static MPMarshalledUser *mpw_marshal_read_json(
         *error = (MPMarshalError){ MPMarshalErrorMissing, "Missing value for full name." };
         return NULL;
     }
-    if (!(masterKey = masterKeyProvider( user->algorithm, user->fullName ))) {
+    if (!(masterKey = masterKeyProvider( algorithm, fullName ))) {
         *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't derive master key." };
         return NULL;
     }
@@ -779,7 +782,7 @@ static MPMarshalledUser *mpw_marshal_read_json(
         if (!user->redacted) {
             // Clear Text
             mpw_free( &masterKey, MPMasterKeySize );
-            if (!(masterKey = masterKeyProvider( user->algorithm, user->fullName ))) {
+            if (!(masterKey = masterKeyProvider( site->algorithm, user->fullName ))) {
                 *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't derive master key." };
                 return NULL;
             }
@@ -827,6 +830,7 @@ static MPMarshalledUser *mpw_marshal_read_json(
     *error = (MPMarshalError){ .type = MPMarshalSuccess };
     return user;
 }
+
 #endif
 
 MPMarshalInfo *mpw_marshal_read_info(
@@ -913,10 +917,41 @@ const char *mpw_marshal_format_extension(
         case MPMarshalFormatFlat:
             return "mpsites";
         case MPMarshalFormatJSON:
-            return "mpsites.json";
+            return "mpjson";
         default: {
             dbg( "Unknown format: %d", format );
             return NULL;
         }
     }
+}
+
+int mpw_marshal_format_extensions(
+        const MPMarshalFormat format, const char ***extensions) {
+
+    int count = 0;
+    switch (format) {
+        case MPMarshalFormatNone: {
+            break;
+        }
+        case MPMarshalFormatFlat: {
+            const char *array[3] = { mpw_marshal_format_extension( format ), "mpsites.txt", "txt" };
+            count = sizeof( array ) / sizeof( *array );
+            *extensions = realloc( *extensions, count * sizeof( const char * ) );
+            memcpy( *extensions, array, count * sizeof( const char * ) );
+            break;
+        }
+        case MPMarshalFormatJSON: {
+            const char *array[3] = { mpw_marshal_format_extension( format ), "mpsites.json", "json" };
+            count = sizeof( array ) / sizeof( *array );
+            *extensions = realloc( *extensions, sizeof( array ) );
+            memcpy( *extensions, array, sizeof( array ) );
+            break;
+        }
+        default: {
+            dbg( "Unknown format: %d", format );
+            break;
+        }
+    }
+
+    return count;
 }

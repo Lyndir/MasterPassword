@@ -38,6 +38,8 @@ typedef mpw_enum( unsigned int, MPMarshalFormat ) {
 #else
     MPMarshalFormatDefault = MPMarshalFormatFlat,
 #endif
+    MPMarshalFormatFirst = MPMarshalFormatFlat,
+    MPMarshalFormatLast = MPMarshalFormatJSON,
 };
 
 typedef mpw_enum( unsigned int, MPMarshalErrorType ) {
@@ -162,5 +164,12 @@ const char *mpw_nameForFormat(
  */
 const char *mpw_marshal_format_extension(
         const MPMarshalFormat format);
+/**
+ * @param extensions An array of filename extensions that are used for files of this format,
+ *        the first being the currently preferred/output extension.  Free after use.
+ * @return The amount of filename extensions returned in the array.
+ */
+int mpw_marshal_format_extensions(
+        const MPMarshalFormat format, const char ***extensions);
 
 #endif // _MPW_MARSHAL_H

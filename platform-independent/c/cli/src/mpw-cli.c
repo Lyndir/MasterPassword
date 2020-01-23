@@ -185,6 +185,7 @@ void cli_save(Arguments *args, Operation *operation);
 
 MPMasterKeyProvider cli_masterKeyProvider_op(Operation *operation);
 MPMasterKeyProvider cli_masterKeyProvider_str(const char *masterPassword);
+void cli_masterKeyProvider_free();
 
 /** ========================================================================
  *  MAIN                                                                     */
@@ -274,6 +275,7 @@ void cli_free(Arguments *args, Operation *operation) {
         mpw_marshal_free( &operation->user );
         operation->site = NULL;
         operation->question = NULL;
+        cli_masterKeyProvider_free();
     }
 }
 
@@ -457,21 +459,29 @@ void cli_user(Arguments *args, Operation *operation) {
 
     // Find mpsites file from parameters.
     FILE *sitesFile = NULL;
-    mpw_free_string( &operation->sitesPath );
-    operation->sitesPath = mpw_path( operation->fullName, mpw_marshal_format_extension( operation->sitesFormat ) );
-    if (!operation->sitesPath || !(sitesFile = fopen( operation->sitesPath, "r" ))) {
-        dbg( "Couldn't open configuration file:\n  %s: %s", operation->sitesPath, strerror( errno ) );
+    const char **extensions = NULL;
+    int count = mpw_marshal_format_extensions( operation->sitesFormat, &extensions );
+    for (int e = 0; !sitesFile && e < count; ++e) {
+        mpw_free_string( &operation->sitesPath );
+        operation->sitesPath = mpw_path( operation->fullName, extensions[e] );
 
-        // Try to fall back to the flat format.
-        if (!operation->sitesFormatFixed) {
-            mpw_free_string( &operation->sitesPath );
-            operation->sitesPath = mpw_path( operation->fullName, mpw_marshal_format_extension( MPMarshalFormatFlat ) );
-            if (operation->sitesPath && (sitesFile = fopen( operation->sitesPath, "r" )))
-                operation->sitesFormat = MPMarshalFormatFlat;
-            else
-                dbg( "Couldn't open configuration file:\n  %s: %s", operation->sitesPath, strerror( errno ) );
-        }
+        if (!operation->sitesPath || !(sitesFile = fopen( operation->sitesPath, "r" )))
+            dbg( "Couldn't open configuration file:\n  %s: %s", operation->sitesPath, strerror( errno ) );
     }
+
+    if (!sitesFile && !operation->sitesFormatFixed)
+        for (MPMarshalFormat format = MPMarshalFormatFirst; !sitesFile && format <= MPMarshalFormatLast; ++format) {
+            count = mpw_marshal_format_extensions( operation->sitesFormat, &extensions );
+
+            for (int e = 0; !sitesFile && e < count; ++e) {
+                mpw_free_string( &operation->sitesPath );
+                operation->sitesPath = mpw_path( operation->fullName, extensions[e] );
+
+                if (!operation->sitesPath || !(sitesFile = fopen( operation->sitesPath, "r" )))
+                    dbg( "Couldn't open configuration file:\n  %s: %s", operation->sitesPath, strerror( errno ) );
+            }
+        }
+    free( extensions );
 
     // Load the user object from mpsites.
     if (!sitesFile)
@@ -490,7 +500,8 @@ void cli_user(Arguments *args, Operation *operation) {
         MPMarshalError marshalError = { .type = MPMarshalSuccess };
         mpw_marshal_info_free( &sitesInputInfo );
         mpw_marshal_free( &operation->user );
-        operation->user = mpw_marshal_read( sitesInputData, sitesInputFormat, cli_masterKeyProvider_op( operation ), &marshalError );
+        operation->user = mpw_marshal_read( sitesInputData, sitesInputFormat,
+                cli_masterKeyProvider_op( operation ), &marshalError );
         if (marshalError.type == MPMarshalErrorMasterPassword && operation->allowPasswordUpdate) {
             // Update master password in mpsites.
             while (marshalError.type == MPMarshalErrorMasterPassword) {
@@ -498,14 +509,16 @@ void cli_user(Arguments *args, Operation *operation) {
                 inf( "To update the configuration with this new master password, first confirm the old master password." );
 
                 const char *importMasterPassword = NULL;
-                while (!importMasterPassword || !strlen( importMasterPassword ))
+                while (!importMasterPassword || !strlen( importMasterPassword )) {
+                    mpw_free_string( &importMasterPassword );
                     importMasterPassword = mpw_getpass( "Old master password: " );
+                }
 
                 mpw_marshal_free( &operation->user );
-                operation->user = mpw_marshal_read( sitesInputData, sitesInputFormat, cli_masterKeyProvider_str( importMasterPassword ), &marshalError );
-                mpw_free_string( &importMasterPassword );
-                
+                operation->user = mpw_marshal_read( sitesInputData, sitesInputFormat,
+                        cli_masterKeyProvider_str( importMasterPassword ), &marshalError );
                 operation->user->masterKeyProvider = cli_masterKeyProvider_op( operation );
+                mpw_free_string( &importMasterPassword );
             }
         }
         mpw_free_string( &sitesInputData );
@@ -772,15 +785,17 @@ void cli_mpw(Arguments *args, Operation *operation) {
 
 void cli_save(Arguments *args, Operation *operation) {
 
-    if (operation->sitesFormat == MPMarshalFormatNone)
-        return;
-
     if (!operation->sitesFormatFixed)
         operation->sitesFormat = MPMarshalFormatDefault;
 
+    const char **extensions = NULL;
+    if (!mpw_marshal_format_extensions( operation->sitesFormat, &extensions ))
+        return;
+
     mpw_free_string( &operation->sitesPath );
-    operation->sitesPath = mpw_path( operation->user->fullName, mpw_marshal_format_extension( operation->sitesFormat ) );
-    dbg( "Updating: %s (%s)", operation->sitesPath, mpw_nameForFormat( operation->sitesFormat ) );
+    operation->sitesPath = mpw_path( operation->user->fullName, extensions[0] );
+    dbg( "Updating: %s (%s)", operation->sitesPath, mpw_format_name( operation->sitesFormat ) );
+    free( extensions );
 
     FILE *sitesFile = NULL;
     if (!operation->sitesPath || !mpw_mkdirs( operation->sitesPath ) || !(sitesFile = fopen( operation->sitesPath, "w" ))) {
@@ -800,31 +815,48 @@ void cli_save(Arguments *args, Operation *operation) {
     fclose( sitesFile );
 }
 
-static MPMasterKey __cli_masterKeyProvider_currentKey;
-static MPAlgorithmVersion __cli_masterKeyProvider_currentAlgorithm;
-static const char *__cli_masterKeyProvider_currentPassword;
-static Operation *__cli_masterKeyProvider_currentOperation;
+static MPMasterKey __cli_masterKeyProvider_currentKey = NULL;
+static MPAlgorithmVersion __cli_masterKeyProvider_currentAlgorithm = (MPAlgorithmVersion)-1;
+static const char *__cli_masterKeyProvider_currentPassword = NULL;
+static Operation *__cli_masterKeyProvider_currentOperation = NULL;
+
 static MPMasterKey __cli_masterKeyProvider_op(MPAlgorithmVersion algorithm, const char *fullName) {
-    if (mpw_update_masterKey(&__cli_masterKeyProvider_currentKey, &__cli_masterKeyProvider_currentAlgorithm,
-                             algorithm, fullName, __cli_masterKeyProvider_currentOperation->masterPassword))
-        return __cli_masterKeyProvider_currentKey;
-    
+
+    if (mpw_update_master_key( &__cli_masterKeyProvider_currentKey, &__cli_masterKeyProvider_currentAlgorithm,
+            algorithm, fullName, __cli_masterKeyProvider_currentOperation->masterPassword ))
+        return mpw_memdup( __cli_masterKeyProvider_currentKey, MPMasterKeySize );
+
     return NULL;
 }
+
 static MPMasterKey __cli_masterKeyProvider_str(MPAlgorithmVersion algorithm, const char *fullName) {
-    if (mpw_update_masterKey(&__cli_masterKeyProvider_currentKey, &__cli_masterKeyProvider_currentAlgorithm,
-                             algorithm, fullName, __cli_masterKeyProvider_currentPassword))
-        return __cli_masterKeyProvider_currentKey;
-    
+
+    if (mpw_update_master_key( &__cli_masterKeyProvider_currentKey, &__cli_masterKeyProvider_currentAlgorithm,
+            algorithm, fullName, __cli_masterKeyProvider_currentPassword ))
+        return mpw_memdup( __cli_masterKeyProvider_currentKey, MPMasterKeySize );
+
     return NULL;
 }
 
 MPMasterKeyProvider cli_masterKeyProvider_op(Operation *operation) {
+
+    mpw_free_string( &__cli_masterKeyProvider_currentPassword );
     __cli_masterKeyProvider_currentOperation = operation;
     return __cli_masterKeyProvider_op;
 }
 
 MPMasterKeyProvider cli_masterKeyProvider_str(const char *masterPassword) {
-    __cli_masterKeyProvider_currentPassword = masterPassword;
+
+    mpw_free_string( &__cli_masterKeyProvider_currentPassword );
+    __cli_masterKeyProvider_currentPassword = mpw_strdup( masterPassword );
     return __cli_masterKeyProvider_str;
+}
+
+void cli_masterKeyProvider_free() {
+
+    mpw_free( &__cli_masterKeyProvider_currentKey, MPMasterKeySize );
+    __cli_masterKeyProvider_currentAlgorithm = (MPAlgorithmVersion)-1;
+    mpw_free_string( &__cli_masterKeyProvider_currentPassword );
+    __cli_masterKeyProvider_currentOperation = NULL;
+
 }

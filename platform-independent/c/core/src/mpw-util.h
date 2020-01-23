@@ -223,6 +223,8 @@ bool mpw_id_buf_equals(const char *id1, const char *id2);
 
 /** @return The amount of display characters in the given UTF-8 string. */
 const size_t mpw_utf8_strlen(const char *utf8String);
+/** Drop-in for memdup(3). */
+void *mpw_memdup(const void *src, size_t len);
 /** Drop-in for POSIX strdup(3). */
 char *mpw_strdup(const char *src);
 /** Drop-in for POSIX strndup(3). */

@@ -490,17 +490,25 @@ const size_t mpw_utf8_strlen(const char *utf8String) {
     return charlen;
 }
 
+void *mpw_memdup(const void *src, size_t len) {
+
+    if (!src)
+        return NULL;
+
+    char *dst = malloc( len );
+    if (dst)
+        memcpy( dst, src, len );
+
+    return dst;
+}
+
 char *mpw_strdup(const char *src) {
 
     if (!src)
         return NULL;
 
     size_t len = strlen( src );
-    char *dst = malloc( len + 1 );
-    memcpy( dst, src, len );
-    dst[len] = '\0';
-
-    return dst;
+    return mpw_memdup( src, len + 1 );
 }
 
 char *mpw_strndup(const char *src, size_t max) {
