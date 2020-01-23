@@ -58,7 +58,7 @@ MPMarshalledSite *mpw_marshal_site(
 
     MPMarshalledSite *site = &user->sites[user->sites_count - 1];
     *site = (MPMarshalledSite){
-            .name = mpw_strdup( siteName ),
+            .siteName = mpw_strdup( siteName ),
             .algorithm = algorithmVersion,
             .counter = siteCounter,
 
@@ -119,7 +119,7 @@ bool mpw_marshal_free(
 
     for (size_t s = 0; s < (*user)->sites_count; ++s) {
         MPMarshalledSite *site = &(*user)->sites[s];
-        success &= mpw_free_strings( &site->name, &site->resultState, &site->loginState, &site->url, NULL );
+        success &= mpw_free_strings( &site->siteName, &site->resultState, &site->loginState, &site->url, NULL );
 
         for (size_t q = 0; q < site->questions_count; ++q) {
             MPMarshalledQuestion *question = &site->questions[q];
@@ -177,7 +177,7 @@ static bool mpw_marshal_write_flat(
     // Sites.
     for (size_t s = 0; s < user->sites_count; ++s) {
         MPMarshalledSite *site = &user->sites[s];
-        if (!site->name || !strlen( site->name ))
+        if (!site->siteName || !strlen( site->siteName ))
             continue;
 
         const char *resultState = NULL, *loginState = NULL;
@@ -189,9 +189,9 @@ static bool mpw_marshal_write_flat(
                 return false;
             }
 
-            resultState = mpw_site_result( masterKey, site->name, site->counter,
+            resultState = mpw_site_result( masterKey, site->siteName, site->counter,
                     MPKeyPurposeAuthentication, NULL, site->resultType, site->resultState, site->algorithm );
-            loginState = mpw_site_result( masterKey, site->name, MPCounterValueInitial,
+            loginState = mpw_site_result( masterKey, site->siteName, MPCounterValueInitial,
                     MPKeyPurposeIdentification, NULL, site->loginType, site->loginState, site->algorithm );
         }
         else {
@@ -205,7 +205,7 @@ static bool mpw_marshal_write_flat(
         if (strftime( dateString, sizeof( dateString ), "%FT%TZ", gmtime( &site->lastUsed ) ))
             mpw_string_pushf( out, "%s  %8ld  %lu:%lu:%lu  %25s\t%25s\t%s\n",
                     dateString, (long)site->uses, (long)site->resultType, (long)site->algorithm, (long)site->counter,
-                    loginState? loginState: "", site->name, resultState? resultState: "" );
+                    loginState? loginState: "", site->siteName, resultState? resultState: "" );
         mpw_free_strings( &resultState, &loginState, NULL );
     }
     mpw_free( &masterKey, MPMasterKeySize );
@@ -668,10 +668,10 @@ static MPMarshalledUser *mpw_marshal_read_flat(
                 }
 
                 if (siteResultState && strlen( siteResultState ))
-                    site->resultState = mpw_site_state( masterKey, site->name, site->counter,
+                    site->resultState = mpw_site_state( masterKey, site->siteName, site->counter,
                             MPKeyPurposeAuthentication, NULL, site->resultType, siteResultState, site->algorithm );
                 if (siteLoginState && strlen( siteLoginState ))
-                    site->loginState = mpw_site_state( masterKey, site->name, MPCounterValueInitial,
+                    site->loginState = mpw_site_state( masterKey, site->siteName, MPCounterValueInitial,
                             MPKeyPurposeIdentification, NULL, site->loginType, siteLoginState, site->algorithm );
             }
             else {

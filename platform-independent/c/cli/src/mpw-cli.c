@@ -240,7 +240,7 @@ int main(const int argc, char *const argv[]) {
         dbg( "sitesPath        : %s", operation.sitesPath );
     }
     if (operation.site) {
-        dbg( "siteName         : %s", operation.site->name );
+        dbg( "siteName         : %s", operation.site->siteName );
         dbg( "siteCounter      : %u", operation.siteCounter );
         dbg( "resultType       : %s (%u)", mpw_type_short_name( operation.resultType ), operation.resultType );
         dbg( "resultParam      : %s", operation.resultParam );
@@ -552,7 +552,7 @@ void cli_site(Arguments *args, Operation *operation) {
 
     // Load the site object from mpsites.
     for (size_t s = 0; !operation->site && s < operation->user->sites_count; ++s)
-        if (strcmp( operation->siteName, (&operation->user->sites[s])->name ) == 0)
+        if (strcmp( operation->siteName, (&operation->user->sites[s])->siteName ) == 0)
             operation->site = &operation->user->sites[s];
 
     // If no site from mpsites, create a new one.
@@ -715,7 +715,7 @@ void cli_mpw(Arguments *args, Operation *operation) {
 
     if (mpw_verbosity >= inf_level)
         fprintf( stderr, "%s's %s for %s:\n[ %s ]: ",
-                operation->user->fullName, operation->purposeResult, operation->site->name, operation->identicon );
+                operation->user->fullName, operation->purposeResult, operation->site->siteName, operation->identicon );
 
     // Determine master key.
     MPMasterKey masterKey = operation->user->masterKeyProvider( operation->site->algorithm, operation->user->fullName );
@@ -728,7 +728,7 @@ void cli_mpw(Arguments *args, Operation *operation) {
     // Update state from resultParam if stateful.
     if (operation->resultParam && operation->resultType & MPResultTypeClassStateful) {
         mpw_free_string( &operation->resultState );
-        if (!(operation->resultState = mpw_site_state( masterKey, operation->site->name, operation->siteCounter,
+        if (!(operation->resultState = mpw_site_state( masterKey, operation->site->siteName, operation->siteCounter,
                 operation->keyPurpose, operation->keyContext, operation->resultType, operation->resultParam,
                 operation->site->algorithm ))) {
             ftl( "Couldn't encrypt site result." );
@@ -766,7 +766,7 @@ void cli_mpw(Arguments *args, Operation *operation) {
         operation->resultParam = mpw_strdup( operation->resultState );
 
     // Generate result.
-    const char *result = mpw_site_result( masterKey, operation->site->name, operation->siteCounter,
+    const char *result = mpw_site_result( masterKey, operation->site->siteName, operation->siteCounter,
             operation->keyPurpose, operation->keyContext, operation->resultType, operation->resultParam, operation->site->algorithm );
     mpw_free( &masterKey, MPMasterKeySize );
     if (!result) {

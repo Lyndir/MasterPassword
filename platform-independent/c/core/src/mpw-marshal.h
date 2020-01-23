@@ -73,7 +73,7 @@ typedef struct MPMarshalledQuestion {
 } MPMarshalledQuestion;
 
 typedef struct MPMarshalledSite {
-    const char *name;
+    const char *siteName;
     MPAlgorithmVersion algorithm;
     MPCounterValue counter;
 

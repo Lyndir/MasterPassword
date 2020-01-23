@@ -641,10 +641,10 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
 
             // Find an existing site to update.
             NSFetchRequest *siteFetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPSiteEntity class] )];
-            siteFetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@ AND user == %@", @(importSite->name), user];
+            siteFetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@ AND user == %@", @(importSite->siteName), user];
             NSArray *existingSites = [context executeFetchRequest:siteFetchRequest error:&error];
             if (!existingSites)
-                return MPError( error, @"Lookup of existing sites failed for site: %@, user: %@", @(importSite->name), user.userID );
+                return MPError( error, @"Lookup of existing sites failed for site: %@, user: %@", @(importSite->siteName), user.userID );
             if ([existingSites count])
                 // Update existing site.
                 for (MPSiteEntity *site in existingSites) {
@@ -656,7 +656,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
                 id<MPAlgorithm> algorithm = MPAlgorithmForVersion( importSite->algorithm );
                 Class entityType = [algorithm classOfType:importSite->type];
                 if (!entityType)
-                    return MPMakeError( @"Invalid site type in import file: %@ has type %lu", @(importSite->name), (long)importSite->type );
+                    return MPMakeError( @"Invalid site type in import file: %@ has type %lu", @(importSite->siteName), (long)importSite->type );
 
                 MPSiteEntity *site = (MPSiteEntity *)[entityType insertNewObjectInContext:context];
                 site.user = user;
@@ -683,7 +683,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
 - (void)importSite:(const MPMarshalledSite *)importSite protectedByKey:(MPKey *)importKey intoSite:(MPSiteEntity *)site
           usingKey:(MPKey *)userKey {
 
-    site.name = @(importSite->name);
+    site.name = @(importSite->siteName);
     if (importSite->content)
         [site.algorithm importPassword:@(importSite->content) protectedByKey:importKey intoSite:site usingKey:userKey];
     site.type = importSite->type;
