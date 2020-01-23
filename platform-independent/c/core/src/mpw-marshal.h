@@ -125,20 +125,24 @@ bool mpw_marshal_write(
 /** Try to read metadata on the sites in the input buffer. */
 MPMarshalInfo *mpw_marshal_read_info(
         const char *in);
-/** Unmarshall sites in the given input buffer by parsing it using the given marshalling format. */
+/** Unmarshall sites in the given input buffer by parsing it using the given marshalling format.
+ * @return NULL if the format provides no marshalling or an error occurred. */
 MPMarshalledUser *mpw_marshal_read(
         const char *in, const MPMarshalFormat inFormat, MPMasterKeyProvider masterKeyProvider, MPMarshalError *error);
 
 //// Utilities.
 
-/** Create a new user object ready for marshalling. */
+/** Create a new user object ready for marshalling.
+ * @return NULL if the fullName or masterKeyProvider is missing, or the marshalled user couldn't be allocated. */
 MPMarshalledUser *mpw_marshal_user(
         const char *fullName, MPMasterKeyProvider masterKeyProvider, const MPAlgorithmVersion algorithmVersion);
-/** Create a new site attached to the given user object, ready for marshalling. */
+/** Create a new site attached to the given user object, ready for marshalling.
+ * @return NULL if the siteName is missing, or the marshalled site couldn't be allocated. */
 MPMarshalledSite *mpw_marshal_site(
         MPMarshalledUser *user,
         const char *siteName, const MPResultType resultType, const MPCounterValue siteCounter, const MPAlgorithmVersion algorithmVersion);
-/** Create a new question attached to the given site object, ready for marshalling. */
+/** Create a new question attached to the given site object, ready for marshalling.
+ * @return NULL if the marshalled question couldn't be allocated. */
 MPMarshalledQuestion *mpw_marshal_question(
         MPMarshalledSite *site, const char *keyword);
 /** Free the given user object and all associated data. */
@@ -150,24 +154,24 @@ bool mpw_marshal_free(
 //// Format.
 
 /**
- * @return The purpose represented by the given name.
+ * @return The purpose represented by the given name or ERR if the format was not recognized.
  */
 const MPMarshalFormat mpw_format_named(
         const char *formatName);
 /**
- * @return The standard name for the given purpose.
+ * @return The standard name for the given purpose or NULL if the format was not recognized.
  */
 const char *mpw_format_name(
         const MPMarshalFormat format);
 /**
- * @return The file extension that's recommended for files that use the given marshalling format.
+ * @return The file extension that's recommended for files that use the given marshalling format or NULL if the format was not recognized.
  */
 const char *mpw_marshal_format_extension(
         const MPMarshalFormat format);
 /**
  * @param extensions An array of filename extensions that are used for files of this format,
  *        the first being the currently preferred/output extension.  Free after use.
- * @return The amount of filename extensions returned in the array.
+ * @return The amount of filename extensions returned in the array or 0 if the format does not support marshalling or was not recognized.
  */
 int mpw_marshal_format_extensions(
         const MPMarshalFormat format, const char ***extensions);

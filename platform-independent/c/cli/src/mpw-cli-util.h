@@ -35,7 +35,7 @@
 const char *mpw_getenv(const char *variableName);
 
 /** Use the askpass program to prompt the user.
-  * @return A newly allocated string or NULL if askpass is not supported or an error occurred. */
+  * @return A newly allocated string or NULL if askpass is not enabled or could not be executed. */
 const char *mpw_askpass(const char *prompt);
 
 /** Ask the user a question.
@@ -49,7 +49,7 @@ const char *mpw_getpass(const char *prompt);
 /** Get the absolute path to the mpw configuration file with the given prefix name and file extension.
   * Resolves the file <prefix.extension> as located in the <.mpw.d> directory inside the user's home directory
   * or current directory if it couldn't be resolved.
-  * @return A newly allocated string. */
+  * @return A newly allocated string or NULL if the prefix or extension is missing or the path could not be allocated. */
 const char *mpw_path(const char *prefix, const char *extension);
 
 /** mkdir all the directories up to the directory of the given file path.
@@ -57,13 +57,13 @@ const char *mpw_path(const char *prefix, const char *extension);
 bool mpw_mkdirs(const char *filePath);
 
 /** Read until EOF from the given file descriptor.
-  * @return A newly allocated string or NULL the read buffer couldn't be allocated. */
+  * @return A newly allocated string or NULL if the an IO error occurred or the read buffer couldn't be allocated. */
 const char *mpw_read_fd(int fd);
 
 /** Read the file contents of a given file.
-  * @return A newly allocated string or NULL the read buffer couldn't be allocated. */
+  * @return A newly allocated string or NULL if the file is missing, an IO error occurred or the read buffer couldn't be allocated. */
 const char *mpw_read_file(FILE *file);
 
 /** Encode a visual fingerprint for a user.
-  * @return A newly allocated string. */
+  * @return A newly allocated string or NULL if the identicon couldn't be allocated. */
 const char *mpw_identicon_str(MPIdenticon identicon);

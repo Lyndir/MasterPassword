@@ -128,7 +128,7 @@ static const char *_mpw_getline(const char *prompt, bool silent) {
         // Read response.
         color_set( 2, NULL );
         attron( A_STANDOUT );
-        int result = ERR;
+        int result;
         char str[MPW_MAX_INPUT + 1];
         if (silent) {
             mvprintw( rows / 2 + 1, (cols - 5) / 2, "[ * ]" );
@@ -180,6 +180,17 @@ const char *mpw_getpass(const char *prompt) {
 
 const char *mpw_path(const char *prefix, const char *extension) {
 
+    if (!prefix || !extension)
+        return NULL;
+
+    // Compose filename.
+    char *path = mpw_strdup( mpw_str( "%s.%s", prefix, extension ) );
+    if (!path)
+        return NULL;
+
+    // This is a filename, remove all potential directory separators.
+    for (char *slash; (slash = strstr( path, "/" )); *slash = '_');
+
     // Resolve user's home directory.
     char *homeDir = NULL;
     if (!homeDir)
@@ -200,12 +211,6 @@ const char *mpw_path(const char *prefix, const char *extension) {
     }
     if (!homeDir)
         homeDir = getcwd( NULL, 0 );
-
-    // Compose filename.
-    char *path = mpw_strdup( mpw_str( "%s.%s", prefix, extension ) );
-
-    // This is a filename, remove all potential directory separators.
-    for (char *slash; (slash = strstr( path, "/" )); *slash = '_');
 
     // Compose pathname.
     if (homeDir) {
@@ -277,6 +282,8 @@ const char *mpw_read_file(FILE *file) {
     while ((mpw_realloc( &buf, &bufSize, blockSize )) &&
            (bufOffset += (readSize = fread( buf + bufOffset, 1, blockSize, file ))) &&
            (readSize == blockSize));
+    if (ferror( file ))
+        mpw_free( &buf, bufSize );
 
     return buf;
 }
@@ -345,7 +352,9 @@ const char *mpw_identicon_str(MPIdenticon identicon) {
     }
 
     const char *str = mpw_str( "%s%s%s%s%s%s",
-            colorString, identicon.leftArm, identicon.body, identicon.rightArm, identicon.accessory, resetString );
+            colorString? colorString: "",
+            identicon.leftArm, identicon.body, identicon.rightArm, identicon.accessory,
+            resetString? resetString: "" );
     mpw_free_strings( &colorString, &resetString, NULL );
 
     return mpw_strdup( str );

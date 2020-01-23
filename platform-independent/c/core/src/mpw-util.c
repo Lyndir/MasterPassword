@@ -308,6 +308,8 @@ static uint8_t const *mpw_aes(bool encrypt, const uint8_t *key, const size_t key
     memcpy( aesBuf, buf, *bufSize );
     memset( aesBuf + *bufSize, aesSize - *bufSize, aesSize - *bufSize );
     uint8_t *resultBuf = malloc( aesSize );
+    if (!resultBuf)
+        return NULL;
 
     if (encrypt)
         AES_CBC_encrypt_buffer( resultBuf, aesBuf, aesSize, key, iv );
@@ -366,7 +368,7 @@ const char *mpw_hotp(const uint8_t *key, size_t keySize, uint64_t movingFactor, 
 MPKeyID mpw_id_buf(const void *buf, size_t length) {
 
     if (!buf)
-        return "<unset>";
+        return NULL;
 
 #if MPW_CPERCIVA
     uint8_t hash[32];
@@ -382,6 +384,9 @@ MPKeyID mpw_id_buf(const void *buf, size_t length) {
 }
 
 bool mpw_id_buf_equals(const char *id1, const char *id2) {
+
+    if (!id1 || !id2)
+        return !id1 && !id2;
 
     size_t size = strlen( id1 );
     if (size != strlen( id2 ))
@@ -405,6 +410,9 @@ const char *mpw_str(const char *format, ...) {
 }
 
 const char *mpw_vstr(const char *format, va_list args) {
+
+    if (!format)
+        return NULL;
 
     // TODO: We should find a way to get rid of this shared storage medium.
     // TODO: Not thread-safe
@@ -433,18 +441,22 @@ const char *mpw_vstr(const char *format, va_list args) {
 
 const char *mpw_hex(const void *buf, size_t length) {
 
+    if (!buf || !length)
+        return NULL;
+
     // TODO: We should find a way to get rid of this shared storage medium.
     // TODO: Not thread-safe
     static char **mpw_hex_buf;
-    static unsigned int mpw_hex_buf_i;
+    static size_t mpw_hex_buf_i;
+    if (!mpw_hex_buf && !(mpw_hex_buf = calloc( 10, sizeof( char * ) )))
+        return NULL;
 
-    if (!mpw_hex_buf)
-        mpw_hex_buf = calloc( 10, sizeof( char * ) );
     mpw_hex_buf_i = (mpw_hex_buf_i + 1) % 10;
+    if (!mpw_realloc( &mpw_hex_buf[mpw_hex_buf_i], NULL, length * 2 + 1 ))
+        return NULL;
 
-    if (mpw_realloc( &mpw_hex_buf[mpw_hex_buf_i], NULL, length * 2 + 1 ))
-        for (size_t kH = 0; kH < length; kH++)
-            sprintf( &(mpw_hex_buf[mpw_hex_buf_i][kH * 2]), "%02X", ((const uint8_t *)buf)[kH] );
+    for (size_t kH = 0; kH < length; kH++)
+        sprintf( &(mpw_hex_buf[mpw_hex_buf_i][kH * 2]), "%02X", ((const uint8_t *)buf)[kH] );
 
     return mpw_hex_buf[mpw_hex_buf_i];
 }
@@ -484,7 +496,9 @@ const size_t mpw_utf8_strlen(const char *utf8String) {
 
     size_t charlen = 0;
     char *remainingString = (char *)utf8String;
-    for (int charByteSize; (charByteSize = mpw_utf8_sizeof( (unsigned char)*remainingString )); remainingString += charByteSize)
+    for (int charByteSize;
+         remainingString && (charByteSize = mpw_utf8_sizeof( (unsigned char)*remainingString ));
+         remainingString += charByteSize)
         ++charlen;
 
     return charlen;

@@ -33,7 +33,8 @@
   * @return A new string containing the token or NULL if the delim wasn't found before eol. */
 char *mpw_get_token(
         const char **in, const char *eol, char *delim);
-/** Convert an RFC 3339 time string into epoch time. */
+/** Convert an RFC 3339 time string into epoch time.
+ * @return ERR if the string could not be parsed. */
 time_t mpw_timegm(
         const char *time);
 

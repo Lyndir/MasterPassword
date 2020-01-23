@@ -310,7 +310,7 @@ const char *mpw_class_characters(char characterClass) {
 const char mpw_class_character(char characterClass, uint8_t seedByte) {
 
     const char *classCharacters = mpw_class_characters( characterClass );
-    if (!classCharacters)
+    if (!classCharacters || !strlen( classCharacters ))
         return '\0';
 
     return classCharacters[seedByte % strlen( classCharacters )];

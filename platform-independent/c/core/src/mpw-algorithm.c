@@ -32,8 +32,14 @@ MPMasterKey mpw_master_key(const char *fullName, const char *masterPassword, con
     trc( "-- mpw_master_key (algorithm: %u)", algorithmVersion );
     trc( "fullName: %s", fullName );
     trc( "masterPassword.id: %s", masterPassword? mpw_id_buf( masterPassword, strlen( masterPassword ) ): NULL );
-    if (!fullName || !masterPassword)
+    if (!fullName) {
+        err( "Missing fullName" );
         return NULL;
+    }
+    if (!masterPassword) {
+        err( "Missing masterPassword" );
+        return NULL;
+    }
 
     switch (algorithmVersion) {
         case MPAlgorithmVersion0:
@@ -62,8 +68,14 @@ MPSiteKey mpw_site_key(
     trc( "siteCounter: %d", siteCounter );
     trc( "keyPurpose: %d (%s)", keyPurpose, mpw_purpose_name( keyPurpose ) );
     trc( "keyContext: %s", keyContext );
-    if (!masterKey || !siteName)
+    if (!masterKey) {
+        err( "Missing masterKey" );
         return NULL;
+    }
+    if (!siteName) {
+        err( "Missing siteName" );
+        return NULL;
+    }
 
     switch (algorithmVersion) {
         case MPAlgorithmVersion0:
@@ -92,12 +104,18 @@ const char *mpw_site_result(
         resultParam = NULL;
 
     MPSiteKey siteKey = mpw_site_key( masterKey, siteName, siteCounter, keyPurpose, keyContext, algorithmVersion );
-    if (!siteKey)
-        return NULL;
 
     trc( "-- mpw_site_result (algorithm: %u)", algorithmVersion );
     trc( "resultType: %d (%s)", resultType, mpw_type_short_name( resultType ) );
     trc( "resultParam: %s", resultParam );
+    if (!masterKey) {
+        err( "Missing masterKey" );
+        return NULL;
+    }
+    if (!siteKey) {
+        err( "Missing siteKey" );
+        return NULL;
+    }
 
     char *sitePassword = NULL;
     if (resultType & MPResultTypeClassTemplate) {
@@ -164,14 +182,22 @@ const char *mpw_site_state(
         resultParam = NULL;
 
     MPSiteKey siteKey = mpw_site_key( masterKey, siteName, siteCounter, keyPurpose, keyContext, algorithmVersion );
-    if (!siteKey)
-        return NULL;
 
     trc( "-- mpw_site_state (algorithm: %u)", algorithmVersion );
     trc( "resultType: %d (%s)", resultType, mpw_type_short_name( resultType ) );
-    trc( "resultParam: %zu bytes = %s", sizeof( resultParam ), resultParam );
-    if (!masterKey || !resultParam)
+    trc( "resultParam: %zu bytes = %s", resultParam? strlen( resultParam ): 0, resultParam );
+    if (!masterKey) {
+        err( "Missing masterKey" );
         return NULL;
+    }
+    if (!siteKey) {
+        err( "Missing siteKey" );
+        return NULL;
+    }
+    if (!resultParam) {
+        err( "Missing resultParam" );
+        return NULL;
+    }
 
     switch (algorithmVersion) {
         case MPAlgorithmVersion0:
@@ -214,10 +240,10 @@ MPIdenticon mpw_identicon(const char *fullName, const char *masterPassword) {
         };
 
     MPIdenticon identicon = {
-            .leftArm = leftArm[identiconSeed[0] % (sizeof( leftArm ) / sizeof( leftArm[0] ))],
-            .body = body[identiconSeed[1] % (sizeof( body ) / sizeof( body[0] ))],
-            .rightArm = rightArm[identiconSeed[2] % (sizeof( rightArm ) / sizeof( rightArm[0] ))],
-            .accessory = accessory[identiconSeed[3] % (sizeof( accessory ) / sizeof( accessory[0] ))],
+            .leftArm = leftArm[identiconSeed[0] % (sizeof( leftArm ) / sizeof( *leftArm ))],
+            .body = body[identiconSeed[1] % (sizeof( body ) / sizeof( *body ))],
+            .rightArm = rightArm[identiconSeed[2] % (sizeof( rightArm ) / sizeof( *rightArm ))],
+            .accessory = accessory[identiconSeed[3] % (sizeof( accessory ) / sizeof( *accessory ))],
             .color = (uint8_t)(identiconSeed[4] % (MPIdenticonColorLast - MPIdenticonColorFirst + 1) + MPIdenticonColorFirst),
     };
     mpw_free( &identiconSeed, 32 );

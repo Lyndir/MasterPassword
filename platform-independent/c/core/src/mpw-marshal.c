@@ -861,7 +861,7 @@ MPMarshalledUser *mpw_marshal_read(
     switch (inFormat) {
         case MPMarshalFormatNone:
             *error = (MPMarshalError){ .type = MPMarshalSuccess };
-            return false;
+            return NULL;
         case MPMarshalFormatFlat:
             return mpw_marshal_read_flat( in, masterKeyProvider, error );
 #if MPW_JSON

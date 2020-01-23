@@ -52,7 +52,7 @@ time_t mpw_timegm(const char *time) {
         return local_time + gmtoff;
     }
 
-    return false;
+    return ERR;
 }
 
 #if MPW_JSON

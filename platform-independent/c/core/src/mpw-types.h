@@ -84,12 +84,12 @@ typedef mpw_enum( uint32_t, MPResultType ) {
             MPResultTypeTemplatePhrase = 0xF | MPResultTypeClassTemplate | 0x0,
 
     /** 1056: Custom saved password. */
-    MPResultTypeStatefulPersonal = 0x0 | MPResultTypeClassStateful | MPSiteFeatureExportContent,
+            MPResultTypeStatefulPersonal = 0x0 | MPResultTypeClassStateful | MPSiteFeatureExportContent,
     /** 2081: Custom saved password that should not be exported from the device. */
-    MPResultTypeStatefulDevice = 0x1 | MPResultTypeClassStateful | MPSiteFeatureDevicePrivate,
+            MPResultTypeStatefulDevice = 0x1 | MPResultTypeClassStateful | MPSiteFeatureDevicePrivate,
 
     /** 4160: Derive a unique binary key. */
-    MPResultTypeDeriveKey = 0x0 | MPResultTypeClassDerive | MPSiteFeatureAlternative,
+            MPResultTypeDeriveKey = 0x0 | MPResultTypeClassDerive | MPSiteFeatureAlternative,
 
     MPResultTypeDefault = MPResultTypeTemplateLong,
 };
@@ -131,32 +131,32 @@ typedef struct {
 //// Type utilities.
 
 /**
- * @return The purpose represented by the given name.
+ * @return The purpose represented by the given name or ERR if the name does not represent a known purpose.
  */
 const MPKeyPurpose mpw_purpose_named(const char *purposeName);
 /**
- * @return The standard name for the given purpose.
+ * @return The standard name for the given purpose or NULL if the purpose is not known.
  */
 const char *mpw_purpose_name(MPKeyPurpose purpose);
 /**
- * @return An internal string containing the scope identifier to apply when encoding for the given purpose.
+ * @return An internal string containing the scope identifier to apply when encoding for the given purpose or NULL if the purpose is not known.
  */
 const char *mpw_purpose_scope(MPKeyPurpose purpose);
 
 /**
- * @return The password type represented by the given name.
+ * @return The password type represented by the given name or ERR if the name does not represent a known type.
  */
 const MPResultType mpw_type_named(const char *typeName);
 /**
- * @return The standard identifying name for the given password type.
+ * @return The standard identifying name for the given password type or NULL if the type is not known.
  */
 const char *mpw_type_abbreviation(MPResultType resultType);
 /**
- * @return The standard identifying name for the given password type.
+ * @return The standard identifying name for the given password type or NULL if the type is not known.
  */
 const char *mpw_type_short_name(MPResultType resultType);
 /**
- * @return The descriptive name for the given password type.
+ * @return The descriptive name for the given password type or NULL if the type is not known.
  */
 const char *mpw_type_long_name(MPResultType resultType);
 
@@ -164,21 +164,23 @@ const char *mpw_type_long_name(MPResultType resultType);
  * @return A newly allocated array of internal strings that express the templates to use for the given type.
  *         The amount of elements in the array is stored in count.
  *         If an unsupported type is given, count will be 0 and will return NULL.
-*          The array needs to be free'ed, the strings themselves must not be free'ed or modified.
+ *         The array needs to be free'ed, the strings themselves must not be free'ed or modified.
+ *         NULL if the type is not known or is not a MPResultTypeClassTemplate.
  */
 const char **mpw_type_templates(MPResultType type, size_t *count);
 /**
  * @return An internal string that contains the password encoding template of the given type
  *         for a seed that starts with the given byte.
+ *         NULL if the type is not known or is not a MPResultTypeClassTemplate.
  */
 const char *mpw_type_template(MPResultType type, uint8_t templateIndex);
 
 /**
- * @return An internal string that contains all the characters that occur in the given character class.
+ * @return An string literal with all the characters in the given character class or NULL if the character class is not known.
  */
 const char *mpw_class_characters(char characterClass);
 /**
- * @return A character from given character class that encodes the given byte.
+ * @return A character from given character class that encodes the given byte or NUL if the character class is not known or is empty.
  */
 const char mpw_class_character(char characterClass, uint8_t seedByte);
 
