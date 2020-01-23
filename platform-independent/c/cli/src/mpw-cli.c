@@ -718,7 +718,9 @@ void cli_mpw(Arguments *args, Operation *operation) {
                 operation->user->fullName, operation->purposeResult, operation->site->siteName, operation->identicon );
 
     // Determine master key.
-    MPMasterKey masterKey = operation->user->masterKeyProvider( operation->site->algorithm, operation->user->fullName );
+    MPMasterKey masterKey = NULL;
+    if (operation->user->masterKeyProvider)
+        masterKey = operation->user->masterKeyProvider( operation->site->algorithm, operation->user->fullName );
     if (!masterKey) {
         ftl( "Couldn't derive master key." );
         cli_free( args, operation );

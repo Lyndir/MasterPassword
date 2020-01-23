@@ -139,11 +139,11 @@ MPMarshalledUser *mpw_marshal_read(
 //// Utilities.
 
 /** Create a new user object ready for marshalling.
- * @return A user object (allocated), or NULL if the fullName or masterKeyProvider is missing, or the marshalled user couldn't be allocated. */
+ * @return A user object (allocated), or NULL if the fullName is missing or the marshalled user couldn't be allocated. */
 MPMarshalledUser *mpw_marshal_user(
         const char *fullName, MPMasterKeyProvider masterKeyProvider, const MPAlgorithmVersion algorithmVersion);
 /** Create a new site attached to the given user object, ready for marshalling.
- * @return A site object (allocated), or NULL if the siteName is missing, or the marshalled site couldn't be allocated. */
+ * @return A site object (allocated), or NULL if the siteName is missing or the marshalled site couldn't be allocated. */
 MPMarshalledSite *mpw_marshal_site(
         MPMarshalledUser *user,
         const char *siteName, const MPResultType resultType, const MPCounterValue siteCounter, const MPAlgorithmVersion algorithmVersion);
