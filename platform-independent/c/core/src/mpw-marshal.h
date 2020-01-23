@@ -125,8 +125,8 @@ typedef struct MPMarshalInfo {
  * @return A string (allocated), or NULL if the format is unrecognized, does not support marshalling or a format error occurred. */
 const char *mpw_marshal_write(
         const MPMarshalFormat outFormat, const MPMarshalledUser *user, MPMarshalError *error);
-/** Try to read metadata on the sites in the input buffer.
- * @return A metadata object (allocated), or NULL if the object could not be allocated or a format error occurred. */
+/** Best effort parse of metadata on the sites in the input buffer.  Fields that could not be parsed remain at their type's initial value.
+ * @return A metadata object (allocated); NULL if the object could not be allocated or the format was not understood. */
 MPMarshalInfo *mpw_marshal_read_info(
         const char *in);
 /** Unmarshall sites in the given input buffer by parsing it using the given marshalling format.

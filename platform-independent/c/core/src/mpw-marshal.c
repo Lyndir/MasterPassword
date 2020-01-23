@@ -986,6 +986,11 @@ MPMarshalInfo *mpw_marshal_read_info(
         }
     }
 
+    if (info->format == MPMarshalFormatNone) {
+        mpw_marshal_info_free( &info );
+        return NULL;
+    }
+
     return info;
 }
 
