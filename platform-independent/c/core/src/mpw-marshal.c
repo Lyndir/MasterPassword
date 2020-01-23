@@ -934,17 +934,21 @@ int mpw_marshal_format_extensions(
             break;
         }
         case MPMarshalFormatFlat: {
-            const char *array[3] = { mpw_marshal_format_extension( format ), "mpsites.txt", "txt" };
-            count = sizeof( array ) / sizeof( *array );
-            *extensions = realloc( *extensions, count * sizeof( const char * ) );
-            memcpy( *extensions, array, count * sizeof( const char * ) );
+            *extensions = realloc( *extensions, (count = 3) * sizeof( const char * ) );
+            memcpy( *extensions, (const char *[]){
+                    mpw_marshal_format_extension( format ),
+                    "mpsites.txt",
+                    "txt",
+            }, count * sizeof( const char * ) );
             break;
         }
         case MPMarshalFormatJSON: {
-            const char *array[3] = { mpw_marshal_format_extension( format ), "mpsites.json", "json" };
-            count = sizeof( array ) / sizeof( *array );
-            *extensions = realloc( *extensions, sizeof( array ) );
-            memcpy( *extensions, array, sizeof( array ) );
+            *extensions = realloc( *extensions, (count = 3) * sizeof( const char * ) );
+            memcpy( *extensions, (const char *[]){
+                    mpw_marshal_format_extension( format ),
+                    "mpsites.json",
+                    "json",
+            }, count * sizeof( const char * ) );
             break;
         }
         default: {
