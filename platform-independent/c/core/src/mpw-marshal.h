@@ -169,7 +169,8 @@ const MPMarshalFormat mpw_format_named(
 const char *mpw_format_name(
         const MPMarshalFormat format);
 /**
- * @return The file extension (static) that's recommended for files that use the given marshalling format or NULL if the format was not recognized.
+ * @return The file extension (static) that's recommended and currently used for output files,
+ *         or NULL if the format was not recognized or does not support marshalling.
  */
 const char *mpw_marshal_format_extension(
         const MPMarshalFormat format);
