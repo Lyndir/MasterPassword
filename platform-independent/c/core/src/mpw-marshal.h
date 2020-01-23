@@ -68,20 +68,20 @@ typedef struct MPMarshalError {
 
 typedef struct MPMarshalledQuestion {
     const char *keyword;
-    const char *state;
     MPResultType type;
+    const char *state;
 } MPMarshalledQuestion;
 
 typedef struct MPMarshalledSite {
     const char *name;
     MPAlgorithmVersion algorithm;
-
-    const char *resultState;
-    MPResultType resultType;
     MPCounterValue counter;
 
-    const char *loginState;
+    MPResultType resultType;
+    const char *resultState;
+
     MPResultType loginType;
+    const char *loginState;
 
     const char *url;
     unsigned int uses;
@@ -98,6 +98,7 @@ typedef struct MPMarshalledUser {
 
     unsigned int avatar;
     const char *fullName;
+    MPIdenticon identicon;
     MPResultType defaultType;
     time_t lastUsed;
 

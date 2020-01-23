@@ -587,7 +587,8 @@ void cli_question(Arguments *args, Operation *operation) {
 void cli_operation(Arguments *args, Operation *operation) {
 
     mpw_free_string( &operation->identicon );
-    operation->identicon = mpw_identicon_render( mpw_identicon( operation->user->fullName, operation->masterPassword ) );
+    operation->user->identicon = mpw_identicon( operation->user->fullName, operation->masterPassword );
+    operation->identicon = mpw_identicon_render( operation->user->identicon );
 
     if (!operation->site)
         abort();
@@ -595,9 +596,9 @@ void cli_operation(Arguments *args, Operation *operation) {
     switch (operation->keyPurpose) {
         case MPKeyPurposeAuthentication: {
             operation->purposeResult = "password";
+            operation->siteCounter = operation->site->counter;
             operation->resultType = operation->site->resultType;
             operation->resultState = operation->site->resultState? mpw_strdup( operation->site->resultState ): NULL;
-            operation->siteCounter = operation->site->counter;
             break;
         }
         case MPKeyPurposeIdentification: {

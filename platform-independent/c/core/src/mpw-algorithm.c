@@ -248,6 +248,9 @@ MPIdenticon mpw_identicon(const char *fullName, const char *masterPassword) {
 const char *mpw_identicon_encode(
         MPIdenticon identicon) {
 
+    if (identicon.color == MPIdenticonColorUnset)
+        return "";
+
     return mpw_str( "%hhu:%s%s%s%s",
             identicon.color, identicon.leftArm, identicon.body, identicon.rightArm, identicon.accessory );
 }
@@ -256,11 +259,14 @@ MPIdenticon mpw_identicon_encoded(
         const char *encoding) {
 
     MPIdenticon identicon = MPIdenticonUnset;
+    if (!encoding || !strlen( encoding ))
+        return identicon;
+
     char *string = calloc( strlen( encoding ), sizeof( *string ) ), *parser = string;
     const char *leftArm = NULL, *body = NULL, *rightArm = NULL, *accessory = NULL;
     unsigned int color;
 
-    if (encoding && string && sscanf( encoding, "%u:%s", &color, string ) == 2) {
+    if (string && sscanf( encoding, "%u:%s", &color, string ) == 2) {
         if (*parser && color)
             for (int s = 0; s < sizeof( mpw_identicon_leftArms ) / sizeof( *mpw_identicon_leftArms ); ++s) {
                 const char *limb = mpw_identicon_leftArms[s];
