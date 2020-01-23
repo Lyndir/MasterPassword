@@ -414,29 +414,31 @@ const char *mpw_vstr(const char *format, va_list args) {
     if (!format)
         return NULL;
 
-    // TODO: We should find a way to get rid of this shared storage medium.
-    // TODO: Not thread-safe
-    static char *str_str;
-    static size_t str_str_max;
-    if (!str_str && !(str_str = calloc( str_str_max = 1, sizeof( char ) )))
-        return NULL;
+    // TODO: shared storage leaks information, has an implicit recursion cap and isn't thread-safe.
+    static char *str_str[10];
+    static size_t str_str_i;
+    str_str_i = (str_str_i + 1) % (sizeof( str_str ) / sizeof( *str_str ));
 
     do {
-        va_list args_attempt;
-        va_copy( args_attempt, args );
-        size_t len = (size_t)vsnprintf( str_str, str_str_max, format, args_attempt );
-        va_end( args_attempt );
+        va_list args_copy;
+        va_copy( args_copy, args );
+        // FIXME: size is determined by string length, potentially unsafe if string can be modified.
+        size_t str_size = str_str[str_str_i]? strlen( str_str[str_str_i] ) + 1: 0;
+        size_t str_chars = (size_t)vsnprintf( str_str[str_str_i], str_size, format, args_copy );
+        va_end( args_copy );
 
-        if ((int)len < 0)
+        if (str_chars < 0)
             return NULL;
-        if (len < str_str_max)
+        if (str_chars < str_size)
             break;
 
-        if (!mpw_realloc( &str_str, &str_str_max, len - str_str_max + 1 ))
+        if (!mpw_realloc( &str_str[str_str_i], NULL, str_chars + 1 ))
             return NULL;
+        memset( str_str[str_str_i], '.', str_chars );
+        str_str[str_str_i][str_chars] = '\0';
     } while (true);
 
-    return str_str;
+    return str_str[str_str_i];
 }
 
 const char *mpw_hex(const void *buf, size_t length) {
@@ -444,14 +446,10 @@ const char *mpw_hex(const void *buf, size_t length) {
     if (!buf || !length)
         return NULL;
 
-    // TODO: We should find a way to get rid of this shared storage medium.
-    // TODO: Not thread-safe
-    static char **mpw_hex_buf;
+    // TODO: shared storage leaks information, has an implicit recursion cap and isn't thread-safe.
+    static char *mpw_hex_buf[10];
     static size_t mpw_hex_buf_i;
-    if (!mpw_hex_buf && !(mpw_hex_buf = calloc( 10, sizeof( char * ) )))
-        return NULL;
-
-    mpw_hex_buf_i = (mpw_hex_buf_i + 1) % 10;
+    mpw_hex_buf_i = (mpw_hex_buf_i + 1) % (sizeof( mpw_hex_buf ) / sizeof( *mpw_hex_buf ));
     if (!mpw_realloc( &mpw_hex_buf[mpw_hex_buf_i], NULL, length * 2 + 1 ))
         return NULL;
 
