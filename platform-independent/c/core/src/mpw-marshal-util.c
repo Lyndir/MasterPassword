@@ -103,13 +103,13 @@ bool mpw_get_json_boolean(
 }
 #endif
 
-bool mpw_update_masterKey(MPMasterKey *masterKey, MPAlgorithmVersion *masterKeyAlgorithm, MPAlgorithmVersion targetKeyAlgorithm,
+bool mpw_update_master_key(MPMasterKey *masterKey, MPAlgorithmVersion *masterKeyAlgorithm, MPAlgorithmVersion targetKeyAlgorithm,
         const char *fullName, const char *masterPassword) {
 
     if (masterKey && (!*masterKey || *masterKeyAlgorithm != targetKeyAlgorithm)) {
         mpw_free( masterKey, MPMasterKeySize );
         *masterKeyAlgorithm = targetKeyAlgorithm;
-        *masterKey = mpw_masterKey( fullName, masterPassword, *masterKeyAlgorithm );
+        *masterKey = mpw_master_key( fullName, masterPassword, *masterKeyAlgorithm );
         if (!*masterKey) {
             err( "Couldn't derive master key for user %s, algorithm %d.", fullName, *masterKeyAlgorithm );
             return false;

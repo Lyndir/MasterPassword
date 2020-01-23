@@ -104,8 +104,8 @@ int main(int argc, char *const argv[]) {
         xmlChar *keyContext = mpw_xmlTestCaseString( testCase, "keyContext" );
         xmlChar *result = mpw_xmlTestCaseString( testCase, "result" );
 
-        MPResultType resultType = mpw_typeWithName( (char *)resultTypeString );
-        MPKeyPurpose keyPurpose = mpw_purposeWithName( (char *)keyPurposeString );
+        MPResultType resultType = mpw_type_named( (char *)resultTypeString );
+        MPKeyPurpose keyPurpose = mpw_purpose_named( (char *)keyPurposeString );
 
         // Run the test case.
         do {
@@ -125,7 +125,7 @@ int main(int argc, char *const argv[]) {
             }
 
             // 1. calculate the master key.
-            MPMasterKey masterKey = mpw_masterKey(
+            MPMasterKey masterKey = mpw_master_key(
                     (char *)fullName, (char *)masterPassword, algorithm );
             if (!masterKey) {
                 ftl( "Couldn't derive master key." );
@@ -141,7 +141,7 @@ int main(int argc, char *const argv[]) {
             }
 
             // 2. calculate the site password.
-            const char *testResult = mpw_siteResult(
+            const char *testResult = mpw_site_result(
                     masterKey, (char *)siteName, siteCounter, keyPurpose, (char *)keyContext, resultType, NULL, algorithm );
             mpw_free( &masterKey, MPMasterKeySize );
             if (!testResult) {

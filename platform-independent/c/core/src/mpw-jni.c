@@ -25,7 +25,7 @@ JNIEXPORT jbyteArray JNICALL Java_com_lyndir_masterpassword_impl_MPAlgorithmV0__
     const char *fullNameString = (*env)->GetStringUTFChars( env, fullName, NULL );
     jbyte *masterPasswordString = (*env)->GetByteArrayElements( env, masterPassword, NULL );
 
-    MPMasterKey masterKeyBytes = mpw_masterKey( fullNameString, (char *)masterPasswordString, (MPAlgorithmVersion)algorithmVersion );
+    MPMasterKey masterKeyBytes = mpw_master_key( fullNameString, (char *)masterPasswordString, (MPAlgorithmVersion)algorithmVersion );
     (*env)->ReleaseStringUTFChars( env, fullName, fullNameString );
     (*env)->ReleaseByteArrayElements( env, masterPassword, masterPasswordString, JNI_ABORT );
 
@@ -50,7 +50,7 @@ JNIEXPORT jbyteArray JNICALL Java_com_lyndir_masterpassword_impl_MPAlgorithmV0__
     jbyte *masterKeyBytes = (*env)->GetByteArrayElements( env, masterKey, NULL );
     const char *siteNameString = (*env)->GetStringUTFChars( env, siteName, NULL );
     const char *keyContextString = keyContext? (*env)->GetStringUTFChars( env, keyContext, NULL ): NULL;
-    MPMasterKey siteKeyBytes = mpw_siteKey(
+    MPMasterKey siteKeyBytes = mpw_site_key(
             (MPMasterKey)masterKeyBytes, siteNameString, (MPCounterValue)siteCounter,
             (MPKeyPurpose)keyPurpose, keyContextString, (MPAlgorithmVersion)algorithmVersion );
     (*env)->ReleaseByteArrayElements( env, masterKey, masterKeyBytes, JNI_ABORT );
@@ -83,7 +83,7 @@ JNIEXPORT jstring JNICALL Java_com_lyndir_masterpassword_impl_MPAlgorithmV0__1si
     const char *siteNameString = (*env)->GetStringUTFChars( env, siteName, NULL );
     const char *keyContextString = keyContext? (*env)->GetStringUTFChars( env, keyContext, NULL ): NULL;
     const char *resultParamString = resultParam? (*env)->GetStringUTFChars( env, resultParam, NULL ): NULL;
-    const char *siteResultString = mpw_siteResult(
+    const char *siteResultString = mpw_site_result(
             (MPMasterKey)masterKeyBytes, siteNameString, (MPCounterValue)siteCounter,
             (MPKeyPurpose)keyPurpose, keyContextString, (MPResultType)resultType, resultParamString, (MPAlgorithmVersion)algorithmVersion );
     (*env)->ReleaseByteArrayElements( env, masterKey, masterKeyBytes, JNI_ABORT );
@@ -118,7 +118,7 @@ JNIEXPORT jstring JNICALL Java_com_lyndir_masterpassword_impl_MPAlgorithmV0__1si
     const char *siteNameString = (*env)->GetStringUTFChars( env, siteName, NULL );
     const char *keyContextString = keyContext? (*env)->GetStringUTFChars( env, keyContext, NULL ): NULL;
     const char *resultParamString = (*env)->GetStringUTFChars( env, resultParam, NULL );
-    const char *siteStateString = mpw_siteState(
+    const char *siteStateString = mpw_site_state(
             (MPMasterKey)masterKeyBytes, siteNameString, (MPCounterValue)siteCounter,
             (MPKeyPurpose)keyPurpose, keyContextString, (MPResultType)resultType, resultParamString, (MPAlgorithmVersion)algorithmVersion );
     (*env)->ReleaseByteArrayElements( env, masterKey, masterKeyBytes, JNI_ABORT );

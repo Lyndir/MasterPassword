@@ -66,7 +66,7 @@ bool mpw_get_json_boolean(
 
 /** Calculate a master key if the target master key algorithm is different from the given master key algorithm.
   * @return false if an error occurred during the derivation of the master key. */
-bool mpw_update_masterKey(
+bool mpw_update_master_key(
         MPMasterKey *masterKey, MPAlgorithmVersion *masterKeyAlgorithm, MPAlgorithmVersion targetKeyAlgorithm,
         const char *fullName, const char *masterPassword);
 

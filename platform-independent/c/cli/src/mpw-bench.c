@@ -40,16 +40,16 @@
 #define MP_r                8
 #define MP_p                2
 
-static void mpw_getTime(struct timeval *time) {
+static void mpw_time(struct timeval *time) {
 
     if (gettimeofday( time, NULL ) != 0)
         ftl( "Could not get time: %s", strerror( errno ) );
 }
 
-static const double mpw_showSpeed(struct timeval startTime, const unsigned int iterations, const char *operation) {
+static const double mpw_show_speed(struct timeval startTime, const unsigned int iterations, const char *operation) {
 
     struct timeval endTime;
-    mpw_getTime( &endTime );
+    mpw_time( &endTime );
 
     const time_t dsec = (endTime.tv_sec - startTime.tv_sec);
     const suseconds_t dusec = (endTime.tv_usec - startTime.tv_usec);
@@ -80,65 +80,65 @@ int main(int argc, char *const argv[]) {
     // Similar to phase-two of mpw
     uint8_t *sitePasswordInfo = malloc( 128 );
     iterations = 4200000; /* tuned to ~10s on dev machine */
-    masterKey = mpw_masterKey( fullName, masterPassword, MPAlgorithmVersionCurrent );
+    masterKey = mpw_master_key( fullName, masterPassword, MPAlgorithmVersionCurrent );
     if (!masterKey) {
         ftl( "Could not allocate master key: %s", strerror( errno ) );
         abort();
     }
-    mpw_getTime( &startTime );
+    mpw_time( &startTime );
     for (int i = 1; i <= iterations; ++i) {
         free( (void *)mpw_hash_hmac_sha256( masterKey, MPMasterKeySize, sitePasswordInfo, 128 ) );
 
         if (modff( 100.f * i / iterations, &percent ) == 0)
             fprintf( stderr, "\rhmac-sha-256: iteration %d / %d (%.0f%%)..", i, iterations, percent );
     }
-    const double hmacSha256Speed = mpw_showSpeed( startTime, iterations, "hmac-sha-256" );
+    const double hmacSha256Speed = mpw_show_speed( startTime, iterations, "hmac-sha-256" );
     free( (void *)masterKey );
 
     // Start BCrypt
     // Similar to phase-one of mpw
     uint8_t bcrypt_rounds = 9;
     iterations = 170; /* tuned to ~10s on dev machine */
-    mpw_getTime( &startTime );
+    mpw_time( &startTime );
     for (int i = 1; i <= iterations; ++i) {
         bcrypt( masterPassword, bcrypt_gensalt( bcrypt_rounds ) );
 
         if (modff( 100.f * i / iterations, &percent ) == 0)
             fprintf( stderr, "\rbcrypt (rounds 10^%d): iteration %d / %d (%.0f%%)..", bcrypt_rounds, i, iterations, percent );
     }
-    const double bcrypt9Speed = mpw_showSpeed( startTime, iterations, "bcrypt" );
+    const double bcrypt9Speed = mpw_show_speed( startTime, iterations, "bcrypt" );
 
     // Start SCrypt
     // Phase one of mpw
     iterations = 50; /* tuned to ~10s on dev machine */
-    mpw_getTime( &startTime );
+    mpw_time( &startTime );
     for (int i = 1; i <= iterations; ++i) {
-        free( (void *)mpw_masterKey( fullName, masterPassword, MPAlgorithmVersionCurrent ) );
+        free( (void *)mpw_master_key( fullName, masterPassword, MPAlgorithmVersionCurrent ) );
 
         if (modff( 100.f * i / iterations, &percent ) == 0)
             fprintf( stderr, "\rscrypt_mpw: iteration %d / %d (%.0f%%)..", i, iterations, percent );
     }
-    const double scryptSpeed = mpw_showSpeed( startTime, iterations, "scrypt_mpw" );
+    const double scryptSpeed = mpw_show_speed( startTime, iterations, "scrypt_mpw" );
 
     // Start MPW
     // Both phases of mpw
     iterations = 50; /* tuned to ~10s on dev machine */
-    mpw_getTime( &startTime );
+    mpw_time( &startTime );
     for (int i = 1; i <= iterations; ++i) {
-        masterKey = mpw_masterKey( fullName, masterPassword, MPAlgorithmVersionCurrent );
+        masterKey = mpw_master_key( fullName, masterPassword, MPAlgorithmVersionCurrent );
         if (!masterKey) {
             ftl( "Could not allocate master key: %s", strerror( errno ) );
             break;
         }
 
-        free( (void *)mpw_siteResult(
+        free( (void *)mpw_site_result(
                 masterKey, siteName, siteCounter, keyPurpose, keyContext, resultType, NULL, MPAlgorithmVersionCurrent ) );
         free( (void *)masterKey );
 
         if (modff( 100.f * i / iterations, &percent ) == 0)
             fprintf( stderr, "\rmpw: iteration %d / %d (%.0f%%)..", i, iterations, percent );
     }
-    const double mpwSpeed = mpw_showSpeed( startTime, iterations, "mpw" );
+    const double mpwSpeed = mpw_show_speed( startTime, iterations, "mpw" );
 
     // Summarize.
     fprintf( stdout, "\n== SUMMARY ==\nOn this machine,\n" );

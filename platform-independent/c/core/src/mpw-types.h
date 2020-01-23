@@ -133,32 +133,32 @@ typedef struct {
 /**
  * @return The purpose represented by the given name.
  */
-const MPKeyPurpose mpw_purposeWithName(const char *purposeName);
+const MPKeyPurpose mpw_purpose_named(const char *purposeName);
 /**
  * @return The standard name for the given purpose.
  */
-const char *mpw_nameForPurpose(MPKeyPurpose purpose);
+const char *mpw_purpose_name(MPKeyPurpose purpose);
 /**
  * @return An internal string containing the scope identifier to apply when encoding for the given purpose.
  */
-const char *mpw_scopeForPurpose(MPKeyPurpose purpose);
+const char *mpw_purpose_scope(MPKeyPurpose purpose);
 
 /**
  * @return The password type represented by the given name.
  */
-const MPResultType mpw_typeWithName(const char *typeName);
+const MPResultType mpw_type_named(const char *typeName);
 /**
  * @return The standard identifying name for the given password type.
  */
-const char *mpw_abbreviationForType(MPResultType resultType);
+const char *mpw_type_abbreviation(MPResultType resultType);
 /**
  * @return The standard identifying name for the given password type.
  */
-const char *mpw_shortNameForType(MPResultType resultType);
+const char *mpw_type_short_name(MPResultType resultType);
 /**
  * @return The descriptive name for the given password type.
  */
-const char *mpw_longNameForType(MPResultType resultType);
+const char *mpw_type_long_name(MPResultType resultType);
 
 /**
  * @return A newly allocated array of internal strings that express the templates to use for the given type.
@@ -166,20 +166,20 @@ const char *mpw_longNameForType(MPResultType resultType);
  *         If an unsupported type is given, count will be 0 and will return NULL.
 *          The array needs to be free'ed, the strings themselves must not be free'ed or modified.
  */
-const char **mpw_templatesForType(MPResultType type, size_t *count);
+const char **mpw_type_templates(MPResultType type, size_t *count);
 /**
  * @return An internal string that contains the password encoding template of the given type
  *         for a seed that starts with the given byte.
  */
-const char *mpw_templateForType(MPResultType type, uint8_t templateIndex);
+const char *mpw_type_template(MPResultType type, uint8_t templateIndex);
 
 /**
  * @return An internal string that contains all the characters that occur in the given character class.
  */
-const char *mpw_charactersInClass(char characterClass);
+const char *mpw_class_characters(char characterClass);
 /**
  * @return A character from given character class that encodes the given byte.
  */
-const char mpw_characterFromClass(char characterClass, uint8_t seedByte);
+const char mpw_class_character(char characterClass, uint8_t seedByte);
 
 #endif // _MPW_TYPES_H

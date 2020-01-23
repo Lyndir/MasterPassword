@@ -25,7 +25,7 @@
 const size_t MPMasterKeySize = 64;
 const size_t MPSiteKeySize = 256 / 8; // Size of HMAC-SHA-256
 
-const MPResultType mpw_typeWithName(const char *typeName) {
+const MPResultType mpw_type_named(const char *typeName) {
 
     // Find what password type is represented by the type letter.
     if (strlen( typeName ) == 1) {
@@ -54,34 +54,34 @@ const MPResultType mpw_typeWithName(const char *typeName) {
     }
 
     // Find what password type is represented by the type name.
-    if (mpw_strncasecmp( mpw_shortNameForType( MPResultTypeTemplateMaximum ), typeName, strlen( typeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_type_short_name( MPResultTypeTemplateMaximum ), typeName, strlen( typeName ) ) == 0)
         return MPResultTypeTemplateMaximum;
-    if (mpw_strncasecmp( mpw_shortNameForType( MPResultTypeTemplateLong ), typeName, strlen( typeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_type_short_name( MPResultTypeTemplateLong ), typeName, strlen( typeName ) ) == 0)
         return MPResultTypeTemplateLong;
-    if (mpw_strncasecmp( mpw_shortNameForType( MPResultTypeTemplateMedium ), typeName, strlen( typeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_type_short_name( MPResultTypeTemplateMedium ), typeName, strlen( typeName ) ) == 0)
         return MPResultTypeTemplateMedium;
-    if (mpw_strncasecmp( mpw_shortNameForType( MPResultTypeTemplateBasic ), typeName, strlen( typeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_type_short_name( MPResultTypeTemplateBasic ), typeName, strlen( typeName ) ) == 0)
         return MPResultTypeTemplateBasic;
-    if (mpw_strncasecmp( mpw_shortNameForType( MPResultTypeTemplateShort ), typeName, strlen( typeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_type_short_name( MPResultTypeTemplateShort ), typeName, strlen( typeName ) ) == 0)
         return MPResultTypeTemplateShort;
-    if (mpw_strncasecmp( mpw_shortNameForType( MPResultTypeTemplatePIN ), typeName, strlen( typeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_type_short_name( MPResultTypeTemplatePIN ), typeName, strlen( typeName ) ) == 0)
         return MPResultTypeTemplatePIN;
-    if (mpw_strncasecmp( mpw_shortNameForType( MPResultTypeTemplateName ), typeName, strlen( typeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_type_short_name( MPResultTypeTemplateName ), typeName, strlen( typeName ) ) == 0)
         return MPResultTypeTemplateName;
-    if (mpw_strncasecmp( mpw_shortNameForType( MPResultTypeTemplatePhrase ), typeName, strlen( typeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_type_short_name( MPResultTypeTemplatePhrase ), typeName, strlen( typeName ) ) == 0)
         return MPResultTypeTemplatePhrase;
-    if (mpw_strncasecmp( mpw_shortNameForType( MPResultTypeStatefulPersonal ), typeName, strlen( typeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_type_short_name( MPResultTypeStatefulPersonal ), typeName, strlen( typeName ) ) == 0)
         return MPResultTypeStatefulPersonal;
-    if (mpw_strncasecmp( mpw_shortNameForType( MPResultTypeStatefulDevice ), typeName, strlen( typeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_type_short_name( MPResultTypeStatefulDevice ), typeName, strlen( typeName ) ) == 0)
         return MPResultTypeStatefulDevice;
-    if (mpw_strncasecmp( mpw_shortNameForType( MPResultTypeDeriveKey ), typeName, strlen( typeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_type_short_name( MPResultTypeDeriveKey ), typeName, strlen( typeName ) ) == 0)
         return MPResultTypeDeriveKey;
 
     dbg( "Not a generated type name: %s", typeName );
     return (MPResultType)ERR;
 }
 
-const char *mpw_abbreviationForType(MPResultType resultType) {
+const char *mpw_type_abbreviation(MPResultType resultType) {
 
     switch (resultType) {
         case MPResultTypeTemplateMaximum:
@@ -113,7 +113,7 @@ const char *mpw_abbreviationForType(MPResultType resultType) {
     }
 }
 
-const char *mpw_shortNameForType(MPResultType resultType) {
+const char *mpw_type_short_name(MPResultType resultType) {
 
     switch (resultType) {
         case MPResultTypeTemplateMaximum:
@@ -145,7 +145,7 @@ const char *mpw_shortNameForType(MPResultType resultType) {
     }
 }
 
-const char *mpw_longNameForType(MPResultType resultType) {
+const char *mpw_type_long_name(MPResultType resultType) {
 
     switch (resultType) {
         case MPResultTypeTemplateMaximum:
@@ -177,7 +177,7 @@ const char *mpw_longNameForType(MPResultType resultType) {
     }
 }
 
-const char **mpw_templatesForType(MPResultType type, size_t *count) {
+const char **mpw_type_templates(MPResultType type, size_t *count) {
 
     if (!(type & MPResultTypeClassTemplate)) {
         dbg( "Not a generated type: %d", type );
@@ -222,30 +222,30 @@ const char **mpw_templatesForType(MPResultType type, size_t *count) {
     }
 }
 
-const char *mpw_templateForType(MPResultType type, uint8_t templateIndex) {
+const char *mpw_type_template(MPResultType type, uint8_t templateIndex) {
 
     size_t count = 0;
-    const char **templates = mpw_templatesForType( type, &count );
+    const char **templates = mpw_type_templates( type, &count );
     char const *template = templates && count? templates[templateIndex % count]: NULL;
     free( templates );
 
     return template;
 }
 
-const MPKeyPurpose mpw_purposeWithName(const char *purposeName) {
+const MPKeyPurpose mpw_purpose_named(const char *purposeName) {
 
-    if (mpw_strncasecmp( mpw_nameForPurpose( MPKeyPurposeAuthentication ), purposeName, strlen( purposeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_purpose_name( MPKeyPurposeAuthentication ), purposeName, strlen( purposeName ) ) == 0)
         return MPKeyPurposeAuthentication;
-    if (mpw_strncasecmp( mpw_nameForPurpose( MPKeyPurposeIdentification ), purposeName, strlen( purposeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_purpose_name( MPKeyPurposeIdentification ), purposeName, strlen( purposeName ) ) == 0)
         return MPKeyPurposeIdentification;
-    if (mpw_strncasecmp( mpw_nameForPurpose( MPKeyPurposeRecovery ), purposeName, strlen( purposeName ) ) == 0)
+    if (mpw_strncasecmp( mpw_purpose_name( MPKeyPurposeRecovery ), purposeName, strlen( purposeName ) ) == 0)
         return MPKeyPurposeRecovery;
 
     dbg( "Not a purpose name: %s", purposeName );
     return (MPKeyPurpose)ERR;
 }
 
-const char *mpw_nameForPurpose(MPKeyPurpose purpose) {
+const char *mpw_purpose_name(MPKeyPurpose purpose) {
 
     switch (purpose) {
         case MPKeyPurposeAuthentication:
@@ -261,7 +261,7 @@ const char *mpw_nameForPurpose(MPKeyPurpose purpose) {
     }
 }
 
-const char *mpw_scopeForPurpose(MPKeyPurpose purpose) {
+const char *mpw_purpose_scope(MPKeyPurpose purpose) {
 
     switch (purpose) {
         case MPKeyPurposeAuthentication:
@@ -277,7 +277,7 @@ const char *mpw_scopeForPurpose(MPKeyPurpose purpose) {
     }
 }
 
-const char *mpw_charactersInClass(char characterClass) {
+const char *mpw_class_characters(char characterClass) {
 
     switch (characterClass) {
         case 'V':
@@ -307,9 +307,9 @@ const char *mpw_charactersInClass(char characterClass) {
     }
 }
 
-const char mpw_characterFromClass(char characterClass, uint8_t seedByte) {
+const char mpw_class_character(char characterClass, uint8_t seedByte) {
 
-    const char *classCharacters = mpw_charactersInClass( characterClass );
+    const char *classCharacters = mpw_class_characters( characterClass );
     if (!classCharacters)
         return '\0';
 

@@ -39,28 +39,28 @@ typedef mpw_enum( unsigned int, MPAlgorithmVersion ) {
 
 /** Derive the master key for a user based on their name and master password.
  * @return A new MPMasterKeySize-byte allocated buffer or NULL if an error occurred. */
-MPMasterKey mpw_masterKey(
+MPMasterKey mpw_master_key(
         const char *fullName, const char *masterPassword, const MPAlgorithmVersion algorithmVersion);
 
 /** Derive the site key for a user's site from the given master key and site parameters.
  * @return A new MPSiteKeySize-byte allocated buffer or NULL if an error occurred. */
-MPSiteKey mpw_siteKey(
+MPSiteKey mpw_site_key(
         MPMasterKey masterKey, const char *siteName, const MPCounterValue siteCounter,
         const MPKeyPurpose keyPurpose, const char *keyContext, const MPAlgorithmVersion algorithmVersion);
 
 /** Generate a site result token from the given parameters.
- * @param resultParam A parameter for the resultType.  For stateful result types, the output of mpw_siteState.
+ * @param resultParam A parameter for the resultType.  For stateful result types, the output of mpw_site_state.
  * @return A newly allocated string or NULL if an error occurred. */
-const char *mpw_siteResult(
+const char *mpw_site_result(
         MPMasterKey masterKey, const char *siteName, const MPCounterValue siteCounter,
         const MPKeyPurpose keyPurpose, const char *keyContext,
         const MPResultType resultType, const char *resultParam,
         const MPAlgorithmVersion algorithmVersion);
 
 /** Encrypt a stateful site token for persistence.
- * @param resultParam A parameter for the resultType.  For stateful result types, the desired mpw_siteResult.
+ * @param resultParam A parameter for the resultType.  For stateful result types, the desired mpw_site_result.
  * @return A newly allocated string or NULL if an error occurred. */
-const char *mpw_siteState(
+const char *mpw_site_state(
         MPMasterKey masterKey, const char *siteName, const MPCounterValue siteCounter,
         const MPKeyPurpose keyPurpose, const char *keyContext,
         const MPResultType resultType, const char *resultParam,

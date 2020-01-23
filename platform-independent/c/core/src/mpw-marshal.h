@@ -152,12 +152,12 @@ bool mpw_marshal_free(
 /**
  * @return The purpose represented by the given name.
  */
-const MPMarshalFormat mpw_formatWithName(
+const MPMarshalFormat mpw_format_named(
         const char *formatName);
 /**
  * @return The standard name for the given purpose.
  */
-const char *mpw_nameForFormat(
+const char *mpw_format_name(
         const MPMarshalFormat format);
 /**
  * @return The file extension that's recommended for files that use the given marshalling format.

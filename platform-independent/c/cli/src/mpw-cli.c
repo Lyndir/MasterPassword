@@ -35,90 +35,90 @@
 static void usage() {
 
     inf( ""
-            "  Master Password v%s - CLI\n"
-            "--------------------------------------------------------------------------------\n"
-            "      https://masterpassword.app\n", stringify_def( MP_VERSION ) );
+         "  Master Password v%s - CLI\n"
+         "--------------------------------------------------------------------------------\n"
+         "      https://masterpassword.app\n", stringify_def( MP_VERSION ) );
     inf( ""
-            "\nUSAGE\n\n"
-            "  mpw [-u|-U full-name] [-m fd] [-t pw-type] [-P value] [-c counter]\n"
-            "      [-a version] [-p purpose] [-C context] [-f|F format] [-R 0|1]\n"
-            "      [-v|-q]* [-h] [site-name]\n" );
+         "\nUSAGE\n\n"
+         "  mpw [-u|-U full-name] [-m fd] [-t pw-type] [-P value] [-c counter]\n"
+         "      [-a version] [-p purpose] [-C context] [-f|F format] [-R 0|1]\n"
+         "      [-v|-q]* [-h] [site-name]\n" );
     inf( ""
-            "  -u full-name Specify the full name of the user.\n"
-            "               -u checks the master password against the config,\n"
-            "               -U allows updating to a new master password.\n"
-            "               Defaults to %s in env or prompts.\n", MP_ENV_fullName );
+         "  -u full-name Specify the full name of the user.\n"
+         "               -u checks the master password against the config,\n"
+         "               -U allows updating to a new master password.\n"
+         "               Defaults to %s in env or prompts.\n", MP_ENV_fullName );
     dbg( ""
-            "  -M master-pw Specify the master password of the user.\n"
-            "               Passing secrets as arguments is unsafe, for use in testing only." );
+         "  -M master-pw Specify the master password of the user.\n"
+         "               Passing secrets as arguments is unsafe, for use in testing only." );
     inf( ""
-            "  -m fd        Read the master password of the user from a file descriptor.\n"
-            "               Tip: don't send extra characters like newlines such as by using\n"
-            "               echo in a pipe.  Consider printf instead.\n" );
+         "  -m fd        Read the master password of the user from a file descriptor.\n"
+         "               Tip: don't send extra characters like newlines such as by using\n"
+         "               echo in a pipe.  Consider printf instead.\n" );
     inf( ""
-            "  -t pw-type   Specify the password's template.\n"
-            "               Defaults to 'long' (-p a), 'name' (-p i) or 'phrase' (-p r).\n"
-            "                   x, maximum  | 20 characters, contains symbols.\n"
-            "                   l, long     | Copy-friendly, 14 characters, symbols.\n"
-            "                   m, medium   | Copy-friendly, 8 characters, symbols.\n"
-            "                   b, basic    | 8 characters, no symbols.\n"
-            "                   s, short    | Copy-friendly, 4 characters, no symbols.\n"
-            "                   i, pin      | 4 numbers.\n"
-            "                   n, name     | 9 letter name.\n"
-            "                   p, phrase   | 20 character sentence.\n"
-            "                   K, key      | encryption key (512 bit or -P bits).\n"
-            "                   P, personal | saved personal password (save with -P pw).\n" );
+         "  -t pw-type   Specify the password's template.\n"
+         "               Defaults to 'long' (-p a), 'name' (-p i) or 'phrase' (-p r).\n"
+         "                   x, maximum  | 20 characters, contains symbols.\n"
+         "                   l, long     | Copy-friendly, 14 characters, symbols.\n"
+         "                   m, medium   | Copy-friendly, 8 characters, symbols.\n"
+         "                   b, basic    | 8 characters, no symbols.\n"
+         "                   s, short    | Copy-friendly, 4 characters, no symbols.\n"
+         "                   i, pin      | 4 numbers.\n"
+         "                   n, name     | 9 letter name.\n"
+         "                   p, phrase   | 20 character sentence.\n"
+         "                   K, key      | encryption key (512 bit or -P bits).\n"
+         "                   P, personal | saved personal password (save with -P pw).\n" );
     inf( ""
-            "  -P value     The parameter value.\n"
-            "                   -p i        | The login name for the site.\n"
-            "                   -t K        | The bit size of the key to generate (eg. 256).\n"
-            "                   -t P        | The personal password to encrypt.\n" );
+         "  -P value     The parameter value.\n"
+         "                   -p i        | The login name for the site.\n"
+         "                   -t K        | The bit size of the key to generate (eg. 256).\n"
+         "                   -t P        | The personal password to encrypt.\n" );
     inf( ""
-            "  -c counter   The value of the counter.\n"
-            "               Defaults to 1.\n" );
+         "  -c counter   The value of the counter.\n"
+         "               Defaults to 1.\n" );
     inf( ""
-            "  -a version   The algorithm version to use, %d - %d.\n"
-            "               Defaults to env var %s or %d.\n",
+         "  -a version   The algorithm version to use, %d - %d.\n"
+         "               Defaults to env var %s or %d.\n",
             MPAlgorithmVersionFirst, MPAlgorithmVersionLast, MP_ENV_algorithm, MPAlgorithmVersionCurrent );
     inf( ""
-            "  -p purpose   The purpose of the generated token.\n"
-            "               Defaults to 'auth'.\n"
-            "                   a, auth     | An authentication token such as a password.\n"
-            "                   i, ident    | An identification token such as a username.\n"
-            "                   r, rec      | A recovery token such as a security answer.\n" );
+         "  -p purpose   The purpose of the generated token.\n"
+         "               Defaults to 'auth'.\n"
+         "                   a, auth     | An authentication token such as a password.\n"
+         "                   i, ident    | An identification token such as a username.\n"
+         "                   r, rec      | A recovery token such as a security answer.\n" );
     inf( ""
-            "  -C context   A purpose-specific context.\n"
-            "               Defaults to empty.\n"
-            "                   -p a        | -\n"
-            "                   -p i        | -\n"
-            "                   -p r        | Most significant word in security question.\n" );
+         "  -C context   A purpose-specific context.\n"
+         "               Defaults to empty.\n"
+         "                   -p a        | -\n"
+         "                   -p i        | -\n"
+         "                   -p r        | Most significant word in security question.\n" );
     inf( ""
-            "  -f|F format  The mpsites format to use for reading/writing site parameters.\n"
-            "               -F forces the use of the given format,\n"
-            "               -f allows fallback/migration.\n"
-            "               Defaults to env var %s or json, falls back to plain.\n"
-            "                   n, none     | No file\n"
-            "                   f, flat     | ~/.mpw.d/Full Name.%s\n"
-            "                   j, json     | ~/.mpw.d/Full Name.%s\n",
+         "  -f|F format  The mpsites format to use for reading/writing site parameters.\n"
+         "               -F forces the use of the given format,\n"
+         "               -f allows fallback/migration.\n"
+         "               Defaults to env var %s or json, falls back to plain.\n"
+         "                   n, none     | No file\n"
+         "                   f, flat     | ~/.mpw.d/Full Name.%s\n"
+         "                   j, json     | ~/.mpw.d/Full Name.%s\n",
             MP_ENV_format, mpw_marshal_format_extension( MPMarshalFormatFlat ), mpw_marshal_format_extension( MPMarshalFormatJSON ) );
     inf( ""
-            "  -R redacted  Whether to save the mpsites in redacted format or not.\n"
-            "               Redaction omits or encrypts any secrets, making the file safe\n"
-            "               for saving on or transmitting via untrusted media.\n"
-            "               Defaults to 1, redacted.\n" );
+         "  -R redacted  Whether to save the mpsites in redacted format or not.\n"
+         "               Redaction omits or encrypts any secrets, making the file safe\n"
+         "               for saving on or transmitting via untrusted media.\n"
+         "               Defaults to 1, redacted.\n" );
     inf( ""
-            "  -v           Increase output verbosity (can be repeated).\n"
-            "  -q           Decrease output verbosity (can be repeated).\n" );
+         "  -v           Increase output verbosity (can be repeated).\n"
+         "  -q           Decrease output verbosity (can be repeated).\n" );
     inf( ""
-            "  -h           Show this help output instead of performing any operation.\n" );
+         "  -h           Show this help output instead of performing any operation.\n" );
     inf( ""
-            "  site-name    Name of the site for which to generate a token.\n" );
+         "  site-name    Name of the site for which to generate a token.\n" );
     inf( ""
-            "\nENVIRONMENT\n\n"
-            "  %-12s The full name of the user (see -u).\n"
-            "  %-12s The default algorithm version (see -a).\n"
-            "  %-12s The default mpsites format (see -f).\n"
-            "  %-12s The askpass program to use for prompting the user.\n",
+         "\nENVIRONMENT\n\n"
+         "  %-12s The full name of the user (see -u).\n"
+         "  %-12s The default algorithm version (see -a).\n"
+         "  %-12s The default mpsites format (see -f).\n"
+         "  %-12s The askpass program to use for prompting the user.\n",
             MP_ENV_fullName, MP_ENV_algorithm, MP_ENV_format, MP_ENV_askpass );
     exit( EX_OK );
 }
@@ -236,15 +236,15 @@ int main(const int argc, char *const argv[]) {
     if (operation.user) {
         dbg( "fullName         : %s", operation.user->fullName );
         dbg( "identicon        : %s", operation.identicon );
-        dbg( "sitesFormat      : %s%s", mpw_nameForFormat( operation.sitesFormat ), operation.sitesFormatFixed? " (fixed)": "" );
+        dbg( "sitesFormat      : %s%s", mpw_format_name( operation.sitesFormat ), operation.sitesFormatFixed? " (fixed)": "" );
         dbg( "sitesPath        : %s", operation.sitesPath );
     }
     if (operation.site) {
         dbg( "siteName         : %s", operation.site->name );
         dbg( "siteCounter      : %u", operation.siteCounter );
-        dbg( "resultType       : %s (%u)", mpw_shortNameForType( operation.resultType ), operation.resultType );
+        dbg( "resultType       : %s (%u)", mpw_type_short_name( operation.resultType ), operation.resultType );
         dbg( "resultParam      : %s", operation.resultParam );
-        dbg( "keyPurpose       : %s (%u)", mpw_nameForPurpose( operation.keyPurpose ), operation.keyPurpose );
+        dbg( "keyPurpose       : %s (%u)", mpw_purpose_name( operation.keyPurpose ), operation.keyPurpose );
         dbg( "keyContext       : %s", operation.keyContext );
         dbg( "algorithmVersion : %u", operation.site->algorithm );
     }
@@ -426,7 +426,7 @@ void cli_sitesFormat(Arguments *args, Operation *operation) {
     if (!args->sitesFormat)
         return;
 
-    operation->sitesFormat = mpw_formatWithName( args->sitesFormat );
+    operation->sitesFormat = mpw_format_named( args->sitesFormat );
     if (ERR == (int)operation->sitesFormat) {
         ftl( "Invalid sites format: %s", args->sitesFormat );
         cli_free( args, operation );
@@ -439,7 +439,7 @@ void cli_keyPurpose(Arguments *args, Operation *operation) {
     if (!args->keyPurpose)
         return;
 
-    operation->keyPurpose = mpw_purposeWithName( args->keyPurpose );
+    operation->keyPurpose = mpw_purpose_named( args->keyPurpose );
     if (ERR == (int)operation->keyPurpose) {
         ftl( "Invalid purpose: %s", args->keyPurpose );
         cli_free( args, operation );
@@ -625,7 +625,7 @@ void cli_resultType(Arguments *args, Operation *operation) {
     if (!operation->site)
         abort();
 
-    operation->resultType = mpw_typeWithName( args->resultType );
+    operation->resultType = mpw_type_named( args->resultType );
     if (ERR == (int)operation->resultType) {
         ftl( "Invalid type: %s", args->resultType );
         cli_free( args, operation );
@@ -726,7 +726,7 @@ void cli_mpw(Arguments *args, Operation *operation) {
     // Update state from resultParam if stateful.
     if (operation->resultParam && operation->resultType & MPResultTypeClassStateful) {
         mpw_free_string( &operation->resultState );
-        if (!(operation->resultState = mpw_siteState( masterKey, operation->site->name, operation->siteCounter,
+        if (!(operation->resultState = mpw_site_state( masterKey, operation->site->name, operation->siteCounter,
                 operation->keyPurpose, operation->keyContext, operation->resultType, operation->resultParam,
                 operation->site->algorithm ))) {
             ftl( "Couldn't encrypt site result." );
@@ -764,7 +764,7 @@ void cli_mpw(Arguments *args, Operation *operation) {
         operation->resultParam = mpw_strdup( operation->resultState );
 
     // Generate result.
-    const char *result = mpw_siteResult( masterKey, operation->site->name, operation->siteCounter,
+    const char *result = mpw_site_result( masterKey, operation->site->name, operation->siteCounter,
             operation->keyPurpose, operation->keyContext, operation->resultType, operation->resultParam, operation->site->algorithm );
     mpw_free( &masterKey, MPMasterKeySize );
     if (!result) {

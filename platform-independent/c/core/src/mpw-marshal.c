@@ -186,9 +186,9 @@ static bool mpw_marshal_write_flat(
                 return false;
             }
 
-            resultState = mpw_siteResult( masterKey, site->name, site->counter,
+            resultState = mpw_site_result( masterKey, site->name, site->counter,
                     MPKeyPurposeAuthentication, NULL, site->resultType, site->resultState, site->algorithm );
-            loginState = mpw_siteResult( masterKey, site->name, MPCounterValueInitial,
+            loginState = mpw_site_result( masterKey, site->name, MPCounterValueInitial,
                     MPKeyPurposeIdentification, NULL, site->loginType, site->loginState, site->algorithm );
         }
         else {
@@ -269,9 +269,9 @@ static bool mpw_marshal_write_json(
                 return false;
             }
 
-            resultState = mpw_siteResult( masterKey, site->name, site->counter,
+            resultState = mpw_site_result( masterKey, site->name, site->counter,
                     MPKeyPurposeAuthentication, NULL, site->resultType, site->resultState, site->algorithm );
-            loginState = mpw_siteResult( masterKey, site->name, MPCounterValueInitial,
+            loginState = mpw_site_result( masterKey, site->name, MPCounterValueInitial,
                     MPKeyPurposeIdentification, NULL, site->loginType, site->loginState, site->algorithm );
         }
         else {
@@ -311,7 +311,7 @@ static bool mpw_marshal_write_json(
 
                 if (!user->redacted) {
                     // Clear Text
-                    const char *answerState = mpw_siteResult( masterKey, site->name, MPCounterValueInitial,
+                    const char *answerState = mpw_site_result( masterKey, site->name, MPCounterValueInitial,
                             MPKeyPurposeRecovery, question->keyword, question->type, question->state, site->algorithm );
                     json_object_object_add( json_site_question, "answer", json_object_new_string( answerState ) );
                 }
@@ -500,7 +500,7 @@ static MPMarshalledUser *mpw_marshal_read_flat(
                 keyID = mpw_strdup( headerValue );
             if (strcmp( headerName, "Default Type" ) == 0) {
                 int value = atoi( headerValue );
-                if (!mpw_shortNameForType( (MPResultType)value )) {
+                if (!mpw_type_short_name( (MPResultType)value )) {
                     *error = (MPMarshalError){ MPMarshalErrorIllegal, mpw_str( "Invalid user default type: %s", headerValue ) };
                     return NULL;
                 }
@@ -561,7 +561,7 @@ static MPMarshalledUser *mpw_marshal_read_flat(
 
         if (siteName && str_type && str_counter && str_algorithm && str_uses && str_lastUsed) {
             MPResultType siteType = (MPResultType)atoi( str_type );
-            if (!mpw_shortNameForType( siteType )) {
+            if (!mpw_type_short_name( siteType )) {
                 *error = (MPMarshalError){ MPMarshalErrorIllegal, mpw_str( "Invalid site type: %s: %s", siteName, str_type ) };
                 return NULL;
             }
@@ -601,10 +601,10 @@ static MPMarshalledUser *mpw_marshal_read_flat(
                 }
 
                 if (siteResultState && strlen( siteResultState ))
-                    site->resultState = mpw_siteState( masterKey, site->name, site->counter,
+                    site->resultState = mpw_site_state( masterKey, site->name, site->counter,
                             MPKeyPurposeAuthentication, NULL, site->resultType, siteResultState, site->algorithm );
                 if (siteLoginState && strlen( siteLoginState ))
-                    site->loginState = mpw_siteState( masterKey, site->name, MPCounterValueInitial,
+                    site->loginState = mpw_site_state( masterKey, site->name, MPCounterValueInitial,
                             MPKeyPurposeIdentification, NULL, site->loginType, siteLoginState, site->algorithm );
             }
             else {
@@ -703,7 +703,7 @@ static MPMarshalledUser *mpw_marshal_read_json(
     }
     MPAlgorithmVersion algorithm = (MPAlgorithmVersion)value;
     MPResultType defaultType = (MPResultType)mpw_get_json_int( json_file, "user.default_type", MPResultTypeDefault );
-    if (!mpw_shortNameForType( defaultType )) {
+    if (!mpw_type_short_name( defaultType )) {
         *error = (MPMarshalError){ MPMarshalErrorIllegal, mpw_str( "Invalid user default type: %u", defaultType ) };
         return NULL;
     }
@@ -745,7 +745,7 @@ static MPMarshalledUser *mpw_marshal_read_json(
         }
         MPAlgorithmVersion siteAlgorithm = (MPAlgorithmVersion)value;
         MPResultType siteType = (MPResultType)mpw_get_json_int( json_site.val, "type", (int32_t)user->defaultType );
-        if (!mpw_shortNameForType( siteType )) {
+        if (!mpw_type_short_name( siteType )) {
             *error = (MPMarshalError){ MPMarshalErrorIllegal, mpw_str( "Invalid site type: %s: %u", siteName, siteType ) };
             return NULL;
         }
@@ -788,10 +788,10 @@ static MPMarshalledUser *mpw_marshal_read_json(
             }
 
             if (siteResultState && strlen( siteResultState ))
-                site->resultState = mpw_siteState( masterKey, site->name, site->counter,
+                site->resultState = mpw_site_state( masterKey, site->name, site->counter,
                         MPKeyPurposeAuthentication, NULL, site->resultType, siteResultState, site->algorithm );
             if (siteLoginState && strlen( siteLoginState ))
-                site->loginState = mpw_siteState( masterKey, site->name, MPCounterValueInitial,
+                site->loginState = mpw_site_state( masterKey, site->name, MPCounterValueInitial,
                         MPKeyPurposeIdentification, NULL, site->loginType, siteLoginState, site->algorithm );
         }
         else {
@@ -813,7 +813,7 @@ static MPMarshalledUser *mpw_marshal_read_json(
                 if (!user->redacted) {
                     // Clear Text
                     if (answerState && strlen( answerState ))
-                        question->state = mpw_siteState( masterKey, site->name, MPCounterValueInitial,
+                        question->state = mpw_site_state( masterKey, site->name, MPCounterValueInitial,
                                 MPKeyPurposeRecovery, question->keyword, question->type, answerState, site->algorithm );
                 }
                 else {
@@ -874,24 +874,24 @@ MPMarshalledUser *mpw_marshal_read(
     }
 }
 
-const MPMarshalFormat mpw_formatWithName(
+const MPMarshalFormat mpw_format_named(
         const char *formatName) {
 
     if (!formatName || !strlen( formatName ))
         return MPMarshalFormatNone;
 
-    if (mpw_strncasecmp( mpw_nameForFormat( MPMarshalFormatNone ), formatName, strlen( formatName ) ) == 0)
+    if (mpw_strncasecmp( mpw_format_name( MPMarshalFormatNone ), formatName, strlen( formatName ) ) == 0)
         return MPMarshalFormatNone;
-    if (mpw_strncasecmp( mpw_nameForFormat( MPMarshalFormatFlat ), formatName, strlen( formatName ) ) == 0)
+    if (mpw_strncasecmp( mpw_format_name( MPMarshalFormatFlat ), formatName, strlen( formatName ) ) == 0)
         return MPMarshalFormatFlat;
-    if (mpw_strncasecmp( mpw_nameForFormat( MPMarshalFormatJSON ), formatName, strlen( formatName ) ) == 0)
+    if (mpw_strncasecmp( mpw_format_name( MPMarshalFormatJSON ), formatName, strlen( formatName ) ) == 0)
         return MPMarshalFormatJSON;
 
     dbg( "Not a format name: %s", formatName );
     return (MPMarshalFormat)ERR;
 }
 
-const char *mpw_nameForFormat(
+const char *mpw_format_name(
         const MPMarshalFormat format) {
 
     switch (format) {
