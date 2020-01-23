@@ -24,7 +24,7 @@
 
 const size_t MPMasterKeySize = 64;
 const size_t MPSiteKeySize = 256 / 8; // Size of HMAC-SHA-256
-const MPIdenticon MPIdenticonUnset = (MPIdenticon){
+const MPIdenticon MPIdenticonUnset = {
         .leftArm = "",
         .body = "",
         .rightArm = "",

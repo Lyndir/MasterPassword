@@ -121,15 +121,16 @@ typedef struct MPMarshalInfo {
 
 //// Marshalling.
 
-/** Write the user and all associated data out to the given output buffer using the given marshalling format. */
-bool mpw_marshal_write(
-        char **out, const MPMarshalFormat outFormat, const MPMarshalledUser *user, MPMarshalError *error);
+/** Write the user and all associated data out using the given marshalling format.
+ * @return A string (allocated), or NULL if the format is unrecognized, does not support marshalling or a format error occurred. */
+const char *mpw_marshal_write(
+        const MPMarshalFormat outFormat, const MPMarshalledUser *user, MPMarshalError *error);
 /** Try to read metadata on the sites in the input buffer.
- * @return A metadata object (allocated), or NULL if the object could not be allocated. */
+ * @return A metadata object (allocated), or NULL if the object could not be allocated or a format error occurred. */
 MPMarshalInfo *mpw_marshal_read_info(
         const char *in);
 /** Unmarshall sites in the given input buffer by parsing it using the given marshalling format.
- * @return A user object (allocated), or NULL if the format provides no marshalling or an error occurred. */
+ * @return A user object (allocated), or NULL if the format provides no marshalling or a format error occurred. */
 MPMarshalledUser *mpw_marshal_read(
         const char *in, const MPMarshalFormat inFormat, MPMasterKeyProvider masterKeyProvider, MPMarshalError *error);
 

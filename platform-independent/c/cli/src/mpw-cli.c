@@ -806,9 +806,9 @@ void cli_save(Arguments *args, Operation *operation) {
         return;
     }
 
-    char *buf = NULL;
     MPMarshalError marshalError = { .type = MPMarshalSuccess };
-    if (!mpw_marshal_write( &buf, operation->sitesFormat, operation->user, &marshalError ) || marshalError.type != MPMarshalSuccess || !buf)
+    const char *buf = mpw_marshal_write( operation->sitesFormat, operation->user, &marshalError );
+    if (!buf || marshalError.type != MPMarshalSuccess)
         wrn( "Couldn't encode updated configuration file:\n  %s: %s", operation->sitesPath, marshalError.description );
 
     else if (fwrite( buf, sizeof( char ), strlen( buf ), sitesFile ) != strlen( buf ))

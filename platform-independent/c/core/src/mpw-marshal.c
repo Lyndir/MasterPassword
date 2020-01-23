@@ -134,45 +134,47 @@ bool mpw_marshal_free(
     return success;
 }
 
-static bool mpw_marshal_write_flat(
-        char **out, const MPMarshalledUser *user, MPMarshalError *error) {
+static const char *mpw_marshal_write_flat(
+        const MPMarshalledUser *user, MPMarshalError *error) {
 
     *error = (MPMarshalError){ MPMarshalErrorInternal, "Unexpected internal error." };
     if (!user->fullName || !strlen( user->fullName )) {
         *error = (MPMarshalError){ MPMarshalErrorMissing, "Missing full name." };
-        return false;
+        return NULL;
     }
     MPMasterKey masterKey = user->masterKeyProvider( user->algorithm, user->fullName );
     if (!masterKey) {
         *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't derive master key." };
-        return false;
+        return NULL;
     }
 
-    mpw_string_pushf( out, "# Master Password site export\n" );
+    char *out = NULL;
+    mpw_string_pushf( &out, "# Master Password site export\n" );
     if (user->redacted)
-        mpw_string_pushf( out, "#     Export of site names and stored passwords (unless device-private) encrypted with the master key.\n" );
+        mpw_string_pushf( &out,
+                "#     Export of site names and stored passwords (unless device-private) encrypted with the master key.\n" );
     else
-        mpw_string_pushf( out, "#     Export of site names and passwords in clear-text.\n" );
-    mpw_string_pushf( out, "# \n" );
-    mpw_string_pushf( out, "##\n" );
-    mpw_string_pushf( out, "# Format: %d\n", 1 );
+        mpw_string_pushf( &out, "#     Export of site names and passwords in clear-text.\n" );
+    mpw_string_pushf( &out, "# \n" );
+    mpw_string_pushf( &out, "##\n" );
+    mpw_string_pushf( &out, "# Format: %d\n", 1 );
 
     char dateString[21];
     time_t now = time( NULL );
     if (strftime( dateString, sizeof( dateString ), "%FT%TZ", gmtime( &now ) ))
-        mpw_string_pushf( out, "# Date: %s\n", dateString );
-    mpw_string_pushf( out, "# User Name: %s\n", user->fullName );
-    mpw_string_pushf( out, "# Full Name: %s\n", user->fullName );
-    mpw_string_pushf( out, "# Avatar: %u\n", user->avatar );
-    mpw_string_pushf( out, "# Identicon: %s\n", mpw_identicon_encode( user->identicon ) );
-    mpw_string_pushf( out, "# Key ID: %s\n", mpw_id_buf( masterKey, MPMasterKeySize ) );
-    mpw_string_pushf( out, "# Algorithm: %d\n", user->algorithm );
-    mpw_string_pushf( out, "# Default Type: %d\n", user->defaultType );
-    mpw_string_pushf( out, "# Passwords: %s\n", user->redacted? "PROTECTED": "VISIBLE" );
-    mpw_string_pushf( out, "##\n" );
-    mpw_string_pushf( out, "#\n" );
-    mpw_string_pushf( out, "#               Last     Times  Password                      Login\t                     Site\tSite\n" );
-    mpw_string_pushf( out, "#               used      used      type                       name\t                     name\tpassword\n" );
+        mpw_string_pushf( &out, "# Date: %s\n", dateString );
+    mpw_string_pushf( &out, "# User Name: %s\n", user->fullName );
+    mpw_string_pushf( &out, "# Full Name: %s\n", user->fullName );
+    mpw_string_pushf( &out, "# Avatar: %u\n", user->avatar );
+    mpw_string_pushf( &out, "# Identicon: %s\n", mpw_identicon_encode( user->identicon ) );
+    mpw_string_pushf( &out, "# Key ID: %s\n", mpw_id_buf( masterKey, MPMasterKeySize ) );
+    mpw_string_pushf( &out, "# Algorithm: %d\n", user->algorithm );
+    mpw_string_pushf( &out, "# Default Type: %d\n", user->defaultType );
+    mpw_string_pushf( &out, "# Passwords: %s\n", user->redacted? "PROTECTED": "VISIBLE" );
+    mpw_string_pushf( &out, "##\n" );
+    mpw_string_pushf( &out, "#\n" );
+    mpw_string_pushf( &out, "#               Last     Times  Password                      Login\t                     Site\tSite\n" );
+    mpw_string_pushf( &out, "#               used      used      type                       name\t                     name\tpassword\n" );
 
     // Sites.
     for (size_t s = 0; s < user->sites_count; ++s) {
@@ -186,7 +188,8 @@ static bool mpw_marshal_write_flat(
             mpw_free( &masterKey, MPMasterKeySize );
             if (!(masterKey = user->masterKeyProvider( site->algorithm, user->fullName ))) {
                 *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't derive master key." };
-                return false;
+                mpw_free_string( &out );
+                return NULL;
             }
 
             resultState = mpw_site_result( masterKey, site->siteName, site->counter,
@@ -203,7 +206,7 @@ static bool mpw_marshal_write_flat(
         }
 
         if (strftime( dateString, sizeof( dateString ), "%FT%TZ", gmtime( &site->lastUsed ) ))
-            mpw_string_pushf( out, "%s  %8ld  %lu:%lu:%lu  %25s\t%25s\t%s\n",
+            mpw_string_pushf( &out, "%s  %8ld  %lu:%lu:%lu  %25s\t%25s\t%s\n",
                     dateString, (long)site->uses, (long)site->resultType, (long)site->algorithm, (long)site->counter,
                     loginState? loginState: "", site->siteName, resultState? resultState: "" );
         mpw_free_strings( &resultState, &loginState, NULL );
@@ -211,23 +214,23 @@ static bool mpw_marshal_write_flat(
     mpw_free( &masterKey, MPMasterKeySize );
 
     *error = (MPMarshalError){ .type = MPMarshalSuccess };
-    return true;
+    return out;
 }
 
 #if MPW_JSON
 
-static bool mpw_marshal_write_json(
-        char **out, const MPMarshalledUser *user, MPMarshalError *error) {
+static const char *mpw_marshal_write_json(
+        const MPMarshalledUser *user, MPMarshalError *error) {
 
     *error = (MPMarshalError){ MPMarshalErrorInternal, "Unexpected internal error." };
     if (!user->fullName || !strlen( user->fullName )) {
         *error = (MPMarshalError){ MPMarshalErrorMissing, "Missing full name." };
-        return false;
+        return NULL;
     }
     MPMasterKey masterKey = user->masterKeyProvider( user->algorithm, user->fullName );
     if (!masterKey) {
         *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't derive master key." };
-        return false;
+        return NULL;
     }
 
     // Section: "export"
@@ -261,7 +264,7 @@ static bool mpw_marshal_write_json(
     json_object_object_add( json_file, "sites", json_sites );
     for (size_t s = 0; s < user->sites_count; ++s) {
         MPMarshalledSite *site = &user->sites[s];
-        if (!site->name || !strlen( site->name ))
+        if (!site->siteName || !strlen( site->siteName ))
             continue;
 
         const char *resultState = NULL, *loginState = NULL;
@@ -271,12 +274,12 @@ static bool mpw_marshal_write_json(
             if (!(masterKey = user->masterKeyProvider( site->algorithm, user->fullName ))) {
                 *error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't derive master key." };
                 json_object_put( json_file );
-                return false;
+                return NULL;
             }
 
-            resultState = mpw_site_result( masterKey, site->name, site->counter,
+            resultState = mpw_site_result( masterKey, site->siteName, site->counter,
                     MPKeyPurposeAuthentication, NULL, site->resultType, site->resultState, site->algorithm );
-            loginState = mpw_site_result( masterKey, site->name, MPCounterValueInitial,
+            loginState = mpw_site_result( masterKey, site->siteName, MPCounterValueInitial,
                     MPKeyPurposeIdentification, NULL, site->loginType, site->loginState, site->algorithm );
         }
         else {
@@ -288,7 +291,7 @@ static bool mpw_marshal_write_json(
         }
 
         json_object *json_site = json_object_new_object();
-        json_object_object_add( json_sites, site->name, json_site );
+        json_object_object_add( json_sites, site->siteName, json_site );
         json_object_object_add( json_site, "type", json_object_new_int( (int32_t)site->resultType ) );
         json_object_object_add( json_site, "counter", json_object_new_int( (int32_t)site->counter ) );
         json_object_object_add( json_site, "algorithm", json_object_new_int( (int32_t)site->algorithm ) );
@@ -316,7 +319,7 @@ static bool mpw_marshal_write_json(
 
                 if (!user->redacted) {
                     // Clear Text
-                    const char *answerState = mpw_site_result( masterKey, site->name, MPCounterValueInitial,
+                    const char *answerState = mpw_site_result( masterKey, site->siteName, MPCounterValueInitial,
                             MPKeyPurposeRecovery, question->keyword, question->type, question->state, site->algorithm );
                     json_object_object_add( json_site_question, "answer", json_object_new_string( answerState ) );
                 }
@@ -337,33 +340,37 @@ static bool mpw_marshal_write_json(
         mpw_free_strings( &resultState, &loginState, NULL );
     }
 
-    mpw_string_pushf( out, "%s\n", json_object_to_json_string_ext( json_file,
+    const char *out = mpw_strdup( json_object_to_json_string_ext( json_file,
             JSON_C_TO_STRING_PRETTY | JSON_C_TO_STRING_SPACED | JSON_C_TO_STRING_NOSLASHESCAPE ) );
     json_object_put( json_file );
     mpw_free( &masterKey, MPMasterKeySize );
 
-    *error = (MPMarshalError){ .type = MPMarshalSuccess };
-    return true;
+    if (out)
+        *error = (MPMarshalError){ .type = MPMarshalSuccess };
+    else
+        *error = (MPMarshalError){ .type = MPMarshalErrorFormat, .description = "Couldn't encode JSON." };
+
+    return out;
 }
 
 #endif
 
-bool mpw_marshal_write(
-        char **out, const MPMarshalFormat outFormat, const MPMarshalledUser *user, MPMarshalError *error) {
+const char *mpw_marshal_write(
+        const MPMarshalFormat outFormat, const MPMarshalledUser *user, MPMarshalError *error) {
 
     switch (outFormat) {
         case MPMarshalFormatNone:
             *error = (MPMarshalError){ .type = MPMarshalSuccess };
-            return false;
+            return NULL;
         case MPMarshalFormatFlat:
-            return mpw_marshal_write_flat( out, user, error );
+            return mpw_marshal_write_flat( user, error );
 #if MPW_JSON
         case MPMarshalFormatJSON:
-            return mpw_marshal_write_json( out, user, error );
+            return mpw_marshal_write_json( user, error );
 #endif
         default:
             *error = (MPMarshalError){ MPMarshalErrorFormat, mpw_str( "Unsupported output format: %u", outFormat ) };
-            return false;
+            return NULL;
     }
 }
 
@@ -913,10 +920,10 @@ static MPMarshalledUser *mpw_marshal_read_json(
             }
 
             if (siteResultState && strlen( siteResultState ))
-                site->resultState = mpw_site_state( masterKey, site->name, site->counter,
+                site->resultState = mpw_site_state( masterKey, site->siteName, site->counter,
                         MPKeyPurposeAuthentication, NULL, site->resultType, siteResultState, site->algorithm );
             if (siteLoginState && strlen( siteLoginState ))
-                site->loginState = mpw_site_state( masterKey, site->name, MPCounterValueInitial,
+                site->loginState = mpw_site_state( masterKey, site->siteName, MPCounterValueInitial,
                         MPKeyPurposeIdentification, NULL, site->loginType, siteLoginState, site->algorithm );
         }
         else {
@@ -938,7 +945,7 @@ static MPMarshalledUser *mpw_marshal_read_json(
                 if (!user->redacted) {
                     // Clear Text
                     if (answerState && strlen( answerState ))
-                        question->state = mpw_site_state( masterKey, site->name, MPCounterValueInitial,
+                        question->state = mpw_site_state( masterKey, site->siteName, MPCounterValueInitial,
                                 MPKeyPurposeRecovery, question->keyword, question->type, answerState, site->algorithm );
                 }
                 else {
