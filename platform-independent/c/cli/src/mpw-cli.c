@@ -805,7 +805,7 @@ void cli_save(Arguments *args, Operation *operation) {
 
     char *buf = NULL;
     MPMarshalError marshalError = { .type = MPMarshalSuccess };
-    if (!mpw_marshal_write( &buf, operation->sitesFormat, operation->user, &marshalError ) || marshalError.type != MPMarshalSuccess)
+    if (!mpw_marshal_write( &buf, operation->sitesFormat, operation->user, &marshalError ) || marshalError.type != MPMarshalSuccess || !buf)
         wrn( "Couldn't encode updated configuration file:\n  %s: %s", operation->sitesPath, marshalError.description );
 
     else if (fwrite( buf, sizeof( char ), strlen( buf ), sitesFile ) != strlen( buf ))
@@ -858,5 +858,4 @@ void cli_masterKeyProvider_free() {
     __cli_masterKeyProvider_currentAlgorithm = (MPAlgorithmVersion)-1;
     mpw_free_string( &__cli_masterKeyProvider_currentPassword );
     __cli_masterKeyProvider_currentOperation = NULL;
-
 }
