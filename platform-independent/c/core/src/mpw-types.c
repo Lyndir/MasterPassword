@@ -103,7 +103,7 @@ const char *mpw_abbreviationForType(MPResultType resultType) {
         case MPResultTypeStatefulPersonal:
             return "own";
         case MPResultTypeStatefulDevice:
-            return "dev";
+            return "device";
         case MPResultTypeDeriveKey:
             return "key";
         default: {
