@@ -16,10 +16,12 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-#include <string.h>
-
 #include "mpw-marshal-util.h"
 #include "mpw-util.h"
+
+MP_LIBS_BEGIN
+#include <string.h>
+MP_LIBS_END
 
 char *mpw_get_token(const char **in, const char *eol, char *delim) {
 

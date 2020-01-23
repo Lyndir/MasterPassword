@@ -17,13 +17,15 @@
 //==============================================================================
 
 
-#include <stdio.h>
-#include <string.h>
-#include <ctype.h>
-
 #include "mpw-marshal.h"
 #include "mpw-util.h"
 #include "mpw-marshal-util.h"
+
+MP_LIBS_BEGIN
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+MP_LIBS_END
 
 MPMarshalledUser *mpw_marshal_user(
         const char *fullName, MPMasterKeyProvider masterKeyProvider, const MPAlgorithmVersion algorithmVersion) {

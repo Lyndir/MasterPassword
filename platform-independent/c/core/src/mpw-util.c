@@ -16,6 +16,9 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
+#include "mpw-util.h"
+
+MP_LIBS_BEGIN
 #include <string.h>
 #include <ctype.h>
 #include <errno.h>
@@ -29,8 +32,7 @@
 #define AES_ECB 0
 #define AES_CBC 1
 #include "aes.h"
-
-#include "mpw-util.h"
+MP_LIBS_END
 
 #ifdef inf_level
 int mpw_verbosity = inf_level;

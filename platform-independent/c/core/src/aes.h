@@ -9,7 +9,11 @@ This is an implementation of the AES algorithm, specifically ECB and CBC mode.
 #ifndef _AES_H_
 #define _AES_H_
 
+#include "mpw-util.h"
+
+MP_LIBS_BEGIN
 #include <stdint.h>
+MP_LIBS_END
 
 
 // #define the macros below to 1/0 to enable/disable the mode of operation.

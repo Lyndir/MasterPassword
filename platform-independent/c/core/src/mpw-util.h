@@ -19,10 +19,12 @@
 #ifndef _MPW_UTIL_H
 #define _MPW_UTIL_H
 
+#include "mpw-types.h"
+
+MP_LIBS_BEGIN
 #include <stdio.h>
 #include <stdarg.h>
-
-#include "mpw-types.h"
+MP_LIBS_END
 
 //// Logging.
 #ifndef trc

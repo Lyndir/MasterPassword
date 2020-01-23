@@ -16,11 +16,10 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-// NOTE: mpw is currently NOT thread-safe.
-#include "mpw-types.h"
-
 #ifndef _MPW_ALGORITHM_H
 #define _MPW_ALGORITHM_H
+
+#include "mpw-types.h"
 
 typedef mpw_enum( unsigned int, MPAlgorithmVersion ) {
     /** V0 did math with chars whose signedness was platform-dependent. */

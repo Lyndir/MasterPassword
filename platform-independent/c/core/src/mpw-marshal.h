@@ -19,9 +19,11 @@
 #ifndef _MPW_MARSHAL_H
 #define _MPW_MARSHAL_H
 
-#include <time.h>
-
 #include "mpw-algorithm.h"
+
+MP_LIBS_BEGIN
+#include <time.h>
+MP_LIBS_END
 
 //// Types.
 

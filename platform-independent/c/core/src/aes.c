@@ -37,9 +37,11 @@ NOTE:   String length must be evenly divisible by 16byte (str_len % 16 == 0)
 /*****************************************************************************/
 /* Includes:                                                                 */
 /*****************************************************************************/
-#include <string.h>
 #include "aes.h"
-#include "mpw-util.h"
+
+MP_LIBS_BEGIN
+#include <string.h>
+MP_LIBS_END
 
 /*****************************************************************************/
 /* Defines:                                                                  */

@@ -16,11 +16,13 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-#include <string.h>
-#include <ctype.h>
-
 #include "mpw-types.h"
 #include "mpw-util.h"
+
+MP_LIBS_BEGIN
+#include <string.h>
+#include <ctype.h>
+MP_LIBS_END
 
 const size_t MPMasterKeySize = 64;
 const size_t MPSiteKeySize = 256 / 8; // Size of HMAC-SHA-256

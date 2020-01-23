@@ -19,9 +19,16 @@
 #ifndef _MPW_TYPES_H
 #define _MPW_TYPES_H
 
+#ifndef MP_LIBS_BEGIN
+#define MP_LIBS_BEGIN
+#define MP_LIBS_END
+#endif
+
+MP_LIBS_BEGIN
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
+MP_LIBS_END
 
 #ifdef NS_ENUM
 #define mpw_enum(_type, _name) NS_ENUM(_type, _name)

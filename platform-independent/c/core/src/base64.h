@@ -54,8 +54,12 @@
 * project, please see <http://www.apache.org/>.
 */
 
+#include "mpw-util.h"
+
+MP_LIBS_BEGIN
 #include <stddef.h>
 #include <stdint.h>
+MP_LIBS_END
 
 /**
  * @return The amount of bytes needed to decode the given b64Text.

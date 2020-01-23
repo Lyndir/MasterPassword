@@ -16,9 +16,11 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-#include <string.h>
-
 #include "mpw-util.h"
+
+MP_LIBS_BEGIN
+#include <string.h>
+MP_LIBS_END
 
 #define MP_N                32768LU
 #define MP_r                8U

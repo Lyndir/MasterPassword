@@ -19,12 +19,14 @@
 #ifndef _MPW_MARSHAL_UTIL_H
 #define _MPW_MARSHAL_UTIL_H
 
+#include "mpw-algorithm.h"
+
+MP_LIBS_BEGIN
 #include <time.h>
 #if MPW_JSON
-#include "json-c/json.h"
+#include <json-c/json.h>
 #endif
-
-#include "mpw-algorithm.h"
+MP_LIBS_END
 
 /// Type parsing.
 
