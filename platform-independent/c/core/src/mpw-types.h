@@ -107,7 +107,8 @@ typedef mpw_enum ( uint32_t, MPCounterValue ) {
 
 /** These colours are compatible with the original ANSI SGR. */
 typedef mpw_enum( uint8_t, MPIdenticonColor ) {
-    MPIdenticonColorRed = 1,
+    MPIdenticonColorBlack,
+    MPIdenticonColorRed,
     MPIdenticonColorGreen,
     MPIdenticonColorYellow,
     MPIdenticonColorBlue,

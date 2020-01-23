@@ -210,7 +210,7 @@ MPIdenticon mpw_identicon(const char *fullName, const char *masterPassword) {
                 .body = "",
                 .rightArm = "",
                 .accessory = "",
-                .color=0,
+                .color = 0,
         };
 
     MPIdenticon identicon = {
