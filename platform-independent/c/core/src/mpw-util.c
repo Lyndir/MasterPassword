@@ -579,20 +579,23 @@ const char *mpw_hex_l(const uint32_t number) {
     return mpw_hex( &buf, sizeof( buf ) );
 }
 
-const uint8_t *mpw_unhex(const char *hex) {
+const uint8_t *mpw_unhex(const char *hex, size_t *length) {
 
     if (!hex)
         return NULL;
 
-    size_t length = strlen( hex );
-    if (length == 0 || length % 2 != 0)
+    size_t hexLength = strlen( hex );
+    if (hexLength == 0 || hexLength % 2 != 0)
         return NULL;
 
-    size_t bytes = length / 2;
-    uint8_t *buf = malloc( bytes );
-    for (size_t b = 0; b < bytes; ++b)
+    size_t bufLength = hexLength / 2;
+    if (length)
+        *length = bufLength;
+
+    uint8_t *buf = malloc( bufLength );
+    for (size_t b = 0; b < bufLength; ++b)
         if (sscanf( hex + b * 2, "%02hhX", &buf[b] ) != 1) {
-            mpw_free( &buf, bytes );
+            mpw_free( &buf, bufLength );
             return NULL;
         }
 

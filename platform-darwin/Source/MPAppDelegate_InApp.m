@@ -17,6 +17,7 @@
 //==============================================================================
 
 #import "MPAppDelegate_InApp.h"
+#import <Countly/Countly.h>
 
 @interface MPAppDelegate_Shared(InApp_Private)<SKProductsRequestDelegate, SKPaymentTransactionObserver>
 @end
@@ -204,13 +205,16 @@ PearlAssociatedObjectProperty( NSMutableArray*, ProductObservers, productObserve
                 [queue finishTransaction:transaction];
 
                 if ([[MPConfig get].sendInfo boolValue]) {
-#ifdef CRASHLYTICS
                     SKProduct *product = self.products[transaction.payment.productIdentifier];
-                    for (int q = 0; q < transaction.payment.quantity; ++q)
-                        [Answers logPurchaseWithPrice:product.price currency:[product.priceLocale objectForKey:NSLocaleCurrencyCode]
-                                              success:@YES itemName:product.localizedTitle itemType:@"InApp"
-                                               itemId:product.productIdentifier customAttributes:attributes];
-#endif
+                    [attributes addEntriesFromDictionary:@{
+                            @"id": product.productIdentifier,
+                            @"name": product.localizedTitle,
+                            @"price": product.price.description,
+                            @"currency": [product.priceLocale objectForKey:NSLocaleCurrencyCode],
+                            @"state"   : @"success",
+                            @"quantity": @(transaction.payment.quantity).description,
+                    }];
+                    [Countly.sharedInstance recordEvent:@"purchase" segmentation:attributes];
                 }
                 break;
             }
@@ -229,16 +233,16 @@ PearlAssociatedObjectProperty( NSMutableArray*, ProductObservers, productObserve
                 [queue finishTransaction:transaction];
 
                 if ([[MPConfig get].sendInfo boolValue]) {
-#ifdef CRASHLYTICS
                     SKProduct *product = self.products[transaction.payment.productIdentifier];
-                    [Answers logPurchaseWithPrice:product.price currency:[product.priceLocale objectForKey:NSLocaleCurrencyCode]
-                                          success:@NO itemName:product.localizedTitle itemType:@"InApp" itemId:product.productIdentifier
-                                 customAttributes:@{
-                                         @"state"   : @"Failed",
-                                         @"quantity": @(transaction.payment.quantity),
-                                         @"reason"  : [transaction.error localizedFailureReason]?: [transaction.error localizedDescription],
-                                 }];
-#endif
+                    [Countly.sharedInstance recordEvent:@"purchase" segmentation:@{
+                            @"id": product.productIdentifier,
+                            @"name": product.localizedTitle,
+                            @"price": product.price.description,
+                            @"currency": [product.priceLocale objectForKey:NSLocaleCurrencyCode],
+                            @"state"   : @"failed",
+                            @"quantity": @(transaction.payment.quantity).description,
+                            @"reason"  : [transaction.error localizedFailureReason]?: [transaction.error localizedDescription],
+                    }];
                 }
                 break;
         }

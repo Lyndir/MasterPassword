@@ -16,8 +16,7 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-#import <Crashlytics/Crashlytics.h>
-#import <Crashlytics/Answers.h>
+#import <Sentry/Sentry.h>
 
 __BEGIN_DECLS
 extern NSString *const MPErrorDomain;
@@ -34,28 +33,21 @@ extern NSString *const MPFoundInconsistenciesNotification;
 
 extern NSString *const MPSitesImportedNotificationUserKey;
 extern NSString *const MPInconsistenciesFixResultUserKey;
-
 __END_DECLS
 
-#ifdef CRASHLYTICS
-#define MPError(error_, message, ...) ({ \
+#define MPError(error_, message_, ...) ({ \
     NSError *__error = error_; \
-    err( message @"%@%@", ##__VA_ARGS__, __error && [message length]? @"\n": @"", [__error fullDescription]?: @"" ); \
+    err( message_ @"%@%@", ##__VA_ARGS__, __error && [message_ length]? @"\n": @"", [__error fullDescription]?: @"" ); \
     \
     if (__error && [[MPConfig get].sendInfo boolValue]) { \
-        [[Crashlytics sharedInstance] recordError:__error withAdditionalUserInfo:@{ \
-                @"location": strf( @"%@:%d %@", @(basename((char *)__FILE__)), __LINE__, NSStringFromSelector(_cmd) ), \
-        }]; \
+        SentryEvent *event = [[SentryEvent alloc] initWithLevel:kSentrySeverityError]; \
+        event.message = strf(@"%@: %@", message_, [__error localizedDescription]); \
+        event.logger = @"MPError"; \
+        [SentryClient.sharedClient appendStacktraceToEvent:event]; \
+        [SentryClient.sharedClient sendEvent:event withCompletionHandler:nil]; \
     } \
     __error; \
 })
-#else
-#define MPError(error_, message, ...) ({ \
-    NSError *__error = error_; \
-    err( message @"%@%@", ##__VA_ARGS__, __error? @"\n": @"", [__error fullDescription]?: @"" ); \
-    __error; \
-})
-#endif
 
 #define MPMakeError(message, ...) ({ \
      MPError( [NSError errorWithDomain:MPErrorDomain code:0 userInfo:@{ \

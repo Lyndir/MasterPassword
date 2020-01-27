@@ -57,6 +57,8 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     self.dataSource = [NSMutableArray new];
 
     self.view.backgroundColor = [UIColor clearColor];
+    if (@available( iOS 11, * ))
+        self.collectionView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     [self.collectionView automaticallyAdjustInsetsForKeyboard];
     self.searchBar.autocapitalizationType = UITextAutocapitalizationTypeNone;
     if ([self.searchBar respondsToSelector:@selector( keyboardAppearance )])

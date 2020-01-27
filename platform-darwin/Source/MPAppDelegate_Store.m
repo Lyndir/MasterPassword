@@ -216,7 +216,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
 
         self.mainManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
         self.mainManagedObjectContext.parentContext = self.privateManagedObjectContext;
-        if (@available(iOS 10.0, macOS 10.12, *))
+        if (@available( iOS 10.0, macOS 10.12, * ))
             self.mainManagedObjectContext.automaticallyMergesChangesFromParent = YES;
         else
             // When privateManagedObjectContext is saved, import the changes into mainManagedObjectContext.
@@ -565,38 +565,51 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
            saveInContext:(NSManagedObjectContext *)context {
 
     // Read metadata for the import file.
-    MPMarshalledInfo *info = mpw_marshal_read( importData.UTF8String );
-    if (info->format == MPMarshalFormatNone)
+    MPMarshalledFile *file = mpw_marshal_read( NULL, importData.UTF8String );
+    if (!file)
+        return MPError( ([NSError errorWithDomain:MPErrorDomain code:MPErrorMarshalCode userInfo:@{
+                @"type"                  : @(MPMarshalErrorInternal),
+                NSLocalizedDescriptionKey: @"Could not process Master Password import data.",
+        }]), @"While importing sites." );
+    if (file->error.type != MPMarshalSuccess) {
+        MPMarshalErrorType type = file->error.type;
+        mpw_marshal_file_free( &file );
+        return MPError( ([NSError errorWithDomain:MPErrorDomain code:MPErrorMarshalCode userInfo:@{
+                @"type"                  : @(type),
+                NSLocalizedDescriptionKey: @"Could not parse Master Password import data.",
+        }]), @"While importing sites." );
+    }
+    if (file->info->format == MPMarshalFormatNone) {
+        mpw_marshal_file_free( &file );
         return MPError( ([NSError errorWithDomain:MPErrorDomain code:MPErrorMarshalCode userInfo:@{
                 @"type"                  : @(MPMarshalErrorFormat),
                 NSLocalizedDescriptionKey: @"This is not a Master Password import file.",
         }]), @"While importing sites." );
+    }
 
     // Get master password for import file.
     MPKey *importKey;
     NSString *importMasterPassword;
     do {
-        importMasterPassword = askImportPassword( @(info->fullName) );
+        importMasterPassword = askImportPassword( @(file->info->fullName) );
         if (!importMasterPassword) {
             inf( @"Import cancelled." );
-            mpw_marshal_info_free( &info );
+            mpw_marshal_file_free( &file );
             return MPError( ([NSError errorWithDomain:NSCocoaErrorDomain code:NSUserCancelledError userInfo:nil]), @"" );
         }
 
-        importKey = [[MPKey alloc] initForFullName:@(info->fullName) withMasterPassword:importMasterPassword];
-    } while ([[[importKey keyIDForAlgorithm:MPAlgorithmForVersion( info->algorithm )] encodeHex]
-                            caseInsensitiveCompare:@(info->keyID)] != NSOrderedSame);
+        importKey = [[MPKey alloc] initForFullName:@(file->info->fullName) withMasterPassword:importMasterPassword];
+    } while ([[[importKey keyIDForAlgorithm:MPAlgorithmForVersion( file->info->algorithm )] encodeHex]
+                     caseInsensitiveCompare:@(file->info->keyID)] != NSOrderedSame);
 
     // Parse import data.
-    MPMarshalError importError = { .type = MPMarshalSuccess };
-    MPMarshalledUser *importUser = mpw_marshal_auth( importData.UTF8String, info->format, importMasterPassword.UTF8String, &importError );
-    mpw_marshal_info_free( &info );
+    MPMarshalledUser *importUser = mpw_marshal_auth( file, mpw_masterKeyProvider_str( importMasterPassword.UTF8String ) );
 
     @try {
-        if (!importUser || importError.type != MPMarshalSuccess)
+        if (!importUser || file->error.type != MPMarshalSuccess)
             return MPError( ([NSError errorWithDomain:MPErrorDomain code:MPErrorMarshalCode userInfo:@{
-                    @"type"                  : @(importError.type),
-                    NSLocalizedDescriptionKey: @(importError.description),
+                    @"type"                  : @(file->error.type),
+                    NSLocalizedDescriptionKey: @(file->error.message),
             }]), @"While importing sites." );
 
         // Find an existing user to update.
@@ -654,9 +667,10 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
             else {
                 // Create new site.
                 id<MPAlgorithm> algorithm = MPAlgorithmForVersion( importSite->algorithm );
-                Class entityType = [algorithm classOfType:importSite->type];
+                Class entityType = [algorithm classOfType:importSite->resultType];
                 if (!entityType)
-                    return MPMakeError( @"Invalid site type in import file: %@ has type %lu", @(importSite->siteName), (long)importSite->type );
+                    return MPMakeError( @"Invalid site type in import file: %@ has type %lu", @(importSite->siteName),
+                            (long)importSite->resultType );
 
                 MPSiteEntity *site = (MPSiteEntity *)[entityType insertNewObjectInContext:context];
                 site.user = user;
@@ -676,7 +690,9 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
         return nil;
     }
     @finally {
-        mpw_marshal_file_free( &importUser );
+        mpw_marshal_file_free( &file );
+        mpw_marshal_user_free( &importUser );
+        mpw_masterKeyProvider_free();
     }
 }
 
@@ -684,13 +700,13 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
           usingKey:(MPKey *)userKey {
 
     site.name = @(importSite->siteName);
-    if (importSite->content)
-        [site.algorithm importPassword:@(importSite->content) protectedByKey:importKey intoSite:site usingKey:userKey];
-    site.type = importSite->type;
+    if (importSite->resultState)
+        [site.algorithm importPassword:@(importSite->resultState) protectedByKey:importKey intoSite:site usingKey:userKey];
+    site.type = importSite->resultType;
     if ([site isKindOfClass:[MPGeneratedSiteEntity class]])
         ((MPGeneratedSiteEntity *)site).counter = importSite->counter;
     site.algorithm = MPAlgorithmForVersion( importSite->algorithm );
-    site.loginName = importSite->loginContent? @(importSite->loginContent): nil;
+    site.loginName = importSite->loginState? @(importSite->loginState): nil;
     site.loginGenerated = importSite->loginType & MPResultTypeClassTemplate;
     site.url = importSite->url? @(importSite->url): nil;
     site.uses = importSite->uses;
@@ -703,10 +719,10 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
 
     [MPAppDelegate_Shared managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
         MPUserEntity *user = [self activeUserInContext:context];
-        NSString *masterPassword = askImportPassword( user.name );
 
         inf( @"Exporting sites, %@, for user: %@", revealPasswords? @"revealing passwords": @"omitting passwords", user.userID );
-        MPMarshalledUser *exportUser = mpw_marshal_user( user.name.UTF8String, masterPassword.UTF8String, user.algorithm.version );
+        MPMarshalledUser *exportUser = mpw_marshal_user( user.name.UTF8String,
+                mpw_masterKeyProvider_str( askImportPassword( user.name ).UTF8String ), user.algorithm.version );
         exportUser->redacted = !revealPasswords;
         exportUser->avatar = (unsigned int)user.avatar;
         exportUser->defaultType = user.defaultType;
@@ -722,8 +738,8 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
 
             MPMarshalledSite *exportSite = mpw_marshal_site( exportUser,
                     site.name.UTF8String, site.type, counter, site.algorithm.version );
-            exportSite->content = content.UTF8String;
-            exportSite->loginContent = site.loginName.UTF8String;
+            exportSite->resultState = content.UTF8String;
+            exportSite->loginState = site.loginName.UTF8String;
             exportSite->loginType = site.loginGenerated? MPResultTypeTemplateName: MPResultTypeStatefulPersonal;
             exportSite->url = site.url.UTF8String;
             exportSite->uses = (unsigned int)site.uses;
@@ -733,19 +749,21 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
                 mpw_marshal_question( exportSite, siteQuestion.keyword.UTF8String );
         }
 
-        char *export = NULL;
-        MPMarshalError exportError = (MPMarshalError){ .type= MPMarshalSuccess };
-        mpw_marshal_write( &export, MPMarshalFormatFlat, exportUser, &exportError );
+        MPMarshalledFile *exportFile = NULL;
+        const char *export = mpw_marshal_write( MPMarshalFormatFlat, &exportFile, exportUser );
         NSString *mpsites = nil;
-        if (export && exportError.type == MPMarshalSuccess)
+        if (export && exportFile && exportFile->error.type == MPMarshalSuccess)
             mpsites = [NSString stringWithCString:export encoding:NSUTF8StringEncoding];
         mpw_free_string( &export );
 
-        resultBlock( mpsites, exportError.type == MPMarshalSuccess? nil:
+        resultBlock( mpsites, exportFile && exportFile->error.type == MPMarshalSuccess? nil:
                               [NSError errorWithDomain:MPErrorDomain code:MPErrorMarshalCode userInfo:@{
-                                      @"type"                  : @(exportError.type),
-                                      NSLocalizedDescriptionKey: @(exportError.description),
+                                      @"type"                  : @(exportFile? exportFile->error.type: MPMarshalErrorInternal),
+                                      NSLocalizedDescriptionKey: @(exportFile? exportFile->error.message: nil),
                               }] );
+        mpw_marshal_file_free( &exportFile );
+        mpw_marshal_user_free( &exportUser );
+        mpw_masterKeyProvider_free();
     }];
 }
 

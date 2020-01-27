@@ -68,7 +68,6 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 
-#ifdef CRASHLYTICS
     NSString *crashlyticsAPIKey = [self crashlyticsAPIKey];
     if ([crashlyticsAPIKey length]) {
         inf(@"Initializing Crashlytics");
@@ -92,7 +91,6 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         CLSLog( @"Crashlytics (%@) initialized for: %@ v%@.", //
                 [Crashlytics sharedInstance].version, [PearlInfoPlist get].CFBundleName, [PearlInfoPlist get].CFBundleVersion );
     }
-#endif
 
     // Setup delegates and listeners.
     [MPConfig get].delegate = self;
@@ -648,27 +646,6 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 - (void)didUpdateConfigForKey:(SEL)configKey fromValue:(id)oldValue {
 
     [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:NSStringFromSelector( configKey )];
-}
-
-#pragma mark - Crashlytics
-
-- (NSDictionary *)crashlyticsInfo {
-
-    static NSDictionary *crashlyticsInfo = nil;
-    if (crashlyticsInfo == nil)
-        crashlyticsInfo = [[NSDictionary alloc] initWithContentsOfURL:
-                [[NSBundle mainBundle] URLForResource:@"Crashlytics" withExtension:@"plist"]];
-
-    return crashlyticsInfo;
-}
-
-- (NSString *)crashlyticsAPIKey {
-
-    NSString *crashlyticsAPIKey = NSNullToNil( [[self crashlyticsInfo] valueForKeyPath:@"API Key"] );
-    if (![crashlyticsAPIKey length])
-        wrn( @"Crashlytics API key not set.  Crash logs won't be recorded." );
-
-    return crashlyticsAPIKey;
 }
 
 @end

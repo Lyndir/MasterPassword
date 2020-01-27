@@ -230,13 +230,13 @@ const char *mpw_hotp(
  * @return A string (shared); or NULL if the format is missing or the result could not be allocated or formatted. */
 const char *mpw_str(const char *format, ...);
 const char *mpw_vstr(const char *format, va_list args);
-/** Encode a buffer as a string of hexadecimal characters.
+/** Encode length-bytes from a buffer as a string of hexadecimal characters.
  * @return A string (shared); or NULL if the buffer is missing or the result could not be allocated. */
 const char *mpw_hex(const void *buf, const size_t length);
 const char *mpw_hex_l(const uint32_t number);
-/** Decode a string of hexadecimal characters into a buffer.
- * @return A buffer (allocated, strlen(hex) / 2); or NULL if hex is NULL, empty, or not an even-length hexadecimal string. */
-const uint8_t *mpw_unhex(const char *hex);
+/** Decode a string of hexadecimal characters into a buffer of length-bytes.
+ * @return A buffer (allocated, *length); or NULL if hex is NULL, empty, or not an even-length hexadecimal string. */
+const uint8_t *mpw_unhex(const char *hex, size_t *length);
 /** Encode a fingerprint for a buffer.
  * @return A string (shared); or NULL if the buffer is missing or the result could not be allocated. */
 const MPKeyID mpw_id_buf(const void *buf, const size_t length);

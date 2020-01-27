@@ -185,7 +185,6 @@ void cli_mpw(Arguments *args, Operation *operation);
 void cli_save(Arguments *args, Operation *operation);
 
 MPMasterKeyProvider cli_masterKeyProvider_op(Operation *operation);
-MPMasterKeyProvider cli_masterKeyProvider_str(const char *masterPassword);
 void cli_masterKeyProvider_free(void);
 
 /** ========================================================================
@@ -825,7 +824,7 @@ void cli_save(Arguments *args, Operation *operation) {
         return;
     }
 
-    const char *buf = mpw_marshal_write( operation->sitesFormat, operation->file, operation->user );
+    const char *buf = mpw_marshal_write( operation->sitesFormat, &operation->file, operation->user );
     if (!buf || operation->file->error.type != MPMarshalSuccess)
         wrn( "Couldn't encode updated configuration file:\n  %s: %s", operation->sitesPath, operation->file->error.message );
 
@@ -836,47 +835,25 @@ void cli_save(Arguments *args, Operation *operation) {
     fclose( sitesFile );
 }
 
-static MPMasterKey __cli_masterKeyProvider_currentKey = NULL;
-static MPAlgorithmVersion __cli_masterKeyProvider_currentAlgorithm = (MPAlgorithmVersion)-1;
-static const char *__cli_masterKeyProvider_currentPassword = NULL;
 static Operation *__cli_masterKeyProvider_currentOperation = NULL;
 
-static MPMasterKey __cli_masterKeyProvider_op(MPAlgorithmVersion algorithm, const char *fullName) {
+static bool __cli_masterKeyProvider_op(MPMasterKey *currentKey, MPAlgorithmVersion *currentAlgorithm,
+        MPAlgorithmVersion algorithm, const char *fullName) {
 
-    if (mpw_update_master_key( &__cli_masterKeyProvider_currentKey, &__cli_masterKeyProvider_currentAlgorithm,
-            algorithm, fullName, __cli_masterKeyProvider_currentOperation->masterPassword ))
-        return mpw_memdup( __cli_masterKeyProvider_currentKey, MPMasterKeySize );
+    if (!currentKey)
+        __cli_masterKeyProvider_currentOperation = NULL;
+    if (!__cli_masterKeyProvider_currentOperation)
+        return false;
+    if (!mpw_update_master_key( currentKey, currentAlgorithm, algorithm, fullName,
+            __cli_masterKeyProvider_currentOperation->masterPassword ))
+        return false;
 
-    return NULL;
-}
-
-static MPMasterKey __cli_masterKeyProvider_str(MPAlgorithmVersion algorithm, const char *fullName) {
-
-    if (mpw_update_master_key( &__cli_masterKeyProvider_currentKey, &__cli_masterKeyProvider_currentAlgorithm,
-            algorithm, fullName, __cli_masterKeyProvider_currentPassword ))
-        return mpw_memdup( __cli_masterKeyProvider_currentKey, MPMasterKeySize );
-
-    return NULL;
+    return true;
 }
 
 MPMasterKeyProvider cli_masterKeyProvider_op(Operation *operation) {
 
-    mpw_free_string( &__cli_masterKeyProvider_currentPassword );
+    mpw_masterKeyProvider_free();
     __cli_masterKeyProvider_currentOperation = operation;
-    return __cli_masterKeyProvider_op;
-}
-
-MPMasterKeyProvider cli_masterKeyProvider_str(const char *masterPassword) {
-
-    mpw_free_string( &__cli_masterKeyProvider_currentPassword );
-    __cli_masterKeyProvider_currentPassword = mpw_strdup( masterPassword );
-    return __cli_masterKeyProvider_str;
-}
-
-void cli_masterKeyProvider_free() {
-
-    mpw_free( &__cli_masterKeyProvider_currentKey, MPMasterKeySize );
-    __cli_masterKeyProvider_currentAlgorithm = (MPAlgorithmVersion)-1;
-    mpw_free_string( &__cli_masterKeyProvider_currentPassword );
-    __cli_masterKeyProvider_currentOperation = NULL;
+    return mpw_masterKeyProvider_proxy( __cli_masterKeyProvider_op );
 }

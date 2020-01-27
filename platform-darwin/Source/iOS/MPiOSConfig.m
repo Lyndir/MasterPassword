@@ -16,6 +16,8 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
+#import "MPiOSConfig.h"
+
 @implementation MPiOSConfig
 
 @dynamic helpHidden, siteInfoHidden, showSetup, actionsTipShown, typeTipShown, loginNameTipShown, traceMode, dictationSearch, allowDowngrade;

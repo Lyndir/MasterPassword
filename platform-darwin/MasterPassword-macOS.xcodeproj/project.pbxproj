@@ -2999,7 +2999,6 @@
 					"$(inherited)",
 					"NDEBUG=1",
 					"NS_BLOCK_ASSERTIONS=1",
-					"CRASHLYTICS=1",
 					PEARL,
 					PEARL_COCOA,
 					PEARL_CRYPTO,
@@ -3388,7 +3387,6 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
-					"CRASHLYTICS=1",
 					PEARL,
 					PEARL_COCOA,
 					PEARL_CRYPTO,
@@ -3489,7 +3487,6 @@
 					"$(inherited)",
 					"NDEBUG=1",
 					"NS_BLOCK_ASSERTIONS=1",
-					"CRASHLYTICS=1",
 					PEARL,
 					PEARL_COCOA,
 					PEARL_CRYPTO,

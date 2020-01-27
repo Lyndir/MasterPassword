@@ -16,6 +16,7 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
+#import "MPConfig.h"
 #import "MPAppDelegate_Shared.h"
 
 @implementation MPConfig

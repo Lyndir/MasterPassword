@@ -28,6 +28,55 @@ MP_LIBS_BEGIN
 #include <math.h>
 MP_LIBS_END
 
+static MPMasterKey __mpw_masterKeyProvider_currentKey = NULL;
+static MPAlgorithmVersion __mpw_masterKeyProvider_currentAlgorithm = (MPAlgorithmVersion)-1;
+static MPMasterKeyProviderProxy __mpw_masterKeyProvider_currentProxy = NULL;
+static const char *__mpw_masterKeyProvider_currentPassword = NULL;
+
+static bool __mpw_masterKeyProvider_str(MPMasterKey *currentKey, MPAlgorithmVersion *currentAlgorithm,
+        MPAlgorithmVersion algorithm, const char *fullName) {
+
+    if (!currentKey)
+        return mpw_free_string( &__mpw_masterKeyProvider_currentPassword );
+
+    return mpw_update_master_key( currentKey, currentAlgorithm, algorithm, fullName, __mpw_masterKeyProvider_currentPassword );
+}
+
+static MPMasterKey __mpw_masterKeyProvider_proxy(MPAlgorithmVersion algorithm, const char *fullName) {
+
+    if (!__mpw_masterKeyProvider_currentProxy)
+        return NULL;
+    if (!__mpw_masterKeyProvider_currentProxy(
+            &__mpw_masterKeyProvider_currentKey, &__mpw_masterKeyProvider_currentAlgorithm, algorithm, fullName ))
+        return NULL;
+
+    return mpw_memdup( __mpw_masterKeyProvider_currentKey, MPMasterKeySize );
+}
+
+MPMasterKeyProvider mpw_masterKeyProvider_str(const char *masterPassword) {
+
+    mpw_masterKeyProvider_free();
+    __mpw_masterKeyProvider_currentPassword = mpw_strdup( masterPassword );
+    return mpw_masterKeyProvider_proxy( __mpw_masterKeyProvider_str );
+}
+
+MPMasterKeyProvider mpw_masterKeyProvider_proxy(const MPMasterKeyProviderProxy proxy) {
+
+    mpw_masterKeyProvider_free();
+    __mpw_masterKeyProvider_currentProxy = proxy;
+    return __mpw_masterKeyProvider_proxy;
+}
+
+void mpw_masterKeyProvider_free() {
+
+    mpw_free( &__mpw_masterKeyProvider_currentKey, MPMasterKeySize );
+    __mpw_masterKeyProvider_currentAlgorithm = (MPAlgorithmVersion)-1;
+    if (__mpw_masterKeyProvider_currentProxy) {
+        __mpw_masterKeyProvider_currentProxy( NULL, NULL, MPAlgorithmVersionCurrent, NULL );
+        __mpw_masterKeyProvider_currentProxy = NULL;
+    }
+}
+
 MPMarshalledUser *mpw_marshal_user(
         const char *fullName, MPMasterKeyProvider masterKeyProvider, const MPAlgorithmVersion algorithmVersion) {
 
@@ -612,6 +661,7 @@ static const char *mpw_marshal_write_json(
 
 static bool mpw_marshal_data_keep_site_exists(
         MPMarshalledData *child, void *args) {
+
     MPMarshalledUser *user = args;
 
     for (size_t s = 0; s < user->sites_count; ++s) {
@@ -624,6 +674,7 @@ static bool mpw_marshal_data_keep_site_exists(
 
 static bool mpw_marshal_data_keep_question_exists(
         MPMarshalledData *child, void *args) {
+
     MPMarshalledSite *site = args;
 
     for (size_t s = 0; s < site->questions_count; ++s) {
@@ -635,16 +686,15 @@ static bool mpw_marshal_data_keep_question_exists(
 }
 
 const char *mpw_marshal_write(
-        const MPMarshalFormat outFormat, MPMarshalledFile *file, MPMarshalledUser *user) {
+        const MPMarshalFormat outFormat, MPMarshalledFile **file_, MPMarshalledUser *user) {
 
+    MPMarshalledFile *file = file_? *file_: NULL;
+    file = mpw_marshal_file( file, NULL, file && file->data? file->data: mpw_marshal_data_new() );
+    if (file_)
+        *file_ = file;
     if (!file)
         return NULL;
-
-    MPMarshalledData *data = file->data? file->data: mpw_marshal_data_new();
-    mpw_marshal_file( file, NULL, data );
-
-    file->error = (MPMarshalError){ MPMarshalSuccess, NULL };
-    if (!data) {
+    if (!file->data) {
         file->error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't allocate data." };
         return NULL;
     }
@@ -652,12 +702,14 @@ const char *mpw_marshal_write(
         file->error = (MPMarshalError){ MPMarshalErrorMissing, "Missing full name." };
         return NULL;
     }
+    file->error = (MPMarshalError){ MPMarshalSuccess, NULL };
+
     MPMasterKey masterKey = NULL;
     if (user->masterKeyProvider)
         masterKey = user->masterKeyProvider( user->algorithm, user->fullName );
 
     // Section: "export"
-    MPMarshalledData *data_export = mpw_marshal_data_get( data, "export", NULL );
+    MPMarshalledData *data_export = mpw_marshal_data_get( file->data, "export", NULL );
     char dateString[21];
     time_t now = time( NULL );
     if (strftime( dateString, sizeof( dateString ), "%FT%TZ", gmtime( &now ) ))
@@ -665,7 +717,7 @@ const char *mpw_marshal_write(
     mpw_marshal_data_set_bool( user->redacted, data_export, "redacted", NULL );
 
     // Section: "user"
-    MPMarshalledData *data_user = mpw_marshal_data_get( data, "user", NULL );
+    MPMarshalledData *data_user = mpw_marshal_data_get( file->data, "user", NULL );
     mpw_marshal_data_set_num( user->avatar, data_user, "avatar", NULL );
     mpw_marshal_data_set_str( user->fullName, data_user, "full_name", NULL );
     mpw_marshal_data_set_str( mpw_identicon_encode( user->identicon ), data_user, "identicon", NULL );
@@ -676,7 +728,7 @@ const char *mpw_marshal_write(
         mpw_marshal_data_set_str( dateString, data_user, "last_used", NULL );
 
     // Section "sites"
-    MPMarshalledData *data_sites = mpw_marshal_data_get( data, "sites", NULL );
+    MPMarshalledData *data_sites = mpw_marshal_data_get( file->data, "sites", NULL );
     mpw_marshal_data_keep( data_sites, mpw_marshal_data_keep_site_exists, user );
     for (size_t s = 0; s < user->sites_count; ++s) {
         MPMarshalledSite *site = &user->sites[s];
@@ -715,7 +767,7 @@ const char *mpw_marshal_write(
         if (strftime( dateString, sizeof( dateString ), "%FT%TZ", gmtime( &site->lastUsed ) ))
             mpw_marshal_data_set_str( dateString, data_sites, site->siteName, "last_used", NULL );
 
-        MPMarshalledData *data_questions = mpw_marshal_data_get( data, "sites", site->siteName, "questions", NULL );
+        MPMarshalledData *data_questions = mpw_marshal_data_get( file->data, "sites", site->siteName, "questions", NULL );
         mpw_marshal_data_keep( data_questions, mpw_marshal_data_keep_question_exists, site );
         for (size_t q = 0; q < site->questions_count; ++q) {
             MPMarshalledQuestion *question = &site->questions[q];
@@ -761,7 +813,11 @@ const char *mpw_marshal_write(
             break;
     }
     if (out && file->error.type == MPMarshalSuccess)
-        mpw_marshal_read( file, out );
+        file = mpw_marshal_read( file, out );
+    if (file_)
+        *file_ = file;
+    else
+        mpw_marshal_file_free( &file );
 
     return out;
 }

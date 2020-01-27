@@ -28,8 +28,8 @@ MP_LIBS_END
 
 //// Types.
 
-#define mpw_default( __default, __value ) ({ __typeof__ (__default) _v = (__typeof__ (__default))(__value); _v = _v? _v: __default; })
-#define mpw_default_n( __default, __num ) ({ __typeof__ (__num) _n = (__num); !isnan( _n )? (__typeof__ (__default))_n: __default; })
+#define mpw_default(__default, __value) ({ __typeof__ (__default) _v = (__typeof__ (__default))(__value); _v = _v? _v: __default; })
+#define mpw_default_n(__default, __num) ({ __typeof__ (__num) _n = (__num); !isnan( _n )? (__typeof__ (__default))_n: __default; })
 
 typedef mpw_enum( unsigned int, MPMarshalFormat ) {
     /** Do not marshal. */
@@ -66,6 +66,15 @@ typedef mpw_enum( unsigned int, MPMarshalErrorType ) {
 };
 
 typedef MPMasterKey (*MPMasterKeyProvider)(MPAlgorithmVersion algorithm, const char *fullName);
+typedef bool (*MPMasterKeyProviderProxy)(MPMasterKey *, MPAlgorithmVersion *, MPAlgorithmVersion algorithm, const char *fullName);
+
+/** Create a key provider which handles key generation by proxying the given function.
+ * The proxy function receives the currently cached key and its algorithm.  If those are NULL, the proxy function should clean up its state. */
+MPMasterKeyProvider mpw_masterKeyProvider_proxy(const MPMasterKeyProviderProxy proxy);
+/** Create a key provider that computes a master key for the given master password. */
+MPMasterKeyProvider mpw_masterKeyProvider_str(const char *masterPassword);
+/** Free the cached keys and proxy state. */
+void mpw_masterKeyProvider_free(void);
 
 typedef struct MPMarshalError {
     MPMarshalErrorType type;
@@ -148,9 +157,11 @@ typedef struct MPMarshalledFile {
 //// Marshalling.
 
 /** Write the user and all associated data out using the given marshalling format.
+ * @param file A pointer to the original file object to update with the user's data or to NULL to make a new.
+ *             File object will be updated with state or new (allocated).  May be NULL if not interested in a file object.
  * @return A string (allocated), or NULL if the file is missing, format is unrecognized, does not support marshalling or a format error occurred. */
 const char *mpw_marshal_write(
-        const MPMarshalFormat outFormat, MPMarshalledFile *file, MPMarshalledUser *user);
+        const MPMarshalFormat outFormat, MPMarshalledFile **file, MPMarshalledUser *user);
 /** Parse the user configuration in the input buffer.  Fields that could not be parsed remain at their type's initial value.
  * @return The updated file object or a new one (allocated) if none was provided; NULL if a file object could not be allocated. */
 MPMarshalledFile *mpw_marshal_read(

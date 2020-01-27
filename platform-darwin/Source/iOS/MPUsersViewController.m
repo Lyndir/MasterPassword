@@ -16,7 +16,8 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-#import <Crashlytics/Answers.h>
+#import <Countly/Countly.h>
+
 #import "MPUsersViewController.h"
 #import "MPEntities.h"
 #import "MPAvatarCell.h"
@@ -228,14 +229,10 @@ typedef NS_ENUM( NSUInteger, MPActiveUserState ) {
                         user.name = newUserName;
 
                         if ([[MPConfig get].sendInfo boolValue]) {
-#ifdef CRASHLYTICS
-                            [Answers logSignUpWithMethod:@"Manual"
-                                                 success:@YES
-                                        customAttributes:@{
-                                                @"algorithm": @(user.algorithm.version),
-                                                @"avatar"   : @(user.avatar),
-                                        }];
-#endif
+                            [Countly.sharedInstance recordEvent:@"new-user" segmentation:@{
+                                    @"algorithm": @(user.algorithm.version).description,
+                                    @"avatar"   : @(user.avatar).description,
+                            }];
                         }
                     }
 
@@ -666,7 +663,7 @@ referenceSizeForFooterInSection:(NSInteger)section {
     [self removeObservers];
     [self observeKeyPath:@"avatarCollectionView.contentOffset" withBlock:
             ^(id from, id to, NSKeyValueChange cause, MPUsersViewController *self) {
-                [self updateAvatarVisibility];
+                PearlMainQueue( ^{ [self updateAvatarVisibility]; } );
             }];
 
     PearlAddNotificationObserver( UIApplicationDidEnterBackgroundNotification, nil, [NSOperationQueue mainQueue],

@@ -65,6 +65,7 @@
 		93D39E5F7F6D7F5C0FAD090F /* MPTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39D72239990DDAC2D75B0 /* MPTypes.m */; };
 		93D39EAA4D064193074D3021 /* MPFixable.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39A813CA9D7E192261ED2 /* MPFixable.m */; };
 		93D39F8A9254177891F38705 /* MPSetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39A28369954D147E239BA /* MPSetupViewController.m */; };
+		94CD3CD602014A9DC121FDA8 /* Pods_MasterPassword.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D74842A13757EDC1F047D9B4 /* Pods_MasterPassword.framework */; };
 		DA04E33E14B1E70400ECA4F3 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA04E33D14B1E70400ECA4F3 /* MobileCoreServices.framework */; };
 		DA071BF3190187FE00179766 /* empty@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA071BF1190187FE00179766 /* empty@2x.png */; };
 		DA071BF4190187FE00179766 /* empty.png in Resources */ = {isa = PBXBuildFile; fileRef = DA071BF2190187FE00179766 /* empty.png */; };
@@ -85,9 +86,6 @@
 		DA0CC5361EAB99BA009A8ED9 /* IASKTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = DA0CC5241EAB99BA009A8ED9 /* IASKTextField.m */; };
 		DA0CC5371EAB99BA009A8ED9 /* IASKTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA0CC5261EAB99BA009A8ED9 /* IASKTextView.m */; };
 		DA0CC5381EAB99BA009A8ED9 /* IASKTextViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA0CC5281EAB99BA009A8ED9 /* IASKTextViewCell.m */; };
-		DA0CC53B1EB57B5C009A8ED9 /* Fabric.plist in Resources */ = {isa = PBXBuildFile; fileRef = DA0CC53A1EB57B5C009A8ED9 /* Fabric.plist */; };
-		DA0CC5411EB57BD4009A8ED9 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA0CC53F1EB57B91009A8ED9 /* Fabric.framework */; };
-		DA0CC5421EB57BD4009A8ED9 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAA141191922FED80032B392 /* Crashlytics.framework */; };
 		DA0CC54E1EB6AD0E009A8ED9 /* MasterPassword.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DA0CC5441EB6AD0E009A8ED9 /* MasterPassword.xcdatamodeld */; };
 		DA0CC58C1EB6B030009A8ED9 /* MPGeneratedSiteEntity+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = DA0CC5791EB6B030009A8ED9 /* MPGeneratedSiteEntity+CoreDataClass.m */; };
 		DA0CC58D1EB6B030009A8ED9 /* MPGeneratedSiteEntity+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = DA0CC57B1EB6B030009A8ED9 /* MPGeneratedSiteEntity+CoreDataProperties.m */; };
@@ -171,6 +169,7 @@
 		DA45224A190628A1008F650A /* icon_wrench@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD386B1711E29700CF925C /* icon_wrench@2x.png */; };
 		DA45224B190628B2008F650A /* icon_gear.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD37821711E29500CF925C /* icon_gear.png */; };
 		DA45224C190628B2008F650A /* icon_gear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD37831711E29500CF925C /* icon_gear@2x.png */; };
+		DA46021D23D5E30B00398FF4 /* MPSecrets.m in Sources */ = {isa = PBXBuildFile; fileRef = DA46021C23D5E30B00398FF4 /* MPSecrets.m */; };
 		DA4DA1D91564471A00F6F596 /* libjrswizzle.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC6326C148680650075AEA5 /* libjrswizzle.a */; };
 		DA4DA1DA1564471F00F6F596 /* libuicolor-utilities.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC6325D1486805C0075AEA5 /* libuicolor-utilities.a */; };
 		DA5A09DF171A70E4005284AB /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = DA5A09DD171A70E4005284AB /* play.png */; };
@@ -496,6 +495,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5C616FA365D7A5C31689B2FF /* Pods-MasterPassword.test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MasterPassword.test.xcconfig"; path = "Target Support Files/Pods-MasterPassword/Pods-MasterPassword.test.xcconfig"; sourceTree = "<group>"; };
 		93D390519405B76CC6A57C4F /* MPCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPCell.h; sourceTree = "<group>"; };
 		93D39067C0AFDC581794E2B8 /* NSArray+Indexing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Indexing.m"; sourceTree = "<group>"; };
 		93D3908DF8EABBD952065DC0 /* UICollectionView+PearlReloadItems.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UICollectionView+PearlReloadItems.m"; sourceTree = "<group>"; };
@@ -589,6 +589,7 @@
 		93D39F9106F2CCFB94283188 /* NSError+PearlFullDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+PearlFullDescription.m"; sourceTree = "<group>"; };
 		93D39FBF8FCEB4C106272334 /* NSOrderedSetOrArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSOrderedSetOrArray.h; sourceTree = "<group>"; };
 		93D39FD9623E8D5571C0AEB3 /* MPAlgorithmV3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAlgorithmV3.m; sourceTree = "<group>"; };
+		D74842A13757EDC1F047D9B4 /* Pods_MasterPassword.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MasterPassword.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA04E33D14B1E70400ECA4F3 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		DA071BF1190187FE00179766 /* empty@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "empty@2x.png"; sourceTree = "<group>"; };
 		DA071BF2190187FE00179766 /* empty.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = empty.png; sourceTree = "<group>"; };
@@ -640,8 +641,6 @@
 		DA0CC5261EAB99BA009A8ED9 /* IASKTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IASKTextView.m; sourceTree = "<group>"; };
 		DA0CC5271EAB99BA009A8ED9 /* IASKTextViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IASKTextViewCell.h; sourceTree = "<group>"; };
 		DA0CC5281EAB99BA009A8ED9 /* IASKTextViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IASKTextViewCell.m; sourceTree = "<group>"; };
-		DA0CC53A1EB57B5C009A8ED9 /* Fabric.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Fabric.plist; sourceTree = "<group>"; };
-		DA0CC53F1EB57B91009A8ED9 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		DA0CC5451EB6AD0E009A8ED9 /* MasterPassword 1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 1.xcdatamodel"; sourceTree = "<group>"; };
 		DA0CC5461EB6AD0E009A8ED9 /* MasterPassword 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 2.xcdatamodel"; sourceTree = "<group>"; };
 		DA0CC5471EB6AD0E009A8ED9 /* MasterPassword 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 3.xcdatamodel"; sourceTree = "<group>"; };
@@ -704,7 +703,6 @@
 		DA29992D19C86F5700AF7DF1 /* thumb_generated_login@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "thumb_generated_login@2x.png"; sourceTree = "<group>"; };
 		DA29992E19C86F5700AF7DF1 /* thumb_generated_login.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = thumb_generated_login.png; sourceTree = "<group>"; };
 		DA29993119C9132F00AF7DF1 /* thumb_generated_login@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "thumb_generated_login@3x.png"; sourceTree = "<group>"; };
-		DA2C3D601BD95EEE001137B3 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Fabric.framework; path = ../../../External/iOS/Fabric.framework; sourceTree = "<group>"; };
 		DA2C3D621BD96126001137B3 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		DA2C3D641BD9612F001137B3 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		DA2CA4D918D28859007798F8 /* NSArray+Pearl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Pearl.m"; sourceTree = "<group>"; };
@@ -735,7 +733,6 @@
 		DA32D07919D7D784004F3F0E /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = background.png; path = ios/launch/background.png; sourceTree = "<group>"; };
 		DA3509FC15F101A500C14A8E /* PearlQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlQueue.h; sourceTree = "<group>"; };
 		DA3509FD15F101A500C14A8E /* PearlQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlQueue.m; sourceTree = "<group>"; };
-		DA3B844D190FC5DF00246EEA /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = ../../../External/iOS/Crashlytics.framework; sourceTree = "<group>"; };
 		DA351486233EF8FE00BCF504 /* mpw-algorithm_v2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-algorithm_v2.h"; sourceTree = "<group>"; };
 		DA351487233EF8FE00BCF504 /* mpw-algorithm_v1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-algorithm_v1.h"; sourceTree = "<group>"; };
 		DA351488233EF8FE00BCF504 /* mpw-algorithm_v3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-algorithm_v3.h"; sourceTree = "<group>"; };
@@ -743,6 +740,8 @@
 		DA3BCFCA19BD09D5006B2681 /* SourceCodePro-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceCodePro-Regular.otf"; sourceTree = "<group>"; };
 		DA45711B1F572F1E00D54152 /* PearlCryptUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlCryptUtils.m; sourceTree = "<group>"; };
 		DA45711C1F572F1E00D54152 /* PearlCryptUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlCryptUtils.h; sourceTree = "<group>"; };
+		DA46021B23D5E30B00398FF4 /* MPSecrets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSecrets.h; sourceTree = "<group>"; };
+		DA46021C23D5E30B00398FF4 /* MPSecrets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSecrets.m; sourceTree = "<group>"; };
 		DA5A09DD171A70E4005284AB /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
 		DA5A09DE171A70E4005284AB /* play@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "play@2x.png"; sourceTree = "<group>"; };
 		DA5A09E8171BB0F7005284AB /* unlocked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unlocked.png; sourceTree = "<group>"; };
@@ -773,7 +772,6 @@
 		DA95B50D1C4776F00067F5EF /* NSMutableSet+Pearl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableSet+Pearl.h"; sourceTree = "<group>"; };
 		DA95B50E1C4776F00067F5EF /* NSMutableSet+Pearl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableSet+Pearl.m"; sourceTree = "<group>"; };
 		DA95D5F014DF0B1E008D1B94 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
-		DAA141191922FED80032B392 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		DAA1411C1922FF020032B392 /* PearlTween.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlTween.m; sourceTree = "<group>"; };
 		DAA1411D1922FF020032B392 /* PearlTween.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlTween.h; sourceTree = "<group>"; };
 		DAA1411F1922FF020032B392 /* map-macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "map-macro.h"; sourceTree = "<group>"; };
@@ -1685,6 +1683,8 @@
 		DAFE4A63150399FF003ABA8F /* UIScrollView+PearlFlashingIndicators.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+PearlFlashingIndicators.h"; sourceTree = "<group>"; };
 		DAFE4A63150399FF003ABA91 /* NSDateFormatter+RFC3339.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDateFormatter+RFC3339.m"; sourceTree = "<group>"; };
 		DAFE4A63150399FF003ABA93 /* NSDateFormatter+RFC3339.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDateFormatter+RFC3339.h"; sourceTree = "<group>"; };
+		DC2D4B0016EB0A535147BA13 /* Pods-MasterPassword.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MasterPassword.release.xcconfig"; path = "Target Support Files/Pods-MasterPassword/Pods-MasterPassword.release.xcconfig"; sourceTree = "<group>"; };
+		FE662C1B92299C911450537C /* Pods-MasterPassword.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MasterPassword.debug.xcconfig"; path = "Target Support Files/Pods-MasterPassword/Pods-MasterPassword.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1705,7 +1705,6 @@
 				DA2C3D651BD9612F001137B3 /* libz.tbd in Frameworks */,
 				DA2C3D631BD96126001137B3 /* libc++.tbd in Frameworks */,
 				DAA1761B19D86D0D0044227B /* libAttributedMarkdown.a in Frameworks */,
-				DA0CC5421EB57BD4009A8ED9 /* Crashlytics.framework in Frameworks */,
 				DA32D03E19D11293004F3F0E /* libKCOrderedAccessorFix.a in Frameworks */,
 				DA04E33E14B1E70400ECA4F3 /* MobileCoreServices.framework in Frameworks */,
 				DAE2725A19C93B8E007C5262 /* StoreKit.framework in Frameworks */,
@@ -1722,7 +1721,7 @@
 				DA5BFA4B147E415C00F98B1E /* Foundation.framework in Frameworks */,
 				DA5BFA4D147E415C00F98B1E /* CoreGraphics.framework in Frameworks */,
 				DA5BFA4F147E415C00F98B1E /* CoreData.framework in Frameworks */,
-				DA0CC5411EB57BD4009A8ED9 /* Fabric.framework in Frameworks */,
+				94CD3CD602014A9DC121FDA8 /* Pods_MasterPassword.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1770,6 +1769,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6B6983E746CC7BE4292982AE /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				FE662C1B92299C911450537C /* Pods-MasterPassword.debug.xcconfig */,
+				DC2D4B0016EB0A535147BA13 /* Pods-MasterPassword.release.xcconfig */,
+				5C616FA365D7A5C31689B2FF /* Pods-MasterPassword.test.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		93D39A2239FFFE6BEC83E191 /* core */ = {
 			isa = PBXGroup;
 			children = (
@@ -1860,14 +1869,6 @@
 				DA0CC5281EAB99BA009A8ED9 /* IASKTextViewCell.m */,
 			);
 			path = Views;
-			sourceTree = "<group>";
-		};
-		DA0CC5391EB57B5C009A8ED9 /* Fabric */ = {
-			isa = PBXGroup;
-			children = (
-				DA0CC53A1EB57B5C009A8ED9 /* Fabric.plist */,
-			);
-			path = Fabric;
 			sourceTree = "<group>";
 		};
 		DA24EBB019DAD4D000FF010B /* ios */ = {
@@ -1966,6 +1967,7 @@
 				DA5BFA45147E415C00F98B1E /* Products */,
 				DACA23B41705DF7D002C6C22 /* Resources */,
 				DABD3B9F1711E2DB00CF925C /* Source */,
+				6B6983E746CC7BE4292982AE /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1992,8 +1994,6 @@
 				DA5BFA4E147E415C00F98B1E /* CoreData.framework */,
 				DA5BFA4C147E415C00F98B1E /* CoreGraphics.framework */,
 				DAAC35DD156BD77D00C5FD93 /* CoreTelephony.framework */,
-				DA3B844D190FC5DF00246EEA /* Crashlytics.framework */,
-				DA2C3D601BD95EEE001137B3 /* Fabric.framework */,
 				DA5BFA4A147E415C00F98B1E /* Foundation.framework */,
 				DA2C3D621BD96126001137B3 /* libc++.tbd */,
 				DA2C3D641BD9612F001137B3 /* libz.tbd */,
@@ -2007,6 +2007,7 @@
 				DABB981515100B4000B05417 /* SystemConfiguration.framework */,
 				93D394077F8FAB8167647187 /* Twitter.framework */,
 				DA5BFA48147E415C00F98B1E /* UIKit.framework */,
+				D74842A13757EDC1F047D9B4 /* Pods_MasterPassword.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -2014,8 +2015,6 @@
 		DAA141181922FED80032B392 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
-				DA0CC53F1EB57B91009A8ED9 /* Fabric.framework */,
-				DAA141191922FED80032B392 /* Crashlytics.framework */,
 			);
 			path = iOS;
 			sourceTree = "<group>";
@@ -2954,7 +2953,6 @@
 		DABD3BD71711E2DC00CF925C /* iOS */ = {
 			isa = PBXGroup;
 			children = (
-				DAAA1D4023CD145000F3DF56 /* Storyboard.storyboard */,
 				DABD3BFA1711E2DC00CF925C /* InfoPlist.strings */,
 				DABD3BFC1711E2DC00CF925C /* main.m */,
 				DABD3BF31711E2DC00CF925C /* MasterPassword-Info.plist */,
@@ -2987,20 +2985,22 @@
 				93D39CC01630D0421205C4C4 /* MPNavigationController.m */,
 				93D39B455A71EC98C749E623 /* MPOverlayViewController.h */,
 				93D395105935859D71679931 /* MPOverlayViewController.m */,
-				93D39975CE5AEC99E3F086C7 /* MPSiteCell.h */,
-				93D39DEA995041A13DC9CAF7 /* MPSiteCell.m */,
-				93D39C44361BE57AF0B3071F /* MPSitesSegue.h */,
-				93D39E7A12CC352B2825AA66 /* MPSitesSegue.m */,
-				93D3914D7597F9A28DB9D85E /* MPSitesViewController.h */,
-				93D3924EE15017F8A12CB436 /* MPSitesViewController.m */,
 				93D392876BE5C011DE73B43F /* MPPopdownSegue.h */,
 				93D39B050DD5F55E9794EFD4 /* MPPopdownSegue.m */,
 				DABD3BEA1711E2DC00CF925C /* MPPreferencesViewController.h */,
 				DABD3BEB1711E2DC00CF925C /* MPPreferencesViewController.m */,
 				93D3924D6F77E6BF41AC32D3 /* MPRootSegue.h */,
 				93D399493FEDDE74DD1A0C15 /* MPRootSegue.m */,
+				DA46021B23D5E30B00398FF4 /* MPSecrets.h */,
+				DA46021C23D5E30B00398FF4 /* MPSecrets.m */,
 				93D39730673227EFF6DEFF19 /* MPSetupViewController.h */,
 				93D39A28369954D147E239BA /* MPSetupViewController.m */,
+				93D39975CE5AEC99E3F086C7 /* MPSiteCell.h */,
+				93D39DEA995041A13DC9CAF7 /* MPSiteCell.m */,
+				93D39C44361BE57AF0B3071F /* MPSitesSegue.h */,
+				93D39E7A12CC352B2825AA66 /* MPSitesSegue.m */,
+				93D3914D7597F9A28DB9D85E /* MPSitesViewController.h */,
+				93D3924EE15017F8A12CB436 /* MPSitesViewController.m */,
 				93D39149A5F1F9B174D6D061 /* MPStoreViewController.h */,
 				93D3957D76F71A652716EECC /* MPStoreViewController.m */,
 				DABD3BEC1711E2DC00CF925C /* MPTypeViewController.h */,
@@ -3010,6 +3010,7 @@
 				93D39F556F2F142740A65E59 /* MPWebViewController.h */,
 				93D3990E0CD1B5CF9FBB2C07 /* MPWebViewController.m */,
 				DABD3BF91711E2DC00CF925C /* Settings.bundle */,
+				DAAA1D4023CD145000F3DF56 /* Storyboard.storyboard */,
 			);
 			path = iOS;
 			sourceTree = "<group>";
@@ -3044,7 +3045,6 @@
 		DACA23B41705DF7D002C6C22 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				DA0CC5391EB57B5C009A8ED9 /* Fabric */,
 				DACA29701705E1A8002C6C22 /* Data */,
 				DAE1EF2417E942DE00BC0086 /* Localizable.strings */,
 				DABD360D1711E29400CF925C /* Media */,
@@ -3442,12 +3442,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword" */;
 			buildPhases = (
+				B8D66904C16DDB94975E6ABD /* [CP] Check Pods Manifest.lock */,
 				DA8D88E019DA412A00B189D0 /* Run Script: genassets */,
 				DA5BFA40147E415C00F98B1E /* Sources */,
 				DA5BFA41147E415C00F98B1E /* Frameworks */,
 				DA5BFA42147E415C00F98B1E /* Resources */,
 				DA6556E314D55F3000841C99 /* Run Script: GIT version -> Info.plist */,
-				DAD3125D155288AA00A3F9ED /* Run Script: Fabric */,
+				4A87858EE3659604089E2F9F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -3722,7 +3723,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DAFE4A5A1503982E003ABA7C /* Pearl.strings in Resources */,
-				DA0CC53B1EB57B5C009A8ED9 /* Fabric.plist in Resources */,
 				DA32D04F19D2F59B004F3F0E /* meter_fuel@2x.png in Resources */,
 				DACA29741705E1A8002C6C22 /* dictionary.lst in Resources */,
 				DA45224C190628B2008F650A /* icon_gear@2x.png in Resources */,
@@ -3906,6 +3906,48 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		4A87858EE3659604089E2F9F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MasterPassword/Pods-MasterPassword-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Countly/Countly.framework",
+				"${BUILT_PRODUCTS_DIR}/Sentry/Sentry.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Countly.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Sentry.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MasterPassword/Pods-MasterPassword-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B8D66904C16DDB94975E6ABD /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MasterPassword-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		DA6556E314D55F3000841C99 /* Run Script: GIT version -> Info.plist */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -3918,7 +3960,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = "/bin/sh -e";
-			shellScript = "exec Scripts/updatePlist\n";
+			shellScript = "exec Scripts/updatePlist";
 			showEnvVarsInLog = 0;
 		};
 		DA8D88E019DA412A00B189D0 /* Run Script: genassets */ = {
@@ -3948,21 +3990,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "";
-		};
-		DAD3125D155288AA00A3F9ED /* Run Script: Fabric */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Run Script: Fabric";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = "/bin/bash -e";
-			shellScript = "[[ $DEPLOYMENT_LOCATION != YES ]] && exit\n\napiKey=$(/usr/libexec/PlistBuddy -c \"Print :'API Key'\" Resources/Fabric/Fabric.plist)\n[[ $apiKey ]] && External/iOS/Fabric.framework/run \"$apiKey\"";
-			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -4028,6 +4055,7 @@
 				93D3939661CE37180AF7CD6A /* MPStoreViewController.m in Sources */,
 				93D390C1B93F9D3AE37DD0A5 /* MPAnswersViewController.m in Sources */,
 				93D399D7E08A142776A74CB8 /* MPOverlayViewController.m in Sources */,
+				DA46021D23D5E30B00398FF4 /* MPSecrets.m in Sources */,
 				93D39A27F2506C6FEEF9C588 /* MPAlgorithmV2.m in Sources */,
 				93D39B429C67A62E29DC02DA /* MPRootSegue.m in Sources */,
 				93D392FD5E2052F7D7DB3774 /* NSString+MPMarkDown.m in Sources */,
@@ -4294,9 +4322,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
-					"NDEBUG=1",
 					"NS_BLOCK_ASSERTIONS=1",
-					"CRASHLYTICS=1",
 					PEARL,
 					PEARL_UIKIT,
 					PEARL_CRYPTO,
@@ -4347,6 +4373,7 @@
 		};
 		DA09744A1E95703B00F0BFE8 /* Test */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5C616FA365D7A5C31689B2FF /* Pods-MasterPassword.test.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -4508,7 +4535,6 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
-					"CRASHLYTICS=1",
 					PEARL,
 					PEARL_UIKIT,
 					PEARL_CRYPTO,
@@ -4612,9 +4638,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
-					"NDEBUG=1",
+					"PUBLIC=1",
 					"NS_BLOCK_ASSERTIONS=1",
-					"CRASHLYTICS=1",
 					PEARL,
 					PEARL_UIKIT,
 					PEARL_CRYPTO,
@@ -4665,6 +4690,7 @@
 		};
 		DA5BFA6E147E415C00F98B1E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FE662C1B92299C911450537C /* Pods-MasterPassword.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -4707,6 +4733,7 @@
 		};
 		DA5BFA6F147E415C00F98B1E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DC2D4B0016EB0A535147BA13 /* Pods-MasterPassword.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;

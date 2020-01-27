@@ -16,7 +16,8 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
-#import <Crashlytics/Answers.h>
+#import <Countly/Countly.h>
+
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
 
@@ -122,6 +123,10 @@
     if (self.key)
         self.key = nil;
 
+    if ([[MPConfig get].sendInfo boolValue]) {
+        [Countly.sharedInstance userLoggedOut];
+    }
+
     self.activeUser = nil;
     [[NSNotificationCenter defaultCenter] postNotificationName:MPSignedOutNotification object:self userInfo:@{ @"animated": @(animated) }];
 }
@@ -180,11 +185,11 @@
             dbg( @"Automatic login failed for user: %@", user.userID );
 
         if ([[MPConfig get].sendInfo boolValue]) {
-#ifdef CRASHLYTICS
-            [Answers logLoginWithMethod:password? @"Password": @"Automatic" success:@NO customAttributes:@{
-                    @"algorithm": @(user.algorithm.version),
+            [Countly.sharedInstance recordEvent:@"login" segmentation:@{
+                    @"method"   : password? @"Password": @"Automatic",
+                    @"state"  : @"failed",
+                    @"algorithm": @(user.algorithm.version).description,
             }];
-#endif
         }
 
         return NO;
@@ -207,13 +212,13 @@
 
     @try {
         if ([[MPConfig get].sendInfo boolValue]) {
-#ifdef CRASHLYTICS
-            [[Crashlytics sharedInstance] setUserName:user.userID];
+            [Countly.sharedInstance userLoggedIn:user.userID];
 
-            [Answers logLoginWithMethod:password? @"Password": @"Automatic" success:@YES customAttributes:@{
-                    @"algorithm": @(user.algorithm.version),
+            [Countly.sharedInstance recordEvent:@"login" segmentation:@{
+                    @"method"   : password? @"Password": @"Automatic",
+                    @"state"  : @"success",
+                    @"algorithm": @(user.algorithm.version).description,
             }];
-#endif
         }
     }
     @catch (id exception) {
