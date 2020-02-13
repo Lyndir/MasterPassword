@@ -104,8 +104,8 @@
         CountlyConfig *countlyConfig = [CountlyConfig new];
         countlyConfig.host = @"https://countly.lyndir.app";
         countlyConfig.appKey = decrypt( countlyKey );
-        countlyConfig.features = @[ CLYPushNotifications ];
-        countlyConfig.requiresConsent = true;
+        countlyConfig.features = @[ CLYPushNotifications, CLYAutoViewTracking ];
+        countlyConfig.requiresConsent = YES;
 #if PUBLIC
         countlyConfig.pushTestMode = nil;
 #elif DEBUG
@@ -113,9 +113,10 @@
 #else
         countlyConfig.pushTestMode = CLYPushTestModeTestFlightOrAdHoc;
 #endif
-        countlyConfig.alwaysUsePOST = true;
+        countlyConfig.alwaysUsePOST = YES;
         countlyConfig.deviceID = [PearlKeyChain deviceIdentifier];
         countlyConfig.secretSalt = decrypt( countlySalt );
+        countlyConfig.enableDebug = YES;
         [Countly.sharedInstance startWithConfig:countlyConfig];
 
         [self.hangDetector = [[PearlHangDetector alloc] initWithHangAction:^(NSTimeInterval hangTime) {
