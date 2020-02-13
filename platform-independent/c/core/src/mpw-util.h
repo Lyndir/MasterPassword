@@ -24,6 +24,7 @@
 MP_LIBS_BEGIN
 #include <stdio.h>
 #include <stdarg.h>
+#include <time.h>
 MP_LIBS_END
 
 //// Logging.
