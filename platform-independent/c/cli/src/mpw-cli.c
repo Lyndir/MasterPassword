@@ -185,7 +185,6 @@ void cli_mpw(Arguments *args, Operation *operation);
 void cli_save(Arguments *args, Operation *operation);
 
 MPMasterKeyProvider cli_masterKeyProvider_op(Operation *operation);
-void cli_masterKeyProvider_free(void);
 
 /** ========================================================================
  *  MAIN                                                                     */
@@ -276,7 +275,7 @@ void cli_free(Arguments *args, Operation *operation) {
         mpw_marshal_user_free( &operation->user );
         operation->site = NULL;
         operation->question = NULL;
-        cli_masterKeyProvider_free();
+        mpw_masterKeyProvider_free();
     }
 }
 
@@ -521,7 +520,7 @@ void cli_user(Arguments *args, Operation *operation) {
                     }
 
                     mpw_marshal_user_free( &operation->user );
-                    operation->user = mpw_marshal_auth( operation->file, cli_masterKeyProvider_str( importMasterPassword ) );
+                    operation->user = mpw_marshal_auth( operation->file, mpw_masterKeyProvider_str( importMasterPassword ) );
                     if (operation->file && operation->user)
                         operation->user->masterKeyProvider = cli_masterKeyProvider_op( operation );
                     mpw_free_string( &importMasterPassword );
