@@ -103,6 +103,8 @@ void mpw_log_ssink(LogLevel level, const char *file, int line, const char *funct
         if (sink)
             sink( &record );
     }
+    if (!sinks_count)
+        mpw_log_sink_file( &record );
 
     if (record.level <= LogLevelFatal)
         abort();

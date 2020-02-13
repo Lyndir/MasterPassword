@@ -53,12 +53,14 @@ typedef struct {
     const char *message;
 } MPLogEvent;
 
-/** A log sink describes a function that can receive log events when registered. */
+/** A log sink describes a function that can receive log events. */
 typedef void (MPLogSink)(const MPLogEvent *event);
+
+/** To receive events, sinks need to be registered.  If no sinks are registered, log events are sent to the mpw_log_sink_file sink. */
 bool mpw_log_sink_register(MPLogSink *sink);
 bool mpw_log_sink_unregister(MPLogSink *sink);
 
-/** mpw_log_sink_file is a sink that writes log messages to the mpw_log_cli_file, which defaults to stderr. */
+/** mpw_log_sink_file is a sink that writes log messages to the mpw_log_sink_file, which defaults to stderr. */
 extern MPLogSink mpw_log_sink_file;
 extern FILE *mpw_log_sink_file_target;
 
