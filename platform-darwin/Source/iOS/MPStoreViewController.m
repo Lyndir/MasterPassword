@@ -275,7 +275,7 @@ PearlEnum( MPDevelopmentFuelConsumption,
     NSDate *now = [NSDate date], *checked = [MPiOSConfig get].developmentFuelChecked;
     if (!checked || 3600 < (fuelSecondsElapsed = [now timeIntervalSinceDate:checked])) {
         NSTimeInterval weeksElapsed = fuelSecondsElapsed / (3600 * 24 * 7 /* 1 week */); /* x weeks elapsed */
-        NSTimeInterval fuelConsumed = MIN( fuelRemaining, weeklyFuelConsumption * weeksElapsed );
+        CGFloat fuelConsumed = MIN( fuelRemaining, weeklyFuelConsumption * (CGFloat)weeksElapsed );
         fuelRemaining -= fuelConsumed;
         fuelInvested += fuelConsumed;
         [MPiOSConfig get].developmentFuelChecked = now;

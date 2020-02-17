@@ -59,7 +59,7 @@ NSString *digest(NSString *value) {
     if (!value)
         return nil;
 
-    size_t appSaltLength, valueLength;
+    NSUInteger appSaltLength, valueLength;
     const void *appSaltString = [decrypt( appSalt ) cStringUsingEncoding:NSUTF8StringEncoding length:&appSaltLength];
     const void *valueString = [value cStringUsingEncoding:NSUTF8StringEncoding length:&valueLength];
     const uint8_t *digest = mpw_hash_hmac_sha256( appSaltString, appSaltLength, valueString, valueLength );

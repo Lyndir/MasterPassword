@@ -42,7 +42,7 @@
         [PearlLogger get].printLevel = [[MPiOSConfig get].traceMode boolValue]? PearlLogLevelDebug: PearlLogLevelInfo;
         [PearlLogger get].historyLevel = [[MPiOSConfig get].traceMode boolValue]? PearlLogLevelTrace: PearlLogLevelInfo;
 #ifdef DEBUG
-        //[PearlLogger get].printLevel = PearlLogLevelTrace;
+        [PearlLogger get].printLevel = PearlLogLevelDebug;
 #endif
     } );
 }
@@ -119,11 +119,13 @@
         countlyConfig.enableDebug = YES;
         [Countly.sharedInstance startWithConfig:countlyConfig];
 
+#if ! DEBUG
         [self.hangDetector = [[PearlHangDetector alloc] initWithHangAction:^(NSTimeInterval hangTime) {
             MPError( [NSError errorWithDomain:MPErrorDomain code:MPErrorHangCode userInfo:@{
                     @"time": @(hangTime)
             }], @"Timeout waiting for main thread after %fs.", hangTime );
         }] start];
+#endif
     }
     @catch (id exception) {
         err( @"During Analytics Setup: %@", exception );
