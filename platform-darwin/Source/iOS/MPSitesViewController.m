@@ -16,6 +16,8 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
+#import <StoreKit/StoreKit.h>
+
 #import "MPSitesViewController.h"
 #import "MPiOSAppDelegate.h"
 #import "MPAppDelegate_Store.h"
@@ -31,8 +33,9 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     MPPasswordsBadNameTip = 1 << 0,
 };
 
-@interface MPSitesViewController()<NSFetchedResultsControllerDelegate>
+@interface MPSitesViewController()<NSFetchedResultsControllerDelegate, SKStoreProductViewControllerDelegate>
 
+@property(nonatomic, strong) SKStoreProductViewController *voltoViewController;
 @property(nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 @property(nonatomic, strong) NSArray *fuzzyGroups;
 @property(nonatomic, strong) NSCharacterSet *siteNameAcceptableCharactersSet;
@@ -76,6 +79,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 
     [self registerObservers];
     [self updateConfigKey:nil];
+    [self updateVoltoAlerts];
 
     static NSRegularExpression *bareHostRE = nil;
     static dispatch_once_t once = 0;
@@ -327,6 +331,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     PearlAddNotificationObserver( UIApplicationWillEnterForegroundNotification, nil, [NSOperationQueue mainQueue],
             ^(MPSitesViewController *self, NSNotification *note) {
                 [self viewWillAppear:YES];
+                [self updateVoltoAlerts];
             } );
     PearlAddNotificationObserver( MPSignedOutNotification, nil, nil,
             ^(MPSitesViewController *self, NSNotification *note) {
@@ -455,6 +460,13 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     }                completion:completion];
 }
 
+#pragma mark - SKStoreProductViewControllerDelegate
+
+- (void)productViewControllerDidFinish:(SKStoreProductViewController *)viewController {
+
+    [viewController dismissViewControllerAnimated:YES completion:nil];
+}
+
 #pragma mark - Actions
 
 - (IBAction)dismissPopdown:(id)sender {
@@ -463,6 +475,44 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
         [[[MPPopdownSegue alloc] initWithIdentifier:@"unwind-popdown" source:self.popdownVC destination:self] perform];
     else
         self.popdownToTopConstraint.priority = UILayoutPriorityDefaultHigh;
+}
+
+- (IBAction)upgradeVolto:(UIButton *)sender {
+
+    if ([UIApp canOpenURL:[[NSURL alloc] initWithString:@"volto://"]])
+        [UIApp openURL:[[NSURL alloc] initWithString:@"volto://"]];
+    else if (self.voltoViewController)
+        [self presentViewController:self.voltoViewController animated:YES completion:nil];
+}
+
+#pragma mark - Private
+
+- (void)updateVoltoAlerts {
+
+    BOOL voltoInstalled = [UIApp canOpenURL:[[NSURL alloc] initWithString:@"volto://"]];
+    if (voltoInstalled) {
+        self.voltoInstallAlert.visible = NO;
+        self.voltoMigrateAlert.visible = YES;
+    }
+    else {
+        self.voltoInstallAlert.visible = NO;
+        self.voltoMigrateAlert.visible = NO;
+        self.voltoViewController = [SKStoreProductViewController new];
+        self.voltoViewController.delegate = self;
+        [self.voltoViewController loadProductWithParameters:@{
+                SKStoreProductParameterCampaignToken       : @"app-masterpassword.ios", /* Campaign:    From MasterPassword iOS */
+                SKStoreProductParameterProviderToken       : @153897, /*                   Provider:    Maarten Billemont */
+                SKStoreProductParameterITunesItemIdentifier: @510296984, /*                Application: MasterPassword iOS */
+                //SKStoreProductParameterITunesItemIdentifier: @1500430196, /*             Application: Volto iOS */
+        }                                   completionBlock:^(BOOL result, NSError *error) {
+            if (error)
+                err( @"Failed loading Volto product information: %@", error );
+
+            [UIView animateWithDuration:0.3f animations:^{
+                self.voltoInstallAlert.visible = result;
+            }];
+        }];
+    }
 }
 
 @end

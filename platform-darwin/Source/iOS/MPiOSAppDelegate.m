@@ -102,7 +102,7 @@
 
         // Countly
         CountlyConfig *countlyConfig = [CountlyConfig new];
-        countlyConfig.host = @"https://countly.lyndir.app";
+        countlyConfig.host = @"https://countly.lyndir.com";
         countlyConfig.appKey = decrypt( countlyKey );
         countlyConfig.features = @[ CLYPushNotifications, CLYAutoViewTracking ];
         countlyConfig.requiresConsent = YES;

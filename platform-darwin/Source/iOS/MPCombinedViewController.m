@@ -145,6 +145,4 @@
     }
 }
 
-#pragma mark - Private
-
 @end
