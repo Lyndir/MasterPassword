@@ -33,6 +33,35 @@
 
 @end
 
+MPLogSink mpw_log_sink_pearl;
+void mpw_log_sink_pearl(const MPLogEvent *record) {
+
+    PearlLogLevel level = PearlLogLevelInfo;
+    switch (record->level) {
+        case LogLevelTrace:
+            level = PearlLogLevelDebug;
+            break;
+        case LogLevelDebug:
+            level = PearlLogLevelDebug;
+            break;
+        case LogLevelInfo:
+            level = PearlLogLevelInfo;
+            break;
+        case LogLevelWarning:
+            level = PearlLogLevelWarn;
+            break;
+        case LogLevelError:
+            level = PearlLogLevelError;
+            break;
+        case LogLevelFatal:
+            level = PearlLogLevelFatal;
+            break;
+    }
+
+    [[PearlLogger get] inFile:[@(record->file) lastPathComponent] atLine:record->line fromFunction:@(record->function)
+                    withLevel:level text:@(record->message)];
+}
+
 @implementation MPiOSAppDelegate
 
 + (void)initialize {
@@ -44,6 +73,9 @@
 #ifdef DEBUG
         [PearlLogger get].printLevel = PearlLogLevelDebug;
 #endif
+
+        mpw_verbosity = LogLevelTrace;
+        mpw_log_sink_register( &mpw_log_sink_pearl );
     } );
 }
 
@@ -503,27 +535,31 @@
 
     [self exportSitesRevealPasswords:revealPasswords askExportPassword:^NSString *(NSString *userName) {
         return PearlAwait( ^(void (^setResult)(id)) {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:strf( @"Master Password For:\n%@", userName ) message:
-                            @"Enter the user's master password to create an export file."
-                                                                    preferredStyle:UIAlertControllerStyleAlert];
-            [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
-                textField.secureTextEntry = YES;
-            }];
-            [alert addAction:[UIAlertAction actionWithTitle:@"Export" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                setResult( alert.textFields.firstObject.text );
-            }]];
-            [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-                setResult( nil );
-            }]];
-            [self.navigationController presentViewController:alert animated:YES completion:nil];
+            PearlMainQueue( ^{
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:strf( @"Master Password For:\n%@", userName )
+                                                                               message:@"Enter your master password to export the user."
+                                                                        preferredStyle:UIAlertControllerStyleAlert];
+                [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+                    textField.secureTextEntry = YES;
+                }];
+                [alert addAction:[UIAlertAction actionWithTitle:@"Export" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                    setResult( alert.textFields.firstObject.text );
+                }]];
+                [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+                    setResult( nil );
+                }]];
+                [self.navigationController presentViewController:alert animated:YES completion:nil];
+            } );
         } );
-    }                         result:^(NSString *mpsites, NSError *error) {
-        if (!mpsites || error) {
+    }                         result:^(NSString *exportedUser, NSError *error) {
+        if (!exportedUser || error) {
             MPError( error, @"Failed to export mpsites." );
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Export Error" message:[error localizedDescription]
-                                                                    preferredStyle:UIAlertControllerStyleAlert];
-            [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleCancel handler:nil]];
-            [self.navigationController presentViewController:alert animated:YES completion:nil];
+            PearlMainQueue( ^{
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Export Error" message:[error localizedDescription]
+                                                                        preferredStyle:UIAlertControllerStyleAlert];
+                [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleCancel handler:nil]];
+                [self.navigationController presentViewController:alert animated:YES completion:nil];
+            } );
             return;
         }
 
@@ -555,11 +591,9 @@
                         [PearlInfoPlist get].CFBundleVersion );
 
             [PearlEMail sendEMailTo:nil fromVC:viewController subject:@"Master Password Export" body:message
-                        attachments:[[PearlEMailAttachment alloc]
-                                            initWithContent:[mpsites dataUsingEncoding:NSUTF8StringEncoding]
-                                                   mimeType:@"text/plain"
-                                                   fileName:exportFileName],
-                                    nil];
+                        attachments:[[PearlEMailAttachment alloc] initWithContent:[exportedUser dataUsingEncoding:NSUTF8StringEncoding]
+                                                                         mimeType:@"text/plain"
+                                                                         fileName:exportFileName], nil];
             return;
         }]];
         [alert addAction:[UIAlertAction actionWithTitle:@"Share / Export" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
@@ -569,7 +603,7 @@
                     URLByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier isDirectory:YES]
                     URLByAppendingPathComponent:exportFileName isDirectory:NO];
             NSError *writeError = nil;
-            if (![[mpsites dataUsingEncoding:NSUTF8StringEncoding]
+            if (![[exportedUser dataUsingEncoding:NSUTF8StringEncoding]
                     writeToURL:exportURL options:NSDataWritingFileProtectionComplete error:&writeError])
                 MPError( writeError, @"Failed to write export data to URL %@.", exportURL );
             else {

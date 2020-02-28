@@ -41,6 +41,6 @@
                        result:(void ( ^ )(NSError *error))resultBlock;
 - (void)exportSitesRevealPasswords:(BOOL)revealPasswords
                  askExportPassword:(NSString *( ^ )(NSString *userName))askImportPassword
-                            result:(void ( ^ )(NSString *mpsites, NSError *error))resultBlock;
+                            result:(void ( ^ )(NSString *exportedUser, NSError *error))resultBlock;
 
 @end

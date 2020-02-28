@@ -479,8 +479,43 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 
 - (IBAction)upgradeVolto:(UIButton *)sender {
 
-    if ([UIApp canOpenURL:[[NSURL alloc] initWithString:@"volto://"]])
-        [UIApp openURL:[[NSURL alloc] initWithString:@"volto://"]];
+    if ([UIApp canOpenURL:[[NSURL alloc] initWithString:@"volto:"]]) {
+        [[MPiOSAppDelegate get] exportSitesRevealPasswords:NO askExportPassword:^NSString *(NSString *userName) {
+            return PearlAwait( ^(void (^setResult)(id)) {
+                PearlMainQueue( ^{
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:strf( @"Master Password For:\n%@", userName )
+                                                                                   message:@"Enter your master password to export the user."
+                                                                            preferredStyle:UIAlertControllerStyleAlert];
+                    [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+                        textField.secureTextEntry = YES;
+                    }];
+                    [alert addAction:[UIAlertAction actionWithTitle:@"Export" style:UIAlertActionStyleDefault handler:
+                            ^(UIAlertAction *action) { setResult( alert.textFields.firstObject.text ); }]];
+                    [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:
+                            ^(UIAlertAction *action) { setResult( nil ); }]];
+                    [self.navigationController presentViewController:alert animated:YES completion:nil];
+                } );
+            } );
+        }                                           result:^(NSString *exportedUser, NSError *error) {
+            if (!exportedUser || error) {
+                MPError( error, @"Failed to export user." );
+                PearlMainQueue( ^{
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Export Error"
+                                                                                   message:[error localizedDescription]
+                                                                            preferredStyle:UIAlertControllerStyleAlert];
+                    [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleCancel handler:nil]];
+                    [self.navigationController presentViewController:alert animated:YES completion:nil];
+                } );
+                return;
+            }
+
+            NSURLComponents *components = [NSURLComponents new];
+            components.scheme = @"volto";
+            components.path = @"import";
+            components.queryItems = @[ [[NSURLQueryItem alloc] initWithName:@"data" value:exportedUser] ];
+            [UIApp openURL:components.URL];
+        }];
+    }
     else if (self.voltoViewController)
         [self presentViewController:self.voltoViewController animated:YES completion:nil];
 }
@@ -489,7 +524,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 
 - (void)updateVoltoAlerts {
 
-    BOOL voltoInstalled = [UIApp canOpenURL:[[NSURL alloc] initWithString:@"volto://"]];
+    BOOL voltoInstalled = [UIApp canOpenURL:[[NSURL alloc] initWithString:@"volto:"]];
     if (voltoInstalled) {
         self.voltoInstallAlert.visible = NO;
         self.voltoMigrateAlert.visible = YES;

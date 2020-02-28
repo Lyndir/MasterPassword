@@ -73,7 +73,7 @@ static NSOperationQueue *_mpwQueue = nil;
     return [(id<MPAlgorithm>)other version] == [self version];
 }
 
-- (void)mpw_perform:(void ( ^ )(void))operationBlock {
+- (void)mpw_await:(void ( ^ )(void))operationBlock {
 
     if ([NSOperationQueue currentQueue] == _mpwQueue) {
         operationBlock();
@@ -126,7 +126,7 @@ static NSOperationQueue *_mpwQueue = nil;
 - (NSData *)keyDataForFullName:(NSString *)fullName withMasterPassword:(NSString *)masterPassword {
 
     __block NSData *keyData;
-    [self mpw_perform:^{
+    [self mpw_await:^{
         NSDate *start = [NSDate date];
         MPMasterKey masterKey = mpw_master_key( fullName.UTF8String, masterPassword.UTF8String, [self version] );
         if (masterKey) {
@@ -363,7 +363,7 @@ static NSOperationQueue *_mpwQueue = nil;
                            usingKey:(MPKey *)key {
 
     __block NSString *result = nil;
-    [self mpw_perform:^{
+    [self mpw_await:^{
         NSData *masterKey = [key keyForAlgorithm:self];
         char const *resultBytes = mpw_site_result( masterKey.bytes, name.UTF8String,
                 counter, purpose, context.UTF8String, type, parameter.UTF8String, [self version] );
@@ -392,7 +392,7 @@ static NSOperationQueue *_mpwQueue = nil;
 
     __block NSData *state = nil;
     if (plainText)
-        [self mpw_perform:^{
+        [self mpw_await:^{
             NSData *masterKey = [key keyForAlgorithm:self];
             char const *stateBytes = mpw_site_state( masterKey.bytes, site.name.UTF8String,
                     MPCounterValueInitial, MPKeyPurposeAuthentication, NULL, site.type, plainText.UTF8String, [self version] );
@@ -589,6 +589,19 @@ static NSOperationQueue *_mpwQueue = nil;
     }
 }
 
+- (void)importLogin:(NSString *)cipherText protectedByKey:(MPKey *)importKey
+           intoSite:(MPSiteEntity *)site usingKey:(MPKey *)key {
+
+    NSAssert( [[key keyIDForAlgorithm:site.user.algorithm] isEqualToData:site.user.keyID], @"Site does not belong to current user." );
+    if (cipherText && cipherText.length) {
+        NSString *plainText = [self mpwResultForSiteNamed:site.name ofType:MPResultTypeStatefulPersonal parameter:cipherText
+                                              withCounter:MPCounterValueInitial variant:MPKeyPurposeIdentification context:nil
+                                                 usingKey:importKey];
+        if (plainText)
+            site.loginName = plainText;
+    }
+}
+
 - (NSDictionary *)queryForSite:(MPSiteEntity *)site {
 
     return [PearlKeyChain createQueryForClass:kSecClassGenericPassword attributes:@{
@@ -605,6 +618,26 @@ static NSOperationQueue *_mpwQueue = nil;
     NSDictionary *siteQuery = [self queryForSite:site];
     NSData *state = [PearlKeyChain dataOfItemForQuery:siteQuery];
     return [state?: ((MPStoredSiteEntity *)site).contentObject encodeBase64];
+}
+
+- (NSString *)exportLoginForSite:(MPSiteEntity *)site usingKey:(MPKey *)key {
+
+    if (!(site.type & MPSiteFeatureExportContent) || site.loginGenerated || ![site.loginName length])
+        return nil;
+
+    __block NSData *state = nil;
+    [self mpw_await:^{
+        NSData *masterKey = [key keyForAlgorithm:self];
+        char const *stateBytes = mpw_site_state( masterKey.bytes, site.name.UTF8String,
+                MPCounterValueInitial, MPKeyPurposeIdentification, NULL, MPResultTypeStatefulPersonal,
+                site.loginName.UTF8String, [self version] );
+        if (stateBytes) {
+            state = [[NSString stringWithCString:stateBytes encoding:NSUTF8StringEncoding] decodeBase64];
+            mpw_free_string( &stateBytes );
+        }
+    }];
+
+    return [state encodeBase64];
 }
 
 - (BOOL)timeToCrack:(out TimeToCrack *)timeToCrack passwordOfType:(MPResultType)type byAttacker:(MPAttacker)attacker {

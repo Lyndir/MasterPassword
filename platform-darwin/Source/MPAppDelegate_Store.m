@@ -700,14 +700,16 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
           usingKey:(MPKey *)userKey {
 
     site.name = @(importSite->siteName);
-    if (importSite->resultState)
-        [site.algorithm importPassword:@(importSite->resultState) protectedByKey:importKey intoSite:site usingKey:userKey];
-    site.type = importSite->resultType;
+    site.algorithm = MPAlgorithmForVersion( importSite->algorithm );
     if ([site isKindOfClass:[MPGeneratedSiteEntity class]])
         ((MPGeneratedSiteEntity *)site).counter = importSite->counter;
-    site.algorithm = MPAlgorithmForVersion( importSite->algorithm );
-    site.loginName = importSite->loginState? @(importSite->loginState): nil;
-    site.loginGenerated = importSite->loginType & MPResultTypeClassTemplate;
+    site.type = importSite->resultType;
+    if (importSite->resultState)
+        [site.algorithm importPassword:@(importSite->resultState) protectedByKey:importKey intoSite:site usingKey:userKey];
+    site.loginGenerated = (importSite->loginType & MPResultTypeClassTemplate) == MPResultTypeClassTemplate;
+    site.loginName = nil;
+    if (importSite->loginState)
+        [site.algorithm importLogin:@(importSite->loginState) protectedByKey:importKey intoSite:site usingKey:userKey];
     site.url = importSite->url? @(importSite->url): nil;
     site.uses = importSite->uses;
     site.lastUsed = [NSDate dateWithTimeIntervalSince1970:importSite->lastUsed];
@@ -715,7 +717,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
 
 - (void)exportSitesRevealPasswords:(BOOL)revealPasswords
                  askExportPassword:(NSString *( ^ )(NSString *userName))askImportPassword
-                            result:(void ( ^ )(NSString *mpsites, NSError *error))resultBlock {
+                            result:(void ( ^ )(NSString *exportedUser, NSError *error))resultBlock {
 
     [MPAppDelegate_Shared managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
         MPUserEntity *user = [self activeUserInContext:context];
@@ -725,6 +727,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
                 mpw_masterKeyProvider_str( askImportPassword( user.name ).UTF8String ), user.algorithm.version );
         exportUser->redacted = !revealPasswords;
         exportUser->avatar = (unsigned int)user.avatar;
+        exportUser->keyID = mpw_strdup( [user.keyID encodeHex].UTF8String );
         exportUser->defaultType = user.defaultType;
         exportUser->lastUsed = (time_t)user.lastUsed.timeIntervalSince1970;
 
@@ -732,16 +735,12 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
             MPCounterValue counter = MPCounterValueInitial;
             if ([site isKindOfClass:[MPGeneratedSiteEntity class]])
                 counter = ((MPGeneratedSiteEntity *)site).counter;
-            NSString *content = revealPasswords
-                                ? [site.algorithm exportPasswordForSite:site usingKey:self.key]
-                                : [site.algorithm resolvePasswordForSite:site usingKey:self.key];
-
             MPMarshalledSite *exportSite = mpw_marshal_site( exportUser,
                     site.name.UTF8String, site.type, counter, site.algorithm.version );
-            exportSite->resultState = content.UTF8String;
-            exportSite->loginState = site.loginName.UTF8String;
+            exportSite->resultState = mpw_strdup( [site.algorithm exportPasswordForSite:site usingKey:self.key].UTF8String );
+            exportSite->loginState = mpw_strdup( [site.algorithm exportLoginForSite:site usingKey:self.key].UTF8String );
             exportSite->loginType = site.loginGenerated? MPResultTypeTemplateName: MPResultTypeStatefulPersonal;
-            exportSite->url = site.url.UTF8String;
+            exportSite->url = mpw_strdup( site.url.UTF8String );
             exportSite->uses = (unsigned int)site.uses;
             exportSite->lastUsed = (time_t)site.lastUsed.timeIntervalSince1970;
 
@@ -750,14 +749,14 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
         }
 
         MPMarshalledFile *exportFile = NULL;
-        const char *export = mpw_marshal_write( MPMarshalFormatFlat, &exportFile, exportUser );
-        NSString *mpsites = nil;
+        const char *export = mpw_marshal_write( MPMarshalFormatDefault, &exportFile, exportUser );
+        NSString *exportedUser = nil;
         if (export && exportFile && exportFile->error.type == MPMarshalSuccess)
-            mpsites = [NSString stringWithCString:export encoding:NSUTF8StringEncoding];
+            exportedUser = [NSString stringWithCString:export encoding:NSUTF8StringEncoding];
         mpw_free_string( &export );
 
-        resultBlock( mpsites, exportFile && exportFile->error.type == MPMarshalSuccess? nil:
-                              [NSError errorWithDomain:MPErrorDomain code:MPErrorMarshalCode userInfo:@{
+        resultBlock( exportedUser, exportFile && exportFile->error.type == MPMarshalSuccess? nil:
+                                   [NSError errorWithDomain:MPErrorDomain code:MPErrorMarshalCode userInfo:@{
                                       @"type"                  : @(exportFile? exportFile->error.type: MPMarshalErrorInternal),
                                       NSLocalizedDescriptionKey: @(exportFile? exportFile->error.message: nil),
                               }] );

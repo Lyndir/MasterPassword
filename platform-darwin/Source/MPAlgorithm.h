@@ -87,7 +87,10 @@ NSString *NSStringFromTimeToCrack(TimeToCrack timeToCrack);
 
 - (void)importPassword:(NSString *)protectedPassword protectedByKey:(MPKey *)importKey
               intoSite:(MPSiteEntity *)site usingKey:(MPKey *)key;
+- (void)importLogin:(NSString *)protectedLogin protectedByKey:(MPKey *)importKey
+              intoSite:(MPSiteEntity *)site usingKey:(MPKey *)key;
 - (NSString *)exportPasswordForSite:(MPSiteEntity *)site usingKey:(MPKey *)key;
+- (NSString *)exportLoginForSite:(MPSiteEntity *)site usingKey:(MPKey *)key;
 
 - (BOOL)timeToCrack:(out TimeToCrack *)timeToCrack passwordOfType:(MPResultType)type byAttacker:(MPAttacker)attacker;
 - (BOOL)timeToCrack:(out TimeToCrack *)timeToCrack passwordString:(NSString *)password byAttacker:(MPAttacker)attacker;
