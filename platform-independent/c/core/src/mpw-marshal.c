@@ -552,12 +552,12 @@ static const char *mpw_marshal_write_flat(
     mpw_string_pushf( &out, "##\n" );
     mpw_string_pushf( &out, "# Format: %d\n", 1 );
 
-    mpw_string_pushf( &out, "# Date: %s\n", mpw_marshal_data_get_str( data, "export", "date", NULL ) );
-    mpw_string_pushf( &out, "# User Name: %s\n", mpw_marshal_data_get_str( data, "user", "full_name", NULL ) );
-    mpw_string_pushf( &out, "# Full Name: %s\n", mpw_marshal_data_get_str( data, "user", "full_name", NULL ) );
+    mpw_string_pushf( &out, "# Date: %s\n", mpw_default( "", mpw_marshal_data_get_str( data, "export", "date", NULL ) ) );
+    mpw_string_pushf( &out, "# User Name: %s\n", mpw_default( "", mpw_marshal_data_get_str( data, "user", "full_name", NULL ) ) );
+    mpw_string_pushf( &out, "# Full Name: %s\n", mpw_default( "", mpw_marshal_data_get_str( data, "user", "full_name", NULL ) ) );
     mpw_string_pushf( &out, "# Avatar: %u\n", (unsigned int)mpw_marshal_data_get_num( data, "user", "avatar", NULL ) );
-    mpw_string_pushf( &out, "# Identicon: %s\n", mpw_marshal_data_get_str( data, "user", "identicon", NULL ) );
-    mpw_string_pushf( &out, "# Key ID: %s\n", mpw_marshal_data_get_str( data, "user", "key_id", NULL ) );
+    mpw_string_pushf( &out, "# Identicon: %s\n", mpw_default( "", mpw_marshal_data_get_str( data, "user", "identicon", NULL ) ) );
+    mpw_string_pushf( &out, "# Key ID: %s\n", mpw_default( "", mpw_marshal_data_get_str( data, "user", "key_id", NULL ) ) );
     mpw_string_pushf( &out, "# Algorithm: %d\n", (MPAlgorithmVersion)mpw_marshal_data_get_num( data, "user", "algorithm", NULL ) );
     mpw_string_pushf( &out, "# Default Type: %d\n", (MPResultType)mpw_marshal_data_get_num( data, "user", "default_type", NULL ) );
     mpw_string_pushf( &out, "# Passwords: %s\n", mpw_marshal_data_get_bool( data, "export", "redacted", NULL )? "PROTECTED": "VISIBLE" );
@@ -571,15 +571,15 @@ static const char *mpw_marshal_write_flat(
     for (size_t s = 0; s < (sites? sites->children_count: 0); ++s) {
         const MPMarshalledData *site = &sites->children[s];
         mpw_string_pushf( &out, "%s  %8ld  %8s  %25s\t%25s\t%s\n",
-                mpw_default( (char *)"", mpw_marshal_data_get_str( site, "last_used", NULL ) ),
+                mpw_default( "", mpw_marshal_data_get_str( site, "last_used", NULL ) ),
                 (long)mpw_marshal_data_get_num( site, "uses", NULL ),
                 mpw_str( "%lu:%lu:%lu",
                         (long)mpw_marshal_data_get_num( site, "type", NULL ),
                         (long)mpw_marshal_data_get_num( site, "algorithm", NULL ),
                         (long)mpw_marshal_data_get_num( site, "counter", NULL ) ),
-                mpw_default( (char *)"", mpw_marshal_data_get_str( site, "login_name", NULL ) ),
+                mpw_default( "", mpw_marshal_data_get_str( site, "login_name", NULL ) ),
                 site->obj_key,
-                mpw_default( (char *)"", mpw_marshal_data_get_str( site, "password", NULL ) ) );
+                mpw_default( "", mpw_marshal_data_get_str( site, "password", NULL ) ) );
     }
 
     if (!out)
@@ -878,13 +878,15 @@ static void mpw_marshal_read_flat(
             }
 
             // Header
+            const char *line = positionInLine;
             const char *headerName = mpw_get_token( &positionInLine, endOfLine, ":\n" );
             const char *headerValue = mpw_get_token( &positionInLine, endOfLine, "\n" );
             if (!headerName || !headerValue) {
                 file->error = (MPMarshalError){
                         MPMarshalErrorStructure,
-                        mpw_str( "Invalid header: %s", mpw_strndup( positionInLine, (size_t)(endOfLine - positionInLine) ) )
+                        mpw_str( "Invalid header: %s", mpw_strndup( line, (size_t)(endOfLine - line) ) )
                 };
+                mpw_free_strings( &headerName, &headerValue, NULL );
                 continue;
             }
 
@@ -956,7 +958,7 @@ static void mpw_marshal_read_flat(
                     str_counter = mpw_strdup( strtok( NULL, "" ) );
                     mpw_free_string( &typeAndVersionAndCounter );
                 }
-                siteLoginState = mpw_get_token( &positionInLine, endOfLine, "\t\n" );
+                siteLoginState = mpw_get_token( &positionInLine, endOfLine, "\t\n" ); // TODO: Needs to be encoded if redacted?
                 siteName = mpw_get_token( &positionInLine, endOfLine, "\t\n" );
                 siteResultState = mpw_get_token( &positionInLine, endOfLine, "\n" );
                 break;
@@ -999,9 +1001,9 @@ static void mpw_marshal_read_flat(
             mpw_marshal_data_set_num( siteCounter, file->data, "sites", siteName, "counter", NULL );
             mpw_marshal_data_set_num( siteAlgorithm, file->data, "sites", siteName, "algorithm", NULL );
             mpw_marshal_data_set_num( siteType, file->data, "sites", siteName, "type", NULL );
-            mpw_marshal_data_set_str( siteResultState, file->data, "sites", siteName, "password", NULL );
+            mpw_marshal_data_set_str( siteResultState && strlen( siteResultState )? siteResultState: NULL, file->data, "sites", siteName, "password", NULL );
             mpw_marshal_data_set_num( MPResultTypeDefault, file->data, "sites", siteName, "login_type", NULL );
-            mpw_marshal_data_set_str( siteLoginState, file->data, "sites", siteName, "login_name", NULL );
+            mpw_marshal_data_set_str( siteLoginState && strlen( siteLoginState )? siteLoginState: NULL, file->data, "sites", siteName, "login_name", NULL );
             mpw_marshal_data_set_num( atoi( str_uses ), file->data, "sites", siteName, "uses", NULL );
             if (strftime( dateString, sizeof( dateString ), "%FT%TZ", gmtime( &siteLastUsed ) ))
                 mpw_marshal_data_set_str( dateString, file->data, "sites", siteName, "last_used", NULL );

@@ -28,9 +28,6 @@ MP_LIBS_END
 
 //// Types.
 
-#define mpw_default(__default, __value) ({ __typeof__ (__default) _v = (__typeof__ (__default))(__value); _v = _v? _v: __default; })
-#define mpw_default_n(__default, __num) ({ __typeof__ (__num) _n = (__num); !isnan( _n )? (__typeof__ (__default))_n: __default; })
-
 typedef mpw_enum( unsigned int, MPMarshalFormat ) {
     /** Do not marshal. */
             MPMarshalFormatNone,
@@ -77,58 +74,92 @@ MPMasterKeyProvider mpw_masterKeyProvider_str(const char *masterPassword);
 void mpw_masterKeyProvider_free(void);
 
 typedef struct MPMarshalError {
+    /** The status of the most recent processing operation. */
     MPMarshalErrorType type;
+    /** An explanation of the situation that caused the current status type. */
     const char *message;
 } MPMarshalError;
 
 typedef struct MPMarshalledData {
+    /** If the parent is an object, this holds the key by which this data value is referenced. */
     const char *obj_key;
+    /** If the parent is an array, this holds the index at which this data value is referenced. */
     size_t arr_index;
 
+    /** Whether this data value represents a null value (true). */
     bool is_null;
+    /** Whether this data value represents a boolean value (true). */
     bool is_bool;
+    /** The textual value of this data if it holds a string. */
     const char *str_value;
+    /** The numerical value of this data if it holds a number or a boolean. */
     double num_value;
 
+    /** Amount of data values references under this value if it represents an object or an array. */
     size_t children_count;
+    /** Array of data values referenced under this value. */
     struct MPMarshalledData *children;
 } MPMarshalledData;
 
 typedef struct MPMarshalledInfo {
+    /** The data format used for serializing the file and user data into a byte stream. */
     MPMarshalFormat format;
+    /** Date of when the file was previously serialized. */
     time_t exportDate;
+    /** Whether secrets and state should be visible in clear-text (false) when serialized. */
     bool redacted;
 
+    /** Algorithm version to use for user operations (eg. key ID operations). */
     MPAlgorithmVersion algorithm;
+    /** A number identifying the avatar to display for the user in this file. */
     unsigned int avatar;
+    /** Unique name for this file's user, preferably the user's full legal name. */
     const char *fullName;
+    /** User metadata: The identicon that was generated to represent this file's user identity. */
     MPIdenticon identicon;
+    /** A unique identifier (hex) for the user's master key, primarily for authentication/verification. */
     const char *keyID;
+    /** User metadata: Date of the most recent action taken by this user. */
     time_t lastUsed;
 } MPMarshalledInfo;
 
 typedef struct MPMarshalledQuestion {
+    /** Unique name for the security question, preferably a single key word from the question sentence. */
     const char *keyword;
+    /** The result type to use for generating an answer. */
     MPResultType type;
+    /** State data (base64), if any, necessary for generating the question's answer. */
     const char *state;
 } MPMarshalledQuestion;
 
 typedef struct MPMarshalledSite {
+    /** Unique name for this site. */
     const char *siteName;
+    /** Algorithm version to use for all site operations (eg. result, login, question operations). */
     MPAlgorithmVersion algorithm;
-    MPCounterValue counter;
 
+    /** The counter value of the site result to generate. */
+    MPCounterValue counter;
+    /** The result type to use for generating a site result. */
     MPResultType resultType;
+    /** State data (base64), if any, necessary for generating the site result. */
     const char *resultState;
 
+    /** The result type to use for generating a site login. */
     MPResultType loginType;
+    /** State data (base64), if any, necessary for generating the site login. */
     const char *loginState;
 
+    /** Site metadata: URL location where the site can be accessed. */
     const char *url;
+    /** Site metadata: Amount of times an action has been taken for this site. */
     unsigned int uses;
+    /** Site metadata: Date of the most recent action taken on this site. */
     time_t lastUsed;
 
+    /** Amount of security questions associated with this site. */
     size_t questions_count;
+    /** Array of security questions associated with this site. */
     MPMarshalledQuestion *questions;
 } MPMarshalledSite;
 
@@ -136,21 +167,33 @@ typedef struct MPMarshalledUser {
     MPMasterKeyProvider masterKeyProvider;
     bool redacted;
 
+    /** A number identifying the avatar to display for this user. */
     unsigned int avatar;
+    /** Unique name for this user, preferably the user's full legal name. */
     const char *fullName;
+    /** User metadata: The identicon that was generated to represent this user's identity. */
     MPIdenticon identicon;
+    /** Algorithm version to use for user operations (eg. key ID operations). */
     MPAlgorithmVersion algorithm;
+    /** A unique identifier (hex) for the user's master key, primarily for authentication/verification. */
     const char *keyID;
+    /** The initial result type to use for new sites created by the user. */
     MPResultType defaultType;
+    /** User metadata: Date of the most recent action taken by this user. */
     time_t lastUsed;
 
+    /** Amount of sites associated to this user. */
     size_t sites_count;
+    /** Array of sites associated to this user. */
     MPMarshalledSite *sites;
 } MPMarshalledUser;
 
 typedef struct MPMarshalledFile {
+    /** Metadata from the file that holds user data, available without the need for user authentication. */
     MPMarshalledInfo *info;
+    /** All data in the file, including extensions and other data present, even if not used by this library. */
     MPMarshalledData *data;
+    /** Status of parsing the file and any errors that might have occurred during the process. */
     MPMarshalError error;
 } MPMarshalledFile;
 

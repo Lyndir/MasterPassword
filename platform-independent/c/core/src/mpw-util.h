@@ -83,6 +83,9 @@ void mpw_log_ssink(LogLevel level, const char *file, int line, const char *funct
 #define ftl(format, ...) MPW_LOG( LogLevelFatal, __FILE__, __LINE__, __func__, format, ##__VA_ARGS__ )
 #endif
 
+
+//// Utilities
+
 #ifndef min
 #define min(a, b) ({ \
     __typeof__ (a) _a = (a); \
@@ -107,6 +110,10 @@ void mpw_log_ssink(LogLevel level, const char *file, int line, const char *funct
 #ifndef stringify_def
 #define stringify_def(s) stringify(s)
 #endif
+
+#define mpw_default(__default, __value) ({ __typeof__ (__value) _v = __value; _v? _v: __default; })
+#define mpw_default_n(__default, __num) ({ __typeof__ (__num) _n = (__num); !isnan( _n )? (__typeof__ (__default))_n: __default; })
+
 
 //// Buffers and memory.
 

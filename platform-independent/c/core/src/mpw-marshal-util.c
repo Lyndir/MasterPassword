@@ -31,7 +31,7 @@ char *mpw_get_token(const char **in, const char *eol, const char *delim) {
 
     // Find characters up to the first delim.
     size_t len = strcspn( *in, delim );
-    char *token = len && len <= (size_t)(eol - *in)? mpw_strndup( *in, len ): NULL;
+    char *token = len <= (size_t)(eol - *in)? mpw_strndup( *in, len ): NULL;
 
     // Advance past the delimitor.
     *in = min( eol, *in + len + 1 );
