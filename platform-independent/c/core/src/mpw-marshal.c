@@ -890,29 +890,29 @@ static void mpw_marshal_read_flat(
                 continue;
             }
 
-            if (strcmp( headerName, "Format" ) == OK)
-                format = (unsigned int)atoi( headerValue );
-            if (strcmp( headerName, "Date" ) == OK)
+            if (mpw_strcasecmp( headerName, "Format" ) == OK)
+                format = (unsigned int)strtoul( headerValue, NULL, 10 );
+            if (mpw_strcasecmp( headerName, "Date" ) == OK)
                 exportDate = mpw_timegm( headerValue );
-            if (strcmp( headerName, "Passwords" ) == OK)
-                importRedacted = strcmp( headerValue, "VISIBLE" ) != OK;
-            if (strcmp( headerName, "Algorithm" ) == OK) {
-                int value = atoi( headerValue );
+            if (mpw_strcasecmp( headerName, "Passwords" ) == OK)
+                importRedacted = mpw_strcasecmp( headerValue, "VISIBLE" ) != OK;
+            if (mpw_strcasecmp( headerName, "Algorithm" ) == OK) {
+                unsigned long value = strtoul( headerValue, NULL, 10 );
                 if (value < MPAlgorithmVersionFirst || value > MPAlgorithmVersionLast)
                     file->error = (MPMarshalError){ MPMarshalErrorIllegal, mpw_str( "Invalid user algorithm version: %s", headerValue ) };
                 else
                     algorithm = (MPAlgorithmVersion)value;
             }
-            if (strcmp( headerName, "Avatar" ) == OK)
-                avatar = (unsigned int)atoi( headerValue );
-            if (strcmp( headerName, "Full Name" ) == OK || strcmp( headerName, "User Name" ) == OK)
+            if (mpw_strcasecmp( headerName, "Avatar" ) == OK)
+                avatar = (unsigned int)strtoul( headerValue, NULL, 10 );
+            if (mpw_strcasecmp( headerName, "Full Name" ) == OK || mpw_strcasecmp( headerName, "User Name" ) == OK)
                 fullName = mpw_strdup( headerValue );
-            if (strcmp( headerName, "Identicon" ) == OK)
+            if (mpw_strcasecmp( headerName, "Identicon" ) == OK)
                 identicon = mpw_identicon_encoded( headerValue );
-            if (strcmp( headerName, "Key ID" ) == OK)
+            if (mpw_strcasecmp( headerName, "Key ID" ) == OK)
                 keyID = mpw_strdup( headerValue );
-            if (strcmp( headerName, "Default Type" ) == OK) {
-                int value = atoi( headerValue );
+            if (mpw_strcasecmp( headerName, "Default Type" ) == OK) {
+                unsigned long value = strtoul( headerValue, NULL, 10 );
                 if (!mpw_type_short_name( (MPResultType)value ))
                     file->error = (MPMarshalError){ MPMarshalErrorIllegal, mpw_str( "Invalid user default type: %s", headerValue ) };
                 else
@@ -970,18 +970,18 @@ static void mpw_marshal_read_flat(
         }
 
         if (siteName && str_type && str_counter && str_algorithm && str_uses && str_lastUsed) {
-            MPResultType siteType = (MPResultType)atoi( str_type );
+            MPResultType siteType = (MPResultType)strtoul( str_type, NULL, 10 );
             if (!mpw_type_short_name( siteType )) {
                 file->error = (MPMarshalError){ MPMarshalErrorIllegal, mpw_str( "Invalid site type: %s: %s", siteName, str_type ) };
                 continue;
             }
-            long long int value = atoll( str_counter );
+            long long int value = strtoll( str_counter, NULL, 10 );
             if (value < MPCounterValueFirst || value > MPCounterValueLast) {
                 file->error = (MPMarshalError){ MPMarshalErrorIllegal, mpw_str( "Invalid site counter: %s: %s", siteName, str_counter ) };
                 continue;
             }
             MPCounterValue siteCounter = (MPCounterValue)value;
-            value = atoll( str_algorithm );
+            value = strtoll( str_algorithm, NULL, 0 );
             if (value < MPAlgorithmVersionFirst || value > MPAlgorithmVersionLast) {
                 file->error = (MPMarshalError){
                         MPMarshalErrorIllegal, mpw_str( "Invalid site algorithm: %s: %s", siteName, str_algorithm )
@@ -1001,10 +1001,12 @@ static void mpw_marshal_read_flat(
             mpw_marshal_data_set_num( siteCounter, file->data, "sites", siteName, "counter", NULL );
             mpw_marshal_data_set_num( siteAlgorithm, file->data, "sites", siteName, "algorithm", NULL );
             mpw_marshal_data_set_num( siteType, file->data, "sites", siteName, "type", NULL );
-            mpw_marshal_data_set_str( siteResultState && strlen( siteResultState )? siteResultState: NULL, file->data, "sites", siteName, "password", NULL );
+            mpw_marshal_data_set_str( siteResultState && strlen( siteResultState )? siteResultState: NULL, file->data, "sites", siteName,
+                    "password", NULL );
             mpw_marshal_data_set_num( MPResultTypeDefault, file->data, "sites", siteName, "login_type", NULL );
-            mpw_marshal_data_set_str( siteLoginState && strlen( siteLoginState )? siteLoginState: NULL, file->data, "sites", siteName, "login_name", NULL );
-            mpw_marshal_data_set_num( atoi( str_uses ), file->data, "sites", siteName, "uses", NULL );
+            mpw_marshal_data_set_str( siteLoginState && strlen( siteLoginState )? siteLoginState: NULL, file->data, "sites", siteName,
+                    "login_name", NULL );
+            mpw_marshal_data_set_num( strtol( str_uses, NULL, 10 ), file->data, "sites", siteName, "uses", NULL );
             if (strftime( dateString, sizeof( dateString ), "%FT%TZ", gmtime( &siteLastUsed ) ))
                 mpw_marshal_data_set_str( dateString, file->data, "sites", siteName, "last_used", NULL );
         }

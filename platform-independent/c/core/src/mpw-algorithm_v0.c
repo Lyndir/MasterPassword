@@ -199,14 +199,14 @@ const char *mpw_site_derived_password_v0(
                 err( "Missing key size parameter." );
                 return NULL;
             }
-            int resultParamInt = atoi( resultParam );
-            if (!resultParamInt)
-                resultParamInt = 512;
-            if (resultParamInt < 128 || resultParamInt > 512 || resultParamInt % 8 != 0) {
+            long parameter = strtol( resultParam, NULL, 10 );
+            if (!parameter)
+                parameter = 512;
+            if (parameter < 128 || parameter > 512 || parameter % 8 != 0) {
                 err( "Parameter is not a valid key size (should be 128 - 512): %s", resultParam );
                 return NULL;
             }
-            uint16_t keySize = (uint16_t)(resultParamInt / 8);
+            uint16_t keySize = (uint16_t)(parameter / 8);
             trc( "keySize: %u", keySize );
 
             // Derive key

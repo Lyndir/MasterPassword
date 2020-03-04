@@ -118,7 +118,7 @@ typedef struct MPMarshalledInfo {
     /** User metadata: The identicon that was generated to represent this file's user identity. */
     MPIdenticon identicon;
     /** A unique identifier (hex) for the user's master key, primarily for authentication/verification. */
-    const char *keyID;
+    MPKeyID keyID;
     /** User metadata: Date of the most recent action taken by this user. */
     time_t lastUsed;
 } MPMarshalledInfo;
@@ -176,7 +176,7 @@ typedef struct MPMarshalledUser {
     /** Algorithm version to use for user operations (eg. key ID operations). */
     MPAlgorithmVersion algorithm;
     /** A unique identifier (hex) for the user's master key, primarily for authentication/verification. */
-    const char *keyID;
+    MPKeyID keyID;
     /** The initial result type to use for new sites created by the user. */
     MPResultType defaultType;
     /** User metadata: Date of the most recent action taken by this user. */

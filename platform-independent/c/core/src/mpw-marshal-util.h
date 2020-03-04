@@ -36,6 +36,10 @@ MP_LIBS_END
  * @return A string (allocated) containing the token or NULL if the delim wasn't found before eol. */
 char *mpw_get_token(
         const char **in, const char *eol, const char *delim);
+/** Get a boolean value as expressed by the given string.
+ * @return true if the string is not NULL and holds a number larger than 0, or starts with a t (for true) or y (for yes). */
+bool mpw_get_bool(
+        const char *in);
 /** Convert an RFC 3339 time string into epoch time.
  * @return ERR if the string could not be parsed. */
 time_t mpw_timegm(

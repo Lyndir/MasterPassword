@@ -86,7 +86,7 @@ uint32_t mpw_xmlTestCaseInteger(xmlNodePtr context, const char *nodeName) {
         return 0;
 
     xmlChar *string = mpw_xmlTestCaseString( context, nodeName );
-    uint32_t integer = string? (uint32_t)atol( (char *)string ): 0;
+    uint32_t integer = string? (uint32_t)strtoul( (char *)string, NULL, 10 ): 0;
     xmlFree( string );
 
     return integer;

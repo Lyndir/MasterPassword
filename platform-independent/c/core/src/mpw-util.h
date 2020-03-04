@@ -252,7 +252,7 @@ const uint8_t *mpw_unhex(const char *hex, size_t *length);
 const MPKeyID mpw_id_buf(const void *buf, const size_t length);
 /** Compare two fingerprints for equality.
  * @return true if the buffers represent identical fingerprints or are both NULL. */
-bool mpw_id_buf_equals(const char *id1, const char *id2);
+bool mpw_id_buf_equals(MPKeyID id1, MPKeyID id2);
 
 //// String utilities.
 
@@ -269,6 +269,8 @@ char *mpw_strdup(const char *src);
 /** Drop-in for POSIX strndup(3).
  * @return A string (allocated) with no more than max bytes copied from src or NULL if src is missing or the buffer could not be allocated. */
 char *mpw_strndup(const char *src, const size_t max);
+/** Drop-in for POSIX strcasecmp(3). */
+int mpw_strcasecmp(const char *s1, const char *s2);
 /** Drop-in for POSIX strncasecmp(3). */
 int mpw_strncasecmp(const char *s1, const char *s2, const size_t max);
 

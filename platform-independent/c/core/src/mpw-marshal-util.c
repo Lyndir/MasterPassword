@@ -38,6 +38,11 @@ char *mpw_get_token(const char **in, const char *eol, const char *delim) {
     return token;
 }
 
+bool mpw_get_bool(const char *in) {
+
+    return in && (in[0] == 'y' || in[0] == 't' || strtol( in, NULL, 10 ) > 0);
+}
+
 time_t mpw_timegm(const char *time) {
 
     // TODO: Support for parsing non-UTC time strings

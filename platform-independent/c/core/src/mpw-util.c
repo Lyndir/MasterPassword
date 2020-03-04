@@ -106,6 +106,9 @@ void mpw_log_ssink(LogLevel level, const char *file, int line, const char *funct
     if (!sinks_count)
         mpw_log_sink_file( &record );
 
+    if (record.level <= LogLevelError) {
+        /* error breakpoint */;
+    }
     if (record.level <= LogLevelFatal)
         abort();
 }
@@ -495,7 +498,7 @@ const MPKeyID mpw_id_buf(const void *buf, const size_t length) {
     return mpw_hex( hash, sizeof( hash ) / sizeof( uint8_t ) );
 }
 
-bool mpw_id_buf_equals(const char *id1, const char *id2) {
+bool mpw_id_buf_equals(MPKeyID id1, MPKeyID id2) {
 
     if (!id1 || !id2)
         return !id1 && !id2;
@@ -504,11 +507,7 @@ bool mpw_id_buf_equals(const char *id1, const char *id2) {
     if (size != strlen( id2 ))
         return false;
 
-    for (size_t c = 0; c < size; ++c)
-        if (tolower( id1[c] ) != tolower( id2[c] ))
-            return false;
-
-    return true;
+    return mpw_strncasecmp( id1, id2, size ) == OK;
 }
 
 const char *mpw_str(const char *format, ...) {
@@ -665,10 +664,15 @@ char *mpw_strndup(const char *src, const size_t max) {
     return dst;
 }
 
+int mpw_strcasecmp(const char *s1, const char *s2) {
+
+    return mpw_strncasecmp( s1, s2, s1 && s2? min( strlen( s1 ), strlen( s2 ) ): 0 );
+}
+
 int mpw_strncasecmp(const char *s1, const char *s2, size_t max) {
 
-    int cmp = 0;
-    for (; !cmp && max-- > 0 && s1 && s2; ++s1, ++s2)
+    int cmp = s1 && s2 && max > 0? 0: s1? 1: -1;
+    for (; !cmp && max && max-- > 0 && s1 && s2; ++s1, ++s2)
         cmp = tolower( (unsigned char)*s1 ) - tolower( (unsigned char)*s2 );
 
     return cmp;

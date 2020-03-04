@@ -385,7 +385,7 @@ void cli_masterPassword(Arguments *args, Operation *operation) {
     mpw_free_string( &operation->masterPassword );
 
     if (args->masterPasswordFD) {
-        operation->masterPassword = mpw_read_fd( atoi( args->masterPasswordFD ) );
+        operation->masterPassword = mpw_read_fd( (int)strtol( args->masterPasswordFD, NULL, 10 ) );
         if (!operation->masterPassword && errno)
             wrn( "Error reading master password from FD %s: %s", args->masterPasswordFD, strerror( errno ) );
     }
@@ -660,7 +660,7 @@ void cli_siteCounter(Arguments *args, Operation *operation) {
     if (!operation->site)
         abort();
 
-    long long int siteCounterInt = atoll( args->siteCounter );
+    long long int siteCounterInt = strtoll( args->siteCounter, NULL, 0 );
     if (siteCounterInt < MPCounterValueFirst || siteCounterInt > MPCounterValueLast) {
         ftl( "Invalid site counter: %s", args->siteCounter );
         cli_free( args, operation );
@@ -694,19 +694,19 @@ void cli_algorithmVersion(Arguments *args, Operation *operation) {
     if (!operation->site)
         abort();
 
-    int algorithmVersionInt = atoi( args->algorithmVersion );
-    if (algorithmVersionInt < MPAlgorithmVersionFirst || algorithmVersionInt > MPAlgorithmVersionLast) {
+    unsigned long algorithmVersion = strtoul( args->algorithmVersion, NULL, 10 );
+    if (algorithmVersion < MPAlgorithmVersionFirst || algorithmVersion > MPAlgorithmVersionLast) {
         ftl( "Invalid algorithm version: %s", args->algorithmVersion );
         cli_free( args, operation );
         exit( EX_USAGE );
     }
-    operation->site->algorithm = (MPAlgorithmVersion)algorithmVersionInt;
+    operation->site->algorithm = (MPAlgorithmVersion)algorithmVersion;
 }
 
 void cli_sitesRedacted(Arguments *args, Operation *operation) {
 
     if (args->sitesRedacted)
-        operation->user->redacted = strcmp( args->sitesRedacted, "1" ) == OK;
+        operation->user->redacted = mpw_get_bool( args->sitesRedacted );
 
     else if (!operation->user->redacted)
         wrn( "Sites configuration is not redacted.  Use -R 1 to change this." );
