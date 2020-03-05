@@ -248,8 +248,7 @@
 
     MPKey *recoverKey = newKey;
 #ifdef PEARL_UIKIT
-    PearlOverlay *activityOverlay = [PearlOverlay showProgressOverlayWithTitle:PearlString( @"Migrating %ld sites...",
-            (long)[user.sites count] )];
+    PearlOverlay *activityOverlay = [PearlOverlay showProgressOverlayWithTitle:strf( @"Migrating %ld sites...", (long)[user.sites count] )];
 #endif
 
     for (MPSiteEntity *site in user.sites) {
@@ -261,19 +260,21 @@
 
 #ifdef PEARL_UIKIT
                 masterPassword = PearlAwait( ^(void (^setResult)(id)) {
-                    UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"Enter Old Master Password" message:
-                                    PearlString( @"Your old master password is required to migrate the stored password for %@", site.name )
-                                                                                 preferredStyle:UIAlertControllerStyleAlert];
-                    [controller addTextFieldWithConfigurationHandler:nil];
-                    [controller addAction:[UIAlertAction actionWithTitle:@"Migrate" style:UIAlertActionStyleDefault handler:
-                            ^(UIAlertAction *_Nonnull action) {
-                                setResult( controller.textFields.firstObject.text );
-                            }]];
-                    [controller addAction:[UIAlertAction actionWithTitle:@"Don't Migrate" style:UIAlertActionStyleCancel handler:
-                            ^(UIAlertAction *_Nonnull action) {
-                                setResult( nil );
-                            }]];
-                    [self.navigationController presentViewController:controller animated:YES completion:nil];
+                    PearlMainQueue( ^{
+                        UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"Enter Old Master Password" message:
+                                        strf( @"Your old master password is required to migrate the stored password for %@", site.name )
+                                                                                     preferredStyle:UIAlertControllerStyleAlert];
+                        [controller addTextFieldWithConfigurationHandler:nil];
+                        [controller addAction:[UIAlertAction actionWithTitle:@"Migrate" style:UIAlertActionStyleDefault handler:
+                                ^(UIAlertAction *_Nonnull action) {
+                                    setResult( controller.textFields.firstObject.text );
+                                }]];
+                        [controller addAction:[UIAlertAction actionWithTitle:@"Don't Migrate" style:UIAlertActionStyleCancel handler:
+                                ^(UIAlertAction *_Nonnull action) {
+                                    setResult( nil );
+                                }]];
+                        [self.navigationController presentViewController:controller animated:YES completion:nil];
+                    } );
                 } );
 #endif
                 if (!masterPassword)

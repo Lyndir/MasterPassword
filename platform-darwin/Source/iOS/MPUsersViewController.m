@@ -431,22 +431,22 @@ referenceSizeForFooterInSection:(NSInteger)section {
         NSManagedObjectID *userID = user.permanentObjectID;
         UIAlertController *controller = [UIAlertController alertControllerWithTitle:user.name message:nil preferredStyle:UIAlertControllerStyleActionSheet];
         [controller addAction:[UIAlertAction actionWithTitle:@"Delete User" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-            UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"Deleting User" message:
-                                             @"The user and its sites will be deleted." preferredStyle:UIAlertControllerStyleAlert];
-            [controller addAction:[UIAlertAction actionWithTitle:@"Delete User" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+            UIAlertController *controller_ = [UIAlertController alertControllerWithTitle:@"Deleting User" message:
+                    @"The user and its sites will be deleted."            preferredStyle:UIAlertControllerStyleAlert];
+            [controller_ addAction:[UIAlertAction actionWithTitle:@"Delete User" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
                 [self deleteUser:userID];
             }]];
-            [controller addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
-            [self presentViewController:controller animated:YES completion:nil];
+            [controller_ addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+            [self presentViewController:controller_ animated:YES completion:nil];
         }]];
         [controller addAction:[UIAlertAction actionWithTitle:@"Reset Password" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"Resetting User" message:
-                                             @"The user's master password will be reset." preferredStyle:UIAlertControllerStyleAlert];
-            [controller addAction:[UIAlertAction actionWithTitle:@"Reset User" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+            UIAlertController *controller_ = [UIAlertController alertControllerWithTitle:@"Resetting User" message:
+                    @"The user's master password will be reset."          preferredStyle:UIAlertControllerStyleAlert];
+            [controller_ addAction:[UIAlertAction actionWithTitle:@"Reset User" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
                 [self resetUser:userID avatar:avatarCell];
             }]];
-            [controller addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
-            [self presentViewController:controller animated:YES completion:nil];
+            [controller_ addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+            [self presentViewController:controller_ animated:YES completion:nil];
         }]];
         [controller addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
         [self presentViewController:controller animated:YES completion:nil];

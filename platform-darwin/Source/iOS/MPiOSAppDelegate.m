@@ -182,7 +182,8 @@ void mpw_log_sink_pearl(const MPLogEvent *record) {
     @try {
         inf( @"Started up with device identifier: %@", [PearlKeyChain deviceIdentifier] );
 
-        PearlAddNotificationObserver( MPFoundInconsistenciesNotification, nil, nil, ^(id self, NSNotification *note) {
+        PearlAddNotificationObserver(
+                MPFoundInconsistenciesNotification, nil, [NSOperationQueue mainQueue], ^(id self, NSNotification *note) {
             switch ((MPFixableResult)[note.userInfo[MPInconsistenciesFixResultUserKey] unsignedIntegerValue]) {
 
                 case MPFixableResultNoProblems:
@@ -244,22 +245,26 @@ void mpw_log_sink_pearl(const MPLogEvent *record) {
                     MPError( error, @"While reading imported sites from %@.", url );
 
                 if (!importedSitesData) {
-                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error" message:
-                                    strf( @"Master Password couldn't read the import sites.\n\n%@",
-                                            (id)[error localizedDescription]?: error )
-                                                                            preferredStyle:UIAlertControllerStyleAlert];
-                    [alert addAction:[UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleCancel handler:nil]];
-                    [self.navigationController presentViewController:alert animated:YES completion:nil];
+                    PearlMainQueue( ^{
+                        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error" message:
+                                        strf( @"Master Password couldn't read the import sites.\n\n%@",
+                                                (id)[error localizedDescription]?: error )
+                                                                                preferredStyle:UIAlertControllerStyleAlert];
+                        [alert addAction:[UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleCancel handler:nil]];
+                        [self.navigationController presentViewController:alert animated:YES completion:nil];
+                    } );
                     return;
                 }
 
                 NSString *importedSitesString = [[NSString alloc] initWithData:importedSitesData encoding:NSUTF8StringEncoding];
                 if (!importedSitesString) {
-                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error" message:
-                                    @"Master Password couldn't understand the import file."
-                                                                            preferredStyle:UIAlertControllerStyleAlert];
-                    [alert addAction:[UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleCancel handler:nil]];
-                    [self.navigationController presentViewController:alert animated:YES completion:nil];
+                    PearlMainQueue( ^{
+                        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error" message:
+                                        @"Master Password couldn't understand the import file."
+                                                                                preferredStyle:UIAlertControllerStyleAlert];
+                        [alert addAction:[UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleCancel handler:nil]];
+                        [self.navigationController presentViewController:alert animated:YES completion:nil];
+                    } );
                     return;
                 }
 
@@ -281,44 +286,50 @@ void mpw_log_sink_pearl(const MPLogEvent *record) {
     PearlOverlay *activityOverlay = [PearlOverlay showProgressOverlayWithTitle:@"Importing"];
     [self importSites:importData askImportPassword:^NSString *(NSString *userName) {
         return PearlAwait( ^(void (^setResult)(id)) {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:strf( @"Importing Sites For\n%@", userName ) message:
-                            @"Enter the master password used to create this export file."
-                                                                    preferredStyle:UIAlertControllerStyleAlert];
-            [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
-                textField.secureTextEntry = YES;
-            }];
-            [alert addAction:[UIAlertAction actionWithTitle:@"Import" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                setResult( alert.textFields.firstObject.text );
-            }]];
-            [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-                setResult( nil );
-            }]];
-            [self.navigationController presentViewController:alert animated:YES completion:nil];
+            PearlMainQueue( ^{
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:strf( @"Importing Sites For\n%@", userName ) message:
+                                @"Enter the master password used to create this export file."
+                                                                        preferredStyle:UIAlertControllerStyleAlert];
+                [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+                    textField.secureTextEntry = YES;
+                }];
+                [alert addAction:[UIAlertAction actionWithTitle:@"Import" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                    setResult( alert.textFields.firstObject.text );
+                }]];
+                [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+                    setResult( nil );
+                }]];
+                [self.navigationController presentViewController:alert animated:YES completion:nil];
+            } );
         } );
     } askUserPassword:^NSString *(NSString *userName) {
         return PearlAwait( (id)^(void (^setResult)(id)) {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:strf( @"Master Password For\n%@", userName ) message:
-                            @"Enter the current master password for this user."
-                                                                    preferredStyle:UIAlertControllerStyleAlert];
-            [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
-                textField.secureTextEntry = YES;
-            }];
-            [alert addAction:[UIAlertAction actionWithTitle:@"Import" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                setResult( alert.textFields.firstObject.text );
-            }]];
-            [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-                setResult( nil );
-            }]];
-            [self.navigationController presentViewController:alert animated:YES completion:nil];
+            PearlMainQueue( ^{
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:strf( @"Master Password For\n%@", userName ) message:
+                                @"Enter the current master password for this user."
+                                                                        preferredStyle:UIAlertControllerStyleAlert];
+                [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+                    textField.secureTextEntry = YES;
+                }];
+                [alert addAction:[UIAlertAction actionWithTitle:@"Import" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                    setResult( alert.textFields.firstObject.text );
+                }]];
+                [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+                    setResult( nil );
+                }]];
+                [self.navigationController presentViewController:alert animated:YES completion:nil];
+            } );
         } );
     }          result:^(NSError *error) {
         [activityOverlay cancelOverlayAnimated:YES];
 
         if (error && !(error.domain == NSCocoaErrorDomain && error.code == NSUserCancelledError)) {
-            UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"Error" message:[error localizedDescription]
-                                                                         preferredStyle:UIAlertControllerStyleAlert];
-            [controller addAction:[UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleCancel handler:nil]];
-            [self.navigationController presentViewController:controller animated:YES completion:nil];
+            PearlMainQueue( ^{
+                UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"Error" message:[error localizedDescription]
+                                                                             preferredStyle:UIAlertControllerStyleAlert];
+                [controller addAction:[UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleCancel handler:nil]];
+                [self.navigationController presentViewController:controller animated:YES completion:nil];
+            } );
         }
     }];
 }
@@ -341,16 +352,18 @@ void mpw_log_sink_pearl(const MPLogEvent *record) {
         NSString *importData = [UIPasteboard generalPasteboard].string;
         MPMarshalledFile *importFile = mpw_marshal_read( NULL, importData.UTF8String );
         if (importFile && importFile->error.type == MPMarshalSuccess && importFile->info->format != MPMarshalFormatNone) {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Import Sites?" message:
-                            @"We've detected Master Password import sites on your pasteboard, would you like to import them?"
-                                                                    preferredStyle:UIAlertControllerStyleAlert];
-            [alert addAction:[UIAlertAction actionWithTitle:@"Import Sites" style:UIAlertActionStyleDefault handler:
-                    ^(UIAlertAction *action) {
-                        [self importSites:importData];
-                        [UIPasteboard generalPasteboard].string = @"";
-                    }]];
-            [alert addAction:[UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:nil]];
-            [self.navigationController presentViewController:alert animated:YES completion:nil];
+            PearlMainQueue( ^{
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Import Sites?" message:
+                                @"We've detected Master Password import sites on your pasteboard, would you like to import them?"
+                                                                        preferredStyle:UIAlertControllerStyleAlert];
+                [alert addAction:[UIAlertAction actionWithTitle:@"Import Sites" style:UIAlertActionStyleDefault handler:
+                        ^(UIAlertAction *action) {
+                            [self importSites:importData];
+                            [UIPasteboard generalPasteboard].string = @"";
+                        }]];
+                [alert addAction:[UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:nil]];
+                [self.navigationController presentViewController:alert animated:YES completion:nil];
+            } );
         }
         mpw_marshal_file_free( &importFile );
     } );
@@ -422,7 +435,7 @@ void mpw_log_sink_pearl(const MPLogEvent *record) {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Feedback" message:
                         @"Have a question, comment, issue or just saying thanks?\n\n"
                         @"We'd love to hear what you think!\n"
-                        @"masterpassword@lyndir.com"
+                        @"help@masterpassword.app"
                                                                 preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleCancel handler:nil]];
         [self.navigationController presentViewController:alert animated:YES completion:nil];
@@ -452,7 +465,7 @@ void mpw_log_sink_pearl(const MPLogEvent *record) {
     if (logs && ([[MPConfig get].sendInfo boolValue] || [[MPiOSConfig get].traceMode boolValue]))
         logLevel = PearlLogLevelDebug;
 
-    [[[PearlEMail alloc] initForEMailTo:@"Master Password Development <masterpassword@lyndir.com>"
+    [[[PearlEMail alloc] initForEMailTo:@"Master Password Development <help@masterpassword.app"
                                 subject:strf( @"Feedback for Master Password [%@]",
                                         [[PearlKeyChain deviceIdentifier] stringByDeletingMatchesOf:@"-.*"] )
                                    body:strf( @"\n\n\n"
@@ -479,19 +492,22 @@ void mpw_log_sink_pearl(const MPLogEvent *record) {
 
     static dispatch_once_t once = 0;
     dispatch_once( &once, ^{
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Failed To Load Sites" message:
-                        @"Master Password was unable to open your sites history.\n"
-                        @"This may be due to corruption.  You can either reset Master Password and "
-                        @"recreate your user, or E-Mail us your logs and leave your corrupt store as-is for now."
-                                                                preferredStyle:UIAlertControllerStyleAlert];
-        [alert addAction:[UIAlertAction actionWithTitle:@"E-Mail Logs" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            [self openFeedbackWithLogs:YES forVC:nil];
-        }]];
-        [alert addAction:[UIAlertAction actionWithTitle:@"Reset" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            [self deleteAndResetStore];
-        }]];
-        [alert addAction:[UIAlertAction actionWithTitle:@"Ignore" style:UIAlertActionStyleCancel handler:nil]];
-        [self.navigationController presentViewController:alert animated:YES completion:nil];
+        PearlMainQueue( ^{
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Failed To Load Sites" message:
+                            @"Master Password was unable to open your sites history.\n"
+                            @"This may be due to corruption.  You can either reset Master Password and "
+                            @"recreate your user, or E-Mail us your logs and leave your corrupt store as-is for now."
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:@"E-Mail Logs" style:UIAlertActionStyleDefault
+                                                    handler:^(UIAlertAction *action) {
+                                                        [self openFeedbackWithLogs:YES forVC:nil];
+                                                    }]];
+            [alert addAction:[UIAlertAction actionWithTitle:@"Reset" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                [self deleteAndResetStore];
+            }]];
+            [alert addAction:[UIAlertAction actionWithTitle:@"Ignore" style:UIAlertActionStyleCancel handler:nil]];
+            [self.navigationController presentViewController:alert animated:YES completion:nil];
+        } );
     } );
 }
 
@@ -620,25 +636,27 @@ void mpw_log_sink_pearl(const MPLogEvent *record) {
 
 - (void)changeMasterPasswordFor:(MPUserEntity *)user saveInContext:(NSManagedObjectContext *)moc didResetBlock:(void ( ^ )(void))didReset {
 
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Changing Master Password" message:
-                    @"If you continue, you'll be able to set a new master password.\n\n"
-                    @"Changing your master password will cause all your generated passwords to change!\n"
-                    @"Changing the master password back to the old one will cause your passwords to revert as well."
-                                                            preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:@"Abort" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [moc performBlockAndWait:^{
-            inf( @"Clearing keyID for user: %@.", user.userID );
-            user.keyID = nil;
-            [self forgetSavedKeyFor:user];
-            [moc saveToStore];
-        }];
+    PearlMainQueue( ^{
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Changing Master Password" message:
+                        @"If you continue, you'll be able to set a new master password.\n\n"
+                        @"Changing your master password will cause all your generated passwords to change!\n"
+                        @"Changing the master password back to the old one will cause your passwords to revert as well."
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"Abort" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [moc performBlockAndWait:^{
+                inf( @"Clearing keyID for user: %@.", user.userID );
+                user.keyID = nil;
+                [self forgetSavedKeyFor:user];
+                [moc saveToStore];
+            }];
 
-        [self signOutAnimated:YES];
-        if (didReset)
-            didReset();
-    }]];
-    [alert addAction:[UIAlertAction actionWithTitle:@"Abort" style:UIAlertActionStyleCancel handler:nil]];
-    [self.navigationController presentViewController:alert animated:YES completion:nil];
+            [self signOutAnimated:YES];
+            if (didReset)
+                didReset();
+        }]];
+        [alert addAction:[UIAlertAction actionWithTitle:@"Abort" style:UIAlertActionStyleCancel handler:nil]];
+        [self.navigationController presentViewController:alert animated:YES completion:nil];
+    } );
 }
 
 #pragma mark - UIDocumentInteractionControllerDelegate

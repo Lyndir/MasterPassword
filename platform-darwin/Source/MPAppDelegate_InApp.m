@@ -161,13 +161,14 @@ PearlAssociatedObjectProperty( NSMutableArray*, ProductObservers, productObserve
     MPError( error, @"StoreKit request (%@) failed.", request );
 
 #if TARGET_OS_IPHONE
-    UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"Purchase Failed" message:
-                    strf( @"%@\n\n%@", error.localizedDescription,
-                            @"Ensure you are online and try logging out and back into iTunes from your device's Settings." )
-                                                                 preferredStyle:UIAlertControllerStyleAlert];
-    [controller addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
-    [self.navigationController presentViewController:controller animated:YES completion:nil];
-#else
+    PearlMainQueue( ^{
+        UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"Purchase Failed" message:
+                        strf( @"%@\n\n%@", error.localizedDescription,
+                                @"Ensure you are online and try logging out and back into iTunes from your device's Settings." )
+                                                                     preferredStyle:UIAlertControllerStyleAlert];
+        [controller addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
+        [self.navigationController presentViewController:controller animated:YES completion:nil];
+    } );
 #endif
 }
 

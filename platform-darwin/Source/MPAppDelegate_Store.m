@@ -548,11 +548,8 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
 
     do {
         if ([MPAppDelegate_Shared managedObjectContextPerformBlockAndWait:^(NSManagedObjectContext *context) {
-            NSError *error = [self importSites:importData askImportPassword:importPassword askUserPassword:userPassword
-                                 saveInContext:context];
-            PearlMainQueue( ^{
-                resultBlock( error );
-            } );
+            resultBlock( [self importSites:importData askImportPassword:importPassword askUserPassword:userPassword
+                             saveInContext:context] );
         }])
             break;
         usleep( (useconds_t)(USEC_PER_SEC * 0.2) );

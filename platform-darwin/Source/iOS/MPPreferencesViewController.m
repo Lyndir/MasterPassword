@@ -113,7 +113,7 @@
     }
 
     if (cell == self.checkInconsistencies)
-        [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+        [MPiOSAppDelegate managedObjectContextForMainThreadPerformBlock:^(NSManagedObjectContext *context) {
             if ([[MPiOSAppDelegate get] findAndFixInconsistenciesSaveInContext:context] == MPFixableResultNoProblems) {
                 UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"No Inconsistencies" message:
                                 @"No inconsistencies were detected in your sites."
@@ -215,7 +215,7 @@
 - (IBAction)securityButton:(id)sender {
 
     [[self dismissPopup].navigationController performSegueWithIdentifier:@"web" sender:
-            [NSURL URLWithString:@"https://masterpassword.app/security.html"]];
+            [NSURL URLWithString:@"https://masterpassword.app/masterpassword-algorithm.pdf"]];
 }
 
 - (IBAction)sourceButton:(id)sender {
