@@ -3562,7 +3562,7 @@
 					DA5BFA43147E415C00F98B1E = {
 						DevelopmentTeam = HL3Q45LX9N;
 						LastSwiftMigration = 0920;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 0;
@@ -4268,205 +4268,6 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		DA0974491E95703B00F0BFE8 /* Test */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
-				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_STATIC_ANALYZER_MODE = deep;
-				CLANG_UNDEFINED_BEHAVIOR_SANITIZER_INTEGER = YES;
-				CLANG_UNDEFINED_BEHAVIOR_SANITIZER_NULLABILITY = YES;
-				CLANG_WARN_ASSIGN_ENUM = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_CXX0X_EXTENSIONS = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = NO;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_EXPLICIT_OWNERSHIP_TYPE = YES;
-				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_RECEIVER_WEAK = NO;
-				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = NO;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
-				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = HL3Q45LX9N;
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"NS_BLOCK_ASSERTIONS=1",
-					PEARL,
-					PEARL_UIKIT,
-					PEARL_CRYPTO,
-					PEARL_WITH_MESSAGEUI,
-				);
-				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
-				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
-				GCC_WARN_ABOUT_INVALID_OFFSETOF_MACRO = YES;
-				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
-				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_ALLOW_INCOMPLETE_PROTOCOL = YES;
-				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
-				GCC_WARN_FOUR_CHARACTER_CONSTANTS = YES;
-				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
-				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
-				GCC_WARN_MISSING_PARENTHESES = YES;
-				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
-				GCC_WARN_SIGN_COMPARE = NO;
-				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNKNOWN_PRAGMAS = NO;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_LABEL = YES;
-				GCC_WARN_UNUSED_VALUE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "${TARGET_NAME}";
-				PUBLIC_HEADERS_FOLDER_PATH = include;
-				RUN_CLANG_STATIC_ANALYZER = YES;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				STRIP_INSTALLED_PRODUCT = NO;
-				STRIP_SWIFT_SYMBOLS = NO;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				WARNING_CFLAGS = "-Wno-float-conversion";
-			};
-			name = Test;
-		};
-		DA09744A1E95703B00F0BFE8 /* Test */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5C616FA365D7A5C31689B2FF /* Pods-MasterPassword.test.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = NO;
-				CODE_SIGN_ENTITLEMENTS = Source/iOS/MasterPassword.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "-";
-				EXCLUDED_SOURCE_FILE_NAMES = libDCIntrospect.a;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/External/iOS\"",
-				);
-				GCC_C_LANGUAGE_STANDARD = c11;
-				GCC_PREFIX_HEADER = "Source/MasterPassword-Prefix.pch";
-				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(PROJECT_DIR)/../lib/libsodium/build-ios~/out/include\"",
-					"\"$(PROJECT_DIR)/../lib/libjson-c/build-ios~/out/include\"",
-				);
-				INFOPLIST_FILE = "Source/iOS/MasterPassword-Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(PROJECT_DIR)/../lib/libsodium/build-ios~/out/lib\"",
-					"\"$(PROJECT_DIR)/../lib/libjson-c/build-ios~/out/lib\"",
-				);
-				OTHER_CFLAGS = (
-					"-DMPW_SODIUM=1",
-					"-DMPW_CPERCIVA=0",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword;
-				SKIP_INSTALL = NO;
-				STRIP_INSTALLED_PRODUCT = YES;
-				STRIP_SWIFT_SYMBOLS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "Source/iOS/MasterPassword-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 4.0;
-			};
-			name = Test;
-		};
-		DA09744B1E95703B00F0BFE8 /* Test */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = YES;
-				GCC_PREFIX_HEADER = "External/Pearl/Pearl-Prefix.pch";
-				LIBRARY_SEARCH_PATHS = (
-					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib\"",
-					"$(inherited)",
-				);
-				SWIFT_OBJC_BRIDGING_HEADER = "External/Pearl/Pearl-Bridging-Header.h";
-				SWIFT_VERSION = 4.0;
-			};
-			name = Test;
-		};
-		DA09744C1E95703B00F0BFE8 /* Test */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = NO;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-			};
-			name = Test;
-		};
-		DA09744D1E95703B00F0BFE8 /* Test */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = NO;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-			};
-			name = Test;
-		};
-		DA09744E1E95703B00F0BFE8 /* Test */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = YES;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-			};
-			name = Test;
-		};
-		DA09744F1E95703B00F0BFE8 /* Test */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-			};
-			name = Test;
-		};
-		DA0974501E95703B00F0BFE8 /* Test */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				GCC_PREFIX_HEADER = "External/AttributedMarkdown/attributed-markdown.pch";
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-			};
-			name = Test;
-		};
 		DA32D02E19D111C7004F3F0E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -4523,6 +4324,7 @@
 				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = HL3Q45LX9N;
@@ -4629,6 +4431,7 @@
 				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
+				CODE_SIGN_IDENTITY = "Apple Distribution";
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = HL3Q45LX9N;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -4697,7 +4500,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = NO;
 				CODE_SIGN_ENTITLEMENTS = Source/iOS/MasterPassword.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/External/iOS\"",
@@ -4722,6 +4525,7 @@
 					"-DMPW_CPERCIVA=0",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword;
+				PROVISIONING_PROFILE_SPECIFIER = "Master Password Development";
 				SKIP_INSTALL = NO;
 				STRIP_INSTALLED_PRODUCT = YES;
 				STRIP_SWIFT_SYMBOLS = YES;
@@ -4740,7 +4544,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = NO;
 				CODE_SIGN_ENTITLEMENTS = Source/iOS/MasterPassword.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				EXCLUDED_SOURCE_FILE_NAMES = libDCIntrospect.a;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4766,6 +4570,7 @@
 					"-DMPW_CPERCIVA=0",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword;
+				PROVISIONING_PROFILE_SPECIFIER = "Master Password Ad Hoc";
 				SKIP_INSTALL = NO;
 				STRIP_INSTALLED_PRODUCT = YES;
 				STRIP_SWIFT_SYMBOLS = YES;
@@ -4834,24 +4639,6 @@
 			};
 			name = Release;
 		};
-		DAB7AE401F3D464A00C856B1 /* Test */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_OBJC_ARC = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Test;
-		};
 		DAB7AE491F3D468300C856B1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -4894,24 +4681,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
-		};
-		DAB7AE4B1F3D468300C856B1 /* Test */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_OBJC_ARC = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Test;
 		};
 		DAC632661486805C0075AEA5 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -4995,100 +4764,90 @@
 			buildConfigurations = (
 				DA32D02E19D111C7004F3F0E /* Debug */,
 				DA32D02F19D111C7004F3F0E /* Release */,
-				DA09744F1E95703B00F0BFE8 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Test;
+			defaultConfigurationName = Debug;
 		};
 		DA5BFA3E147E415C00F98B1E /* Build configuration list for PBXProject "MasterPassword-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DA5BFA6B147E415C00F98B1E /* Debug */,
 				DA5BFA6C147E415C00F98B1E /* Release */,
-				DA0974491E95703B00F0BFE8 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Test;
+			defaultConfigurationName = Debug;
 		};
 		DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DA5BFA6E147E415C00F98B1E /* Debug */,
 				DA5BFA6F147E415C00F98B1E /* Release */,
-				DA09744A1E95703B00F0BFE8 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Test;
+			defaultConfigurationName = Debug;
 		};
 		DAA1758B19D86BE80044227B /* Build configuration list for PBXNativeTarget "AttributedMarkdown" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DAA1758C19D86BE80044227B /* Debug */,
 				DAA1758D19D86BE80044227B /* Release */,
-				DA0974501E95703B00F0BFE8 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Test;
+			defaultConfigurationName = Debug;
 		};
 		DAB7AE411F3D464A00C856B1 /* Build configuration list for PBXLegacyTarget "libjson-c-ios" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DAB7AE3E1F3D464A00C856B1 /* Debug */,
 				DAB7AE3F1F3D464A00C856B1 /* Release */,
-				DAB7AE401F3D464A00C856B1 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Test;
+			defaultConfigurationName = Debug;
 		};
 		DAB7AE481F3D468300C856B1 /* Build configuration list for PBXLegacyTarget "libsodium-ios" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DAB7AE491F3D468300C856B1 /* Debug */,
 				DAB7AE4A1F3D468300C856B1 /* Release */,
-				DAB7AE4B1F3D468300C856B1 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Test;
+			defaultConfigurationName = Debug;
 		};
 		DAC632651486805C0075AEA5 /* Build configuration list for PBXNativeTarget "uicolor-utilities" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DAC632661486805C0075AEA5 /* Debug */,
 				DAC632671486805C0075AEA5 /* Release */,
-				DA09744C1E95703B00F0BFE8 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Test;
+			defaultConfigurationName = Debug;
 		};
 		DAC63274148680650075AEA5 /* Build configuration list for PBXNativeTarget "jrswizzle" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DAC63275148680650075AEA5 /* Debug */,
 				DAC63276148680650075AEA5 /* Release */,
-				DA09744D1E95703B00F0BFE8 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Test;
+			defaultConfigurationName = Debug;
 		};
 		DAC77CB7148291A600BCF976 /* Build configuration list for PBXNativeTarget "Pearl" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DAC77CB5148291A600BCF976 /* Debug */,
 				DAC77CB6148291A600BCF976 /* Release */,
-				DA09744B1E95703B00F0BFE8 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Test;
+			defaultConfigurationName = Debug;
 		};
 		DAFC565E172C573B00CB5CC5 /* Build configuration list for PBXNativeTarget "InAppSettingsKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DAFC565F172C573B00CB5CC5 /* Debug */,
 				DAFC5660172C573B00CB5CC5 /* Release */,
-				DA09744E1E95703B00F0BFE8 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Test;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 

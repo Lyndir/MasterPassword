@@ -31,20 +31,16 @@
 
 @implementation MPAppDelegate_Shared
 
+static MPAppDelegate_Shared *instance;
+
 + (MPAppDelegate_Shared *)get {
 
-#if TARGET_OS_IPHONE
-    return (MPAppDelegate_Shared *)UIApp.delegate;
-#elif defined (__MAC_OS_X_VERSION_MIN_REQUIRED)
-    return (MPAppDelegate_Shared *)[NSApplication sharedApplication].delegate;
-#else
-#error Unsupported OS.
-#endif
+    return instance;
 }
 
 - (instancetype)init {
 
-    if (!(self = [super init]))
+    if (!(self = instance = [super init]))
         return nil;
 
     NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];

@@ -35,25 +35,6 @@ PearlEnum( MPDevelopmentFuelConsumption,
 
 @implementation MPStoreViewController
 
-+ (NSString *)latestStoreFeatures {
-
-    NSMutableString *features = [NSMutableString string];
-    NSArray *storeVersions = @[
-            @"Generated Usernames\nSecurity Question Answers",
-            @"Biometrics Support",
-    ];
-    NSInteger storeVersion = [[NSUserDefaults standardUserDefaults] integerForKey:@"storeVersion"];
-    for (; storeVersion < [storeVersions count]; ++storeVersion)
-        [features appendFormat:@"%@\n", storeVersions[(NSUInteger)storeVersion]];
-    if (![features length])
-        return nil;
-
-    [[NSUserDefaults standardUserDefaults] setInteger:storeVersion forKey:@"storeVersion"];
-    if (![[NSUserDefaults standardUserDefaults] synchronize])
-        wrn( @"Couldn't synchronize store version update." );
-    return features;
-}
-
 - (void)viewDidLoad {
 
     [super viewDidLoad];

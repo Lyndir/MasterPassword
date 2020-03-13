@@ -216,11 +216,12 @@ typedef NS_ENUM( NSUInteger, MPActiveUserState ) {
                 self.entryField.enabled = NO;
                 MPAvatarCell *avatarCell = [self selectedAvatar];
                 avatarCell.spinnerActive = YES;
+                NSIndexPath *avatarPath = [self.avatarCollectionView indexPathForCell:avatarCell];
                 NSUInteger newUserAvatar = avatarCell.avatar;
                 NSString *newUserName = avatarCell.name;
                 if (![MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
                     BOOL isNew = NO;
-                    MPUserEntity *user = [self userForAvatar:avatarCell inContext:context isNew:&isNew];
+                    MPUserEntity *user = [self userForIndexPath:avatarPath inContext:context isNew:&isNew];
                     if (isNew) {
                         user = [MPUserEntity insertNewObjectInContext:context];
                         user.algorithm = MPAlgorithmDefault;
@@ -424,7 +425,8 @@ referenceSizeForFooterInSection:(NSInteger)section {
         NSManagedObjectContext *mainContext = [MPiOSAppDelegate managedObjectContextForMainThreadIfReady];
 
         BOOL isNew = NO;
-        MPUserEntity *user = [self userForAvatar:avatarCell inContext:mainContext isNew:&isNew];
+        MPUserEntity *user = [self userForIndexPath:[self.avatarCollectionView indexPathForCell:avatarCell]
+                                          inContext:mainContext isNew:&isNew];
         if (isNew || !user)
             return;
 
@@ -577,12 +579,7 @@ referenceSizeForFooterInSection:(NSInteger)section {
         return nil;
     }
 
-    return [self userForAvatar:selectedAvatar inContext:context isNew:isNew];
-}
-
-- (MPUserEntity *)userForAvatar:(MPAvatarCell *)cell inContext:(NSManagedObjectContext *)context isNew:(BOOL *)isNew {
-
-    return [self userForIndexPath:[self.avatarCollectionView indexPathForCell:cell] inContext:context isNew:isNew];
+    return [self userForIndexPath:[self.avatarCollectionView indexPathForCell:selectedAvatar] inContext:context isNew:isNew];
 }
 
 - (MPUserEntity *)userForIndexPath:(NSIndexPath *)indexPath inContext:(NSManagedObjectContext *)context isNew:(BOOL *)isNew {

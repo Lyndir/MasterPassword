@@ -209,20 +209,31 @@ void mpw_log_sink_pearl(const MPLogEvent *record) {
             }
         } );
 
-        PearlMainQueue( ^{
+        if (@available( iOS 12, * )) {
+            [Countly.sharedInstance askForNotificationPermissionWithOptions:UNAuthorizationOptionProvisional completionHandler:
+                    ^(BOOL granted, NSError *error) {
+                        inf( @"provisional: %d: %@", granted, error );
+            }];
+        }
+
+
+        PearlMainQueueOperation( ^{
             if ([[MPiOSConfig get].showSetup boolValue])
                 [self.navigationController performSegueWithIdentifier:@"setup" sender:self];
-        } );
 
-        NSString *latestFeatures = [MPStoreViewController latestStoreFeatures];
-        if (latestFeatures) {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"New Features" message:
-                            strf( @"The following features are now available in the store:\n\n%@•••\n\n"
-                                  @"Find the store from the user pull‑down after logging in.", latestFeatures )
-                                                                    preferredStyle:UIAlertControllerStyleAlert];
-            [alert addAction:[UIAlertAction actionWithTitle:@"Thanks" style:UIAlertActionStyleCancel handler:nil]];
-            [self.navigationController presentViewController:alert animated:YES completion:nil];
-        }
+            if (![[NSUserDefaults standardUserDefaults] boolForKey:@"notificationsDecided"]) {
+                UIAlertController *alert =  [UIAlertController alertControllerWithTitle:@"Coming Soon" message:
+                                @"Master Password is rolling out a new modern personal security platform and we're excited to bring you along.\n\n"
+                                @"When it's time, we'll send you a notification to help you make an effortless transition."
+                                                                        preferredStyle:UIAlertControllerStyleAlert];
+                [alert addAction:[UIAlertAction actionWithTitle:@"Thanks" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                    [Countly.sharedInstance askForNotificationPermission];
+                    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"notificationsDecided"];
+                }]];
+                [(self.navigationController.presentedViewController?: (UIViewController *)self.navigationController)
+                        presentViewController:alert animated:YES completion:nil];
+            }
+        } );
     }
     @catch (id exception) {
         err( @"During Post-Startup: %@", exception );

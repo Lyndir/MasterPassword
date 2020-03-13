@@ -23,8 +23,6 @@
 
 @interface MPStoreViewController : UITableViewController
 
-+ (NSString *)latestStoreFeatures;
-
 @end
 
 @interface MPStoreProductCell : UITableViewCell
