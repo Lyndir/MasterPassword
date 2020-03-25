@@ -149,11 +149,13 @@ typedef NS_ENUM( NSUInteger, MPActiveUserState ) {
             }
             case MPActiveUserStateLogin: {
                 self.entryField.enabled = NO;
-                [self selectedAvatar].spinnerActive = YES;
+                MPAvatarCell *selectedAvatar = [self selectedAvatar];
+                selectedAvatar.spinnerActive = YES;
+                NSIndexPath *selectedPath = selectedAvatar? [self.avatarCollectionView indexPathForCell:selectedAvatar]: nil;
                 NSString *masterPassword = self.entryField.text;
                 if (![MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
                     BOOL signedIn = NO, isNew = NO;
-                    MPUserEntity *user = [self selectedUserInContext:context isNew:&isNew];
+                    MPUserEntity *user = selectedPath? [self userForIndexPath:selectedPath inContext:context isNew:&isNew]: nil;
                     if (!isNew && user)
                         signedIn = [[MPiOSAppDelegate get] signInAsUser:user saveInContext:context
                                                     usingMasterPassword:masterPassword];
@@ -570,21 +572,10 @@ referenceSizeForFooterInSection:(NSInteger)section {
     return (MPAvatarCell *)[self.avatarCollectionView cellForItemAtIndexPath:selectedIndexPaths.firstObject];
 }
 
-- (MPUserEntity *)selectedUserInContext:(NSManagedObjectContext *)context isNew:(BOOL *)isNew {
-
-    MPAvatarCell *selectedAvatar = [self selectedAvatar];
-    if (!selectedAvatar) {
-        // No selected user.
-        *isNew = NO;
-        return nil;
-    }
-
-    return [self userForIndexPath:[self.avatarCollectionView indexPathForCell:selectedAvatar] inContext:context isNew:isNew];
-}
-
 - (MPUserEntity *)userForIndexPath:(NSIndexPath *)indexPath inContext:(NSManagedObjectContext *)context isNew:(BOOL *)isNew {
-
-    if ((*isNew = indexPath.item >= [self.userIDs count]))
+    
+    *isNew = NO;
+    if (!indexPath || (*isNew = indexPath.item >= [self.userIDs count]))
         return nil;
 
     return [MPUserEntity existingObjectWithID:self.userIDs[indexPath.item] inContext:context];
@@ -756,9 +747,11 @@ referenceSizeForFooterInSection:(NSInteger)section {
     PearlMainQueue( ^{
         BOOL isNew = NO;
         NSManagedObjectID *selectUserID = [MPiOSAppDelegate get].activeUserOID;
-        if (!selectUserID)
-            selectUserID = [self selectedUserInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]
-                                                 isNew:&isNew].permanentObjectID;
+        if (!selectUserID) {
+            selectUserID = [self userForIndexPath:self.avatarCollectionView.indexPathsForSelectedItems.firstObject
+                                        inContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]
+                                            isNew:&isNew].permanentObjectID;
+        }
         [self.avatarCollectionView reloadData];
 
         NSUInteger selectedAvatarItem = isNew? [self.userIDs count]: selectUserID? [self.userIDs indexOfObject:selectUserID]: NSNotFound;

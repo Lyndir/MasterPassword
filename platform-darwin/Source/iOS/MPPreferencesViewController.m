@@ -131,7 +131,7 @@
 - (IBAction)valueChanged:(id)sender {
 
     if (sender == self.savePasswordSwitch)
-        [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+        [MPiOSAppDelegate managedObjectContextForMainThreadPerformBlock:^(NSManagedObjectContext *context) {
             MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserInContext:context];
             if ((activeUser.saveKey = self.savePasswordSwitch.on))
                 [[MPiOSAppDelegate get] storeSavedKeyFor:activeUser];
@@ -139,13 +139,11 @@
                 [[MPiOSAppDelegate get] forgetSavedKeyFor:activeUser];
             [context saveToStore];
 
-            PearlMainQueue( ^{
-                [self reload];
-            } );
+            [self reload];
         }];
 
     if (sender == self.touchIDSwitch)
-        [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+        [MPiOSAppDelegate managedObjectContextForMainThreadPerformBlock:^(NSManagedObjectContext *context) {
             MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserInContext:context];
             if ((activeUser.touchID = self.touchIDSwitch.on))
                 [[MPiOSAppDelegate get] storeSavedKeyFor:activeUser];
@@ -153,9 +151,7 @@
                 [[MPiOSAppDelegate get] forgetSavedKeyFor:activeUser];
             [context saveToStore];
 
-            PearlMainQueue( ^{
-                [self reload];
-            } );
+            [self reload];
         }];
 
     if (sender == self.generated1TypeControl || sender == self.generated2TypeControl || sender == self.storedTypeControl) {
@@ -167,42 +163,34 @@
             self.storedTypeControl.selectedSegmentIndex = -1;
 
         MPResultType defaultType = [self typeForSelectedSegment];
-        [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+        [MPiOSAppDelegate managedObjectContextForMainThreadPerformBlock:^(NSManagedObjectContext *context) {
             [[MPiOSAppDelegate get] activeUserInContext:context].defaultType = defaultType;
             [context saveToStore];
 
-            PearlMainQueue( ^{
-                [self reload];
-            } );
+            [self reload];
         }];
     }
 }
 
 - (IBAction)previousAvatar:(id)sender {
 
-    [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+    [MPiOSAppDelegate managedObjectContextForMainThreadPerformBlock:^(NSManagedObjectContext *context) {
         MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserInContext:context];
         activeUser.avatar = (activeUser.avatar - 1 + MPAvatarCount) % MPAvatarCount;
         [context saveToStore];
 
-        NSUInteger avatar = activeUser.avatar;
-        PearlMainQueue( ^{
-            self.avatarImage.image = [UIImage imageNamed:strf( @"avatar-%lu", (unsigned long)avatar )];
-        } );
+        self.avatarImage.image = [UIImage imageNamed:strf( @"avatar-%lu", (unsigned long)activeUser.avatar )];
     }];
 }
 
 - (IBAction)nextAvatar:(id)sender {
 
-    [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+    [MPiOSAppDelegate managedObjectContextForMainThreadPerformBlock:^(NSManagedObjectContext *context) {
         MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserInContext:context];
         activeUser.avatar = (activeUser.avatar + 1 + MPAvatarCount) % MPAvatarCount;
         [context saveToStore];
 
-        NSUInteger avatar = activeUser.avatar;
-        PearlMainQueue( ^{
-            self.avatarImage.image = [UIImage imageNamed:strf( @"avatar-%lu", (unsigned long)avatar )];
-        } );
+        self.avatarImage.image = [UIImage imageNamed:strf( @"avatar-%lu", (unsigned long)activeUser.avatar )];
     }];
 }
 

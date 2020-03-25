@@ -76,10 +76,7 @@
     NSDictionary *keyQuery = [self createKeyQueryforUser:user origin:&keyOrigin];
     id<MPAlgorithm> keyAlgorithm = user.algorithm;
     MPKey *key = [[MPKey alloc] initForFullName:user.name withKeyResolver:^NSData *(id<MPAlgorithm> algorithm) {
-        return ![algorithm isEqual:keyAlgorithm]? nil:
-               PearlMainQueueAwait( (id)^{
-                   return [PearlKeyChain dataOfItemForQuery:keyQuery];
-               } );
+        return ![algorithm isEqual:keyAlgorithm]? nil: [PearlKeyChain dataOfItemForQuery:keyQuery];
     }                                 keyOrigin:keyOrigin];
 
     if ([key keyIDForAlgorithm:user.algorithm])
