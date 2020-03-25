@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7352E972184B980C428B66A2 /* Pods_MasterPassword_macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E9477508F419F29008C7553 /* Pods_MasterPassword_macOS.framework */; };
 		93D390C676DF52DA7E459F19 /* MPSitesWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39D9D0061FF1159998F06 /* MPSitesWindow.m */; };
 		93D391E61DC23E128DA4446C /* NSView+Traversing.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D393EE88DE554BCCBC1C2D /* NSView+Traversing.h */; };
 		93D392EC39DA43C46C692C12 /* NSDictionary+Indexing.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D393B97158D7BE9332EA53 /* NSDictionary+Indexing.h */; };
@@ -24,7 +25,6 @@
 		DA0933CC1747AD2D00DE1CEF /* shot-laptop-leaning-iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0933CB1747AD2D00DE1CEF /* shot-laptop-leaning-iphone.png */; };
 		DA0933D01747B91B00DE1CEF /* appstore.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0933CF1747B91B00DE1CEF /* appstore.png */; };
 		DA09745E1E99586600F0BFE8 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DA09745D1E99586600F0BFE8 /* libxml2.tbd */; };
-		DA0CC53E1EB57B69009A8ED9 /* Fabric.plist in Resources */ = {isa = PBXBuildFile; fileRef = DA0CC53D1EB57B69009A8ED9 /* Fabric.plist */; };
 		DA0CC5591EB6AE45009A8ED9 /* MasterPassword.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DA0CC54F1EB6AE45009A8ED9 /* MasterPassword.xcdatamodeld */; };
 		DA16B341170661DB000A0EAB /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA16B340170661DB000A0EAB /* Carbon.framework */; };
 		DA16B342170661E0000A0EAB /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC632871486D95D0075AEA5 /* Security.framework */; };
@@ -43,7 +43,7 @@
 		DA1C7AD71F1A8FE6009A3551 /* mpw-bench.c in Sources */ = {isa = PBXBuildFile; fileRef = DA1C7AB81F1A8F6E009A3551 /* mpw-bench.c */; };
 		DA1C7AD81F1A8FF4009A3551 /* mpw-tests-util.c in Sources */ = {isa = PBXBuildFile; fileRef = DA1C7ABA1F1A8F6E009A3551 /* mpw-tests-util.c */; };
 		DA1C7AD91F1A8FF4009A3551 /* mpw-tests.c in Sources */ = {isa = PBXBuildFile; fileRef = DA1C7ABC1F1A8F6E009A3551 /* mpw-tests.c */; };
-		DA2508F119511D3600AC23F1 /* MPPasswordWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA2508F019511D3600AC23F1 /* MPPasswordWindowController.xib */; };
+		DA2508F119511D3600AC23F1 /* MPSitesWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA2508F019511D3600AC23F1 /* MPSitesWindowController.xib */; };
 		DA250925195148E200AC23F1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBC45214F6364500987BF6 /* QuartzCore.framework */; };
 		DA26861D1EBFD7A40001E37E /* MPGeneratedSiteEntity+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = DA26860A1EBFD7A40001E37E /* MPGeneratedSiteEntity+CoreDataClass.m */; };
 		DA26861E1EBFD7A40001E37E /* MPGeneratedSiteEntity+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = DA26860C1EBFD7A40001E37E /* MPGeneratedSiteEntity+CoreDataProperties.m */; };
@@ -67,7 +67,6 @@
 		DA30E9D815723E6900A68B4C /* PearlLazy.m in Sources */ = {isa = PBXBuildFile; fileRef = DA30E9D615723E6900A68B4C /* PearlLazy.m */; };
 		DA3509FE15F101A500C14A8E /* PearlQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = DA3509FC15F101A500C14A8E /* PearlQueue.h */; };
 		DA3509FF15F101A500C14A8E /* PearlQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3509FD15F101A500C14A8E /* PearlQueue.m */; };
-		DA3B844F190FC60900246EEA /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA3B844A190FC5A900246EEA /* Crashlytics.framework */; };
 		DA35148E233EF93E00BCF504 /* mpw-algorithm_v0.c in Sources */ = {isa = PBXBuildFile; fileRef = DA831A271A6E1146000AC234 /* mpw-algorithm_v0.c */; };
 		DA35148F233EF93E00BCF504 /* mpw-algorithm_v1.c in Sources */ = {isa = PBXBuildFile; fileRef = DA831A281A6E1146000AC234 /* mpw-algorithm_v1.c */; };
 		DA351490233EF93E00BCF504 /* mpw-algorithm_v2.c in Sources */ = {isa = PBXBuildFile; fileRef = DA831A291A6E1146000AC234 /* mpw-algorithm_v2.c */; };
@@ -128,7 +127,6 @@
 		DA8ED896192906920099B726 /* PearlTween.h in Headers */ = {isa = PBXBuildFile; fileRef = DA8ED892192906920099B726 /* PearlTween.h */; };
 		DA8ED897192906920099B726 /* map-macro.h in Headers */ = {isa = PBXBuildFile; fileRef = DA8ED894192906920099B726 /* map-macro.h */; };
 		DA9261511BE1A86700369DE5 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA92614F1BE1A86700369DE5 /* SystemConfiguration.framework */; };
-		DA9261521BE1A86700369DE5 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA9261501BE1A86700369DE5 /* Fabric.framework */; };
 		DA9261541BE1A88900369DE5 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DA9261531BE1A88900369DE5 /* libc++.tbd */; };
 		DA9261561BE1A89600369DE5 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DA9261551BE1A89600369DE5 /* libz.tbd */; };
 		DAA449D51EEC4B6B00E7BDD5 /* mpw-marshal.c in Sources */ = {isa = PBXBuildFile; fileRef = DAA449D31EEC4B6B00E7BDD5 /* mpw-marshal.c */; };
@@ -157,6 +155,17 @@
 		DAB4FBEC202FF979002768FB /* PearlCryptUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DA45711E1F572F3200D54152 /* PearlCryptUtils.m */; };
 		DAB7AE5A1F3D74E700C856B1 /* libjson-c.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB7AE591F3D74E700C856B1 /* libjson-c.a */; };
 		DAB7AE5B1F3D750B00C856B1 /* libjson-c.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB7AE591F3D74E700C856B1 /* libjson-c.a */; };
+		DABD5EF1242BBCE200200755 /* icon_16x16.png in Resources */ = {isa = PBXBuildFile; fileRef = DAD0C5F819FD6034009CB08D /* icon_16x16.png */; };
+		DABD5EF2242BBCE200200755 /* icon_16x16@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAD0C5F919FD6034009CB08D /* icon_16x16@2x.png */; };
+		DABD5EF3242BBCE200200755 /* icon_32x32.png in Resources */ = {isa = PBXBuildFile; fileRef = DAD0C5FC19FD6034009CB08D /* icon_32x32.png */; };
+		DABD5EF4242BBCE200200755 /* icon_32x32@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAD0C5FD19FD6034009CB08D /* icon_32x32@2x.png */; };
+		DABD5EF5242BBCE200200755 /* icon_128x128.png in Resources */ = {isa = PBXBuildFile; fileRef = DAD0C5F619FD6034009CB08D /* icon_128x128.png */; };
+		DABD5EF6242BBCE200200755 /* icon_128x128@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAD0C5F719FD6034009CB08D /* icon_128x128@2x.png */; };
+		DABD5EF7242BBCE200200755 /* icon_256x256.png in Resources */ = {isa = PBXBuildFile; fileRef = DAD0C5FA19FD6034009CB08D /* icon_256x256.png */; };
+		DABD5EF8242BBCE200200755 /* icon_256x256@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAD0C5FB19FD6034009CB08D /* icon_256x256@2x.png */; };
+		DABD5EF9242BBCE200200755 /* icon_512x512.png in Resources */ = {isa = PBXBuildFile; fileRef = DAD0C5FE19FD6034009CB08D /* icon_512x512.png */; };
+		DABD5EFA242BBCE200200755 /* icon_512x512@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAD0C5FF19FD6034009CB08D /* icon_512x512@2x.png */; };
+		DABD5F00242BC32D00200755 /* MPSecrets.m in Sources */ = {isa = PBXBuildFile; fileRef = DABD5EFE242BC32D00200755 /* MPSecrets.m */; };
 		DAC6326D148680650075AEA5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DAC77CAE148291A600BCF976 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DACA26FE1705DF81002C6C22 /* logo-bare.png in Resources */ = {isa = PBXBuildFile; fileRef = DACA241C1705DF7D002C6C22 /* logo-bare.png */; };
@@ -366,6 +375,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		04D86D0B84D29123756339FD /* Pods-MasterPassword.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MasterPassword.debug.xcconfig"; path = "Target Support Files/Pods-MasterPassword/Pods-MasterPassword.debug.xcconfig"; sourceTree = "<group>"; };
+		1E9477508F419F29008C7553 /* Pods_MasterPassword_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MasterPassword_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1E9ED9547411486CE0898611 /* Pods-MasterPassword-macOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MasterPassword-macOS.debug.xcconfig"; path = "Target Support Files/Pods-MasterPassword-macOS/Pods-MasterPassword-macOS.debug.xcconfig"; sourceTree = "<group>"; };
+		28DD0F6129ECC496C8DFE6F8 /* Pods-MasterPassword-macOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MasterPassword-macOS.release.xcconfig"; path = "Target Support Files/Pods-MasterPassword-macOS/Pods-MasterPassword-macOS.release.xcconfig"; sourceTree = "<group>"; };
+		7791961245EBC3023523FDCD /* Pods-MasterPassword.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MasterPassword.release.xcconfig"; path = "Target Support Files/Pods-MasterPassword/Pods-MasterPassword.release.xcconfig"; sourceTree = "<group>"; };
 		93D39067C0AFDC581794E2B8 /* NSArray+Indexing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Indexing.m"; sourceTree = "<group>"; };
 		93D39240B5143E01F0B75E96 /* MPSiteModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSiteModel.h; sourceTree = "<group>"; };
 		93D392870DF659AFC1870521 /* NSView+Traversing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSView+Traversing.m"; sourceTree = "<group>"; };
@@ -393,7 +407,6 @@
 		DA0933CF1747B91B00DE1CEF /* appstore.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = appstore.png; sourceTree = "<group>"; };
 		DA09745D1E99586600F0BFE8 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
 		DA09745F1E995EB500F0BFE8 /* mpw_tests.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = mpw_tests.xml; path = ../../core/java/tests/src/main/resources/mpw_tests.xml; sourceTree = "<group>"; };
-		DA0CC53D1EB57B69009A8ED9 /* Fabric.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Fabric.plist; sourceTree = "<group>"; };
 		DA0CC5501EB6AE45009A8ED9 /* MasterPassword 1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 1.xcdatamodel"; sourceTree = "<group>"; };
 		DA0CC5511EB6AE45009A8ED9 /* MasterPassword 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 2.xcdatamodel"; sourceTree = "<group>"; };
 		DA0CC5521EB6AE45009A8ED9 /* MasterPassword 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 3.xcdatamodel"; sourceTree = "<group>"; };
@@ -412,7 +425,7 @@
 		DA1C7ABB1F1A8F6E009A3551 /* mpw-tests-util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-tests-util.h"; sourceTree = "<group>"; };
 		DA1C7ABC1F1A8F6E009A3551 /* mpw-tests.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-tests.c"; sourceTree = "<group>"; };
 		DA1C7AD61F1A8FD8009A3551 /* mpw-bench */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "mpw-bench"; sourceTree = BUILT_PRODUCTS_DIR; };
-		DA2508F019511D3600AC23F1 /* MPPasswordWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MPPasswordWindowController.xib; sourceTree = "<group>"; };
+		DA2508F019511D3600AC23F1 /* MPSitesWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MPSitesWindowController.xib; sourceTree = "<group>"; };
 		DA2508F919513C1400AC23F1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		DA2508FA19513C1400AC23F1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		DA2508FB19513C1400AC23F1 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -448,7 +461,6 @@
 		DA30E9D615723E6900A68B4C /* PearlLazy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlLazy.m; sourceTree = "<group>"; };
 		DA3509FC15F101A500C14A8E /* PearlQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlQueue.h; sourceTree = "<group>"; };
 		DA3509FD15F101A500C14A8E /* PearlQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlQueue.m; sourceTree = "<group>"; };
-		DA3B844A190FC5A900246EEA /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		DA351482233EF8E800BCF504 /* mpw-algorithm_v3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-algorithm_v3.h"; sourceTree = "<group>"; };
 		DA351483233EF8E800BCF504 /* mpw-algorithm_v0.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-algorithm_v0.h"; sourceTree = "<group>"; };
 		DA351484233EF8E800BCF504 /* mpw-algorithm_v2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-algorithm_v2.h"; sourceTree = "<group>"; };
@@ -927,7 +939,6 @@
 		DA8ED892192906920099B726 /* PearlTween.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlTween.h; sourceTree = "<group>"; };
 		DA8ED894192906920099B726 /* map-macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "map-macro.h"; sourceTree = "<group>"; };
 		DA92614F1BE1A86700369DE5 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		DA9261501BE1A86700369DE5 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		DA9261531BE1A88900369DE5 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		DA9261551BE1A89600369DE5 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		DAA449D31EEC4B6B00E7BDD5 /* mpw-marshal.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-marshal.c"; sourceTree = "<group>"; };
@@ -1038,6 +1049,8 @@
 		DAB4FBE2202FF93D002768FB /* NSOrderedSetOrArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSOrderedSetOrArray.m; sourceTree = "<group>"; };
 		DAB7AE591F3D74E700C856B1 /* libjson-c.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libjson-c.a"; path = "External/libjson-c/libjson-c-osx/lib/libjson-c.a"; sourceTree = "<group>"; };
 		DABB981515100B4000B05417 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		DABD5EFE242BC32D00200755 /* MPSecrets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSecrets.m; sourceTree = "<group>"; };
+		DABD5EFF242BC32D00200755 /* MPSecrets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSecrets.h; sourceTree = "<group>"; };
 		DAC6326C148680650075AEA5 /* libjrswizzle.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libjrswizzle.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAC632871486D95D0075AEA5 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		DAC77CAD148291A600BCF976 /* libPearl.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPearl.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1173,15 +1186,14 @@
 				DA9261561BE1A89600369DE5 /* libz.tbd in Frameworks */,
 				DA9261541BE1A88900369DE5 /* libc++.tbd in Frameworks */,
 				DAADCC6A19FB00B500987B1D /* libKCOrderedAccessorFix.a in Frameworks */,
-				DA9261521BE1A86700369DE5 /* Fabric.framework in Frameworks */,
 				DA9261511BE1A86700369DE5 /* SystemConfiguration.framework in Frameworks */,
 				DA250925195148E200AC23F1 /* QuartzCore.framework in Frameworks */,
 				DAD9B5F01762CAA4001835F9 /* ServiceManagement.framework in Frameworks */,
 				DA16B341170661DB000A0EAB /* Carbon.framework in Frameworks */,
 				DA16B342170661E0000A0EAB /* Security.framework in Frameworks */,
 				DA16B345170661F2000A0EAB /* libPearl.a in Frameworks */,
-				DA3B844F190FC60900246EEA /* Crashlytics.framework in Frameworks */,
 				DA16B344170661EE000A0EAB /* Cocoa.framework in Frameworks */,
+				7352E972184B980C428B66A2 /* Pods_MasterPassword_macOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1221,12 +1233,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		DA0CC53C1EB57B69009A8ED9 /* Fabric */ = {
+		0C357E29DE20E18311095EBF /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				DA0CC53D1EB57B69009A8ED9 /* Fabric.plist */,
+				04D86D0B84D29123756339FD /* Pods-MasterPassword.debug.xcconfig */,
+				7791961245EBC3023523FDCD /* Pods-MasterPassword.release.xcconfig */,
+				1E9ED9547411486CE0898611 /* Pods-MasterPassword-macOS.debug.xcconfig */,
+				28DD0F6129ECC496C8DFE6F8 /* Pods-MasterPassword-macOS.release.xcconfig */,
 			);
-			path = Fabric;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 		DA1C7AB71F1A8F6E009A3551 /* cli */ = {
@@ -1260,8 +1275,6 @@
 		DA3B8449190FC5A900246EEA /* Mac */ = {
 			isa = PBXGroup;
 			children = (
-				DA3B844A190FC5A900246EEA /* Crashlytics.framework */,
-				DA9261501BE1A86700369DE5 /* Fabric.framework */,
 				DA92614F1BE1A86700369DE5 /* SystemConfiguration.framework */,
 			);
 			path = Mac;
@@ -1276,6 +1289,7 @@
 				DACA22121705DDC5002C6C22 /* External */,
 				DA5BFA47147E415C00F98B1E /* Frameworks */,
 				DA5BFA45147E415C00F98B1E /* Products */,
+				0C357E29DE20E18311095EBF /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1312,6 +1326,7 @@
 				DAD9B5EF1762CAA4001835F9 /* ServiceManagement.framework */,
 				DA6701DD16406B7300B61001 /* Social.framework */,
 				DABB981515100B4000B05417 /* SystemConfiguration.framework */,
+				1E9477508F419F29008C7553 /* Pods_MasterPassword_macOS.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1350,6 +1365,8 @@
 				DA26860C1EBFD7A40001E37E /* MPGeneratedSiteEntity+CoreDataProperties.m */,
 				DA5E5CAD1724A667003798D8 /* MPKey.h */,
 				DA5E5CAE1724A667003798D8 /* MPKey.m */,
+				DABD5EFF242BC32D00200755 /* MPSecrets.h */,
+				DABD5EFE242BC32D00200755 /* MPSecrets.m */,
 				DA26860D1EBFD7A40001E37E /* MPSiteEntity+CoreDataClass.h */,
 				DA26860E1EBFD7A40001E37E /* MPSiteEntity+CoreDataClass.m */,
 				DA26860F1EBFD7A40001E37E /* MPSiteEntity+CoreDataProperties.h */,
@@ -1398,7 +1415,7 @@
 				93D39D9D0061FF1159998F06 /* MPSitesWindow.m */,
 				93D392C3918763B3B72CF366 /* MPSitesWindowController.h */,
 				93D39A57A7823DE98A0FF83C /* MPSitesWindowController.m */,
-				DA2508F019511D3600AC23F1 /* MPPasswordWindowController.xib */,
+				DA2508F019511D3600AC23F1 /* MPSitesWindowController.xib */,
 				93D39240B5143E01F0B75E96 /* MPSiteModel.h */,
 				93D39E73BF5CBF8E5B005CD3 /* MPSiteModel.m */,
 				93D39AC6360DDC16AEAA4119 /* MPSitesTableView.h */,
@@ -2044,7 +2061,6 @@
 		DACA23B41705DF7D002C6C22 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				DA0CC53C1EB57B69009A8ED9 /* Fabric */,
 				DA09745F1E995EB500F0BFE8 /* mpw_tests.xml */,
 				DACA29701705E1A8002C6C22 /* Data */,
 				DACA23B51705DF7D002C6C22 /* Media */,
@@ -2400,10 +2416,11 @@
 			productReference = DA1C7AD61F1A8FD8009A3551 /* mpw-bench */;
 			productType = "com.apple.product-type.tool";
 		};
-		DA5BFA43147E415C00F98B1E /* MasterPassword */ = {
+		DA5BFA43147E415C00F98B1E /* MasterPassword-macOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword" */;
+			buildConfigurationList = DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword-macOS" */;
 			buildPhases = (
+				0DC4F66C2499C40A68A07D58 /* [CP] Check Pods Manifest.lock */,
 				DA4EF9CB19FD4B600032ECB5 /* Run Script: genassets */,
 				DA5BFA40147E415C00F98B1E /* Sources */,
 				DA5BFA41147E415C00F98B1E /* Frameworks */,
@@ -2411,6 +2428,7 @@
 				DAD9B5EE1762CA3A001835F9 /* Copy LoginHelper */,
 				DA6556E314D55F3000841C99 /* Run Script: GIT version -> Info.plist */,
 				DAD3125D155288AA00A3F9ED /* Run Script: Fabric */,
+				43E5966C8C236E86824DDADE /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -2419,7 +2437,7 @@
 				DAB7AE351F3D423600C856B1 /* PBXTargetDependency */,
 				DABFA072176E3FDF00E83589 /* PBXTargetDependency */,
 			);
-			name = MasterPassword;
+			name = "MasterPassword-macOS";
 			productName = MasterPassword;
 			productReference = DA5BFA44147E415C00F98B1E /* Master Password.app */;
 			productType = "com.apple.product-type.application";
@@ -2566,7 +2584,7 @@
 			);
 			projectRoot = "";
 			targets = (
-				DA5BFA43147E415C00F98B1E /* MasterPassword */,
+				DA5BFA43147E415C00F98B1E /* MasterPassword-macOS */,
 				DAC77CAC148291A600BCF976 /* Pearl */,
 				DAC6326B148680650075AEA5 /* jrswizzle */,
 				DAADCC4F19FB006500987B1D /* KCOrderedAccessorFix */,
@@ -2594,6 +2612,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DABD5EF2242BBCE200200755 /* icon_16x16@2x.png in Resources */,
+				DABD5EF9242BBCE200200755 /* icon_512x512.png in Resources */,
 				DAFE4A5A1503982E003ABA7C /* Pearl.strings in Resources */,
 				DACA26FE1705DF81002C6C22 /* logo-bare.png in Resources */,
 				DACA27121705DF81002C6C22 /* avatar-13@2x.png in Resources */,
@@ -2604,17 +2624,20 @@
 				DA6558A419A99609009A0BEB /* Images.xcassets in Resources */,
 				DACA27161705DF81002C6C22 /* avatar-12.png in Resources */,
 				DACA27171705DF81002C6C22 /* avatar-15.png in Resources */,
+				DABD5EF3242BBCE200200755 /* icon_32x32.png in Resources */,
 				DAF4EF59190A828100023C90 /* Exo2.0-Bold.otf in Resources */,
 				DACA27181705DF81002C6C22 /* avatar-9.png in Resources */,
 				DAAA81B0195A8D1300FA30D9 /* gradient.png in Resources */,
+				DABD5EFA242BBCE200200755 /* icon_512x512@2x.png in Resources */,
 				DACA27191705DF81002C6C22 /* avatar-1@2x.png in Resources */,
-				DA2508F119511D3600AC23F1 /* MPPasswordWindowController.xib in Resources */,
+				DA2508F119511D3600AC23F1 /* MPSitesWindowController.xib in Resources */,
 				DA60717C195D040500CA98B5 /* icon_gear.png in Resources */,
 				DACA271A1705DF81002C6C22 /* avatar-11@2x.png in Resources */,
 				DACA271B1705DF81002C6C22 /* avatar-7@2x.png in Resources */,
 				DACA271C1705DF81002C6C22 /* avatar-17@2x.png in Resources */,
 				DACA271D1705DF81002C6C22 /* avatar-14.png in Resources */,
 				DACA271E1705DF81002C6C22 /* avatar-18@2x.png in Resources */,
+				DABD5EF6242BBCE200200755 /* icon_128x128@2x.png in Resources */,
 				DACA271F1705DF81002C6C22 /* avatar-8.png in Resources */,
 				DACA27201705DF81002C6C22 /* avatar-13.png in Resources */,
 				DACA27211705DF81002C6C22 /* avatar-8@2x.png in Resources */,
@@ -2629,8 +2652,11 @@
 				DACA27291705DF81002C6C22 /* avatar-17.png in Resources */,
 				DACA272A1705DF81002C6C22 /* avatar-5.png in Resources */,
 				DACA272B1705DF81002C6C22 /* avatar-2.png in Resources */,
+				DABD5EF8242BBCE200200755 /* icon_256x256@2x.png in Resources */,
+				DABD5EF1242BBCE200200755 /* icon_16x16.png in Resources */,
 				DACA272C1705DF81002C6C22 /* avatar-14@2x.png in Resources */,
 				DACA272D1705DF81002C6C22 /* avatar-4@2x.png in Resources */,
+				DABD5EF7242BBCE200200755 /* icon_256x256.png in Resources */,
 				DACA272E1705DF81002C6C22 /* avatar-9@2x.png in Resources */,
 				DACA272F1705DF81002C6C22 /* avatar-3.png in Resources */,
 				DACA27301705DF81002C6C22 /* avatar-18.png in Resources */,
@@ -2642,7 +2668,8 @@
 				DACA27331705DF81002C6C22 /* avatar-12@2x.png in Resources */,
 				DACA27341705DF81002C6C22 /* avatar-2@2x.png in Resources */,
 				DA60717D195D040500CA98B5 /* icon_gear@2x.png in Resources */,
-				DA0CC53E1EB57B69009A8ED9 /* Fabric.plist in Resources */,
+				DABD5EF4242BBCE200200755 /* icon_32x32@2x.png in Resources */,
+				DABD5EF5242BBCE200200755 /* icon_128x128.png in Resources */,
 				DACA27351705DF81002C6C22 /* avatar-11.png in Resources */,
 				DACA27361705DF81002C6C22 /* avatar-0@2x.png in Resources */,
 				DACA27371705DF81002C6C22 /* avatar-10@2x.png in Resources */,
@@ -2661,6 +2688,48 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		0DC4F66C2499C40A68A07D58 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MasterPassword-macOS-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		43E5966C8C236E86824DDADE /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MasterPassword-macOS/Pods-MasterPassword-macOS-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Countly-macOS/Countly.framework",
+				"${BUILT_PRODUCTS_DIR}/Sentry-macOS/Sentry.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Countly.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Sentry.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MasterPassword-macOS/Pods-MasterPassword-macOS-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		DA4EF9CB19FD4B600032ECB5 /* Run Script: genassets */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2750,6 +2819,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DA2686251EBFD7A40001E37E /* MPUserEntity+CoreDataClass.m in Sources */,
+				DABD5F00242BC32D00200755 /* MPSecrets.m in Sources */,
 				DA5E5CF61724A667003798D8 /* MPAlgorithm.m in Sources */,
 				DA2686201EBFD7A40001E37E /* MPSiteEntity+CoreDataProperties.m in Sources */,
 				DA5E5CF71724A667003798D8 /* MPAlgorithmV0.m in Sources */,
@@ -2947,198 +3017,6 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		DA0974431E956FA600F0BFE8 /* Test */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
-				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
-				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
-				CLANG_STATIC_ANALYZER_MODE = deep;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_CXX0X_EXTENSIONS = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = NO;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_EXPLICIT_OWNERSHIP_TYPE = YES;
-				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_RECEIVER_WEAK = NO;
-				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = NO;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = HL3Q45LX9N;
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"NDEBUG=1",
-					"NS_BLOCK_ASSERTIONS=1",
-					PEARL,
-					PEARL_COCOA,
-					PEARL_CRYPTO,
-				);
-				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
-				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
-				GCC_WARN_ABOUT_INVALID_OFFSETOF_MACRO = YES;
-				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
-				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_ALLOW_INCOMPLETE_PROTOCOL = YES;
-				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
-				GCC_WARN_FOUR_CHARACTER_CONSTANTS = YES;
-				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
-				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
-				GCC_WARN_MISSING_PARENTHESES = YES;
-				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
-				GCC_WARN_SIGN_COMPARE = NO;
-				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNKNOWN_PRAGMAS = NO;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_LABEL = YES;
-				GCC_WARN_UNUSED_VALUE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				LD_DYLIB_INSTALL_NAME = "@rpath/$(EXECUTABLE_PATH)";
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "${TARGET_NAME}";
-				PUBLIC_HEADERS_FOLDER_PATH = include;
-				RUN_CLANG_STATIC_ANALYZER = YES;
-				SDKROOT = macosx;
-				SKIP_INSTALL = YES;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Test;
-		};
-		DA0974441E956FA600F0BFE8 /* Test */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_ENTITLEMENTS = Source/Mac/MasterPassword.entitlements;
-				CODE_SIGN_IDENTITY = "-";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
-				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/External/Mac\"",
-				);
-				GCC_PREFIX_HEADER = "Source/MasterPassword-Prefix.pch";
-				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(PROJECT_DIR)/../lib/libsodium/build-macos~/out/include\"",
-					"\"$(PROJECT_DIR)/../lib/libjson-c/build-macos~/out/include\"",
-				);
-				INFOPLIST_FILE = "Source/Mac/MasterPassword-Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(PROJECT_DIR)/../lib/libsodium/build-macos~/out/lib\"",
-					"\"$(PROJECT_DIR)/../lib/libjson-c/build-macos~/out/lib\"",
-				);
-				OTHER_CFLAGS = (
-					"-DMPW_SODIUM=1",
-					"-DMPW_CPERCIVA=0",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword.Mac;
-				SKIP_INSTALL = NO;
-				WRAPPER_NAME = "Master Password.${WRAPPER_EXTENSION}";
-			};
-			name = Test;
-		};
-		DA0974451E956FA600F0BFE8 /* Test */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = YES;
-				GCC_PREFIX_HEADER = "External/Pearl/Pearl-Prefix.pch";
-				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
-				LIBRARY_SEARCH_PATHS = (
-					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib\"",
-					"$(inherited)",
-				);
-			};
-			name = Test;
-		};
-		DA0974461E956FA600F0BFE8 /* Test */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = NO;
-				COMBINE_HIDPI_IMAGES = YES;
-				DSTROOT = /tmp/jrswizzle.dst;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-			};
-			name = Test;
-		};
-		DA0974471E956FA600F0BFE8 /* Test */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = YES;
-				COMBINE_HIDPI_IMAGES = YES;
-			};
-			name = Test;
-		};
-		DA0974481E956FA600F0BFE8 /* Test */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(PROJECT_DIR)/../lib/libsodium/build-macos~/out/include\"",
-					"\"$(PROJECT_DIR)/../lib/libjson-c/build-macos~/out/include\"",
-					/usr/include/libxml2,
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(PROJECT_DIR)/../lib/libsodium/build-macos~/out/lib\"",
-					"\"$(PROJECT_DIR)/../lib/libjson-c/build-macos~/out/lib\"",
-				);
-				OTHER_CFLAGS = (
-					"-DMPW_SODIUM=1",
-					"-DMPW_CPERCIVA=0",
-				);
-			};
-			name = Test;
-		};
 		DA1C7AB31F1A8F24009A3551 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -3187,30 +3065,6 @@
 			};
 			name = Release;
 		};
-		DA1C7AB51F1A8F24009A3551 /* Test */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(PROJECT_DIR)/../lib/libsodium/build-macos~/out/include\"",
-					"\"$(PROJECT_DIR)/../lib/libjson-c/build-macos~/out/include\"",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(PROJECT_DIR)/../lib/libsodium/build-macos~/out/lib\"",
-					"\"$(PROJECT_DIR)/../lib/libjson-c/build-macos~/out/lib\"",
-				);
-				OTHER_CFLAGS = (
-					"-DMPW_SODIUM=1",
-					"-DMPW_CPERCIVA=0",
-					"-DMPW_JSON=1",
-					"-DMPW_COLOR=1",
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Test;
-		};
 		DA1C7AD31F1A8FD8009A3551 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -3255,28 +3109,6 @@
 			};
 			name = Release;
 		};
-		DA1C7AD51F1A8FD8009A3551 /* Test */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(PROJECT_DIR)/../lib/libsodium/build-macos~/out/include\"",
-					"\"$(PROJECT_DIR)/../lib/libjson-c/build-macos~/out/include\"",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(PROJECT_DIR)/../lib/libsodium/build-macos~/out/lib\"",
-					"\"$(PROJECT_DIR)/../lib/libjson-c/build-macos~/out/lib\"",
-				);
-				OTHER_CFLAGS = (
-					"-DMPW_SODIUM=1",
-					"-DMPW_CPERCIVA=0",
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Test;
-		};
 		DA5B0B631F3D416500B663F0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -3317,24 +3149,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
-		};
-		DA5B0B651F3D416500B663F0 /* Test */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Test;
 		};
 		DA5BFA6B147E415C00F98B1E /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -3385,8 +3199,8 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
 					"$(inherited)",
+					"DEBUG=1",
 					PEARL,
 					PEARL_COCOA,
 					PEARL_CRYPTO,
@@ -3485,7 +3299,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
-					"NDEBUG=1",
+					"PUBLIC=1",
 					"NS_BLOCK_ASSERTIONS=1",
 					PEARL,
 					PEARL_COCOA,
@@ -3535,6 +3349,7 @@
 		};
 		DA5BFA6E147E415C00F98B1E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1E9ED9547411486CE0898611 /* Pods-MasterPassword-macOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -3566,6 +3381,7 @@
 					"-DMPW_CPERCIVA=0",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword.Mac;
+				PRODUCT_NAME = MasterPassword;
 				SKIP_INSTALL = NO;
 				WRAPPER_NAME = "Master Password.${WRAPPER_EXTENSION}";
 			};
@@ -3573,6 +3389,7 @@
 		};
 		DA5BFA6F147E415C00F98B1E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 28DD0F6129ECC496C8DFE6F8 /* Pods-MasterPassword-macOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -3604,6 +3421,7 @@
 					"-DMPW_CPERCIVA=0",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword.Mac;
+				PRODUCT_NAME = MasterPassword;
 				SKIP_INSTALL = NO;
 				WRAPPER_NAME = "Master Password.${WRAPPER_EXTENSION}";
 			};
@@ -3710,24 +3528,6 @@
 			};
 			name = Release;
 		};
-		DAB7AE461F3D466D00C856B1 /* Test */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Test;
-		};
 		DAC63275148680650075AEA5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -3788,100 +3588,90 @@
 			buildConfigurations = (
 				DA1C7AB31F1A8F24009A3551 /* Debug */,
 				DA1C7AB41F1A8F24009A3551 /* Release */,
-				DA1C7AB51F1A8F24009A3551 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Test;
+			defaultConfigurationName = Debug;
 		};
 		DA1C7AD21F1A8FD8009A3551 /* Build configuration list for PBXNativeTarget "mpw-bench" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DA1C7AD31F1A8FD8009A3551 /* Debug */,
 				DA1C7AD41F1A8FD8009A3551 /* Release */,
-				DA1C7AD51F1A8FD8009A3551 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Test;
+			defaultConfigurationName = Debug;
 		};
 		DA5B0B621F3D416500B663F0 /* Build configuration list for PBXLegacyTarget "libsodium-macos" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DA5B0B631F3D416500B663F0 /* Debug */,
 				DA5B0B641F3D416500B663F0 /* Release */,
-				DA5B0B651F3D416500B663F0 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Test;
+			defaultConfigurationName = Debug;
 		};
 		DA5BFA3E147E415C00F98B1E /* Build configuration list for PBXProject "MasterPassword-macOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DA5BFA6B147E415C00F98B1E /* Debug */,
 				DA5BFA6C147E415C00F98B1E /* Release */,
-				DA0974431E956FA600F0BFE8 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Test;
+			defaultConfigurationName = Debug;
 		};
-		DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword" */ = {
+		DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword-macOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DA5BFA6E147E415C00F98B1E /* Debug */,
 				DA5BFA6F147E415C00F98B1E /* Release */,
-				DA0974441E956FA600F0BFE8 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Test;
+			defaultConfigurationName = Debug;
 		};
 		DA67743F1A474A03004F356A /* Build configuration list for PBXNativeTarget "mpw-test" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DA6774401A474A03004F356A /* Debug */,
 				DA6774411A474A03004F356A /* Release */,
-				DA0974481E956FA600F0BFE8 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Test;
+			defaultConfigurationName = Debug;
 		};
 		DAADCC5E19FB006500987B1D /* Build configuration list for PBXNativeTarget "KCOrderedAccessorFix" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DAADCC5F19FB006500987B1D /* Debug */,
 				DAADCC6019FB006500987B1D /* Release */,
-				DA0974471E956FA600F0BFE8 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Test;
+			defaultConfigurationName = Debug;
 		};
 		DAB7AE431F3D466D00C856B1 /* Build configuration list for PBXLegacyTarget "libjson-c-macos" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DAB7AE441F3D466D00C856B1 /* Debug */,
 				DAB7AE451F3D466D00C856B1 /* Release */,
-				DAB7AE461F3D466D00C856B1 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Test;
+			defaultConfigurationName = Debug;
 		};
 		DAC63274148680650075AEA5 /* Build configuration list for PBXNativeTarget "jrswizzle" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DAC63275148680650075AEA5 /* Debug */,
 				DAC63276148680650075AEA5 /* Release */,
-				DA0974461E956FA600F0BFE8 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Test;
+			defaultConfigurationName = Debug;
 		};
 		DAC77CB7148291A600BCF976 /* Build configuration list for PBXNativeTarget "Pearl" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DAC77CB5148291A600BCF976 /* Debug */,
 				DAC77CB6148291A600BCF976 /* Release */,
-				DA0974451E956FA600F0BFE8 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Test;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 

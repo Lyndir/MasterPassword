@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		13D62249DA5980D1FFC89971 /* Pods_MasterPassword_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B4E180CA32C86ACDC960D8B1 /* Pods_MasterPassword_iOS.framework */; };
 		93D390C1B93F9D3AE37DD0A5 /* MPAnswersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39C426E03358384018E85 /* MPAnswersViewController.m */; };
 		93D391ECBD9BD2C64115B5DD /* PearlSizedTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39156E806BB78E04F78B9 /* PearlSizedTextView.m */; };
 		93D3922A53E41A54832E90D9 /* PearlOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D390FADEB325D8D54A957D /* PearlOverlay.m */; };
@@ -65,7 +66,6 @@
 		93D39E5F7F6D7F5C0FAD090F /* MPTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39D72239990DDAC2D75B0 /* MPTypes.m */; };
 		93D39EAA4D064193074D3021 /* MPFixable.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39A813CA9D7E192261ED2 /* MPFixable.m */; };
 		93D39F8A9254177891F38705 /* MPSetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39A28369954D147E239BA /* MPSetupViewController.m */; };
-		94CD3CD602014A9DC121FDA8 /* Pods_MasterPassword.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D74842A13757EDC1F047D9B4 /* Pods_MasterPassword.framework */; };
 		DA04E33E14B1E70400ECA4F3 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA04E33D14B1E70400ECA4F3 /* MobileCoreServices.framework */; };
 		DA071BF3190187FE00179766 /* empty@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA071BF1190187FE00179766 /* empty@2x.png */; };
 		DA071BF4190187FE00179766 /* empty.png in Resources */ = {isa = PBXBuildFile; fileRef = DA071BF2190187FE00179766 /* empty.png */; };
@@ -589,7 +589,7 @@
 		93D39F9106F2CCFB94283188 /* NSError+PearlFullDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+PearlFullDescription.m"; sourceTree = "<group>"; };
 		93D39FBF8FCEB4C106272334 /* NSOrderedSetOrArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSOrderedSetOrArray.h; sourceTree = "<group>"; };
 		93D39FD9623E8D5571C0AEB3 /* MPAlgorithmV3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAlgorithmV3.m; sourceTree = "<group>"; };
-		D74842A13757EDC1F047D9B4 /* Pods_MasterPassword.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MasterPassword.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B4E180CA32C86ACDC960D8B1 /* Pods_MasterPassword_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MasterPassword_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA04E33D14B1E70400ECA4F3 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		DA071BF1190187FE00179766 /* empty@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "empty@2x.png"; sourceTree = "<group>"; };
 		DA071BF2190187FE00179766 /* empty.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = empty.png; sourceTree = "<group>"; };
@@ -1684,7 +1684,9 @@
 		DAFE4A63150399FF003ABA91 /* NSDateFormatter+RFC3339.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDateFormatter+RFC3339.m"; sourceTree = "<group>"; };
 		DAFE4A63150399FF003ABA93 /* NSDateFormatter+RFC3339.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDateFormatter+RFC3339.h"; sourceTree = "<group>"; };
 		DC2D4B0016EB0A535147BA13 /* Pods-MasterPassword.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MasterPassword.release.xcconfig"; path = "Target Support Files/Pods-MasterPassword/Pods-MasterPassword.release.xcconfig"; sourceTree = "<group>"; };
+		E4F11DB2CE85A9CF2A0C79B2 /* Pods-MasterPassword-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MasterPassword-iOS.debug.xcconfig"; path = "Target Support Files/Pods-MasterPassword-iOS/Pods-MasterPassword-iOS.debug.xcconfig"; sourceTree = "<group>"; };
 		FE662C1B92299C911450537C /* Pods-MasterPassword.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MasterPassword.debug.xcconfig"; path = "Target Support Files/Pods-MasterPassword/Pods-MasterPassword.debug.xcconfig"; sourceTree = "<group>"; };
+		FFFCFF8FBD5549B1EFF8806D /* Pods-MasterPassword-iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MasterPassword-iOS.release.xcconfig"; path = "Target Support Files/Pods-MasterPassword-iOS/Pods-MasterPassword-iOS.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1721,7 +1723,7 @@
 				DA5BFA4B147E415C00F98B1E /* Foundation.framework in Frameworks */,
 				DA5BFA4D147E415C00F98B1E /* CoreGraphics.framework in Frameworks */,
 				DA5BFA4F147E415C00F98B1E /* CoreData.framework in Frameworks */,
-				94CD3CD602014A9DC121FDA8 /* Pods_MasterPassword.framework in Frameworks */,
+				13D62249DA5980D1FFC89971 /* Pods_MasterPassword_iOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1775,6 +1777,8 @@
 				FE662C1B92299C911450537C /* Pods-MasterPassword.debug.xcconfig */,
 				DC2D4B0016EB0A535147BA13 /* Pods-MasterPassword.release.xcconfig */,
 				5C616FA365D7A5C31689B2FF /* Pods-MasterPassword.test.xcconfig */,
+				E4F11DB2CE85A9CF2A0C79B2 /* Pods-MasterPassword-iOS.debug.xcconfig */,
+				FFFCFF8FBD5549B1EFF8806D /* Pods-MasterPassword-iOS.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -2007,7 +2011,7 @@
 				DABB981515100B4000B05417 /* SystemConfiguration.framework */,
 				93D394077F8FAB8167647187 /* Twitter.framework */,
 				DA5BFA48147E415C00F98B1E /* UIKit.framework */,
-				D74842A13757EDC1F047D9B4 /* Pods_MasterPassword.framework */,
+				B4E180CA32C86ACDC960D8B1 /* Pods_MasterPassword_iOS.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -2926,6 +2930,8 @@
 				DA0CC57B1EB6B030009A8ED9 /* MPGeneratedSiteEntity+CoreDataProperties.m */,
 				DABD3BB61711E2DC00CF925C /* MPKey.h */,
 				DABD3BB71711E2DC00CF925C /* MPKey.m */,
+				DA46021B23D5E30B00398FF4 /* MPSecrets.h */,
+				DA46021C23D5E30B00398FF4 /* MPSecrets.m */,
 				DA0CC5881EB6B030009A8ED9 /* MPSiteEntity+CoreDataClass.h */,
 				DA0CC5891EB6B030009A8ED9 /* MPSiteEntity+CoreDataClass.m */,
 				DA0CC58A1EB6B030009A8ED9 /* MPSiteEntity+CoreDataProperties.h */,
@@ -2991,8 +2997,6 @@
 				DABD3BEB1711E2DC00CF925C /* MPPreferencesViewController.m */,
 				93D3924D6F77E6BF41AC32D3 /* MPRootSegue.h */,
 				93D399493FEDDE74DD1A0C15 /* MPRootSegue.m */,
-				DA46021B23D5E30B00398FF4 /* MPSecrets.h */,
-				DA46021C23D5E30B00398FF4 /* MPSecrets.m */,
 				93D39730673227EFF6DEFF19 /* MPSetupViewController.h */,
 				93D39A28369954D147E239BA /* MPSetupViewController.m */,
 				93D39975CE5AEC99E3F086C7 /* MPSiteCell.h */,
@@ -3438,9 +3442,9 @@
 			productReference = DA32D02019D111C6004F3F0E /* libKCOrderedAccessorFix.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		DA5BFA43147E415C00F98B1E /* MasterPassword */ = {
+		DA5BFA43147E415C00F98B1E /* MasterPassword-iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword" */;
+			buildConfigurationList = DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword-iOS" */;
 			buildPhases = (
 				B8D66904C16DDB94975E6ABD /* [CP] Check Pods Manifest.lock */,
 				DA8D88E019DA412A00B189D0 /* Run Script: genassets */,
@@ -3456,7 +3460,7 @@
 				DAB7AE4E1F3D618700C856B1 /* PBXTargetDependency */,
 				DAB7AE501F3D618700C856B1 /* PBXTargetDependency */,
 			);
-			name = MasterPassword;
+			name = "MasterPassword-iOS";
 			productName = MasterPassword;
 			productReference = DA5BFA44147E415C00F98B1E /* MasterPassword.app */;
 			productType = "com.apple.product-type.application";
@@ -3704,7 +3708,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				DA5BFA43147E415C00F98B1E /* MasterPassword */,
+				DA5BFA43147E415C00F98B1E /* MasterPassword-iOS */,
 				DAC77CAC148291A600BCF976 /* Pearl */,
 				DAC6325C1486805C0075AEA5 /* uicolor-utilities */,
 				DAC6326B148680650075AEA5 /* jrswizzle */,
@@ -3912,9 +3916,9 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MasterPassword/Pods-MasterPassword-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Countly/Countly.framework",
-				"${BUILT_PRODUCTS_DIR}/Sentry/Sentry.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-MasterPassword-iOS/Pods-MasterPassword-iOS-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Countly-iOS/Countly.framework",
+				"${BUILT_PRODUCTS_DIR}/Sentry-iOS/Sentry.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -3923,7 +3927,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MasterPassword/Pods-MasterPassword-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MasterPassword-iOS/Pods-MasterPassword-iOS-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		B8D66904C16DDB94975E6ABD /* [CP] Check Pods Manifest.lock */ = {
@@ -3941,7 +3945,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-MasterPassword-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-MasterPassword-iOS-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4335,8 +4339,8 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
 					"$(inherited)",
+					"DEBUG=1",
 					PEARL,
 					PEARL_UIKIT,
 					PEARL_CRYPTO,
@@ -4493,7 +4497,7 @@
 		};
 		DA5BFA6E147E415C00F98B1E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FE662C1B92299C911450537C /* Pods-MasterPassword.debug.xcconfig */;
+			baseConfigurationReference = E4F11DB2CE85A9CF2A0C79B2 /* Pods-MasterPassword-iOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -4525,6 +4529,7 @@
 					"-DMPW_CPERCIVA=0",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword;
+				PRODUCT_NAME = MasterPassword;
 				PROVISIONING_PROFILE_SPECIFIER = "Master Password Development";
 				SKIP_INSTALL = NO;
 				STRIP_INSTALLED_PRODUCT = YES;
@@ -4537,7 +4542,7 @@
 		};
 		DA5BFA6F147E415C00F98B1E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DC2D4B0016EB0A535147BA13 /* Pods-MasterPassword.release.xcconfig */;
+			baseConfigurationReference = FFFCFF8FBD5549B1EFF8806D /* Pods-MasterPassword-iOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -4570,6 +4575,7 @@
 					"-DMPW_CPERCIVA=0",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword;
+				PRODUCT_NAME = MasterPassword;
 				PROVISIONING_PROFILE_SPECIFIER = "Master Password Ad Hoc";
 				SKIP_INSTALL = NO;
 				STRIP_INSTALLED_PRODUCT = YES;
@@ -4777,7 +4783,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword" */ = {
+		DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DA5BFA6E147E415C00F98B1E /* Debug */,

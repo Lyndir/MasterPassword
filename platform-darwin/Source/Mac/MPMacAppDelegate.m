@@ -19,8 +19,12 @@
 #import "MPMacAppDelegate.h"
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
+#import "MPSecrets.h"
+
 #import <Carbon/Carbon.h>
 #import <ServiceManagement/ServiceManagement.h>
+#import <Sentry/Sentry.h>
+#import <Countly/Countly.h>
 
 #define LOGIN_HELPER_BUNDLE_ID @"com.lyndir.lhunath.MasterPassword.Mac.LoginHelper"
 
@@ -68,28 +72,86 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 
-    NSString *crashlyticsAPIKey = [self crashlyticsAPIKey];
-    if ([crashlyticsAPIKey length]) {
-        inf(@"Initializing Crashlytics");
-#if DEBUG
-        [Crashlytics sharedInstance].debugMode = YES;
+    @try {
+        // Sentry
+        SentryClient.sharedClient = [[SentryClient alloc] initWithDsn:decrypt( sentryDSN ) didFailWithError:nil];
+#ifdef DEBUG
+        SentryClient.sharedClient.environment = @"Development";
+#elif PUBLIC
+        SentryClient.sharedClient.environment = @"Public";
+#else
+        SentryClient.sharedClient.environment = @"Private";
 #endif
-        [[Crashlytics sharedInstance] setUserIdentifier:[PearlKeyChain deviceIdentifier]];
-        [[Crashlytics sharedInstance] setObjectValue:[PearlKeyChain deviceIdentifier] forKey:@"deviceIdentifier"];
-        [[Crashlytics sharedInstance] setUserName:@"Anonymous"];
-        [Crashlytics startWithAPIKey:crashlyticsAPIKey];
+        SentryClient.sharedClient.enabled = [MPMacConfig get].sendInfo;
+        [SentryClient.sharedClient enableAutomaticBreadcrumbTracking];
+        [SentryClient.sharedClient startCrashHandlerWithError:nil];
         [[PearlLogger get] registerListener:^BOOL(PearlLogMessage *message) {
-            PearlLogLevel level = PearlLogLevelInfo;
+            PearlLogLevel level = PearlLogLevelWarn;
             if ([[MPConfig get].sendInfo boolValue])
                 level = PearlLogLevelDebug;
 
-            if (message.level >= level)
-                CLSLog( @"%@", [message messageDescription] );
+            if (message.level >= level) {
+                SentrySeverity sentryLevel = kSentrySeverityInfo;
+                switch (message.level) {
+                    case PearlLogLevelTrace:
+                        sentryLevel = kSentrySeverityDebug;
+                        break;
+                    case PearlLogLevelDebug:
+                        sentryLevel = kSentrySeverityDebug;
+                        break;
+                    case PearlLogLevelInfo:
+                        sentryLevel = kSentrySeverityInfo;
+                        break;
+                    case PearlLogLevelWarn:
+                        sentryLevel = kSentrySeverityWarning;
+                        break;
+                    case PearlLogLevelError:
+                        sentryLevel = kSentrySeverityError;
+                        break;
+                    case PearlLogLevelFatal:
+                        sentryLevel = kSentrySeverityFatal;
+                        break;
+                }
+                SentryBreadcrumb *breadcrumb = [[SentryBreadcrumb alloc] initWithLevel:sentryLevel category:@"Pearl"];
+                breadcrumb.type = @"log";
+                breadcrumb.message = message.message;
+                breadcrumb.timestamp = message.occurrence;
+                breadcrumb.data = @{ @"file": message.fileName, @"line": @(message.lineNumber), @"function": message.function };
+                [SentryClient.sharedClient.breadcrumbs addBreadcrumb:breadcrumb];
+            }
 
             return YES;
         }];
-        CLSLog( @"Crashlytics (%@) initialized for: %@ v%@.", //
-                [Crashlytics sharedInstance].version, [PearlInfoPlist get].CFBundleName, [PearlInfoPlist get].CFBundleVersion );
+
+        // Countly
+        CountlyConfig *countlyConfig = [CountlyConfig new];
+        countlyConfig.host = @"https://countly.lyndir.com";
+        countlyConfig.appKey = decrypt( countlyKey );
+        countlyConfig.features = @[ CLYPushNotifications ];
+        countlyConfig.requiresConsent = YES;
+#if PUBLIC
+        countlyConfig.pushTestMode = nil;
+#elif DEBUG
+        countlyConfig.pushTestMode = CLYPushTestModeDevelopment;
+#else
+        countlyConfig.pushTestMode = CLYPushTestModeTestFlightOrAdHoc;
+#endif
+        countlyConfig.alwaysUsePOST = YES;
+        countlyConfig.deviceID = [PearlKeyChain deviceIdentifier];
+        countlyConfig.secretSalt = decrypt( countlySalt );
+        countlyConfig.enableDebug = YES;
+        [Countly.sharedInstance startWithConfig:countlyConfig];
+
+#if ! DEBUG
+        [self.hangDetector = [[PearlHangDetector alloc] initWithHangAction:^(NSTimeInterval hangTime) {
+            MPError( [NSError errorWithDomain:MPErrorDomain code:MPErrorHangCode userInfo:@{
+                    @"time": @(hangTime)
+            }], @"Timeout waiting for main thread after %fs.", hangTime );
+        }] start];
+#endif
+    }
+    @catch (id exception) {
+        err( @"During Analytics Setup: %@", exception );
     }
 
     // Setup delegates and listeners.
@@ -354,7 +416,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     NSTextField *nameField = [[NSTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )];
     [alert setAccessoryView:nameField];
     [alert layout];
-    [nameField becomeFirstResponder];
+    [alert.window makeFirstResponder:nameField];
     if ([alert runModal] != NSAlertFirstButtonReturn)
         return;
 

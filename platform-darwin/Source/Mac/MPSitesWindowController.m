@@ -116,7 +116,7 @@
             NSTextField *passwordField = self.securePasswordField;
             if (self.securePasswordField.isHidden)
                 passwordField = self.revealPasswordField;
-            [passwordField becomeFirstResponder];
+            [passwordField.window makeFirstResponder:passwordField];
             [[passwordField currentEditor] moveToEndOfLine:nil];
         }
     }
@@ -503,14 +503,14 @@
             if ([MPMacAppDelegate get].key) {
                 self.inputLabel.stringValue = strf( @"%@'s password for:", mainActiveUser.name );
                 self.locked = NO;
-                [self.siteField becomeFirstResponder];
+                [self.siteField.window makeFirstResponder:self.siteField];
             }
             else {
                 self.inputLabel.stringValue = strf( @"Enter %@'s master password:", mainActiveUser.name );
                 NSTextField *passwordField = self.securePasswordField;
                 if (self.securePasswordField.isHidden)
                     passwordField = self.revealPasswordField;
-                [passwordField becomeFirstResponder];
+                [passwordField.window makeFirstResponder:passwordField];
             }
         }
 
