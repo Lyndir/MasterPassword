@@ -48,13 +48,13 @@ static void usage() {
          "               -u checks the master password against the config,\n"
          "               -U allows updating to a new master password.\n"
          "               Defaults to %s in env or prompts.\n", MP_ENV_fullName );
-    dbg( ""
-         "  -M master-pw Specify the master password of the user.\n"
-         "               Passing secrets as arguments is unsafe, for use in testing only." );
     inf( ""
          "  -m fd        Read the master password of the user from a file descriptor.\n"
          "               Tip: don't send extra characters like newlines such as by using\n"
          "               echo in a pipe.  Consider printf instead.\n" );
+    dbg( ""
+         "  -M master-pw Specify the master password of the user.\n"
+         "               Passing secrets as arguments is unsafe, for use in testing only." );
     inf( ""
          "  -t pw-type   Specify the password's template.\n"
          "               Defaults to 'long' (-p a), 'name' (-p i) or 'phrase' (-p r).\n"
@@ -93,14 +93,15 @@ static void usage() {
          "                   -p i        | -\n"
          "                   -p r        | Most significant word in security question.\n" );
     inf( ""
-         "  -f|F format  The mpsites format to use for reading/writing site parameters.\n"
-         "               -F forces the use of the given format,\n"
-         "               -f allows fallback/migration.\n"
-         "               Defaults to env var %s or json, falls back to plain.\n"
+         "  -f|F format  The file format to use for reading/writing user state.\n"
+         "               -f reads the given format, allows fall-back & writes the default format (%s).\n"
+         "               -F reads & writes only the given format,\n"
+         "               Defaults to env var %s or the default format (%s).\n"
          "                   n, none     | No file\n"
          "                   f, flat     | ~/.mpw.d/Full Name.%s\n"
          "                   j, json     | ~/.mpw.d/Full Name.%s\n",
-            MP_ENV_format, mpw_marshal_format_extension( MPMarshalFormatFlat ), mpw_marshal_format_extension( MPMarshalFormatJSON ) );
+            mpw_format_name( MPMarshalFormatDefault ), MP_ENV_format, mpw_format_name( MPMarshalFormatDefault ),
+            mpw_format_extension( MPMarshalFormatFlat ), mpw_format_extension( MPMarshalFormatJSON ) );
     inf( ""
          "  -R redacted  Whether to save the mpsites in redacted format or not.\n"
          "               Redaction omits or encrypts any secrets, making the file safe\n"
@@ -455,12 +456,10 @@ void cli_keyContext(Arguments *args, Operation *operation) {
     operation->keyContext = mpw_strdup( args->keyContext );
 }
 
-void cli_user(Arguments *args, Operation *operation) {
-
-    // Find mpsites file from parameters.
+static FILE *cli_user_open(const MPMarshalFormat format, Operation *operation) {
     FILE *sitesFile = NULL;
     size_t count = 0;
-    const char **extensions = mpw_marshal_format_extensions( operation->sitesFormat, &count );
+    const char **extensions = mpw_format_extensions( format, &count );
     for (int e = 0; !sitesFile && e < count; ++e) {
         mpw_free_string( &operation->sitesPath );
         operation->sitesPath = mpw_path( operation->fullName, extensions[e] );
@@ -468,21 +467,18 @@ void cli_user(Arguments *args, Operation *operation) {
         if (!operation->sitesPath || !(sitesFile = fopen( operation->sitesPath, "r" )))
             dbg( "Couldn't open configuration file:\n  %s: %s", operation->sitesPath, strerror( errno ) );
     }
-
-    if (!sitesFile && !operation->sitesFormatFixed)
-        for (MPMarshalFormat format = MPMarshalFormatFirst; !sitesFile && format <= MPMarshalFormatLast; ++format) {
-            mpw_free( &extensions, count * sizeof( *extensions ) );
-            extensions = mpw_marshal_format_extensions( operation->sitesFormat, &count );
-
-            for (int e = 0; !sitesFile && e < count; ++e) {
-                mpw_free_string( &operation->sitesPath );
-                operation->sitesPath = mpw_path( operation->fullName, extensions[e] );
-
-                if (!operation->sitesPath || !(sitesFile = fopen( operation->sitesPath, "r" )))
-                    dbg( "Couldn't open configuration file:\n  %s: %s", operation->sitesPath, strerror( errno ) );
-            }
-        }
     mpw_free( &extensions, count * sizeof( *extensions ) );
+
+    return sitesFile;
+}
+
+void cli_user(Arguments *args, Operation *operation) {
+
+    // Find mpsites file from parameters.
+    FILE *sitesFile = cli_user_open( operation->sitesFormat, operation );
+    if (!sitesFile && !operation->sitesFormatFixed)
+        for (MPMarshalFormat format = MPMarshalFormatLast; !sitesFile && format >= MPMarshalFormatFirst; --format)
+            sitesFile = cli_user_open( format, operation );
 
     if (!sitesFile) {
         // If no user from mpsites, create a new one.
@@ -721,10 +717,10 @@ void cli_mpw(Arguments *args, Operation *operation) {
         fprintf( stderr, "%s's %s for %s:\n[ %s ]: ",
                 operation->user->fullName, operation->purposeResult, operation->site->siteName, operation->identicon );
 
-    // Determine master key.
+    // Check user keyID.
     MPMasterKey masterKey = NULL;
     if (operation->user->masterKeyProvider)
-        masterKey = operation->user->masterKeyProvider( operation->site->algorithm, operation->user->fullName );
+        masterKey = operation->user->masterKeyProvider( operation->user->algorithm, operation->user->fullName );
     if (!masterKey) {
         ftl( "Couldn't derive master key." );
         cli_free( args, operation );
@@ -735,6 +731,17 @@ void cli_mpw(Arguments *args, Operation *operation) {
         operation->user->keyID = mpw_strdup( keyID );
     else if (!mpw_id_buf_equals( keyID, operation->user->keyID )) {
         ftl( "Master key mismatch." );
+        mpw_free( &masterKey, MPMasterKeySize );
+        cli_free( args, operation );
+        exit( EX_SOFTWARE );
+    }
+
+    // Resolve master key for site.
+    mpw_free( &masterKey, MPMasterKeySize );
+    if (operation->user->masterKeyProvider)
+        masterKey = operation->user->masterKeyProvider( operation->site->algorithm, operation->user->fullName );
+    if (!masterKey) {
+        ftl( "Couldn't derive master key." );
         cli_free( args, operation );
         exit( EX_SOFTWARE );
     }
@@ -808,7 +815,7 @@ void cli_save(Arguments *args, Operation *operation) {
         operation->sitesFormat = MPMarshalFormatDefault;
 
     size_t count = 0;
-    const char **extensions = mpw_marshal_format_extensions( operation->sitesFormat, &count );
+    const char **extensions = mpw_format_extensions( operation->sitesFormat, &count );
     if (!extensions || !count)
         return;
 

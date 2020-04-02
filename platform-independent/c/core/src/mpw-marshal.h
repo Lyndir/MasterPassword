@@ -62,14 +62,27 @@ typedef mpw_enum( unsigned int, MPMarshalErrorType ) {
             MPMarshalErrorInternal,
 };
 
-typedef MPMasterKey (*MPMasterKeyProvider)(MPAlgorithmVersion algorithm, const char *fullName);
-typedef bool (*MPMasterKeyProviderProxy)(MPMasterKey *, MPAlgorithmVersion *, MPAlgorithmVersion algorithm, const char *fullName);
+/** A function that can resolve a master key of the given algorithm for the user with the given name.
+ * @return A master key (allocated), or NULL if the key could not be resolved. */
+typedef MPMasterKey (*MPMasterKeyProvider)(
+        MPAlgorithmVersion algorithm, const char *fullName);
+/** A function that updates the currentKey with the masterKey of the given algorithm for the user with the given name.
+ * @param currentKey A pointer to where the current masterKey (allocated) can be found and a new one can be placed.  Must be freed if updated.
+ * @param currentAlgorithm A pointer to where the algorithm of the current masterKey is found and can be updated.
+ * @param algorithm The algorithm of the masterKey that should be placed in currentKey.
+ * @param fullName The name of the user whose masterKey should be placed in currentKey.
+ * @return false if not able to resolve the requested masterKey. */
+typedef bool (*MPMasterKeyProviderProxy)(
+        MPMasterKey *currentKey, MPAlgorithmVersion *currentAlgorithm, MPAlgorithmVersion algorithm, const char *fullName);
 
 /** Create a key provider which handles key generation by proxying the given function.
  * The proxy function receives the currently cached key and its algorithm.  If those are NULL, the proxy function should clean up its state. */
-MPMasterKeyProvider mpw_masterKeyProvider_proxy(const MPMasterKeyProviderProxy proxy);
+MPMasterKeyProvider mpw_masterKeyProvider_proxy(
+        const MPMasterKeyProviderProxy proxy);
 /** Create a key provider that computes a master key for the given master password. */
-MPMasterKeyProvider mpw_masterKeyProvider_str(const char *masterPassword);
+MPMasterKeyProvider mpw_masterKeyProvider_str(
+        const char *masterPassword);
+
 /** Free the cached keys and proxy state. */
 void mpw_masterKeyProvider_free(void);
 
@@ -329,14 +342,14 @@ const char *mpw_format_name(
  * @return The file extension (static) that's recommended and currently used for output files,
  *         or NULL if the format was not recognized or does not support marshalling.
  */
-const char *mpw_marshal_format_extension(
+const char *mpw_format_extension(
         const MPMarshalFormat format);
 /**
  * @return An array (allocated, count) of filename extensions (static) that are used for files of this format,
  *         the first being the currently preferred/output extension.
  *         NULL if the format is unrecognized or does not support marshalling.
  */
-const char **mpw_marshal_format_extensions(
+const char **mpw_format_extensions(
         const MPMarshalFormat format, size_t *count);
 
 #endif // _MPW_MARSHAL_H

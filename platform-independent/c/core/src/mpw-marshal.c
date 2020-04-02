@@ -1319,7 +1319,7 @@ const char *mpw_format_name(
     }
 }
 
-const char *mpw_marshal_format_extension(
+const char *mpw_format_extension(
         const MPMarshalFormat format) {
 
     switch (format) {
@@ -1336,7 +1336,7 @@ const char *mpw_marshal_format_extension(
     }
 }
 
-const char **mpw_marshal_format_extensions(
+const char **mpw_format_extensions(
         const MPMarshalFormat format, size_t *count) {
 
     *count = 0;
@@ -1345,10 +1345,10 @@ const char **mpw_marshal_format_extensions(
             return NULL;
         case MPMarshalFormatFlat:
             return mpw_strings( count,
-                    mpw_marshal_format_extension( format ), "mpsites.txt", "txt", NULL );
+                    mpw_format_extension( format ), "mpsites.txt", "txt", NULL );
         case MPMarshalFormatJSON:
             return mpw_strings( count,
-                    mpw_marshal_format_extension( format ), "mpsites.json", "json", NULL );
+                    mpw_format_extension( format ), "mpsites.json", "json", NULL );
         default: {
             dbg( "Unknown format: %d", format );
             return NULL;
