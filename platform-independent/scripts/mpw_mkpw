@@ -36,13 +36,18 @@ done
 template=${template:-${templates[$((RANDOM % ${#templates[@]}))]}}
 
 
-printf 'sentence: '
-while read -n1 character && [[ $character ]]; do
-    category=${categoryByCharacter["$character"]}
-    read p word < <(getword "$category" "$pop_limit")
-    (( permutations *= p ))
-    printf '%s ' "$word"
-done <<< "$template"
-echo
-printf 'permutations: %s, entropy: ~%.1f bit\n' "$permutations" "$(bc -l <<< "l($permutations) / l(2)")"
+while true; do (
+    printf 'sentence: '
+    while read -n1 character && [[ $character ]]; do
+        category=${categoryByCharacter["$character"]}
+        read p word < <(getword "$category" "$pop_limit")
+        (( permutations *= p ))
+        printf '%s ' "$word"
+    done <<< "$template"
+    echo
+    printf 'permutations: %s, entropy: ~%.1f bit\n' "$permutations" "$(bc -l <<< "l($permutations) / l(2)")"
+
+    read -s -n 1 -p 'Generate another? [Yn]' && echo || break
+    [[ $REPLY = n ]] && break
+); done
 
