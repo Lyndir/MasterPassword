@@ -130,11 +130,9 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         countlyConfig.appKey = decrypt( countlyKey );
         countlyConfig.features = @[ CLYPushNotifications ];
         countlyConfig.requiresConsent = YES;
-#if PUBLIC
-        countlyConfig.pushTestMode = nil;
-#elif DEBUG
+#if DEBUG
         countlyConfig.pushTestMode = CLYPushTestModeDevelopment;
-#else
+#elif ! PUBLIC
         countlyConfig.pushTestMode = CLYPushTestModeTestFlightOrAdHoc;
 #endif
         countlyConfig.alwaysUsePOST = YES;
