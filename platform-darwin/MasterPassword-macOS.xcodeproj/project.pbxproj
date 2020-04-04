@@ -2427,7 +2427,6 @@
 				DA5BFA42147E415C00F98B1E /* Resources */,
 				DAD9B5EE1762CA3A001835F9 /* Copy LoginHelper */,
 				DA6556E314D55F3000841C99 /* Run Script: GIT version -> Info.plist */,
-				DAD3125D155288AA00A3F9ED /* Run Script: Fabric */,
 				43E5966C8C236E86824DDADE /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -2758,21 +2757,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = "/bin/sh -e";
 			shellScript = "exec Scripts/updatePlist\n";
-		};
-		DAD3125D155288AA00A3F9ED /* Run Script: Fabric */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Run Script: Fabric";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = "/bin/sh -e";
-			shellScript = "[[ $DEPLOYMENT_LOCATION != YES ]] && exit\n\napiKey=$(/usr/libexec/PlistBuddy -c \"Print :'API Key'\" Resources/Fabric/Fabric.plist)\n[[ $apiKey ]] && External/Mac/Fabric.framework/run \"$apiKey\" 410fb41450e3a2e50fa8357682d812ecd3e1846f2141a99bdb9d3a6a981ad69c";
-			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
