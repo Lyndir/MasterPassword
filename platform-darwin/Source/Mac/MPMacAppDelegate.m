@@ -295,8 +295,6 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (void)selectUser:(NSMenuItem *)item {
 
-    [self signOutAnimated:NO];
-
     NSManagedObjectContext *mainContext = [MPMacAppDelegate managedObjectContextForMainThreadIfReady];
     self.activeUser = [MPUserEntity existingObjectWithID:[item representedObject] inContext:mainContext];
 }
@@ -369,10 +367,12 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
                     return masterPassword;
                 }          result:^(NSError *error) {
-                    [self updateUsers];
+                    PearlMainQueue( ^{
+                        [self updateUsers];
 
-                    if (error && !(error.domain == NSCocoaErrorDomain && error.code == NSUserCancelledError))
-                        [[NSAlert alertWithError:error] runModal];
+                        if (error && !(error.domain == NSCocoaErrorDomain && error.code == NSUserCancelledError))
+                            [[NSAlert alertWithError:error] runModal];
+                    } );
                 }];
             }] resume];
 }
@@ -458,7 +458,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (IBAction)lock:(id)sender {
 
-    [self signOutAnimated:YES];
+    [self signOut];
 }
 
 - (IBAction)terminate:(id)sender {
@@ -641,6 +641,9 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         else
             userItem.state = NSOffState;
     }
+
+    if (!mainActiveUser)
+        [self.sitesWindowController close];
 
     [self updateMenuItems];
 }

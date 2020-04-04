@@ -776,7 +776,7 @@ referenceSizeForFooterInSection:(NSInteger)section {
     self.masterPasswordChoice = nil;
 
     if (activeUserState != MPActiveUserStateMinimized && (!self.active || [MPiOSAppDelegate get].activeUserOID)) {
-        [[MPiOSAppDelegate get] signOutAnimated:YES];
+        [[MPiOSAppDelegate get] signOut];
         return;
     }
 

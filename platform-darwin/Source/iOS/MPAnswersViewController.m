@@ -49,10 +49,7 @@
 
     PearlAddNotificationObserver( MPSignedOutNotification, nil, [NSOperationQueue mainQueue],
             ^(MPAnswersViewController *self, NSNotification *note) {
-                if (![note.userInfo[@"animated"] boolValue])
-                    [UIView setAnimationsEnabled:NO];
                 [[MPOverlaySegue dismissViewController:self] perform];
-                [UIView setAnimationsEnabled:YES];
             } );
 }
 

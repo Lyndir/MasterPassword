@@ -363,7 +363,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
         [MPiOSAppDelegate managedObjectContextForMainThreadPerformBlock:^(NSManagedObjectContext *mainContext) {
             // TODO: either move this into the app delegate or remove the duplicate signOutAnimated: call from the app delegate.
             if (![[MPiOSAppDelegate get] activeUserInContext:mainContext])
-                [[MPiOSAppDelegate get] signOutAnimated:YES];
+                [[MPiOSAppDelegate get] signOut];
         }];
     }];
 }

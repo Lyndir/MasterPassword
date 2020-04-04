@@ -31,7 +31,7 @@ mpw_expect() {
     [[ $file ]] && (( ! keep )) && rm "$file"
 
     printf '.'
-    local result=$(set -x; ./mpw -q "${args[@]}") err=$?
+    local result=$(./mpw -q "${args[@]}") err=$?
 
     if (( err )); then
         printf >&2 "Error (exit %d) mpw%s\n" "$err" "$(printf ' %q' "${args[@]}")"

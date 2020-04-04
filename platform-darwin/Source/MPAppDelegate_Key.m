@@ -115,17 +115,9 @@
     }
 }
 
-- (void)signOutAnimated:(BOOL)animated {
-
-    if (self.key)
-        self.key = nil;
-
-    if ([[MPConfig get].sendInfo boolValue]) {
-        [Countly.sharedInstance userLoggedOut];
-    }
+- (void)signOut {
 
     self.activeUser = nil;
-    [[NSNotificationCenter defaultCenter] postNotificationName:MPSignedOutNotification object:self userInfo:@{ @"animated": @(animated) }];
 }
 
 - (BOOL)signInAsUser:(MPUserEntity *)user saveInContext:(NSManagedObjectContext *)moc usingMasterPassword:(NSString *)password {
@@ -191,7 +183,10 @@
 
         return NO;
     }
+
     inf( @"Logged in user: %@", user.userID );
+    user.lastUsed = [NSDate date];
+    self.activeUser = user;
 
     if (![self.key isEqualToKey:tryKey]) {
         // Upgrade the user's keyID if not at the default version yet.
@@ -222,8 +217,6 @@
         err( @"While setting username: %@", exception );
     }
 
-    user.lastUsed = [NSDate date];
-    self.activeUser = user;
     [moc saveToStore];
 
     // Perform a data sanity check now that we're logged in as the user to allow fixes that require the user's key.

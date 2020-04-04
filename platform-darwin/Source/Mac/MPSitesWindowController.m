@@ -51,8 +51,6 @@
             } );
     PearlAddNotificationObserver( NSWindowWillCloseNotification, self.window, [NSOperationQueue mainQueue],
             ^(id host, NSNotification *note) {
-                PearlRemoveNotificationObservers();
-
                 NSWindow *sheet = [self.window attachedSheet];
                 if (sheet)
                     [self.window endSheet:sheet];
@@ -84,6 +82,10 @@
 
     self.siteTable.controller = self;
     prof_finish( @"ui" );
+}
+
+- (void)dealloc {
+    PearlRemoveNotificationObservers();
 }
 
 - (void)replaceFonts:(NSView *)view {
@@ -325,7 +327,7 @@
                         [alert_ beginSheetModalForWindow:self.window completionHandler:nil];
 
                         if ([MPMacAppDelegate get].key)
-                            [[MPMacAppDelegate get] signOutAnimated:YES];
+                            [[MPMacAppDelegate get] signOut];
                     } );
                 }];
             }
@@ -573,7 +575,6 @@
         }
         prof_finish( @"newSites: %@", newSites );
 
-        dbg( @"newSites: %@", newSites );
         if (![newSites isEqualToArray:self.sites])
             PearlMainQueue( ^{
                 self.sites = newSites;

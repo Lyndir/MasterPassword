@@ -332,16 +332,16 @@ void mpw_log_sink_pearl(const MPLogEvent *record) {
             } );
         } );
     }          result:^(NSError *error) {
-        [activityOverlay cancelOverlayAnimated:YES];
+        PearlMainQueue( ^{
+            [activityOverlay cancelOverlayAnimated:YES];
 
-        if (error && !(error.domain == NSCocoaErrorDomain && error.code == NSUserCancelledError)) {
-            PearlMainQueue( ^{
+            if (error && !(error.domain == NSCocoaErrorDomain && error.code == NSUserCancelledError)) {
                 UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"Error" message:[error localizedDescription]
                                                                              preferredStyle:UIAlertControllerStyleAlert];
                 [controller addAction:[UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleCancel handler:nil]];
                 [self.navigationController presentViewController:controller animated:YES completion:nil];
-            } );
-        }
+            }
+        } );
     }];
 }
 
@@ -392,8 +392,11 @@ void mpw_log_sink_pearl(const MPLogEvent *record) {
 - (void)applicationDidEnterBackground:(UIApplication *)application {
 
     inf( @"Did background" );
-    if (![[MPiOSConfig get].rememberLogin boolValue])
-        [self signOutAnimated:NO];
+    if (![[MPiOSConfig get].rememberLogin boolValue]) {
+        [UIView setAnimationsEnabled:NO];
+        [self signOut];
+        [UIView setAnimationsEnabled:YES];
+    }
 
     [self.hangDetector stop];
 
@@ -661,7 +664,7 @@ void mpw_log_sink_pearl(const MPLogEvent *record) {
                 [moc saveToStore];
             }];
 
-            [self signOutAnimated:YES];
+            [self signOut];
             if (didReset)
                 didReset();
         }]];

@@ -51,7 +51,7 @@
             } );
     PearlAddNotificationObserver( MPSignedOutNotification, nil, [NSOperationQueue mainQueue],
             ^(MPCombinedViewController *self, NSNotification *note) {
-                [self setMode:MPCombinedModeUserSelection animated:[note.userInfo[@"animated"] boolValue]];
+                [self setMode:MPCombinedModeUserSelection];
             } );
 }
 
@@ -110,7 +110,7 @@
 
 - (void)setMode:(MPCombinedMode)mode {
 
-    [self setMode:mode animated:YES];
+    [self setMode:mode animated:[UIView areAnimationsEnabled]];
 }
 
 - (void)setMode:(MPCombinedMode)mode animated:(BOOL)animated {

@@ -98,7 +98,7 @@
     UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
     if (cell == self.signOutCell) {
         [self dismissPopup];
-        [[MPiOSAppDelegate get] signOutAnimated:YES];
+        [[MPiOSAppDelegate get] signOut];
     }
 
     if (cell == self.feedbackCell)

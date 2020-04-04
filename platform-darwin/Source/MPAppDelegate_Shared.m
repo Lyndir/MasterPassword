@@ -21,6 +21,8 @@
 #import "MPAppDelegate_Key.h"
 #import "NSManagedObjectModel+KCOrderedAccessorFix.h"
 
+#import <Countly/Countly.h>
+
 @interface MPAppDelegate_Shared()
 
 @property(strong, atomic) MPKey *key;
@@ -63,14 +65,26 @@ static MPAppDelegate_Shared *instance;
 
     MPUserEntity *activeUser = [MPUserEntity existingObjectWithID:activeUserOID inContext:context];
     if (!activeUser)
-        [self signOutAnimated:YES];
+        [self signOut];
 
     return activeUser;
 }
 
 - (void)setActiveUser:(MPUserEntity *)activeUser {
 
-    self.activeUserOID = activeUser.permanentObjectID;
+    NSManagedObjectID *activeUserOID = activeUser.permanentObjectID;
+    if ([self.activeUserOID isEqualTo:activeUserOID])
+        return;
+
+    if (self.key)
+        self.key = nil;
+
+    if ([[MPConfig get].sendInfo boolValue])
+        [Countly.sharedInstance userLoggedOut];
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:MPSignedOutNotification object:self];
+
+    self.activeUserOID = activeUserOID;
 }
 
 - (void)handleCoordinatorError:(NSError *)error {
