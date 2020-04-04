@@ -40,11 +40,10 @@ __END_DECLS
     err( message_ @"%@%@", ##__VA_ARGS__, __error && [message_ length]? @"\n": @"", [__error fullDescription]?: @"" ); \
     \
     if (__error && [[MPConfig get].sendInfo boolValue]) { \
-        SentryEvent *event = [[SentryEvent alloc] initWithLevel:kSentrySeverityError]; \
+        SentryEvent *event = [[SentryEvent alloc] initWithLevel:kSentryLevelError]; \
         event.message = strf(@"%@: %@", message_, [__error localizedDescription]); \
         event.logger = @"MPError"; \
-        [SentryClient.sharedClient appendStacktraceToEvent:event]; \
-        [SentryClient.sharedClient sendEvent:event withCompletionHandler:nil]; \
+        [SentrySDK captureEvent:event]; \
     } \
     __error; \
 })

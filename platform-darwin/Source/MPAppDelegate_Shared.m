@@ -73,7 +73,7 @@ static MPAppDelegate_Shared *instance;
 - (void)setActiveUser:(MPUserEntity *)activeUser {
 
     NSManagedObjectID *activeUserOID = activeUser.permanentObjectID;
-    if ([self.activeUserOID isEqualTo:activeUserOID])
+    if ([self.activeUserOID isEqual:activeUserOID])
         return;
 
     if (self.key)

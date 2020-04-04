@@ -83,42 +83,45 @@ void mpw_log_sink_pearl(const MPLogEvent *record) {
 
     @try {
         // Sentry
-        SentryClient.sharedClient = [[SentryClient alloc] initWithDsn:decrypt( sentryDSN ) didFailWithError:nil];
+        [SentrySDK initWithOptions:@{
+                @"dsn"        : decrypt( sentryDSN ),
 #ifdef DEBUG
-        SentryClient.sharedClient.environment = @"Development";
+                @"debug"      : @(YES),
+                @"environment": @"Development",
 #elif PUBLIC
-        SentryClient.sharedClient.environment = @"Public";
+                @"debug"      : @(NO),
+                @"environment": @"Public",
 #else
-        SentryClient.sharedClient.environment = @"Private";
+                @"debug"      : @(NO),
+                @"environment": @"Private",
 #endif
-        SentryClient.sharedClient.enabled = [MPiOSConfig get].sendInfo;
-        [SentryClient.sharedClient enableAutomaticBreadcrumbTracking];
-        [SentryClient.sharedClient startCrashHandlerWithError:nil];
+                @"enabled"    : [MPiOSConfig get].sendInfo,
+        }];
         [[PearlLogger get] registerListener:^BOOL(PearlLogMessage *message) {
             PearlLogLevel level = PearlLogLevelWarn;
             if ([[MPConfig get].sendInfo boolValue])
                 level = PearlLogLevelDebug;
 
             if (message.level >= level) {
-                SentrySeverity sentryLevel = kSentrySeverityInfo;
+                SentryLevel sentryLevel = kSentryLevelInfo;
                 switch (message.level) {
                     case PearlLogLevelTrace:
-                        sentryLevel = kSentrySeverityDebug;
+                        sentryLevel = kSentryLevelNone;
                         break;
                     case PearlLogLevelDebug:
-                        sentryLevel = kSentrySeverityDebug;
+                        sentryLevel = kSentryLevelDebug;
                         break;
                     case PearlLogLevelInfo:
-                        sentryLevel = kSentrySeverityInfo;
+                        sentryLevel = kSentryLevelInfo;
                         break;
                     case PearlLogLevelWarn:
-                        sentryLevel = kSentrySeverityWarning;
+                        sentryLevel = kSentryLevelWarning;
                         break;
                     case PearlLogLevelError:
-                        sentryLevel = kSentrySeverityError;
+                        sentryLevel = kSentryLevelError;
                         break;
                     case PearlLogLevelFatal:
-                        sentryLevel = kSentrySeverityFatal;
+                        sentryLevel = kSentryLevelFatal;
                         break;
                 }
                 SentryBreadcrumb *breadcrumb = [[SentryBreadcrumb alloc] initWithLevel:sentryLevel category:@"Pearl"];
@@ -126,7 +129,7 @@ void mpw_log_sink_pearl(const MPLogEvent *record) {
                 breadcrumb.message = message.message;
                 breadcrumb.timestamp = message.occurrence;
                 breadcrumb.data = @{ @"file": message.fileName, @"line": @(message.lineNumber), @"function": message.function };
-                [SentryClient.sharedClient.breadcrumbs addBreadcrumb:breadcrumb];
+                [SentrySDK addBreadcrumb:breadcrumb];
             }
 
             return YES;
@@ -716,13 +719,11 @@ void mpw_log_sink_pearl(const MPLogEvent *record) {
 #else
         prefs[@"reviewedVersion"] = @(YES);
 #endif
-        PearlMainQueueOperation( ^{
-            if (![[SentryClient.sharedClient.extra dictionaryWithValuesForKeys:prefs.allKeys] isEqualToDictionary:prefs]) {
-                NSMutableDictionary *extra = [SentryClient.sharedClient.extra mutableCopy]?: [NSMutableDictionary dictionary];
-                [extra addEntriesFromDictionary:prefs];
-                SentryClient.sharedClient.extra = extra;
-            }
-        } );
+
+        [SentrySDK configureScope:^(SentryScope *scope) {
+            for (NSString *pref in prefs.allKeys)
+                [scope setExtraValue:prefs[pref] forKey:pref];
+        }];
     }
     else {
         [Countly.sharedInstance cancelConsentForAllFeatures];
