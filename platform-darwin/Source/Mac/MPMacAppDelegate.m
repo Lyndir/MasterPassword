@@ -142,14 +142,6 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         countlyConfig.secretSalt = decrypt( countlySalt );
         countlyConfig.enableDebug = YES;
         [Countly.sharedInstance startWithConfig:countlyConfig];
-
-#if ! DEBUG
-        [self.hangDetector = [[PearlHangDetector alloc] initWithHangAction:^(NSTimeInterval hangTime) {
-            MPError( [NSError errorWithDomain:MPErrorDomain code:MPErrorHangCode userInfo:@{
-                    @"time": @(hangTime)
-            }], @"Timeout waiting for main thread after %fs.", hangTime );
-        }] start];
-#endif
     }
     @catch (id exception) {
         err( @"During Analytics Setup: %@", exception );
