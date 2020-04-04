@@ -20,6 +20,7 @@
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
 #import "MPSecrets.h"
+#import "mpw-marshal.h"
 
 #import <Carbon/Carbon.h>
 #import <ServiceManagement/ServiceManagement.h>
@@ -318,7 +319,15 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     openPanel.message = @"Locate the Master Password export file to import.";
     openPanel.prompt = @"Import";
     openPanel.directoryURL = [[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask].firstObject;
-    openPanel.allowedFileTypes = @[ @"mpsites" ];
+    NSMutableArray *allExtensions = [NSMutableArray array];
+    for (MPMarshalFormat format = MPMarshalFormatLast; format >= MPMarshalFormatFirst; --format) {
+        size_t count = 0;
+        const char **extensions = mpw_format_extensions( format, &count );
+        for (int c = 0; c < count; ++c)
+            [allExtensions addObject:@(extensions[c])];
+        free( extensions );
+    }
+    openPanel.allowedFileTypes = allExtensions;
     [NSApp activateIgnoringOtherApps:YES];
     if ([openPanel runModal] == NSFileHandlingPanelCancelButton)
         return;
@@ -535,9 +544,15 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
                 savePanel.message );
     savePanel.prompt = @"Export";
     savePanel.directoryURL = [[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask].firstObject;
-    savePanel.nameFieldStringValue = strf( @"%@ (%@).mpsites", mainActiveUser.name,
-            [exportDateFormatter stringFromDate:[NSDate date]] );
-    savePanel.allowedFileTypes = @[ @"mpsites" ];
+    savePanel.nameFieldStringValue = strf( @"%@ (%@).%@", mainActiveUser.name, [exportDateFormatter stringFromDate:[NSDate date]],
+            @(mpw_format_extension( MPMarshalFormatDefault ) ) );
+    NSMutableArray *allExtensions = [NSMutableArray array];
+    size_t count = 0;
+    const char **extensions = mpw_format_extensions( MPMarshalFormatDefault, &count );
+    for (int c = 0; c < count; ++c)
+        [allExtensions addObject:@(extensions[c])];
+    free( extensions );
+    savePanel.allowedFileTypes = allExtensions;
     [NSApp activateIgnoringOtherApps:YES];
     if ([savePanel runModal] == NSFileHandlingPanelCancelButton)
         return;
