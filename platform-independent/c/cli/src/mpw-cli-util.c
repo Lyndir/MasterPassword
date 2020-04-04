@@ -339,7 +339,7 @@ static char *mpw_tputs(const char *str, int affcnt) {
 const char *mpw_identicon_render(MPIdenticon identicon) {
 
     char *colorString, *resetString;
-#ifdef MPW_COLOR
+#if MPW_COLOR
     if (mpw_setupterm()) {
         colorString = mpw_tputs( tparm( tgetstr( "AF", NULL ), identicon.color ), 1 );
         resetString = mpw_tputs( tgetstr( "me", NULL ), 1 );
