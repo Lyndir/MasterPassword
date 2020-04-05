@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 53;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -594,20 +594,7 @@
 		DA071BF1190187FE00179766 /* empty@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "empty@2x.png"; sourceTree = "<group>"; };
 		DA071BF2190187FE00179766 /* empty.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = empty.png; sourceTree = "<group>"; };
 		DA0CC4F61EAB99BA009A8ED9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/IASKLocalizable.strings; sourceTree = "<group>"; };
-		DA0CC4F71EAB99BA009A8ED9 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/IASKLocalizable.strings; sourceTree = "<group>"; };
-		DA0CC4F81EAB99BA009A8ED9 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/IASKLocalizable.strings; sourceTree = "<group>"; };
 		DA0CC4F91EAB99BA009A8ED9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/IASKLocalizable.strings; sourceTree = "<group>"; };
-		DA0CC4FA1EAB99BA009A8ED9 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/IASKLocalizable.strings; sourceTree = "<group>"; };
-		DA0CC4FB1EAB99BA009A8ED9 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/IASKLocalizable.strings; sourceTree = "<group>"; };
-		DA0CC4FC1EAB99BA009A8ED9 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/IASKLocalizable.strings; sourceTree = "<group>"; };
-		DA0CC4FD1EAB99BA009A8ED9 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/IASKLocalizable.strings; sourceTree = "<group>"; };
-		DA0CC4FE1EAB99BA009A8ED9 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/IASKLocalizable.strings; sourceTree = "<group>"; };
-		DA0CC4FF1EAB99BA009A8ED9 /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/IASKLocalizable.strings"; sourceTree = "<group>"; };
-		DA0CC5001EAB99BA009A8ED9 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/IASKLocalizable.strings; sourceTree = "<group>"; };
-		DA0CC5011EAB99BA009A8ED9 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/IASKLocalizable.strings; sourceTree = "<group>"; };
-		DA0CC5021EAB99BA009A8ED9 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/IASKLocalizable.strings; sourceTree = "<group>"; };
-		DA0CC5031EAB99BA009A8ED9 /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/IASKLocalizable.strings; sourceTree = "<group>"; };
-		DA0CC5041EAB99BA009A8ED9 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/IASKLocalizable.strings; sourceTree = "<group>"; };
 		DA0CC5061EAB99BA009A8ED9 /* IASKAppSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IASKAppSettingsViewController.h; sourceTree = "<group>"; };
 		DA0CC5071EAB99BA009A8ED9 /* IASKAppSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IASKAppSettingsViewController.m; sourceTree = "<group>"; };
 		DA0CC5081EAB99BA009A8ED9 /* IASKAppSettingsWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IASKAppSettingsWebViewController.h; sourceTree = "<group>"; };
@@ -3557,6 +3544,7 @@
 		DA5BFA3B147E415C00F98B1E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				CLASSPREFIX = MP;
 				LastUpgradeCheck = 0920;
 				ORGANIZATIONNAME = Lyndir;
@@ -3612,97 +3600,11 @@
 			};
 			buildConfigurationList = DA5BFA3E147E415C00F98B1E /* Build configuration list for PBXProject "MasterPassword-iOS" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
-				English,
-				es,
-				af,
-				am,
-				ar,
-				be,
-				bg,
-				ca,
-				cs,
-				da,
-				de,
-				de_AT,
-				de_CH,
-				el,
-				en_GB,
-				en_IE,
-				en_IN,
-				en_SG,
-				en_ZA,
-				es_419,
-				es_AR,
-				es_BO,
-				es_CL,
-				es_CO,
-				es_CR,
-				es_DO,
-				es_EC,
-				es_GT,
-				es_HN,
-				es_MX,
-				es_NI,
-				es_PA,
-				es_PE,
-				es_PR,
-				es_PY,
-				es_SV,
-				es_US,
-				es_UY,
-				es_VE,
-				et,
-				fa,
-				fi,
-				fil,
-				fr,
-				fr_CH,
-				gsw,
-				he,
-				hi,
-				hr,
-				hu,
-				id,
-				in,
-				it,
-				iw,
-				ja,
-				ko,
-				ln,
-				lt,
-				lv,
-				mo,
-				ms,
-				nb,
-				nl,
-				no,
-				pl,
-				pt,
-				pt_BR,
-				pt_PT,
-				ro,
-				ru,
-				sk,
-				sl,
-				sr,
-				sv,
-				sw,
-				th,
-				tl,
-				tr,
-				uk,
-				vi,
-				zh,
-				zh_CN,
-				zh_HK,
-				zh_TW,
-				zu,
 				Base,
-				"pt-PT",
 			);
 			mainGroup = DA5BFA39147E415C00F98B1E;
 			productRefGroup = DA5BFA45147E415C00F98B1E /* Products */;
@@ -4246,20 +4148,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				DA0CC4F61EAB99BA009A8ED9 /* Base */,
-				DA0CC4F71EAB99BA009A8ED9 /* de */,
-				DA0CC4F81EAB99BA009A8ED9 /* el */,
 				DA0CC4F91EAB99BA009A8ED9 /* en */,
-				DA0CC4FA1EAB99BA009A8ED9 /* es */,
-				DA0CC4FB1EAB99BA009A8ED9 /* fr */,
-				DA0CC4FC1EAB99BA009A8ED9 /* it */,
-				DA0CC4FD1EAB99BA009A8ED9 /* ja */,
-				DA0CC4FE1EAB99BA009A8ED9 /* nl */,
-				DA0CC4FF1EAB99BA009A8ED9 /* pt-PT */,
-				DA0CC5001EAB99BA009A8ED9 /* pt */,
-				DA0CC5011EAB99BA009A8ED9 /* ru */,
-				DA0CC5021EAB99BA009A8ED9 /* sv */,
-				DA0CC5031EAB99BA009A8ED9 /* th */,
-				DA0CC5041EAB99BA009A8ED9 /* tr */,
 			);
 			name = IASKLocalizable.strings;
 			sourceTree = "<group>";
@@ -4533,7 +4422,10 @@
 					"\"$(PROJECT_DIR)/../lib/libjson-c/build-ios~/out/include\"",
 				);
 				INFOPLIST_FILE = "Source/iOS/MasterPassword-Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(PROJECT_DIR)/../lib/libsodium/build-ios~/out/lib\"",
@@ -4575,7 +4467,10 @@
 					"\"$(PROJECT_DIR)/../lib/libjson-c/build-ios~/out/include\"",
 				);
 				INFOPLIST_FILE = "Source/iOS/MasterPassword-Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(PROJECT_DIR)/../lib/libsodium/build-ios~/out/lib\"",
@@ -4591,8 +4486,9 @@
 				SKIP_INSTALL = NO;
 				STRIP_INSTALLED_PRODUCT = YES;
 				STRIP_SWIFT_SYMBOLS = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OBJC_BRIDGING_HEADER = "Source/iOS/MasterPassword-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
