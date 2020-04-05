@@ -695,11 +695,17 @@ const char *mpw_marshal_write(
     if (!file)
         return NULL;
     if (!file->data) {
-        file->error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't allocate data." };
+        if (!file_)
+            mpw_marshal_file_free( &file );
+        else
+            file->error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't allocate data." };
         return NULL;
     }
     if (!user->fullName || !strlen( user->fullName )) {
-        file->error = (MPMarshalError){ MPMarshalErrorMissing, "Missing full name." };
+        if (!file_)
+            mpw_marshal_file_free( &file );
+        else
+            file->error = (MPMarshalError){ MPMarshalErrorMissing, "Missing full name." };
         return NULL;
     }
     file->error = (MPMarshalError){ MPMarshalSuccess, NULL };
@@ -740,7 +746,10 @@ const char *mpw_marshal_write(
             // Clear Text
             mpw_free( &masterKey, MPMasterKeySize );
             if (!user->masterKeyProvider || !(masterKey = user->masterKeyProvider( site->algorithm, user->fullName ))) {
-                file->error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't derive master key." };
+                if (!file_)
+                    mpw_marshal_file_free( &file );
+                else
+                    file->error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't derive master key." };
                 return NULL;
             }
 
