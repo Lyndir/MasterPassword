@@ -9,6 +9,7 @@ export PATH+=:/usr/local/bin
 
 # icons format: [pixel size]@[scale]@[idiom]@[os]:[filename] -- if os is "anything lower", omit it
 icons=(
+    1024@1@ios-marketing@:iTunesArtwork@2x.png
 # Mac
     16@1@mac@:
     32@2@mac@:
@@ -24,6 +25,8 @@ icons=(
     180@3@iphone@8.0:Icon-60@3x.png
     120@3@iphone@8.0:Icon-Small-40@3x.png
     120@2@iphone@7.0:Icon-60@2x.png
+    40@2@iphone@7.0:Icon-Small-20@2x.png
+    60@3@iphone@7.0:Icon-Small-20@3x.png
     80@2@iphone@7.0:Icon-Small-40@2x.png
 #    114@2@iphone@:Icon@2x.png
     87@3@iphone@:Icon-Small@3x.png
@@ -31,8 +34,11 @@ icons=(
 #    57@1@iphone@:Icon.png
 #    29@1@iphone@:Icon-Small.png
 # iPad
-    76@1@ipad@7.0:Icon-76.png
+#    76@1@ipad@7.0:Icon-76.png
     152@2@ipad@7.0:Icon-76@2x.png
+    167@2@ipad@9.0:Icon-83@2x.png
+    20@1@ipad@7.0:Icon-Small-20.png
+    40@2@ipad@7.0:Icon-Small-20@2x.png
     40@1@ipad@7.0:Icon-Small-40.png
     80@2@ipad@7.0:Icon-Small-40@2x.png
     29@1@ipad@:Icon-Small.png
@@ -47,10 +53,10 @@ splashes=(
     414-736@3@iphone@8.0
     375-667@2@iphone@8.0
     320-568@2@iphone@7.0
-    320-568@2@iphone@
+#    320-568@2@iphone@
     320-480@2@iphone@7.0
-    320-480@2@iphone@
-    320-480@@iphone@
+#    320-480@2@iphone@
+#    320-480@@iphone@
 )
 
 copyImage() {
@@ -90,7 +96,7 @@ if [[ "$(latest "$ios_icon"/*)" -nt "$appiconset/Contents.json" ]] ||
         for icon in "${icons[@]}"; do
             IFS=: read icon filename <<< "$icon"
             IFS=@ read px scale idiom os <<< "$icon"
-            pt=$(( px / scale ))
+            pt=$(printf '%g' "$(bc <<< "scale=1; $px / $scale")")
 
             suffix=
             [[ $scale != 1 ]] && suffix=@${scale}x
@@ -102,7 +108,7 @@ if [[ "$(latest "$ios_icon"/*)" -nt "$appiconset/Contents.json" ]] ||
             fi
 
             imageProps=$(copyImage "$source" "$appiconset/$filename")
-            printf '%s{"size":"%dx%d","filename":"%s","scale":"%sx"' \
+            printf '%s{"size":"%sx%s","filename":"%s","scale":"%sx"' \
                 "$comma" "$pt" "$pt" "$filename" "$scale"
             [[ $idiom ]] && printf ',"idiom":"%s"' "$idiom"
             [[ $os ]] && printf ',"minimum-system-version":"%s"' "$os"

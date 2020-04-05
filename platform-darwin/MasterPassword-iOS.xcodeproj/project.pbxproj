@@ -66,7 +66,6 @@
 		93D39E5F7F6D7F5C0FAD090F /* MPTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39D72239990DDAC2D75B0 /* MPTypes.m */; };
 		93D39EAA4D064193074D3021 /* MPFixable.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39A813CA9D7E192261ED2 /* MPFixable.m */; };
 		93D39F8A9254177891F38705 /* MPSetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39A28369954D147E239BA /* MPSetupViewController.m */; };
-		DA04E33E14B1E70400ECA4F3 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA04E33D14B1E70400ECA4F3 /* MobileCoreServices.framework */; };
 		DA071BF3190187FE00179766 /* empty@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA071BF1190187FE00179766 /* empty@2x.png */; };
 		DA071BF4190187FE00179766 /* empty.png in Resources */ = {isa = PBXBuildFile; fileRef = DA071BF2190187FE00179766 /* empty.png */; };
 		DA095E75172F4CD8001C948B /* MPLogsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3979190DACEBD1F6AE9F4 /* MPLogsViewController.m */; };
@@ -389,6 +388,8 @@
 		DAEFB01F19BCBD9E00525079 /* UIView+LayoutGone.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEFB01D19BCBD9E00525079 /* UIView+LayoutGone.h */; };
 		DAF4EF50190A81E400023C90 /* NSManagedObject+Pearl.m in Sources */ = {isa = PBXBuildFile; fileRef = DAF4EF4E190A81E400023C90 /* NSManagedObject+Pearl.m */; };
 		DAF4EF51190A81E400023C90 /* NSManagedObject+Pearl.h in Headers */ = {isa = PBXBuildFile; fileRef = DAF4EF4F190A81E400023C90 /* NSManagedObject+Pearl.h */; };
+		DAFC1F702439795100D1CD66 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAFC1F6F2439795000D1CD66 /* CoreServices.framework */; };
+		DAFC1F73243989FB00D1CD66 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAFC1F72243989FB00D1CD66 /* Launch Screen.storyboard */; };
 		DAFC5656172C573B00CB5CC5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DAFE4A1315039824003ABA7C /* NSObject+PearlExport.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE45D815039823003ABA7C /* NSObject+PearlExport.h */; };
 		DAFE4A1415039824003ABA7C /* NSObject+PearlExport.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFE45D915039823003ABA7C /* NSObject+PearlExport.m */; };
@@ -1602,6 +1603,8 @@
 		DAEFB01D19BCBD9E00525079 /* UIView+LayoutGone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+LayoutGone.h"; sourceTree = "<group>"; };
 		DAF4EF4E190A81E400023C90 /* NSManagedObject+Pearl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObject+Pearl.m"; sourceTree = "<group>"; };
 		DAF4EF4F190A81E400023C90 /* NSManagedObject+Pearl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+Pearl.h"; sourceTree = "<group>"; };
+		DAFC1F6F2439795000D1CD66 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
+		DAFC1F72243989FB00D1CD66 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		DAFC5655172C573B00CB5CC5 /* libInAppSettingsKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libInAppSettingsKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAFE45D815039823003ABA7C /* NSObject+PearlExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+PearlExport.h"; sourceTree = "<group>"; };
 		DAFE45D915039823003ABA7C /* NSObject+PearlExport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+PearlExport.m"; sourceTree = "<group>"; };
@@ -1695,7 +1698,7 @@
 				DA2C3D631BD96126001137B3 /* libc++.tbd in Frameworks */,
 				DAA1761B19D86D0D0044227B /* libAttributedMarkdown.a in Frameworks */,
 				DA32D03E19D11293004F3F0E /* libKCOrderedAccessorFix.a in Frameworks */,
-				DA04E33E14B1E70400ECA4F3 /* MobileCoreServices.framework in Frameworks */,
+				DAFC1F702439795100D1CD66 /* CoreServices.framework in Frameworks */,
 				DAE2725A19C93B8E007C5262 /* StoreKit.framework in Frameworks */,
 				DAE2725919C93B80007C5262 /* libInAppSettingsKit.a in Frameworks */,
 				DA6701E016406BB400B61001 /* AdSupport.framework in Frameworks */,
@@ -1979,6 +1982,7 @@
 		DA5BFA47147E415C00F98B1E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DAFC1F6F2439795000D1CD66 /* CoreServices.framework */,
 				DAB7AE5C1F3D752900C856B1 /* libjson-c.a */,
 				DA6701B716406A4100B61001 /* Accounts.framework */,
 				DA6701DF16406BB400B61001 /* AdSupport.framework */,
@@ -3002,6 +3006,7 @@
 				93D3990E0CD1B5CF9FBB2C07 /* MPWebViewController.m */,
 				DABD3BF91711E2DC00CF925C /* Settings.bundle */,
 				DAAA1D4023CD145000F3DF56 /* Storyboard.storyboard */,
+				DAFC1F72243989FB00D1CD66 /* Launch Screen.storyboard */,
 			);
 			path = iOS;
 			sourceTree = "<group>";
@@ -3641,6 +3646,7 @@
 				DA67460D18DE7F0C00DFE240 /* Exo2.0-Thin.otf in Resources */,
 				DA4522451902355C008F650A /* icon_book@2x.png in Resources */,
 				DA32D04919D2F417004F3F0E /* thumb_fuel@2x.png in Resources */,
+				DAFC1F73243989FB00D1CD66 /* Launch Screen.storyboard in Resources */,
 				DABD39371711E29700CF925C /* avatar-0.png in Resources */,
 				DABD39381711E29700CF925C /* avatar-0@2x.png in Resources */,
 				DAA1764819D8B82B0044227B /* mpw_new.png in Resources */,
@@ -3857,7 +3863,7 @@
 		};
 		DA3C4EB32439438B00A6C4A8 /* Upload Sentry dSYM */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 8;
 			files = (
 			);
 			inputFileListPaths = (
@@ -3869,9 +3875,10 @@
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = "/bin/sh -e";
 			shellScript = "if hash sentry-cli 2>/dev/null; then\n    if ! ERROR=$(SENTRY_ORG=lyndir SENTRY_PROJECT=masterpassword-ios sentry-cli upload-dif --log-level info \"$DWARF_DSYM_FOLDER_PATH\" 2>&1 >/dev/null); then\n        echo >&2 \"warning: sentry-cli: $ERROR\"\n    fi\nelse\n    echo >&2 \"warning: sentry-cli not installed: try brew install getsentry/tools/sentry-cli\"\nfi\n";
+			showEnvVarsInLog = 0;
 		};
 		DA6556E314D55F3000841C99 /* Run Script: GIT version -> Info.plist */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4408,7 +4415,6 @@
 			baseConfigurationReference = E4F11DB2CE85A9CF2A0C79B2 /* Pods-MasterPassword-iOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = NO;
 				CODE_SIGN_ENTITLEMENTS = Source/iOS/MasterPassword.entitlements;
@@ -4452,7 +4458,6 @@
 			baseConfigurationReference = FFFCFF8FBD5549B1EFF8806D /* Pods-MasterPassword-iOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = NO;
 				CODE_SIGN_ENTITLEMENTS = Source/iOS/MasterPassword.entitlements;
