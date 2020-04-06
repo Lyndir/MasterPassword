@@ -699,8 +699,10 @@ referenceSizeForFooterInSection:(NSInteger)section {
             } );
     PearlAddNotificationObserver( NSPersistentStoreCoordinatorStoresDidChangeNotification, [MPiOSAppDelegate get].storeCoordinator, nil,
             ^(MPUsersViewController *self, NSNotification *note) {
-                [self registerObservers];
-                [self reloadUsers];
+                PearlMainQueue( ^{
+                    [self registerObservers];
+                    [self reloadUsers];
+                } );
             } );
 }
 
