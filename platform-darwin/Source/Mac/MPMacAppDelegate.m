@@ -39,14 +39,7 @@ static EventHotKeyID MPLockHotKey = { .signature = 'lock', .id = 1 };
 
 + (void)initialize {
 
-    static dispatch_once_t once = 0;
-    dispatch_once( &once, ^{
-        [MPMacConfig get];
-
-#ifdef DEBUG
-        [PearlLogger get].printLevel = PearlLogLevelDebug; //Trace;
-#endif
-    } );
+    [MPMacConfig get];
 }
 
 static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEvent, void *userData) {
@@ -98,7 +91,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
                 SentryLevel sentryLevel = kSentryLevelInfo;
                 switch (message.level) {
                     case PearlLogLevelTrace:
-                        sentryLevel = kSentryLevelDebug;
+                        sentryLevel = kSentryLevelNone;
                         break;
                     case PearlLogLevelDebug:
                         sentryLevel = kSentryLevelDebug;

@@ -33,50 +33,11 @@
 
 @end
 
-MPLogSink mpw_log_sink_pearl;
-void mpw_log_sink_pearl(const MPLogEvent *record) {
-
-    PearlLogLevel level = PearlLogLevelInfo;
-    switch (record->level) {
-        case LogLevelTrace:
-            level = PearlLogLevelDebug;
-            break;
-        case LogLevelDebug:
-            level = PearlLogLevelDebug;
-            break;
-        case LogLevelInfo:
-            level = PearlLogLevelInfo;
-            break;
-        case LogLevelWarning:
-            level = PearlLogLevelWarn;
-            break;
-        case LogLevelError:
-            level = PearlLogLevelError;
-            break;
-        case LogLevelFatal:
-            level = PearlLogLevelFatal;
-            break;
-    }
-
-    [[PearlLogger get] inFile:[@(record->file) lastPathComponent] atLine:record->line fromFunction:@(record->function)
-                    withLevel:level text:@(record->message)];
-}
-
 @implementation MPiOSAppDelegate
 
 + (void)initialize {
 
-    static dispatch_once_t once = 0;
-    dispatch_once( &once, ^{
-        [PearlLogger get].printLevel = [[MPiOSConfig get].traceMode boolValue]? PearlLogLevelDebug: PearlLogLevelInfo;
-        [PearlLogger get].historyLevel = [[MPiOSConfig get].traceMode boolValue]? PearlLogLevelTrace: PearlLogLevelInfo;
-#ifdef DEBUG
-        [PearlLogger get].printLevel = PearlLogLevelDebug;
-#endif
-
-        mpw_verbosity = LogLevelTrace;
-        mpw_log_sink_register( &mpw_log_sink_pearl );
-    } );
+    [MPiOSConfig get];
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {

@@ -31,6 +31,35 @@
 
 @end
 
+MPLogSink mpw_log_sink_pearl;
+void mpw_log_sink_pearl(const MPLogEvent *record) {
+
+    PearlLogLevel level = PearlLogLevelInfo;
+    switch (record->level) {
+        case LogLevelTrace:
+            level = PearlLogLevelTrace;
+            break;
+        case LogLevelDebug:
+            level = PearlLogLevelDebug;
+            break;
+        case LogLevelInfo:
+            level = PearlLogLevelInfo;
+            break;
+        case LogLevelWarning:
+            level = PearlLogLevelWarn;
+            break;
+        case LogLevelError:
+            level = PearlLogLevelError;
+            break;
+        case LogLevelFatal:
+            level = PearlLogLevelFatal;
+            break;
+    }
+
+    [[PearlLogger get] inFile:[@(record->file) lastPathComponent] atLine:record->line fromFunction:@(record->function)
+                    withLevel:level text:@(record->message)];
+}
+
 @implementation MPAppDelegate_Shared
 
 static MPAppDelegate_Shared *instance;
@@ -44,6 +73,16 @@ static MPAppDelegate_Shared *instance;
 
     if (!(self = instance = [super init]))
         return nil;
+
+    [PearlLogger get].historyLevel = PearlLogLevelInfo;
+#ifdef DEBUG
+    [PearlLogger get].printLevel = PearlLogLevelDebug;
+#else
+    [PearlLogger get].printLevel = PearlLogLevelInfo;
+#endif
+
+    mpw_verbosity = LogLevelTrace;
+    mpw_log_sink_register( &mpw_log_sink_pearl );
 
     NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
     [model kc_generateOrderedSetAccessors];
