@@ -126,7 +126,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         countlyConfig.host = @"https://countly.lyndir.com";
         countlyConfig.appKey = decrypt( countlyKey );
         countlyConfig.features = @[ CLYPushNotifications ];
-        //countlyConfig.requiresConsent = YES; // FIXME: https://support.count.ly/hc/en-us/community/posts/900000930423-Notifications-on-macOS
+        countlyConfig.requiresConsent = YES;
         countlyConfig.alwaysUsePOST = YES;
         countlyConfig.deviceID = [PearlKeyChain deviceIdentifier];
         countlyConfig.secretSalt = decrypt( countlySalt );
@@ -138,9 +138,6 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         countlyConfig.enableDebug = NO;
 #endif
         [Countly.sharedInstance startWithConfig:countlyConfig];
-
-        [Countly.sharedInstance giveConsentForFeature:CLYConsentPushNotifications];
-        [Countly.sharedInstance askForNotificationPermission];
     }
     @catch (id exception) {
         err( @"During Analytics Setup: %@", exception );
@@ -732,6 +729,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     // Send info
     if ([[MPConfig get].sendInfo boolValue]) {
         [Countly.sharedInstance giveConsentForAllFeatures];
+        [Countly.sharedInstance askForNotificationPermission];
 
         if ([PearlLogger get].printLevel > PearlLogLevelInfo)
             [PearlLogger get].printLevel = PearlLogLevelInfo;
@@ -749,12 +747,14 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         prefs[@"encrypted"] = @([PearlDeviceUtils isAppEncrypted]);
         prefs[@"platform"] = [PearlDeviceUtils platform];
 
+        [SentrySDK.currentHub getClient].options.enabled = @YES;
         [SentrySDK configureScope:^(SentryScope *scope) {
             for (NSString *pref in prefs.allKeys)
                 [scope setExtraValue:prefs[pref] forKey:pref];
         }];
     }
     else {
+        [SentrySDK.currentHub getClient].options.enabled = @NO;
         [Countly.sharedInstance cancelConsentForAllFeatures];
     }
 }
