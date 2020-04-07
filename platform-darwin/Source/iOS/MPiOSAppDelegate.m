@@ -681,12 +681,14 @@
         prefs[@"reviewedVersion"] = @(YES);
 #endif
 
+        [SentrySDK.currentHub getClient].options.enabled = @YES;
         [SentrySDK configureScope:^(SentryScope *scope) {
             for (NSString *pref in prefs.allKeys)
                 [scope setExtraValue:prefs[pref] forKey:pref];
         }];
     }
     else {
+        [SentrySDK.currentHub getClient].options.enabled = @NO;
         [Countly.sharedInstance cancelConsentForAllFeatures];
     }
 }
