@@ -125,7 +125,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         countlyConfig.host = @"https://countly.lyndir.com";
         countlyConfig.appKey = decrypt( countlyKey );
         countlyConfig.features = @[ CLYPushNotifications ];
-        countlyConfig.requiresConsent = YES;
+        //countlyConfig.requiresConsent = YES; // FIXME: https://support.count.ly/hc/en-us/community/posts/900000930423-Notifications-on-macOS
         countlyConfig.alwaysUsePOST = YES;
         countlyConfig.deviceID = [PearlKeyChain deviceIdentifier];
         countlyConfig.secretSalt = decrypt( countlySalt );
@@ -137,6 +137,9 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         countlyConfig.enableDebug = NO;
 #endif
         [Countly.sharedInstance startWithConfig:countlyConfig];
+
+        [Countly.sharedInstance giveConsentForFeature:CLYConsentPushNotifications];
+        [Countly.sharedInstance askForNotificationPermission];
     }
     @catch (id exception) {
         err( @"During Analytics Setup: %@", exception );
