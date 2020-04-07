@@ -126,15 +126,16 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         countlyConfig.appKey = decrypt( countlyKey );
         countlyConfig.features = @[ CLYPushNotifications ];
         countlyConfig.requiresConsent = YES;
-#if DEBUG
-        countlyConfig.pushTestMode = CLYPushTestModeDevelopment;
-#elif ! PUBLIC
-        countlyConfig.pushTestMode = CLYPushTestModeTestFlightOrAdHoc;
-#endif
         countlyConfig.alwaysUsePOST = YES;
         countlyConfig.deviceID = [PearlKeyChain deviceIdentifier];
         countlyConfig.secretSalt = decrypt( countlySalt );
+#if DEBUG
+        countlyConfig.pushTestMode = CLYPushTestModeDevelopment;
         countlyConfig.enableDebug = YES;
+#elif ! PUBLIC
+        countlyConfig.pushTestMode = CLYPushTestModeTestFlightOrAdHoc;
+        countlyConfig.enableDebug = NO;
+#endif
         [Countly.sharedInstance startWithConfig:countlyConfig];
     }
     @catch (id exception) {
@@ -177,13 +178,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
             } );
     PearlAddNotificationObserver( MPCheckConfigNotification, nil, nil,
             ^(MPMacAppDelegate *self, NSNotification *note) {
-                PearlMainQueue( ^{
-                    NSString *key = note.object;
-                    if (!key || [key isEqualToString:NSStringFromSelector( @selector( hidePasswords ) )])
-                        self.hidePasswordsItem.state = [[MPConfig get].hidePasswords boolValue]? NSOnState: NSOffState;
-                    if (!key || [key isEqualToString:NSStringFromSelector( @selector( rememberLogin ) )])
-                        self.rememberPasswordItem.state = [[MPConfig get].rememberLogin boolValue]? NSOnState: NSOffState;
-                } );
+                [self updateConfigKey:note.object];
             } );
     [self updateUsers];
 
@@ -712,6 +707,45 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 - (void)didUpdateConfigForKey:(SEL)configKey fromValue:(id)oldValue {
 
     [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:NSStringFromSelector( configKey )];
+}
+
+- (void)updateConfigKey:(NSString *)key {
+
+    PearlMainQueue( ^{
+        if (!key || [key isEqualToString:NSStringFromSelector( @selector( hidePasswords ) )])
+            self.hidePasswordsItem.state = [[MPConfig get].hidePasswords boolValue]? NSOnState: NSOffState;
+        if (!key || [key isEqualToString:NSStringFromSelector( @selector( rememberLogin ) )])
+            self.rememberPasswordItem.state = [[MPConfig get].rememberLogin boolValue]? NSOnState: NSOffState;
+    } );
+
+    // Send info
+    if ([[MPConfig get].sendInfo boolValue]) {
+        [Countly.sharedInstance giveConsentForAllFeatures];
+
+        if ([PearlLogger get].printLevel > PearlLogLevelInfo)
+            [PearlLogger get].printLevel = PearlLogLevelInfo;
+
+        NSMutableDictionary *prefs = [NSMutableDictionary new];
+        prefs[@"rememberLogin"] = [MPConfig get].rememberLogin;
+        prefs[@"sendInfo"] = [MPConfig get].sendInfo;
+        prefs[@"fullScreen"] = [MPMacConfig get].fullScreen;
+        prefs[@"firstRun"] = [PearlConfig get].firstRun;
+        prefs[@"launchCount"] = [PearlConfig get].launchCount;
+        prefs[@"askForReviews"] = [PearlConfig get].askForReviews;
+        prefs[@"reviewAfterLaunches"] = [PearlConfig get].reviewAfterLaunches;
+        prefs[@"reviewedVersion"] = [PearlConfig get].reviewedVersion;
+        prefs[@"simulator"] = @([PearlDeviceUtils isSimulator]);
+        prefs[@"encrypted"] = @([PearlDeviceUtils isAppEncrypted]);
+        prefs[@"platform"] = [PearlDeviceUtils platform];
+
+        [SentrySDK configureScope:^(SentryScope *scope) {
+            for (NSString *pref in prefs.allKeys)
+                [scope setExtraValue:prefs[pref] forKey:pref];
+        }];
+    }
+    else {
+        [Countly.sharedInstance cancelConsentForAllFeatures];
+    }
 }
 
 @end
