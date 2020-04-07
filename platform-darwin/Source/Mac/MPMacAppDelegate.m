@@ -29,6 +29,7 @@
 
 #define LOGIN_HELPER_BUNDLE_ID @"com.lyndir.lhunath.MasterPassword.Mac.LoginHelper"
 
+
 @implementation MPMacAppDelegate
 
 #pragma clang diagnostic push
@@ -372,6 +373,8 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (IBAction)togglePreference:(id)sender {
 
+    if (sender == self.diagnosticsItem)
+        [MPConfig get].sendInfo = @(self.diagnosticsItem.state != NSOnState);
     if (sender == self.hidePasswordsItem)
         [MPConfig get].hidePasswords = @(self.hidePasswordsItem.state != NSOnState);
     if (sender == self.rememberPasswordItem)
@@ -582,10 +585,13 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (void)updateUsers {
 
-    [[[self.usersItem submenu] itemArray] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if (idx > 2)
-            [[self.usersItem submenu] removeItem:obj];
-    }];
+    BOOL foundSeparator = NO;
+    for (NSMenuItem *item in [[self.usersItem submenu] itemArray]) {
+        if (foundSeparator)
+            [[self.usersItem submenu] removeItem:item];
+        else if (item.isSeparatorItem)
+            foundSeparator = YES;
+    }
 
     NSManagedObjectContext *mainContext = [MPMacAppDelegate managedObjectContextForMainThreadIfReady];
     if (!mainContext) {
@@ -715,6 +721,8 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 - (void)updateConfigKey:(NSString *)key {
 
     PearlMainQueue( ^{
+        if (!key || [key isEqualToString:NSStringFromSelector( @selector( sendInfo ) )])
+            self.diagnosticsItem.state = [[MPConfig get].sendInfo boolValue]? NSOnState: NSOffState;
         if (!key || [key isEqualToString:NSStringFromSelector( @selector( hidePasswords ) )])
             self.hidePasswordsItem.state = [[MPConfig get].hidePasswords boolValue]? NSOnState: NSOffState;
         if (!key || [key isEqualToString:NSStringFromSelector( @selector( rememberLogin ) )])

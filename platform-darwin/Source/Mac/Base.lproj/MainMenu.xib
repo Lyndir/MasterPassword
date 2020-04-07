@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12118" systemVersion="16D32" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16096" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12118"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16096"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -12,11 +12,14 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <menu title="AMainMenu" systemMenu="main" id="29"/>
+        <menu title="AMainMenu" systemMenu="main" id="29">
+            <point key="canvasLocation" x="139" y="155"/>
+        </menu>
         <customObject id="494" customClass="MPMacAppDelegate">
             <connections>
                 <outlet property="createUserItem" destination="757" id="763"/>
                 <outlet property="deleteUserItem" destination="ZgZ-p2-463" id="smU-PF-mKA"/>
+                <outlet property="diagnosticsItem" destination="GSN-f0-q7s" id="kns-3O-fu0"/>
                 <outlet property="hidePasswordsItem" destination="9G7-17-PzY" id="qPX-VT-jVx"/>
                 <outlet property="lockItem" destination="720" id="726"/>
                 <outlet property="openAtLoginItem" destination="785" id="788"/>
@@ -33,7 +36,7 @@
             <items>
                 <menuItem title="Users" id="755">
                     <modifierMask key="keyEquivalentModifierMask"/>
-                    <menu key="submenu" title="Users" id="756">
+                    <menu key="submenu" title="Users" autoenablesItems="NO" id="756">
                         <items>
                             <menuItem title="New User" enabled="NO" toolTip="Creating users is not yet supported.  Please use the iOS app with iCloud enabled to create users and sites." id="757">
                                 <modifierMask key="keyEquivalentModifierMask"/>
@@ -46,6 +49,53 @@
                                 <connections>
                                     <action selector="deleteUser:" target="494" id="eia-X5-QMc"/>
                                 </connections>
+                            </menuItem>
+                            <menuItem title="Import User..." id="EFK-zt-EvJ">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="importSites:" target="494" id="CNv-4j-036"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Export User" id="r1P-hr-mh5">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Export User" id="fnk-gK-yCi">
+                                    <items>
+                                        <menuItem title="Secure Export (recommended)" id="06i-og-eLt">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="exportSitesSecure:" target="494" id="LVH-es-imA"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Your passwords are hidden." enabled="NO" id="ybY-P3-eao">
+                                            <attributedString key="attributedTitle">
+                                                <fragment content="Your passwords are not visible.">
+                                                    <attributes>
+                                                        <font key="NSFont" metaFont="user"/>
+                                                        <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                    </attributes>
+                                                </fragment>
+                                            </attributedString>
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                        </menuItem>
+                                        <menuItem title="Reveal Passwords" id="fMG-TT-bTn">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="exportSitesReveal:" target="494" id="1IW-VT-Oeu"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Handy for backups - keep it in a safe location!" enabled="NO" id="cQu-oR-SUa">
+                                            <attributedString key="attributedTitle">
+                                                <fragment content="Keep this file secure or delete it when you're done with it!">
+                                                    <attributes>
+                                                        <font key="NSFont" metaFont="user"/>
+                                                        <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                    </attributes>
+                                                </fragment>
+                                            </attributedString>
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                        </menuItem>
+                                    </items>
+                                </menu>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="759"/>
                         </items>
@@ -152,52 +202,22 @@
                                 </attributedString>
                                 <modifierMask key="keyEquivalentModifierMask"/>
                             </menuItem>
-                            <menuItem title="Export Sites" id="r1P-hr-mh5">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Export Sites" id="fnk-gK-yCi">
-                                    <items>
-                                        <menuItem title="Secure Export" id="06i-og-eLt">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="exportSitesSecure:" target="494" id="LVH-es-imA"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Your passwords are not visible." enabled="NO" id="ybY-P3-eao">
-                                            <attributedString key="attributedTitle">
-                                                <fragment content="Your passwords are not visible.">
-                                                    <attributes>
-                                                        <font key="NSFont" size="12" name="Helvetica"/>
-                                                        <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
-                                                    </attributes>
-                                                </fragment>
-                                            </attributedString>
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                        </menuItem>
-                                        <menuItem title="Reveal Passwords" id="fMG-TT-bTn">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="exportSitesReveal:" target="494" id="1IW-VT-Oeu"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Keep this file secure or delete it when you're done with it!" enabled="NO" id="cQu-oR-SUa">
-                                            <attributedString key="attributedTitle">
-                                                <fragment content="Keep this file secure or delete it when you're done with it!">
-                                                    <attributes>
-                                                        <font key="NSFont" size="12" name="Helvetica"/>
-                                                        <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
-                                                    </attributes>
-                                                </fragment>
-                                            </attributedString>
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                        </menuItem>
-                                    </items>
-                                </menu>
-                            </menuItem>
-                            <menuItem title="Import Sites..." id="EFK-zt-EvJ">
+                            <menuItem title="Diagnostics" id="GSN-f0-q7s">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="importSites:" target="494" id="CNv-4j-036"/>
+                                    <action selector="togglePreference:" target="494" id="ZNq-yf-fxg"/>
                                 </connections>
+                            </menuItem>
+                            <menuItem title="Crash and usage information is anonymized and sent to development." enabled="NO" id="WfD-lX-C93">
+                                <attributedString key="attributedTitle">
+                                    <fragment content="Save the password in your keychain so you don't need to enter it again.">
+                                        <attributes>
+                                            <font key="NSFont" size="11" name="Helvetica"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" firstLineHeadIndent="8"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <modifierMask key="keyEquivalentModifierMask"/>
                             </menuItem>
                         </items>
                     </menu>
@@ -221,6 +241,7 @@
                     </connections>
                 </menuItem>
             </items>
+            <point key="canvasLocation" x="140" y="23"/>
         </menu>
     </objects>
 </document>
