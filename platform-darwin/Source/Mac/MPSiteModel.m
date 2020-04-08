@@ -270,7 +270,9 @@
 
     PearlMainQueue( ^{
         self.content = result;
-        self.displayedContent = displayResult;
+
+        if (!([NSEvent modifierFlags] & NSShiftKeyMask))
+            self.displayedContent = displayResult;
     } );
 }
 
@@ -278,6 +280,9 @@
 
     PearlMainQueue( ^{
         self.loginName = loginName;
+
+        if ([NSEvent modifierFlags] & NSShiftKeyMask)
+            self.displayedContent = loginName;
     } );
 }
 

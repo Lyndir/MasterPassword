@@ -66,7 +66,7 @@
         [self updateUser];
     } );
     [self observeKeyPath:@"sitesController.selection" withBlock:^(id from, id to, NSKeyValueChange cause, id self) {
-        [self updateSelection];
+        [self updateTable];
     }];
     prof_rewind( @"observers" );
 
@@ -105,14 +105,18 @@
 - (void)flagsChanged:(NSEvent *)theEvent {
 
     BOOL shiftPressed = (theEvent.modifierFlags & NSShiftKeyMask) != 0;
-    if (shiftPressed != self.shiftPressed)
+    if (shiftPressed != self.shiftPressed) {
         self.shiftPressed = shiftPressed;
+        [self.selectedSite updateContent];
+        [self updateSelection];
+    }
 
     BOOL alternatePressed = (theEvent.modifierFlags & NSAlternateKeyMask) != 0;
     if (alternatePressed != self.alternatePressed) {
         self.alternatePressed = alternatePressed;
         self.showVersionContainer = self.alternatePressed || self.selectedSite.outdated;
         [self.selectedSite updateContent];
+        [self updateSelection];
 
         if (self.locked) {
             NSTextField *passwordField = self.securePasswordField;
@@ -477,7 +481,7 @@
     }
 
     // Performing action while content is available.  Copy it.
-    [self copyContent:self.shiftPressed? selectedSite.answer: selectedSite.content];
+    [self copyContent:self.shiftPressed? selectedSite.loginName: selectedSite.content];
     [NSApp hide:nil];
 
     NSUserNotification *notification = [NSUserNotification new];
@@ -582,7 +586,7 @@
     }];
 }
 
-- (void)updateSelection {
+- (void)updateTable {
 
     [self.siteTable scrollRowToVisible:(NSInteger)self.sitesController.selectionIndex];
 
@@ -596,8 +600,13 @@
             (__bridge id)[NSColor colorWithDeviceWhite:1 alpha:gradientOpacity].CGColor
     ];
 
+    [self updateSelection];
+}
+
+- (void)updateSelection {
     self.showVersionContainer = self.alternatePressed || self.selectedSite.outdated;
-    [self.sitePasswordTipField setAttributedStringValue:straf( @"Your password for %@:", self.selectedSite.displayedName )];
+    [self.sitePasswordTipField setAttributedStringValue:
+            straf( @"Your %@ for %@:", self.shiftPressed? @"login": @"password", self.selectedSite.displayedName )];
 }
 
 - (void)createNewSite:(NSString *)siteName {
