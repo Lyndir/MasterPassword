@@ -265,6 +265,9 @@
     [alert setInformativeText:strf( @"Your login name for: %@", self.selectedSite.name )];
     NSTextField *loginField = [NSTextField new];
     [loginField bind:@"value" toObject:self.selectedSite withKeyPath:@"loginName" options:nil];
+    [loginField bind:@"enabled" toObject:self.selectedSite withKeyPath:@"loginGenerated" options:@{
+        NSValueTransformerNameBindingOption: NSNegateBooleanTransformerName
+    }];
     NSButton *generatedField = [NSButton new];
     [generatedField setButtonType:NSSwitchButton];
     [generatedField bind:@"value" toObject:self.selectedSite withKeyPath:@"loginGenerated" options:nil];
