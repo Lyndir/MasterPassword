@@ -122,7 +122,6 @@ const char *mpw_site_result(
         return NULL;
     }
 
-    char *sitePassword = NULL;
     if (resultType & MPResultTypeClassTemplate) {
         switch (algorithmVersion) {
             case MPAlgorithmVersionV0:
@@ -172,7 +171,7 @@ const char *mpw_site_result(
         err( "Unsupported password type: %d", resultType );
     }
 
-    return sitePassword;
+    return NULL;
 }
 
 const char *mpw_site_state(
