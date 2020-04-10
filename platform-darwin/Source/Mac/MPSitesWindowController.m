@@ -609,7 +609,7 @@
 - (void)updateSelection {
     self.showVersionContainer = self.alternatePressed || self.selectedSite.outdated;
     [self.sitePasswordTipField setAttributedStringValue:
-            straf( @"Your %@ for %@:", self.shiftPressed? @"login": @"password", self.selectedSite.displayedName )];
+            straf( @"Your %@ for %@:", self.shiftPressed? @"login": @"password", self.selectedSite.displayedName, nil )];
 }
 
 - (void)createNewSite:(NSString *)siteName {
