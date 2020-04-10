@@ -45,7 +45,7 @@
     @try {
         // Sentry
         [SentrySDK initWithOptions:@{
-                @"dsn"        : decrypt( sentryDSN ),
+                @"dsn"        : NilToNSNull( decrypt( sentryDSN ) ),
 #ifdef DEBUG
                 @"debug"      : @(YES),
                 @"environment": @"Development",
