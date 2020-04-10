@@ -728,8 +728,10 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
     // Send info
     if ([[MPConfig get].sendInfo boolValue]) {
-        [Countly.sharedInstance giveConsentForAllFeatures];
-        [Countly.sharedInstance askForNotificationPermission];
+        PearlMainQueue( ^{
+            [Countly.sharedInstance giveConsentForAllFeatures];
+            [Countly.sharedInstance askForNotificationPermission];
+        });
 
         if ([PearlLogger get].printLevel > PearlLogLevelInfo)
             [PearlLogger get].printLevel = PearlLogLevelInfo;
@@ -755,7 +757,9 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     }
     else {
         [SentrySDK.currentHub getClient].options.enabled = @NO;
-        [Countly.sharedInstance cancelConsentForAllFeatures];
+        PearlMainQueue( ^{
+            [Countly.sharedInstance cancelConsentForAllFeatures];
+        });
     }
 }
 
