@@ -1,6 +1,7 @@
 # OS-Specific junk.
 .DS_Store
 Thumbs.db
+*~
 
 # IntelliJ
 .idea
