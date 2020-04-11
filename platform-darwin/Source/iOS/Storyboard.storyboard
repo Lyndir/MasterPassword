@@ -69,7 +69,7 @@
                                         </collectionViewFlowLayout>
                                         <cells>
                                             <collectionViewCell opaque="NO" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MPAvatarCell" id="Zab-uQ-uk9" customClass="MPAvatarCell">
-                                                <rect key="frame" x="80" y="114.5" width="215" height="667"/>
+                                                <rect key="frame" x="80" y="115" width="215" height="667"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                                     <rect key="frame" x="0.0" y="0.0" width="215" height="667"/>
@@ -600,7 +600,6 @@
                     <connections>
                         <segue destination="JFc-sj-awD" kind="relationship" relationship="viewControllers" id="bwn-ao-Y5g"/>
                         <segue destination="C0Q-RC-szS" kind="relationship" relationship="viewControllers" id="wap-5K-BMD"/>
-                        <segue destination="LBn-EA-NAH" kind="relationship" relationship="viewControllers" id="sGh-gf-eKK"/>
                         <segue destination="pdl-xv-zjX" kind="relationship" relationship="viewControllers" id="QTc-cR-VHJ"/>
                     </connections>
                 </tabBarController>
@@ -1150,11 +1149,11 @@
                                             <size key="itemSize" width="355" height="100"/>
                                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                            <inset key="sectionInset" minX="10" minY="200" maxX="10" maxY="10"/>
+                                            <inset key="sectionInset" minX="10" minY="10" maxX="10" maxY="10"/>
                                         </collectionViewFlowLayout>
                                         <cells>
                                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MPSiteCell" id="W2g-yv-V3V" customClass="MPSiteCell">
-                                                <rect key="frame" x="29.5" y="200" width="355" height="100"/>
+                                                <rect key="frame" x="29.5" y="10" width="355" height="100"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                                     <rect key="frame" x="0.0" y="0.0" width="355" height="100"/>
@@ -2091,58 +2090,6 @@ This app is now out of maintenance.</string>
             </objects>
             <point key="canvasLocation" x="2038" y="-518"/>
         </scene>
-        <!--Settings-->
-        <scene sceneID="jGj-Je-kyC">
-            <objects>
-                <navigationController definesPresentationContext="YES" id="LBn-EA-NAH" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Settings" image="icon_gears.png" id="6n3-Ay-Knn"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="h6j-1o-LHf">
-                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="IJT-xV-jHt" kind="relationship" relationship="rootViewController" id="ymU-OE-v4t"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="PQz-c8-3Ww" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3803" y="919"/>
-        </scene>
-        <!--Settings-->
-        <scene sceneID="fmc-CS-nuo">
-            <objects>
-                <tableViewController automaticallyAdjustsScrollViewInsets="NO" id="IJT-xV-jHt" customClass="MPAppSettingsViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="jPx-Oa-WxU">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                        <inset key="scrollIndicatorInsets" minX="0.0" minY="64" maxX="0.0" maxY="49"/>
-                        <color key="separatorColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <color key="sectionIndexColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="-" id="3ZC-Sm-lB8">
-                                <rect key="frame" x="0.0" y="55.5" width="414" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="3ZC-Sm-lB8" id="UzB-cq-EM3">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="IJT-xV-jHt" id="bMa-HU-UPY"/>
-                            <outlet property="delegate" destination="IJT-xV-jHt" id="MJE-yH-6xk"/>
-                        </connections>
-                    </tableView>
-                    <tabBarItem key="tabBarItem" title="Settings" image="icon_gears.png" id="K62-lO-hO3"/>
-                    <navigationItem key="navigationItem" title="Settings" id="FPc-yy-RoS">
-                        <barButtonItem key="rightBarButtonItem" title="Logs" id="rO8-gt-aLH"/>
-                    </navigationItem>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="sDE-fE-FNc" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="4730" y="919"/>
-        </scene>
         <!--Usage-->
         <scene sceneID="9SY-7D-CE9">
             <objects>
@@ -2278,7 +2225,7 @@ CgoKCgoKCgoKCgoKCg
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZLZ-Ds-7pp">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="852"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                 <inset key="scrollIndicatorInsets" minX="0.0" minY="64" maxX="0.0" maxY="93"/>
                                 <string key="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris facilisis tortor leo, iaculis mollis elit dictum et. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In congue justo porta enim imperdiet, id luctus justo fringilla. Nunc nec sem id augue bibendum hendrerit eu ut eros. Ut fermentum augue quis nunc feugiat vehicula. Quisque in ultrices magna. Praesent quis mollis lectus. Sed fringilla massa vitae eros luctus, eget convallis justo pretium. Duis non tristique ante. Sed suscipit tortor ligula, sed fermentum eros sodales ut. Maecenas sed ante et orci posuere lobortis et sodales diam. Nunc non ullamcorper orci.
@@ -2290,7 +2237,7 @@ Suspendisse potenti. Etiam ut nisi id augue tempor ultrices et sit amet sapien. 
                                 <dataDetectorType key="dataDetectorTypes" link="YES"/>
                             </textView>
                             <toolbar contentMode="scaleToFill" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="WmH-JB-jp2">
-                                <rect key="frame" x="0.0" y="798" width="414" height="49"/>
+                                <rect key="frame" x="0.0" y="764" width="414" height="49"/>
                                 <items>
                                     <barButtonItem systemItem="compose" id="BSV-3i-01h">
                                         <connections>
@@ -2323,8 +2270,8 @@ Suspendisse potenti. Etiam ut nisi id augue tempor ultrices et sit amet sapien. 
                         </subviews>
                         <color key="backgroundColor" red="0.1215686275" green="0.12941176469999999" blue="0.14117647059999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="WmH-JB-jp2" secondAttribute="bottom" constant="49" id="3MJ-7p-Ko1"/>
-                            <constraint firstItem="ZLZ-Ds-7pp" firstAttribute="top" secondItem="VRk-ZF-UQ6" secondAttribute="top" id="SDj-uX-oNC"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="WmH-JB-jp2" secondAttribute="bottom" id="3MJ-7p-Ko1"/>
+                            <constraint firstItem="ZLZ-Ds-7pp" firstAttribute="top" secondItem="VRk-ZF-UQ6" secondAttribute="topMargin" id="SDj-uX-oNC"/>
                             <constraint firstAttribute="bottom" secondItem="ZLZ-Ds-7pp" secondAttribute="bottom" id="bpm-15-Rgy"/>
                             <constraint firstAttribute="trailing" secondItem="WmH-JB-jp2" secondAttribute="trailing" id="f4Q-oI-Dxc"/>
                             <constraint firstAttribute="trailing" secondItem="ZLZ-Ds-7pp" secondAttribute="trailing" id="iID-PM-DSF"/>
@@ -2384,10 +2331,10 @@ Suspendisse potenti. Etiam ut nisi id augue tempor ultrices et sit amet sapien. 
                                 <rect key="frame" x="0.0" y="56" width="414" height="752"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="top" image="unlocked.png" translatesAutoresizingMaskIntoConstraints="NO" id="Cih-B6-Sfd">
-                                        <rect key="frame" x="20" y="20" width="374" height="79.5"/>
+                                        <rect key="frame" x="20" y="20" width="374" height="80"/>
                                     </imageView>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Stay Logged In?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5X1-J4-TbH">
-                                        <rect key="frame" x="20" y="107.5" width="374" height="20"/>
+                                        <rect key="frame" x="20" y="108" width="374" height="20"/>
                                         <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
@@ -2397,7 +2344,7 @@ Suspendisse potenti. Etiam ut nisi id augue tempor ultrices et sit amet sapien. 
                                         <color key="onTintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </switch>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e80-98-V6D">
-                                        <rect key="frame" x="20" y="135.5" width="374" height="151.5"/>
+                                        <rect key="frame" x="20" y="136" width="374" height="151.5"/>
                                         <string key="text">The right balance between security and convenience is often very personal.
 
 To make getting to your passwords faster, you can remain logged in after you close Master Password.  This allows you to skip having to log in the next time.
@@ -2639,32 +2586,32 @@ See </string>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Negare non possum" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pax-1J-IZi">
-                                            <rect key="frame" x="20" y="226" width="330" height="20"/>
+                                            <rect key="frame" x="20" y="228" width="330" height="20"/>
                                             <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999999999999996" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="749" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ra0-yS-99P">
-                                            <rect key="frame" x="20" y="254" width="374" height="106"/>
+                                            <rect key="frame" x="20" y="256" width="374" height="104"/>
                                             <string key="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. At multis se probavit. Sic consequentibus vestris sublatis prima tolluntur. Nescio quo modo praetervolavit oratio. Reguli reiciendam; Theophrastus mediocriterne delectat, cum tractat locos ab Aristotele ante tractatos? Duo Reges: constructio interrete.</string>
                                             <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="12"/>
                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="thumb_generated_answers.png" translatesAutoresizingMaskIntoConstraints="NO" id="DMJ-sd-eNJ">
-                                            <rect key="frame" x="108" y="20" width="198" height="198"/>
+                                            <rect key="frame" x="107" y="20" width="200" height="200"/>
                                         </imageView>
                                         <activityIndicatorView hidden="YES" opaque="NO" tag="2" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="cef-sc-aph">
-                                            <rect key="frame" x="188.5" y="100.5" width="37" height="37"/>
+                                            <rect key="frame" x="188.5" y="101.5" width="37" height="37"/>
                                         </activityIndicatorView>
                                         <label opaque="NO" userInteractionEnabled="NO" tag="3" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="✔︎" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FWu-V6-mLT">
-                                            <rect key="frame" x="219.5" y="-6" width="93" height="132"/>
+                                            <rect key="frame" x="220.5" y="-6" width="93" height="132"/>
                                             <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="110"/>
                                             <color key="textColor" red="0.47450980390000003" green="0.86666666670000003" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="$0.95" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="68f-wn-UlS">
-                                            <rect key="frame" x="358" y="226" width="36" height="20"/>
+                                            <rect key="frame" x="358" y="228" width="36" height="20"/>
                                             <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="14"/>
                                             <color key="textColor" red="0.47450980390000003" green="0.86666666670000003" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
@@ -3346,7 +3293,7 @@ Ut in geometria, prima si dederis, danda sunt omnia. Nonne igitur tibi videntur,
         <image name="identity.png" width="82" height="79.5"/>
         <image name="initial.png" width="320" height="568"/>
         <image name="thumb_fuel.png" width="198" height="198"/>
-        <image name="thumb_generated_answers.png" width="198" height="198"/>
+        <image name="thumb_generated_answers.png" width="200" height="200"/>
         <image name="tip_alert_black" width="83.5" height="81"/>
         <image name="tip_basic_black.png" width="210" height="60"/>
         <image name="tip_basic_black_top.png" width="210" height="60"/>

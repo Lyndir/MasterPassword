@@ -127,6 +127,14 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     PearlRemoveNotificationObservers();
 }
 
+- (void)viewWillLayoutSubviews {
+
+    self.collectionView.contentInset = [self.collectionView occludedInsets];
+    self.collectionView.scrollIndicatorInsets = self.collectionView.contentInset;
+
+    [super viewWillLayoutSubviews];
+}
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 
     if ([segue.identifier isEqualToString:@"popdown"])
@@ -142,33 +150,6 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 
     [self.collectionView.collectionViewLayout invalidateLayout];
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-}
-
-#pragma mark - UICollectionViewDelegateFlowLayout
-
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout
-  sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-
-    UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)collectionViewLayout;
-    CGFloat itemWidth = UIEdgeInsetsInsetRect( collectionView.bounds, layout.sectionInset ).size.width;
-    return CGSizeMake( itemWidth, 100 );
-}
-
-- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout
-        insetForSectionAtIndex:(NSInteger)section {
-
-    UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)collectionViewLayout;
-    UIEdgeInsets occludedInsets = [self.collectionView occludedInsets];
-    UIEdgeInsets insets = layout.sectionInset;
-    insets.top = insets.bottom; // Undo storyboard hack for manual top-occluded insets.
-
-    if (section == 0)
-        insets.top += occludedInsets.top;
-
-    if (section == collectionView.numberOfSections - 1)
-        insets.bottom += occludedInsets.bottom;
-
-    return insets;
 }
 
 #pragma mark - UICollectionViewDataSource

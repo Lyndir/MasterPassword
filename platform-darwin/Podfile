@@ -11,6 +11,9 @@ target 'MasterPassword-iOS' do
 
   pod 'Sentry', :git => 'https://github.com/getsentry/sentry-cocoa.git'
   pod 'Countly'
+  pod 'UIColor-Utilities'
+  pod 'KCOrderedAccessorFix'
+  pod 'JRSwizzle'
 end
 
 target 'MasterPassword-macOS' do

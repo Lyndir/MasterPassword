@@ -64,6 +64,17 @@ PearlEnum( MPDevelopmentFuelConsumption,
     [[MPiOSAppDelegate get] removeProductsObserver:self];
 }
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "UnavailableInDeploymentTarget"
+- (void)viewSafeAreaInsetsDidChange {
+
+    [super viewSafeAreaInsetsDidChange];
+
+    self.tableView.contentInset = UIEdgeInsetsMake( 44, 0, 0, 0 );
+    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake( 44, 0, 0, 0 );
+}
+#pragma clang diagnostic pop
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {

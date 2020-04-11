@@ -112,7 +112,7 @@ static MPAppDelegate_Shared *instance;
 - (void)setActiveUser:(MPUserEntity *)activeUser {
 
     NSManagedObjectID *activeUserOID = activeUser.permanentObjectID;
-    if ([self.activeUserOID isEqual:activeUserOID])
+    if (self.activeUserOID == activeUserOID || [self.activeUserOID isEqual:activeUserOID])
         return;
 
     if (self.key)
@@ -121,9 +121,9 @@ static MPAppDelegate_Shared *instance;
     if ([[MPConfig get].sendInfo boolValue])
         [Countly.sharedInstance userLoggedOut];
 
-    [[NSNotificationCenter defaultCenter] postNotificationName:MPSignedOutNotification object:self];
-
     self.activeUserOID = activeUserOID;
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:MPSignedOutNotification object:self];
 }
 
 - (void)handleCoordinatorError:(NSError *)error {

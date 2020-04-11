@@ -18,7 +18,6 @@
 
 #import "MPLogsViewController.h"
 #import "MPiOSAppDelegate.h"
-#import "MPAppDelegate_Store.h"
 
 @implementation MPLogsViewController
 
@@ -51,6 +50,17 @@
 
     PearlRemoveNotificationObservers();
 }
+
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "UnavailableInDeploymentTarget"
+- (void)viewSafeAreaInsetsDidChange {
+
+    [super viewSafeAreaInsetsDidChange];
+
+    self.logView.contentInset = UIEdgeInsetsMake( 44, 0, 0, 0 );
+    self.logView.scrollIndicatorInsets = UIEdgeInsetsMake( 44, 0, 0, 0 );
+}
+#pragma clang diagnostic pop
 
 - (IBAction)toggleLevelControl:(UISegmentedControl *)sender {
 
