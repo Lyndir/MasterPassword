@@ -512,132 +512,140 @@
 
 - (void)updateAnimated:(BOOL)animated {
 
-    Weakify( self );
     if (![NSThread isMainThread]) {
         PearlMainQueueOperation( ^{
-            Strongify( self );
             [self updateAnimated:animated];
         } );
         return;
     }
 
-    [UIView animateWithDuration:animated? .3f: 0 animations:^{
-        MPSiteEntity *mainSite = [self siteInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]];
+    if (animated)
+        [UIView animateWithDuration:.3f animations:^{
+            [self updateWasAnimated:animated];
+        }];
+    else
+        [self updateWasAnimated:animated];
+}
 
-        // UI
-        //self.backgroundColor = mainSite.url? [UIColor greenColor]: [UIColor redColor];
-        self.upgradeButton.gone = !mainSite.requiresExplicitMigration && ![[MPiOSConfig get].allowDowngrade boolValue];
-        self.answersButton.gone = ![[MPiOSAppDelegate get] isFeatureUnlocked:MPProductGenerateAnswers];
-        BOOL settingsMode = self.mode == MPPasswordCellModeSettings;
-        self.loginNameContainer.visible = settingsMode || mainSite.loginGenerated || [mainSite.loginName length];
-        self.modeButton.visible = !self.transientSite;
-        self.modeButton.alpha = settingsMode? 0.5f: 0.1f;
-        self.counterLabel.visible = self.counterButton.visible = mainSite.type & MPResultTypeClassTemplate;
-        self.modeButton.selected = settingsMode;
-        self.strengthLabel.gone = !settingsMode;
-        self.modeScrollView.scrollEnabled = !self.transientSite;
-        [self.modeScrollView setContentOffset:CGPointMake( self.mode * self.modeScrollView.frame.size.width, 0 ) animated:animated];
-        if (!settingsMode) {
-            [self.loginNameField resignFirstResponder];
-            [self.passwordField resignFirstResponder];
-        }
-        if ([[MPiOSAppDelegate get] isFeatureUnlocked:MPProductGenerateLogins])
-            self.loginNameHint.text = @"Tap here to ⚙ generate username or the pencil to type one";
-        else
-            self.loginNameHint.text = @"Tap the pencil to type a username";
+- (void)updateWasAnimated:(BOOL)animated {
 
-        // Site Name
-        [self updateSiteName:mainSite];
+    Weakify( self );
+    MPSiteEntity *mainSite = [self siteInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]];
 
-        // Site Counter
-        if ([mainSite isKindOfClass:[MPGeneratedSiteEntity class]])
-            self.counterLabel.text = strf( @"%lu", (unsigned long)((MPGeneratedSiteEntity *)mainSite).counter );
+    // UI
+    //self.backgroundColor = mainSite.url? [UIColor greenColor]: [UIColor redColor];
+    self.upgradeButton.gone = !mainSite.requiresExplicitMigration && ![[MPiOSConfig get].allowDowngrade boolValue];
+    self.answersButton.gone = ![[MPiOSAppDelegate get] isFeatureUnlocked:MPProductGenerateAnswers];
+    BOOL settingsMode = self.mode == MPPasswordCellModeSettings;
+    self.loginNameContainer.visible = settingsMode || mainSite.loginGenerated || [mainSite.loginName length];
+    self.modeButton.visible = !self.transientSite;
+    self.modeButton.alpha = settingsMode? 0.5f: 0.1f;
+    self.counterLabel.visible = self.counterButton.visible = mainSite.type & MPResultTypeClassTemplate;
+    self.modeButton.selected = settingsMode;
+    self.strengthLabel.gone = !settingsMode;
+    self.modeScrollView.scrollEnabled = !self.transientSite;
+    [self.modeScrollView setContentOffset:CGPointMake( self.mode * self.modeScrollView.frame.size.width, 0 ) animated:animated];
+    if (!settingsMode) {
+        [self.loginNameField resignFirstResponder];
+        [self.passwordField resignFirstResponder];
+    }
+    if ([[MPiOSAppDelegate get] isFeatureUnlocked:MPProductGenerateLogins])
+        self.loginNameHint.text = @"Tap here to ⚙ generate username or the pencil to type one";
+    else
+        self.loginNameHint.text = @"Tap the pencil to type a username";
 
-        // Site Login Name
-        self.loginNameField.enabled = self.passwordField.enabled = //
-                [self.loginNameField isFirstResponder] || [self.passwordField isFirstResponder];
+    // Site Name
+    [self updateSiteName:mainSite];
 
-        // Site Password
-        self.passwordField.secureTextEntry = [[MPiOSConfig get].hidePasswords boolValue];
-        self.passwordField.attributedPlaceholder = stra(
-                mainSite.type & MPResultTypeClassStateful? strl( @"No password" ):
-                mainSite.type & MPResultTypeClassTemplate? strl( @"..." ): @"", @{
-                        NSForegroundColorAttributeName: [UIColor whiteColor]
-                } );
+    // Site Counter
+    if ([mainSite isKindOfClass:[MPGeneratedSiteEntity class]])
+        self.counterLabel.text = strf( @"%lu", (unsigned long)((MPGeneratedSiteEntity *)mainSite).counter );
 
-        // Calculate Fields
-        if (![MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-            MPKey *key = [MPiOSAppDelegate get].key;
-            if (!key) {
-                wrn( @"Could not load cell content: key unavailable." );
-                PearlMainQueueOperation( ^{
-                    Strongify( self );
-                    [self updateAnimated:YES];
-                } );
-                return;
-            }
+    // Site Login Name
+    self.loginNameField.enabled = self.passwordField.enabled = //
+            [self.loginNameField isFirstResponder] || [self.passwordField isFirstResponder];
 
-            MPSiteEntity *site = [self siteInContext:context];
-            BOOL loginGenerated = site.loginGenerated;
-            NSString *password = nil, *loginName = [site resolveLoginUsingKey:key];
-            MPResultType transientType = [[MPiOSAppDelegate get] activeUserInContext:context].defaultType?: MPAlgorithmDefault.defaultType;
-            if (self.transientSite && transientType & MPResultTypeClassTemplate)
-                password = [MPAlgorithmDefault mpwTemplateForSiteNamed:self.transientSite ofType:transientType
-                                                           withCounter:1 usingKey:key];
-            else if (site)
-                password = [site resolvePasswordUsingKey:key];
-
-            TimeToCrack timeToCrack;
-            NSString *timeToCrackString = nil;
-            id<MPAlgorithm> algorithm = site.algorithm?: MPAlgorithmDefault;
-            MPAttacker attackHardware = [[MPConfig get].siteAttacker integerValue];
-            if ([algorithm timeToCrack:&timeToCrack passwordOfType:site.type byAttacker:attackHardware] ||
-                [algorithm timeToCrack:&timeToCrack passwordString:password byAttacker:attackHardware])
-                timeToCrackString = NSStringFromTimeToCrack( timeToCrack );
-
-            BOOL requiresExplicitMigration = site.requiresExplicitMigration;
-
-            PearlMainQueue( ^{
-                self.passwordField.text = password;
-                self.strengthLabel.text = timeToCrackString;
-                self.loginNameGenerated.hidden = !loginGenerated;
-                self.loginNameField.attributedText =
-                        strarm( stra( loginName?: @"", self.siteNameLabel.textAttributes ), NSParagraphStyleAttributeName, nil );
-                self.loginNameHint.hidden = [loginName length] || self.loginNameField.enabled;
-
-                if (![password length]) {
-                    self.indicatorView.hidden = NO;
-                    [self.indicatorView removeFromSuperview];
-                    [self.modeScrollView addSubview:self.indicatorView];
-                    [self.contentView addConstraintsWithVisualFormat:@"V:[indicator][target]" options:NSLayoutFormatAlignAllCenterX
-                                                             metrics:nil views:@{
-                                    @"indicator": self.indicatorView,
-                                    @"target"   : settingsMode? self.editButton: self.modeButton
-                            }];
-                }
-                else if (requiresExplicitMigration) {
-                    self.indicatorView.hidden = NO;
-                    [self.indicatorView removeFromSuperview];
-                    [self.modeScrollView addSubview:self.indicatorView];
-                    [self.contentView addConstraintsWithVisualFormat:@"V:[indicator][target]" options:NSLayoutFormatAlignAllCenterX
-                                                             metrics:nil views:@{
-                                    @"indicator": self.indicatorView,
-                                    @"target"   : settingsMode? self.upgradeButton: self.modeButton
-                            }];
-                }
-                else
-                    self.indicatorView.hidden = YES;
+    // Site Password
+    self.passwordField.secureTextEntry = [[MPiOSConfig get].hidePasswords boolValue];
+    self.passwordField.attributedPlaceholder = stra(
+            mainSite.type & MPResultTypeClassStateful? strl( @"No password" ):
+            mainSite.type & MPResultTypeClassTemplate? strl( @"..." ): @"", @{
+                    NSForegroundColorAttributeName: [UIColor whiteColor]
             } );
-        }]) {
-            wrn( @"Could not load cell content: store unavailable." );
+
+    // Calculate Fields
+    if (![MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+        MPKey *key = [MPiOSAppDelegate get].key;
+        if (!key) {
+            wrn( @"Could not load cell content: key unavailable." );
             PearlMainQueueOperation( ^{
                 Strongify( self );
-                [self updateAnimated:YES];
+                [self updateAnimated:animated];
             } );
+            return;
         }
 
+        MPSiteEntity *site = [self siteInContext:context];
+        BOOL loginGenerated = site.loginGenerated;
+        NSString *password = nil, *loginName = [site resolveLoginUsingKey:key];
+        MPResultType transientType = [[MPiOSAppDelegate get] activeUserInContext:context].defaultType?: MPAlgorithmDefault.defaultType;
+        if (self.transientSite && transientType & MPResultTypeClassTemplate)
+            password = [MPAlgorithmDefault mpwTemplateForSiteNamed:self.transientSite ofType:transientType
+                                                       withCounter:1 usingKey:key];
+        else if (site)
+            password = [site resolvePasswordUsingKey:key];
+
+        TimeToCrack timeToCrack;
+        NSString *timeToCrackString = nil;
+        id<MPAlgorithm> algorithm = site.algorithm?: MPAlgorithmDefault;
+        MPAttacker attackHardware = [[MPConfig get].siteAttacker integerValue];
+        if ([algorithm timeToCrack:&timeToCrack passwordOfType:site.type byAttacker:attackHardware] ||
+            [algorithm timeToCrack:&timeToCrack passwordString:password byAttacker:attackHardware])
+            timeToCrackString = NSStringFromTimeToCrack( timeToCrack );
+
+        BOOL requiresExplicitMigration = site.requiresExplicitMigration;
+
+        PearlMainQueue( ^{
+            self.passwordField.text = password;
+            self.strengthLabel.text = timeToCrackString;
+            self.loginNameGenerated.hidden = !loginGenerated;
+            self.loginNameField.attributedText =
+                    strarm( stra( loginName?: @"", self.siteNameLabel.textAttributes ), NSParagraphStyleAttributeName, nil );
+            self.loginNameHint.hidden = [loginName length] || self.loginNameField.enabled;
+
+            if (![password length]) {
+                self.indicatorView.hidden = NO;
+                [self.indicatorView removeFromSuperview];
+                [self.modeScrollView addSubview:self.indicatorView];
+                [self.contentView addConstraintsWithVisualFormat:@"V:[indicator][target]" options:NSLayoutFormatAlignAllCenterX
+                                                         metrics:nil views:@{
+                                @"indicator": self.indicatorView,
+                                @"target"   : settingsMode? self.editButton: self.modeButton
+                        }];
+            }
+            else if (requiresExplicitMigration) {
+                self.indicatorView.hidden = NO;
+                [self.indicatorView removeFromSuperview];
+                [self.modeScrollView addSubview:self.indicatorView];
+                [self.contentView addConstraintsWithVisualFormat:@"V:[indicator][target]" options:NSLayoutFormatAlignAllCenterX
+                                                         metrics:nil views:@{
+                                @"indicator": self.indicatorView,
+                                @"target"   : settingsMode? self.upgradeButton: self.modeButton
+                        }];
+            }
+            else
+                self.indicatorView.hidden = YES;
+        } );
+    }]) {
+        wrn( @"Could not load cell content: store unavailable." );
+        PearlMainQueueOperation( ^{
+            Strongify( self );
+            [self updateAnimated:animated];
+        } );
+    }
+
+    if (animated)
         [self.contentView layoutIfNeeded];
-    }];
 }
 
 - (void)updateSiteName:(MPSiteEntity *)site {
