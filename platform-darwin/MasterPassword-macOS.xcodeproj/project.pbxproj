@@ -87,7 +87,6 @@
 		DA3B8453190FC86F00246EEA /* NSManagedObject+Pearl.h in Headers */ = {isa = PBXBuildFile; fileRef = DA3B8451190FC86F00246EEA /* NSManagedObject+Pearl.h */; };
 		DA3B8456190FC89700246EEA /* MPFixable.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3B8454190FC89700246EEA /* MPFixable.m */; };
 		DA3BCFCD19BD09E0006B2681 /* SourceCodePro-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = DA3BCFCC19BD09E0006B2681 /* SourceCodePro-Regular.otf */; };
-		DA4DA1D91564471A00F6F596 /* libjrswizzle.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC6326C148680650075AEA5 /* libjrswizzle.a */; };
 		DA4DAE941A7D8117003E5423 /* MPAlgorithmV3.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4DAE921A7D8117003E5423 /* MPAlgorithmV3.m */; };
 		DA4DAE951A7D8117003E5423 /* MPTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4DAE931A7D8117003E5423 /* MPTypes.m */; };
 		DA5180CA19FF2F9200A587E9 /* MPAlgorithmV2.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5180C719FF2F9200A587E9 /* MPAlgorithmV2.m */; };
@@ -136,8 +135,6 @@
 		DAADCC4819FAFFAD00987B1D /* NSPersistentStore+PearlMigration.h in Headers */ = {isa = PBXBuildFile; fileRef = DAADCC3F19FAFFAD00987B1D /* NSPersistentStore+PearlMigration.h */; };
 		DAADCC4919FAFFAD00987B1D /* NSPersistentStore+PearlMigration.m in Sources */ = {isa = PBXBuildFile; fileRef = DAADCC4019FAFFAD00987B1D /* NSPersistentStore+PearlMigration.m */; };
 		DAADCC4B19FB000C00987B1D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBC45214F6364500987BF6 /* QuartzCore.framework */; };
-		DAADCC6919FB007F00987B1D /* NSManagedObjectModel+KCOrderedAccessorFix.m in Sources */ = {isa = PBXBuildFile; fileRef = DAADCC6719FB007F00987B1D /* NSManagedObjectModel+KCOrderedAccessorFix.m */; };
-		DAADCC6A19FB00B500987B1D /* libKCOrderedAccessorFix.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAADCC5019FB006500987B1D /* libKCOrderedAccessorFix.a */; };
 		DAAF16661F5CA3240013B8AE /* mpw-cli-util.c in Sources */ = {isa = PBXBuildFile; fileRef = DAAF16631F5897EA0013B8AE /* mpw-cli-util.c */; };
 		DAB07CA01F7725D400CC6D43 /* aes.c in Sources */ = {isa = PBXBuildFile; fileRef = DAB07C9E1F7725D400CC6D43 /* aes.c */; };
 		DAB07CA31F77261400CC6D43 /* aes.c in Sources */ = {isa = PBXBuildFile; fileRef = DAB07C9E1F7725D400CC6D43 /* aes.c */; };
@@ -166,7 +163,6 @@
 		DABD5EF9242BBCE200200755 /* icon_512x512.png in Resources */ = {isa = PBXBuildFile; fileRef = DAD0C5FE19FD6034009CB08D /* icon_512x512.png */; };
 		DABD5EFA242BBCE200200755 /* icon_512x512@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAD0C5FF19FD6034009CB08D /* icon_512x512@2x.png */; };
 		DABD5F00242BC32D00200755 /* MPSecrets.m in Sources */ = {isa = PBXBuildFile; fileRef = DABD5EFE242BC32D00200755 /* MPSecrets.m */; };
-		DAC6326D148680650075AEA5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DAC77CAE148291A600BCF976 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DACA26FE1705DF81002C6C22 /* logo-bare.png in Resources */ = {isa = PBXBuildFile; fileRef = DACA241C1705DF7D002C6C22 /* logo-bare.png */; };
 		DACA27121705DF81002C6C22 /* avatar-13@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DACA24321705DF7D002C6C22 /* avatar-13@2x.png */; };
@@ -211,8 +207,6 @@
 		DACA29671705DF81002C6C22 /* SourceCodePro-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = DACA268E1705DF81002C6C22 /* SourceCodePro-ExtraLight.otf */; };
 		DACA29681705DF81002C6C22 /* SourceCodePro-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = DACA268F1705DF81002C6C22 /* SourceCodePro-Black.otf */; };
 		DACA29741705E1A8002C6C22 /* dictionary.lst in Resources */ = {isa = PBXBuildFile; fileRef = DACA29721705E1A8002C6C22 /* dictionary.lst */; };
-		DACA298D1705E2BD002C6C22 /* JRSwizzle.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA29771705E2BD002C6C22 /* JRSwizzle.h */; };
-		DACA299A1705E2BD002C6C22 /* JRSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = DACA298C1705E2BD002C6C22 /* JRSwizzle.m */; };
 		DAD9B5F01762CAA4001835F9 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD9B5EF1762CAA4001835F9 /* ServiceManagement.framework */; };
 		DAD9B5F11762CAB9001835F9 /* MasterPassword-Mac-LoginHelper.app in Copy LoginHelper */ = {isa = PBXBuildFile; fileRef = DAD9B5E6176299BA001835F9 /* MasterPassword-Mac-LoginHelper.app */; };
 		DAEB942E18B47FB3000490CC /* MPInitialWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA0933C91747A56A00DE1CEF /* MPInitialWindow.xib */; };
@@ -308,13 +302,6 @@
 			remoteGlobalIDString = DAD9B5C0176299B9001835F9;
 			remoteInfo = "MasterPassword-Mac-LoginHelper";
 		};
-		DAC63285148681200075AEA5 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DA5BFA3B147E415C00F98B1E /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = DAC6326B148680650075AEA5;
-			remoteInfo = jrswizzle;
-		};
 		DAD9B5E5176299BA001835F9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DAD9B5E1176299B9001835F9 /* MasterPassword-Mac-LoginHelper.xcodeproj */;
@@ -351,15 +338,6 @@
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 1;
-		};
-		DAADCC4E19FB006500987B1D /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "include/$(PRODUCT_NAME)";
-			dstSubfolderSpec = 16;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		DAD9B5EE1762CA3A001835F9 /* Copy LoginHelper */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -1032,7 +1010,6 @@
 		DAADCC3E19FAFFAD00987B1D /* NSNotificationCenter+PearlEasyCleanup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNotificationCenter+PearlEasyCleanup.h"; sourceTree = "<group>"; };
 		DAADCC3F19FAFFAD00987B1D /* NSPersistentStore+PearlMigration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSPersistentStore+PearlMigration.h"; sourceTree = "<group>"; };
 		DAADCC4019FAFFAD00987B1D /* NSPersistentStore+PearlMigration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSPersistentStore+PearlMigration.m"; sourceTree = "<group>"; };
-		DAADCC5019FB006500987B1D /* libKCOrderedAccessorFix.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libKCOrderedAccessorFix.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAADCC6619FB007F00987B1D /* NSManagedObjectModel+KCOrderedAccessorFix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObjectModel+KCOrderedAccessorFix.h"; sourceTree = "<group>"; };
 		DAADCC6719FB007F00987B1D /* NSManagedObjectModel+KCOrderedAccessorFix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObjectModel+KCOrderedAccessorFix.m"; sourceTree = "<group>"; };
 		DAAF16631F5897EA0013B8AE /* mpw-cli-util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-cli-util.c"; sourceTree = "<group>"; };
@@ -1050,7 +1027,6 @@
 		DABB981515100B4000B05417 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		DABD5EFE242BC32D00200755 /* MPSecrets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSecrets.m; sourceTree = "<group>"; };
 		DABD5EFF242BC32D00200755 /* MPSecrets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSecrets.h; sourceTree = "<group>"; };
-		DAC6326C148680650075AEA5 /* libjrswizzle.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libjrswizzle.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAC632871486D95D0075AEA5 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		DAC77CAD148291A600BCF976 /* libPearl.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPearl.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DACA241C1705DF7D002C6C22 /* logo-bare.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-bare.png"; sourceTree = "<group>"; };
@@ -1185,7 +1161,6 @@
 				DAB7AE5B1F3D750B00C856B1 /* libjson-c.a in Frameworks */,
 				DA9261561BE1A89600369DE5 /* libz.tbd in Frameworks */,
 				DA9261541BE1A88900369DE5 /* libc++.tbd in Frameworks */,
-				DAADCC6A19FB00B500987B1D /* libKCOrderedAccessorFix.a in Frameworks */,
 				DA9261511BE1A86700369DE5 /* SystemConfiguration.framework in Frameworks */,
 				DA250925195148E200AC23F1 /* QuartzCore.framework in Frameworks */,
 				DAD9B5F01762CAA4001835F9 /* ServiceManagement.framework in Frameworks */,
@@ -1205,27 +1180,11 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DAADCC4D19FB006500987B1D /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DAC63269148680650075AEA5 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DAC6326D148680650075AEA5 /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		DAC77CAA148291A600BCF976 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				DAADCC4B19FB000C00987B1D /* QuartzCore.framework in Frameworks */,
-				DA4DA1D91564471A00F6F596 /* libjrswizzle.a in Frameworks */,
 				DAC77CAE148291A600BCF976 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1298,8 +1257,6 @@
 			children = (
 				DA5BFA44147E415C00F98B1E /* Master Password.app */,
 				DAC77CAD148291A600BCF976 /* libPearl.a */,
-				DAC6326C148680650075AEA5 /* libjrswizzle.a */,
-				DAADCC5019FB006500987B1D /* libKCOrderedAccessorFix.a */,
 				DA67743B1A474A03004F356A /* mpw-test */,
 				DA1C7AB61F1A8F24009A3551 /* mpw-cli */,
 				DA1C7AD61F1A8FD8009A3551 /* mpw-bench */,
@@ -2292,14 +2249,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		DAC6326A148680650075AEA5 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DACA298D1705E2BD002C6C22 /* JRSwizzle.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		DAC77CAB148291A600BCF976 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -2460,40 +2409,6 @@
 			productReference = DA67743B1A474A03004F356A /* mpw-test */;
 			productType = "com.apple.product-type.tool";
 		};
-		DAADCC4F19FB006500987B1D /* KCOrderedAccessorFix */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = DAADCC5E19FB006500987B1D /* Build configuration list for PBXNativeTarget "KCOrderedAccessorFix" */;
-			buildPhases = (
-				DAADCC4C19FB006500987B1D /* Sources */,
-				DAADCC4D19FB006500987B1D /* Frameworks */,
-				DAADCC4E19FB006500987B1D /* CopyFiles */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = KCOrderedAccessorFix;
-			productName = KCOrderedAccessorFix;
-			productReference = DAADCC5019FB006500987B1D /* libKCOrderedAccessorFix.a */;
-			productType = "com.apple.product-type.library.static";
-		};
-		DAC6326B148680650075AEA5 /* jrswizzle */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = DAC63274148680650075AEA5 /* Build configuration list for PBXNativeTarget "jrswizzle" */;
-			buildPhases = (
-				DAC63268148680650075AEA5 /* Sources */,
-				DAC63269148680650075AEA5 /* Frameworks */,
-				DAC6326A148680650075AEA5 /* Headers */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = jrswizzle;
-			productName = jrswizzle;
-			productReference = DAC6326C148680650075AEA5 /* libjrswizzle.a */;
-			productType = "com.apple.product-type.library.static";
-		};
 		DAC77CAC148291A600BCF976 /* Pearl */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = DAC77CB7148291A600BCF976 /* Build configuration list for PBXNativeTarget "Pearl" */;
@@ -2505,7 +2420,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				DAC63286148681200075AEA5 /* PBXTargetDependency */,
 			);
 			name = Pearl;
 			productName = Pearl;
@@ -2549,17 +2463,10 @@
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = HL3Q45LX9N;
 					};
-					DAADCC4F19FB006500987B1D = {
-						CreatedOnToolsVersion = 6.0.1;
-						DevelopmentTeam = HL3Q45LX9N;
-					};
 					DAB7AE421F3D466D00C856B1 = {
 						CreatedOnToolsVersion = 8.3.3;
 						DevelopmentTeam = HL3Q45LX9N;
 						ProvisioningStyle = Automatic;
-					};
-					DAC6326B148680650075AEA5 = {
-						DevelopmentTeam = HL3Q45LX9N;
 					};
 					DAC77CAC148291A600BCF976 = {
 						DevelopmentTeam = HL3Q45LX9N;
@@ -2587,8 +2494,6 @@
 			targets = (
 				DA5BFA43147E415C00F98B1E /* MasterPassword-macOS */,
 				DAC77CAC148291A600BCF976 /* Pearl */,
-				DAC6326B148680650075AEA5 /* jrswizzle */,
-				DAADCC4F19FB006500987B1D /* KCOrderedAccessorFix */,
 				DA67743A1A474A03004F356A /* mpw-test */,
 				DA1C7AC61F1A8FD8009A3551 /* mpw-bench */,
 				DA1C7AA61F1A8F24009A3551 /* mpw-cli */,
@@ -2888,22 +2793,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DAADCC4C19FB006500987B1D /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DAADCC6919FB007F00987B1D /* NSManagedObjectModel+KCOrderedAccessorFix.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DAC63268148680650075AEA5 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DACA299A1705E2BD002C6C22 /* JRSwizzle.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		DAC77CA9148291A600BCF976 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2983,11 +2872,6 @@
 			isa = PBXTargetDependency;
 			name = "MasterPassword-Mac-LoginHelper";
 			targetProxy = DABFA071176E3FDF00E83589 /* PBXContainerItemProxy */;
-		};
-		DAC63286148681200075AEA5 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = DAC6326B148680650075AEA5 /* jrswizzle */;
-			targetProxy = DAC63285148681200075AEA5 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -3483,22 +3367,6 @@
 			};
 			name = Release;
 		};
-		DAADCC5F19FB006500987B1D /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = YES;
-				COMBINE_HIDPI_IMAGES = YES;
-			};
-			name = Debug;
-		};
-		DAADCC6019FB006500987B1D /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = YES;
-				COMBINE_HIDPI_IMAGES = YES;
-			};
-			name = Release;
-		};
 		DAB7AE441F3D466D00C856B1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -3537,34 +3405,6 @@
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
-		DAC63275148680650075AEA5 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = NO;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				COMBINE_HIDPI_IMAGES = YES;
-				DSTROOT = /tmp/jrswizzle.dst;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-			};
-			name = Debug;
-		};
-		DAC63276148680650075AEA5 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = NO;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				COMBINE_HIDPI_IMAGES = YES;
-				DSTROOT = /tmp/jrswizzle.dst;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
 			};
 			name = Release;
 		};
@@ -3651,29 +3491,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		DAADCC5E19FB006500987B1D /* Build configuration list for PBXNativeTarget "KCOrderedAccessorFix" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				DAADCC5F19FB006500987B1D /* Debug */,
-				DAADCC6019FB006500987B1D /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
 		DAB7AE431F3D466D00C856B1 /* Build configuration list for PBXLegacyTarget "libjson-c-macos" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DAB7AE441F3D466D00C856B1 /* Debug */,
 				DAB7AE451F3D466D00C856B1 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-		DAC63274148680650075AEA5 /* Build configuration list for PBXNativeTarget "jrswizzle" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				DAC63275148680650075AEA5 /* Debug */,
-				DAC63276148680650075AEA5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
