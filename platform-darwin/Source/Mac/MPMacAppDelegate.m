@@ -131,11 +131,11 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         countlyConfig.deviceID = [PearlKeyChain deviceIdentifier];
         countlyConfig.secretSalt = decrypt( countlySalt );
 #if DEBUG
-        countlyConfig.pushTestMode = CLYPushTestModeDevelopment;
         countlyConfig.enableDebug = YES;
+        countlyConfig.pushTestMode = CLYPushTestModeDevelopment;
 #elif ! PUBLIC
-        countlyConfig.pushTestMode = CLYPushTestModeTestFlightOrAdHoc;
         countlyConfig.enableDebug = NO;
+        countlyConfig.pushTestMode = CLYPushTestModeTestFlightOrAdHoc;
 #endif
         [Countly.sharedInstance startWithConfig:countlyConfig];
     }
@@ -203,6 +203,8 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
                 .window makeKeyAndOrderFront:self];
         [NSApp activateIgnoringOtherApps:YES];
     }
+
+    [self enableNotifications];
 }
 
 - (void)applicationWillResignActive:(NSNotification *)notification {
@@ -226,6 +228,41 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
     [mainContext saveToStore];
     return NSTerminateNow;
+}
+
+- (void)enableNotifications {
+
+    [Countly.sharedInstance giveConsentForFeature:CLYConsentPushNotifications];
+    if (@available( macOS 10.14, * )) {
+        [Countly.sharedInstance askForNotificationPermissionWithOptions:UNAuthorizationOptionProvisional | UNAuthorizationOptionAlert
+                                                      completionHandler:^(BOOL granted, NSError *error) {
+                                                          if (!granted)
+                                                              err( @"No provisional notification permission: %@", error );
+
+                                                          [self askNotifications];
+                                                      }];
+    }
+    else {
+        [self askNotifications];
+    }
+}
+
+- (void)askNotifications {
+
+    PearlMainQueue( ^{
+        if (![[NSUserDefaults standardUserDefaults] boolForKey:@"notificationsDecided"]) {
+            if (@available( macOS 10.14, * )) {
+                [Countly.sharedInstance askForNotificationPermissionWithOptions:UNAuthorizationOptionAlert completionHandler:
+                        ^(BOOL granted, NSError *error) {
+                            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"notificationsDecided"];
+                        }];
+            }
+            else {
+                [Countly.sharedInstance askForNotificationPermission];
+                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"notificationsDecided"];
+            }
+        }
+    } );
 }
 
 #pragma mark - State
@@ -727,39 +764,32 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     } );
 
     // Send info
+    NSArray *countlyFeatures = @[
+            CLYConsentSessions, CLYConsentEvents, CLYConsentUserDetails, CLYConsentCrashReporting, CLYConsentViewTracking, CLYConsentStarRating
+    ];
     if ([[MPConfig get].sendInfo boolValue]) {
-        PearlMainQueue( ^{
-            [Countly.sharedInstance giveConsentForAllFeatures];
-            [Countly.sharedInstance askForNotificationPermission];
-        });
-
+        [Countly.sharedInstance giveConsentForFeatures:countlyFeatures];
         if ([PearlLogger get].printLevel > PearlLogLevelInfo)
             [PearlLogger get].printLevel = PearlLogLevelInfo;
 
-        NSMutableDictionary *prefs = [NSMutableDictionary new];
-        prefs[@"rememberLogin"] = [MPConfig get].rememberLogin;
-        prefs[@"sendInfo"] = [MPConfig get].sendInfo;
-        prefs[@"fullScreen"] = [MPMacConfig get].fullScreen;
-        prefs[@"firstRun"] = [PearlConfig get].firstRun;
-        prefs[@"launchCount"] = [PearlConfig get].launchCount;
-        prefs[@"askForReviews"] = [PearlConfig get].askForReviews;
-        prefs[@"reviewAfterLaunches"] = [PearlConfig get].reviewAfterLaunches;
-        prefs[@"reviewedVersion"] = [PearlConfig get].reviewedVersion;
-        prefs[@"simulator"] = @([PearlDeviceUtils isSimulator]);
-        prefs[@"encrypted"] = @([PearlDeviceUtils isAppEncrypted]);
-        prefs[@"platform"] = [PearlDeviceUtils platform];
-
         [SentrySDK.currentHub getClient].options.enabled = @YES;
         [SentrySDK configureScope:^(SentryScope *scope) {
-            for (NSString *pref in prefs.allKeys)
-                [scope setExtraValue:prefs[pref] forKey:pref];
+            [scope setExtraValue:[MPConfig get].rememberLogin forKey:@"rememberLogin"];
+            [scope setExtraValue:[MPConfig get].sendInfo forKey:@"sendInfo"];
+            [scope setExtraValue:[MPMacConfig get].fullScreen forKey:@"fullScreen"];
+            [scope setExtraValue:[PearlConfig get].firstRun forKey:@"firstRun"];
+            [scope setExtraValue:[PearlConfig get].launchCount forKey:@"launchCount"];
+            [scope setExtraValue:[PearlConfig get].askForReviews forKey:@"askForReviews"];
+            [scope setExtraValue:[PearlConfig get].reviewAfterLaunches forKey:@"reviewAfterLaunches"];
+            [scope setExtraValue:[PearlConfig get].reviewedVersion forKey:@"reviewedVersion"];
+            [scope setExtraValue:@([PearlDeviceUtils isSimulator]) forKey:@"simulator"];
+            [scope setExtraValue:@([PearlDeviceUtils isAppEncrypted]) forKey:@"encrypted"];
+            [scope setExtraValue:[PearlDeviceUtils platform] forKey:@"platform"];
         }];
     }
     else {
         [SentrySDK.currentHub getClient].options.enabled = @NO;
-        PearlMainQueue( ^{
-            [Countly.sharedInstance cancelConsentForAllFeatures];
-        });
+        [Countly.sharedInstance cancelConsentForFeatures:countlyFeatures];
     }
 }
 

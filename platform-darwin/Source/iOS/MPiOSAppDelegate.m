@@ -102,15 +102,16 @@
         countlyConfig.appKey = decrypt( countlyKey );
         countlyConfig.features = @[ CLYPushNotifications, CLYAutoViewTracking ];
         countlyConfig.requiresConsent = YES;
-#if DEBUG
-        countlyConfig.pushTestMode = CLYPushTestModeDevelopment;
-#elif ! PUBLIC
-        countlyConfig.pushTestMode = CLYPushTestModeTestFlightOrAdHoc;
-#endif
         countlyConfig.alwaysUsePOST = YES;
         countlyConfig.deviceID = [PearlKeyChain deviceIdentifier];
         countlyConfig.secretSalt = decrypt( countlySalt );
+#if DEBUG
         countlyConfig.enableDebug = YES;
+        countlyConfig.pushTestMode = CLYPushTestModeDevelopment;
+#elif ! PUBLIC
+        countlyConfig.enableDebug = NO;
+        countlyConfig.pushTestMode = CLYPushTestModeTestFlightOrAdHoc;
+#endif
         [Countly.sharedInstance startWithConfig:countlyConfig];
 
 #if ! DEBUG
@@ -171,30 +172,11 @@
             }
         } );
 
-        if (@available( iOS 12, * )) {
-            [Countly.sharedInstance askForNotificationPermissionWithOptions:UNAuthorizationOptionProvisional completionHandler:
-                    ^(BOOL granted, NSError *error) {
-                        inf( @"provisional: %d: %@", granted, error );
-            }];
-        }
-
-
         PearlMainQueueOperation( ^{
             if ([[MPiOSConfig get].showSetup boolValue])
                 [self.navigationController performSegueWithIdentifier:@"setup" sender:self];
 
-            if (![[NSUserDefaults standardUserDefaults] boolForKey:@"notificationsDecided"]) {
-                UIAlertController *alert =  [UIAlertController alertControllerWithTitle:@"Coming Soon" message:
-                                @"Master Password is rolling out a new modern personal security platform and we're excited to bring you along.\n\n"
-                                @"When it's time, we'll send you a notification to help you make an effortless transition."
-                                                                        preferredStyle:UIAlertControllerStyleAlert];
-                [alert addAction:[UIAlertAction actionWithTitle:@"Thanks" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                    [Countly.sharedInstance askForNotificationPermission];
-                    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"notificationsDecided"];
-                }]];
-                [(self.navigationController.presentedViewController?: (UIViewController *)self.navigationController)
-                        presentViewController:alert animated:YES completion:nil];
-            }
+            [self enableNotifications];
         } );
     }
     @catch (id exception) {
@@ -245,6 +227,49 @@
             }] resume];
 
     return YES;
+}
+
+- (void)enableNotifications {
+
+    [Countly.sharedInstance giveConsentForFeature:CLYConsentPushNotifications];
+    if (@available( iOS 12, * )) {
+        [Countly.sharedInstance askForNotificationPermissionWithOptions:UNAuthorizationOptionProvisional | UNAuthorizationOptionAlert
+                                                      completionHandler:^(BOOL granted, NSError *error) {
+                                                          if (!granted)
+                                                              err( @"No provisional notification permission: %@", error );
+
+                                                          [self askNotifications];
+                                                      }];
+    }
+    else {
+        [self askNotifications];
+    }
+}
+
+- (void)askNotifications {
+
+    PearlMainQueue( ^{
+        if (![[NSUserDefaults standardUserDefaults] boolForKey:@"notificationsDecided"]) {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Coming Soon" message:
+                            @"Master Password is rolling out a new modern personal security platform and we're excited to bring you along.\n\n"
+                            @"When it's time, we'll send you a notification to help you make an effortless transition."
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:@"Thanks" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                if (@available( iOS 12, * )) {
+                    [Countly.sharedInstance askForNotificationPermissionWithOptions:UNAuthorizationOptionAlert completionHandler:
+                            ^(BOOL granted, NSError *error) {
+                                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"notificationsDecided"];
+                            }];
+                }
+                else {
+                    [Countly.sharedInstance askForNotificationPermission];
+                    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"notificationsDecided"];
+                }
+            }]];
+            [(self.navigationController.presentedViewController?: (UIViewController *)self.navigationController)
+                    presentViewController:alert animated:YES completion:nil];
+        }
+    } );
 }
 
 - (void)importSites:(NSString *)importData {
@@ -655,41 +680,39 @@
     [PearlLogger get].historyLevel = [[MPiOSConfig get].traceMode boolValue]? PearlLogLevelTrace: PearlLogLevelInfo;
 
     // Send info
+    NSArray *countlyFeatures = @[
+            CLYConsentSessions, CLYConsentEvents, CLYConsentUserDetails, CLYConsentCrashReporting, CLYConsentViewTracking, CLYConsentStarRating
+    ];
     if ([[MPConfig get].sendInfo boolValue]) {
-        [Countly.sharedInstance giveConsentForAllFeatures];
-
+        [Countly.sharedInstance giveConsentForFeatures:countlyFeatures];
         if ([PearlLogger get].printLevel > PearlLogLevelInfo)
             [PearlLogger get].printLevel = PearlLogLevelInfo;
 
-        NSMutableDictionary *prefs = [NSMutableDictionary new];
-        prefs[@"rememberLogin"] = [MPConfig get].rememberLogin;
-        prefs[@"sendInfo"] = [MPConfig get].sendInfo;
-        prefs[@"helpHidden"] = [MPiOSConfig get].helpHidden;
-        prefs[@"showQuickStart"] = [MPiOSConfig get].showSetup;
-        prefs[@"firstRun"] = [PearlConfig get].firstRun;
-        prefs[@"launchCount"] = [PearlConfig get].launchCount;
-        prefs[@"askForReviews"] = [PearlConfig get].askForReviews;
-        prefs[@"reviewAfterLaunches"] = [PearlConfig get].reviewAfterLaunches;
-        prefs[@"reviewedVersion"] = [PearlConfig get].reviewedVersion;
-        prefs[@"simulator"] = @([PearlDeviceUtils isSimulator]);
-        prefs[@"encrypted"] = @([PearlDeviceUtils isAppEncrypted]);
-        prefs[@"jailbroken"] = @([PearlDeviceUtils isJailbroken]);
-        prefs[@"platform"] = [PearlDeviceUtils platform];
-#ifdef APPSTORE
-        prefs[@"reviewedVersion"] = @([PearlDeviceUtils isAppEncrypted]);
-#else
-        prefs[@"reviewedVersion"] = @(YES);
-#endif
-
         [SentrySDK.currentHub getClient].options.enabled = @YES;
         [SentrySDK configureScope:^(SentryScope *scope) {
-            for (NSString *pref in prefs.allKeys)
-                [scope setExtraValue:prefs[pref] forKey:pref];
+            [scope setExtraValue:[MPConfig get].rememberLogin forKey:@"rememberLogin"];
+            [scope setExtraValue:[MPConfig get].sendInfo forKey:@"sendInfo"];
+            [scope setExtraValue:[MPiOSConfig get].helpHidden forKey:@"helpHidden"];
+            [scope setExtraValue:[MPiOSConfig get].showSetup forKey:@"showQuickStart"];
+            [scope setExtraValue:[PearlConfig get].firstRun forKey:@"firstRun"];
+            [scope setExtraValue:[PearlConfig get].launchCount forKey:@"launchCount"];
+            [scope setExtraValue:[PearlConfig get].askForReviews forKey:@"askForReviews"];
+            [scope setExtraValue:[PearlConfig get].reviewAfterLaunches forKey:@"reviewAfterLaunches"];
+            [scope setExtraValue:[PearlConfig get].reviewedVersion forKey:@"reviewedVersion"];
+            [scope setExtraValue:@([PearlDeviceUtils isSimulator]) forKey:@"simulator"];
+            [scope setExtraValue:@([PearlDeviceUtils isAppEncrypted]) forKey:@"encrypted"];
+            [scope setExtraValue:@([PearlDeviceUtils isJailbroken]) forKey:@"jailbroken"];
+            [scope setExtraValue:[PearlDeviceUtils platform] forKey:@"platform"];
+#ifdef APPSTORE
+            [scope setExtraValue:@([PearlDeviceUtils isAppEncrypted]) forKey:@"reviewedVersion"];
+#else
+            [scope setExtraValue:@(NO) forKey:@"reviewedVersion"];
+#endif
         }];
     }
     else {
         [SentrySDK.currentHub getClient].options.enabled = @NO;
-        [Countly.sharedInstance cancelConsentForAllFeatures];
+        [Countly.sharedInstance cancelConsentForFeatures:countlyFeatures];
     }
 }
 
