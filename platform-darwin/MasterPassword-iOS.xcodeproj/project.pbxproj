@@ -619,8 +619,6 @@
 		DA30E9D615723E6900A68B4C /* PearlLazy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlLazy.m; sourceTree = "<group>"; };
 		DA32D01819D046E1004F3F0E /* PearlFixedTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlFixedTableView.m; sourceTree = "<group>"; };
 		DA32D01919D046E1004F3F0E /* PearlFixedTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlFixedTableView.h; sourceTree = "<group>"; };
-		DA32D03919D111EB004F3F0E /* NSManagedObjectModel+KCOrderedAccessorFix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObjectModel+KCOrderedAccessorFix.h"; sourceTree = "<group>"; };
-		DA32D03A19D111EB004F3F0E /* NSManagedObjectModel+KCOrderedAccessorFix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObjectModel+KCOrderedAccessorFix.m"; sourceTree = "<group>"; };
 		DA32D03F19D27093004F3F0E /* thumb_generated_answers@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "thumb_generated_answers@3x.png"; sourceTree = "<group>"; };
 		DA32D04019D27093004F3F0E /* thumb_generated_answers@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "thumb_generated_answers@2x.png"; sourceTree = "<group>"; };
 		DA32D04119D27093004F3F0E /* thumb_generated_answers.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = thumb_generated_answers.png; sourceTree = "<group>"; };
@@ -1490,12 +1488,6 @@
 		DAC632871486D95D0075AEA5 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		DAC77CAD148291A600BCF976 /* libPearl.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPearl.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DACA29721705E1A8002C6C22 /* dictionary.lst */ = {isa = PBXFileReference; fileEncoding = 1; lastKnownFileType = text; path = dictionary.lst; sourceTree = "<group>"; };
-		DACA29771705E2BD002C6C22 /* JRSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JRSwizzle.h; sourceTree = "<group>"; };
-		DACA298C1705E2BD002C6C22 /* JRSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JRSwizzle.m; sourceTree = "<group>"; };
-		DACA29B51705E2DE002C6C22 /* UIColor+Expanded.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Expanded.h"; sourceTree = "<group>"; };
-		DACA29B61705E2DE002C6C22 /* UIColor+HSV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+HSV.h"; sourceTree = "<group>"; };
-		DACA29BA1705E2DE002C6C22 /* UIColor+Expanded.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Expanded.m"; sourceTree = "<group>"; };
-		DACA29BB1705E2DE002C6C22 /* UIColor+HSV.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+HSV.m"; sourceTree = "<group>"; };
 		DACE2F6319BA6A0A0010F92E /* PearlProfiler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlProfiler.m; sourceTree = "<group>"; };
 		DACE2F6419BA6A0A0010F92E /* PearlProfiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlProfiler.h; sourceTree = "<group>"; };
 		DACE2F6719BA6A2A0010F92E /* UIView+FontScale.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+FontScale.m"; sourceTree = "<group>"; };
@@ -1757,15 +1749,6 @@
 			path = Guide;
 			sourceTree = "<group>";
 		};
-		DA32D03719D111EB004F3F0E /* KCOrderedAccessorFix */ = {
-			isa = PBXGroup;
-			children = (
-				DA32D03919D111EB004F3F0E /* NSManagedObjectModel+KCOrderedAccessorFix.h */,
-				DA32D03A19D111EB004F3F0E /* NSManagedObjectModel+KCOrderedAccessorFix.m */,
-			);
-			path = KCOrderedAccessorFix;
-			sourceTree = "<group>";
-		};
 		DA5BFA39147E415C00F98B1E = {
 			isa = PBXGroup;
 			children = (
@@ -1815,13 +1798,6 @@
 				B4E180CA32C86ACDC960D8B1 /* Pods_MasterPassword_iOS.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		DAA141181922FED80032B392 /* iOS */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = iOS;
 			sourceTree = "<group>";
 		};
 		DAA1411E1922FF020032B392 /* include */ = {
@@ -2836,11 +2812,7 @@
 				DAA7BB6D20C4C0C400101DC7 /* libjson-c-ios */,
 				DAA7BB8720C4C10F00101DC7 /* libsodium-ios */,
 				DAA1759319D86C610044227B /* AttributedMarkdown */,
-				DAA141181922FED80032B392 /* iOS */,
-				DACA29751705E2BD002C6C22 /* jrswizzle */,
-				DA32D03719D111EB004F3F0E /* KCOrderedAccessorFix */,
 				DAC77CAF148291A600BCF976 /* Pearl */,
-				DACA29B41705E2DE002C6C22 /* uicolor-utilities */,
 			);
 			path = External;
 			sourceTree = "<group>";
@@ -2861,26 +2833,6 @@
 				DACA29721705E1A8002C6C22 /* dictionary.lst */,
 			);
 			path = Data;
-			sourceTree = "<group>";
-		};
-		DACA29751705E2BD002C6C22 /* jrswizzle */ = {
-			isa = PBXGroup;
-			children = (
-				DACA29771705E2BD002C6C22 /* JRSwizzle.h */,
-				DACA298C1705E2BD002C6C22 /* JRSwizzle.m */,
-			);
-			path = jrswizzle;
-			sourceTree = "<group>";
-		};
-		DACA29B41705E2DE002C6C22 /* uicolor-utilities */ = {
-			isa = PBXGroup;
-			children = (
-				DACA29B51705E2DE002C6C22 /* UIColor+Expanded.h */,
-				DACA29BA1705E2DE002C6C22 /* UIColor+Expanded.m */,
-				DACA29B61705E2DE002C6C22 /* UIColor+HSV.h */,
-				DACA29BB1705E2DE002C6C22 /* UIColor+HSV.m */,
-			);
-			path = "uicolor-utilities";
 			sourceTree = "<group>";
 		};
 		DAFE45D715039823003ABA7C /* Pearl */ = {

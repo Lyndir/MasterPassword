@@ -114,6 +114,7 @@
 		DA6774431A474A3B004F356A /* mpw-algorithm.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773BB1A4746AF004F356A /* mpw-algorithm.c */; };
 		DA6774451A474A3B004F356A /* mpw-types.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773C21A4746AF004F356A /* mpw-types.c */; };
 		DA6774461A474A3B004F356A /* mpw-util.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773C51A4746AF004F356A /* mpw-util.c */; };
+		DA72E2272444081200676D4F /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DABB981515100B4000B05417 /* SystemConfiguration.framework */; };
 		DA7471A31F2B71AE005F3468 /* mpw-marshal-util.c in Sources */ = {isa = PBXBuildFile; fileRef = DA7471A01F2B71A9005F3468 /* mpw-marshal-util.c */; };
 		DA7471A61F2B71B9005F3468 /* mpw-marshal-util.c in Sources */ = {isa = PBXBuildFile; fileRef = DA7471A01F2B71A9005F3468 /* mpw-marshal-util.c */; };
 		DA89D4EC1A51EABD00AC64D7 /* Pearl-Cocoa.h in Headers */ = {isa = PBXBuildFile; fileRef = DA89D4EA1A51EABD00AC64D7 /* Pearl-Cocoa.h */; };
@@ -121,7 +122,6 @@
 		DA8ED895192906920099B726 /* PearlTween.m in Sources */ = {isa = PBXBuildFile; fileRef = DA8ED891192906920099B726 /* PearlTween.m */; };
 		DA8ED896192906920099B726 /* PearlTween.h in Headers */ = {isa = PBXBuildFile; fileRef = DA8ED892192906920099B726 /* PearlTween.h */; };
 		DA8ED897192906920099B726 /* map-macro.h in Headers */ = {isa = PBXBuildFile; fileRef = DA8ED894192906920099B726 /* map-macro.h */; };
-		DA9261511BE1A86700369DE5 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA92614F1BE1A86700369DE5 /* SystemConfiguration.framework */; };
 		DA9261541BE1A88900369DE5 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DA9261531BE1A88900369DE5 /* libc++.tbd */; };
 		DA9261561BE1A89600369DE5 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DA9261551BE1A89600369DE5 /* libz.tbd */; };
 		DAA449D51EEC4B6B00E7BDD5 /* mpw-marshal.c in Sources */ = {isa = PBXBuildFile; fileRef = DAA449D31EEC4B6B00E7BDD5 /* mpw-marshal.c */; };
@@ -907,7 +907,6 @@
 		DA8ED891192906920099B726 /* PearlTween.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlTween.m; sourceTree = "<group>"; };
 		DA8ED892192906920099B726 /* PearlTween.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlTween.h; sourceTree = "<group>"; };
 		DA8ED894192906920099B726 /* map-macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "map-macro.h"; sourceTree = "<group>"; };
-		DA92614F1BE1A86700369DE5 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		DA9261531BE1A88900369DE5 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		DA9261551BE1A89600369DE5 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		DAA449D31EEC4B6B00E7BDD5 /* mpw-marshal.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-marshal.c"; sourceTree = "<group>"; };
@@ -1002,8 +1001,6 @@
 		DAADCC3E19FAFFAD00987B1D /* NSNotificationCenter+PearlEasyCleanup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNotificationCenter+PearlEasyCleanup.h"; sourceTree = "<group>"; };
 		DAADCC3F19FAFFAD00987B1D /* NSPersistentStore+PearlMigration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSPersistentStore+PearlMigration.h"; sourceTree = "<group>"; };
 		DAADCC4019FAFFAD00987B1D /* NSPersistentStore+PearlMigration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSPersistentStore+PearlMigration.m"; sourceTree = "<group>"; };
-		DAADCC6619FB007F00987B1D /* NSManagedObjectModel+KCOrderedAccessorFix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObjectModel+KCOrderedAccessorFix.h"; sourceTree = "<group>"; };
-		DAADCC6719FB007F00987B1D /* NSManagedObjectModel+KCOrderedAccessorFix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObjectModel+KCOrderedAccessorFix.m"; sourceTree = "<group>"; };
 		DAAF16631F5897EA0013B8AE /* mpw-cli-util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-cli-util.c"; sourceTree = "<group>"; };
 		DAAF16641F5897EA0013B8AE /* mpw-cli-util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-cli-util.h"; sourceTree = "<group>"; };
 		DAB07C9E1F7725D400CC6D43 /* aes.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aes.c; sourceTree = "<group>"; };
@@ -1064,8 +1061,6 @@
 		DACA268E1705DF81002C6C22 /* SourceCodePro-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceCodePro-ExtraLight.otf"; sourceTree = "<group>"; };
 		DACA268F1705DF81002C6C22 /* SourceCodePro-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceCodePro-Black.otf"; sourceTree = "<group>"; };
 		DACA29721705E1A8002C6C22 /* dictionary.lst */ = {isa = PBXFileReference; fileEncoding = 1; lastKnownFileType = text; path = dictionary.lst; sourceTree = "<group>"; };
-		DACA29771705E2BD002C6C22 /* JRSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JRSwizzle.h; sourceTree = "<group>"; };
-		DACA298C1705E2BD002C6C22 /* JRSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JRSwizzle.m; sourceTree = "<group>"; };
 		DACBFCDB1C59B22E007EF90F /* NSMutableSet+Pearl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableSet+Pearl.h"; sourceTree = "<group>"; };
 		DACBFCDC1C59B22E007EF90F /* NSMutableSet+Pearl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableSet+Pearl.m"; sourceTree = "<group>"; };
 		DAD0C5F619FD6034009CB08D /* icon_128x128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_128x128.png; sourceTree = "<group>"; };
@@ -1153,13 +1148,13 @@
 				DAB7AE5B1F3D750B00C856B1 /* libjson-c.a in Frameworks */,
 				DA9261561BE1A89600369DE5 /* libz.tbd in Frameworks */,
 				DA9261541BE1A88900369DE5 /* libc++.tbd in Frameworks */,
-				DA9261511BE1A86700369DE5 /* SystemConfiguration.framework in Frameworks */,
 				DA250925195148E200AC23F1 /* QuartzCore.framework in Frameworks */,
 				DAD9B5F01762CAA4001835F9 /* ServiceManagement.framework in Frameworks */,
 				DA16B341170661DB000A0EAB /* Carbon.framework in Frameworks */,
 				DA16B342170661E0000A0EAB /* Security.framework in Frameworks */,
 				DA16B345170661F2000A0EAB /* libPearl.a in Frameworks */,
 				DA16B344170661EE000A0EAB /* Cocoa.framework in Frameworks */,
+				DA72E2272444081200676D4F /* SystemConfiguration.framework in Frameworks */,
 				7352E972184B980C428B66A2 /* Pods_MasterPassword_macOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1221,14 +1216,6 @@
 				DA2508FB19513C1400AC23F1 /* AppKit.framework */,
 			);
 			name = "Other Frameworks";
-			sourceTree = "<group>";
-		};
-		DA3B8449190FC5A900246EEA /* Mac */ = {
-			isa = PBXGroup;
-			children = (
-				DA92614F1BE1A86700369DE5 /* SystemConfiguration.framework */,
-			);
-			path = Mac;
 			sourceTree = "<group>";
 		};
 		DA5BFA39147E415C00F98B1E = {
@@ -1974,15 +1961,6 @@
 			path = lib;
 			sourceTree = "<group>";
 		};
-		DAADCC6819FB007F00987B1D /* KCOrderedAccessorFix */ = {
-			isa = PBXGroup;
-			children = (
-				DAADCC6619FB007F00987B1D /* NSManagedObjectModel+KCOrderedAccessorFix.h */,
-				DAADCC6719FB007F00987B1D /* NSManagedObjectModel+KCOrderedAccessorFix.m */,
-			);
-			path = KCOrderedAccessorFix;
-			sourceTree = "<group>";
-		};
 		DAC77CAF148291A600BCF976 /* Pearl */ = {
 			isa = PBXGroup;
 			children = (
@@ -1999,9 +1977,6 @@
 			children = (
 				DAA7BC0D20C4C1B500101DC7 /* libjson-c-macos */,
 				DAA7BBC920C4C17300101DC7 /* libsodium-macos */,
-				DACA29751705E2BD002C6C22 /* jrswizzle */,
-				DAADCC6819FB007F00987B1D /* KCOrderedAccessorFix */,
-				DA3B8449190FC5A900246EEA /* Mac */,
 				DAC77CAF148291A600BCF976 /* Pearl */,
 			);
 			path = External;
@@ -2099,15 +2074,6 @@
 				DACA29721705E1A8002C6C22 /* dictionary.lst */,
 			);
 			path = Data;
-			sourceTree = "<group>";
-		};
-		DACA29751705E2BD002C6C22 /* jrswizzle */ = {
-			isa = PBXGroup;
-			children = (
-				DACA29771705E2BD002C6C22 /* JRSwizzle.h */,
-				DACA298C1705E2BD002C6C22 /* JRSwizzle.m */,
-			);
-			path = jrswizzle;
 			sourceTree = "<group>";
 		};
 		DAD0C5F419FD6034009CB08D /* mac */ = {
