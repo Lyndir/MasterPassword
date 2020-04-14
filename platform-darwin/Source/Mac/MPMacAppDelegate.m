@@ -70,18 +70,19 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     @try {
         // Sentry
         [SentrySDK initWithOptions:@{
-                @"dsn"        : NilToNSNull( decrypt( sentryDSN ) ),
+                @"dsn"                      : NilToNSNull( decrypt( sentryDSN ) ),
 #ifdef DEBUG
-                @"debug"      : @(YES),
-                @"environment": @"Development",
+                @"debug"                    : @(YES),
+                @"environment"              : @"Development",
 #elif PUBLIC
-                @"debug"      : @(NO),
-                @"environment": @"Public",
+                @"debug"                    : @(NO),
+                @"environment"              : @"Public",
 #else
-                @"debug"      : @(NO),
-                @"environment": @"Private",
+                @"debug"                    : @(NO),
+                @"environment"              : @"Private",
 #endif
-                @"enabled"    : [MPMacConfig get].sendInfo,
+                @"enabled"                  : [MPMacConfig get].sendInfo,
+                @"enableAutoSessionTracking": @(YES),
         }];
         [[PearlLogger get] registerListener:^BOOL(PearlLogMessage *message) {
             PearlLogLevel level = PearlLogLevelWarn;

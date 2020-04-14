@@ -643,7 +643,6 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
         user.avatar = importUser->avatar;
         user.defaultType = importUser->defaultType;
         user.lastUsed = [NSDate dateWithTimeIntervalSince1970:MAX( user.lastUsed.timeIntervalSince1970, importUser->lastUsed )];
-        dbg( @"Importing user: %@", [user debugDescription] );
 
         // Update or create sites.
         for (size_t s = 0; s < importUser->sites_count; ++s) {
@@ -657,10 +656,8 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
                 return MPError( error, @"Lookup of existing sites failed for site: %@, user: %@", @(importSite->siteName), user.userID );
             if ([existingSites count])
                 // Update existing site.
-                for (MPSiteEntity *site in existingSites) {
+                for (MPSiteEntity *site in existingSites)
                     [self importSite:importSite protectedByKey:importKey intoSite:site usingKey:userKey];
-                    dbg( @"Updated site: %@", [site debugDescription] );
-                }
             else {
                 // Create new site.
                 id<MPAlgorithm> algorithm = MPAlgorithmForVersion( importSite->algorithm );
@@ -673,7 +670,6 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
                 site.user = user;
 
                 [self importSite:importSite protectedByKey:importKey intoSite:site usingKey:userKey];
-                dbg( @"Created site: %@", [site debugDescription] );
             }
         }
 

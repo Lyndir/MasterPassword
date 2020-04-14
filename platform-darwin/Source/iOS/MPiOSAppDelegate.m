@@ -30,7 +30,6 @@
 
 @property(nonatomic, strong) UIDocumentInteractionController *interactionController;
 @property(nonatomic, strong) PearlHangDetector *hangDetector;
-
 @end
 
 @implementation MPiOSAppDelegate
@@ -45,18 +44,19 @@
     @try {
         // Sentry
         [SentrySDK initWithOptions:@{
-                @"dsn"        : NilToNSNull( decrypt( sentryDSN ) ),
+                @"dsn"                      : NilToNSNull( decrypt( sentryDSN ) ),
 #ifdef DEBUG
-                @"debug"      : @(YES),
-                @"environment": @"Development",
+                @"debug"                    : @(YES),
+                @"environment"              : @"Development",
 #elif PUBLIC
-                @"debug"      : @(NO),
-                @"environment": @"Public",
+                @"debug"                    : @(NO),
+                @"environment"              : @"Public",
 #else
-                @"debug"      : @(NO),
-                @"environment": @"Private",
+                @"debug"                    : @(NO),
+                @"environment"              : @"Private",
 #endif
-                @"enabled"    : [MPiOSConfig get].sendInfo,
+                @"enabled"                  : [MPiOSConfig get].sendInfo,
+                @"enableAutoSessionTracking": @(YES),
         }];
         [[PearlLogger get] registerListener:^BOOL(PearlLogMessage *message) {
             PearlLogLevel level = PearlLogLevelWarn;
@@ -386,44 +386,6 @@
     }
 
     [self.hangDetector stop];
-
-//    self.task = [application beginBackgroundTaskWithExpirationHandler:^{
-//        [application endBackgroundTask:self.task];
-//        dbg( @"background expiring" );
-//    }];
-//    PearlNotMainQueueOperation( ^{
-//        NSString *pbstring = [UIPasteboard generalPasteboard].string;
-//        while (YES) {
-//            NSString *newString = [UIPasteboard generalPasteboard].string;
-//            if (![newString isEqualToString:pbstring]) {
-//                dbg( @"pasteboard changed to: %@", newString );
-//                pbstring = newString;
-//                NSURL *url = [NSURL URLWithString:pbstring];
-//                if (url) {
-//                    NSString *siteName = [url host];
-//                }
-//                MPKey *key = [MPiOSAppDelegate get].key;
-//                if (key)
-//                    [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-//                        NSFetchRequest<MPSiteEntity *>
-//                                *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPSiteEntity class] )];
-//                        fetchRequest.sortDescriptors = @[
-//                                [[NSSortDescriptor alloc] initWithKey:NSStringFromSelector( @selector( lastUsed ) ) ascending:NO]
-//                        ];
-//                        fetchRequest.fetchBatchSize = 2;
-//                        fetchRequest.predicate = [NSPredicate predicateWithFormat:@"(name LIKE[cd] %@) AND user == %@", siteName,
-//                                                                                  [[MPiOSAppDelegate get] activeUserOID]];
-//                        NSError *error = nil;
-//                        NSArray<MPSiteEntity *> *results = [fetchRequest execute:&error];
-//                        dbg( @"site search, error: %@, results:\n%@", error, results );
-//                        if ([results count]) {
-//                            [UIPasteboard generalPasteboard].string = [[results firstObject] resolvePasswordUsingKey:key];
-//                        }
-//                    }];
-//            }
-//            [NSThread sleepForTimeInterval:5];
-//        }
-//    } );
 
     [super applicationDidEnterBackground:application];
 }

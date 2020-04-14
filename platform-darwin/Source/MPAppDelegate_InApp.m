@@ -172,21 +172,13 @@ PearlAssociatedObjectProperty( NSMutableArray*, ProductObservers, productObserve
 #endif
 }
 
-- (void)requestDidFinish:(SKRequest *)request {
-
-    dbg( @"StoreKit request (%@) finished.", request );
-}
-
 #pragma mark - SKPaymentTransactionObserver
 
 - (void)paymentQueue:(SKPaymentQueue *)queue updatedTransactions:(NSArray *)transactions {
 
     for (SKPaymentTransaction *transaction in transactions) {
-        dbg( @"transaction updated: %@ -> %d", transaction.payment.productIdentifier, (int)(transaction.transactionState) );
-
         switch (transaction.transactionState) {
             case SKPaymentTransactionStatePurchased: {
-                inf( @"Purchased: %@", transaction.payment.productIdentifier );
                 NSMutableDictionary *attributes = [NSMutableDictionary new];
 
                 if ([transaction.payment.productIdentifier isEqualToString:MPProductFuel]) {
@@ -220,7 +212,6 @@ PearlAssociatedObjectProperty( NSMutableArray*, ProductObservers, productObserve
                 break;
             }
             case SKPaymentTransactionStateRestored: {
-                inf( @"Restored: %@", transaction.payment.productIdentifier );
                 [[NSUserDefaults standardUserDefaults] setObject:transaction.transactionIdentifier
                                                           forKey:transaction.payment.productIdentifier];
                 [queue finishTransaction:transaction];

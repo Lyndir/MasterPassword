@@ -102,8 +102,6 @@
 #pragma mark - Actions
 
 - (IBAction)unwindToCombined:(UIStoryboardSegue *)sender {
-
-    dbg( @"unwindToCombined:%@", sender );
 }
 
 #pragma mark - State
