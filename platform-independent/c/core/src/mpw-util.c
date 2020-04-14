@@ -97,14 +97,15 @@ void mpw_log_ssink(LogLevel level, const char *file, int line, const char *funct
             .message = message,
     };
 
+    bool sunk = false;
     for (unsigned int s = 0; s < sinks_count; ++s) {
         MPLogSink *sink = sinks[s];
 
         if (sink)
-            sink( &record );
+            sunk |= sink( &record );
     }
-    if (!sinks_count)
-        mpw_log_sink_file( &record );
+    if (!sunk)
+        sunk = mpw_log_sink_file( &record );
 
     if (record.level <= LogLevelError) {
         /* error breakpoint */;
@@ -113,7 +114,7 @@ void mpw_log_ssink(LogLevel level, const char *file, int line, const char *funct
         abort();
 }
 
-void mpw_log_sink_file(const MPLogEvent *record) {
+bool mpw_log_sink_file(const MPLogEvent *record) {
 
     if (!mpw_log_sink_file_target)
         mpw_log_sink_file_target = stderr;
@@ -145,6 +146,7 @@ void mpw_log_sink_file(const MPLogEvent *record) {
     }
 
     fprintf( mpw_log_sink_file_target, "%s\n", record->message );
+    return true;
 }
 
 void mpw_uint16(const uint16_t number, uint8_t buf[2]) {
