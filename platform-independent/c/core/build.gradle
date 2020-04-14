@@ -44,7 +44,6 @@ library {
         def arch = targetMachine.getArchitecture().getName().replace('-', '_')
 
         compile.macros.put("MPW_SODIUM", "1")
-        compile.macros.put("MPW_LOG", "mpw_log_app")
 
         dependencies {
             // libsodium

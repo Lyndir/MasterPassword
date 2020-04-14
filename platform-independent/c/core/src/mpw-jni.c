@@ -10,50 +10,46 @@
 static JavaVM* _vm;
 static jobject logger;
 
-void mpw_log_app(LogLevel level, const char *format, ...) {
+MPLogSink mpw_log_sink_jni;
+bool mpw_log_sink_jni(const MPLogEvent *record) {
+    bool sunk = false;
+
     JNIEnv *env;
     if ((*_vm)->GetEnv( _vm, (void **)&env, JNI_VERSION_1_6 ) != JNI_OK)
-        return;
-
-    va_list args;
-    va_start( args, format );
+        return sunk;
 
     if (logger && (*env)->PushLocalFrame( env, 16 ) == OK) {
         jmethodID method = NULL;
         jclass Logger = (*env)->GetObjectClass( env, logger );
-        if (level >= LogLevelTrace)
-            method = (*env)->GetMethodID( env, Logger, "trace", "(Ljava/lang/String;)V" );
-        else if (level == LogLevelDebug)
-            method = (*env)->GetMethodID( env, Logger, "debug", "(Ljava/lang/String;)V" );
-        else if (level == LogLevelInfo)
-            method = (*env)->GetMethodID( env, Logger, "info", "(Ljava/lang/String;)V" );
-        else if (level == LogLevelWarning)
-            method = (*env)->GetMethodID( env, Logger, "warn", "(Ljava/lang/String;)V" );
-        else if (level <= LogLevelError)
-            method = (*env)->GetMethodID( env, Logger, "error", "(Ljava/lang/String;)V" );
+        switch (record->level) {
+            case LogLevelTrace:
+                method = (*env)->GetMethodID( env, Logger, "trace", "(Ljava/lang/String;)V" );
+                break;
+            case LogLevelDebug:
+                method = (*env)->GetMethodID( env, Logger, "debug", "(Ljava/lang/String;)V" );
+                break;
+            case LogLevelInfo:
+                method = (*env)->GetMethodID( env, Logger, "info", "(Ljava/lang/String;)V" );
+                break;
+            case LogLevelWarning:
+                method = (*env)->GetMethodID( env, Logger, "warn", "(Ljava/lang/String;)V" );
+                break;
+            case LogLevelError:
+            case LogLevelFatal:
+                method = (*env)->GetMethodID( env, Logger, "error", "(Ljava/lang/String;)V" );
+                break;
+        }
 
-        va_list _args;
-        va_copy( _args, args );
-        int length = vsnprintf( NULL, 0, format, _args );
-        va_end( _args );
-
-        if (length > 0) {
-            size_t size = (size_t) (length + 1);
-            char *message = malloc( size );
-            va_copy( _args, args );
-            if (message && (length = vsnprintf( message, size, format, _args )) > 0)
-                (*env)->CallVoidMethod( env, logger, method, (*env)->NewStringUTF( env, message ) );
-            va_end( _args );
-            mpw_free( &message, (size_t)max( 0, length ) );
+        if (method && record->message) {
+            // TODO: log file, line & function as markers?
+            (*env)->CallVoidMethod( env, logger, method, (*env)->NewStringUTF( env, record->message ) );
+            sunk = true;
         }
 
         (*env)->PopLocalFrame( env, NULL );
     }
-    else
-        // Can't log via slf4j, fall back to cli logger.
-        mpw_vlog_cli( level, format, args );
 
-    va_end( args );
+    return sunk;
 }
 
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved) {
@@ -82,6 +78,8 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved) {
         mpw_verbosity = LogLevelError;
     else
         mpw_verbosity = LogLevelFatal;
+
+    mpw_log_sink_register( &mpw_log_sink_jni );
 
     return JNI_VERSION_1_6;
 }
