@@ -81,7 +81,7 @@ static const uint8_t b64ToBits[256] =
 size_t mpw_base64_decode_max(const char *b64Text) {
 
     register const char *b64Cursor = b64Text;
-    for (; b64ToBits[*b64Cursor] <= 63; ++b64Cursor);
+    for (; b64ToBits[(uint8_t)*b64Cursor] <= 63; ++b64Cursor);
     size_t b64Size = b64Cursor - b64Text;
 
     // Every 4 b64 chars yield 3 plain bytes => len = 3 * ceil(b64Size / 4)
@@ -91,7 +91,7 @@ size_t mpw_base64_decode_max(const char *b64Text) {
 size_t mpw_base64_decode(uint8_t *plainBuf, const char *b64Text) {
 
     register const uint8_t *b64Cursor = (uint8_t *)b64Text;
-    for (; b64ToBits[*b64Cursor] <= 63; ++b64Cursor);
+    for (; b64ToBits[(uint8_t)*b64Cursor] <= 63; ++b64Cursor);
     size_t b64Remaining = b64Cursor - (uint8_t *)b64Text;
 
     b64Cursor = (uint8_t *)b64Text;
