@@ -32,7 +32,7 @@
 @end
 
 MPLogSink mpw_log_sink_pearl;
-void mpw_log_sink_pearl(const MPLogEvent *record) {
+bool mpw_log_sink_pearl(const MPLogEvent *record) {
 
     PearlLogLevel level = PearlLogLevelInfo;
     switch (record->level) {
@@ -58,6 +58,7 @@ void mpw_log_sink_pearl(const MPLogEvent *record) {
 
     [[PearlLogger get] inFile:[@(record->file) lastPathComponent] atLine:record->line fromFunction:@(record->function)
                     withLevel:level text:@(record->message)];
+    return YES;
 }
 
 @implementation MPAppDelegate_Shared
