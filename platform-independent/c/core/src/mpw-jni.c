@@ -84,8 +84,8 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved) {
     return JNI_VERSION_1_6;
 }
 
-/* native int _masterKey(final String fullName, final byte[] masterPassword, final Version version) */
-JNIEXPORT jbyteArray JNICALL Java_com_lyndir_masterpassword_impl_MPAlgorithmV0__1masterKey(JNIEnv *env, jobject obj,
+/* native byte[] _masterKey(final String fullName, final byte[] masterPassword, final int algorithmVersion) */
+JNIEXPORT jbyteArray JNICALL Java_com_lyndir_masterpassword_MPAlgorithm_00024Version__1masterKey(JNIEnv *env, jobject obj,
         jstring fullName, jbyteArray masterPassword, jint algorithmVersion) {
 
     if (!fullName || !masterPassword)
@@ -108,9 +108,9 @@ JNIEXPORT jbyteArray JNICALL Java_com_lyndir_masterpassword_impl_MPAlgorithmV0__
     return masterKey;
 }
 
-/* native int _siteKey(final byte[] masterKey, final String siteName, final long siteCounter,
-                       final MPKeyPurpose keyPurpose, @Nullable final String keyContext,  final Version version) */
-JNIEXPORT jbyteArray JNICALL Java_com_lyndir_masterpassword_impl_MPAlgorithmV0__1siteKey(JNIEnv *env, jobject obj,
+/* native byte[] _siteKey(final byte[] masterKey, final String siteName, final long siteCounter,
+                          final int keyPurpose, @Nullable final String keyContext, final int version) */
+JNIEXPORT jbyteArray JNICALL Java_com_lyndir_masterpassword_MPAlgorithm_00024Version__1siteKey(JNIEnv *env, jobject obj,
         jbyteArray masterKey, jstring siteName, jlong siteCounter, jint keyPurpose, jstring keyContext, jint algorithmVersion) {
 
     if (!masterKey || !siteName)
@@ -138,9 +138,9 @@ JNIEXPORT jbyteArray JNICALL Java_com_lyndir_masterpassword_impl_MPAlgorithmV0__
 }
 
 /* native String _siteResult(final byte[] masterKey, final byte[] siteKey, final String siteName, final long siteCounter,
-                             final MPKeyPurpose keyPurpose, @Nullable final String keyContext,
-                             final MPResultType resultType, @Nullable final String resultParam, final Version version) */
-JNIEXPORT jstring JNICALL Java_com_lyndir_masterpassword_impl_MPAlgorithmV0__1siteResult(JNIEnv *env, jobject obj,
+                             final int keyPurpose, @Nullable final String keyContext,
+                             final int resultType, @Nullable final String resultParam, final int algorithmVersion) */
+JNIEXPORT jstring JNICALL Java_com_lyndir_masterpassword_MPAlgorithm_00024Version__1siteResult(JNIEnv *env, jobject obj,
         jbyteArray masterKey, jbyteArray siteKey, jstring siteName, jlong siteCounter, jint keyPurpose, jstring keyContext,
         jint resultType, jstring resultParam, jint algorithmVersion) {
 
@@ -173,9 +173,9 @@ JNIEXPORT jstring JNICALL Java_com_lyndir_masterpassword_impl_MPAlgorithmV0__1si
 }
 
 /* native String _siteState(final byte[] masterKey, final byte[] siteKey, final String siteName, final long siteCounter,
-                            final MPKeyPurpose keyPurpose, @Nullable final String keyContext,
-                            final MPResultType resultType, final String resultParam, final Version version) */
-JNIEXPORT jstring JNICALL Java_com_lyndir_masterpassword_impl_MPAlgorithmV0__1siteState(JNIEnv *env, jobject obj,
+                            final int keyPurpose, @Nullable final String keyContext,
+                            final int resultType, final String resultParam, final int algorithmVersion) */
+JNIEXPORT jstring JNICALL Java_com_lyndir_masterpassword_MPAlgorithm_00024Version__1siteState(JNIEnv *env, jobject obj,
         jbyteArray masterKey, jbyteArray siteKey, jstring siteName, jlong siteCounter, jint keyPurpose, jstring keyContext,
         jint resultType, jstring resultParam, jint algorithmVersion) {
 

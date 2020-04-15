@@ -74,9 +74,9 @@ public final class Native {
 
                 // Write the library resource to a temporary file.
                 libraryFile = File.createTempFile( libraryName, libraryExtension );
+                libraryFile.deleteOnExit();
                 FileOutputStream libraryFileStream = new FileOutputStream( libraryFile );
                 try {
-                    libraryFile.deleteOnExit();
                     ByteStreams.copy( libraryStream, libraryFileStream );
                 }
                 finally {
@@ -91,9 +91,8 @@ public final class Native {
             catch (@SuppressWarnings("ErrorNotRethrown") final IOException | UnsatisfiedLinkError e) {
                 logger.wrn( e, "Couldn't load library: %s", libraryResource );
 
-                if (libraryFile != null)
-                    if (libraryFile.exists() && !libraryFile.delete())
-                        logger.wrn( "Couldn't clean up library file: %s", libraryFile );
+                if (libraryFile != null && libraryFile.exists() && !libraryFile.delete())
+                    logger.wrn( "Couldn't clean up library file: %s", libraryFile );
                 libraryFile = null;
             }
         }

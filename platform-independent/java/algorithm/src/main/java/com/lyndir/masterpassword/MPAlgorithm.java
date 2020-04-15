@@ -227,7 +227,8 @@ public interface MPAlgorithm {
         private static final int    AES_BLOCKSIZE      = 128 /* bit */;
 
         static {
-            Native.load( MPAlgorithm.class, "mpw" );
+            if (!Native.load( MPAlgorithm.class, "mpw" ))
+                Logger.get( MPAlgorithm.class ).err( "Native mpw library unavailable." );
         }
 
         protected final Logger logger = Logger.get( getClass() );
