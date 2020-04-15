@@ -35,6 +35,7 @@ import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.text.*;
+import javax.swing.undo.UndoableEdit;
 import org.jetbrains.annotations.NonNls;
 
 
@@ -207,7 +208,13 @@ public abstract class Components {
     }
 
     public static JPasswordField passwordField() {
-        return new JPasswordField() {
+        return new JPasswordField( new PlainDocument( new GapContent() {
+            @Override
+            public String getString(final int where, final int len)
+                    throws BadLocationException {
+                return "";
+            }
+        } ), null, 0 ) {
             {
                 setBorder( BorderFactory.createCompoundBorder( BorderFactory.createLineBorder( Res.colors().controlBorder(), 1, true ),
                                                                BorderFactory.createEmptyBorder( 4, 4, 4, 4 ) ) );

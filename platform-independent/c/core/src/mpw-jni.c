@@ -20,23 +20,23 @@ bool mpw_log_sink_jni(const MPLogEvent *record) {
 
     if (logger && (*env)->PushLocalFrame( env, 16 ) == OK) {
         jmethodID method = NULL;
-        jclass Logger = (*env)->GetObjectClass( env, logger );
+        jclass cLogger = (*env)->GetObjectClass( env, logger );
         switch (record->level) {
             case LogLevelTrace:
-                method = (*env)->GetMethodID( env, Logger, "trace", "(Ljava/lang/String;)V" );
+                method = (*env)->GetMethodID( env, cLogger, "trace", "(Ljava/lang/String;)V" );
                 break;
             case LogLevelDebug:
-                method = (*env)->GetMethodID( env, Logger, "debug", "(Ljava/lang/String;)V" );
+                method = (*env)->GetMethodID( env, cLogger, "debug", "(Ljava/lang/String;)V" );
                 break;
             case LogLevelInfo:
-                method = (*env)->GetMethodID( env, Logger, "info", "(Ljava/lang/String;)V" );
+                method = (*env)->GetMethodID( env, cLogger, "info", "(Ljava/lang/String;)V" );
                 break;
             case LogLevelWarning:
-                method = (*env)->GetMethodID( env, Logger, "warn", "(Ljava/lang/String;)V" );
+                method = (*env)->GetMethodID( env, cLogger, "warn", "(Ljava/lang/String;)V" );
                 break;
             case LogLevelError:
             case LogLevelFatal:
-                method = (*env)->GetMethodID( env, Logger, "error", "(Ljava/lang/String;)V" );
+                method = (*env)->GetMethodID( env, cLogger, "error", "(Ljava/lang/String;)V" );
                 break;
         }
 
@@ -57,29 +57,39 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved) {
     if ((*vm)->GetEnv( _vm = vm, (void **)&env, JNI_VERSION_1_6 ) != JNI_OK)
         return -1;
 
-    jclass LoggerFactory = (*env)->FindClass( env, "org/slf4j/LoggerFactory" );
-    jmethodID method = (*env)->GetStaticMethodID( env, LoggerFactory, "getLogger", "(Ljava/lang/String;)Lorg/slf4j/Logger;" );
-    jstring name = (*env)->NewStringUTF( env, "com.lyndir.masterpassword.algorithm" );
-    if (LoggerFactory && method && name)
-        logger = (*env)->NewGlobalRef( env, (*env)->CallStaticObjectMethod( env, LoggerFactory, method, name ) );
-    else
+    do {
+        jclass cLoggerFactory = (*env)->FindClass( env, "org/slf4j/LoggerFactory" );
+        if (!cLoggerFactory)
+            break;
+        jmethodID method = (*env)->GetStaticMethodID( env, cLoggerFactory, "getLogger", "(Ljava/lang/String;)Lorg/slf4j/Logger;" );
+        if (!method)
+            break;
+        jstring name = (*env)->NewStringUTF( env, "com.lyndir.masterpassword.algorithm" );
+        if (!name)
+            break;
+        logger = (*env)->NewGlobalRef( env, (*env)->CallStaticObjectMethod( env, cLoggerFactory, method, name ) );
+        if (!logger)
+            break;
+
+        jclass cLogger = (*env)->GetObjectClass( env, logger );
+        if ((*env)->CallBooleanMethod( env, logger, (*env)->GetMethodID( env, cLogger, "isTraceEnabled", "()Z" ) ))
+            mpw_verbosity = LogLevelTrace;
+        else if ((*env)->CallBooleanMethod( env, logger, (*env)->GetMethodID( env, cLogger, "isDebugEnabled", "()Z" ) ))
+            mpw_verbosity = LogLevelDebug;
+        else if ((*env)->CallBooleanMethod( env, logger, (*env)->GetMethodID( env, cLogger, "isInfoEnabled", "()Z" ) ))
+            mpw_verbosity = LogLevelInfo;
+        else if ((*env)->CallBooleanMethod( env, logger, (*env)->GetMethodID( env, cLogger, "isWarnEnabled", "()Z" ) ))
+            mpw_verbosity = LogLevelWarning;
+        else if ((*env)->CallBooleanMethod( env, logger, (*env)->GetMethodID( env, cLogger, "isErrorEnabled", "()Z" ) ))
+            mpw_verbosity = LogLevelError;
+        else
+            mpw_verbosity = LogLevelFatal;
+
+        mpw_log_sink_register( &mpw_log_sink_jni );
+    } while (false);
+
+    if (!logger)
         wrn( "Couldn't initialize JNI logger." );
-
-    jclass Logger = (*env)->GetObjectClass( env, logger );
-    if ((*env)->CallBooleanMethod( env, logger, (*env)->GetMethodID( env, Logger, "isTraceEnabled", "()Z" ) ))
-        mpw_verbosity = LogLevelTrace;
-    else if ((*env)->CallBooleanMethod( env, logger, (*env)->GetMethodID( env, Logger, "isDebugEnabled", "()Z" ) ))
-        mpw_verbosity = LogLevelDebug;
-    else if ((*env)->CallBooleanMethod( env, logger, (*env)->GetMethodID( env, Logger, "isInfoEnabled", "()Z" ) ))
-        mpw_verbosity = LogLevelInfo;
-    else if ((*env)->CallBooleanMethod( env, logger, (*env)->GetMethodID( env, Logger, "isWarnEnabled", "()Z" ) ))
-        mpw_verbosity = LogLevelWarning;
-    else if ((*env)->CallBooleanMethod( env, logger, (*env)->GetMethodID( env, Logger, "isErrorEnabled", "()Z" ) ))
-        mpw_verbosity = LogLevelError;
-    else
-        mpw_verbosity = LogLevelFatal;
-
-    mpw_log_sink_register( &mpw_log_sink_jni );
 
     return JNI_VERSION_1_6;
 }
@@ -205,4 +215,52 @@ JNIEXPORT jstring JNICALL Java_com_lyndir_masterpassword_MPAlgorithm_00024Versio
     mpw_free_string( &siteStateString );
 
     return siteState;
+}
+
+/* native MPIdenticon _identicon(final String fullName, final byte[] masterPassword) */
+JNIEXPORT jobject JNICALL Java_com_lyndir_masterpassword_MPAlgorithm_00024Version__1identicon(JNIEnv *env, jobject obj,
+        jstring fullName, jbyteArray masterPassword) {
+
+    if (!fullName || !masterPassword)
+        return NULL;
+
+    const char *fullNameString = (*env)->GetStringUTFChars( env, fullName, NULL );
+    jbyte *masterPasswordString = (*env)->GetByteArrayElements( env, masterPassword, NULL );
+
+    MPIdenticon identicon = mpw_identicon( fullNameString, (char *)masterPasswordString );
+    (*env)->ReleaseStringUTFChars( env, fullName, fullNameString );
+    (*env)->ReleaseByteArrayElements( env, masterPassword, masterPasswordString, JNI_ABORT );
+    if (identicon.color == MPIdenticonColorUnset)
+        return NULL;
+
+    jclass cMPIdenticonColor = (*env)->FindClass( env, "com/lyndir/masterpassword/MPIdenticon$Color" );
+    if (!cMPIdenticonColor)
+        return NULL;
+    jmethodID method = (*env)->GetStaticMethodID( env, cMPIdenticonColor, "values", "()[Lcom/lyndir/masterpassword/MPIdenticon$Color;" );
+    if (!method)
+        return NULL;
+    jobject values = (*env)->CallStaticObjectMethod( env, cMPIdenticonColor, method );
+    if (!values)
+        return NULL;
+
+    jclass cMPIdenticon = (*env)->FindClass( env, "com/lyndir/masterpassword/MPIdenticon" );
+    if (!cMPIdenticon)
+        return NULL;
+    jmethodID init = (*env)->GetMethodID( env, cMPIdenticon, "<init>", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/lyndir/masterpassword/MPIdenticon$Color;)V" );
+    if (!init)
+        return NULL;
+
+    return (*env)->NewObject( env, cMPIdenticon, init, fullName,
+            (*env)->NewStringUTF( env, identicon.leftArm ),
+            (*env)->NewStringUTF( env, identicon.body ),
+            (*env)->NewStringUTF( env, identicon.rightArm ),
+            (*env)->NewStringUTF( env, identicon.accessory ),
+            (*env)->GetObjectArrayElement( env, values, identicon.color ) );
+}
+
+/* native String _toID(final byte[] buffer) */
+JNIEXPORT jstring JNICALL Java_com_lyndir_masterpassword_MPAlgorithm_00024Version__1toID(JNIEnv *env, jobject obj,
+        jbyteArray buffer) {
+
+    return (*env)->NewStringUTF( env, mpw_id_buf( (*env)->GetByteArrayElements( env, buffer, NULL ), (*env)->GetArrayLength( env, buffer ) ) );
 }

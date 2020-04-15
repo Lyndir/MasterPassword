@@ -53,9 +53,8 @@ public class MPMasterKeyTest {
             MPMasterKey masterKey      = new MPMasterKey( testCase.getFullName(), masterPassword );
 
             // Test key
-            assertEquals(
-                    CodeUtils.encodeHex( masterKey.getKeyID( testCase.getAlgorithm() ) ),
-                    testCase.getKeyID(),
+            assertTrue(
+                    testCase.getKeyID().equalsIgnoreCase( masterKey.getKeyID( testCase.getAlgorithm() ) ),
                     "[testMasterKey] keyID mismatch for test case: " + testCase );
 
             // Test invalidation

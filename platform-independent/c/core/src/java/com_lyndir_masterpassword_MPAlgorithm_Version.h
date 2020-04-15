@@ -7,8 +7,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#undef com_lyndir_masterpassword_MPAlgorithm_Version_AES_BLOCKSIZE
-#define com_lyndir_masterpassword_MPAlgorithm_Version_AES_BLOCKSIZE 128L
 /*
  * Class:     com_lyndir_masterpassword_MPAlgorithm_Version
  * Method:    _masterKey
@@ -40,6 +38,22 @@ JNIEXPORT jstring JNICALL Java_com_lyndir_masterpassword_MPAlgorithm_00024Versio
  */
 JNIEXPORT jstring JNICALL Java_com_lyndir_masterpassword_MPAlgorithm_00024Version__1siteState
   (JNIEnv *, jobject, jbyteArray, jbyteArray, jstring, jlong, jint, jstring, jint, jstring, jint);
+
+/*
+ * Class:     com_lyndir_masterpassword_MPAlgorithm_Version
+ * Method:    _identicon
+ * Signature: (Ljava/lang/String;[B)Lcom/lyndir/masterpassword/MPIdenticon;
+ */
+JNIEXPORT jobject JNICALL Java_com_lyndir_masterpassword_MPAlgorithm_00024Version__1identicon
+  (JNIEnv *, jobject, jstring, jbyteArray);
+
+/*
+ * Class:     com_lyndir_masterpassword_MPAlgorithm_Version
+ * Method:    _toID
+ * Signature: ([B)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_com_lyndir_masterpassword_MPAlgorithm_00024Version__1toID
+  (JNIEnv *, jobject, jbyteArray);
 
 #ifdef __cplusplus
 }

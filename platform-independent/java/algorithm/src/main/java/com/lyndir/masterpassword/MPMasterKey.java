@@ -55,6 +55,18 @@ public class MPMasterKey {
         Arrays.fill( masterPassword, (char) 0 );
     }
 
+    @Override
+    protected void finalize()
+            throws Throwable {
+
+        if (isValid()) {
+            logger.wrn( "A master key for %s was abandoned without being invalidated.", getFullName() );
+            invalidate();
+        }
+
+        super.finalize();
+    }
+
     @Nonnull
     public String getFullName() {
 
@@ -67,7 +79,7 @@ public class MPMasterKey {
      * @throws MPKeyUnavailableException {@link #invalidate()} has been called on this object.
      */
     @Nonnull
-    public byte[] getKeyID(final MPAlgorithm algorithm)
+    public String getKeyID(final MPAlgorithm algorithm)
             throws MPKeyUnavailableException, MPAlgorithmException {
 
         return algorithm.toID( masterKey( algorithm ) );
@@ -98,11 +110,6 @@ public class MPMasterKey {
 
         byte[] masterKey = keyByVersion.get( algorithm.version() );
         if (masterKey == null) {
-            logger.trc( "-- mpw_masterKey (algorithm: %s)", algorithm );
-            logger.trc( "fullName: %s", fullName );
-            logger.trc( "masterPassword.id: %s", CodeUtils.encodeHex(
-                    algorithm.toID( algorithm.toBytes( masterPassword ) ) ) );
-
             keyByVersion.put( algorithm.version(), masterKey = algorithm.masterKey( fullName, masterPassword ) );
         }
         if (masterKey == null)
@@ -118,13 +125,6 @@ public class MPMasterKey {
         Preconditions.checkArgument( !siteName.isEmpty() );
 
         byte[] masterKey = masterKey( algorithm );
-
-        logger.trc( "-- mpw_siteKey (algorithm: %s)", algorithm );
-        logger.trc( "siteName: %s", siteName );
-        logger.trc( "siteCounter: %s", siteCounter );
-        logger.trc( "keyPurpose: %d (%s)", keyPurpose.toInt(), keyPurpose.getShortName() );
-        logger.trc( "keyContext: %s", keyContext );
-
         byte[] siteKey = algorithm.siteKey( masterKey, siteName, siteCounter, keyPurpose, keyContext );
         if (siteKey == null)
             throw new MPAlgorithmException( "Could not derive site key." );
@@ -161,10 +161,6 @@ public class MPMasterKey {
         byte[] masterKey = masterKey( algorithm );
         byte[] siteKey   = siteKey( siteName, algorithm, siteCounter, keyPurpose, keyContext );
 
-        logger.trc( "-- mpw_siteResult (algorithm: %s)", algorithm );
-        logger.trc( "resultType: %d (%s)", resultType.getType(), resultType.getShortName() );
-        logger.trc( "resultParam: %s", resultParam );
-
         String siteResult = algorithm.siteResult(
                 masterKey, siteKey, siteName, siteCounter, keyPurpose, keyContext, resultType, resultParam );
         if (siteResult == null)
@@ -198,10 +194,6 @@ public class MPMasterKey {
 
         byte[] masterKey = masterKey( algorithm );
         byte[] siteKey   = siteKey( siteName, algorithm, siteCounter, keyPurpose, keyContext );
-
-        logger.trc( "-- mpw_siteState (algorithm: %s)", algorithm );
-        logger.trc( "resultType: %d (%s)", resultType.getType(), resultType.getShortName() );
-        logger.trc( "resultParam: %d bytes = %s", resultParam.getBytes( algorithm.mpw_charset() ).length, resultParam );
 
         String siteState = algorithm.siteState(
                 masterKey, siteKey, siteName, siteCounter, keyPurpose, keyContext, resultType, resultParam );

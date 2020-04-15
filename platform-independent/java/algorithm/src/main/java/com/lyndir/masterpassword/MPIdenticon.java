@@ -20,14 +20,8 @@ package com.lyndir.masterpassword;
 
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
-import com.google.common.base.Charsets;
-import com.google.common.primitives.UnsignedBytes;
-import com.lyndir.lhunath.opal.system.MessageAuthenticationDigests;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import java.nio.*;
-import java.nio.charset.Charset;
-import java.util.Arrays;
 import java.util.Locale;
 
 
@@ -39,43 +33,23 @@ public class MPIdenticon {
     @SuppressWarnings("UnusedDeclaration")
     private static final Logger logger = Logger.get( MPIdenticon.class );
 
-    private static final Charset charset   = Charsets.UTF_8;
-    private static final Color[] colors    = {
-            Color.RED, Color.GREEN, Color.YELLOW, Color.BLUE, Color.MAGENTA, Color.CYAN, Color.MONO };
-    private static final char[]  leftArm   = { '╔', '╚', '╰', '═' };
-    private static final char[]  rightArm  = { '╗', '╝', '╯', '═' };
-    private static final char[]  body      = { '█', '░', '▒', '▓', '☺', '☻' };
-    private static final char[]  accessory = {
-            '◈', '◎', '◐', '◑', '◒', '◓', '☀', '☁', '☂', '☃', '☄', '★', '☆', '☎', '☏', '⎈', '⌂', '☘', '☢', '☣', '☕', '⌚', '⌛', '⏰', '⚡',
-            '⛄', '⛅', '☔', '♔', '♕', '♖', '♗', '♘', '♙', '♚', '♛', '♜', '♝', '♞', '♟', '♨', '♩', '♪', '♫', '⚐', '⚑', '⚔', '⚖', '⚙', '⚠',
-            '⌘', '⏎', '✄', '✆', '✈', '✉', '✌' };
-
     private final String fullName;
+    private final String leftArm;
+    private final String body;
+    private final String rightArm;
+    private final String accessory;
     private final Color  color;
-    private final String text;
-
-    public MPIdenticon(final String fullName, final String masterPassword) {
-        this( fullName, masterPassword.toCharArray() );
-    }
 
     @SuppressFBWarnings("CLI_CONSTANT_LIST_INDEX")
     @SuppressWarnings("MethodCanBeVariableArityMethod")
-    public MPIdenticon(final String fullName, final char[] masterPassword) {
+    public MPIdenticon(final String fullName, final String leftArm, final String body, final String rightArm, final String accessory,
+                       final Color color) {
         this.fullName = fullName;
-
-        byte[] masterPasswordBytes = charset.encode( CharBuffer.wrap( masterPassword ) ).array();
-        ByteBuffer identiconSeedBytes = ByteBuffer.wrap(
-                MessageAuthenticationDigests.HmacSHA256.of( masterPasswordBytes, fullName.getBytes( charset ) ) );
-        Arrays.fill( masterPasswordBytes, (byte) 0 );
-
-        IntBuffer identiconSeedBuffer = IntBuffer.allocate( identiconSeedBytes.capacity() );
-        while (identiconSeedBytes.hasRemaining())
-            identiconSeedBuffer.put( UnsignedBytes.toInt( identiconSeedBytes.get() ) );
-        int[] identiconSeed = identiconSeedBuffer.array();
-
-        color = colors[identiconSeed[4] % colors.length];
-        text = strf( "%c%c%c%c", leftArm[identiconSeed[0] % leftArm.length], body[identiconSeed[1] % body.length],
-                     rightArm[identiconSeed[2] % rightArm.length], accessory[identiconSeed[3] % accessory.length] );
+        this.leftArm = leftArm;
+        this.body = body;
+        this.rightArm = rightArm;
+        this.accessory = accessory;
+        this.color = color;
     }
 
     public String getFullName() {
@@ -83,11 +57,11 @@ public class MPIdenticon {
     }
 
     public String getText() {
-        return text;
+        return strf( "%s%s%s%s", this.leftArm, this.body, this.rightArm, this.accessory );
     }
 
     public String getHTML() {
-        return strf( "<span style='color: %s'>%s</span>", color.getCSS(), text );
+        return strf( "<span style='color: %s'>%s</span>", color.getCSS(), getText() );
     }
 
     public Color getColor() {
@@ -95,6 +69,12 @@ public class MPIdenticon {
     }
 
     public enum Color {
+        UNSET {
+            @Override
+            public String getCSS() {
+                return "inherit";
+            }
+        },
         RED,
         GREEN,
         YELLOW,

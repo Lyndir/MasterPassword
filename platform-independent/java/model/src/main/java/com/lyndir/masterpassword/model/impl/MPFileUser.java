@@ -39,7 +39,7 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
     private static final Logger logger = Logger.get( MPFileUser.class );
 
     @Nullable
-    private byte[]                   keyID;
+    private String                   keyID;
     private File                     file;
     private MPMarshalFormat          format;
     private MPMarshaller.ContentMode contentMode;
@@ -62,18 +62,18 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
         this( fullName, null, MPAlgorithm.Version.CURRENT, location );
     }
 
-    public MPFileUser(final String fullName, @Nullable final byte[] keyID, final MPAlgorithm algorithm, final File location) {
+    public MPFileUser(final String fullName, @Nullable final String keyID, final MPAlgorithm algorithm, final File location) {
         this( fullName, keyID, algorithm, 0, null, new Instant(), false,
               MPMarshaller.ContentMode.PROTECTED, MPMarshalFormat.DEFAULT, location );
     }
 
     @SuppressFBWarnings("PATH_TRAVERSAL_IN")
-    public MPFileUser(final String fullName, @Nullable final byte[] keyID, final MPAlgorithm algorithm, final int avatar,
+    public MPFileUser(final String fullName, @Nullable final String keyID, final MPAlgorithm algorithm, final int avatar,
                       @Nullable final MPResultType defaultType, final ReadableInstant lastUsed, final boolean hidePasswords,
                       final MPMarshaller.ContentMode contentMode, final MPMarshalFormat format, final File location) {
         super( avatar, fullName, algorithm );
 
-        this.keyID = (keyID != null)? keyID.clone(): null;
+        this.keyID = keyID;
         this.lastUsed = lastUsed;
         this.preferences = new MPFileUserPreferences( this, defaultType, hidePasswords );
         this.format = format;
@@ -87,8 +87,8 @@ public class MPFileUser extends MPBasicUser<MPFileSite> {
 
     @Nullable
     @Override
-    public byte[] getKeyID() {
-        return (keyID == null)? null: keyID.clone();
+    public String getKeyID() {
+        return keyID;
     }
 
     @Nonnull

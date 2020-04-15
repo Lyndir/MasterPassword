@@ -182,7 +182,7 @@ public abstract class Res {
 
     public static final class Fonts {
 
-        public Font emoticonsFont(final int size) {
+        public Font identiconFont(final int size) {
             return MPFont.emoticonsRegular.get( size );
         }
 

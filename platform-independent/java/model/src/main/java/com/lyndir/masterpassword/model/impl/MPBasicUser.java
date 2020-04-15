@@ -100,7 +100,7 @@ public abstract class MPBasicUser<S extends MPBasicSite<?, ?>> extends Changeabl
 
     @Nullable
     @Override
-    public byte[] getKeyID() {
+    public String getKeyID() {
         try {
             if (isMasterKeyAvailable())
                 return getMasterKey().getKeyID( getAlgorithm() );
@@ -110,12 +110,6 @@ public abstract class MPBasicUser<S extends MPBasicSite<?, ?>> extends Changeabl
         }
 
         return null;
-    }
-
-    @Nullable
-    @Override
-    public String exportKeyID() {
-        return CodeUtils.encodeHex( getKeyID() );
     }
 
     @Override
@@ -136,8 +130,8 @@ public abstract class MPBasicUser<S extends MPBasicSite<?, ?>> extends Changeabl
             throw new IllegalArgumentException(
                     "Master key (for " + masterKey.getFullName() + ") is not for this user (" + getFullName() + ")." );
 
-        byte[] keyID = getKeyID();
-        if ((keyID != null) && !Arrays.equals( masterKey.getKeyID( getAlgorithm() ), keyID ))
+        String keyID = getKeyID();
+        if (keyID != null && !keyID.equalsIgnoreCase( masterKey.getKeyID( getAlgorithm() ) ))
             throw new MPIncorrectMasterPasswordException( this );
 
         this.masterKey = masterKey;

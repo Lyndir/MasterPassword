@@ -61,7 +61,7 @@ public class MPJSONFile extends MPJSONAnyObject {
         user.avatar = modelUser.getAvatar();
         user.full_name = modelUser.getFullName();
         user.last_used = MPModelConstants.dateTimeFormatter.print( modelUser.getLastUsed() );
-        user.key_id = modelUser.exportKeyID();
+        user.key_id = modelUser.getKeyID();
         user.algorithm = modelUser.getAlgorithm().version();
         user._ext_mpw = new User.Ext() {
             {
@@ -131,7 +131,7 @@ public class MPJSONFile extends MPJSONAnyObject {
         MPAlgorithm algorithm = ifNotNullElse( user.algorithm, MPAlgorithm.Version.CURRENT );
 
         return new MPFileUser(
-                user.full_name, CodeUtils.decodeHex( user.key_id ), algorithm, user.avatar,
+                user.full_name, user.key_id, algorithm, user.avatar,
                 (user._ext_mpw != null)? user._ext_mpw.default_type: null,
                 (user.last_used != null)? MPModelConstants.dateTimeFormatter.parseDateTime( user.last_used ): new Instant(),
                 (user._ext_mpw != null) && user._ext_mpw.hide_passwords,

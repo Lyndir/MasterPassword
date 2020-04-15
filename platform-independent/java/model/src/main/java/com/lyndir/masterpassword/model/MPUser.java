@@ -49,10 +49,7 @@ public interface MPUser<S extends MPSite<?>> extends Comparable<MPUser<?>> {
     void setAlgorithm(MPAlgorithm algorithm);
 
     @Nullable
-    byte[] getKeyID();
-
-    @Nullable
-    String exportKeyID();
+    String getKeyID();
 
     /**
      * Performs an authentication attempt against the keyID for this user.

@@ -317,7 +317,7 @@ public class UserContentPanel extends JPanel implements State.Listener, MPUser.L
             add( Components.strut() );
 
             add( identiconLabel = Components.label( SwingConstants.CENTER ) );
-            identiconLabel.setFont( Res.fonts().emoticonsFont( Components.TEXT_SIZE_CONTROL ) );
+            identiconLabel.setFont( Res.fonts().identiconFont( Components.TEXT_SIZE_CONTROL ) );
             add( Box.createGlue() );
 
             add( Components.label( "Master Password:" ) );
@@ -328,6 +328,15 @@ public class UserContentPanel extends JPanel implements State.Listener, MPUser.L
             add( errorLabel = Components.label() );
             errorLabel.setForeground( Res.colors().errorFg() );
             add( Box.createGlue() );
+        }
+
+        @Override
+        public void removeNotify() {
+            char[] password = masterPasswordField.getPassword();
+            Arrays.fill( password, (char) 0 );
+            masterPasswordField.setText( new String( password ) );
+
+            super.removeNotify();
         }
 
         private void exportUser() {
@@ -449,7 +458,8 @@ public class UserContentPanel extends JPanel implements State.Listener, MPUser.L
         private void updateIdenticon() {
             char[] masterPassword = masterPasswordField.getPassword();
             MPIdenticon identicon = ((masterPassword != null) && (masterPassword.length > 0))?
-                    new MPIdenticon( user.getFullName(), masterPassword ): null;
+                    user.getAlgorithm().identicon( user.getFullName(), masterPassword ): null;
+            Arrays.fill( masterPassword, (char) 0 );
 
             Res.ui( () -> {
                 if (identicon != null) {
@@ -779,7 +789,7 @@ public class UserContentPanel extends JPanel implements State.Listener, MPUser.L
             typeModel.selection( MPResultType.DeriveKey, t -> {
                 switch (t) {
                     case DeriveKey:
-                        stateModel.setText( Integer.toString( site.getAlgorithm().mpw_keySize_min() ) );
+                        stateModel.setText( "128" );
                         break;
 
                     default:

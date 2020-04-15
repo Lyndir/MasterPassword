@@ -54,7 +54,7 @@ public class MPFlatMarshaller implements MPMarshaller {
         content.append( "# User Name: " ).append( user.getFullName() ).append( '\n' );
         content.append( "# Full Name: " ).append( user.getFullName() ).append( '\n' );
         content.append( "# Avatar: " ).append( user.getAvatar() ).append( '\n' );
-        content.append( "# Key ID: " ).append( user.exportKeyID() ).append( '\n' );
+        content.append( "# Key ID: " ).append( user.getKeyID() ).append( '\n' );
         content.append( "# Algorithm: " ).append( user.getAlgorithm().version().toInt() ).append( '\n' );
         content.append( "# Default Type: " ).append( user.getPreferences().getDefaultType().getType() ).append( '\n' );
         content.append( "# Passwords: " ).append( user.getContentMode().name() ).append( '\n' );

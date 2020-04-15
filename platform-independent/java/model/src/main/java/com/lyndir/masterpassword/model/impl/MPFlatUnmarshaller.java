@@ -51,7 +51,7 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
     public MPFileUser readUser(@Nonnull final File file)
             throws IOException, MPMarshalException {
         try (Reader reader = new InputStreamReader( new FileInputStream( file ), Charsets.UTF_8 )) {
-            byte[]       keyID        = null;
+            String       keyID        = null;
             String       fullName     = null;
             int          mpVersion    = 0, avatar = 0;
             boolean      clearContent = false, headerStarted = false;
@@ -84,7 +84,7 @@ public class MPFlatUnmarshaller implements MPUnmarshaller {
                             if ("Full Name".equalsIgnoreCase( name ) || "User Name".equalsIgnoreCase( name ))
                                 fullName = value;
                             else if ("Key ID".equalsIgnoreCase( name ))
-                                keyID = CodeUtils.decodeHex( value );
+                                keyID = value;
                             else if ("Algorithm".equalsIgnoreCase( name ))
                                 mpVersion = ConversionUtils.toIntegerNN( value );
                             else if ("Avatar".equalsIgnoreCase( name ))
