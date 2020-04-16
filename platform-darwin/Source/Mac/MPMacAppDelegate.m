@@ -723,10 +723,13 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     }
 
     BOOL loginItemEnabled = [self loginItemEnabled];
+    self.initialWindowController.openAtLoginButton.state = loginItemEnabled? NSOnState: NSOffState;
     self.openAtLoginItem.state = loginItemEnabled? NSOnState: NSOffState;
     self.showFullScreenItem.state = [[MPMacConfig get].fullScreen boolValue]? NSOnState: NSOffState;
-    self.initialWindowController.openAtLoginButton.state = loginItemEnabled? NSOnState: NSOffState;
-    self.rememberPasswordItem.state = [[MPConfig get].rememberLogin boolValue]? NSOnState: NSOffState;
+    self.rememberPasswordItem.state = [[MPMacConfig get].rememberLogin boolValue]? NSOnState: NSOffState;
+    self.diagnosticsItem.state = [[MPMacConfig get].sendInfo boolValue]? NSOnState: NSOffState;
+    self.hidePasswordsItem.state = [[MPMacConfig get].hidePasswords boolValue]? NSOnState: NSOffState;
+    self.rememberPasswordItem.state = [[MPMacConfig get].rememberLogin boolValue]? NSOnState: NSOffState;
 
     self.savePasswordItem.state = activeUser.saveKey? NSOnState: NSOffState;
     if (!activeUser) {

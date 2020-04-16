@@ -66,7 +66,7 @@
                                                 <action selector="exportSitesSecure:" target="494" id="LVH-es-imA"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Your passwords are hidden." enabled="NO" id="ybY-P3-eao">
+                                        <menuItem title="Your passwords are not visible." enabled="NO" id="ybY-P3-eao">
                                             <attributedString key="attributedTitle">
                                                 <fragment content="Your passwords are not visible.">
                                                     <attributes>
@@ -83,7 +83,7 @@
                                                 <action selector="exportSitesReveal:" target="494" id="1IW-VT-Oeu"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Handy for backups - keep it in a safe location!" enabled="NO" id="cQu-oR-SUa">
+                                        <menuItem title="Keep this file secure or delete it when you're done with it!" enabled="NO" id="cQu-oR-SUa">
                                             <attributedString key="attributedTitle">
                                                 <fragment content="Keep this file secure or delete it when you're done with it!">
                                                     <attributes>
@@ -210,7 +210,7 @@
                             </menuItem>
                             <menuItem title="Crash and usage information is anonymized and sent to development." enabled="NO" id="WfD-lX-C93">
                                 <attributedString key="attributedTitle">
-                                    <fragment content="Save the password in your keychain so you don't need to enter it again.">
+                                    <fragment content="Crash and usage information is anonymized and sent to development.">
                                         <attributes>
                                             <font key="NSFont" size="11" name="Helvetica"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" firstLineHeadIndent="8"/>
