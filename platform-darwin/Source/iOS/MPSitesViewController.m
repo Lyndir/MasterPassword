@@ -64,13 +64,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
         self.collectionView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     [self.collectionView automaticallyAdjustInsetsForKeyboard];
     self.searchBar.autocapitalizationType = UITextAutocapitalizationTypeNone;
-    if ([self.searchBar respondsToSelector:@selector( keyboardAppearance )])
-        self.searchBar.keyboardAppearance = UIKeyboardAppearanceDark;
-    else
-        [self.searchBar enumerateViews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
-            if ([subview isKindOfClass:[UITextField class]])
-                ((UITextField *)subview).keyboardAppearance = UIKeyboardAppearanceDark;
-        }                      recurse:YES];
+    self.searchBar.keyboardAppearance = UIKeyboardAppearanceDark;
 }
 
 - (void)viewWillAppear:(BOOL)animated {

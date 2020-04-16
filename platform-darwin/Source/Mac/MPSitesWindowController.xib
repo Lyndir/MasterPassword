@@ -50,7 +50,7 @@
                                     <color key="color" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
                                 </shadow>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Your password for apple.com (hit &lt;⏎ enter&gt; to copy):" id="CgJ-XZ-6Hy">
-                                    <font key="font" metaFont="message" size="11"/>
+                                    <font key="font" metaFont="menu" size="11"/>
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -78,7 +78,7 @@
                                     <color key="color" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
                                 </shadow>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="No password set.  Click &quot;Set Password&quot; on the bottom to set one." id="eDQ-iz-97a">
-                                    <font key="font" metaFont="message" size="11"/>
+                                    <font key="font" metaFont="menu" size="11"/>
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -345,7 +345,7 @@
                             <color key="color" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
                         </shadow>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="⌘," id="Xm1-qb-6EP">
-                            <font key="font" metaFont="message" size="11"/>
+                            <font key="font" metaFont="menu" size="11"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -600,7 +600,7 @@ Use the arrows ⇅ to navigate the list or esc ⎋ to exit.</string>
                                             <color key="color" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
                                         </shadow>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="⌘P" id="MyN-x6-dMk">
-                                            <font key="font" metaFont="message" size="11"/>
+                                            <font key="font" metaFont="menu" size="11"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
@@ -892,7 +892,7 @@ Use the arrows ⇅ to navigate the list or esc ⎋ to exit.</string>
                             <color key="color" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
                         </shadow>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Password Number:" id="weR-33-U49">
-                            <font key="font" metaFont="message" size="11"/>
+                            <font key="font" metaFont="menu" size="11"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -929,7 +929,7 @@ Use the arrows ⇅ to navigate the list or esc ⎋ to exit.</string>
                             <color key="color" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
                         </shadow>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Password Version:" id="E77-5t-EKJ">
-                            <font key="font" metaFont="message" size="11"/>
+                            <font key="font" metaFont="menu" size="11"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -966,7 +966,7 @@ Use the arrows ⇅ to navigate the list or esc ⎋ to exit.</string>
                             <color key="color" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
                         </shadow>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Upgrade your site's algorithm version for maximum protection:" id="3ds-qG-YNd">
-                            <font key="font" metaFont="message" size="11"/>
+                            <font key="font" metaFont="menu" size="11"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -1022,7 +1022,7 @@ Use the arrows ⇅ to navigate the list or esc ⎋ to exit.</string>
                             <color key="color" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
                         </shadow>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="⌘T" id="HFM-Bk-akx">
-                            <font key="font" metaFont="message" size="11"/>
+                            <font key="font" metaFont="menu" size="11"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -1178,7 +1178,7 @@ Use the arrows ⇅ to navigate the list or esc ⎋ to exit.</string>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kCO-1M-Wz1">
                         <rect key="frame" x="10" y="12" width="390" height="92"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" id="kl0-P1-6ZY">
-                            <font key="font" metaFont="message" size="11"/>
+                            <font key="font" metaFont="menu" size="11"/>
                             <string key="title">"Personal password" allows you to store your own password.  It cannot be regenerated in the event of loss.  "Device private password" is similar but will never leave your device: it cannot be synced, backed up or exported.</string>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>

@@ -81,8 +81,7 @@ static NSOperationQueue *_mpwQueue = nil;
     }
 
     NSOperation *operation = [NSBlockOperation blockOperationWithBlock:operationBlock];
-    if ([operation respondsToSelector:@selector( qualityOfService )])
-        operation.qualityOfService = NSQualityOfServiceUserInitiated;
+    operation.qualityOfService = NSQualityOfServiceUserInitiated;
     [_mpwQueue addOperations:@[ operation ] waitUntilFinished:YES];
 }
 

@@ -3220,6 +3220,7 @@
 					"\"$(PROJECT_DIR)/../lib/libsodium/build-macos~/out/lib\"",
 					"\"$(PROJECT_DIR)/../lib/libjson-c/build-macos~/out/lib\"",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_CFLAGS = (
 					"-DMPW_SODIUM=1",
 					"-DMPW_JSON=1",
@@ -3258,6 +3259,7 @@
 					"\"$(PROJECT_DIR)/../lib/libsodium/build-macos~/out/lib\"",
 					"\"$(PROJECT_DIR)/../lib/libjson-c/build-macos~/out/lib\"",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_CFLAGS = (
 					"-DMPW_SODIUM=1",
 					"-DMPW_JSON=1",
