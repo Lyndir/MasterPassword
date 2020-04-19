@@ -231,12 +231,10 @@ typedef NS_ENUM( NSUInteger, MPActiveUserState ) {
                         user.avatar = newUserAvatar;
                         user.name = newUserName;
 
-                        if ([[MPConfig get].sendInfo boolValue]) {
-                            [Countly.sharedInstance recordEvent:@"new-user" segmentation:@{
-                                    @"algorithm": @(user.algorithm.version).description,
-                                    @"avatar"   : @(user.avatar).description,
-                            }];
-                        }
+                        [Countly.sharedInstance recordEvent:@"new-user" segmentation:@{
+                                @"algorithm": @(user.algorithm.version).description,
+                                @"avatar"   : @(user.avatar).description,
+                        }];
                     }
 
                     BOOL signedIn = [[MPiOSAppDelegate get] signInAsUser:user saveInContext:context

@@ -408,14 +408,8 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (IBAction)togglePreference:(id)sender {
 
-    if (sender == self.diagnosticsItem) {
-        BOOL sendInfo = self.diagnosticsItem.state != NSOnState;
-        [[Countly sharedInstance] recordEvent:@"sendInfoDecided" segmentation:@{
-                @"from": @"preferences",
-                @"sendInfo": [@(sendInfo) description],
-            }];
-        [MPMacConfig get].sendInfo = @(sendInfo);
-    }
+    if (sender == self.diagnosticsItem)
+        [MPMacConfig get].sendInfo = @(self.diagnosticsItem.state != NSOnState);
     if (sender == self.hidePasswordsItem)
         [MPMacConfig get].hidePasswords = @(self.hidePasswordsItem.state != NSOnState);
     if (sender == self.rememberPasswordItem)
@@ -778,7 +772,6 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
             CLYConsentSessions, CLYConsentEvents, CLYConsentUserDetails, CLYConsentCrashReporting, CLYConsentViewTracking, CLYConsentStarRating
     ];
     if ([[MPMacConfig get].sendInfo boolValue]) {
-        [Countly.sharedInstance giveConsentForFeatures:countlyFeatures];
         if ([PearlLogger get].printLevel > PearlLogLevelInfo)
             [PearlLogger get].printLevel = PearlLogLevelInfo;
 
@@ -796,10 +789,12 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
             [scope setExtraValue:@([PearlDeviceUtils isAppEncrypted]) forKey:@"encrypted"];
             [scope setExtraValue:[PearlDeviceUtils platform] forKey:@"platform"];
         }];
+
+        [Countly.sharedInstance giveConsentForFeatures:countlyFeatures];
     }
     else {
-        [SentrySDK.currentHub getClient].options.enabled = @NO;
         [Countly.sharedInstance cancelConsentForFeatures:countlyFeatures];
+        [SentrySDK.currentHub getClient].options.enabled = @NO;
     }
 }
 

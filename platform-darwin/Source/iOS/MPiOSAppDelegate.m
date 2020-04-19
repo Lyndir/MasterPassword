@@ -646,7 +646,6 @@
             CLYConsentSessions, CLYConsentEvents, CLYConsentUserDetails, CLYConsentCrashReporting, CLYConsentViewTracking, CLYConsentStarRating
     ];
     if ([[MPConfig get].sendInfo boolValue]) {
-        [Countly.sharedInstance giveConsentForFeatures:countlyFeatures];
         if ([PearlLogger get].printLevel > PearlLogLevelInfo)
             [PearlLogger get].printLevel = PearlLogLevelInfo;
 
@@ -670,11 +669,13 @@
 #else
             [scope setExtraValue:@(NO) forKey:@"reviewedVersion"];
 #endif
+
+            [Countly.sharedInstance giveConsentForFeatures:countlyFeatures];
         }];
     }
     else {
-        [SentrySDK.currentHub getClient].options.enabled = @NO;
         [Countly.sharedInstance cancelConsentForFeatures:countlyFeatures];
+        [SentrySDK.currentHub getClient].options.enabled = @NO;
     }
 }
 

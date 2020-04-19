@@ -63,7 +63,6 @@
                     [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
                         BOOL sendInfo = returnCode != NSAlertSecondButtonReturn;
                         [[Countly sharedInstance] recordEvent:@"sendInfoDecided" segmentation:@{
-                                @"from": @"initial",
                                 @"sendInfo": [@(sendInfo) description],
                         }];
                         [MPMacConfig get].sendInfo = @(sendInfo);

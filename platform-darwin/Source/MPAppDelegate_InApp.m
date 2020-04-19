@@ -197,18 +197,16 @@ PearlAssociatedObjectProperty( NSMutableArray*, ProductObservers, productObserve
                                                           forKey:transaction.payment.productIdentifier];
                 [queue finishTransaction:transaction];
 
-                if ([[MPConfig get].sendInfo boolValue]) {
-                    SKProduct *product = self.products[transaction.payment.productIdentifier];
-                    [attributes addEntriesFromDictionary:@{
-                            @"id": product.productIdentifier,
-                            @"name": product.localizedTitle,
-                            @"price": product.price.description,
-                            @"currency": [product.priceLocale objectForKey:NSLocaleCurrencyCode],
-                            @"state"   : @"success",
-                            @"quantity": @(transaction.payment.quantity).description,
-                    }];
-                    [Countly.sharedInstance recordEvent:@"purchase" segmentation:attributes];
-                }
+                SKProduct *product = self.products[transaction.payment.productIdentifier];
+                [attributes addEntriesFromDictionary:@{
+                        @"id": product.productIdentifier,
+                        @"name": product.localizedTitle,
+                        @"price": product.price.description,
+                        @"currency": [product.priceLocale objectForKey:NSLocaleCurrencyCode],
+                        @"state"   : @"success",
+                        @"quantity": @(transaction.payment.quantity).description,
+                }];
+                [Countly.sharedInstance recordEvent:@"purchase" segmentation:attributes];
                 break;
             }
             case SKPaymentTransactionStateRestored: {
@@ -224,18 +222,16 @@ PearlAssociatedObjectProperty( NSMutableArray*, ProductObservers, productObserve
                 MPError( transaction.error, @"Transaction failed: %@.", transaction.payment.productIdentifier );
                 [queue finishTransaction:transaction];
 
-                if ([[MPConfig get].sendInfo boolValue]) {
-                    SKProduct *product = self.products[transaction.payment.productIdentifier];
-                    [Countly.sharedInstance recordEvent:@"purchase" segmentation:@{
-                            @"id": product.productIdentifier,
-                            @"name": product.localizedTitle,
-                            @"price": product.price.description,
-                            @"currency": [product.priceLocale objectForKey:NSLocaleCurrencyCode],
-                            @"state"   : @"failed",
-                            @"quantity": @(transaction.payment.quantity).description,
-                            @"reason"  : [transaction.error localizedFailureReason]?: [transaction.error localizedDescription],
-                    }];
-                }
+                SKProduct *product = self.products[transaction.payment.productIdentifier];
+                [Countly.sharedInstance recordEvent:@"purchase" segmentation:@{
+                        @"id": product.productIdentifier,
+                        @"name": product.localizedTitle,
+                        @"price": product.price.description,
+                        @"currency": [product.priceLocale objectForKey:NSLocaleCurrencyCode],
+                        @"state"   : @"failed",
+                        @"quantity": @(transaction.payment.quantity).description,
+                        @"reason"  : [transaction.error localizedFailureReason]?: [transaction.error localizedDescription],
+                }];
                 break;
         }
     }

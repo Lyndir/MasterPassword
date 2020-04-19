@@ -119,8 +119,7 @@ static MPAppDelegate_Shared *instance;
     if (self.key)
         self.key = nil;
 
-    if ([[MPConfig get].sendInfo boolValue])
-        [Countly.sharedInstance userLoggedOut];
+    [Countly.sharedInstance userLoggedOut];
 
     self.activeUserOID = activeUserOID;
 

@@ -173,13 +173,11 @@
         else
             dbg( @"Automatic login failed for user: %@", user.userID );
 
-        if ([[MPConfig get].sendInfo boolValue]) {
-            [Countly.sharedInstance recordEvent:@"login" segmentation:@{
-                    @"method"   : password? @"Password": @"Automatic",
-                    @"state"  : @"failed",
-                    @"algorithm": @(user.algorithm.version).description,
-            }];
-        }
+        [Countly.sharedInstance recordEvent:@"login" segmentation:@{
+                @"method"   : password? @"Password": @"Automatic",
+                @"state"  : @"failed",
+                @"algorithm": @(user.algorithm.version).description,
+        }];
 
         return NO;
     }
@@ -203,15 +201,13 @@
     }
 
     @try {
-        if ([[MPConfig get].sendInfo boolValue]) {
-            [Countly.sharedInstance userLoggedIn:user.userID];
+        [Countly.sharedInstance userLoggedIn:user.userID];
 
-            [Countly.sharedInstance recordEvent:@"login" segmentation:@{
-                    @"method"   : password? @"Password": @"Automatic",
-                    @"state"  : @"success",
-                    @"algorithm": @(user.algorithm.version).description,
-            }];
-        }
+        [Countly.sharedInstance recordEvent:@"login" segmentation:@{
+                @"method"   : password? @"Password": @"Automatic",
+                @"state"  : @"success",
+                @"algorithm": @(user.algorithm.version).description,
+        }];
     }
     @catch (id exception) {
         err( @"While setting username: %@", exception );
