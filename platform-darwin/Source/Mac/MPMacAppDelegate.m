@@ -86,7 +86,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         }];
         [[PearlLogger get] registerListener:^BOOL(PearlLogMessage *message) {
             PearlLogLevel level = PearlLogLevelWarn;
-            if ([[MPConfig get].sendInfo boolValue])
+            if ([[MPMacConfig get].sendInfo boolValue])
                 level = PearlLogLevelDebug;
 
             if (message.level >= level) {
@@ -145,7 +145,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     }
 
     // Setup delegates and listeners.
-    [MPConfig get].delegate = self;
+    [MPMacConfig get].delegate = self;
     __weak id weakSelf = self;
     [self addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
         dispatch_async( dispatch_get_main_queue(), ^{
@@ -210,7 +210,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (void)applicationWillResignActive:(NSNotification *)notification {
 
-    if (![[MPConfig get].rememberLogin boolValue])
+    if (![[MPMacConfig get].rememberLogin boolValue])
         [self lock:nil];
 }
 
@@ -408,12 +408,18 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (IBAction)togglePreference:(id)sender {
 
-    if (sender == self.diagnosticsItem)
-        [MPConfig get].sendInfo = @(self.diagnosticsItem.state != NSOnState);
+    if (sender == self.diagnosticsItem) {
+        BOOL sendInfo = self.diagnosticsItem.state != NSOnState;
+        [[Countly sharedInstance] recordEvent:@"sendInfoDecided" segmentation:@{
+                @"from": @"preferences",
+                @"sendInfo": [@(sendInfo) description],
+            }];
+        [MPMacConfig get].sendInfo = @(sendInfo);
+    }
     if (sender == self.hidePasswordsItem)
-        [MPConfig get].hidePasswords = @(self.hidePasswordsItem.state != NSOnState);
+        [MPMacConfig get].hidePasswords = @(self.hidePasswordsItem.state != NSOnState);
     if (sender == self.rememberPasswordItem)
-        [MPConfig get].rememberLogin = @(self.rememberPasswordItem.state != NSOnState);
+        [MPMacConfig get].rememberLogin = @(self.rememberPasswordItem.state != NSOnState);
     if (sender == self.openAtLoginItem)
         [self setLoginItemEnabled:self.openAtLoginItem.state != NSOnState];
     if (sender == self.showFullScreenItem) {
@@ -760,26 +766,26 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
     PearlMainQueue( ^{
         if (!key || [key isEqualToString:NSStringFromSelector( @selector( sendInfo ) )])
-            self.diagnosticsItem.state = [[MPConfig get].sendInfo boolValue]? NSOnState: NSOffState;
+            self.diagnosticsItem.state = [[MPMacConfig get].sendInfo boolValue]? NSOnState: NSOffState;
         if (!key || [key isEqualToString:NSStringFromSelector( @selector( hidePasswords ) )])
-            self.hidePasswordsItem.state = [[MPConfig get].hidePasswords boolValue]? NSOnState: NSOffState;
+            self.hidePasswordsItem.state = [[MPMacConfig get].hidePasswords boolValue]? NSOnState: NSOffState;
         if (!key || [key isEqualToString:NSStringFromSelector( @selector( rememberLogin ) )])
-            self.rememberPasswordItem.state = [[MPConfig get].rememberLogin boolValue]? NSOnState: NSOffState;
+            self.rememberPasswordItem.state = [[MPMacConfig get].rememberLogin boolValue]? NSOnState: NSOffState;
     } );
 
     // Send info
     NSArray *countlyFeatures = @[
             CLYConsentSessions, CLYConsentEvents, CLYConsentUserDetails, CLYConsentCrashReporting, CLYConsentViewTracking, CLYConsentStarRating
     ];
-    if ([[MPConfig get].sendInfo boolValue]) {
+    if ([[MPMacConfig get].sendInfo boolValue]) {
         [Countly.sharedInstance giveConsentForFeatures:countlyFeatures];
         if ([PearlLogger get].printLevel > PearlLogLevelInfo)
             [PearlLogger get].printLevel = PearlLogLevelInfo;
 
         [SentrySDK.currentHub getClient].options.enabled = @YES;
         [SentrySDK configureScope:^(SentryScope *scope) {
-            [scope setExtraValue:[MPConfig get].rememberLogin forKey:@"rememberLogin"];
-            [scope setExtraValue:[MPConfig get].sendInfo forKey:@"sendInfo"];
+            [scope setExtraValue:[MPMacConfig get].rememberLogin forKey:@"rememberLogin"];
+            [scope setExtraValue:[MPMacConfig get].sendInfo forKey:@"sendInfo"];
             [scope setExtraValue:[MPMacConfig get].fullScreen forKey:@"fullScreen"];
             [scope setExtraValue:[PearlConfig get].firstRun forKey:@"firstRun"];
             [scope setExtraValue:[PearlConfig get].launchCount forKey:@"launchCount"];

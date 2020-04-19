@@ -29,13 +29,15 @@
         return nil;
 
     [self.defaults registerDefaults:@{
-            NSStringFromSelector( @selector( askForReviews ) )     : @YES,
-
             NSStringFromSelector( @selector( sendInfo ) )          : @YES,
+            NSStringFromSelector( @selector( sendInfoDecided ) )   : @NO,
+
             NSStringFromSelector( @selector( rememberLogin ) )     : @NO,
             NSStringFromSelector( @selector( hidePasswords ) )     : @NO,
-            NSStringFromSelector( @selector( checkInconsistency ) ): @NO,
             NSStringFromSelector( @selector( siteAttacker ) )      : @(MPAttacker1),
+
+            NSStringFromSelector( @selector( checkInconsistency ) ): @NO,
+            NSStringFromSelector( @selector( askForReviews ) )     : @YES,
     }];
 
     self.delegate = [MPAppDelegate_Shared get];

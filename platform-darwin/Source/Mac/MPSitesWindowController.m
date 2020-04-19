@@ -17,6 +17,7 @@
 //==============================================================================
 
 #import <QuartzCore/QuartzCore.h>
+#import <Countly/Countly.h>
 #import "MPSitesWindowController.h"
 #import "MPMacAppDelegate.h"
 #import "MPAppDelegate_Store.h"
@@ -42,13 +43,35 @@
     prof_rewind( @"replaceFonts" );
 
     PearlAddNotificationObserver( NSWindowDidBecomeKeyNotification, self.window, [NSOperationQueue mainQueue],
-            ^(id host, NSNotification *note) {
+            (^(id host, NSNotification *note) {
                 prof_new( @"didBecomeKey" );
                 [self.window makeKeyAndOrderFront:nil];
                 prof_rewind( @"fadeIn" );
                 [self updateUser];
-                prof_finish( @"updateUser" );
-            } );
+                prof_rewind( @"updateUser" );
+
+                if (![[MPMacConfig get].sendInfoDecided boolValue]) {
+                    NSAlert *alert = [NSAlert new];
+                    alert.messageText = @"Welcome to Master Password!";
+                    alert.informativeText = @"We want you to have a top-notch experience.\n"
+                                            @"Using diagnostics, we ensure the application keeps working as designed for you.\n"
+                                            @"\n"
+                                            @"We look out for application bugs, runtime issues, sudden crashes & usage counters.\n"
+                                            @"Needless to say, diagnostics are always scrubbed and personal details will never leave your device.";
+                    [alert addButtonWithTitle:@"Thanks!"];
+                    [alert addButtonWithTitle:@"Disable"];
+                    [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
+                        BOOL sendInfo = returnCode != NSAlertSecondButtonReturn;
+                        [[Countly sharedInstance] recordEvent:@"sendInfoDecided" segmentation:@{
+                                @"from": @"initial",
+                                @"sendInfo": [@(sendInfo) description],
+                        }];
+                        [MPMacConfig get].sendInfo = @(sendInfo);
+                        [MPMacConfig get].sendInfoDecided = @(YES);
+                    }];
+                }
+                prof_finish( @"sendInfoDecided" );
+            }) );
     PearlAddNotificationObserver( NSWindowWillCloseNotification, self.window, [NSOperationQueue mainQueue],
             ^(id host, NSNotification *note) {
                 NSWindow *sheet = [self.window attachedSheet];
