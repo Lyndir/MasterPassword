@@ -31,26 +31,26 @@
             <rect key="contentRect" x="0.0" y="0.0" width="640" height="577"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ" userLabel="Root">
-                <rect key="frame" x="0.0" y="0.0" width="640" height="557"/>
+                <rect key="frame" x="0.0" y="0.0" width="738" height="553"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
                     <visualEffectView blendingMode="behindWindow" material="popover" state="followsWindowActiveState" translatesAutoresizingMaskIntoConstraints="NO" id="eRe-Ef-AZx">
-                        <rect key="frame" x="0.0" y="0.0" width="640" height="557"/>
+                        <rect key="frame" x="0.0" y="0.0" width="738" height="553"/>
                     </visualEffectView>
                     <progressIndicator hidden="YES" wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="oSh-Ec-8Nf" userLabel="Progress Spinner">
-                        <rect key="frame" x="312" y="521" width="16" height="16"/>
+                        <rect key="frame" x="361" y="517" width="16" height="16"/>
                     </progressIndicator>
                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="NGk-Io-Buc" userLabel="Top Box">
-                        <rect key="frame" x="20" y="381" width="600" height="132"/>
+                        <rect key="frame" x="20" y="377" width="698" height="132"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ond-dT-x5d" userLabel="Site Password Label">
-                                <rect key="frame" x="157" y="98" width="287" height="14"/>
+                                <rect key="frame" x="206" y="98" width="287" height="14"/>
                                 <shadow key="shadow" blurRadius="0.5">
                                     <size key="offset" width="0.0" height="1"/>
                                     <color key="color" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
                                 </shadow>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Your password for apple.com (hit &lt;⏎ enter&gt; to copy):" id="CgJ-XZ-6Hy">
-                                    <font key="font" metaFont="menu" size="11"/>
+                                    <font key="font" metaFont="message" size="11"/>
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -72,13 +72,13 @@
                                 </connections>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ia6-7b-dFr">
-                                <rect key="frame" x="127" y="59" width="347" height="14"/>
+                                <rect key="frame" x="176" y="59" width="347" height="14"/>
                                 <shadow key="shadow" blurRadius="0.5">
                                     <size key="offset" width="0.0" height="1"/>
                                     <color key="color" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
                                 </shadow>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="No password set.  Click &quot;Set Password&quot; on the bottom to set one." id="eDQ-iz-97a">
-                                    <font key="font" metaFont="menu" size="11"/>
+                                    <font key="font" metaFont="message" size="11"/>
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -108,13 +108,13 @@
                                 </connections>
                             </textField>
                             <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OaQ-of-zmb" userLabel="Initial Help">
-                                <rect key="frame" x="39" y="109" width="522" height="18"/>
+                                <rect key="frame" x="113" y="109" width="473" height="17"/>
                                 <shadow key="shadow" blurRadius="0.5">
                                     <size key="offset" width="0.0" height="1"/>
                                     <color key="color" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
                                 </shadow>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Master Password generates passwords for your sites (and other things)." id="YyD-hd-wi3">
-                                    <font key="font" size="16" name="HelveticaNeue"/>
+                                    <font key="font" metaFont="system" size="14"/>
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -136,18 +136,18 @@
                                 </connections>
                             </textField>
                             <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sYt-eL-uwt" userLabel="Initial Tip">
-                                <rect key="frame" x="-26" y="31" width="652" height="70"/>
+                                <rect key="frame" x="-2" y="31" width="702" height="70"/>
                                 <shadow key="shadow" blurRadius="0.5">
                                     <size key="offset" width="0.0" height="1"/>
                                     <color key="color" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
                                 </shadow>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" id="9c4-NI-NM0">
-                                    <font key="font" size="12" name="HelveticaNeue"/>
-                                    <string key="title">– When you create an account with a site, use Master Password to create a password for it.
-– For accounts you already have, change the password to that created by Master Password for it.
-– To get a password, enter the site's bare domain name in the "site name" field (eg. apple.com).
-– For your master password, think of a strong password (eg. a short sentence). Tell *nobody*.
-– It's OK to share your site passwords.  They can be changed if necessary.</string>
+                                    <font key="font" metaFont="message" size="11"/>
+                                    <mutableString key="title">⑴ When you create an account on a site, open Master Password to create your account password.
+⑵ Consider changing all your existing account passwords to the password Master Password creates for those sites.
+⑶ To get the password for a site, just enter its domain name in the "site name" field (eg. "apple.com").
+⑷ When chosing a master password, make it easy but long (eg. a short sentence).
+⑸ Tell *nobody* your master password. It's OK to share your site passwords with people you trust: they can be changed if necessary.</mutableString>
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -169,7 +169,7 @@
                                 </connections>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="XUV-zU-Y9c" userLabel="Site Password">
-                                <rect key="frame" x="-2" y="26" width="604" height="80"/>
+                                <rect key="frame" x="-2" y="26" width="702" height="80"/>
                                 <shadow key="shadow" blurRadius="0.5">
                                     <size key="offset" width="0.0" height="1"/>
                                     <color key="color" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -202,6 +202,7 @@
                             <constraint firstItem="XUV-zU-Y9c" firstAttribute="leading" secondItem="NGk-Io-Buc" secondAttribute="leading" id="6Kl-7u-r90"/>
                             <constraint firstAttribute="centerY" secondItem="XUV-zU-Y9c" secondAttribute="centerY" id="6Qf-5O-Cvk"/>
                             <constraint firstAttribute="centerX" secondItem="XUV-zU-Y9c" secondAttribute="centerX" id="7sl-qi-HY9"/>
+                            <constraint firstItem="sYt-eL-uwt" firstAttribute="width" secondItem="NGk-Io-Buc" secondAttribute="width" id="Beb-mW-KDP"/>
                             <constraint firstItem="Ond-dT-x5d" firstAttribute="top" secondItem="NGk-Io-Buc" secondAttribute="top" constant="20" symbolic="YES" id="IX4-cd-VkJ"/>
                             <constraint firstItem="Ia6-7b-dFr" firstAttribute="centerY" secondItem="XUV-zU-Y9c" secondAttribute="centerY" id="KqM-uR-Obm"/>
                             <constraint firstItem="Ia6-7b-dFr" firstAttribute="centerX" secondItem="XUV-zU-Y9c" secondAttribute="centerX" id="NFQ-aw-8tm"/>
@@ -209,14 +210,13 @@
                             <constraint firstAttribute="trailing" secondItem="XUV-zU-Y9c" secondAttribute="trailing" id="TdB-QV-9JK"/>
                             <constraint firstItem="Ond-dT-x5d" firstAttribute="bottom" secondItem="XUV-zU-Y9c" secondAttribute="top" constant="8" symbolic="YES" id="UgV-J6-B5T"/>
                             <constraint firstItem="Ond-dT-x5d" firstAttribute="centerX" secondItem="XUV-zU-Y9c" secondAttribute="centerX" id="UhT-LQ-aZ8"/>
-                            <constraint firstItem="sYt-eL-uwt" firstAttribute="leading" secondItem="NGk-Io-Buc" secondAttribute="leading" constant="-24" id="eaC-ow-ren"/>
                             <constraint firstItem="sYt-eL-uwt" firstAttribute="top" secondItem="OaQ-of-zmb" secondAttribute="bottom" constant="8" symbolic="YES" id="hjJ-f1-mFv"/>
                             <constraint firstItem="sYt-eL-uwt" firstAttribute="centerX" secondItem="OaQ-of-zmb" secondAttribute="centerX" id="mu2-se-Mtn"/>
                             <constraint firstAttribute="centerY" secondItem="sYt-eL-uwt" secondAttribute="centerY" id="zLS-QG-MKS"/>
                         </constraints>
                     </customView>
                     <scrollView focusRingType="none" borderType="none" autohidesScrollers="YES" horizontalLineScroll="34" horizontalPageScroll="10" verticalLineScroll="34" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" horizontalScrollElasticity="none" translatesAutoresizingMaskIntoConstraints="NO" id="Bme-XK-MMc" userLabel="Sites Table">
-                        <rect key="frame" x="64" y="40" width="512" height="177"/>
+                        <rect key="frame" x="113" y="40" width="512" height="177"/>
                         <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="e11-59-xSS">
                             <rect key="frame" x="0.0" y="0.0" width="512" height="177"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -251,7 +251,7 @@
                                                                 <color key="color" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
                                                             </shadow>
                                                             <textFieldCell key="cell" lineBreakMode="truncatingTail" alignment="center" title="apple.com" id="o0g-Zv-pH4">
-                                                                <font key="font" size="24" name="HelveticaNeue-Thin"/>
+                                                                <font key="font" metaFont="systemUltraLight" size="24"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
@@ -310,7 +310,7 @@
                         </connections>
                     </scrollView>
                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="nM8-O3-spM" customClass="MPGradientView">
-                        <rect key="frame" x="0.0" y="0.0" width="640" height="212"/>
+                        <rect key="frame" x="0.0" y="0.0" width="738" height="212"/>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="color" keyPath="startingColor">
                                 <color key="value" red="0.11764705882352941" green="0.11764705882352941" blue="0.11764705882352941" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
@@ -324,7 +324,7 @@
                         </userDefinedRuntimeAttributes>
                     </customView>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="Aue-Zx-6Mf" userLabel="Settings Gear">
-                        <rect key="frame" x="585" y="493" width="35" height="44"/>
+                        <rect key="frame" x="683" y="489" width="35" height="44"/>
                         <shadow key="shadow">
                             <color key="color" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
                         </shadow>
@@ -339,13 +339,13 @@
                         </connections>
                     </button>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gAU-xs-aae">
-                        <rect key="frame" x="594" y="479" width="18" height="14"/>
+                        <rect key="frame" x="692" y="475" width="18" height="14"/>
                         <shadow key="shadow" blurRadius="0.5">
                             <size key="offset" width="0.0" height="1"/>
                             <color key="color" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
                         </shadow>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="⌘," id="Xm1-qb-6EP">
-                            <font key="font" metaFont="menu" size="11"/>
+                            <font key="font" metaFont="message" size="11"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -358,7 +358,7 @@
                         </connections>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OnR-s6-d4P" userLabel="Site Name Label">
-                        <rect key="frame" x="209" y="308" width="223" height="16"/>
+                        <rect key="frame" x="258" y="306" width="223" height="16"/>
                         <shadow key="shadow" blurRadius="0.5">
                             <size key="offset" width="0.0" height="1"/>
                             <color key="color" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
@@ -370,7 +370,7 @@
                         </textFieldCell>
                     </textField>
                     <secureTextField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iGR-wo-ual" userLabel="Secure Master Password">
-                        <rect key="frame" x="18" y="257" width="604" height="43"/>
+                        <rect key="frame" x="18" y="255" width="702" height="43"/>
                         <shadow key="shadow" blurRadius="0.5">
                             <size key="offset" width="0.0" height="1"/>
                             <color key="color" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
@@ -405,7 +405,7 @@
                         </connections>
                     </secureTextField>
                     <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="v80-wd-hUR" userLabel="Revealed Master Password">
-                        <rect key="frame" x="18" y="257" width="604" height="43"/>
+                        <rect key="frame" x="18" y="255" width="702" height="43"/>
                         <shadow key="shadow" blurRadius="0.5">
                             <size key="offset" width="0.0" height="1"/>
                             <color key="color" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
@@ -444,13 +444,13 @@
                         </connections>
                     </textField>
                     <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lW3-2z-cEa" userLabel="Master Password Tip">
-                        <rect key="frame" x="195" y="237" width="251" height="12"/>
+                        <rect key="frame" x="248" y="236" width="243" height="11"/>
                         <shadow key="shadow" blurRadius="0.5">
                             <size key="offset" width="0.0" height="1"/>
                             <color key="color" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
                         </shadow>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Hold alt ⌥ to reveal tips and unmask ●●●●●●●●." id="4Ep-xX-Ky8">
-                            <font key="font" size="11" name="HelveticaNeue"/>
+                            <font key="font" metaFont="miniSystem"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -471,13 +471,13 @@
                         </connections>
                     </textField>
                     <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Oy5-B7-hdN" userLabel="Revealed Master Password Tip">
-                        <rect key="frame" x="195" y="237" width="250" height="12"/>
+                        <rect key="frame" x="258" y="236" width="222" height="11"/>
                         <shadow key="shadow" blurRadius="0.5">
                             <size key="offset" width="0.0" height="1"/>
                             <color key="color" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
                         </shadow>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Hold alt ⌥ to reveal tips and unmask passwords." id="bQ4-AN-S1A">
-                            <font key="font" size="11" name="HelveticaNeue"/>
+                            <font key="font" metaFont="miniSystem"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -499,7 +499,7 @@
                         </connections>
                     </textField>
                     <searchField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CnS-iI-dhr" userLabel="Site Name">
-                        <rect key="frame" x="62" y="257" width="516" height="43"/>
+                        <rect key="frame" x="111" y="255" width="516" height="43"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="512" id="rW7-Vq-4Xy"/>
                         </constraints>
@@ -508,7 +508,7 @@
                             <color key="color" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
                         </shadow>
                         <searchFieldCell key="cell" selectable="YES" editable="YES" focusRingType="none" alignment="center" placeholderString="Site Name" sendsSearchStringImmediately="YES" id="ppl-2c-1E9">
-                            <font key="font" size="36" name="HelveticaNeue-Thin"/>
+                            <font key="font" metaFont="system" size="36"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </searchFieldCell>
@@ -519,13 +519,13 @@
                         </connections>
                     </searchField>
                     <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="npC-Kk-gUM" userLabel="Site Name Tip">
-                        <rect key="frame" x="101" y="237" width="438" height="12"/>
+                        <rect key="frame" x="172" y="236" width="395" height="11"/>
                         <shadow key="shadow" blurRadius="0.5">
                             <size key="offset" width="0.0" height="1"/>
                             <color key="color" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
                         </shadow>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Type the name of your site (eg. apple.com), then hit enter ⏎ to create a password for it." id="QTI-cz-Onx">
-                            <font key="font" size="11" name="HelveticaNeue"/>
+                            <font key="font" metaFont="miniSystem"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -542,13 +542,13 @@
                         </connections>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rhm-sC-xFS" userLabel="Site Name Tip">
-                        <rect key="frame" x="138" y="225" width="365" height="24"/>
+                        <rect key="frame" x="206" y="225" width="326" height="22"/>
                         <shadow key="shadow" blurRadius="0.5">
                             <size key="offset" width="0.0" height="1"/>
                             <color key="color" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
                         </shadow>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" id="n3W-XU-dya">
-                            <font key="font" size="11" name="HelveticaNeue"/>
+                            <font key="font" metaFont="miniSystem"/>
                             <string key="title">Hit enter ⏎ to copy the site's password, hold shift ⇧ for the login name.
 Use the arrows ⇅ to navigate the list or esc ⎋ to exit.</string>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -568,7 +568,7 @@ Use the arrows ⇅ to navigate the list or esc ⎋ to exit.</string>
                         </connections>
                     </textField>
                     <stackView distribution="fill" orientation="horizontal" alignment="bottom" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pHt-gg-ZNX">
-                        <rect key="frame" x="73" y="20" width="495" height="152"/>
+                        <rect key="frame" x="122" y="20" width="495" height="152"/>
                         <subviews>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1Qo-iG-CQt">
                                 <rect key="frame" x="0.0" y="-1" width="85" height="19"/>
@@ -600,7 +600,7 @@ Use the arrows ⇅ to navigate the list or esc ⎋ to exit.</string>
                                             <color key="color" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
                                         </shadow>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="⌘P" id="MyN-x6-dMk">
-                                            <font key="font" metaFont="menu" size="11"/>
+                                            <font key="font" metaFont="message" size="11"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
@@ -686,7 +686,7 @@ Use the arrows ⇅ to navigate the list or esc ⎋ to exit.</string>
                                         </connections>
                                     </button>
                                     <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bgn-Ne-fQ7" userLabel="Version Container">
-                                        <rect key="frame" x="70" y="56" width="36" height="22"/>
+                                        <rect key="frame" x="71" y="56" width="34" height="22"/>
                                         <subviews>
                                             <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="mcq-qD-yte">
                                                 <rect key="frame" x="-3" y="-3" width="19" height="28"/>
@@ -699,13 +699,13 @@ Use the arrows ⇅ to navigate the list or esc ⎋ to exit.</string>
                                                 </connections>
                                             </stepper>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gyg-Fh-yn7">
-                                                <rect key="frame" x="19" y="7" width="19" height="15"/>
+                                                <rect key="frame" x="19" y="8" width="17" height="14"/>
                                                 <shadow key="shadow" blurRadius="0.5">
                                                     <size key="offset" width="0.0" height="1"/>
                                                     <color key="color" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
                                                 </shadow>
                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="V1" id="Pjy-Fm-zwB">
-                                                    <font key="font" size="12" name="HelveticaNeue-Medium"/>
+                                                    <font key="font" metaFont="message" size="11"/>
                                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="calibratedRGB"/>
                                                 </textFieldCell>
@@ -740,7 +740,7 @@ Use the arrows ⇅ to navigate the list or esc ⎋ to exit.</string>
                                         </connections>
                                     </stackView>
                                     <stackView distribution="fill" orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6II-KA-cNi" userLabel="Counter Container">
-                                        <rect key="frame" x="74" y="26" width="28" height="22"/>
+                                        <rect key="frame" x="75" y="26" width="27" height="22"/>
                                         <subviews>
                                             <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="XgA-Vl-CKh" userLabel="Counter Stepper">
                                                 <rect key="frame" x="-3" y="-3" width="19" height="28"/>
@@ -753,13 +753,13 @@ Use the arrows ⇅ to navigate the list or esc ⎋ to exit.</string>
                                                 </connections>
                                             </stepper>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NvO-kt-eZ2" userLabel="Counter Field">
-                                                <rect key="frame" x="19" y="4" width="11" height="15"/>
+                                                <rect key="frame" x="19" y="4" width="10" height="14"/>
                                                 <shadow key="shadow" blurRadius="0.5">
                                                     <size key="offset" width="0.0" height="1"/>
                                                     <color key="color" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
                                                 </shadow>
                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="1" id="dhQ-bJ-rn3">
-                                                    <font key="font" size="12" name="HelveticaNeue-Medium"/>
+                                                    <font key="font" metaFont="message" size="11"/>
                                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="calibratedRGB"/>
                                                 </textFieldCell>
@@ -886,13 +886,13 @@ Use the arrows ⇅ to navigate the list or esc ⎋ to exit.</string>
                         </customSpacing>
                     </stackView>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="luC-0j-BeV">
-                        <rect key="frame" x="135" y="50" width="103" height="14"/>
+                        <rect key="frame" x="185" y="50" width="103" height="14"/>
                         <shadow key="shadow" blurRadius="0.5">
                             <size key="offset" width="0.0" height="1"/>
                             <color key="color" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
                         </shadow>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Password Number:" id="weR-33-U49">
-                            <font key="font" metaFont="menu" size="11"/>
+                            <font key="font" metaFont="message" size="11"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -923,13 +923,13 @@ Use the arrows ⇅ to navigate the list or esc ⎋ to exit.</string>
                         </connections>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gjx-bt-fKM">
-                        <rect key="frame" x="134" y="80" width="100" height="14"/>
+                        <rect key="frame" x="184" y="80" width="100" height="14"/>
                         <shadow key="shadow" blurRadius="0.5">
                             <size key="offset" width="0.0" height="1"/>
                             <color key="color" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
                         </shadow>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Password Version:" id="E77-5t-EKJ">
-                            <font key="font" metaFont="menu" size="11"/>
+                            <font key="font" metaFont="message" size="11"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -960,13 +960,13 @@ Use the arrows ⇅ to navigate the list or esc ⎋ to exit.</string>
                         </connections>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dbM-ja-dKO" userLabel="Version Tip">
-                        <rect key="frame" x="88" y="106" width="332" height="14"/>
+                        <rect key="frame" x="137" y="106" width="332" height="14"/>
                         <shadow key="shadow" blurRadius="0.5">
                             <size key="offset" width="0.0" height="1"/>
                             <color key="color" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
                         </shadow>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Upgrade your site's algorithm version for maximum protection:" id="3ds-qG-YNd">
-                            <font key="font" metaFont="menu" size="11"/>
+                            <font key="font" metaFont="message" size="11"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -988,13 +988,13 @@ Use the arrows ⇅ to navigate the list or esc ⎋ to exit.</string>
                         </connections>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ido-NQ-3MY">
-                        <rect key="frame" x="104" y="4" width="22" height="12"/>
+                        <rect key="frame" x="154" y="2" width="21" height="14"/>
                         <shadow key="shadow" blurRadius="0.5">
                             <size key="offset" width="0.0" height="1"/>
                             <color key="color" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
                         </shadow>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="⌘L" id="fUB-rF-7x8">
-                            <font key="font" size="11" name="HelveticaNeue"/>
+                            <font key="font" metaFont="message" size="11"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -1016,13 +1016,13 @@ Use the arrows ⇅ to navigate the list or esc ⎋ to exit.</string>
                         </connections>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9b3-wy-KBb">
-                        <rect key="frame" x="243" y="2" width="22" height="14"/>
+                        <rect key="frame" x="292" y="2" width="22" height="14"/>
                         <shadow key="shadow" blurRadius="0.5">
                             <size key="offset" width="0.0" height="1"/>
                             <color key="color" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
                         </shadow>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="⌘T" id="HFM-Bk-akx">
-                            <font key="font" metaFont="menu" size="11"/>
+                            <font key="font" metaFont="message" size="11"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -1044,13 +1044,13 @@ Use the arrows ⇅ to navigate the list or esc ⎋ to exit.</string>
                         </connections>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qal-PP-YtO">
-                        <rect key="frame" x="516" y="4" width="23" height="12"/>
+                        <rect key="frame" x="565" y="2" width="23" height="14"/>
                         <shadow key="shadow" blurRadius="0.5">
                             <size key="offset" width="0.0" height="1"/>
                             <color key="color" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
                         </shadow>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="⌘D" id="PPC-be-w4E">
-                            <font key="font" size="11" name="HelveticaNeue"/>
+                            <font key="font" metaFont="message" size="11"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -1072,13 +1072,13 @@ Use the arrows ⇅ to navigate the list or esc ⎋ to exit.</string>
                         </connections>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qLF-A6-ThX">
-                        <rect key="frame" x="404" y="4" width="23" height="12"/>
+                        <rect key="frame" x="453" y="2" width="22" height="14"/>
                         <shadow key="shadow" blurRadius="0.5">
                             <size key="offset" width="0.0" height="1"/>
                             <color key="color" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
                         </shadow>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="⌘S" id="qh6-k2-MUr">
-                            <font key="font" size="11" name="HelveticaNeue"/>
+                            <font key="font" metaFont="message" size="11"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -1178,7 +1178,7 @@ Use the arrows ⇅ to navigate the list or esc ⎋ to exit.</string>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kCO-1M-Wz1">
                         <rect key="frame" x="10" y="12" width="390" height="92"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" id="kl0-P1-6ZY">
-                            <font key="font" metaFont="menu" size="11"/>
+                            <font key="font" metaFont="message" size="11"/>
                             <string key="title">"Personal password" allows you to store your own password.  It cannot be regenerated in the event of loss.  "Device private password" is similar but will never leave your device: it cannot be synced, backed up or exported.</string>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
