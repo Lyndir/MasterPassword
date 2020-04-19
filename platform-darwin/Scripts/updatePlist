@@ -46,9 +46,10 @@ esac
 description=$(git describe --always --dirty --long --match "*-$platform*")
 version=${description%-g*} build=${version##*-} version=${version%-$build}
 version=${version//-$platform/} version=${version//-/.} commit=${description##*-g}
+IFS=. read major minor build <<< "$version"
 
 addPlistWithKey GITDescription string "$description"
-setPlistWithKey CFBundleVersion "$(hr "${version%%.*}" 14).${version#*.}"
+setPlistWithKey CFBundleVersion "$(hr "$major" 14)$(printf '%02d' "$minor")$(printf '%02d' "$build")"
 setPlistWithKey CFBundleShortVersionString "$version"
 
 setSettingWithTitle "Build" "$commit"
