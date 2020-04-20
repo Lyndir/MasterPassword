@@ -176,6 +176,21 @@ MPMarshalledFile *mpw_marshal_file(
     return file;
 }
 
+MPMarshalledFile *mpw_marshal_error(
+        MPMarshalledFile *file, MPMarshalErrorType type, const char *format, ...) {
+
+    file = mpw_marshal_file( file, NULL, NULL );
+    if (!file)
+        return NULL;
+
+    va_list args;
+    va_start( args, format );
+    file->error = (MPMarshalError){ type, mpw_strdup( mpw_vstr( format, args ) ) };
+    va_end( args );
+
+    return file;
+}
+
 void mpw_marshal_info_free(
         MPMarshalledInfo **info) {
 
@@ -228,6 +243,7 @@ void mpw_marshal_file_free(
 
     mpw_marshal_info_free( &(*file)->info );
     mpw_marshal_data_free( &(*file)->data );
+    mpw_free_string( &(*file)->error.message );
     mpw_free( file, sizeof( MPMarshalledFile ) );
 }
 
@@ -539,7 +555,7 @@ static const char *mpw_marshal_write_flat(
 
     const MPMarshalledData *data = file->data;
     if (!data) {
-        file->error = (MPMarshalError){ MPMarshalErrorMissing, "Missing data." };
+        mpw_marshal_error( file, MPMarshalErrorMissing, "Missing data." );
         return NULL;
     }
 
@@ -583,9 +599,9 @@ static const char *mpw_marshal_write_flat(
     }
 
     if (!out)
-        file->error = (MPMarshalError){ MPMarshalErrorFormat, "Couldn't encode JSON." };
+        mpw_marshal_error( file, MPMarshalErrorFormat, "Couldn't encode JSON." );
     else
-        file->error = (MPMarshalError){ MPMarshalSuccess, NULL };
+        mpw_marshal_error( file, MPMarshalSuccess, NULL );
 
     return out;
 }
@@ -637,7 +653,7 @@ static const char *mpw_marshal_write_json(
     // Section: "export"
     json_object *json_file = mpw_get_json_data( file->data );
     if (!json_file) {
-        file->error = (MPMarshalError){ MPMarshalErrorFormat, "Couldn't serialize export data." };
+        mpw_marshal_error( file, MPMarshalErrorFormat, "Couldn't serialize export data." );
         return NULL;
     }
 
@@ -650,9 +666,9 @@ static const char *mpw_marshal_write_json(
     json_object_put( json_file );
 
     if (!out)
-        file->error = (MPMarshalError){ MPMarshalErrorFormat, "Couldn't encode JSON." };
+        mpw_marshal_error( file, MPMarshalErrorFormat, "Couldn't encode JSON." );
     else
-        file->error = (MPMarshalError){ MPMarshalSuccess, NULL };
+        mpw_marshal_error( file, MPMarshalSuccess, NULL );
 
     return out;
 }
@@ -698,17 +714,17 @@ const char *mpw_marshal_write(
         if (!file_)
             mpw_marshal_file_free( &file );
         else
-            file->error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't allocate data." };
+            mpw_marshal_error( file, MPMarshalErrorInternal, "Couldn't allocate data." );
         return NULL;
     }
     if (!user->fullName || !strlen( user->fullName )) {
         if (!file_)
             mpw_marshal_file_free( &file );
         else
-            file->error = (MPMarshalError){ MPMarshalErrorMissing, "Missing full name." };
+            mpw_marshal_error( file, MPMarshalErrorMissing, "Missing full name." );
         return NULL;
     }
-    file->error = (MPMarshalError){ MPMarshalSuccess, NULL };
+    mpw_marshal_error( file, MPMarshalSuccess, NULL );
 
     MPMasterKey masterKey = NULL;
     if (user->masterKeyProvider)
@@ -749,7 +765,7 @@ const char *mpw_marshal_write(
                 if (!file_)
                     mpw_marshal_file_free( &file );
                 else
-                    file->error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't derive master key." };
+                    mpw_marshal_error( file, MPMarshalErrorInternal, "Couldn't derive master key." );
                 return NULL;
             }
 
@@ -807,7 +823,7 @@ const char *mpw_marshal_write(
     const char *out = NULL;
     switch (outFormat) {
         case MPMarshalFormatNone:
-            file->error = (MPMarshalError){ MPMarshalSuccess, NULL };
+            mpw_marshal_error( file, MPMarshalSuccess, NULL );
             break;
         case MPMarshalFormatFlat:
             out = mpw_marshal_write_flat( file );
@@ -818,7 +834,7 @@ const char *mpw_marshal_write(
             break;
 #endif
         default:
-            file->error = (MPMarshalError){ MPMarshalErrorFormat, mpw_str( "Unsupported output format: %u", outFormat ) };
+            mpw_marshal_error( file, MPMarshalErrorFormat, "Unsupported output format: %u", outFormat );
             break;
     }
     if (out && file->error.type == MPMarshalSuccess)
@@ -839,7 +855,7 @@ static void mpw_marshal_read_flat(
 
     mpw_marshal_file( file, NULL, mpw_marshal_data_new() );
     if (!file->data) {
-        file->error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't allocate data." };
+        mpw_marshal_error( file, MPMarshalErrorInternal, "Couldn't allocate data." );
         return;
     }
 
@@ -891,10 +907,7 @@ static void mpw_marshal_read_flat(
             const char *headerName = mpw_get_token( &positionInLine, endOfLine, ":\n" );
             const char *headerValue = mpw_get_token( &positionInLine, endOfLine, "\n" );
             if (!headerName || !headerValue) {
-                file->error = (MPMarshalError){
-                        MPMarshalErrorStructure,
-                        mpw_str( "Invalid header: %s", mpw_strndup( line, (size_t)(endOfLine - line) ) )
-                };
+                mpw_marshal_error( file, MPMarshalErrorStructure, "Invalid header: %s", mpw_strndup( line, (size_t)(endOfLine - line) ) );
                 mpw_free_strings( &headerName, &headerValue, NULL );
                 continue;
             }
@@ -908,7 +921,7 @@ static void mpw_marshal_read_flat(
             if (mpw_strcasecmp( headerName, "Algorithm" ) == OK) {
                 unsigned long value = strtoul( headerValue, NULL, 10 );
                 if (value < MPAlgorithmVersionFirst || value > MPAlgorithmVersionLast)
-                    file->error = (MPMarshalError){ MPMarshalErrorIllegal, mpw_str( "Invalid user algorithm version: %s", headerValue ) };
+                    mpw_marshal_error( file, MPMarshalErrorIllegal, "Invalid user algorithm version: %s", headerValue );
                 else
                     algorithm = (MPAlgorithmVersion)value;
             }
@@ -923,7 +936,7 @@ static void mpw_marshal_read_flat(
             if (mpw_strcasecmp( headerName, "Default Type" ) == OK) {
                 unsigned long value = strtoul( headerValue, NULL, 10 );
                 if (!mpw_type_short_name( (MPResultType)value ))
-                    file->error = (MPMarshalError){ MPMarshalErrorIllegal, mpw_str( "Invalid user default type: %s", headerValue ) };
+                    mpw_marshal_error( file, MPMarshalErrorIllegal, "Invalid user default type: %s", headerValue );
                 else
                     defaultType = (MPResultType)value;
             }
@@ -934,7 +947,7 @@ static void mpw_marshal_read_flat(
         if (!headerEnded)
             continue;
         if (!fullName)
-            file->error = (MPMarshalError){ MPMarshalErrorMissing, "Missing header: Full Name" };
+            mpw_marshal_error( file, MPMarshalErrorMissing, "Missing header: Full Name" );
         if (positionInLine >= endOfLine)
             continue;
 
@@ -973,7 +986,7 @@ static void mpw_marshal_read_flat(
                 break;
             }
             default: {
-                file->error = (MPMarshalError){ MPMarshalErrorFormat, mpw_str( "Unexpected import format: %u", format ) };
+                mpw_marshal_error( file, MPMarshalErrorFormat, "Unexpected import format: %u", format );
                 continue;
             }
         }
@@ -981,28 +994,24 @@ static void mpw_marshal_read_flat(
         if (siteName && str_type && str_counter && str_algorithm && str_uses && str_lastUsed) {
             MPResultType siteType = (MPResultType)strtoul( str_type, NULL, 10 );
             if (!mpw_type_short_name( siteType )) {
-                file->error = (MPMarshalError){ MPMarshalErrorIllegal, mpw_str( "Invalid site type: %s: %s", siteName, str_type ) };
+                mpw_marshal_error( file, MPMarshalErrorIllegal, "Invalid site type: %s: %s", siteName, str_type );
                 continue;
             }
             long long int value = strtoll( str_counter, NULL, 10 );
             if (value < MPCounterValueFirst || value > MPCounterValueLast) {
-                file->error = (MPMarshalError){ MPMarshalErrorIllegal, mpw_str( "Invalid site counter: %s: %s", siteName, str_counter ) };
+                mpw_marshal_error( file, MPMarshalErrorIllegal, "Invalid site counter: %s: %s", siteName, str_counter );
                 continue;
             }
             MPCounterValue siteCounter = (MPCounterValue)value;
             value = strtoll( str_algorithm, NULL, 0 );
             if (value < MPAlgorithmVersionFirst || value > MPAlgorithmVersionLast) {
-                file->error = (MPMarshalError){
-                        MPMarshalErrorIllegal, mpw_str( "Invalid site algorithm: %s: %s", siteName, str_algorithm )
-                };
+                mpw_marshal_error( file, MPMarshalErrorIllegal, "Invalid site algorithm: %s: %s", siteName, str_algorithm );
                 continue;
             }
             MPAlgorithmVersion siteAlgorithm = (MPAlgorithmVersion)value;
             time_t siteLastUsed = mpw_timegm( str_lastUsed );
             if (!siteLastUsed) {
-                file->error = (MPMarshalError){
-                        MPMarshalErrorIllegal, mpw_str( "Invalid site last used: %s: %s", siteName, str_lastUsed )
-                };
+                mpw_marshal_error( file, MPMarshalErrorIllegal, "Invalid site last used: %s: %s", siteName, str_lastUsed );
                 continue;
             }
 
@@ -1020,11 +1029,9 @@ static void mpw_marshal_read_flat(
                 mpw_marshal_data_set_str( dateString, file->data, "sites", siteName, "last_used", NULL );
         }
         else {
-            file->error = (MPMarshalError){
-                    MPMarshalErrorMissing,
-                    mpw_str( "Missing one of: lastUsed=%s, uses=%s, type=%s, version=%s, counter=%s, loginName=%s, siteName=%s",
-                            str_lastUsed, str_uses, str_type, str_algorithm, str_counter, siteLoginState, siteName )
-            };
+            mpw_marshal_error( file, MPMarshalErrorMissing,
+                    "Missing one of: lastUsed=%s, uses=%s, type=%s, version=%s, counter=%s, loginName=%s, siteName=%s",
+                    str_lastUsed, str_uses, str_type, str_algorithm, str_counter, siteLoginState, siteName );
             continue;
         }
 
@@ -1044,7 +1051,7 @@ static void mpw_marshal_read_json(
 
     mpw_marshal_file( file, NULL, mpw_marshal_data_new() );
     if (!file->data) {
-        file->error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't allocate data." };
+        mpw_marshal_error( file, MPMarshalErrorInternal, "Couldn't allocate data." );
         return;
     }
 
@@ -1052,7 +1059,7 @@ static void mpw_marshal_read_json(
     enum json_tokener_error json_error = json_tokener_success;
     json_object *json_file = json_tokener_parse_verbose( in, &json_error );
     if (!json_file || json_error != json_tokener_success) {
-        file->error = (MPMarshalError){ MPMarshalErrorFormat, mpw_str( "Couldn't parse JSON: %s", json_tokener_error_desc( json_error ) ) };
+        mpw_marshal_error( file, MPMarshalErrorFormat, "Couldn't parse JSON: %s", json_tokener_error_desc( json_error ) );
         return;
     }
 
@@ -1074,9 +1081,9 @@ MPMarshalledFile *mpw_marshal_read(
     if (!file)
         return NULL;
 
-    file->error = (MPMarshalError){ MPMarshalSuccess, NULL };
+    mpw_marshal_error( file, MPMarshalSuccess, NULL );
     if (!info) {
-        file->error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't allocate info." };
+        mpw_marshal_error( file, MPMarshalErrorInternal, "Couldn't allocate info." );
         return file;
     }
 
@@ -1116,13 +1123,13 @@ MPMarshalledUser *mpw_marshal_auth(
     if (!file)
         return NULL;
 
-    file->error = (MPMarshalError){ MPMarshalSuccess, NULL };
+    mpw_marshal_error( file, MPMarshalSuccess, NULL );
     if (!file->info) {
-        file->error = (MPMarshalError){ MPMarshalErrorMissing, "File wasn't parsed yet." };
+        mpw_marshal_error( file, MPMarshalErrorMissing, "File wasn't parsed yet." );
         return NULL;
     }
     if (!file->data) {
-        file->error = (MPMarshalError){ MPMarshalErrorMissing, "No input data." };
+        mpw_marshal_error( file, MPMarshalErrorMissing, "No input data." );
         return NULL;
     }
 
@@ -1132,43 +1139,43 @@ MPMarshalledUser *mpw_marshal_auth(
     MPAlgorithmVersion algorithm =
             mpw_default_n( MPAlgorithmVersionCurrent, mpw_marshal_data_get_num( file->data, "user", "algorithm", NULL ) );
     if (algorithm < MPAlgorithmVersionFirst || algorithm > MPAlgorithmVersionLast) {
-        file->error = (MPMarshalError){ MPMarshalErrorIllegal, mpw_str( "Invalid user algorithm: %u", algorithm ) };
+        mpw_marshal_error( file, MPMarshalErrorIllegal, "Invalid user algorithm: %u", algorithm );
         return NULL;
     }
     unsigned int avatar = mpw_default_n( 0U, mpw_marshal_data_get_num( file->data, "user", "avatar", NULL ) );
     const char *fullName = mpw_marshal_data_get_str( file->data, "user", "full_name", NULL );
     if (!fullName || !strlen( fullName )) {
-        file->error = (MPMarshalError){ MPMarshalErrorMissing, "Missing value for full name." };
+        mpw_marshal_error( file, MPMarshalErrorMissing, "Missing value for full name." );
         return NULL;
     }
     MPIdenticon identicon = mpw_identicon_encoded( mpw_marshal_data_get_str( file->data, "user", "identicon", NULL ) );
     const char *keyID = mpw_marshal_data_get_str( file->data, "user", "key_id", NULL );
     MPResultType defaultType = mpw_default_n( MPResultTypeDefault, mpw_marshal_data_get_num( file->data, "user", "default_type", NULL ) );
     if (!mpw_type_short_name( defaultType )) {
-        file->error = (MPMarshalError){ MPMarshalErrorIllegal, mpw_str( "Invalid user default type: %u", defaultType ) };
+        mpw_marshal_error( file, MPMarshalErrorIllegal, "Invalid user default type: %u", defaultType );
         return NULL;
     }
     const char *str_lastUsed = mpw_marshal_data_get_str( file->data, "user", "last_used", NULL );
     time_t lastUsed = mpw_timegm( str_lastUsed );
     if (!lastUsed) {
-        file->error = (MPMarshalError){ MPMarshalErrorIllegal, mpw_str( "Invalid user last used: %s", str_lastUsed ) };
+        mpw_marshal_error( file, MPMarshalErrorIllegal, "Invalid user last used: %s", str_lastUsed );
         return NULL;
     }
 
     MPMasterKey masterKey = NULL;
     if (masterKeyProvider && !(masterKey = masterKeyProvider( algorithm, fullName ))) {
-        file->error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't derive master key." };
+        mpw_marshal_error( file, MPMarshalErrorInternal, "Couldn't derive master key." );
         return NULL;
     }
     if (keyID && masterKey && !mpw_id_buf_equals( keyID, mpw_id_buf( masterKey, MPMasterKeySize ) )) {
-        file->error = (MPMarshalError){ MPMarshalErrorMasterPassword, "Master key doesn't match key ID." };
+        mpw_marshal_error( file, MPMarshalErrorMasterPassword, "Master key doesn't match key ID." );
         mpw_free( &masterKey, MPMasterKeySize );
         return NULL;
     }
 
     MPMarshalledUser *user = NULL;
     if (!(user = mpw_marshal_user( fullName, masterKeyProvider, algorithm ))) {
-        file->error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't allocate a new user." };
+        mpw_marshal_error( file, MPMarshalErrorInternal, "Couldn't allocate a new user." );
         mpw_free( &masterKey, MPMasterKeySize );
         mpw_marshal_user_free( &user );
         return NULL;
@@ -1189,21 +1196,21 @@ MPMarshalledUser *mpw_marshal_auth(
 
         algorithm = mpw_default_n( user->algorithm, mpw_marshal_data_get_num( siteData, "algorithm", NULL ) );
         if (algorithm < MPAlgorithmVersionFirst || algorithm > MPAlgorithmVersionLast) {
-            file->error = (MPMarshalError){ MPMarshalErrorIllegal, mpw_str( "Invalid site algorithm: %s: %u", siteName, algorithm ) };
+            mpw_marshal_error( file, MPMarshalErrorIllegal, "Invalid site algorithm: %s: %u", siteName, algorithm );
             mpw_free( &masterKey, MPMasterKeySize );
             mpw_marshal_user_free( &user );
             return NULL;
         }
         MPCounterValue siteCounter = mpw_default_n( MPCounterValueDefault, mpw_marshal_data_get_num( siteData, "counter", NULL ) );
         if (siteCounter < MPCounterValueFirst || siteCounter > MPCounterValueLast) {
-            file->error = (MPMarshalError){ MPMarshalErrorIllegal, mpw_str( "Invalid site counter: %s: %d", siteName, siteCounter ) };
+            mpw_marshal_error( file, MPMarshalErrorIllegal, "Invalid site counter: %s: %d", siteName, siteCounter );
             mpw_free( &masterKey, MPMasterKeySize );
             mpw_marshal_user_free( &user );
             return NULL;
         }
         MPResultType siteType = mpw_default_n( user->defaultType, mpw_marshal_data_get_num( siteData, "type", NULL ) );
         if (!mpw_type_short_name( siteType )) {
-            file->error = (MPMarshalError){ MPMarshalErrorIllegal, mpw_str( "Invalid site type: %s: %u", siteName, siteType ) };
+            mpw_marshal_error( file, MPMarshalErrorIllegal, "Invalid site type: %s: %u", siteName, siteType );
             mpw_free( &masterKey, MPMasterKeySize );
             mpw_marshal_user_free( &user );
             return NULL;
@@ -1211,7 +1218,7 @@ MPMarshalledUser *mpw_marshal_auth(
         const char *siteResultState = mpw_marshal_data_get_str( siteData, "password", NULL );
         MPResultType siteLoginType = mpw_default_n( MPResultTypeTemplateName, mpw_marshal_data_get_num( siteData, "login_type", NULL ) );
         if (!mpw_type_short_name( siteLoginType )) {
-            file->error = (MPMarshalError){ MPMarshalErrorIllegal, mpw_str( "Invalid site login type: %s: %u", siteName, siteLoginType ) };
+            mpw_marshal_error( file, MPMarshalErrorIllegal, "Invalid site login type: %s: %u", siteName, siteLoginType );
             mpw_free( &masterKey, MPMasterKeySize );
             mpw_marshal_user_free( &user );
             return NULL;
@@ -1221,7 +1228,7 @@ MPMarshalledUser *mpw_marshal_auth(
         str_lastUsed = mpw_marshal_data_get_str( siteData, "last_used", NULL );
         time_t siteLastUsed = mpw_timegm( str_lastUsed );
         if (!siteLastUsed) {
-            file->error = (MPMarshalError){ MPMarshalErrorIllegal, mpw_str( "Invalid site last used: %s: %s", siteName, str_lastUsed ) };
+            mpw_marshal_error( file, MPMarshalErrorIllegal, "Invalid site last used: %s: %s", siteName, str_lastUsed );
             mpw_free( &masterKey, MPMasterKeySize );
             mpw_marshal_user_free( &user );
             return NULL;
@@ -1231,7 +1238,7 @@ MPMarshalledUser *mpw_marshal_auth(
 
         MPMarshalledSite *site = mpw_marshal_site( user, siteName, siteType, siteCounter, algorithm );
         if (!site) {
-            file->error = (MPMarshalError){ MPMarshalErrorInternal, "Couldn't allocate a new site." };
+            mpw_marshal_error( file, MPMarshalErrorInternal, "Couldn't allocate a new site." );
             mpw_free( &masterKey, MPMasterKeySize );
             mpw_marshal_user_free( &user );
             return NULL;
@@ -1245,10 +1252,7 @@ MPMarshalledUser *mpw_marshal_auth(
             // Clear Text
             mpw_free( &masterKey, MPMasterKeySize );
             if (!masterKeyProvider || !(masterKey = masterKeyProvider( site->algorithm, user->fullName ))) {
-                file->error = (MPMarshalError){
-                        MPMarshalErrorInternal,
-                        "Couldn't derive master key."
-                };
+                mpw_marshal_error( file, MPMarshalErrorInternal, "Couldn't derive master key." );
                 mpw_free( &masterKey, MPMasterKeySize );
                 mpw_marshal_user_free( &user );
                 return NULL;

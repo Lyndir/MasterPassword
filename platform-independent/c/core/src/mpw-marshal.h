@@ -246,6 +246,10 @@ MPMarshalledQuestion *mpw_marshal_question(
  * @return The given file or new (allocated) if file is NULL; or NULL if the user is missing or the file couldn't be allocated. */
 MPMarshalledFile *mpw_marshal_file(
         MPMarshalledFile *file, MPMarshalledInfo *info, MPMarshalledData *data);
+/** Record a marshal error.
+ * @return The given file or new (allocated) if file is NULL; or NULL if the file couldn't be allocated. */
+MPMarshalledFile *mpw_marshal_error(
+        MPMarshalledFile *file, MPMarshalErrorType type, const char *format, ...);
 
 //// Disposing.
 
