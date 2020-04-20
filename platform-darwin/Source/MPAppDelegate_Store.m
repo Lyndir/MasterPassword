@@ -563,50 +563,46 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
 
     // Read metadata for the import file.
     MPMarshalledFile *file = mpw_marshal_read( NULL, importData.UTF8String );
-    if (!file)
-        return MPError( ([NSError errorWithDomain:MPErrorDomain code:MPErrorMarshalCode userInfo:@{
-                @"type"                  : @(MPMarshalErrorInternal),
-                NSLocalizedDescriptionKey: @"Could not process Master Password import data.",
-        }]), @"While importing sites." );
-    if (file->error.type != MPMarshalSuccess) {
-        MPMarshalErrorType type = file->error.type;
-        mpw_marshal_file_free( &file );
-        return MPError( ([NSError errorWithDomain:MPErrorDomain code:MPErrorMarshalCode userInfo:@{
-                @"type"                  : @(type),
-                NSLocalizedDescriptionKey: @"Could not parse Master Password import data.",
-        }]), @"While importing sites." );
-    }
-    if (file->info->format == MPMarshalFormatNone) {
-        mpw_marshal_file_free( &file );
-        return MPError( ([NSError errorWithDomain:MPErrorDomain code:MPErrorMarshalCode userInfo:@{
-                @"type"                  : @(MPMarshalErrorFormat),
-                NSLocalizedDescriptionKey: @"This is not a Master Password import file.",
-        }]), @"While importing sites." );
-    }
-
-    // Get master password for import file.
-    MPKey *importKey;
-    NSString *importMasterPassword;
-    do {
-        importMasterPassword = askImportPassword( @(file->info->fullName) );
-        if (!importMasterPassword) {
-            inf( @"Import cancelled." );
-            mpw_marshal_file_free( &file );
-            return MPError( ([NSError errorWithDomain:NSCocoaErrorDomain code:NSUserCancelledError userInfo:nil]), @"" );
+    MPMarshalledUser *importUser = nil;
+    @try {
+        if (!file)
+            return MPError( ([NSError errorWithDomain:MPErrorDomain code:MPErrorMarshalCode userInfo:@{
+                    @"type"                  : @(MPMarshalErrorInternal),
+                    NSLocalizedDescriptionKey: @"Could not process Master Password import data.",
+            }]), @"While importing sites." );
+        if (file->error.type != MPMarshalSuccess) {
+            return MPError( ([NSError errorWithDomain:MPErrorDomain code:MPErrorMarshalCode userInfo:@{
+                    @"type"                  : @(file->error.type),
+                    NSLocalizedDescriptionKey: strf( @"Could not parse Master Password import data:\n%@", @(file->error.message) ),
+            }]), @"While importing sites." );
+        }
+        if (file->info->format == MPMarshalFormatNone) {
+            return MPError( ([NSError errorWithDomain:MPErrorDomain code:MPErrorMarshalCode userInfo:@{
+                    @"type"                  : @(MPMarshalErrorFormat),
+                    NSLocalizedDescriptionKey: @"This is not a Master Password import file.",
+            }]), @"While importing sites." );
         }
 
-        importKey = [[MPKey alloc] initForFullName:@(file->info->fullName) withMasterPassword:importMasterPassword];
-    } while ([[[importKey keyIDForAlgorithm:MPAlgorithmForVersion( file->info->algorithm )] encodeHex]
-                     caseInsensitiveCompare:@(file->info->keyID)] != NSOrderedSame);
+        // Get master password for import file.
+        MPKey *importKey;
+        NSString *importMasterPassword;
+        do {
+            importMasterPassword = askImportPassword( @(file->info->fullName) );
+            if (!importMasterPassword) {
+                inf( @"Import cancelled." );
+                return MPError( ([NSError errorWithDomain:NSCocoaErrorDomain code:NSUserCancelledError userInfo:nil]), @"" );
+            }
 
-    // Parse import data.
-    MPMarshalledUser *importUser = mpw_marshal_auth( file, mpw_masterKeyProvider_str( importMasterPassword.UTF8String ) );
+            importKey = [[MPKey alloc] initForFullName:@(file->info->fullName) withMasterPassword:importMasterPassword];
+        } while ([[[importKey keyIDForAlgorithm:MPAlgorithmForVersion( file->info->algorithm )] encodeHex]
+                         caseInsensitiveCompare:@(file->info->keyID)] != NSOrderedSame);
 
-    @try {
+        // Parse import data.
+        importUser = mpw_marshal_auth( file, mpw_masterKeyProvider_str( importMasterPassword.UTF8String ) );
         if (!importUser || file->error.type != MPMarshalSuccess)
             return MPError( ([NSError errorWithDomain:MPErrorDomain code:MPErrorMarshalCode userInfo:@{
                     @"type"                  : @(file->error.type),
-                    NSLocalizedDescriptionKey: @(file->error.message),
+                    NSLocalizedDescriptionKey: strf( @"Could not authenticate Master Password import:\n%@", @(file->error.message) ),
             }]), @"While importing sites." );
 
         // Find an existing user to update.
