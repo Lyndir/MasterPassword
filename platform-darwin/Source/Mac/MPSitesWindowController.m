@@ -394,7 +394,52 @@
     }];
 }
 
-- (IBAction)changeType:(id)sender {
+- (IBAction)changeDefaultType:(id)sender {
+
+    MPSiteModel *site = self.selectedSite;
+    MPUserEntity *user = [MPMacAppDelegate get].activeUserForMainThread;
+    NSArray *types = [user.algorithm allTypes];
+    [self.passwordTypesMatrix renewRows:(NSInteger)[types count] columns:1];
+    for (NSUInteger t = 0; t < [types count]; ++t) {
+        MPResultType type = (MPResultType)[types[t] unsignedIntegerValue];
+        NSString *title = [user.algorithm nameOfType:type];
+        if (type & MPResultTypeClassTemplate)
+            title = strf( @"%@ – %@", [user.algorithm mpwTemplateForSiteNamed:site.name?: @"masterpassword.app" ofType:type
+                                                                  withCounter:site.counter?: MPCounterValueDefault
+                                                                     usingKey:[MPMacAppDelegate get].key], title );
+
+        NSButtonCell *cell = [self.passwordTypesMatrix cellAtRow:(NSInteger)t column:0];
+        cell.tag = type;
+        cell.state = type == site.type? NSOnState: NSOffState;
+        cell.title = title;
+    }
+
+    self.passwordTypesBox.title = strf( @"Choose a password type for new sites of %@:", user.name );
+
+    NSAlert *alert = [NSAlert new];
+    [alert addButtonWithTitle:@"Save"];
+    [alert addButtonWithTitle:@"Cancel"];
+    [alert setMessageText:@"Change Default Type"];
+    [alert setAccessoryView:self.passwordTypesBox];
+    [alert layout];
+    [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
+        switch (returnCode) {
+            case NSAlertFirstButtonReturn: {
+                // "Save" button.
+                MPResultType type = (MPResultType)[self.passwordTypesMatrix.selectedCell tag];
+                [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+                    [[MPMacAppDelegate get] activeUserInContext:context].defaultType = type;
+                    [context saveToStore];
+                }];
+                break;
+            }
+            default:
+                break;
+        }
+    }];
+}
+
+- (IBAction)changeSiteType:(id)sender {
 
     MPSiteModel *site = self.selectedSite;
     NSArray *types = [site.algorithm allTypes];
