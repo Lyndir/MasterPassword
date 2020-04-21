@@ -29,7 +29,6 @@
 
 #define LOGIN_HELPER_BUNDLE_ID @"com.lyndir.lhunath.MasterPassword.Mac.LoginHelper"
 
-
 @implementation MPMacAppDelegate
 
 #pragma clang diagnostic push
@@ -134,7 +133,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 #if DEBUG
         countlyConfig.enableDebug = YES;
         countlyConfig.pushTestMode = CLYPushTestModeDevelopment;
-#elif ! PUBLIC
+#elif !PUBLIC
         countlyConfig.enableDebug = NO;
         countlyConfig.pushTestMode = CLYPushTestModeTestFlightOrAdHoc;
 #endif
@@ -205,7 +204,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         [NSApp activateIgnoringOtherApps:YES];
     }
 
-    [self enableNotifications];
+    [self tryNotifications];
 }
 
 - (void)applicationWillResignActive:(NSNotification *)notification {
@@ -231,7 +230,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     return NSTerminateNow;
 }
 
-- (void)enableNotifications {
+- (void)tryNotifications {
 
     [Countly.sharedInstance giveConsentForFeature:CLYConsentPushNotifications];
     if (@available( macOS 10.14, * )) {
@@ -250,18 +249,19 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (void)askNotifications {
 
+    if ([[MPMacConfig get].notificationsDecided boolValue])
+        return;
+
     PearlMainQueue( ^{
-        if (![[NSUserDefaults standardUserDefaults] boolForKey:@"notificationsDecided"]) {
-            if (@available( macOS 10.14, * )) {
-                [Countly.sharedInstance askForNotificationPermissionWithOptions:UNAuthorizationOptionAlert completionHandler:
-                        ^(BOOL granted, NSError *error) {
-                            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"notificationsDecided"];
-                        }];
-            }
-            else {
-                [Countly.sharedInstance askForNotificationPermission];
-                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"notificationsDecided"];
-            }
+        if (@available( macOS 10.14, * )) {
+            [Countly.sharedInstance askForNotificationPermissionWithOptions:UNAuthorizationOptionAlert completionHandler:
+                    ^(BOOL granted, NSError *error) {
+                        [MPMacConfig get].notificationsDecided = @(YES);
+                    }];
+        }
+        else {
+            [Countly.sharedInstance askForNotificationPermission];
+            [MPMacConfig get].notificationsDecided = @(YES);
         }
     } );
 }
@@ -440,8 +440,8 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     NSAlert *alert = [NSAlert new];
     [alert setMessageText:@"New User"];
     [alert setInformativeText:@"To begin, enter your full name.\n\n"
-            @"IMPORTANT: Enter your name correctly, including the right capitalization, "
-            @"as you would on an official document."];
+                              @"IMPORTANT: Enter your name correctly, including the right capitalization, "
+                              @"as you would on an official document."];
     [alert addButtonWithTitle:@"Create User"];
     [alert addButtonWithTitle:@"Cancel"];
     NSTextField *nameField = [[NSTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )];
@@ -769,8 +769,12 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
     // Send info
     NSArray *countlyFeatures = @[
-            CLYConsentSessions, CLYConsentEvents, CLYConsentUserDetails, CLYConsentCrashReporting, CLYConsentViewTracking, CLYConsentStarRating
+            CLYConsentEvents, CLYConsentUserDetails, CLYConsentCrashReporting, CLYConsentViewTracking, CLYConsentStarRating
     ];
+    if ([[MPConfig get].sendInfo boolValue] || ![[MPConfig get].sendInfoDecided boolValue])
+        [Countly.sharedInstance giveConsentForFeature:CLYConsentSessions];
+    else
+        [Countly.sharedInstance cancelConsentForFeature:CLYConsentSessions];
     if ([[MPMacConfig get].sendInfo boolValue]) {
         if ([PearlLogger get].printLevel > PearlLogLevelInfo)
             [PearlLogger get].printLevel = PearlLogLevelInfo;

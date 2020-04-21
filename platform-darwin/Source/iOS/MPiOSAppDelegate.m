@@ -176,7 +176,7 @@
             if ([[MPiOSConfig get].showSetup boolValue])
                 [self.navigationController performSegueWithIdentifier:@"setup" sender:self];
 
-            [self enableNotifications];
+            [self consentFeatures];
         } );
     }
     @catch (id exception) {
@@ -229,7 +229,44 @@
     return YES;
 }
 
-- (void)enableNotifications {
+- (void)consentFeatures {
+    if ([self askDiagnostics])
+        return;
+
+    [self tryNotifications];
+}
+
+- (BOOL)askDiagnostics {
+
+    if ([[MPiOSConfig get].sendInfoDecided boolValue])
+        return NO;
+
+    PearlMainQueue( ^{
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Welcome to Master Password!" message:
+                        @"We want this experience to be top-notch.\n\n"
+                        @"We look for bugs, runtime issues, crashes & usage counters.\n"
+                        @"Needless to say, diagnostics are always scrubbed and personal details will never leave your device."
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+
+        [alert addAction:[UIAlertAction actionWithTitle:@"Disable" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+            [MPiOSConfig get].sendInfo = @(NO);
+            [MPiOSConfig get].sendInfoDecided = @(YES);
+            [self consentFeatures];
+        }]];
+        [alert addAction:[UIAlertAction actionWithTitle:@"Thanks" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [MPiOSConfig get].sendInfo = @(YES);
+            [MPiOSConfig get].sendInfoDecided = @(YES);
+            [self consentFeatures];
+        }]];
+
+        [(self.navigationController.presentedViewController?: (UIViewController *)self.navigationController)
+                presentViewController:alert animated:YES completion:nil];
+    } );
+
+    return YES;
+}
+
+- (void)tryNotifications {
 
     [Countly.sharedInstance giveConsentForFeature:CLYConsentPushNotifications];
     if (@available( iOS 12, * )) {
@@ -240,35 +277,36 @@
 
                                                           [self askNotifications];
                                                       }];
+        return;
     }
-    else {
-        [self askNotifications];
-    }
+
+    [self askNotifications];
 }
 
 - (void)askNotifications {
 
+    if ([[MPiOSConfig get].notificationsDecided boolValue])
+        return;
+
     PearlMainQueue( ^{
-        if (![[NSUserDefaults standardUserDefaults] boolForKey:@"notificationsDecided"]) {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Coming Soon" message:
-                            @"Master Password is rolling out a new modern personal security platform and we're excited to bring you along.\n\n"
-                            @"When it's time, we'll send you a notification to help you make an effortless transition."
-                                                                    preferredStyle:UIAlertControllerStyleAlert];
-            [alert addAction:[UIAlertAction actionWithTitle:@"Thanks" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                if (@available( iOS 12, * )) {
-                    [Countly.sharedInstance askForNotificationPermissionWithOptions:UNAuthorizationOptionAlert completionHandler:
-                            ^(BOOL granted, NSError *error) {
-                                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"notificationsDecided"];
-                            }];
-                }
-                else {
-                    [Countly.sharedInstance askForNotificationPermission];
-                    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"notificationsDecided"];
-                }
-            }]];
-            [(self.navigationController.presentedViewController?: (UIViewController *)self.navigationController)
-                    presentViewController:alert animated:YES completion:nil];
-        }
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Coming Soon" message:
+                        @"Master Password is rolling out a new modern personal security platform and we're excited to bring you along.\n\n"
+                        @"When it's time, we'll send you a notification to help you make an effortless transition."
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"Thanks" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            if (@available( iOS 12, * )) {
+                [Countly.sharedInstance askForNotificationPermissionWithOptions:UNAuthorizationOptionAlert completionHandler:
+                        ^(BOOL granted, NSError *error) {
+                            [MPiOSConfig get].notificationsDecided = @(YES);
+                        }];
+            }
+            else {
+                [Countly.sharedInstance askForNotificationPermission];
+                [MPiOSConfig get].notificationsDecided = @(YES);
+            }
+        }]];
+        [(self.navigationController.presentedViewController?: (UIViewController *)self.navigationController)
+                presentViewController:alert animated:YES completion:nil];
     } );
 }
 
@@ -643,8 +681,12 @@
 
     // Send info
     NSArray *countlyFeatures = @[
-            CLYConsentSessions, CLYConsentEvents, CLYConsentUserDetails, CLYConsentCrashReporting, CLYConsentViewTracking, CLYConsentStarRating
+            CLYConsentEvents, CLYConsentUserDetails, CLYConsentCrashReporting, CLYConsentViewTracking, CLYConsentStarRating
     ];
+    if ([[MPConfig get].sendInfo boolValue] || ![[MPConfig get].sendInfoDecided boolValue])
+        [Countly.sharedInstance giveConsentForFeature:CLYConsentSessions];
+    else
+        [Countly.sharedInstance cancelConsentForFeature:CLYConsentSessions];
     if ([[MPConfig get].sendInfo boolValue]) {
         if ([PearlLogger get].printLevel > PearlLogLevelInfo)
             [PearlLogger get].printLevel = PearlLogLevelInfo;
