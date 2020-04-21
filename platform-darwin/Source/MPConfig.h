@@ -23,11 +23,11 @@
 @property(nonatomic, retain) NSNumber *sendInfo;
 @property(nonatomic, retain) NSNumber *sendInfoDecided;
 @property(nonatomic, retain) NSNumber *notificationsDecided;
+
 @property(nonatomic, retain) NSNumber *rememberLogin;
 @property(nonatomic, retain) NSNumber *hidePasswords;
+@property(nonatomic, strong) NSNumber *siteAttacker;
 
 @property(nonatomic, retain) NSNumber *checkInconsistency;
-
-@property(nonatomic, strong) NSNumber *siteAttacker;
 
 @end

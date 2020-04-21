@@ -21,7 +21,7 @@
 
 @implementation MPConfig
 
-@dynamic sendInfo, rememberLogin, checkInconsistency, hidePasswords, siteAttacker;
+@dynamic sendInfo, sendInfoDecided, notificationsDecided, rememberLogin, hidePasswords, siteAttacker, checkInconsistency;
 
 - (id)init {
 

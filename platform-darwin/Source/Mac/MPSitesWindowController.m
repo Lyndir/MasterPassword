@@ -61,11 +61,7 @@
                     [alert addButtonWithTitle:@"Thanks!"];
                     [alert addButtonWithTitle:@"Disable"];
                     [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
-                        BOOL sendInfo = returnCode != NSAlertSecondButtonReturn;
-                        [[Countly sharedInstance] recordEvent:@"sendInfoDecided" segmentation:@{
-                                @"sendInfo": [@(sendInfo) description],
-                        }];
-                        [MPMacConfig get].sendInfo = @(sendInfo);
+                        [MPMacConfig get].sendInfo = @(returnCode != NSAlertSecondButtonReturn);
                         [MPMacConfig get].sendInfoDecided = @(YES);
                     }];
                 }
