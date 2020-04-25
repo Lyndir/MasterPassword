@@ -17,15 +17,22 @@
 //==============================================================================
 
 #import <UIKit/UIKit.h>
+#import <StoreKit/StoreKit.h>
 
 #import "MPAppDelegate_Shared.h"
 
-@interface MPiOSAppDelegate : MPAppDelegate_Shared
+@interface MPiOSAppDelegate : MPAppDelegate_Shared <SKStoreProductViewControllerDelegate>
+
+@property(nonatomic, strong) SKStoreProductViewController *voltoViewController;
+
+- (void)openURL:(NSURL *)url;
 
 - (void)showFeedbackWithLogs:(BOOL)logs forVC:(UIViewController *)viewController;
 - (void)openFeedbackWithLogs:(BOOL)logs forVC:(UIViewController *)viewController;
 
 - (void)showExportForVC:(UIViewController *)viewController;
+- (void)migrateFor:(MPUserEntity *)user;
+
 - (void)changeMasterPasswordFor:(MPUserEntity *)user saveInContext:(NSManagedObjectContext *)moc didResetBlock:(void ( ^ )(void))didReset;
 
 @end

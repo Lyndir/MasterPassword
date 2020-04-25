@@ -18,6 +18,7 @@
 
 #import "MPNavigationController.h"
 #import "MPWebViewController.h"
+#import "MPiOSAppDelegate.h"
 
 @implementation MPNavigationController
 
@@ -27,6 +28,16 @@
 
     if ([[MPiOSConfig get].showSetup boolValue])
         [self performSegueWithIdentifier:@"setup" sender:self];
+}
+
+- (void)performSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
+
+    if ([identifier isEqualToString:@"web"] && [[(NSURL *)sender scheme] isEqualToString:@"masterpassword"]) {
+        [[MPiOSAppDelegate get] openURL:sender];
+        return;
+    }
+
+    [super performSegueWithIdentifier:identifier sender:sender];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

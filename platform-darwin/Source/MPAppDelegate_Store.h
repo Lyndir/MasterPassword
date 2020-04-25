@@ -39,8 +39,9 @@
             askImportPassword:(NSString *( ^ )(NSString *userName))importPassword
               askUserPassword:(NSString *( ^ )(NSString *userName))userPassword
                        result:(void ( ^ )(NSError *error))resultBlock;
-- (void)exportSitesRevealPasswords:(BOOL)revealPasswords
-                 askExportPassword:(NSString *( ^ )(NSString *userName))askImportPassword
-                            result:(void ( ^ )(NSString *exportedUser, NSError *error))resultBlock;
+- (NSString *)exportSitesFor:(MPUserEntity *)user
+             revealPasswords:(BOOL)revealPasswords
+           askExportPassword:(NSString *( ^ )(NSString *userName))askExportPassword
+                       error:(__autoreleasing NSError **)error;
 
 @end

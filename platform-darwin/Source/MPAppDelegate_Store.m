@@ -704,16 +704,17 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
     site.lastUsed = [NSDate dateWithTimeIntervalSince1970:importSite->lastUsed];
 }
 
-- (void)exportSitesRevealPasswords:(BOOL)revealPasswords
-                 askExportPassword:(NSString *( ^ )(NSString *userName))askImportPassword
-                            result:(void ( ^ )(NSString *exportedUser, NSError *error))resultBlock {
+- (NSString *)exportSitesFor:(MPUserEntity *)user
+             revealPasswords:(BOOL)revealPasswords
+           askExportPassword:(NSString *( ^ )(NSString *userName))askExportPassword
+                       error:(__autoreleasing NSError **)error {
 
-    [MPAppDelegate_Shared managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-        MPUserEntity *user = [self activeUserInContext:context];
-
+    MPMarshalledUser *exportUser = NULL;
+    MPMarshalledFile *exportFile = NULL;
+    @try {
         inf( @"Exporting sites, %@, for user: %@", revealPasswords? @"revealing passwords": @"omitting passwords", user.userID );
-        MPMarshalledUser *exportUser = mpw_marshal_user( user.name.UTF8String,
-                mpw_masterKeyProvider_str( askImportPassword( user.name ).UTF8String ), user.algorithm.version );
+        exportUser = mpw_marshal_user( user.name.UTF8String,
+                mpw_masterKeyProvider_str( askExportPassword( user.name ).UTF8String ), user.algorithm.version );
         exportUser->redacted = !revealPasswords;
         exportUser->avatar = (unsigned int)user.avatar;
         exportUser->keyID = mpw_strdup( [user.keyID encodeHex].UTF8String );
@@ -737,22 +738,26 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
                 mpw_marshal_question( exportSite, siteQuestion.keyword.UTF8String );
         }
 
-        MPMarshalledFile *exportFile = NULL;
         const char *export = mpw_marshal_write( MPMarshalFormatDefault, &exportFile, exportUser );
         NSString *exportedUser = nil;
         if (export && exportFile && exportFile->error.type == MPMarshalSuccess)
             exportedUser = [NSString stringWithCString:export encoding:NSUTF8StringEncoding];
         mpw_free_string( &export );
 
-        resultBlock( exportedUser, exportFile && exportFile->error.type == MPMarshalSuccess? nil:
-                                   [NSError errorWithDomain:MPErrorDomain code:MPErrorMarshalCode userInfo:@{
-                                      @"type"                  : @(exportFile? exportFile->error.type: MPMarshalErrorInternal),
-                                      NSLocalizedDescriptionKey: @(exportFile? exportFile->error.message: nil),
-                              }] );
+        if (error)
+            *error = exportFile && exportFile->error.type == MPMarshalSuccess? nil:
+                     [NSError errorWithDomain:MPErrorDomain code:MPErrorMarshalCode userInfo:@{
+                             @"type"                  : @(exportFile? exportFile->error.type: MPMarshalErrorInternal),
+                             NSLocalizedDescriptionKey: @(exportFile? exportFile->error.message: nil),
+                     }];
+
+        return exportedUser;
+    }
+    @finally {
         mpw_marshal_file_free( &exportFile );
         mpw_marshal_user_free( &exportUser );
         mpw_masterKeyProvider_free();
-    }];
+    }
 }
 
 @end

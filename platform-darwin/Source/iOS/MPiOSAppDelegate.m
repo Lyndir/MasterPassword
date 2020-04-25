@@ -35,7 +35,7 @@
 @implementation CountlyPushNotifications(MPNotifications)
 
 - (void)openURL:(NSString *)URLString {
-    [UIApp.keyWindow.rootViewController performSegueWithIdentifier:@"web" sender:[NSURL URLWithString:URLString]];
+    [[MPiOSAppDelegate get].navigationController performSegueWithIdentifier:@"web" sender:[NSURL URLWithString:URLString]];
 }
 
 @end
@@ -186,7 +186,26 @@
             }
         } );
 
+        SKStoreProductViewController *migrateVC = [SKStoreProductViewController new];
+        [migrateVC loadProductWithParameters:@{
+                SKStoreProductParameterCampaignToken       : @"app-masterpassword.ios", /* Campaign:    From MasterPassword iOS */
+                SKStoreProductParameterProviderToken       : @153897, /*                   Provider:    Maarten Billemont */
+                SKStoreProductParameterITunesItemIdentifier: @510296984, /*                Application: MasterPassword iOS */
+                //SKStoreProductParameterITunesItemIdentifier: @1500430196, /*             Application: Volto iOS */
+        }                                   completionBlock:^(BOOL result, NSError *error) {
+            if (error)
+                err( @"Failed loading Volto product information: %@", error );
+
+                if (result) {
+                    self.voltoViewController = migrateVC;
+                    self.voltoViewController.delegate = self;
+                } else {
+                    self.voltoViewController = nil;
+                }
+        }];
+
         PearlMainQueueOperation( ^{
+            [self.navigationController performSegueWithIdentifier:@"web" sender:[NSURL URLWithString:@"masterpassword://foo?bar=quux"]];
             if ([[MPiOSConfig get].showSetup boolValue])
                 [self.navigationController performSegueWithIdentifier:@"setup" sender:self];
 
@@ -206,6 +225,12 @@
     // No URL?
     if (!url)
         return NO;
+
+    // masterpassword: URLs.
+    if ([url.scheme isEqualToString:@"masterpassword"]) {
+        [self openURL:url];
+        return YES;
+    }
 
     // Arbitrary URL to mpsites data.
     [[[NSURLSession sharedSession] dataTaskWithURL:url completionHandler:
@@ -444,6 +469,42 @@
 
 #pragma mark - Behavior
 
+- (void)openURL:(NSURL *)url {
+    if ([url.scheme isEqualToString:@"masterpassword"]) {
+        if ([url.host isEqualToString:@"open-url"]) {
+            for (NSURLQueryItem *item in [NSURLComponents componentsWithString:[url absoluteString]].queryItems)
+                if ([item.name isEqualToString:@"url"]) {
+                    [UIApp openURL:[NSURL URLWithString:item.value]];
+                    return;
+                }
+        }
+        else if ([url.host isEqualToString:@"show-url"]) {
+            for (NSURLQueryItem *item in [NSURLComponents componentsWithString:[url absoluteString]].queryItems)
+                if ([item.name isEqualToString:@"url"]) {
+                    [[MPiOSAppDelegate get].navigationController performSegueWithIdentifier:@"web" sender:[NSURL URLWithString:item.value]];
+                    return;
+                }
+        }
+        else if ([url.host isEqualToString:@"migrate"]) {
+            for (NSURLQueryItem *item in [NSURLComponents componentsWithString:[url absoluteString]].queryItems)
+                if ([item.name isEqualToString:@"fullName"]) {
+                    [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+                        NSFetchRequest
+                                *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPUserEntity class] )];
+                        fetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@", item.value];
+                        NSArray *users = [context executeFetchRequest:fetchRequest error:nil];
+                        [self migrateFor:users.firstObject];
+                    }];
+                    return;
+                }
+
+            [self migrateFor:nil];
+            return;
+        }
+    } else
+        [UIApp openURL:url];
+}
+
 - (void)showFeedbackWithLogs:(BOOL)logs forVC:(UIViewController *)viewController {
 
     if (![PearlEMail canSendMail]) {
@@ -564,89 +625,162 @@
         return;
     }
 
-    [self exportSitesRevealPasswords:revealPasswords askExportPassword:^NSString *(NSString *userName) {
-        return PearlAwait( ^(void (^setResult)(id)) {
-            PearlMainQueue( ^{
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:strf( @"Master Password For:\n%@", userName )
-                                                                               message:@"Enter your master password to export the user."
-                                                                        preferredStyle:UIAlertControllerStyleAlert];
-                [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
-                    textField.secureTextEntry = YES;
-                }];
-                [alert addAction:[UIAlertAction actionWithTitle:@"Export" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                    setResult( alert.textFields.firstObject.text );
-                }]];
-                [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-                    setResult( nil );
-                }]];
-                [self.navigationController presentViewController:alert animated:YES completion:nil];
+    [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+        NSError *error = nil;
+        NSString *exportedUser = [self exportSitesFor:[self activeUserInContext:context] revealPasswords:revealPasswords askExportPassword:^NSString *(NSString *userName) {
+            return PearlAwait( ^(void (^setResult)(id)) {
+                PearlMainQueue( ^{
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:strf( @"Master Password For:\n%@", userName )
+                                                                                   message:@"Enter your master password to export the user."
+                                                                            preferredStyle:UIAlertControllerStyleAlert];
+                    [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+                        textField.secureTextEntry = YES;
+                    }];
+                    [alert addAction:[UIAlertAction actionWithTitle:@"Export" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                        setResult( alert.textFields.firstObject.text );
+                    }]];
+                    [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+                        setResult( nil );
+                    }]];
+                    [self.navigationController presentViewController:alert animated:YES completion:nil];
+                } );
             } );
-        } );
-    }                         result:^(NSString *exportedUser, NSError *error) {
-        if (!exportedUser || error) {
-            MPError( error, @"Failed to export mpsites." );
-            PearlMainQueue( ^{
+        } error:&error];
+
+        PearlMainQueue( ^{
+            if (!exportedUser || error) {
+                MPError( error, @"Failed to export mpsites." );
                 UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Export Error" message:[error localizedDescription]
                                                                         preferredStyle:UIAlertControllerStyleAlert];
                 [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleCancel handler:nil]];
                 [self.navigationController presentViewController:alert animated:YES completion:nil];
-            } );
+                return;
+            }
+
+            NSDateFormatter *exportDateFormatter = [NSDateFormatter new];
+            [exportDateFormatter setDateFormat:@"yyyy'-'MM'-'dd"];
+            NSString *exportFileName = strf( @"%@ (%@).mpsites",
+                    [self activeUserForMainThread].name, [exportDateFormatter stringFromDate:[NSDate date]] );
+
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Export Destination" message:nil
+                                                                    preferredStyle:UIAlertControllerStyleActionSheet];
+            [alert addAction:[UIAlertAction actionWithTitle:@"Send As E-Mail" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                NSString *message;
+                if (revealPasswords)
+                    message = strf( @"Export of Master Password sites with passwords included.\n\n"
+                                    @"REMINDER: Make sure nobody else sees this file!  Passwords are visible!\n\n\n"
+                                    @"--\n"
+                                    @"%@\n"
+                                    @"Master Password %@, build %@",
+                            [self activeUserForMainThread].name,
+                            [PearlInfoPlist get].CFBundleShortVersionString,
+                            [PearlInfoPlist get].CFBundleVersion );
+                else
+                    message = strf( @"Backup of Master Password sites.\n\n\n"
+                                    @"--\n"
+                                    @"%@\n"
+                                    @"Master Password %@, build %@",
+                            [self activeUserForMainThread].name,
+                            [PearlInfoPlist get].CFBundleShortVersionString,
+                            [PearlInfoPlist get].CFBundleVersion );
+
+                [PearlEMail sendEMailTo:nil fromVC:viewController subject:@"Master Password Export" body:message
+                            attachments:[[PearlEMailAttachment alloc] initWithContent:[exportedUser dataUsingEncoding:NSUTF8StringEncoding]
+                                                                             mimeType:@"text/plain"
+                                                                             fileName:exportFileName], nil];
+                return;
+            }]];
+            [alert addAction:[UIAlertAction actionWithTitle:@"Share / Export" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                NSURL *applicationSupportURL = [[[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory
+                                                                                       inDomains:NSUserDomainMask] lastObject];
+                NSURL *exportURL = [[applicationSupportURL
+                        URLByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier isDirectory:YES]
+                        URLByAppendingPathComponent:exportFileName isDirectory:NO];
+                NSError *writeError = nil;
+                if (![[exportedUser dataUsingEncoding:NSUTF8StringEncoding]
+                        writeToURL:exportURL options:NSDataWritingFileProtectionComplete error:&writeError])
+                    MPError( writeError, @"Failed to write export data to URL %@.", exportURL );
+                else {
+                    self.interactionController = [UIDocumentInteractionController interactionControllerWithURL:exportURL];
+                    self.interactionController.UTI = @"com.lyndir.masterpassword.sites";
+                    self.interactionController.delegate = self;
+                    [self.interactionController presentOpenInMenuFromRect:CGRectZero inView:viewController.view animated:YES];
+                }
+            }]];
+            [alert addAction:[UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleCancel handler:nil]];
+            [self.navigationController presentViewController:alert animated:YES completion:nil];
+        } );
+    }];
+}
+
+- (void)migrateFor:(MPUserEntity *)user {
+
+    if ([UIApp canOpenURL:[[NSURL alloc] initWithString:@"volto:"]]) {
+        if (!user) {
+            [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+                NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPUserEntity class] )];
+                NSArray *users = [context executeFetchRequest:fetchRequest error:nil];
+                if (![users count])
+                    return;
+
+                UIAlertController *usersSheet = [UIAlertController alertControllerWithTitle:@"Migrate User"
+                                                                                    message:@"Choose a user to migrate out to Volto."
+                                                                             preferredStyle:UIAlertControllerStyleActionSheet];
+                [usersSheet addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+                for (MPUserEntity *user_ in users)
+                    [usersSheet addAction:[UIAlertAction actionWithTitle:user_.name style:UIAlertActionStyleDefault handler:
+                            ^(UIAlertAction *action) { [self migrateFor:user_]; }]];
+
+                PearlMainQueue( ^{
+                    [self.navigationController presentViewController:usersSheet animated:YES completion:nil];
+                } );
+            }];
             return;
         }
 
-        NSDateFormatter *exportDateFormatter = [NSDateFormatter new];
-        [exportDateFormatter setDateFormat:@"yyyy'-'MM'-'dd"];
-        NSString *exportFileName = strf( @"%@ (%@).mpsites",
-                [self activeUserForMainThread].name, [exportDateFormatter stringFromDate:[NSDate date]] );
+        [MPAppDelegate_Shared managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+            NSError *error = nil;
+            NSString *exportedUser = [[MPAppDelegate_Shared get] exportSitesFor:[MPUserEntity existingObjectWithID:user.objectID inContext:context]
+                                                                revealPasswords:NO askExportPassword:^NSString *(NSString *userName) {
+                        return PearlAwait( ^(void (^setResult)(id)) {
+                            PearlMainQueue( ^{
+                                UIAlertController *alert = [UIAlertController alertControllerWithTitle:strf( @"Master Password For:\n%@", userName )
+                                                                                               message:@"Enter your master password to export the user."
+                                                                                        preferredStyle:UIAlertControllerStyleAlert];
+                                [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+                                    textField.secureTextEntry = YES;
+                                }];
+                                [alert addAction:[UIAlertAction actionWithTitle:@"Export" style:UIAlertActionStyleDefault handler:
+                                        ^(UIAlertAction *action) { setResult( alert.textFields.firstObject.text ); }]];
+                                [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:
+                                        ^(UIAlertAction *action) { setResult( nil ); }]];
+                                [self.navigationController presentViewController:alert animated:YES completion:nil];
+                            } );
+                        } );
+                    } error:&error];
 
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Export Destination" message:nil
-                                                                preferredStyle:UIAlertControllerStyleActionSheet];
-        [alert addAction:[UIAlertAction actionWithTitle:@"Send As E-Mail" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            NSString *message;
-            if (revealPasswords)
-                message = strf( @"Export of Master Password sites with passwords included.\n\n"
-                                @"REMINDER: Make sure nobody else sees this file!  Passwords are visible!\n\n\n"
-                                @"--\n"
-                                @"%@\n"
-                                @"Master Password %@, build %@",
-                        [self activeUserForMainThread].name,
-                        [PearlInfoPlist get].CFBundleShortVersionString,
-                        [PearlInfoPlist get].CFBundleVersion );
-            else
-                message = strf( @"Backup of Master Password sites.\n\n\n"
-                                @"--\n"
-                                @"%@\n"
-                                @"Master Password %@, build %@",
-                        [self activeUserForMainThread].name,
-                        [PearlInfoPlist get].CFBundleShortVersionString,
-                        [PearlInfoPlist get].CFBundleVersion );
+            PearlMainQueue( ^{
+                if (!exportedUser || error) {
+                    MPError( error, @"Failed to export user." );
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Export Error"
+                                                                                   message:[error localizedDescription]
+                                                                            preferredStyle:UIAlertControllerStyleAlert];
+                    [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleCancel handler:nil]];
+                    [self.navigationController presentViewController:alert animated:YES completion:nil];
+                    return;
+                }
 
-            [PearlEMail sendEMailTo:nil fromVC:viewController subject:@"Master Password Export" body:message
-                        attachments:[[PearlEMailAttachment alloc] initWithContent:[exportedUser dataUsingEncoding:NSUTF8StringEncoding]
-                                                                         mimeType:@"text/plain"
-                                                                         fileName:exportFileName], nil];
-            return;
-        }]];
-        [alert addAction:[UIAlertAction actionWithTitle:@"Share / Export" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            NSURL *applicationSupportURL = [[[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory
-                                                                                   inDomains:NSUserDomainMask] lastObject];
-            NSURL *exportURL = [[applicationSupportURL
-                    URLByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier isDirectory:YES]
-                    URLByAppendingPathComponent:exportFileName isDirectory:NO];
-            NSError *writeError = nil;
-            if (![[exportedUser dataUsingEncoding:NSUTF8StringEncoding]
-                    writeToURL:exportURL options:NSDataWritingFileProtectionComplete error:&writeError])
-                MPError( writeError, @"Failed to write export data to URL %@.", exportURL );
-            else {
-                self.interactionController = [UIDocumentInteractionController interactionControllerWithURL:exportURL];
-                self.interactionController.UTI = @"com.lyndir.masterpassword.sites";
-                self.interactionController.delegate = self;
-                [self.interactionController presentOpenInMenuFromRect:CGRectZero inView:viewController.view animated:YES];
-            }
-        }]];
-        [alert addAction:[UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleCancel handler:nil]];
-        [self.navigationController presentViewController:alert animated:YES completion:nil];
-    }];
+                NSURLComponents *components = [NSURLComponents new];
+                components.scheme = @"volto";
+                components.path = @"import";
+                components.queryItems = @[ [[NSURLQueryItem alloc] initWithName:@"data" value:exportedUser] ];
+                [UIApp openURL:components.URL];
+            } );
+        }];
+    }
+
+    else if (self.voltoViewController)
+        [self.navigationController presentViewController:self.voltoViewController animated:YES completion:nil];
 }
 
 - (void)changeMasterPasswordFor:(MPUserEntity *)user saveInContext:(NSManagedObjectContext *)moc didResetBlock:(void ( ^ )(void))didReset {
@@ -672,6 +806,13 @@
         [alert addAction:[UIAlertAction actionWithTitle:@"Abort" style:UIAlertActionStyleCancel handler:nil]];
         [self.navigationController presentViewController:alert animated:YES completion:nil];
     } );
+}
+
+#pragma mark - SKStoreProductViewControllerDelegate
+
+- (void)productViewControllerDidFinish:(SKStoreProductViewController *)viewController {
+
+    [viewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - UIDocumentInteractionControllerDelegate

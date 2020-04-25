@@ -33,9 +33,8 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     MPPasswordsBadNameTip = 1 << 0,
 };
 
-@interface MPSitesViewController()<NSFetchedResultsControllerDelegate, SKStoreProductViewControllerDelegate>
+@interface MPSitesViewController()<NSFetchedResultsControllerDelegate>
 
-@property(nonatomic, strong) SKStoreProductViewController *voltoViewController;
 @property(nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 @property(nonatomic, strong) NSArray *fuzzyGroups;
 @property(nonatomic, strong) NSCharacterSet *siteNameAcceptableCharactersSet;
@@ -435,13 +434,6 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     }                completion:completion];
 }
 
-#pragma mark - SKStoreProductViewControllerDelegate
-
-- (void)productViewControllerDidFinish:(SKStoreProductViewController *)viewController {
-
-    [viewController dismissViewControllerAnimated:YES completion:nil];
-}
-
 #pragma mark - Actions
 
 - (IBAction)dismissPopdown:(id)sender {
@@ -454,45 +446,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 
 - (IBAction)upgradeVolto:(UIButton *)sender {
 
-    if ([UIApp canOpenURL:[[NSURL alloc] initWithString:@"volto:"]]) {
-        [[MPiOSAppDelegate get] exportSitesRevealPasswords:NO askExportPassword:^NSString *(NSString *userName) {
-            return PearlAwait( ^(void (^setResult)(id)) {
-                PearlMainQueue( ^{
-                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:strf( @"Master Password For:\n%@", userName )
-                                                                                   message:@"Enter your master password to export the user."
-                                                                            preferredStyle:UIAlertControllerStyleAlert];
-                    [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
-                        textField.secureTextEntry = YES;
-                    }];
-                    [alert addAction:[UIAlertAction actionWithTitle:@"Export" style:UIAlertActionStyleDefault handler:
-                            ^(UIAlertAction *action) { setResult( alert.textFields.firstObject.text ); }]];
-                    [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:
-                            ^(UIAlertAction *action) { setResult( nil ); }]];
-                    [self.navigationController presentViewController:alert animated:YES completion:nil];
-                } );
-            } );
-        }                                           result:^(NSString *exportedUser, NSError *error) {
-            if (!exportedUser || error) {
-                MPError( error, @"Failed to export user." );
-                PearlMainQueue( ^{
-                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Export Error"
-                                                                                   message:[error localizedDescription]
-                                                                            preferredStyle:UIAlertControllerStyleAlert];
-                    [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleCancel handler:nil]];
-                    [self.navigationController presentViewController:alert animated:YES completion:nil];
-                } );
-                return;
-            }
-
-            NSURLComponents *components = [NSURLComponents new];
-            components.scheme = @"volto";
-            components.path = @"import";
-            components.queryItems = @[ [[NSURLQueryItem alloc] initWithName:@"data" value:exportedUser] ];
-            [UIApp openURL:components.URL];
-        }];
-    }
-    else if (self.voltoViewController)
-        [self presentViewController:self.voltoViewController animated:YES completion:nil];
+    [[MPiOSAppDelegate get] migrateFor:[MPiOSAppDelegate get].activeUserForMainThread];
 }
 
 #pragma mark - Private
@@ -505,23 +459,8 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
         self.voltoMigrateAlert.visible = YES;
     }
     else {
-        self.voltoInstallAlert.visible = NO;
+        self.voltoInstallAlert.visible = [MPiOSAppDelegate get].voltoViewController != nil;
         self.voltoMigrateAlert.visible = NO;
-        self.voltoViewController = [SKStoreProductViewController new];
-        self.voltoViewController.delegate = self;
-        [self.voltoViewController loadProductWithParameters:@{
-                SKStoreProductParameterCampaignToken       : @"app-masterpassword.ios", /* Campaign:    From MasterPassword iOS */
-                SKStoreProductParameterProviderToken       : @153897, /*                   Provider:    Maarten Billemont */
-                SKStoreProductParameterITunesItemIdentifier: @510296984, /*                Application: MasterPassword iOS */
-                //SKStoreProductParameterITunesItemIdentifier: @1500430196, /*             Application: Volto iOS */
-        }                                   completionBlock:^(BOOL result, NSError *error) {
-            if (error)
-                err( @"Failed loading Volto product information: %@", error );
-
-            [UIView animateWithDuration:0.3f animations:^{
-                self.voltoInstallAlert.visible = result;
-            }];
-        }];
     }
 }
 

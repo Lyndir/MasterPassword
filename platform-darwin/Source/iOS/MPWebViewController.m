@@ -17,6 +17,7 @@
 //==============================================================================
 
 #import "MPWebViewController.h"
+#import "MPiOSAppDelegate.h"
 
 @implementation MPWebViewController
 
@@ -57,6 +58,18 @@
 
 #pragma mark - WKNavigationDelegate
 
+- (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction
+decisionHandler:(void ( ^ )(WKNavigationActionPolicy))decisionHandler {
+
+    if ([navigationAction.request.mainDocumentURL.scheme isEqualToString:@"masterpassword"]) {
+        [[MPiOSAppDelegate get] openURL:navigationAction.request.mainDocumentURL];
+        decisionHandler( WKNavigationActionPolicyCancel );
+        return;
+    }
+
+    decisionHandler( WKNavigationActionPolicyAllow );
+}
+
 - (void)webView:(WKWebView *)webView didStartProvisionalNavigation:(null_unspecified WKNavigation *)navigation {
 
     self.webNavigationItem.title = webView.URL.host;
@@ -77,7 +90,7 @@
     }
 
     [self.webNavigationItem setLeftBarButtonItem:[[UIBarButtonItem alloc]
-            initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(openURL:)]];
+            initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector( action: )]];
     [webView evaluateJavaScript:@"document.title" completionHandler:^(id o, NSError *error) {
         self.webNavigationItem.prompt = [o description];
     }];
@@ -85,7 +98,7 @@
 
 #pragma mark - Actions
 
-- (IBAction)openURL:(id)sender {
+- (IBAction)action:(id)sender {
 
     UIAlertController *controller = [UIAlertController new];
     controller.title = self.webView.URL.host;
