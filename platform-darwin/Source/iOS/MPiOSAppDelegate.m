@@ -26,6 +26,20 @@
 #import <Sentry/Sentry.h>
 #import <Countly/Countly.h>
 
+@interface CountlyPushNotifications
+@end
+
+@interface CountlyPushNotifications(MPNotifications)
+@end
+
+@implementation CountlyPushNotifications(MPNotifications)
+
+- (void)openURL:(NSString *)URLString {
+    [UIApp.keyWindow.rootViewController performSegueWithIdentifier:@"web" sender:[NSURL URLWithString:URLString]];
+}
+
+@end
+
 @interface MPiOSAppDelegate()<UIDocumentInteractionControllerDelegate>
 
 @property(nonatomic, strong) UIDocumentInteractionController *interactionController;
@@ -242,13 +256,13 @@
         return NO;
 
     PearlMainQueue( ^{
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Welcome to Master Password!" message:
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Diagnostics Opt-In" message:
                         @"We want this experience to be top-notch.\n\n"
-                        @"We look for bugs, runtime issues, crashes & usage counters.\n"
-                        @"Needless to say, diagnostics are always scrubbed and personal details will never leave your device."
+                        @"We look for bugs, sudden crashes, runtime issues & statistics.\n"
+                        @"Needless to say, diagnostics are scrubbed and personal details will never leave your device."
                                                                 preferredStyle:UIAlertControllerStyleAlert];
 
-        [alert addAction:[UIAlertAction actionWithTitle:@"Disable" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+        [alert addAction:[UIAlertAction actionWithTitle:@"Disable" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
             [MPiOSConfig get].sendInfo = @(NO);
             [MPiOSConfig get].sendInfoDecided = @(YES);
             [self consentFeatures];

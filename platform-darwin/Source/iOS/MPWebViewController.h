@@ -17,10 +17,12 @@
 //==============================================================================
 
 #import <Foundation/Foundation.h>
+#import <WebKit/WebKit.h>
 
-@interface MPWebViewController : UIViewController<UIWebViewDelegate>
+@interface MPWebViewController : UIViewController<WKNavigationDelegate>
 
-@property(nonatomic) IBOutlet UIWebView *webView;
+@property(nonatomic) IBOutlet WKWebView *webView;
+@property(nonatomic) IBOutlet UINavigationBar *webNavigationBar;
 @property(nonatomic) IBOutlet UINavigationItem *webNavigationItem;
 
 @property(nonatomic) NSURL *initialURL;

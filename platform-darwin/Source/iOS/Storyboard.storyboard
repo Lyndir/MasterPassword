@@ -69,7 +69,7 @@
                                         </collectionViewFlowLayout>
                                         <cells>
                                             <collectionViewCell opaque="NO" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MPAvatarCell" id="Zab-uQ-uk9" customClass="MPAvatarCell">
-                                                <rect key="frame" x="80" y="114.5" width="215" height="667"/>
+                                                <rect key="frame" x="80" y="115" width="215" height="667"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                                     <rect key="frame" x="0.0" y="0.0" width="215" height="667"/>
@@ -472,13 +472,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <webView contentMode="scaleToFill" scalesPageToFit="YES" suppressesIncrementalRendering="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3aB-Hk-Fgd">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
-                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                                <connections>
-                                    <outlet property="delegate" destination="Sd5-eW-Cx2" id="ePX-qz-XXR"/>
-                                </connections>
-                            </webView>
                             <navigationBar contentMode="scaleToFill" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="03x-KT-JQN">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="90"/>
                                 <items>
@@ -494,19 +487,14 @@
                         </subviews>
                         <color key="backgroundColor" red="0.12549020350000001" green="0.1411764771" blue="0.14901961389999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="3aB-Hk-Fgd" firstAttribute="top" secondItem="zXV-QC-CZm" secondAttribute="bottom" id="3Od-Xa-Ssc"/>
                             <constraint firstItem="03x-KT-JQN" firstAttribute="leading" secondItem="2Jz-8H-3nG" secondAttribute="leading" id="BAn-wU-k2A"/>
                             <constraint firstItem="03x-KT-JQN" firstAttribute="top" secondItem="zXV-QC-CZm" secondAttribute="bottom" id="JU6-uj-GA3"/>
-                            <constraint firstAttribute="bottom" secondItem="3aB-Hk-Fgd" secondAttribute="bottom" id="S01-AA-E0a"/>
                             <constraint firstAttribute="trailing" secondItem="03x-KT-JQN" secondAttribute="trailing" id="sQs-u3-M3r"/>
-                            <constraint firstItem="3aB-Hk-Fgd" firstAttribute="leading" secondItem="2Jz-8H-3nG" secondAttribute="leading" id="w1l-x3-qCi"/>
-                            <constraint firstAttribute="trailing" secondItem="3aB-Hk-Fgd" secondAttribute="trailing" id="xdJ-WF-yw0"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="gmy-ym-z4I"/>
                     <connections>
                         <outlet property="webNavigationItem" destination="Wpf-6b-UJb" id="8gM-LU-pHk"/>
-                        <outlet property="webView" destination="3aB-Hk-Fgd" id="Mie-rI-l4h"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hNt-WS-DuE" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2324,7 +2312,7 @@ Suspendisse potenti. Etiam ut nisi id augue tempor ultrices et sit amet sapien. 
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="center" image="background.png" translatesAutoresizingMaskIntoConstraints="NO" id="OsH-Mq-gpM">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" image="background.png" translatesAutoresizingMaskIntoConstraints="NO" id="OsH-Mq-gpM">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                             </imageView>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ol8-3I-X99">
@@ -2412,7 +2400,7 @@ However, it means that anyone who finds your device unlocked can do the same.</s
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="center" image="background.png" translatesAutoresizingMaskIntoConstraints="NO" id="Hrg-vp-M2J">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" image="background.png" translatesAutoresizingMaskIntoConstraints="NO" id="Hrg-vp-M2J">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                             </imageView>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fJc-xU-1xA">
@@ -3036,7 +3024,7 @@ Invested: 3.7 work hours</string>
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="center" image="background.png" translatesAutoresizingMaskIntoConstraints="NO" id="rvb-7K-MHe">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" image="background.png" translatesAutoresizingMaskIntoConstraints="NO" id="rvb-7K-MHe">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                             </imageView>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7A7-Yn-F6L">
@@ -3268,7 +3256,7 @@ Ut in geometria, prima si dederis, danda sunt omnia. Nonne igitur tibi videntur,
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Ql4-wf-T8u"/>
+        <segue reference="k2G-nL-x3l"/>
         <segue reference="GZk-I4-JyH"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

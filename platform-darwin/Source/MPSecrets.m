@@ -20,11 +20,19 @@
 #import "base64.h"
 
 // printf <secret> | openssl enc -[ed] -aes-128-cbc -a -A -K <appSecret> -iv 0
-NSString *appSecret    = @"";
-NSString *appSalt      = @"";
-NSString *sentryDSN    = @"";
-NSString *countlyKey   = @"";
-NSString *countlySalt  = @"";
+#if TARGET_OS_IOS
+NSString *appSecret    = @"946a6b12e6e6e004cc35bad1ea11478c";
+NSString *appSalt      = @"uBcsbZeTB8TfSS7dDw4yUq6wMZD/2nREvR0mqzqsNXvv9guh+62hkt99ly6QcJ5n";
+NSString *sentryDSN    = @"tmVjdMN9DpZ+0EIrrvHi44hWfaBkwrlrxjBkdeau2rDk+zlvgSdAZkAvNj7m1V+5NUR7i8Y/NumNKOaYlWJvPynEMJ4ZBvPepSbivgVvmr8=";
+NSString *countlyKey   = @"mDnMZyxwoq4ENgYnGYTzW8wsyiJQlmNKxkRLj88/nrs0mzE+zVjs6Y5LAT3+AYBB";
+NSString *countlySalt  = @"2COFsZd+4FNAU6jvI/HUu297mkZALzRIyKv5mD3vs55BHXDowh62A7FursCYS+cG";
+#elif TARGET_OS_MAC
+NSString *appSecret    = @"24fcbadccb5789b2a969c0c811f86702";
+NSString *appSalt      = @"0N1fzSanIOCb7OQ4hEshXSjwEPXAXMhPBKQJeEcYPor8FWz76IpdB8ZHa3Wyb7o9";
+NSString *sentryDSN    = @"2RbeS9wfzQEOKB9MG3EWLDe+N8iXYNtWc8tovMcBmhuMIeyAHYKqo5eclSEYyM6lA73Y7FFHqUyTLbEmOR6MAU2PtWAitLdxOZlq3VnbXjI=";
+NSString *countlyKey   = @"uiasXoQNtkPQHvpvNqEE5N/tw/F1Hnzm+4ViSJ38EMeoWGvDQPJ+Kt9zPhb8Qans";
+NSString *countlySalt  = @"/raQUNxKQdxXRR5VFmCDJdyyJE8f6SPrTO5Y4z0kJH+wCrjaZ1VvCq+JSmOsBkz2";
+#endif
 
 NSString *decrypt(NSString *secret) {
 

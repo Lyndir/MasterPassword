@@ -24,20 +24,30 @@
 
     [super viewDidLoad];
 
-    [self.webView.scrollView insetOcclusion];
+    if (!self.initialURL)
+        self.initialURL = [NSURL URLWithString:@"https://masterpassword.app"];
+    self.webNavigationItem.title = self.initialURL.host;
+
+    // WKWebView can't be on the storyboard for iOS pre 11 due to an NSCoding bug.
+    [self.view insertSubview:self.webView = [WKWebView new] atIndex:0];
+    [self.webView setNavigationDelegate:self];
+    [self.webView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.webView.topAnchor constraintEqualToAnchor:self.view.topAnchor].active = YES;
+    [self.webView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor].active = YES;
+    [self.webView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor].active = YES;
+    [self.webView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor].active = YES;
+
+    [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:self.initialURL]];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 
     [super viewWillAppear:animated];
+}
 
-    if (!self.initialURL)
-        self.initialURL = [NSURL URLWithString:@"https://masterpassword.app"];
-
-    self.webNavigationItem.title = self.initialURL.host;
-
-    self.webView.visible = NO;
-    [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:self.initialURL]];
+- (void)viewDidLayoutSubviews {
+    [self.webView.scrollView insetOcclusion];
+    [super viewDidLayoutSubviews];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
@@ -45,26 +55,12 @@
     return UIStatusBarStyleLightContent;
 }
 
-#pragma mark - UIWebViewDelegate
+#pragma mark - WKNavigationDelegate
 
-- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request
- navigationType:(UIWebViewNavigationType)navigationType {
+- (void)webView:(WKWebView *)webView didStartProvisionalNavigation:(null_unspecified WKNavigation *)navigation {
 
-    if ([[request.URL absoluteString] rangeOfString:@"thanks.lhunath.com"].location != NSNotFound) {
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"tipped.thanks"];
-        if (![[NSUserDefaults standardUserDefaults] synchronize])
-            wrn( @"Couldn't synchronize thanks tip." );
-    }
-
-    if ([request.URL isEqual:request.mainDocumentURL]) {
-        self.webNavigationItem.title = request.URL.host;
-        self.webNavigationItem.prompt = strl( @"Loading" );
-    }
-
-    return YES;
-}
-
-- (void)webViewDidStartLoad:(UIWebView *)webView {
+    self.webNavigationItem.title = webView.URL.host;
+    self.webNavigationItem.prompt = strl( @"Loading" );
 
     UIActivityIndicatorView *activityView =
             [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
@@ -72,15 +68,19 @@
     [activityView startAnimating];
 }
 
-- (void)webViewDidFinishLoad:(UIWebView *)webView {
+- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
 
-    [UIView animateWithDuration:0.3 animations:^{
-        self.webView.visible = YES;
-    }];
+    if ([[webView.URL absoluteString] rangeOfString:@"thanks.lhunath.com"].location != NSNotFound) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"tipped.thanks"];
+        if (![[NSUserDefaults standardUserDefaults] synchronize])
+            wrn( @"Couldn't synchronize thanks tip." );
+    }
 
     [self.webNavigationItem setLeftBarButtonItem:[webView canGoBack]? [[UIBarButtonItem alloc]
             initWithTitle:@"⬅︎" style:UIBarButtonItemStylePlain target:webView action:@selector( goBack )]: nil];
-    self.webNavigationItem.prompt = [webView stringByEvaluatingJavaScriptFromString:@"document.title"];
+    [webView evaluateJavaScript:@"document.title" completionHandler:^(id o, NSError *error) {
+        self.webNavigationItem.prompt = [o description];
+    }];
 }
 
 #pragma mark - Actions

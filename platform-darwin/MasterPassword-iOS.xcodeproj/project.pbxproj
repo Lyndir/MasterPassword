@@ -166,6 +166,7 @@
 		DA69540617D975D900BF294E /* icon_gears.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD37841711E29500CF925C /* icon_gears.png */; };
 		DA69540717D975D900BF294E /* icon_gears@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD37851711E29500CF925C /* icon_gears@2x.png */; };
 		DA72BD7B19C1510C00E6ACFE /* UIView+FontScale.m in Sources */ = {isa = PBXBuildFile; fileRef = DACE2F6719BA6A2A0010F92E /* UIView+FontScale.m */; };
+		DA72E2302453B91700676D4F /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA72E22F2453B91700676D4F /* WebKit.framework */; };
 		DA73049D194E022700E72520 /* ui_spinner.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD36511711E29400CF925C /* ui_spinner.png */; };
 		DA73049E194E022700E72520 /* ui_spinner@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD36521711E29400CF925C /* ui_spinner@2x.png */; };
 		DA73049F194E022B00E72520 /* ui_textfield.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD365B1711E29400CF925C /* ui_textfield.png */; };
@@ -662,6 +663,7 @@
 		DA67460B18DE7F0C00DFE240 /* Exo2.0-ExtraBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo2.0-ExtraBold.otf"; sourceTree = "<group>"; };
 		DA67460C18DE7F0C00DFE240 /* Exo2.0-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo2.0-Bold.otf"; sourceTree = "<group>"; };
 		DA70EC7F1811B13C00F65DB2 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		DA72E22F2453B91700676D4F /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		DA771FE41E6E1595004D7EDE /* MasterPassword-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MasterPassword-Prefix.pch"; sourceTree = "<group>"; };
 		DA854C8118D4CFBF00106317 /* avatar-add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar-add@2x.png"; sourceTree = "<group>"; };
 		DA854C8218D4CFBF00106317 /* avatar-add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar-add.png"; sourceTree = "<group>"; };
@@ -1597,6 +1599,7 @@
 				DAE2725A19C93B8E007C5262 /* StoreKit.framework in Frameworks */,
 				DA6701E016406BB400B61001 /* AdSupport.framework in Frameworks */,
 				DA6701DE16406B7300B61001 /* Social.framework in Frameworks */,
+				DA72E2302453B91700676D4F /* WebKit.framework in Frameworks */,
 				DA6701B816406A4100B61001 /* Accounts.framework in Frameworks */,
 				DABB981615100B4000B05417 /* SystemConfiguration.framework in Frameworks */,
 				DA672D3014F9413D004A189C /* libPearl.a in Frameworks */,
@@ -1775,6 +1778,7 @@
 		DA5BFA47147E415C00F98B1E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DA72E22F2453B91700676D4F /* WebKit.framework */,
 				DAFC1F6F2439795000D1CD66 /* CoreServices.framework */,
 				DAB7AE5C1F3D752900C856B1 /* libjson-c.a */,
 				DA6701B716406A4100B61001 /* Accounts.framework */,
@@ -3865,7 +3869,6 @@
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
 				STRIP_SWIFT_SYMBOLS = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WARNING_CFLAGS = "-Wno-float-conversion";
 			};
@@ -3994,10 +3997,6 @@
 					"\"$(PROJECT_DIR)/../lib/libjson-c/build-ios~/out/include\"",
 				);
 				INFOPLIST_FILE = "Source/iOS/MasterPassword-Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(PROJECT_DIR)/../lib/libsodium/build-ios~/out/lib\"",
@@ -4013,9 +4012,6 @@
 				SKIP_INSTALL = NO;
 				STRIP_INSTALLED_PRODUCT = YES;
 				STRIP_SWIFT_SYMBOLS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "Source/iOS/MasterPassword-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -4028,7 +4024,6 @@
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = NO;
 				CODE_SIGN_ENTITLEMENTS = Source/iOS/MasterPassword.entitlements;
 				CODE_SIGN_STYLE = Manual;
-				EXCLUDED_SOURCE_FILE_NAMES = libDCIntrospect.a;
 				GCC_C_LANGUAGE_STANDARD = c11;
 				GCC_PREFIX_HEADER = "Source/MasterPassword-Prefix.pch";
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
@@ -4038,10 +4033,6 @@
 					"\"$(PROJECT_DIR)/../lib/libjson-c/build-ios~/out/include\"",
 				);
 				INFOPLIST_FILE = "Source/iOS/MasterPassword-Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(PROJECT_DIR)/../lib/libsodium/build-ios~/out/lib\"",
@@ -4057,10 +4048,6 @@
 				SKIP_INSTALL = NO;
 				STRIP_INSTALLED_PRODUCT = YES;
 				STRIP_SWIFT_SYMBOLS = YES;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OBJC_BRIDGING_HEADER = "Source/iOS/MasterPassword-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
