@@ -76,14 +76,47 @@
             wrn( @"Couldn't synchronize thanks tip." );
     }
 
-    [self.webNavigationItem setLeftBarButtonItem:[webView canGoBack]? [[UIBarButtonItem alloc]
-            initWithTitle:@"⬅︎" style:UIBarButtonItemStylePlain target:webView action:@selector( goBack )]: nil];
+    [self.webNavigationItem setLeftBarButtonItem:[[UIBarButtonItem alloc]
+            initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(openURL:)]];
     [webView evaluateJavaScript:@"document.title" completionHandler:^(id o, NSError *error) {
         self.webNavigationItem.prompt = [o description];
     }];
 }
 
 #pragma mark - Actions
+
+- (IBAction)openURL:(id)sender {
+
+    UIAlertController *controller = [UIAlertController new];
+    controller.title = self.webView.URL.host;
+    controller.message = self.webView.URL.absoluteString;
+    [controller addAction:[UIAlertAction actionWithTitle:@"Safari" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [UIApp openURL:self.webView.URL];
+    }]];
+    if ([UIApp canOpenURL:[NSURL URLWithString:@"firefox:"]]) {
+        [controller addAction:[UIAlertAction actionWithTitle:@"Firefox" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [UIApp openURL:[NSURL URLWithString:strf( @"firefox://open-url?url=%@",
+                    [self.webView.URL.absoluteString stringByAddingPercentEncodingWithAllowedCharacters:
+                            [NSCharacterSet URLQueryAllowedCharacterSet]] )]];
+        }]];
+    }
+    if ([UIApp canOpenURL:[NSURL URLWithString:@"googlechrome:"]]) {
+        NSURL *url = [[NSURL alloc] initWithScheme:[self.webView.URL.scheme isEqualToString:@"http"]? @"googlechrome": @"googlechromes"
+                                              host:self.webView.URL.host path:self.webView.URL.path];
+        [controller addAction:[UIAlertAction actionWithTitle:@"Chrome" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [UIApp openURL:url];
+        }]];
+    }
+    if ([UIApp canOpenURL:[NSURL URLWithString:@"opera-http:"]]) {
+        NSURL *url = [[NSURL alloc] initWithScheme:[self.webView.URL.scheme isEqualToString:@"http"]? @"opera-http": @"opera-https"
+                                              host:self.webView.URL.host path:self.webView.URL.path];
+        [controller addAction:[UIAlertAction actionWithTitle:@"Opera" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [UIApp openURL:url];
+        }]];
+    }
+    [controller addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+    [self presentViewController:controller animated:YES completion:nil];
+}
 
 - (IBAction)done:(id)sender {
 

@@ -69,7 +69,7 @@
                                         </collectionViewFlowLayout>
                                         <cells>
                                             <collectionViewCell opaque="NO" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MPAvatarCell" id="Zab-uQ-uk9" customClass="MPAvatarCell">
-                                                <rect key="frame" x="80" y="115" width="215" height="667"/>
+                                                <rect key="frame" x="80" y="114.5" width="215" height="667"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                                     <rect key="frame" x="0.0" y="0.0" width="215" height="667"/>
@@ -476,6 +476,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="90"/>
                                 <items>
                                     <navigationItem title="masterpassword.app" prompt="Loading" id="Wpf-6b-UJb">
+                                        <barButtonItem key="leftBarButtonItem" systemItem="action" id="d9P-Hd-rdw"/>
                                         <barButtonItem key="rightBarButtonItem" systemItem="done" id="Tbg-c3-qOh">
                                             <connections>
                                                 <action selector="done:" destination="Sd5-eW-Cx2" id="cuN-bV-cwl"/>
@@ -3257,7 +3258,7 @@ Ut in geometria, prima si dederis, danda sunt omnia. Nonne igitur tibi videntur,
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="k2G-nL-x3l"/>
-        <segue reference="GZk-I4-JyH"/>
+        <segue reference="gtb-zE-u9H"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
     <resources>
