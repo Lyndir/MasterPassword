@@ -1097,6 +1097,8 @@ MPMarshalledFile *mpw_marshal_read(
             info->format = MPMarshalFormatJSON;
 #if MPW_JSON
             mpw_marshal_read_json( file, in );
+#else
+            mpw_marshal_error( file, MPMarshalErrorFormat, "JSON support is not enabled." );
 #endif
         }
     }
