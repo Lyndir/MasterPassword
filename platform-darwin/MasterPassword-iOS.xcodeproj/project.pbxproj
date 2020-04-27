@@ -4004,7 +4004,7 @@
 				);
 				OTHER_CFLAGS = (
 					"-DMPW_SODIUM=1",
-					"-DMPW_CPERCIVA=0",
+					"-DMPW_JSON=1",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword;
 				PRODUCT_NAME = MasterPassword;
@@ -4040,7 +4040,7 @@
 				);
 				OTHER_CFLAGS = (
 					"-DMPW_SODIUM=1",
-					"-DMPW_CPERCIVA=0",
+					"-DMPW_JSON=1",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword;
 				PRODUCT_NAME = MasterPassword;
