@@ -281,10 +281,9 @@
         return NO;
 
     PearlMainQueue( ^{
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Diagnostics Opt-In" message:
-                        @"We want this experience to be top-notch.\n\n"
-                        @"We look for bugs, sudden crashes, runtime issues & statistics.\n"
-                        @"Needless to say, diagnostics are scrubbed and personal details will never leave your device."
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Diagnostics" message:
+                        @"We look for bugs, sudden crashes, runtime issues & statistics.\n\n"
+                        @"Diagnostics are scrubbed and personal details will never leave your device."
                                                                 preferredStyle:UIAlertControllerStyleAlert];
 
         [alert addAction:[UIAlertAction actionWithTitle:@"Disable" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
@@ -292,7 +291,7 @@
             [MPiOSConfig get].sendInfoDecided = @(YES);
             [self consentFeatures];
         }]];
-        [alert addAction:[UIAlertAction actionWithTitle:@"Thanks" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [alert addAction:[UIAlertAction actionWithTitle:@"Engage" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             [MPiOSConfig get].sendInfo = @(YES);
             [MPiOSConfig get].sendInfoDecided = @(YES);
             [self consentFeatures];
@@ -329,7 +328,7 @@
 
     PearlMainQueue( ^{
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Coming Soon" message:
-                        @"Master Password is rolling out a new modern personal security platform and we're excited to bring you along.\n\n"
+                        @"Master Password is rolling out a brand new, updated version and we're excited to bring you along.\n\n"
                         @"When it's time, we'll send you a notification to help you make an effortless transition."
                                                                 preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"Thanks" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
