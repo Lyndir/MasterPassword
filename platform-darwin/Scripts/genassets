@@ -34,7 +34,7 @@ icons=(
 #    57@1@iphone@:Icon.png
 #    29@1@iphone@:Icon-Small.png
 # iPad
-#    76@1@ipad@7.0:Icon-76.png
+    76@1@ipad@7.0:Icon-76.png
     152@2@ipad@7.0:Icon-76@2x.png
     167@2@ipad@9.0:Icon-83@2x.png
     20@1@ipad@7.0:Icon-Small-20.png
