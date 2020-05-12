@@ -713,8 +713,14 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
     MPMarshalledFile *exportFile = NULL;
     @try {
         inf( @"Exporting sites, %@, for user: %@", revealPasswords? @"revealing passwords": @"omitting passwords", user.userID );
+        NSString *masterPassword = askExportPassword( user.name );
+        if (!masterPassword) {
+            inf( @"Export cancelled." );
+            return nil;
+        }
+
         exportUser = mpw_marshal_user( user.name.UTF8String,
-                mpw_masterKeyProvider_str( askExportPassword( user.name ).UTF8String ), user.algorithm.version );
+                mpw_masterKeyProvider_str( masterPassword.UTF8String ), user.algorithm.version );
         exportUser->redacted = !revealPasswords;
         exportUser->avatar = (unsigned int)user.avatar;
         exportUser->keyID = mpw_strdup( [user.keyID encodeHex].UTF8String );

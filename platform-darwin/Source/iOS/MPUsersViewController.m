@@ -432,6 +432,7 @@ referenceSizeForFooterInSection:(NSInteger)section {
 
         NSManagedObjectID *userID = user.permanentObjectID;
         UIAlertController *controller = [UIAlertController alertControllerWithTitle:user.name message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+        [controller.popoverPresentationController setSourceView:avatarCell];
         [controller addAction:[UIAlertAction actionWithTitle:@"Delete User" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
             UIAlertController *controller_ = [UIAlertController alertControllerWithTitle:@"Deleting User" message:
                     @"The user and its sites will be deleted."            preferredStyle:UIAlertControllerStyleAlert];

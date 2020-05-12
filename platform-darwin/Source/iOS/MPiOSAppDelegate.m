@@ -57,7 +57,7 @@
 
     @try {
         // Sentry
-        [SentrySDK initWithOptions:@{
+        [SentrySDK startWithOptions:@{
                 @"dsn"                      : NilToNSNull( decrypt( sentryDSN ) ),
 #ifdef DEBUG
                 @"debug"                    : @(YES),
@@ -69,7 +69,7 @@
                 @"debug"                    : @(NO),
                 @"environment"              : @"Private",
 #endif
-                @"enabled"                  : [MPiOSConfig get].sendInfo,
+                @"enabled"                  : @([[MPiOSConfig get].sendInfo boolValue] || ![[MPiOSConfig get].sendInfoDecided boolValue]),
                 @"enableAutoSessionTracking": @(YES),
         }];
         [[PearlLogger get] registerListener:^BOOL(PearlLogMessage *message) {
@@ -598,7 +598,7 @@
                         @"Would you like to make all your passwords visible in the export file?\n\n"
                         @"A safe export will include all sites but make their passwords invisible.\n"
                         @"It is great as a backup and remains safe when fallen in the wrong hands."
-                                                                preferredStyle:UIAlertControllerStyleActionSheet];
+                                                                preferredStyle:UIAlertControllerStyleAlert];
         [sheet addAction:[UIAlertAction actionWithTitle:@"Safe Export" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             [self showExportRevealPasswords:NO forVC:viewController];
         }]];
@@ -647,14 +647,15 @@
         } error:&error];
 
         PearlMainQueue( ^{
-            if (!exportedUser || error) {
+            if (error) {
                 MPError( error, @"Failed to export mpsites." );
                 UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Export Error" message:[error localizedDescription]
                                                                         preferredStyle:UIAlertControllerStyleAlert];
                 [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleCancel handler:nil]];
                 [self.navigationController presentViewController:alert animated:YES completion:nil];
-                return;
             }
+            if (!exportedUser)
+                return;
 
             NSDateFormatter *exportDateFormatter = [NSDateFormatter new];
             [exportDateFormatter setDateFormat:@"yyyy'-'MM'-'dd"];
@@ -662,7 +663,7 @@
                     [self activeUserForMainThread].name, [exportDateFormatter stringFromDate:[NSDate date]] );
 
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Export Destination" message:nil
-                                                                    preferredStyle:UIAlertControllerStyleActionSheet];
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
             [alert addAction:[UIAlertAction actionWithTitle:@"Send As E-Mail" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                 NSString *message;
                 if (revealPasswords)
@@ -724,7 +725,7 @@
 
                 UIAlertController *usersSheet = [UIAlertController alertControllerWithTitle:@"Migrate User"
                                                                                     message:@"Choose a user to migrate out to Volto."
-                                                                             preferredStyle:UIAlertControllerStyleActionSheet];
+                                                                             preferredStyle:UIAlertControllerStyleAlert];
                 [usersSheet addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
                 for (MPUserEntity *user_ in users)
                     [usersSheet addAction:[UIAlertAction actionWithTitle:user_.name style:UIAlertActionStyleDefault handler:
@@ -759,15 +760,16 @@
                     } error:&error];
 
             PearlMainQueue( ^{
-                if (!exportedUser || error) {
+                if (error) {
                     MPError( error, @"Failed to export user." );
                     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Export Error"
                                                                                    message:[error localizedDescription]
                                                                             preferredStyle:UIAlertControllerStyleAlert];
                     [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleCancel handler:nil]];
                     [self.navigationController presentViewController:alert animated:YES completion:nil];
-                    return;
                 }
+                if (!exportedUser)
+                    return;
 
                 NSURLComponents *components = [NSURLComponents new];
                 components.scheme = @"volto";

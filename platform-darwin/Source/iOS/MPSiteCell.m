@@ -263,6 +263,7 @@
 
     UIAlertController *controller = [UIAlertController alertControllerWithTitle:strf( @"Delete %@?", site.name ) message:nil
                                                                  preferredStyle:UIAlertControllerStyleActionSheet];
+    [controller.popoverPresentationController setSourceView:sender];
     [controller addAction:[UIAlertAction actionWithTitle:@"Delete Site" style:UIAlertActionStyleDestructive
                                                  handler:^(UIAlertAction *_Nonnull action) {
                                                      [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
@@ -284,6 +285,7 @@
     MPSiteEntity *mainSite = [self siteInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]];
     UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"Change Password Type" message:nil
                                                                  preferredStyle:UIAlertControllerStyleActionSheet];
+    [controller.popoverPresentationController setSourceView:sender];
     for (NSNumber *typeNumber in [mainSite.algorithm allTypes]) {
         MPResultType type = (MPResultType)[typeNumber unsignedIntegerValue];
         NSString *typeName = [mainSite.algorithm nameOfType:type];
@@ -425,7 +427,7 @@
         if (!site || ![site isKindOfClass:[MPGeneratedSiteEntity class]])
             return;
 
-        ((MPGeneratedSiteEntity *)site).counter = 1;
+        ((MPGeneratedSiteEntity *)site).counter = MPCounterValueInitial;
         [context saveToStore];
 
         [PearlOverlay showTemporaryOverlayWithTitle:@"Counter Reset" dismissAfter:2];
@@ -444,6 +446,7 @@
         UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"Create Site" message:
                         strf( @"Remember site named:\n%@", self.transientSite )
                                                                      preferredStyle:UIAlertControllerStyleActionSheet];
+        [controller.popoverPresentationController setSourceView:sender];
         [controller addAction:[UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:
                 ^(UIAlertAction *_Nonnull action) {
                     [[MPiOSAppDelegate get]

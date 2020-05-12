@@ -68,7 +68,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
     @try {
         // Sentry
-        [SentrySDK initWithOptions:@{
+        [SentrySDK startWithOptions:@{
                 @"dsn"                      : NilToNSNull( decrypt( sentryDSN ) ),
 #ifdef DEBUG
                 @"debug"                    : @(YES),
@@ -80,7 +80,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
                 @"debug"                    : @(NO),
                 @"environment"              : @"Private",
 #endif
-                @"enabled"                  : [MPMacConfig get].sendInfo,
+                @"enabled"                  : @([[MPMacConfig get].sendInfo boolValue] || ![[MPMacConfig get].sendInfoDecided boolValue]),
                 @"enableAutoSessionTracking": @(YES),
         }];
         [[PearlLogger get] registerListener:^BOOL(PearlLogMessage *message) {
