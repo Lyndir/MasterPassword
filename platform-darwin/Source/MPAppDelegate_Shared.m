@@ -116,9 +116,8 @@ static MPAppDelegate_Shared *instance;
     if (self.activeUserOID == activeUserOID || [self.activeUserOID isEqual:activeUserOID])
         return;
 
-    if (self.key)
-        self.key = nil;
-
+    self.key = nil;
+    [SentrySDK setUser:nil];
     [Countly.sharedInstance userLoggedOut];
 
     self.activeUserOID = activeUserOID;

@@ -41,7 +41,7 @@ __END_DECLS
     \
     if (__error && [[MPConfig get].sendInfo boolValue]) { \
         SentryEvent *event = [[SentryEvent alloc] initWithLevel:kSentryLevelError]; \
-        event.message = strf(@"%@: %@", message_, [__error localizedDescription]); \
+        event.message = strf( message_ @": %@", ##__VA_ARGS__, [__error localizedDescription]); \
         event.logger = @"MPError"; \
         [SentrySDK captureEvent:event]; \
     } \

@@ -201,6 +201,7 @@
     }
 
     @try {
+        [SentrySDK setUser:[[SentryUser alloc] initWithUserId:user.userID]];
         [Countly.sharedInstance userLoggedIn:user.userID];
 
         [Countly.sharedInstance recordEvent:@"login" segmentation:@{
