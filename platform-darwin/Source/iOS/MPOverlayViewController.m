@@ -33,13 +33,6 @@
     self.dismissSegueByButton = [NSMutableDictionary dictionary];
 }
 
-- (void)viewDidLoad {
-
-    [super viewDidLoad];
-
-    [self performSegueWithIdentifier:@"root" sender:self];
-}
-
 - (UIViewController *)childViewControllerForStatusBarStyle {
 
     return [self.childViewControllers lastObject];

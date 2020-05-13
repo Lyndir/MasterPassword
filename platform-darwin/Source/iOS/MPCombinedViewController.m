@@ -31,7 +31,6 @@
     [super viewDidLoad];
 
     self.mode = MPCombinedModeUserSelection;
-    [self performSegueWithIdentifier:@"users" sender:self];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

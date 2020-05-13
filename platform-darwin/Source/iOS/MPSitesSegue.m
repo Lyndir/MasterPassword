@@ -43,7 +43,7 @@
         UIView *sitesView = sitesVC.view;
         sitesView.frame = combinedVC.view.bounds;
         sitesView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        [combinedVC.view insertSubview:sitesView belowSubview:combinedVC.usersVC.view];
+        [combinedVC.view insertSubview:sitesView belowSubview:combinedVC.usersVC.view.superview];
 
         [sitesVC setActive:YES animated:self.animated completion:^(BOOL finished) {
             if (!finished)

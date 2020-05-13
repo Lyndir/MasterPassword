@@ -3,7 +3,7 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -69,7 +69,7 @@
                                         </collectionViewFlowLayout>
                                         <cells>
                                             <collectionViewCell opaque="NO" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MPAvatarCell" id="Zab-uQ-uk9" customClass="MPAvatarCell">
-                                                <rect key="frame" x="80" y="114.5" width="215" height="667"/>
+                                                <rect key="frame" x="80" y="115" width="215" height="667"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                                     <rect key="frame" x="0.0" y="0.0" width="215" height="667"/>
@@ -531,12 +531,23 @@
                     <view key="view" contentMode="scaleToFill" id="c4P-nn-PjR">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qca-aL-Un8">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <connections>
+                                    <segue destination="Ac5-na-hOV" kind="embed" identifier="root" id="x4h-Hl-KXD"/>
+                                </connections>
+                            </containerView>
+                        </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="qca-aL-Un8" firstAttribute="top" secondItem="c4P-nn-PjR" secondAttribute="top" id="7ix-Oo-ELN"/>
+                            <constraint firstAttribute="bottom" secondItem="qca-aL-Un8" secondAttribute="bottom" id="JRU-fk-cPG"/>
+                            <constraint firstItem="qca-aL-Un8" firstAttribute="leading" secondItem="c4P-nn-PjR" secondAttribute="leading" id="OAO-XC-DQ1"/>
+                            <constraint firstAttribute="trailing" secondItem="qca-aL-Un8" secondAttribute="trailing" id="R9n-bd-GVl"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="V6W-ql-3TD"/>
-                    <connections>
-                        <segue destination="Ac5-na-hOV" kind="custom" identifier="root" customClass="MPRootSegue" id="UKS-gd-oD2"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fQY-fV-sIe" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -557,12 +568,25 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" image="background.png" translatesAutoresizingMaskIntoConstraints="NO" id="Lkg-xn-bce" userLabel="Background">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                             </imageView>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="91I-wN-JQb">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="ignoreTouches" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <segue destination="S8q-YF-Kt9" kind="embed" identifier="users" id="GzD-Zv-DzW"/>
+                                </connections>
+                            </containerView>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="91I-wN-JQb" firstAttribute="leading" secondItem="fkJ-D0-yue" secondAttribute="leading" id="E4w-Dw-Vip"/>
                             <constraint firstItem="Lkg-xn-bce" firstAttribute="top" secondItem="fkJ-D0-yue" secondAttribute="top" id="EIy-Cd-0vW"/>
+                            <constraint firstItem="91I-wN-JQb" firstAttribute="top" secondItem="fkJ-D0-yue" secondAttribute="top" id="EeB-9X-PEK"/>
                             <constraint firstAttribute="trailing" secondItem="Lkg-xn-bce" secondAttribute="trailing" id="ROW-fK-z92"/>
                             <constraint firstItem="Lkg-xn-bce" firstAttribute="leading" secondItem="fkJ-D0-yue" secondAttribute="leading" id="UH5-Kk-taJ"/>
+                            <constraint firstAttribute="bottom" secondItem="91I-wN-JQb" secondAttribute="bottom" id="mxv-9s-jxT"/>
                             <constraint firstAttribute="bottom" secondItem="Lkg-xn-bce" secondAttribute="bottom" id="txR-pf-v3l"/>
+                            <constraint firstAttribute="trailing" secondItem="91I-wN-JQb" secondAttribute="trailing" id="uef-ig-RRl"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="MPa-zX-Kaq"/>
@@ -570,7 +594,6 @@
                     <connections>
                         <segue destination="osn-5H-SWW" kind="custom" identifier="emergency" customClass="MPOverlaySegue" id="gtX-Cx-AA2"/>
                         <segue destination="nkY-z6-8jd" kind="custom" identifier="passwords" customClass="MPSitesSegue" id="Ozp-YT-Utx"/>
-                        <segue destination="S8q-YF-Kt9" kind="custom" identifier="users" customClass="MPRootSegue" id="StK-nr-nps"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="F33-Fe-Tb6" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -3143,7 +3166,7 @@ Ut in geometria, prima si dederis, danda sunt omnia. Nonne igitur tibi videntur,
                                         <attributes>
                                             <color key="NSBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <color key="NSColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <font key="NSFont" metaFont="label" size="12"/>
+                                            <font key="NSFont" metaFont="controlContent"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                         </attributes>
                                     </fragment>
@@ -3258,7 +3281,7 @@ Ut in geometria, prima si dederis, danda sunt omnia. Nonne igitur tibi videntur,
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="k2G-nL-x3l"/>
-        <segue reference="gtb-zE-u9H"/>
+        <segue reference="GZk-I4-JyH"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
     <resources>
