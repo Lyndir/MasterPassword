@@ -18,6 +18,7 @@
 
 #import <QuartzCore/QuartzCore.h>
 #import <Countly/Countly.h>
+#import <UserNotifications/UserNotifications.h>
 #import "MPSitesWindowController.h"
 #import "MPMacAppDelegate.h"
 #import "MPAppDelegate_Store.h"
@@ -99,7 +100,16 @@
     self.siteTable.superview.superview.layer.mask = self.siteGradient;
 
     self.siteTable.controller = self;
-    prof_finish( @"ui" );
+    prof_rewind( @"ui" );
+
+    if (@available( macOS 10.14, * )) {
+        [[UNUserNotificationCenter currentNotificationCenter]
+                requestAuthorizationWithOptions:UNAuthorizationOptionAlert completionHandler:^(BOOL granted, NSError *error) {
+            if (!granted)
+                err( @"Couldn't obtain notification authorization: %@", error );
+        }];
+    }
+    prof_finish( @"notifications" );
 }
 
 - (void)dealloc {
@@ -550,13 +560,19 @@
     [self copyContent:self.shiftPressed? selectedSite.loginName: selectedSite.content];
     [NSApp hide:nil];
 
-    NSUserNotification *notification = [NSUserNotification new];
-    notification.title = @"Password Copied";
-    if (selectedSite.loginName.length)
-        notification.subtitle = strf( @"%@ at %@", selectedSite.loginName, selectedSite.name );
-    else
-        notification.subtitle = selectedSite.name;
-    [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
+    if (@available( macOS 10.14, * )) {
+        UNMutableNotificationContent *notification = [UNMutableNotificationContent new];
+        notification.title = self.shiftPressed? @"Login Copied": @"Password Copied";
+        if (selectedSite.loginName.length)
+            notification.subtitle = strf( @"%@ at %@", selectedSite.loginName, selectedSite.name );
+        else
+            notification.subtitle = selectedSite.name;
+        [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:
+                        [UNNotificationRequest requestWithIdentifier:selectedSite.name content:notification trigger:nil]
+                                                               withCompletionHandler:^(NSError *error) {
+                                                                   dbg( @"notification: %@, completed w/errror: %@", notification, error );
+                                                               }];
+    }
 }
 
 - (void)updateUser {
