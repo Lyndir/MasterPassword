@@ -626,25 +626,29 @@
 
     [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
         NSError *error = nil;
-        NSString *exportedUser = [self exportSitesFor:[self activeUserInContext:context] revealPasswords:revealPasswords askExportPassword:^NSString *(NSString *userName) {
-            return PearlAwait( ^(void (^setResult)(id)) {
-                PearlMainQueue( ^{
-                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:strf( @"Master Password For:\n%@", userName )
-                                                                                   message:@"Enter your master password to export the user."
-                                                                            preferredStyle:UIAlertControllerStyleAlert];
-                    [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
-                        textField.secureTextEntry = YES;
-                    }];
-                    [alert addAction:[UIAlertAction actionWithTitle:@"Export" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                        setResult( alert.textFields.firstObject.text );
-                    }]];
-                    [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-                        setResult( nil );
-                    }]];
-                    [self.navigationController presentViewController:alert animated:YES completion:nil];
-                } );
-            } );
-        } error:&error];
+        NSString *exportedUser = [self exportSitesFor:[self activeUserInContext:context] revealPasswords:revealPasswords askExportPassword:
+                ^NSString *(NSString *userName) {
+                    return PearlAwait( ^(void (^setResult)(id)) {
+                        PearlMainQueue( ^{
+                            UIAlertController *alert = [UIAlertController alertControllerWithTitle:strf(
+                                            @"Master Password For:\n%@", userName )
+                                                                                           message:@"Enter your master password to export the user."
+                                                                                    preferredStyle:UIAlertControllerStyleAlert];
+                            [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+                                textField.secureTextEntry = YES;
+                            }];
+                            [alert addAction:[UIAlertAction actionWithTitle:@"Export" style:UIAlertActionStyleDefault
+                                                                    handler:^(UIAlertAction *action) {
+                                                                        setResult( alert.textFields.firstObject.text );
+                                                                    }]];
+                            [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel
+                                                                    handler:^(UIAlertAction *action) {
+                                                                        setResult( nil );
+                                                                    }]];
+                            [self.navigationController presentViewController:alert animated:YES completion:nil];
+                        } );
+                    } );
+                }                               error:&error];
 
         PearlMainQueue( ^{
             if (error) {

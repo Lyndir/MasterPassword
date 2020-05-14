@@ -719,6 +719,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
             return nil;
         }
 
+        MPKey *key = [[MPKey alloc] initForFullName:user.name withMasterPassword:masterPassword];
         exportUser = mpw_marshal_user( user.name.UTF8String,
                 mpw_masterKeyProvider_str( masterPassword.UTF8String ), user.algorithm.version );
         exportUser->redacted = !revealPasswords;
@@ -731,11 +732,10 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
             MPCounterValue counter = MPCounterValueInitial;
             if ([site isKindOfClass:[MPGeneratedSiteEntity class]])
                 counter = ((MPGeneratedSiteEntity *)site).counter;
-            MPMarshalledSite *exportSite = mpw_marshal_site( exportUser,
-                    site.name.UTF8String, site.type, counter, site.algorithm.version );
-            exportSite->resultState = mpw_strdup( [site.algorithm exportPasswordForSite:site usingKey:self.key].UTF8String );
-            exportSite->loginState = mpw_strdup( [site.algorithm exportLoginForSite:site usingKey:self.key].UTF8String );
-            exportSite->loginType = site.loginGenerated? MPResultTypeTemplateName: MPResultTypeStatefulPersonal;
+            MPMarshalledSite *exportSite = mpw_marshal_site( exportUser, site.name.UTF8String, site.type, counter, site.algorithm.version );
+            exportSite->resultState = mpw_strdup( [site.algorithm exportPasswordForSite:site usingKey:key].UTF8String );
+            exportSite->loginState = mpw_strdup( [site.algorithm exportLoginForSite:site usingKey:key].UTF8String );
+            exportSite->loginType = site.loginGenerated || !exportSite->loginState? MPResultTypeTemplateName: MPResultTypeStatefulPersonal;
             exportSite->url = mpw_strdup( site.url.UTF8String );
             exportSite->uses = (unsigned int)site.uses;
             exportSite->lastUsed = (time_t)site.lastUsed.timeIntervalSince1970;

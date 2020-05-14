@@ -621,7 +621,7 @@ static NSOperationQueue *_mpwQueue = nil;
 
 - (NSString *)exportLoginForSite:(MPSiteEntity *)site usingKey:(MPKey *)key {
 
-    if (!(site.type & MPSiteFeatureExportContent) || site.loginGenerated || ![site.loginName length])
+    if (site.loginGenerated || ![site.loginName length])
         return nil;
 
     __block NSData *state = nil;

@@ -546,15 +546,6 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         return;
     }
 
-    if (!self.key) {
-        NSAlert *alert = [NSAlert new];
-        alert.messageText = @"User Locked";
-        alert.informativeText = @"To export your sites, first unlock your user by opening Master Password.";
-        [alert runModal];
-        [self showPopup:nil];
-        return;
-    }
-
     NSDateFormatter *exportDateFormatter = [NSDateFormatter new];
     [exportDateFormatter setDateFormat:@"yyyy'-'MM'-'dd"];
 
@@ -579,43 +570,46 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     if ([savePanel runModal] == NSFileHandlingPanelCancelButton)
         return;
 
-    [self exportSitesRevealPasswords:revealPasswords
-                   askExportPassword:^NSString *(NSString *userName) {
-                       return PearlMainQueueAwait( ^id {
-                           NSAlert *alert = [NSAlert new];
-                           [alert addButtonWithTitle:@"Import"];
-                           [alert addButtonWithTitle:@"Cancel"];
-                           alert.messageText = strf( @"Master Password For\n%@", userName );
-                           alert.informativeText = @"Enter the current master password for this user.";
-                           alert.accessoryView = [[NSSecureTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )];
-                           [alert layout];
-                           if ([alert runModal] == NSAlertFirstButtonReturn)
-                               return ((NSTextField *)alert.accessoryView).stringValue;
-                           else
-                               return nil;
-                       } );
-                   } result:^(NSString *mpsites, NSError *error) {
-                if (!mpsites || error) {
-                    PearlMainQueue( ^{
-                        [[NSAlert alertWithError:MPError( error, @"Failed to export mpsites." )] runModal];
+    [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+        NSError *error = nil;
+        NSString *exportedUser = [self exportSitesFor:[self activeUserInContext:context] revealPasswords:revealPasswords askExportPassword:
+                ^NSString *(NSString *userName) {
+                    return PearlMainQueueAwait( ^id {
+                        NSAlert *alert = [NSAlert new];
+                        [alert addButtonWithTitle:@"Export"];
+                        [alert addButtonWithTitle:@"Cancel"];
+                        alert.messageText = strf( @"Master Password For\n%@", userName );
+                        alert.informativeText = @"Enter the current master password for this user.";
+                        alert.accessoryView = [[NSSecureTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )];
+                        [alert layout];
+                        if ([alert runModal] == NSAlertFirstButtonReturn)
+                            return ((NSTextField *)alert.accessoryView).stringValue;
+                        else
+                            return nil;
                     } );
-                    return;
-                }
+                }                               error:&error];
 
-                NSError *coordinateError = nil;
-                [[[NSFileCoordinator alloc] initWithFilePresenter:nil]
-                        coordinateWritingItemAtURL:savePanel.URL options:0 error:&coordinateError byAccessor:^(NSURL *newURL) {
-                    NSError *writeError = nil;
-                    if (![mpsites writeToURL:newURL atomically:NO encoding:NSUTF8StringEncoding error:&writeError])
-                        PearlMainQueue( ^{
-                            [[NSAlert alertWithError:MPError( writeError, @"Could not write to the export file." )] runModal];
-                        } );
-                }];
-                if (coordinateError)
-                    PearlMainQueue( ^{
-                        [[NSAlert alertWithError:MPError( coordinateError, @"Could not gain access to the export file." )] runModal];
-                    } );
-            }];
+        if (error)
+            PearlMainQueue( ^{
+                [[NSAlert alertWithError:MPError( error, @"Failed to export mpsites." )] runModal];
+            } );
+        if (!exportedUser)
+            return;
+
+        NSError *coordinateError = nil;
+        [[[NSFileCoordinator alloc] initWithFilePresenter:nil]
+                coordinateWritingItemAtURL:savePanel.URL options:0 error:&coordinateError byAccessor:^(NSURL *newURL) {
+            NSError *writeError = nil;
+            if (![exportedUser writeToURL:newURL atomically:NO encoding:NSUTF8StringEncoding error:&writeError])
+                PearlMainQueue( ^{
+                    [[NSAlert alertWithError:MPError( writeError, @"Could not write to the export file." )] runModal];
+                } );
+        }];
+        if (coordinateError)
+            PearlMainQueue( ^{
+                [[NSAlert alertWithError:MPError( coordinateError, @"Could not gain access to the export file." )] runModal];
+            } );
+    }];
 }
 
 - (void)updateUsers {
