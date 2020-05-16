@@ -722,7 +722,7 @@ Use the arrows ⇅ to navigate the list or esc ⎋ to exit.</string>
                                                 <shadow key="shadow">
                                                     <color key="color" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
                                                 </shadow>
-                                                <stepperCell key="cell" continuous="YES" alignment="left" minValue="1" maxValue="1000" doubleValue="1" id="73y-03-zHt"/>
+                                                <stepperCell key="cell" continuous="YES" alignment="left" maxValue="4294967295" doubleValue="1" valueWraps="YES" id="73y-03-zHt"/>
                                                 <connections>
                                                     <binding destination="mcS-ik-b0n" name="value" keyPath="selection.algorithmVersion" id="GyA-hK-6cD"/>
                                                 </connections>
@@ -776,7 +776,7 @@ Use the arrows ⇅ to navigate the list or esc ⎋ to exit.</string>
                                                 <shadow key="shadow">
                                                     <color key="color" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
                                                 </shadow>
-                                                <stepperCell key="cell" continuous="YES" alignment="left" minValue="1" maxValue="1000" doubleValue="1" id="ikF-n4-xiI"/>
+                                                <stepperCell key="cell" continuous="YES" alignment="left" minValue="1" maxValue="4294967295" doubleValue="1" valueWraps="YES" id="ikF-n4-xiI"/>
                                                 <connections>
                                                     <binding destination="mcS-ik-b0n" name="value" keyPath="selection.counter" id="qmm-6z-boy"/>
                                                 </connections>

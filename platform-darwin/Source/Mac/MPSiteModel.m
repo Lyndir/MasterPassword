@@ -179,7 +179,8 @@
     if (algorithmVersion == self.algorithm.version)
         return;
     [self willChangeValueForKey:@"outdated"];
-    self.algorithm = MPAlgorithmForVersion( algorithmVersion )?: self.algorithm;
+    self.algorithm =
+            MPAlgorithmForVersion( MIN( MPAlgorithmVersionLast, MAX( MPAlgorithmVersionFirst, algorithmVersion ) ) )?: self.algorithm;
     [self didChangeValueForKey:@"outdated"];
 
     if (self.entityOID)
