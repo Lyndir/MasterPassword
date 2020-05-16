@@ -728,7 +728,9 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
         exportUser->defaultType = user.defaultType;
         exportUser->lastUsed = (time_t)user.lastUsed.timeIntervalSince1970;
 
-        for (MPSiteEntity *site in user.sites) {
+        for (MPSiteEntity *site in [user.sites sortedArrayUsingDescriptors:@[
+                [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]
+        ]]) {
             MPCounterValue counter = MPCounterValueInitial;
             if ([site isKindOfClass:[MPGeneratedSiteEntity class]])
                 counter = ((MPGeneratedSiteEntity *)site).counter;
