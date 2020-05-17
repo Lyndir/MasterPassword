@@ -53,13 +53,10 @@
 
                 if (![[MPMacConfig get].sendInfoDecided boolValue]) {
                     NSAlert *alert = [NSAlert new];
-                    alert.messageText = @"Welcome to Master Password!";
-                    alert.informativeText = @"We want you to have a top-notch experience.\n"
-                                            @"Using diagnostics, we ensure the application keeps working as designed for you.\n"
-                                            @"\n"
-                                            @"We look out for application bugs, runtime issues, sudden crashes & usage counters.\n"
-                                            @"Needless to say, diagnostics are always scrubbed and personal details will never leave your device.";
-                    [alert addButtonWithTitle:@"Thanks!"];
+                    alert.messageText = @"Diagnostics";
+                    alert.informativeText = @"We look for bugs, sudden crashes, runtime issues & statistics.\n\n"
+                                            @"Diagnostics are scrubbed and personal details will never leave your device.";
+                    [alert addButtonWithTitle:@"Engage"];
                     [alert addButtonWithTitle:@"Disable"];
                     [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
                         [MPMacConfig get].sendInfo = @(returnCode != NSAlertSecondButtonReturn);

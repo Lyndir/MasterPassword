@@ -190,8 +190,8 @@
         [migrateVC loadProductWithParameters:@{
                 SKStoreProductParameterCampaignToken       : @"app-masterpassword.ios", /* Campaign:    From MasterPassword iOS */
                 SKStoreProductParameterProviderToken       : @153897, /*                   Provider:    Maarten Billemont */
-                SKStoreProductParameterITunesItemIdentifier: @510296984, /*                Application: MasterPassword iOS */
-                //SKStoreProductParameterITunesItemIdentifier: @1500430196, /*             Application: Volto iOS */
+//              SKStoreProductParameterITunesItemIdentifier: @510296984, /*                Application: MasterPassword iOS */
+                SKStoreProductParameterITunesItemIdentifier: @1500430196, /*               Application: Volto iOS */
         }                                   completionBlock:^(BOOL result, NSError *error) {
             if (error)
                 err( @"Failed loading Volto product information: %@", error );
@@ -205,7 +205,6 @@
         }];
 
         PearlMainQueueOperation( ^{
-            [self.navigationController performSegueWithIdentifier:@"web" sender:[NSURL URLWithString:@"masterpassword://foo?bar=quux"]];
             if ([[MPiOSConfig get].showSetup boolValue])
                 [self.navigationController performSegueWithIdentifier:@"setup" sender:self];
 
@@ -841,20 +840,16 @@
 
     // Send info
     NSArray *countlyFeatures = @[
-            CLYConsentEvents, CLYConsentUserDetails, CLYConsentCrashReporting, CLYConsentViewTracking, CLYConsentStarRating
+            CLYConsentSessions, CLYConsentEvents, CLYConsentUserDetails, CLYConsentCrashReporting, CLYConsentViewTracking, CLYConsentStarRating
     ];
-    if ([[MPConfig get].sendInfo boolValue] || ![[MPConfig get].sendInfoDecided boolValue])
-        [Countly.sharedInstance giveConsentForFeature:CLYConsentSessions];
-    else
-        [Countly.sharedInstance cancelConsentForFeature:CLYConsentSessions];
-    if ([[MPConfig get].sendInfo boolValue]) {
+    if ([[MPiOSConfig get].sendInfo boolValue] || ![[MPiOSConfig get].sendInfoDecided boolValue]) {
         if ([PearlLogger get].printLevel > PearlLogLevelInfo)
             [PearlLogger get].printLevel = PearlLogLevelInfo;
 
         [SentrySDK.currentHub getClient].options.enabled = @YES;
         [SentrySDK configureScope:^(SentryScope *scope) {
-            [scope setExtraValue:[MPConfig get].rememberLogin forKey:@"rememberLogin"];
-            [scope setExtraValue:[MPConfig get].sendInfo forKey:@"sendInfo"];
+            [scope setExtraValue:[MPiOSConfig get].rememberLogin forKey:@"rememberLogin"];
+            [scope setExtraValue:[MPiOSConfig get].sendInfo forKey:@"sendInfo"];
             [scope setExtraValue:[MPiOSConfig get].helpHidden forKey:@"helpHidden"];
             [scope setExtraValue:[MPiOSConfig get].showSetup forKey:@"showQuickStart"];
             [scope setExtraValue:[PearlConfig get].firstRun forKey:@"firstRun"];
@@ -871,9 +866,8 @@
 #else
             [scope setExtraValue:@(NO) forKey:@"reviewedVersion"];
 #endif
-
-            [Countly.sharedInstance giveConsentForFeatures:countlyFeatures];
         }];
+        [Countly.sharedInstance giveConsentForFeatures:countlyFeatures];
     }
     else {
         [Countly.sharedInstance cancelConsentForFeatures:countlyFeatures];

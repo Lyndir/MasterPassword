@@ -763,13 +763,9 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
     // Send info
     NSArray *countlyFeatures = @[
-            CLYConsentEvents, CLYConsentUserDetails, CLYConsentCrashReporting, CLYConsentViewTracking, CLYConsentStarRating
+            CLYConsentSessions, CLYConsentEvents, CLYConsentUserDetails, CLYConsentCrashReporting, CLYConsentViewTracking, CLYConsentStarRating
     ];
-    if ([[MPConfig get].sendInfo boolValue] || ![[MPConfig get].sendInfoDecided boolValue])
-        [Countly.sharedInstance giveConsentForFeature:CLYConsentSessions];
-    else
-        [Countly.sharedInstance cancelConsentForFeature:CLYConsentSessions];
-    if ([[MPMacConfig get].sendInfo boolValue]) {
+    if ([[MPMacConfig get].sendInfo boolValue] || ![[MPMacConfig get].sendInfoDecided boolValue]) {
         if ([PearlLogger get].printLevel > PearlLogLevelInfo)
             [PearlLogger get].printLevel = PearlLogLevelInfo;
 
