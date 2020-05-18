@@ -442,21 +442,12 @@
                         <outlet property="nextAvatarButton" destination="fUK-gJ-NRE" id="5qo-lK-rSa"/>
                         <outlet property="preferencesTipContainer" destination="0Um-Ot-hI6" id="Cv8-Bp-ZZs"/>
                         <outlet property="previousAvatarButton" destination="9u7-pu-Wtv" id="Hgv-lN-S1n"/>
-                        <outlet property="searchDisplayController" destination="h98-GT-FoS" id="VvS-JO-rqq"/>
                         <outlet property="storeLoadingActivity" destination="VDd-oM-ZOO" id="MJ7-2f-e8n"/>
                         <outlet property="thanksTipContainer" destination="069-Pu-yXe" id="wWf-2X-Ryw"/>
                         <outlet property="userSelectionContainer" destination="rWM-08-aab" id="Yme-hX-8P0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8hZ-Tb-wZw" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <searchDisplayController id="h98-GT-FoS">
-                    <connections>
-                        <outlet property="delegate" destination="S8q-YF-Kt9" id="hyY-rf-2x2"/>
-                        <outlet property="searchContentsController" destination="S8q-YF-Kt9" id="2RA-rs-GhH"/>
-                        <outlet property="searchResultsDataSource" destination="S8q-YF-Kt9" id="Cdu-go-UBQ"/>
-                        <outlet property="searchResultsDelegate" destination="S8q-YF-Kt9" id="xxe-xE-sFM"/>
-                    </connections>
-                </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="2041" y="226"/>
         </scene>
@@ -3166,7 +3157,7 @@ Ut in geometria, prima si dederis, danda sunt omnia. Nonne igitur tibi videntur,
                                         <attributes>
                                             <color key="NSBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <color key="NSColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <font key="NSFont" metaFont="controlContent"/>
+                                            <font key="NSFont" metaFont="label" size="12"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                         </attributes>
                                     </fragment>
@@ -3281,7 +3272,7 @@ Ut in geometria, prima si dederis, danda sunt omnia. Nonne igitur tibi videntur,
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="k2G-nL-x3l"/>
-        <segue reference="GZk-I4-JyH"/>
+        <segue reference="gtb-zE-u9H"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
     <resources>
