@@ -20,7 +20,6 @@ package com.lyndir.masterpassword;
 
 import com.google.common.base.Preconditions;
 import com.google.common.primitives.UnsignedInteger;
-import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import java.util.Arrays;
 import java.util.EnumMap;
@@ -56,6 +55,7 @@ public class MPMasterKey {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     protected void finalize()
             throws Throwable {
 

@@ -151,7 +151,7 @@ public interface MPAlgorithm {
     /**
      * The algorithm iterations.
      */
-    enum Version implements  MPAlgorithm {
+    enum Version implements MPAlgorithm {
 
         /**
          * bugs:
@@ -346,7 +346,7 @@ public interface MPAlgorithm {
         @Nonnull
         @Override
         public Version version() {
-            return MPAlgorithm.Version.V0;
+            return this;
         }
 
         @Nonnull
