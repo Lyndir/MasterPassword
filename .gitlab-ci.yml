@@ -15,4 +15,4 @@ build_project:
   tags:
     - brew
     - java_9
-    - xcode_9
+    - xcode_11
