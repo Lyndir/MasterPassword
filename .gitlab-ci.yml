@@ -11,8 +11,8 @@ build_project:
     - "( cd ./platform-independent/c/cli && ./clean && targets=all ./build && ./mpw-tests && ./mpw-cli-tests )"
     - "( ./gradlew --stacktrace --info clean test )"
     - "( cd platform-darwin && pod install )"
-    - "( xcodebuild -workspace platform-darwin/MasterPassword.xcworkspace -configuration 'Test' -scheme 'MasterPassword iOS' -sdk iphonesimulator clean build )"
-    - "( xcodebuild -workspace platform-darwin/MasterPassword.xcworkspace -configuration 'Test' -scheme 'MasterPassword macOS' clean build )"
+    - "( xcodebuild -workspace platform-darwin/MasterPassword.xcworkspace -configuration 'Release' -scheme 'MasterPassword iOS' -sdk iphonesimulator clean build )"
+    - "( xcodebuild -workspace platform-darwin/MasterPassword.xcworkspace -configuration 'Release' -scheme 'MasterPassword macOS' clean build )"
   tags:
     - brew
     - java
