@@ -100,9 +100,10 @@ decisionHandler:(void ( ^ )(WKNavigationActionPolicy))decisionHandler {
 
 - (IBAction)action:(id)sender {
 
-    UIAlertController *controller = [UIAlertController new];
-    controller.title = self.webView.URL.host;
-    controller.message = self.webView.URL.absoluteString;
+    UIAlertController *controller = [UIAlertController alertControllerWithTitle:self.webView.URL.host
+                                                                        message:self.webView.URL.absoluteString
+                                                                 preferredStyle:UIAlertControllerStyleActionSheet];
+    [controller.popoverPresentationController setSourceView:sender];
     [controller addAction:[UIAlertAction actionWithTitle:@"Safari" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         [UIApp openURL:self.webView.URL];
     }]];
