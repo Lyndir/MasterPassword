@@ -158,12 +158,10 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     }           forKeyPath:@"activeUser" options:0 context:nil];
 
     // Status item.
-    self.statusView = [[NSStatusBar systemStatusBar] statusItemWithLength:NSSquareStatusItemLength];
-    self.statusView.image = [NSImage imageNamed:@"menu-icon"];
-    self.statusView.image.template = YES;
-    self.statusView.menu = self.statusMenu;
-    self.statusView.target = self;
-    self.statusView.action = @selector( showMenu );
+    self.statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSSquareStatusItemLength];
+    self.statusItem.menu = self.statusMenu;
+    self.statusItem.button.image = [NSImage imageNamed:@"menu-icon"];
+    self.statusItem.button.image.template = YES;
 
     PearlAddNotificationObserver( NSPersistentStoreCoordinatorStoresWillChangeNotification, self.storeCoordinator, nil,
             ^(id self, NSNotification *note) {
@@ -502,7 +500,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (IBAction)showPopup:(id)sender {
 
-    [self.statusView popUpStatusItemMenu:self.statusView.menu];
+    [[self.statusItem button] performClick:sender];
 }
 
 - (IBAction)showPasswordWindow:(id)sender {
@@ -682,13 +680,6 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     [self updateMenuItems];
 }
 
-- (void)showMenu {
-
-    [self updateMenuItems];
-
-    [self.statusView popUpStatusItemMenu:self.statusView.menu];
-}
-
 - (void)updateMenuItems {
 
     MPUserEntity *activeUser = [self activeUserForMainThread];
@@ -741,6 +732,13 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         self.savePasswordItem.enabled = YES;
         self.savePasswordItem.toolTip = nil;
     }
+}
+
+#pragma mark - NSMenuDelegate
+
+- (void)menuNeedsUpdate:(NSMenu *)menu {
+
+    [self updateMenuItems];
 }
 
 #pragma mark - PearlConfigDelegate

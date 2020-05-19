@@ -21,9 +21,9 @@
 #import "MPSitesWindowController.h"
 #import "MPInitialWindowController.h"
 
-@interface MPMacAppDelegate : MPAppDelegate_Shared<NSApplicationDelegate>
+@interface MPMacAppDelegate : MPAppDelegate_Shared<NSApplicationDelegate, NSMenuDelegate>
 
-@property(nonatomic, strong) NSStatusItem *statusView;
+@property(nonatomic, strong) NSStatusItem *statusItem;
 @property(nonatomic, strong) MPSitesWindowController *sitesWindowController;
 @property(nonatomic, strong) MPInitialWindowController *initialWindowController;
 @property(nonatomic, weak) IBOutlet NSMenuItem *lockItem;
