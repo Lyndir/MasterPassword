@@ -3161,7 +3161,7 @@
 				DA5BFA42147E415C00F98B1E /* Resources */,
 				DA6556E314D55F3000841C99 /* Run Script: GIT version -> Info.plist */,
 				4A87858EE3659604089E2F9F /* [CP] Embed Pods Frameworks */,
-				DA3C4EB32439438B00A6C4A8 /* Upload Sentry dSYM */,
+				DA3C4EB32439438B00A6C4A8 /* Sentry dSYM Upload */,
 			);
 			buildRules = (
 			);
@@ -3518,7 +3518,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		DA3C4EB32439438B00A6C4A8 /* Upload Sentry dSYM */ = {
+		DA3C4EB32439438B00A6C4A8 /* Sentry dSYM Upload */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 8;
 			files = (
@@ -3526,15 +3526,16 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
 			);
-			name = "Upload Sentry dSYM";
+			name = "Sentry dSYM Upload";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = "/bin/sh -e";
-			shellScript = "if hash sentry-cli 2>/dev/null; then\n    if ! ERROR=$(SENTRY_ORG=lyndir SENTRY_PROJECT=masterpassword-ios sentry-cli upload-dif --log-level info \"$DWARF_DSYM_FOLDER_PATH\" 2>&1 >/dev/null); then\n        echo >&2 \"warning: sentry-cli: $ERROR\"\n    fi\nelse\n    echo >&2 \"warning: sentry-cli not installed: try brew install getsentry/tools/sentry-cli\"\nfi\n";
+			shellScript = "if ! hash sentry-cli 2>/dev/null; then\n    echo >&2 \"error: sentry-cli not installed. Try brew install getsentry/tools/sentry-cli\"\n    exit 1\nfi\n\nSENTRY_ORG=lyndir SENTRY_PROJECT=masterpassword-ios sentry-cli upload-dif --log-level info \"$DWARF_DSYM_FOLDER_PATH\"\n";
 			showEnvVarsInLog = 0;
 		};
 		DA6556E314D55F3000841C99 /* Run Script: GIT version -> Info.plist */ = {
