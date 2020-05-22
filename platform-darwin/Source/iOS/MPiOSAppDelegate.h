@@ -23,6 +23,7 @@
 
 @interface MPiOSAppDelegate : MPAppDelegate_Shared <SKStoreProductViewControllerDelegate>
 
+@property(nonatomic, strong) UIWindow *window;
 @property(nonatomic, strong) SKStoreProductViewController *voltoViewController;
 
 - (void)openURL:(NSURL *)url;

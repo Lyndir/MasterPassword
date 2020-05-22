@@ -35,7 +35,7 @@
 @implementation CountlyPushNotifications(MPNotifications)
 
 - (void)openURL:(NSString *)URLString {
-    [[MPiOSAppDelegate get].navigationController performSegueWithIdentifier:@"web" sender:[NSURL URLWithString:URLString]];
+    [[MPiOSAppDelegate get].window.rootViewController performSegueWithIdentifier:@"web" sender:[NSURL URLWithString:URLString]];
 }
 
 @end
@@ -47,6 +47,8 @@
 @end
 
 @implementation MPiOSAppDelegate
+
+@synthesize window;
 
 + (void)initialize {
 
@@ -151,12 +153,6 @@
         err( @"During Config Test: %@", exception );
     }
     @try {
-        [super application:application didFinishLaunchingWithOptions:launchOptions];
-    }
-    @catch (id exception) {
-        err( @"During Pearl Application Launch: %@", exception );
-    }
-    @try {
         inf( @"Started up with device identifier: %@", [PearlKeyChain deviceIdentifier] );
 
         PearlAddNotificationObserver(
@@ -206,7 +202,7 @@
 
         PearlMainQueueOperation( ^{
             if ([[MPiOSConfig get].showSetup boolValue])
-                [self.navigationController performSegueWithIdentifier:@"setup" sender:self];
+                [self.window.rootViewController performSegueWithIdentifier:@"setup" sender:self];
 
             [self consentFeatures];
         } );
@@ -244,7 +240,7 @@
                                                 (id)[error localizedDescription]?: error )
                                                                                 preferredStyle:UIAlertControllerStyleAlert];
                         [alert addAction:[UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleCancel handler:nil]];
-                        [self.navigationController presentViewController:alert animated:YES completion:nil];
+                        [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
                     } );
                     return;
                 }
@@ -256,7 +252,7 @@
                                         @"Master Password couldn't understand the import file."
                                                                                 preferredStyle:UIAlertControllerStyleAlert];
                         [alert addAction:[UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleCancel handler:nil]];
-                        [self.navigationController presentViewController:alert animated:YES completion:nil];
+                        [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
                     } );
                     return;
                 }
@@ -296,8 +292,7 @@
             [self consentFeatures];
         }]];
 
-        [(self.navigationController.presentedViewController?: (UIViewController *)self.navigationController)
-                presentViewController:alert animated:YES completion:nil];
+        [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
     } );
 
     return YES;
@@ -342,8 +337,7 @@
                 [MPiOSConfig get].notificationsDecided = @(YES);
             }
         }]];
-        [(self.navigationController.presentedViewController?: (UIViewController *)self.navigationController)
-                presentViewController:alert animated:YES completion:nil];
+        [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
     } );
 }
 
@@ -372,7 +366,7 @@
                 [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
                     setResult( nil );
                 }]];
-                [self.navigationController presentViewController:alert animated:YES completion:nil];
+                [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
             } );
         } );
     } askUserPassword:^NSString *(NSString *userName) {
@@ -390,7 +384,7 @@
                 [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
                     setResult( nil );
                 }]];
-                [self.navigationController presentViewController:alert animated:YES completion:nil];
+                [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
             } );
         } );
     }          result:^(NSError *error) {
@@ -401,7 +395,7 @@
                 UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"Error" message:[error localizedDescription]
                                                                              preferredStyle:UIAlertControllerStyleAlert];
                 [controller addAction:[UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleCancel handler:nil]];
-                [self.navigationController presentViewController:controller animated:YES completion:nil];
+                [self.window.rootViewController presentViewController:controller animated:YES completion:nil];
             }
         } );
     }];
@@ -410,8 +404,6 @@
 - (void)applicationWillEnterForeground:(UIApplication *)application {
 
     inf( @"Will foreground" );
-
-    [super applicationWillEnterForeground:application];
 
     [self.hangDetector start];
 }
@@ -435,20 +427,16 @@
                             [UIPasteboard generalPasteboard].string = @"";
                         }]];
                 [alert addAction:[UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:nil]];
-                [self.navigationController presentViewController:alert animated:YES completion:nil];
+                [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
             } );
         }
         mpw_marshal_file_free( &importFile );
     } );
-
-    [super applicationDidBecomeActive:application];
 }
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
 
     inf( @"Received memory warning." );
-
-    [super applicationDidReceiveMemoryWarning:application];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
@@ -461,8 +449,6 @@
     }
 
     [self.hangDetector stop];
-
-    [super applicationDidEnterBackground:application];
 }
 
 #pragma mark - Behavior
@@ -479,7 +465,7 @@
         else if ([url.host isEqualToString:@"show-url"]) {
             for (NSURLQueryItem *item in [NSURLComponents componentsWithString:[url absoluteString]].queryItems)
                 if ([item.name isEqualToString:@"url"]) {
-                    [[MPiOSAppDelegate get].navigationController performSegueWithIdentifier:@"web" sender:[NSURL URLWithString:item.value]];
+                    [self.window.rootViewController performSegueWithIdentifier:@"web" sender:[NSURL URLWithString:item.value]];
                     return;
                 }
         }
@@ -512,7 +498,7 @@
                         @"help@masterpassword.app"
                                                                 preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleCancel handler:nil]];
-        [self.navigationController presentViewController:alert animated:YES completion:nil];
+        [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
     }
     else if (logs) {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Feedback" message:
@@ -526,7 +512,7 @@
         [alert addAction:[UIAlertAction actionWithTitle:@"No Logs" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             [self openFeedbackWithLogs:NO forVC:viewController];
         }]];
-        [self.navigationController presentViewController:alert animated:YES completion:nil];
+        [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
     }
     else
         [self openFeedbackWithLogs:NO forVC:viewController];
@@ -580,7 +566,7 @@
                 [self deleteAndResetStore];
             }]];
             [alert addAction:[UIAlertAction actionWithTitle:@"Ignore" style:UIAlertActionStyleCancel handler:nil]];
-            [self.navigationController presentViewController:alert animated:YES completion:nil];
+            [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
         } );
     } );
 }
@@ -605,10 +591,10 @@
             [self showExportRevealPasswords:YES forVC:viewController];
         }]];
         [sheet addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
-        [self.navigationController presentViewController:sheet animated:YES completion:nil];
+        [self.window.rootViewController presentViewController:sheet animated:YES completion:nil];
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
-    [self.navigationController presentViewController:alert animated:YES completion:nil];
+    [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)showExportRevealPasswords:(BOOL)revealPasswords forVC:(UIViewController *)viewController {
@@ -619,7 +605,7 @@
                         @"Close Master Password, go into Settings and add a Mail account."
                                                                 preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleCancel handler:nil]];
-        [self.navigationController presentViewController:alert animated:YES completion:nil];
+        [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
         return;
     }
 
@@ -644,7 +630,7 @@
                                                                     handler:^(UIAlertAction *action) {
                                                                         setResult( nil );
                                                                     }]];
-                            [self.navigationController presentViewController:alert animated:YES completion:nil];
+                            [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
                         } );
                     } );
                 }                               error:&error];
@@ -655,7 +641,7 @@
                 UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Export Error" message:[error localizedDescription]
                                                                         preferredStyle:UIAlertControllerStyleAlert];
                 [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleCancel handler:nil]];
-                [self.navigationController presentViewController:alert animated:YES completion:nil];
+                [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
             }
             if (!exportedUser)
                 return;
@@ -711,7 +697,7 @@
                 }
             }]];
             [alert addAction:[UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleCancel handler:nil]];
-            [self.navigationController presentViewController:alert animated:YES completion:nil];
+            [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
         } );
     }];
 }
@@ -735,7 +721,7 @@
                             ^(UIAlertAction *action) { [self migrateFor:user_]; }]];
 
                 PearlMainQueue( ^{
-                    [self.navigationController presentViewController:usersSheet animated:YES completion:nil];
+                    [self.window.rootViewController presentViewController:usersSheet animated:YES completion:nil];
                 } );
             }];
             return;
@@ -757,7 +743,7 @@
                                         ^(UIAlertAction *action) { setResult( alert.textFields.firstObject.text ); }]];
                                 [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:
                                         ^(UIAlertAction *action) { setResult( nil ); }]];
-                                [self.navigationController presentViewController:alert animated:YES completion:nil];
+                                [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
                             } );
                         } );
                     } error:&error];
@@ -769,7 +755,7 @@
                                                                                    message:[error localizedDescription]
                                                                             preferredStyle:UIAlertControllerStyleAlert];
                     [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleCancel handler:nil]];
-                    [self.navigationController presentViewController:alert animated:YES completion:nil];
+                    [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
                 }
                 if (!exportedUser)
                     return;
@@ -784,7 +770,7 @@
     }
 
     else if (self.voltoViewController)
-        [self.navigationController presentViewController:self.voltoViewController animated:YES completion:nil];
+        [self.window.rootViewController presentViewController:self.voltoViewController animated:YES completion:nil];
 }
 
 - (void)changeMasterPasswordFor:(MPUserEntity *)user saveInContext:(NSManagedObjectContext *)moc didResetBlock:(void ( ^ )(void))didReset {
@@ -808,7 +794,7 @@
                 didReset();
         }]];
         [alert addAction:[UIAlertAction actionWithTitle:@"Abort" style:UIAlertActionStyleCancel handler:nil]];
-        [self.navigationController presentViewController:alert animated:YES completion:nil];
+        [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
     } );
 }
 

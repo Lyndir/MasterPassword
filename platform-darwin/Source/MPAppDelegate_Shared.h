@@ -20,7 +20,7 @@
 
 #if TARGET_OS_IPHONE
 
-@interface MPAppDelegate_Shared : PearlAppDelegate
+@interface MPAppDelegate_Shared : UIResponder<UIApplicationDelegate, PearlConfigDelegate>
 
 #else
 

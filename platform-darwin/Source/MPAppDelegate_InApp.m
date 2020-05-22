@@ -117,7 +117,7 @@ PearlAssociatedObjectProperty( NSMutableArray*, ProductObservers, productObserve
             [self performPurchaseProductWithIdentifier:productIdentifier quantity:quantity];
         }]];
         [controller addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
-        [self.navigationController presentViewController:controller animated:YES completion:nil];
+        [self.window.rootViewController presentViewController:controller animated:YES completion:nil];
         return;
     }
 #endif
@@ -167,7 +167,7 @@ PearlAssociatedObjectProperty( NSMutableArray*, ProductObservers, productObserve
                                 @"Ensure you are online and try logging out and back into iTunes from your device's Settings." )
                                                                      preferredStyle:UIAlertControllerStyleAlert];
         [controller addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
-        [self.navigationController presentViewController:controller animated:YES completion:nil];
+        [self.window.rootViewController presentViewController:controller animated:YES completion:nil];
     } );
 #endif
 }

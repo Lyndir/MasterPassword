@@ -260,7 +260,7 @@
                                 ^(UIAlertAction *_Nonnull action) {
                                     setResult( nil );
                                 }]];
-                        [self.navigationController presentViewController:controller animated:YES completion:nil];
+                        [self.window.rootViewController presentViewController:controller animated:YES completion:nil];
                     } );
                 } );
 #endif
