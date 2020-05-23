@@ -558,14 +558,15 @@
                             @"This may be due to corruption.  You can either reset Master Password and "
                             @"recreate your user, or E-Mail us your logs and leave your corrupt store as-is for now."
                                                                     preferredStyle:UIAlertControllerStyleAlert];
-            [alert addAction:[UIAlertAction actionWithTitle:@"E-Mail Logs" style:UIAlertActionStyleDefault
-                                                    handler:^(UIAlertAction *action) {
-                                                        [self openFeedbackWithLogs:YES forVC:nil];
-                                                    }]];
+            [alert addAction:[UIAlertAction actionWithTitle:@"Try Again" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                [self retryCorruptStore];
+            }]];
+            [alert addAction:[UIAlertAction actionWithTitle:@"Send Logs" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                [self openFeedbackWithLogs:YES forVC:nil];
+            }]];
             [alert addAction:[UIAlertAction actionWithTitle:@"Reset" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                 [self deleteAndResetStore];
             }]];
-            [alert addAction:[UIAlertAction actionWithTitle:@"Ignore" style:UIAlertActionStyleCancel handler:nil]];
             [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
         } );
     } );

@@ -30,6 +30,7 @@
 - (id)managedObjectContextChanged:(void ( ^ )(NSDictionary<NSManagedObjectID *, NSString *> *affectedObjects))changedBlock;
 
 - (MPFixableResult)findAndFixInconsistenciesSaveInContext:(NSManagedObjectContext *)context;
+- (void)retryCorruptStore;
 - (void)deleteAndResetStore;
 
 /** @param completion The block to execute after adding the site, executed from the main thread with the new site in the main MOC. */

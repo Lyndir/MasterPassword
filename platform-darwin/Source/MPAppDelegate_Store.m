@@ -232,22 +232,27 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
                 }];
             } );
 
-
         // Create a new store coordinator.
         NSError *error = nil;
         NSURL *localStoreURL = [self localStoreURL];
         if (![[NSFileManager defaultManager] createDirectoryAtURL:[localStoreURL URLByDeletingLastPathComponent]
                                       withIntermediateDirectories:YES attributes:nil error:&error]) {
             MPError( error, @"Couldn't create our application support directory." );
+            PearlRemoveNotificationObserversFrom( self.mainManagedObjectContext );
+            self.mainManagedObjectContext = nil;
+            self.privateManagedObjectContext = nil;
             return;
         }
-        if (![self.storeCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[self localStoreURL]
+        if (![self.storeCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:localStoreURL
                                                        options:@{
                                                                NSMigratePersistentStoresAutomaticallyOption: @YES,
                                                                NSInferMappingModelAutomaticallyOption      : @YES,
                                                                STORE_OPTIONS
                                                        } error:&error]) {
             MPError( error, @"Failed to open store." );
+            PearlRemoveNotificationObserversFrom( self.mainManagedObjectContext );
+            self.mainManagedObjectContext = nil;
+            self.privateManagedObjectContext = nil;
             self.storeCorrupted = @YES;
             [self handleCoordinatorError:error];
             return;
@@ -272,6 +277,12 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
                 [self findAndFixInconsistenciesSaveInContext:context];
             }];
     }];
+}
+
+- (void)retryCorruptStore {
+
+    self.storeCorrupted = @NO;
+    [self loadStore];
 }
 
 - (void)deleteAndResetStore {
