@@ -135,7 +135,7 @@
     [super prepareForReuse];
 
     self.siteOID = nil;
-    self.fuzzyGroups = nil;
+    self.queryGroups = nil;
     self.transientSite = nil;
     self.mode = MPPasswordCellModePassword;
     [self updateAnimated:NO];
@@ -150,11 +150,11 @@
 
 #pragma mark - State
 
-- (void)setFuzzyGroups:(NSArray *)fuzzyGroups {
+- (void)setQueryGroups:(NSArray *)queryGroups {
 
-    if (self.fuzzyGroups == fuzzyGroups)
+    if (self.queryGroups == queryGroups)
         return;
-    _fuzzyGroups = fuzzyGroups;
+    _queryGroups = queryGroups;
 
     [self updateSiteName:[self siteInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]]];
 }
@@ -656,14 +656,14 @@
     NSString *siteName = self.transientSite?: site.name;
     NSMutableAttributedString *attributedSiteName = [[NSMutableAttributedString alloc] initWithString:siteName?: @""];
     if ([attributedSiteName length])
-        for (NSUInteger f = 0, s = (NSUInteger)-1; f < [self.fuzzyGroups count]; ++f) {
-            s = [siteName rangeOfString:self.fuzzyGroups[f] options:NSDiacriticInsensitiveSearch | NSCaseInsensitiveSearch
-                                  range:NSMakeRange( s + 1, [siteName length] - (s + 1) )].location;
+        for (NSUInteger f = 0, s = 0; f < [self.queryGroups count]; ++f, ++s) {
+            s = [siteName rangeOfString:self.queryGroups[f] options:NSDiacriticInsensitiveSearch | NSCaseInsensitiveSearch
+                                  range:NSMakeRange( s, [siteName length] - s )].location;
             if (s == NSNotFound)
                 break;
 
             [attributedSiteName addAttribute:NSBackgroundColorAttributeName value:[UIColor redColor]
-                                       range:NSMakeRange( s, [self.fuzzyGroups[f] length] )];
+                                       range:NSMakeRange( s, [self.queryGroups[f] length] )];
         }
 
     if (self.transientSite)

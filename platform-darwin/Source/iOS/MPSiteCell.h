@@ -27,7 +27,7 @@ typedef NS_ENUM ( NSUInteger, MPSiteCellMode ) {
 
 @interface MPSiteCell : MPCell<UIScrollViewDelegate, UITextFieldDelegate>
 
-@property(nonatomic) NSArray *fuzzyGroups;
+@property(nonatomic) NSArray *queryGroups;
 
 - (void)setSite:(MPSiteEntity *)site animated:(BOOL)animated;
 - (void)setTransientSite:(NSString *)siteName animated:(BOOL)animated;

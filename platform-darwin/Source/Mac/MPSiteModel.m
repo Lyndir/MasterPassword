@@ -31,12 +31,12 @@
 
 @implementation MPSiteModel
 
-- (instancetype)initWithEntity:(MPSiteEntity *)entity fuzzyGroups:(NSArray *)fuzzyGroups {
+- (instancetype)initWithEntity:(MPSiteEntity *)entity queryGroups:(NSArray *)queryGroups {
 
     if (!(self = [super init]))
         return nil;
 
-    [self setEntity:entity fuzzyGroups:fuzzyGroups];
+    [self setEntity:entity queryGroups:queryGroups];
     self.initialized = YES;
 
     return self;
@@ -53,23 +53,25 @@
     return self;
 }
 
-- (void)setEntity:(MPSiteEntity *)entity fuzzyGroups:(NSArray *)fuzzyGroups {
+- (void)setEntity:(MPSiteEntity *)entity queryGroups:(NSArray *)queryGroups {
 
     if ([self.entityOID isEqual:entity.permanentObjectID])
         return;
     self.entityOID = entity.permanentObjectID;
 
     NSString *siteName = entity.name;
-    NSMutableAttributedString *attributedSiteName = [[NSMutableAttributedString alloc] initWithString:siteName];
-    for (NSUInteger f = 0, s = (NSUInteger)-1; f < [fuzzyGroups count]; ++f) {
-        s = [siteName rangeOfString:fuzzyGroups[f] options:NSDiacriticInsensitiveSearch | NSCaseInsensitiveSearch
-                              range:NSMakeRange( s + 1, [siteName length] - (s + 1) )].location;
-        if (s == NSNotFound)
-            break;
+    NSMutableAttributedString *attributedSiteName = [[NSMutableAttributedString alloc] initWithString:siteName?: @""];
+    if ([attributedSiteName length])
+        for (NSUInteger f = 0, s = 0; f < [queryGroups count]; ++f, ++s) {
+            s = [siteName rangeOfString:queryGroups[f] options:NSDiacriticInsensitiveSearch | NSCaseInsensitiveSearch
+                                  range:NSMakeRange( s, [siteName length] - s )].location;
+            if (s == NSNotFound)
+                break;
 
-        [attributedSiteName addAttribute:NSBackgroundColorAttributeName value:[NSColor alternateSelectedControlColor]
-                                   range:NSMakeRange( s, [fuzzyGroups[f] length] )];
-    }
+            [attributedSiteName addAttribute:NSBackgroundColorAttributeName value:[NSColor alternateSelectedControlColor]
+                                       range:NSMakeRange( s, [queryGroups[f] length] )];
+        }
+
     NSMutableParagraphStyle *paragraphStyle = [NSMutableParagraphStyle new];
     paragraphStyle.alignment = NSCenterTextAlignment;
     [attributedSiteName addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange( 0, [siteName length] )];

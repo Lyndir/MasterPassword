@@ -36,7 +36,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 @interface MPSitesViewController()<NSFetchedResultsControllerDelegate>
 
 @property(nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
-@property(nonatomic, strong) NSArray *fuzzyGroups;
+@property(nonatomic, strong) NSArray *queryGroups;
 @property(nonatomic, strong) NSCharacterSet *siteNameAcceptableCharactersSet;
 @property(nonatomic, strong) NSMutableArray<NSMutableArray *> *dataSource;
 @property(nonatomic, weak) UIViewController *popdownVC;
@@ -162,7 +162,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
 
     MPSiteCell *cell = [MPSiteCell dequeueFromCollectionView:collectionView indexPath:indexPath];
-    [cell setFuzzyGroups:self.fuzzyGroups];
+    [cell setQueryGroups:self.queryGroups];
     id item = self.dataSource[(NSUInteger)indexPath.section][(NSUInteger)indexPath.item];
     if ([item isKindOfClass:[MPSiteEntity class]])
         [cell setSite:item animated:NO];
@@ -355,21 +355,19 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 - (void)reloadSites {
 
     [self.fetchedResultsController.managedObjectContext performBlock:^{
-        static NSRegularExpression *fuzzyRE;
-        static dispatch_once_t once = 0;
-        dispatch_once( &once, ^{
-            fuzzyRE = [NSRegularExpression regularExpressionWithPattern:@"(.)" options:0 error:nil];
-        } );
-
         NSString *queryString = self.query;
-        NSString *queryPattern = [[queryString stringByReplacingMatchesOfExpression:fuzzyRE withTemplate:@"*$1"]
-                stringByAppendingString:@"*"];
-        NSMutableArray *fuzzyGroups = [NSMutableArray new];
-        [fuzzyRE enumerateMatchesInString:queryString options:0 range:NSMakeRange( 0, queryString.length )
-                               usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
-                                   [fuzzyGroups addObject:[queryString substringWithRange:result.range]];
-                               }];
-        self.fuzzyGroups = fuzzyGroups;
+        NSMutableArray *queryGroups = [NSMutableArray new];
+        NSMutableString *queryPattern = [NSMutableString new];
+        [queryString enumerateSubstringsInRange: NSMakeRange(0, [queryString length]) options: NSStringEnumerationByComposedCharacterSequences
+                              usingBlock: ^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
+            if (substringRange.location < 10) {
+                [queryGroups addObject:substring];
+                [queryPattern appendString:@"*"];
+            }
+                                  [queryPattern appendString:substring];
+                              }];
+        [queryPattern appendString:@"*"];
+        self.queryGroups = queryGroups;
 
         NSError *error = nil;
         self.fetchedResultsController.fetchRequest.predicate =
@@ -382,7 +380,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
                                        toSections:[self createDataSource]
                                       reloadItems:@[ MPTransientPasswordItem ] completion:^(BOOL finished) {
                         for (MPSiteCell *cell in self.collectionView.visibleCells)
-                            [cell setFuzzyGroups:self.fuzzyGroups];
+                            [cell setQueryGroups:self.queryGroups];
                     }];
         } );
     }];

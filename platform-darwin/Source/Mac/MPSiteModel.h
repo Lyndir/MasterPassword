@@ -45,7 +45,7 @@
 @property(nonatomic, readonly) BOOL stored;
 @property(nonatomic, readonly) BOOL transient;
 
-- (instancetype)initWithEntity:(MPSiteEntity *)entity fuzzyGroups:(NSArray *)fuzzyGroups;
+- (instancetype)initWithEntity:(MPSiteEntity *)entity queryGroups:(NSArray *)queryGroups;
 - (instancetype)initWithName:(NSString *)siteName forUser:(MPUserEntity *)user;
 - (MPSiteEntity *)entityInContext:(NSManagedObjectContext *)moc;
 

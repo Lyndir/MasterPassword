@@ -611,22 +611,20 @@
         return;
     }
 
-    static NSRegularExpression *fuzzyRE;
-    static dispatch_once_t once = 0;
-    dispatch_once( &once, ^{
-        fuzzyRE = [NSRegularExpression regularExpressionWithPattern:@"(.)" options:0 error:nil];
-    } );
-
     prof_new( @"updateSites" );
     NSString *queryString = self.siteField.stringValue;
-    NSString *queryPattern = [[queryString stringByReplacingMatchesOfExpression:fuzzyRE withTemplate:@"*$1"] stringByAppendingString:@"*"];
+    NSMutableArray *queryGroups = [NSMutableArray new];
+    NSMutableString *queryPattern = [NSMutableString new];
+    [queryString enumerateSubstringsInRange: NSMakeRange(0, [queryString length]) options: NSStringEnumerationByComposedCharacterSequences
+                                 usingBlock: ^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
+                                     if (substringRange.location < 10) {
+                                         [queryGroups addObject:substring];
+                                         [queryPattern appendString:@"*"];
+                                     }
+                                     [queryPattern appendString:substring];
+                                 }];
+    [queryPattern appendString:@"*"];
     prof_rewind( @"queryPattern" );
-    NSMutableArray *fuzzyGroups = [NSMutableArray new];
-    [fuzzyRE enumerateMatchesInString:queryString options:0 range:NSMakeRange( 0, queryString.length )
-                           usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
-                               [fuzzyGroups addObject:[queryString substringWithRange:result.range]];
-                           }];
-    prof_rewind( @"fuzzyRE" );
     [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
         prof_rewind( @"moc" );
 
@@ -648,7 +646,7 @@
         BOOL exact = NO;
         NSMutableArray *newSites = [NSMutableArray arrayWithCapacity:[siteResults count]];
         for (MPSiteEntity *site in siteResults) {
-            [newSites addObject:[[MPSiteModel alloc] initWithEntity:site fuzzyGroups:fuzzyGroups]];
+            [newSites addObject:[[MPSiteModel alloc] initWithEntity:site queryGroups:queryGroups]];
             exact |= [site.name isEqualToString:queryString];
         }
         prof_rewind( @"newSites: %u, exact: %d", (uint)[siteResults count], exact );
