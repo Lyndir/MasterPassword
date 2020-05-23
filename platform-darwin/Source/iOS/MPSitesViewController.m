@@ -172,6 +172,19 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     return cell;
 }
 
+#pragma mark - UICollectionViewDelegateFlowLayout
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout
+  sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+
+    UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)collectionViewLayout;
+    CGFloat availableWidth = collectionView.bounds.size.width
+                             - collectionView.layoutMargins.left - collectionView.layoutMargins.right
+                             - layout.sectionInset.left - layout.sectionInset.right;
+    CGFloat cells = MAX( 1, (int)((availableWidth + layout.minimumInteritemSpacing) / (318 + layout.minimumInteritemSpacing)) );
+    return CGSizeMake( (availableWidth - layout.minimumInteritemSpacing * (cells - 1)) / cells, 100 );
+}
+
 #pragma mark - UIScrollDelegate
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
