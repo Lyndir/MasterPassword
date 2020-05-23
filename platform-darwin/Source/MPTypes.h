@@ -43,6 +43,7 @@ __END_DECLS
         SentryEvent *event = [[SentryEvent alloc] initWithLevel:kSentryLevelError]; \
         event.message = strf( message_ @": %@", ##__VA_ARGS__, [__error localizedDescription]); \
         event.logger = @"MPError"; \
+        event.fingerprint = @[ message_, __error.domain, @(__error.code) ]; \
         [SentrySDK captureEvent:event]; \
     } \
     __error; \
