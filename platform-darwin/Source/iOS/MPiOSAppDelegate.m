@@ -782,7 +782,7 @@
                         @"Changing your master password will cause all your generated passwords to change!\n"
                         @"Changing the master password back to the old one will cause your passwords to revert as well."
                                                                 preferredStyle:UIAlertControllerStyleAlert];
-        [alert addAction:[UIAlertAction actionWithTitle:@"Abort" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [alert addAction:[UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             [moc performBlockAndWait:^{
                 inf( @"Clearing keyID for user: %@.", user.userID );
                 user.keyID = nil;

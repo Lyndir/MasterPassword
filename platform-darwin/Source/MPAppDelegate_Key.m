@@ -249,14 +249,14 @@
                 masterPassword = PearlAwait( ^(void (^setResult)(id)) {
                     PearlMainQueue( ^{
                         UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"Enter Old Master Password" message:
-                                        strf( @"Your old master password is required to migrate the stored password for %@", site.name )
+                                        strf( @"Your old master password is required to unlock the stored password for %@", site.name )
                                                                                      preferredStyle:UIAlertControllerStyleAlert];
                         [controller addTextFieldWithConfigurationHandler:nil];
                         [controller addAction:[UIAlertAction actionWithTitle:@"Migrate" style:UIAlertActionStyleDefault handler:
                                 ^(UIAlertAction *_Nonnull action) {
                                     setResult( controller.textFields.firstObject.text );
                                 }]];
-                        [controller addAction:[UIAlertAction actionWithTitle:@"Don't Migrate" style:UIAlertActionStyleCancel handler:
+                        [controller addAction:[UIAlertAction actionWithTitle:@"Leave It" style:UIAlertActionStyleCancel handler:
                                 ^(UIAlertAction *_Nonnull action) {
                                     setResult( nil );
                                 }]];
