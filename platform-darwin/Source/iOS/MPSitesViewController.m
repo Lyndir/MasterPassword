@@ -120,12 +120,14 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     PearlRemoveNotificationObservers();
 }
 
-- (void)viewWillLayoutSubviews {
+- (void)viewDidLayoutSubviews {
 
-    self.collectionView.contentInset = [self.collectionView occludedInsets];
-    self.collectionView.scrollIndicatorInsets = self.collectionView.contentInset;
+    [super viewDidLayoutSubviews];
 
-    [super viewWillLayoutSubviews];
+    if (@available( iOS 11, * )) {
+        self.collectionView.layoutMargins =
+                UIEdgeInsetsMake( [self.collectionView occludedInsets].top - self.view.safeAreaInsets.top, 0, 0, 0 );
+    }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
