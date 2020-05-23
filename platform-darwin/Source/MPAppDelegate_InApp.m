@@ -158,13 +158,13 @@ PearlAssociatedObjectProperty( NSMutableArray*, ProductObservers, productObserve
 
 - (void)request:(SKRequest *)request didFailWithError:(NSError *)error {
 
-    MPError( error, @"StoreKit request (%@) failed.", request );
+    MPError( error, @"StoreKit request failed." );
 
 #if TARGET_OS_IPHONE
     PearlMainQueue( ^{
         UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"Purchase Failed" message:
                         strf( @"%@\n\n%@", error.localizedDescription,
-                                @"Ensure you are online and try logging out and back into iTunes from your device's Settings." )
+                                @"Could not reach Apple's iTunes Store.  Make sure you're connected to the Internet and try again." )
                                                                      preferredStyle:UIAlertControllerStyleAlert];
         [controller addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
         [self.window.rootViewController presentViewController:controller animated:YES completion:nil];
@@ -221,6 +221,17 @@ PearlAssociatedObjectProperty( NSMutableArray*, ProductObservers, productObserve
             case SKPaymentTransactionStateFailed:
                 MPError( transaction.error, @"Transaction failed: %@.", transaction.payment.productIdentifier );
                 [queue finishTransaction:transaction];
+
+#if TARGET_OS_IPHONE
+                PearlMainQueue( ^{
+                    UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"Purchase Failed" message:
+                                    strf( @"%@\n\n%@", transaction.error.localizedDescription,
+                                            @"Could not reach Apple's iTunes Store.  Make sure you're connected to the Internet and try again." )
+                                                                                 preferredStyle:UIAlertControllerStyleAlert];
+                    [controller addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
+                    [self.window.rootViewController presentViewController:controller animated:YES completion:nil];
+                } );
+#endif
 
                 SKProduct *product = self.products[transaction.payment.productIdentifier];
                 [Countly.sharedInstance recordEvent:@"purchase" segmentation:@{
