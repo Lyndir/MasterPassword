@@ -435,7 +435,7 @@
     }];
 }
 
-- (IBAction)doContent:(id)sender {
+- (IBAction)doContent:(UIButton *)sender {
 
     [UIView animateWithDuration:.2f animations:^{
         self.contentButton.selected = YES;

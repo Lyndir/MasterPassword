@@ -98,12 +98,12 @@ decisionHandler:(void ( ^ )(WKNavigationActionPolicy))decisionHandler {
 
 #pragma mark - Actions
 
-- (IBAction)action:(id)sender {
+- (IBAction)action:(UIBarButtonItem *)sender {
 
     UIAlertController *controller = [UIAlertController alertControllerWithTitle:self.webView.URL.host
                                                                         message:self.webView.URL.absoluteString
                                                                  preferredStyle:UIAlertControllerStyleActionSheet];
-    [controller.popoverPresentationController setSourceView:sender];
+    [controller.popoverPresentationController setBarButtonItem:sender];
     [controller addAction:[UIAlertAction actionWithTitle:@"Safari" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         [UIApp openURL:self.webView.URL];
     }]];
