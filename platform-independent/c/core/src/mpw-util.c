@@ -607,6 +607,9 @@ const uint8_t *mpw_unhex(const char *hex, size_t *length) {
 
 size_t mpw_utf8_charlen(const char *utf8String) {
 
+    if (!utf8String)
+        return 0;
+
     // Legal UTF-8 byte sequences: <http://www.unicode.org/unicode/uni2errata/UTF-8_Corrigendum.html>
     unsigned char utf8Char = (unsigned char)*utf8String;
     if (utf8Char >= 0x00 && utf8Char <= 0x7F)
@@ -624,8 +627,9 @@ size_t mpw_utf8_charlen(const char *utf8String) {
 size_t mpw_utf8_strchars(const char *utf8String) {
 
     size_t strchars = 0, charlen;
-    for (char *remaining = (char *)utf8String; (charlen = mpw_utf8_charlen( remaining )); remaining += charlen)
-        ++strchars;
+    for (char *remaining = (char *)utf8String; remaining && *remaining; remaining += charlen, ++strchars)
+        if (!(charlen = mpw_utf8_charlen( remaining )))
+            return 0;
 
     return strchars;
 }

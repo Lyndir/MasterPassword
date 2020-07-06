@@ -256,9 +256,9 @@ bool mpw_id_buf_equals(MPKeyID id1, MPKeyID id2);
 
 //// String utilities.
 
-/** @return The byte length of the UTF-8 character at the start of the given string. */
+/** @return The byte length of the UTF-8 character at the start of the given string or 0 if it is NULL, empty or not a legal UTF-8 character. */
 size_t mpw_utf8_charlen(const char *utf8String);
-/** @return The amount of UTF-8 characters in the given string. */
+/** @return The amount of UTF-8 characters in the given string or 0 if it is NULL, empty, or contains bytes that are not legal in UTF-8. */
 size_t mpw_utf8_strchars(const char *utf8String);
 /** Drop-in for memdup(3).
  * @return A buffer (allocated, len) with len bytes copied from src or NULL if src is missing or the buffer could not be allocated. */

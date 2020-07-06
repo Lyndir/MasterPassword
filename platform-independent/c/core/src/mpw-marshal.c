@@ -980,7 +980,7 @@ static void mpw_marshal_read_flat(
                     str_counter = mpw_strdup( strtok( NULL, "" ) );
                     mpw_free_string( &typeAndVersionAndCounter );
                 }
-                siteLoginState = mpw_get_token( &positionInLine, endOfLine, "\t\n" ); // TODO: Needs to be encoded if redacted?
+                siteLoginState = mpw_get_token( &positionInLine, endOfLine, "\t\n" );
                 siteName = mpw_get_token( &positionInLine, endOfLine, "\t\n" );
                 siteResultState = mpw_get_token( &positionInLine, endOfLine, "\n" );
                 break;
@@ -1019,11 +1019,9 @@ static void mpw_marshal_read_flat(
             mpw_marshal_data_set_num( siteCounter, file->data, "sites", siteName, "counter", NULL );
             mpw_marshal_data_set_num( siteAlgorithm, file->data, "sites", siteName, "algorithm", NULL );
             mpw_marshal_data_set_num( siteType, file->data, "sites", siteName, "type", NULL );
-            mpw_marshal_data_set_str( siteResultState && strlen( siteResultState )? siteResultState: NULL, file->data, "sites", siteName,
-                    "password", NULL );
+            mpw_marshal_data_set_str( siteResultState, file->data, "sites", siteName, "password", NULL );
             mpw_marshal_data_set_num( MPResultTypeDefault, file->data, "sites", siteName, "login_type", NULL );
-            mpw_marshal_data_set_str( siteLoginState && strlen( siteLoginState )? siteLoginState: NULL, file->data, "sites", siteName,
-                    "login_name", NULL );
+            mpw_marshal_data_set_str( siteLoginState, file->data, "sites", siteName, "login_name", NULL );
             mpw_marshal_data_set_num( strtol( str_uses, NULL, 10 ), file->data, "sites", siteName, "uses", NULL );
             if (strftime( dateString, sizeof( dateString ), "%FT%TZ", gmtime( &siteLastUsed ) ))
                 mpw_marshal_data_set_str( dateString, file->data, "sites", siteName, "last_used", NULL );

@@ -166,6 +166,11 @@ const char *mpw_site_crypted_password_v0(
         err( "Missing encrypted state." );
         return NULL;
     }
+    if (strlen( cipherText ) % 4 != 0) {
+        wrn( "Malformed encrypted state, not base64." );
+        // This can happen if state was stored in a non-encrypted form, eg. login in old mpsites.
+        return strdup( cipherText );
+    }
 
     // Base64-decode
     uint8_t *cipherBuf = calloc( 1, mpw_base64_decode_max( cipherText ) );
@@ -184,8 +189,10 @@ const char *mpw_site_crypted_password_v0(
     mpw_free( &plainBytes, bufSize );
     if (!plainText)
         err( "AES decryption error: %s", strerror( errno ) );
+    else if (!mpw_utf8_strchars( plainText ))
+        wrn( "decrypted -> plainText: %zu bytes = illegal UTF-8 = %s", strlen( plainText ), mpw_hex( plainText, bufSize ) );
     else
-        trc( "decrypted -> plainText: %zu bytes = %s = %s", strlen( plainText ), plainText, mpw_hex( plainText, strlen( plainText ) ) );
+        trc( "decrypted -> plainText: %zu bytes = %s = %s", strlen( plainText ), plainText, mpw_hex( plainText, bufSize ) );
 
     return plainText;
 }
