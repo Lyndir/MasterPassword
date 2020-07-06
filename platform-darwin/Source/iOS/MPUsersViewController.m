@@ -48,7 +48,7 @@ typedef NS_ENUM( NSUInteger, MPActiveUserState ) {
             MPActiveUserStateMinimized,
 };
 
-@interface MPUsersViewController()
+@interface MPUsersViewController()<NSFetchedResultsControllerDelegate>
 
 @property(nonatomic) MPActiveUserState activeUserState;
 @property(nonatomic, strong) NSArray *userIDs;
@@ -58,6 +58,7 @@ typedef NS_ENUM( NSUInteger, MPActiveUserState ) {
 @property(nonatomic, copy) NSString *masterPasswordChoice;
 @property(nonatomic, strong) NSOperationQueue *afterUpdates;
 @property(nonatomic, weak) id contextChangedObserver;
+@property(nonatomic, strong) NSFetchedResultsController *userResultsController;
 
 @end
 
@@ -91,6 +92,7 @@ typedef NS_ENUM( NSUInteger, MPActiveUserState ) {
     [super viewWillAppear:animated];
 
     self.userSelectionContainer.visible = NO;
+    [self.storeLoadingActivity startAnimating];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -674,24 +676,6 @@ referenceSizeForFooterInSection:(NSInteger)section {
                 [self.keyboardHeightConstraint updateConstant:keyboardHeight];
             } );
 
-    if ((self.contextChangedObserver
-            = [[MPiOSAppDelegate get] managedObjectContextChanged:^(NSDictionary<NSManagedObjectID *, NSString *> *affectedObjects) {
-                if ([[[affectedObjects allKeys] filteredArrayUsingPredicate:
-                        [NSPredicate predicateWithBlock:^BOOL(NSManagedObjectID *objectID, NSDictionary *bindings) {
-                            return [objectID.entity.name isEqualToString:NSStringFromClass( [MPUserEntity class] )];
-                        }]] count])
-                    [self reloadUsers];
-            }]))
-        [UIView animateWithDuration:0.3f animations:^{
-            self.avatarCollectionView.visible = YES;
-            [self.storeLoadingActivity stopAnimating];
-        }];
-    else
-        [UIView animateWithDuration:0.3f animations:^{
-            self.avatarCollectionView.visible = NO;
-            [self.storeLoadingActivity startAnimating];
-        }];
-
     PearlAddNotificationObserver( NSPersistentStoreCoordinatorStoresWillChangeNotification, [MPiOSAppDelegate get].storeCoordinator, nil,
             ^(MPUsersViewController *self, NSNotification *note) {
                 self.userIDs = nil;
@@ -703,30 +687,52 @@ referenceSizeForFooterInSection:(NSInteger)section {
                     [self reloadUsers];
                 } );
             } );
+
+    [UIView animateWithDuration:0.3f animations:^{
+        self.avatarCollectionView.visible = YES;
+        [self.storeLoadingActivity stopAnimating];
+    }];
 }
 
 - (void)reloadUsers {
 
     [self afterUpdatesMainQueue:^{
         if (![MPiOSAppDelegate managedObjectContextForMainThreadPerformBlockAndWait:^(NSManagedObjectContext *mainContext) {
-            NSError *error = nil;
             NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPUserEntity class] )];
             fetchRequest.sortDescriptors = @[
                     [NSSortDescriptor sortDescriptorWithKey:NSStringFromSelector( @selector( lastUsed ) ) ascending:NO]
             ];
-            NSArray *users = [mainContext executeFetchRequest:fetchRequest error:&error];
-            if (!users) {
-                MPError( error, @"Failed to load users." );
-                self.userIDs = nil;
-            }
+            self.userResultsController = [[NSFetchedResultsController alloc]
+                                          initWithFetchRequest:fetchRequest managedObjectContext:mainContext
+                                          sectionNameKeyPath:nil cacheName:nil];
+            self.userResultsController.delegate = self;
 
-            NSMutableArray *userIDs = [NSMutableArray arrayWithCapacity:[users count]];
-            for (MPUserEntity *user in users)
-                [userIDs addObject:user.permanentObjectID];
-            self.userIDs = userIDs;
+            NSError *error = nil;
+            if (![self.userResultsController performFetch:&error])
+                MPError( error, @"Failed to load users." );
+
+            [self updateUsers];
         }])
             self.userIDs = nil;
     }];
+}
+
+- (void)updateUsers {
+
+    [self.userResultsController.managedObjectContext performBlock:^{
+        NSArray *users = self.userResultsController.fetchedObjects;
+        NSMutableArray *userIDs = [NSMutableArray arrayWithCapacity:[users count]];
+        for (MPUserEntity *user in users)
+            [userIDs addObject:user.permanentObjectID];
+        self.userIDs = userIDs;
+    }];
+}
+
+#pragma mark - NSFetchedResultsControllerDelegate
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+
+    [self updateUsers];
 }
 
 #pragma mark - Properties

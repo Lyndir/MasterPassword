@@ -29,6 +29,8 @@
     if ([self hasChanges])
         [self performBlockAndWait:^{
             @try {
+                [self processPendingChanges];
+
                 NSError *error = nil;
                 if (!(success = [self save:&error]))
                     MPError( error, @"While saving." );
