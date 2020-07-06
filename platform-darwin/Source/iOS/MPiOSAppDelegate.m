@@ -62,7 +62,7 @@
         [SentrySDK startWithOptions:@{
                 @"dsn"                      : NilToNSNull( decrypt( sentryDSN ) ),
 #ifdef DEBUG
-                @"debug"                    : @(YES),
+                @"debug"                    : @(NO), //@(YES),
                 @"environment"              : @"Development",
 #elif PUBLIC
                 @"debug"                    : @(NO),
@@ -122,7 +122,7 @@
         countlyConfig.deviceID = [PearlKeyChain deviceIdentifier];
         countlyConfig.secretSalt = decrypt( countlySalt );
 #if DEBUG
-        countlyConfig.enableDebug = YES;
+        //countlyConfig.enableDebug = YES;
         countlyConfig.pushTestMode = CLYPushTestModeDevelopment;
 #elif ! PUBLIC
         countlyConfig.enableDebug = NO;
@@ -406,12 +406,6 @@
     inf( @"Will foreground" );
 
     [self.hangDetector start];
-}
-
-- (void)applicationDidBecomeActive:(UIApplication *)application {
-
-    inf( @"Re-activated" );
-    [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:nil];
 
     PearlNotMainQueue( ^{
         NSString *importData = [UIPasteboard generalPasteboard].string;
@@ -432,6 +426,12 @@
         }
         mpw_marshal_file_free( &importFile );
     } );
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+
+    inf( @"Re-activated" );
+    [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:nil];
 }
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
