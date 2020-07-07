@@ -19,6 +19,8 @@
 #import "MPAppDelegate_Store.h"
 #import "mpw-marshal.h"
 #import "mpw-util.h"
+#import "MPAppDelegate_InApp.h"
+#import "MPSecrets.h"
 
 #if TARGET_OS_IPHONE
 #define STORE_OPTIONS NSPersistentStoreFileProtectionKey : NSFileProtectionComplete,
@@ -721,7 +723,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
                        error:(__autoreleasing NSError **)error {
 
     MPMarshalledUser *exportUser = NULL;
-    MPMarshalledFile *exportFile = NULL;
+    MPMarshalledFile *exportFile = mpw_marshal_file( NULL, NULL, mpw_marshal_data_new() );
     @try {
         inf( @"Exporting sites, %@, for user: %@", revealPasswords? @"revealing passwords": @"omitting passwords", user.userID );
         NSString *masterPassword = askExportPassword( user.name );
@@ -729,6 +731,11 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
             inf( @"Export cancelled." );
             return nil;
         }
+
+        for (NSString *feature in @[MPProductGenerateLogins, MPProductGenerateAnswers, MPProductOSIntegration, MPProductTouchID])
+            if ([[MPAppDelegate_Shared get] isFeatureUnlocked:feature])
+                mpw_marshal_data_set_str( digest( strf( @"%@/%@", user.name, feature )).UTF8String, exportFile->data,
+                        "user", "_ext_mpw", feature.UTF8String, nil );
 
         MPKey *key = [[MPKey alloc] initForFullName:user.name withMasterPassword:masterPassword];
         exportUser = mpw_marshal_user( user.name.UTF8String,
