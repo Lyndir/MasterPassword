@@ -223,6 +223,7 @@ const char *mpw_marshal_write(
 MPMarshalledFile *mpw_marshal_read(
         MPMarshalledFile *file, const char *in);
 /** Authenticate as the user identified by the given marshalled file.
+ * @note This object stores a reference to the given key provider.
  * @return A user object (allocated), or NULL if the file format provides no marshalling or a format error occurred. */
 MPMarshalledUser *mpw_marshal_auth(
         MPMarshalledFile *file, const MPMasterKeyProvider masterKeyProvider);
@@ -230,19 +231,25 @@ MPMarshalledUser *mpw_marshal_auth(
 //// Creating.
 
 /** Create a new user object ready for marshalling.
+ * @note This object stores copies of the strings assigned to it and manages their deallocation internally.
  * @return A user object (allocated), or NULL if the fullName is missing or the marshalled user couldn't be allocated. */
 MPMarshalledUser *mpw_marshal_user(
         const char *fullName, const MPMasterKeyProvider masterKeyProvider, const MPAlgorithmVersion algorithmVersion);
 /** Create a new site attached to the given user object, ready for marshalling.
+ * @note This object stores copies of the strings assigned to it and manages their deallocation internally.
  * @return A site object (allocated), or NULL if the siteName is missing or the marshalled site couldn't be allocated. */
 MPMarshalledSite *mpw_marshal_site(
         MPMarshalledUser *user,
         const char *siteName, const MPResultType resultType, const MPCounterValue siteCounter, const MPAlgorithmVersion algorithmVersion);
 /** Create a new question attached to the given site object, ready for marshalling.
+ * @note This object stores copies of the strings assigned to it and manages their deallocation internally.
  * @return A question object (allocated), or NULL if the marshalled question couldn't be allocated. */
 MPMarshalledQuestion *mpw_marshal_question(
         MPMarshalledSite *site, const char *keyword);
 /** Create or update a marshal file descriptor.
+ * @param file If NULL, a new file will be allocated.  Otherwise, the given file will be updated and the updated file returned.
+ * @param info If NULL, the file's info will be left as-is, otherwise it will be replaced by the given one.  The file will manage the info's deallocation.
+ * @param data If NULL, the file's data will be left as-is, otherwise it will be replaced by the given one.  The file will manage the data's deallocation.
  * @return The given file or new (allocated) if file is NULL; or NULL if the user is missing or the file couldn't be allocated. */
 MPMarshalledFile *mpw_marshal_file(
         MPMarshalledFile *file, MPMarshalledInfo *info, MPMarshalledData *data);
