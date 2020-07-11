@@ -537,8 +537,8 @@
 
     // UI
     //self.backgroundColor = mainSite.url? [UIColor greenColor]: [UIColor redColor];
-    self.upgradeButton.gone = !mainSite.requiresExplicitMigration && ![[MPiOSConfig get].allowDowngrade boolValue];
-    self.answersButton.gone = ![[MPiOSAppDelegate get] isFeatureUnlocked:MPProductGenerateAnswers];
+    self.upgradeButton.visible = mainSite.requiresExplicitMigration || [[MPiOSConfig get].allowDowngrade boolValue];
+    self.answersButton.visible = [[MPiOSAppDelegate get] isFeatureUnlocked:MPProductGenerateAnswers];
     BOOL settingsMode = self.mode == MPPasswordCellModeSettings;
     self.loginNameContainer.visible = settingsMode || mainSite.loginGenerated || [mainSite.loginName length];
     self.modeButton.visible = !self.transientSite;
