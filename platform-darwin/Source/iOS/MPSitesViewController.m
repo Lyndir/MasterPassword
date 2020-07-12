@@ -373,7 +373,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
         NSMutableString *queryPattern = [NSMutableString new];
         [queryString enumerateSubstringsInRange: NSMakeRange(0, [queryString length]) options: NSStringEnumerationByComposedCharacterSequences
                               usingBlock: ^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
-            if (substringRange.location < 10) {
+            if (substringRange.location < 20) {
                 [queryGroups addObject:substring];
                 [queryPattern appendString:@"*"];
             }
