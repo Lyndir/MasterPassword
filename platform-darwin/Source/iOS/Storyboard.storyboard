@@ -1679,12 +1679,12 @@ eg. apple.com, rmitchell@twitter.com</string>
                                         <rect key="frame" x="8" y="8" width="398" height="106"/>
                                         <state key="normal" backgroundImage="tip_alert_black"/>
                                         <connections>
-                                            <action selector="upgradeVolto:" destination="nkY-z6-8jd" eventType="touchUpInside" id="8KJ-vm-3D0"/>
+                                            <action selector="upgradeSpectre:" destination="nkY-z6-8jd" eventType="touchUpInside" id="8KJ-vm-3D0"/>
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XgC-Ky-oVC">
                                         <rect key="frame" x="80" y="15" width="315" height="84"/>
-                                        <string key="text">The next generation of password security is now called «Volto»:
+                                        <string key="text">The next generation of password security is now called «Spectre»:
 Tap to install the upgrade.
 
 This app is now out of maintenance.</string>
@@ -1711,13 +1711,13 @@ This app is now out of maintenance.</string>
                                         <rect key="frame" x="8" y="8" width="398" height="106"/>
                                         <state key="normal" backgroundImage="tip_alert_black"/>
                                         <connections>
-                                            <action selector="upgradeVolto:" destination="nkY-z6-8jd" eventType="touchUpInside" id="P4a-tL-9yX"/>
+                                            <action selector="upgradeSpectre:" destination="nkY-z6-8jd" eventType="touchUpInside" id="P4a-tL-9yX"/>
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fLB-gA-32p">
                                         <rect key="frame" x="80" y="15" width="315" height="84"/>
-                                        <string key="text">The next generation of password security is now called «Volto»:
-Tap to copy this user into Volto.
+                                        <string key="text">The next generation of password security is now called «Spectre»:
+Tap to copy this user into Spectre.
 
 This app is now out of maintenance.</string>
                                         <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="14"/>
@@ -1816,8 +1816,8 @@ This app is now out of maintenance.</string>
                         <outlet property="popdownView" destination="XNM-XQ-rMe" id="FaW-4m-Fff"/>
                         <outlet property="searchBar" destination="aGs-1S-aC3" id="rTp-DP-rIz"/>
                         <outlet property="sitesToBottomConstraint" destination="dNt-uf-8BC" id="Ta6-eL-z7w"/>
-                        <outlet property="voltoInstallAlert" destination="3ve-eR-1IW" id="Ah5-OX-XhQ"/>
-                        <outlet property="voltoMigrateAlert" destination="67c-5R-Foa" id="aTi-fu-opO"/>
+                        <outlet property="spectreInstallAlert" destination="3ve-eR-1IW" id="Ah5-OX-XhQ"/>
+                        <outlet property="spectreMigrateAlert" destination="67c-5R-Foa" id="aTi-fu-opO"/>
                         <segue destination="z9O-w0-6oR" kind="modal" identifier="guide" id="Ql4-wf-T8u"/>
                         <segue destination="Foa-Er-RBr" kind="custom" identifier="message" customClass="MPOverlaySegue" id="Xne-Sm-HQt"/>
                     </connections>

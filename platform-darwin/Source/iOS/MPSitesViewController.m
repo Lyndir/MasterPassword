@@ -72,7 +72,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 
     [self registerObservers];
     [self updateConfigKey:nil];
-    [self updateVoltoAlerts];
+    [self updateSpectreAlerts];
 
     static NSRegularExpression *bareHostRE = nil;
     static dispatch_once_t once = 0;
@@ -320,7 +320,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     PearlAddNotificationObserver( UIApplicationWillEnterForegroundNotification, nil, [NSOperationQueue mainQueue],
             ^(MPSitesViewController *self, NSNotification *note) {
                 [self viewWillAppear:YES];
-                [self updateVoltoAlerts];
+                [self updateSpectreAlerts];
             } );
     PearlAddNotificationObserver( MPSignedOutNotification, nil, nil,
             ^(MPSitesViewController *self, NSNotification *note) {
@@ -457,23 +457,23 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
         self.popdownToTopConstraint.priority = UILayoutPriorityDefaultHigh;
 }
 
-- (IBAction)upgradeVolto:(UIButton *)sender {
+- (IBAction)upgradeSpectre:(UIButton *)sender {
 
     [[MPiOSAppDelegate get] migrateFor:[MPiOSAppDelegate get].activeUserForMainThread];
 }
 
 #pragma mark - Private
 
-- (void)updateVoltoAlerts {
+- (void)updateSpectreAlerts {
 
-    BOOL voltoInstalled = [UIApp canOpenURL:[[NSURL alloc] initWithString:@"volto:"]];
-    if (voltoInstalled) {
-        self.voltoInstallAlert.visible = NO;
-        self.voltoMigrateAlert.visible = YES;
+    BOOL spectreInstalled = [UIApp canOpenURL:[[NSURL alloc] initWithString:@"spectre:"]];
+    if (spectreInstalled) {
+        self.spectreInstallAlert.visible = NO;
+        self.spectreMigrateAlert.visible = YES;
     }
     else {
-        self.voltoInstallAlert.visible = [MPiOSAppDelegate get].voltoViewController != nil;
-        self.voltoMigrateAlert.visible = NO;
+        self.spectreInstallAlert.visible = [MPiOSAppDelegate get].spectreViewController != nil;
+        self.spectreMigrateAlert.visible = NO;
     }
 }
 

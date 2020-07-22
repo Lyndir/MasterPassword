@@ -187,16 +187,16 @@
                 SKStoreProductParameterCampaignToken       : @"app-masterpassword.ios", /* Campaign:    From MasterPassword iOS */
                 SKStoreProductParameterProviderToken       : @153897, /*                   Provider:    Maarten Billemont */
 //              SKStoreProductParameterITunesItemIdentifier: @510296984, /*                Application: MasterPassword iOS */
-                SKStoreProductParameterITunesItemIdentifier: @1500430196, /*               Application: Volto iOS */
+                SKStoreProductParameterITunesItemIdentifier: @1500430196, /*               Application: Spectre iOS */
         }                                   completionBlock:^(BOOL result, NSError *error) {
             if (error)
-                err( @"Failed loading Volto product information: %@", error );
+                err( @"Failed loading Spectre product information: %@", error );
 
                 if (result) {
-                    self.voltoViewController = migrateVC;
-                    self.voltoViewController.delegate = self;
+                    self.spectreViewController = migrateVC;
+                    self.spectreViewController.delegate = self;
                 } else {
-                    self.voltoViewController = nil;
+                    self.spectreViewController = nil;
                 }
         }];
 
@@ -705,7 +705,7 @@
 
 - (void)migrateFor:(MPUserEntity *)user {
 
-    if ([UIApp canOpenURL:[[NSURL alloc] initWithString:@"volto:"]]) {
+    if ([UIApp canOpenURL:[[NSURL alloc] initWithString:@"spectre:"]]) {
         if (!user) {
             [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
                 NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPUserEntity class] )];
@@ -714,7 +714,7 @@
                     return;
 
                 UIAlertController *usersSheet = [UIAlertController alertControllerWithTitle:@"Migrate User"
-                                                                                    message:@"Choose a user to migrate out to Volto."
+                                                                                    message:@"Choose a user to migrate out to Spectre."
                                                                              preferredStyle:UIAlertControllerStyleAlert];
                 [usersSheet addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
                 for (MPUserEntity *user_ in users)
@@ -762,7 +762,7 @@
                     return;
 
                 NSURLComponents *components = [NSURLComponents new];
-                components.scheme = @"volto";
+                components.scheme = @"spectre";
                 components.path = @"import";
                 components.queryItems = @[ [[NSURLQueryItem alloc] initWithName:@"data" value:exportedUser] ];
                 [UIApp openURL:components.URL];
@@ -770,8 +770,8 @@
         }];
     }
 
-    else if (self.voltoViewController)
-        [self.window.rootViewController presentViewController:self.voltoViewController animated:YES completion:nil];
+    else if (self.spectreViewController)
+        [self.window.rootViewController presentViewController:self.spectreViewController animated:YES completion:nil];
 }
 
 - (void)changeMasterPasswordFor:(MPUserEntity *)user saveInContext:(NSManagedObjectContext *)moc didResetBlock:(void ( ^ )(void))didReset {

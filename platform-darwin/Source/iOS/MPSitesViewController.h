@@ -30,8 +30,8 @@
 @property(nonatomic, strong) IBOutlet UIView *badNameTipContainer;
 @property(nonatomic, strong) IBOutlet UIView *popdownView;
 @property(nonatomic, strong) IBOutlet UIView *popdownContainer;
-@property(nonatomic, strong) IBOutlet UIView *voltoInstallAlert;
-@property(nonatomic, strong) IBOutlet UIView *voltoMigrateAlert;
+@property(nonatomic, strong) IBOutlet UIView *spectreInstallAlert;
+@property(nonatomic, strong) IBOutlet UIView *spectreMigrateAlert;
 
 @property(assign, nonatomic) BOOL active;
 
@@ -39,6 +39,6 @@
 - (void)reloadSites;
 
 - (IBAction)dismissPopdown:(id)sender;
-- (IBAction)upgradeVolto:(UIButton *)sender;
+- (IBAction)upgradeSpectre:(UIButton *)sender;
 
 @end
