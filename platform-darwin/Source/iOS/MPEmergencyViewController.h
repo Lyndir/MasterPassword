@@ -30,8 +30,10 @@
 @property(weak, nonatomic) IBOutlet UIActivityIndicatorView *activity;
 @property(weak, nonatomic) IBOutlet UIButton *passwordButton;
 @property(weak, nonatomic) IBOutlet UIView *tipContainer;
+@property(weak, nonatomic) IBOutlet UIButton *deviceButton;
 
 - (IBAction)controlChanged:(UIControl *)control;
 - (IBAction)copyPassword:(UITapGestureRecognizer *)recognizer;
+- (IBAction)copyDevice:(id)sender;
 
 @end

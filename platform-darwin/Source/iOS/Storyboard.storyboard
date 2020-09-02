@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES" initialViewController="Q1S-vU-GGO">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17154" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES" initialViewController="Q1S-vU-GGO">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17124"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -164,7 +164,7 @@
                                             <outlet property="delegate" destination="S8q-YF-Kt9" id="det-Eh-phM"/>
                                         </connections>
                                     </collectionView>
-                                    <button opaque="NO" alpha="0.69999999999999996" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9u7-pu-Wtv" userLabel="Previous Avatar">
+                                    <button opaque="NO" alpha="0.69999999999999996" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9u7-pu-Wtv" userLabel="Previous Avatar">
                                         <rect key="frame" x="0.0" y="439.5" width="44" height="53"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="44" id="Ay6-Jg-c3T"/>
@@ -177,7 +177,7 @@
                                             <action selector="changeAvatar:" destination="S8q-YF-Kt9" eventType="touchUpInside" id="lNu-mK-3zD"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" alpha="0.69999999999999996" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fUK-gJ-NRE" userLabel="Next Avatar">
+                                    <button opaque="NO" alpha="0.69999999999999996" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fUK-gJ-NRE" userLabel="Next Avatar">
                                         <rect key="frame" x="370" y="439.5" width="44" height="53"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="44" id="oAm-YX-Fx5"/>
@@ -276,7 +276,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XEP-O3-ayG" userLabel="Footer">
                                         <rect key="frame" x="0.0" y="824" width="414" height="72"/>
                                         <subviews>
-                                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4md-Gp-SLG">
+                                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4md-Gp-SLG">
                                                 <rect key="frame" x="20" y="48" width="374" height="24"/>
                                                 <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="10"/>
                                                 <state key="normal" title="Thanks, lhunath ➚">
@@ -798,7 +798,7 @@
                                                         <constraint firstAttribute="height" constant="110" id="zBf-EA-iDN"/>
                                                     </constraints>
                                                 </imageView>
-                                                <button opaque="NO" alpha="0.69999998807907104" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DzC-Ts-gew" userLabel="Previous Avatar">
+                                                <button opaque="NO" alpha="0.69999998807907104" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DzC-Ts-gew" userLabel="Previous Avatar">
                                                     <rect key="frame" x="20" y="148.5" width="44" height="53"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="1Wu-gS-flK"/>
@@ -812,7 +812,7 @@
                                                         <action selector="previousAvatar:" destination="JFc-sj-awD" eventType="touchUpInside" id="D92-6I-zFd"/>
                                                     </connections>
                                                 </button>
-                                                <button opaque="NO" alpha="0.69999998807907104" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yAf-fc-SKl" userLabel="Next Avatar">
+                                                <button opaque="NO" alpha="0.69999998807907104" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yAf-fc-SKl" userLabel="Next Avatar">
                                                     <rect key="frame" x="350" y="148.5" width="44" height="53"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="pEf-Vp-D7s"/>
@@ -1039,7 +1039,7 @@ Note that this feature requires you enable the Save Password option and have pur
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rl7-cr-FHf">
+                                                <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rl7-cr-FHf">
                                                     <rect key="frame" x="20" y="118" width="374" height="27"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="12"/>
                                                     <state key="normal" title="Home Page">
@@ -1049,7 +1049,7 @@ Note that this feature requires you enable the Save Password option and have pur
                                                         <action selector="homePageButton:" destination="JFc-sj-awD" eventType="touchUpInside" id="ptD-cv-NMr"/>
                                                     </connections>
                                                 </button>
-                                                <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="epW-Rm-9St">
+                                                <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="epW-Rm-9St">
                                                     <rect key="frame" x="20" y="153" width="374" height="27"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="12"/>
                                                     <state key="normal" title="Understanding Master Password's Security">
@@ -1059,7 +1059,7 @@ Note that this feature requires you enable the Save Password option and have pur
                                                         <action selector="securityButton:" destination="JFc-sj-awD" eventType="touchUpInside" id="Efv-cp-Xfh"/>
                                                     </connections>
                                                 </button>
-                                                <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LTN-ch-h8D">
+                                                <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LTN-ch-h8D">
                                                     <rect key="frame" x="20" y="188" width="374" height="27"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="12"/>
                                                     <state key="normal" title="Get the Master Password source code">
@@ -1069,7 +1069,7 @@ Note that this feature requires you enable the Save Password option and have pur
                                                         <action selector="sourceButton:" destination="JFc-sj-awD" eventType="touchUpInside" id="Y3O-di-CZo"/>
                                                     </connections>
                                                 </button>
-                                                <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z60-lc-Nka">
+                                                <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z60-lc-Nka">
                                                     <rect key="frame" x="20" y="223" width="374" height="27"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="12"/>
                                                     <state key="normal" title="Send Thanks">
@@ -1675,7 +1675,7 @@ eg. apple.com, rmitchell@twitter.com</string>
                             <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3ve-eR-1IW">
                                 <rect key="frame" x="0.0" y="740" width="414" height="156"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PWC-I5-RSl">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PWC-I5-RSl">
                                         <rect key="frame" x="8" y="8" width="398" height="106"/>
                                         <state key="normal" backgroundImage="tip_alert_black"/>
                                         <connections>
@@ -1707,7 +1707,7 @@ This app is now out of maintenance.</string>
                             <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="67c-5R-Foa">
                                 <rect key="frame" x="0.0" y="740" width="414" height="156"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EZK-er-8ql">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EZK-er-8ql">
                                         <rect key="frame" x="8" y="8" width="398" height="106"/>
                                         <state key="normal" backgroundImage="tip_alert_black"/>
                                         <connections>
@@ -1846,10 +1846,10 @@ This app is now out of maintenance.</string>
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1lc-e7-Qme" userLabel="Emergency Generator">
-                                        <rect key="frame" x="20" y="240.5" width="374" height="415.5"/>
+                                        <rect key="frame" x="20" y="240" width="374" height="416"/>
                                         <subviews>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Emergency Generator" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="4Lh-s0-Dbt">
-                                                <rect key="frame" x="20" y="20" width="334" height="21"/>
+                                                <rect key="frame" x="20" y="20" width="334" height="21.5"/>
                                                 <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -1857,7 +1857,7 @@ This app is now out of maintenance.</string>
                                                 <size key="shadowOffset" width="0.0" height="1"/>
                                             </label>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Generate your password without logging in.  Great for if you're borrowing a friend's device or are having trouble logging in." lineBreakMode="tailTruncation" numberOfLines="0" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="vHS-3A-Tae">
-                                                <rect key="frame" x="20" y="49" width="334" height="51.5"/>
+                                                <rect key="frame" x="20" y="49.5" width="334" height="51.5"/>
                                                 <fontDescription key="fontDescription" name="Exo2.0-Thin" family="Exo 2.0" pointSize="14"/>
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -1865,7 +1865,7 @@ This app is now out of maintenance.</string>
                                                 <size key="shadowOffset" width="0.0" height="1"/>
                                             </label>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Your Name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="XAC-Da-lpf" userLabel="User Name">
-                                                <rect key="frame" x="20" y="108.5" width="334" height="34"/>
+                                                <rect key="frame" x="20" y="109" width="334" height="34"/>
                                                 <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" autocapitalizationType="words" keyboardAppearance="alert" returnKeyType="next" enablesReturnKeyAutomatically="YES"/>
                                                 <connections>
@@ -1874,7 +1874,7 @@ This app is now out of maintenance.</string>
                                                 </connections>
                                             </textField>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Your Master Password" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="J46-0E-no3" userLabel="Master Password">
-                                                <rect key="frame" x="20" y="150.5" width="334" height="34"/>
+                                                <rect key="frame" x="20" y="151" width="334" height="34"/>
                                                 <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardAppearance="alert" returnKeyType="next" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
                                                 <connections>
@@ -1883,7 +1883,7 @@ This app is now out of maintenance.</string>
                                                 </connections>
                                             </textField>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Site Name" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="56H-xR-09J" userLabel="Site Name">
-                                                <rect key="frame" x="20" y="192.5" width="334" height="34"/>
+                                                <rect key="frame" x="20" y="193" width="334" height="34"/>
                                                 <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="URL" keyboardAppearance="alert" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                                                 <connections>
@@ -1892,7 +1892,7 @@ This app is now out of maintenance.</string>
                                                 </connections>
                                             </textField>
                                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="1" translatesAutoresizingMaskIntoConstraints="NO" id="e4b-Iv-Pk9" userLabel="Type">
-                                                <rect key="frame" x="20" y="234.5" width="334" height="32"/>
+                                                <rect key="frame" x="20" y="235" width="334" height="32"/>
                                                 <segments>
                                                     <segment title="Max"/>
                                                     <segment title="Long"/>
@@ -1907,7 +1907,7 @@ This app is now out of maintenance.</string>
                                                 </connections>
                                             </segmentedControl>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Counter" lineBreakMode="tailTruncation" numberOfLines="0" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="cAo-K2-E23">
-                                                <rect key="frame" x="20" y="277.5" width="64" height="21.5"/>
+                                                <rect key="frame" x="20" y="278.5" width="64" height="21.5"/>
                                                 <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -1915,13 +1915,13 @@ This app is now out of maintenance.</string>
                                                 <size key="shadowOffset" width="0.0" height="1"/>
                                             </label>
                                             <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="ZPT-EI-yuv" userLabel="Counter">
-                                                <rect key="frame" x="260" y="273.5" width="94" height="32"/>
+                                                <rect key="frame" x="260" y="274" width="94" height="32"/>
                                                 <connections>
                                                     <action selector="controlChanged:" destination="osn-5H-SWW" eventType="valueChanged" id="eQA-3X-uc9"/>
                                                 </connections>
                                             </stepper>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="1" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="3Cd-XH-Wau">
-                                                <rect key="frame" x="245" y="278.5" width="7" height="20"/>
+                                                <rect key="frame" x="245" y="279" width="7" height="20.5"/>
                                                 <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="17"/>
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1962,10 +1962,10 @@ This app is now out of maintenance.</string>
                                                 </state>
                                             </button>
                                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="4sN-hm-xio">
-                                                <rect key="frame" x="168.5" y="352" width="37" height="37"/>
+                                                <rect key="frame" x="168.5" y="352.5" width="37" height="37"/>
                                             </activityIndicatorView>
                                             <button opaque="NO" clipsSubviews="YES" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="clip" translatesAutoresizingMaskIntoConstraints="NO" id="bHR-he-dnZ">
-                                                <rect key="frame" x="20" y="345.5" width="334" height="50"/>
+                                                <rect key="frame" x="20" y="346" width="334" height="50"/>
                                                 <gestureRecognizers/>
                                                 <fontDescription key="fontDescription" name="SourceCodePro-Black" family="Source Code Pro" pointSize="30"/>
                                                 <state key="normal" title="XapaNuwjFihn6$">
@@ -1977,7 +1977,7 @@ This app is now out of maintenance.</string>
                                                 </connections>
                                             </button>
                                             <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="beo-cJ-jIn" userLabel="View - Content Tip">
-                                                <rect key="frame" x="82" y="310.5" width="210" height="60"/>
+                                                <rect key="frame" x="82" y="311" width="210" height="60"/>
                                                 <subviews>
                                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black.png" translatesAutoresizingMaskIntoConstraints="NO" id="nyL-cO-aPa">
                                                         <rect key="frame" x="0.0" y="0.0" width="210" height="60"/>
@@ -2056,14 +2056,41 @@ This app is now out of maintenance.</string>
                                     <constraint firstItem="1lc-e7-Qme" firstAttribute="leading" secondItem="whU-l0-2bU" secondAttribute="leading" constant="20" id="ztv-2f-RAc"/>
                                 </constraints>
                             </scrollView>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="cbe-hc-9K5">
+                                <rect key="frame" x="20" y="820" width="374" height="42"/>
+                                <subviews>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Anonymous Device Identifier" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="VyZ-qP-VkG">
+                                        <rect key="frame" x="0.0" y="0.0" width="374" height="18"/>
+                                        <fontDescription key="fontDescription" name="Exo2.0-Thin" family="Exo 2.0" pointSize="14"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                        <color key="shadowColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <size key="shadowOffset" width="0.0" height="1"/>
+                                    </label>
+                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DVF-Im-H2I">
+                                        <rect key="frame" x="0.0" y="18" width="374" height="24"/>
+                                        <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="10"/>
+                                        <state key="normal" title="0000000000000000000000000000000000000000">
+                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="copyDevice:" destination="osn-5H-SWW" eventType="touchUpInside" id="0dD-IS-Ktn"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="whU-l0-2bU" firstAttribute="height" secondItem="GiS-3g-cDj" secondAttribute="height" multiplier="1:2" id="4oQ-JI-wQv"/>
                             <constraint firstAttribute="width" secondItem="whU-l0-2bU" secondAttribute="width" id="AiQ-LE-3bh"/>
                             <constraint firstItem="IV3-lc-Fnf" firstAttribute="top" secondItem="gRG-Ys-94p" secondAttribute="bottom" id="IMb-wl-Eeb"/>
+                            <constraint firstItem="cbe-hc-9K5" firstAttribute="leading" secondItem="GiS-3g-cDj" secondAttribute="leadingMargin" id="KNZ-jb-npt"/>
                             <constraint firstAttribute="trailing" secondItem="gRG-Ys-94p" secondAttribute="trailing" id="Pb1-eY-0FG"/>
+                            <constraint firstItem="IV3-lc-Fnf" firstAttribute="top" secondItem="cbe-hc-9K5" secondAttribute="bottom" id="YWv-H4-Ij3"/>
                             <constraint firstItem="gRG-Ys-94p" firstAttribute="top" secondItem="GiS-3g-cDj" secondAttribute="top" id="oyk-Xr-zTZ"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="cbe-hc-9K5" secondAttribute="trailing" id="wss-B8-PT6"/>
                             <constraint firstItem="gRG-Ys-94p" firstAttribute="leading" secondItem="GiS-3g-cDj" secondAttribute="leading" id="zhC-jf-5dY"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
@@ -2078,6 +2105,7 @@ This app is now out of maintenance.</string>
                         <outlet property="containerView" destination="GiS-3g-cDj" id="01o-PU-SNZ"/>
                         <outlet property="counterLabel" destination="3Cd-XH-Wau" id="wv7-jZ-6tX"/>
                         <outlet property="counterStepper" destination="ZPT-EI-yuv" id="w5c-hO-T51"/>
+                        <outlet property="deviceButton" destination="DVF-Im-H2I" id="TMU-Vo-bDo"/>
                         <outlet property="dialogView" destination="1lc-e7-Qme" id="JYt-mv-XV2"/>
                         <outlet property="fullNameField" destination="XAC-Da-lpf" id="XCk-0H-IcI"/>
                         <outlet property="masterPasswordField" destination="J46-0E-no3" id="DfH-4n-cop"/>
@@ -2119,10 +2147,10 @@ This app is now out of maintenance.</string>
                                 </items>
                             </navigationBar>
                             <pageControl opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="8A2-ly-WTX">
-                                <rect key="frame" x="187.5" y="771" width="39" height="37"/>
+                                <rect key="frame" x="141" y="778.5" width="132" height="29.5"/>
                             </pageControl>
                             <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="i2y-lo-HXR">
-                                <rect key="frame" x="0.0" y="44" width="414" height="637"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="644.5"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="m8O-kY-22j">
                                     <size key="itemSize" width="320" height="458"/>
@@ -2132,7 +2160,7 @@ This app is now out of maintenance.</string>
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MPGuideStepCell" id="oGu-pJ-3bQ" customClass="MPGuideStepCell">
-                                        <rect key="frame" x="0.0" y="89.5" width="320" height="458"/>
+                                        <rect key="frame" x="0.0" y="93.5" width="320" height="458"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="458"/>
@@ -2161,13 +2189,13 @@ This app is now out of maintenance.</string>
                                 </connections>
                             </collectionView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="To begin, tap the &quot;New User&quot; icon and add yourself as a user to the application." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ciw-56-nNy" userLabel="Caption">
-                                <rect key="frame" x="8" y="689" width="398" height="82"/>
+                                <rect key="frame" x="8" y="696.5" width="398" height="82"/>
                                 <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="13"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Oop-Ff-gbz" userLabel="Caption Height Strut">
-                                <rect key="frame" x="8" y="689" width="1" height="82"/>
+                                <rect key="frame" x="8" y="696.5" width="1" height="82"/>
                                 <string key="text" base64-UTF8="YES">
 CgoKCgoKCgoKCgoKCg
 </string>
@@ -2785,7 +2813,7 @@ Invested: 3.7 work hours</string>
                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lQ1-b9-Xp4">
+                                        <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lQ1-b9-Xp4">
                                             <rect key="frame" x="20" y="34" width="374" height="27"/>
                                             <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="12"/>
                                             <state key="normal" title="Restore Previous Purchases">
@@ -2795,7 +2823,7 @@ Invested: 3.7 work hours</string>
                                                 <action selector="restorePurchases:" destination="pdl-xv-zjX" eventType="touchUpInside" id="Q8M-ud-OHL"/>
                                             </connections>
                                         </button>
-                                        <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eus-kQ-emn">
+                                        <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eus-kQ-emn">
                                             <rect key="frame" x="8" y="69" width="398" height="27"/>
                                             <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="12"/>
                                             <state key="normal" title="Send Thanks">

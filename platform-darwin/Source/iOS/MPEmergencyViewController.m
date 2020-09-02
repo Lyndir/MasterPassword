@@ -38,6 +38,8 @@
 
     self.view.backgroundColor = [UIColor clearColor];
     self.dialogView.layer.cornerRadius = 5;
+
+    [self.deviceButton setTitle:[PearlKeyChain deviceIdentifier] forState:UIControlStateNormal];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -110,6 +112,11 @@
             }];
         } );
     }];
+}
+
+- (IBAction)copyDevice:(id)sender {
+    [UIPasteboard generalPasteboard].string = [PearlKeyChain deviceIdentifier];
+    [PearlOverlay showTemporaryOverlayWithTitle:strl( @"Device Identifier Copied" ) dismissAfter:2];
 }
 
 #pragma mark - Private
