@@ -213,12 +213,12 @@
 
 - (BOOL)generated {
 
-    return self.type & MPResultTypeClassTemplate;
+    return (self.type & MPResultTypeClassTemplate) == MPResultTypeClassTemplate;
 }
 
 - (BOOL)stored {
 
-    return self.type & MPResultTypeClassStateful;
+    return (self.type & MPResultTypeClassStateful) == MPResultTypeClassStateful;
 }
 
 - (BOOL)transient {
