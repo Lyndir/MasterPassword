@@ -22,10 +22,12 @@
 #import "MPSecrets.h"
 #import "mpw-marshal.h"
 
+MP_LIBS_BEGIN
 #import <Carbon/Carbon.h>
 #import <ServiceManagement/ServiceManagement.h>
 #import <Sentry/Sentry.h>
 #import <Countly/Countly.h>
+MP_LIBS_END
 
 #define LOGIN_HELPER_BUNDLE_ID @"com.lyndir.lhunath.MasterPassword.Mac.LoginHelper"
 
@@ -71,7 +73,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         [SentrySDK startWithOptions:@{
                 @"dsn"                      : NilToNSNull( decrypt( sentryDSN ) ),
 #ifdef DEBUG
-                @"debug"                    : @(YES),
+                @"debug"                    : @(NO),
                 @"environment"              : @"Development",
 #elif PUBLIC
                 @"debug"                    : @(NO),

@@ -16,7 +16,9 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
+MP_LIBS_BEGIN
 #import <StoreKit/StoreKit.h>
+MP_LIBS_END
 
 #import "MPSitesViewController.h"
 #import "MPiOSAppDelegate.h"

@@ -18,9 +18,12 @@
 
 #import "MPStoreViewController.h"
 #import "MPiOSAppDelegate.h"
-#import "UIColor+Expanded.h"
 #import "MPAppDelegate_InApp.h"
 #import "MPSitesViewController.h"
+
+MP_LIBS_BEGIN
+#import "UIColor+Expanded.h"
+MP_LIBS_END
 
 PearlEnum( MPDevelopmentFuelConsumption,
         MPDevelopmentFuelConsumptionQuarterly, MPDevelopmentFuelConsumptionMonthly, MPDevelopmentFuelWeekly );

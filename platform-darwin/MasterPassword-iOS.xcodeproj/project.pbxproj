@@ -332,7 +332,6 @@
 		DABD3C1E1711E2DC00CF925C /* MPPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DABD3BEB1711E2DC00CF925C /* MPPreferencesViewController.m */; };
 		DABD3C1F1711E2DC00CF925C /* MPTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DABD3BED1711E2DC00CF925C /* MPTypeViewController.m */; };
 		DABD3C211711E2DC00CF925C /* MPiOSConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = DABD3BF11711E2DC00CF925C /* MPiOSConfig.m */; };
-		DABD3C241711E2DC00CF925C /* MasterPassword.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = DABD3BF81711E2DC00CF925C /* MasterPassword.entitlements */; };
 		DABD3C251711E2DC00CF925C /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DABD3BF91711E2DC00CF925C /* Settings.bundle */; };
 		DABD3C261711E2DC00CF925C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DABD3BFA1711E2DC00CF925C /* InfoPlist.strings */; };
 		DABD3C271711E2DC00CF925C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DABD3BFC1711E2DC00CF925C /* main.m */; };
@@ -3446,7 +3445,6 @@
 				DA5E0E5E24589C9B0007FBA7 /* Icon-83@2x.png in Resources */,
 				DA854C8418D4CFBF00106317 /* avatar-add.png in Resources */,
 				DAA1764B19D8B82B0044227B /* login_name@2x.png in Resources */,
-				DABD3C241711E2DC00CF925C /* MasterPassword.entitlements in Resources */,
 				DABD3C251711E2DC00CF925C /* Settings.bundle in Resources */,
 				DABD3C261711E2DC00CF925C /* InfoPlist.strings in Resources */,
 				DA32D05119D3D107004F3F0E /* icon_meter.png in Resources */,

@@ -17,7 +17,6 @@
 //==============================================================================
 
 #import "MPGuideViewController.h"
-#import "markdown_lib.h"
 #import "NSString+MPMarkDown.h"
 
 @interface MPGuideStep : NSObject

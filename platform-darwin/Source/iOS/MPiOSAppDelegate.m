@@ -23,8 +23,10 @@
 #import "mpw-marshal.h"
 #import "MPSecrets.h"
 
+MP_LIBS_BEGIN
 #import <Sentry/Sentry.h>
 #import <Countly/Countly.h>
+MP_LIBS_END
 
 @interface CountlyPushNotifications
 @end

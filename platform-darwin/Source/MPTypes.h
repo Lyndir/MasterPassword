@@ -16,7 +16,9 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
+MP_LIBS_BEGIN
 #import <Sentry/Sentry.h>
+MP_LIBS_END
 
 __BEGIN_DECLS
 extern NSString *const MPErrorDomain;

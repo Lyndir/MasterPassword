@@ -58,22 +58,6 @@ const long MPAvatarAdd = 10000;
     self.avatarImageView.layer.masksToBounds = NO;
     self.avatarImageView.backgroundColor = [UIColor clearColor];
 
-    [self observeKeyPath:@"bounds" withBlock:^(id from, id to, NSKeyValueChange cause, MPAvatarCell *self) {
-        self.contentView.frame = self.bounds;
-    }];
-    [self observeKeyPath:@"selected" withBlock:^(id from, id to, NSKeyValueChange cause, MPAvatarCell *self) {
-        [self updateAnimated:self.superview != nil];
-    }];
-    [self observeKeyPath:@"highlighted" withBlock:^(id from, id to, NSKeyValueChange cause, MPAvatarCell *self) {
-        [self updateAnimated:self.superview != nil];
-    }];
-    PearlAddNotificationObserver( UIKeyboardWillShowNotification, nil, [NSOperationQueue mainQueue],
-            ^(MPAvatarCell *self, NSNotification *note) {
-                CGRect keyboardRect = [note.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-                CGFloat keyboardHeight = CGRectGetHeight( self.window.screen.bounds ) - CGRectGetMinY( keyboardRect );
-                [self.keyboardHeightConstraint updateConstant:keyboardHeight];
-            } );
-
     CABasicAnimation *toShadowOpacityAnimation = [CABasicAnimation animationWithKeyPath:@"shadowOpacity"];
     toShadowOpacityAnimation.toValue = @0.2f;
     toShadowOpacityAnimation.duration = 0.5f;
@@ -91,6 +75,22 @@ const long MPAvatarAdd = 10000;
     self.targetedShadowAnimation.duration = MAXFLOAT;
     self.avatarImageView.layer.shadowColor = [UIColor whiteColor].CGColor;
     self.avatarImageView.layer.shadowOffset = CGSizeZero;
+
+    [self observeKeyPath:@"bounds" withBlock:^(id from, id to, NSKeyValueChange cause, MPAvatarCell *self) {
+        self.contentView.frame = self.bounds;
+    }];
+    [self observeKeyPath:@"selected" withBlock:^(id from, id to, NSKeyValueChange cause, MPAvatarCell *self) {
+        [self updateAnimated:self.superview != nil];
+    }];
+    [self observeKeyPath:@"highlighted" withBlock:^(id from, id to, NSKeyValueChange cause, MPAvatarCell *self) {
+        [self updateAnimated:self.superview != nil];
+    }];
+    PearlAddNotificationObserver( UIKeyboardWillShowNotification, nil, [NSOperationQueue mainQueue],
+            ^(MPAvatarCell *self, NSNotification *note) {
+                CGRect keyboardRect = [note.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+                CGFloat keyboardHeight = CGRectGetHeight( self.window.screen.bounds ) - CGRectGetMinY( keyboardRect );
+                [self.keyboardHeightConstraint updateConstant:keyboardHeight];
+            } );
 }
 
 - (void)prepareForReuse {

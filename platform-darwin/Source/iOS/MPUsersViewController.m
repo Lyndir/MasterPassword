@@ -57,7 +57,6 @@ typedef NS_ENUM( NSUInteger, MPActiveUserState ) {
 @property(nonatomic) NSUInteger marqueeTipTextIndex;
 @property(nonatomic, copy) NSString *masterPasswordChoice;
 @property(nonatomic, strong) NSOperationQueue *afterUpdates;
-@property(nonatomic, weak) id contextChangedObserver;
 @property(nonatomic, strong) NSFetchedResultsController *userResultsController;
 
 @end
@@ -644,7 +643,6 @@ referenceSizeForFooterInSection:(NSInteger)section {
 
     [self removeKeyPathObservers];
     PearlRemoveNotificationObservers();
-    [[NSNotificationCenter defaultCenter] removeObserver:self.contextChangedObserver];
 }
 
 - (void)registerObservers {
