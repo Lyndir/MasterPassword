@@ -63,7 +63,7 @@
 		DA071BF3190187FE00179766 /* empty@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA071BF1190187FE00179766 /* empty@2x.png */; };
 		DA071BF4190187FE00179766 /* empty.png in Resources */ = {isa = PBXBuildFile; fileRef = DA071BF2190187FE00179766 /* empty.png */; };
 		DA095E75172F4CD8001C948B /* MPLogsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3979190DACEBD1F6AE9F4 /* MPLogsViewController.m */; };
-		DA0CC54E1EB6AD0E009A8ED9 /* MasterPassword.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DA0CC5441EB6AD0E009A8ED9 /* MasterPassword.xcdatamodeld */; };
+		DA0CC5401EB6AD0E009A8ED9 /* MasterPassword.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DA0CC5441EB6AD0E009A8ED9 /* MasterPassword.xcdatamodeld */; };
 		DA0CC58C1EB6B030009A8ED9 /* MPGeneratedSiteEntity+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = DA0CC5791EB6B030009A8ED9 /* MPGeneratedSiteEntity+CoreDataClass.m */; };
 		DA0CC58D1EB6B030009A8ED9 /* MPGeneratedSiteEntity+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = DA0CC57B1EB6B030009A8ED9 /* MPGeneratedSiteEntity+CoreDataProperties.m */; };
 		DA0CC58E1EB6B030009A8ED9 /* MPSiteQuestionEntity+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = DA0CC57D1EB6B030009A8ED9 /* MPSiteQuestionEntity+CoreDataClass.m */; };
@@ -3624,7 +3624,7 @@
 				DA0CC58F1EB6B030009A8ED9 /* MPSiteQuestionEntity+CoreDataProperties.m in Sources */,
 				93D396D8B67DA6522CDBA142 /* MPCoachmarkViewController.m in Sources */,
 				DAADBFE01A68763B00F7A756 /* mpw-algorithm.c in Sources */,
-				DA0CC54E1EB6AD0E009A8ED9 /* MasterPassword.xcdatamodeld in Sources */,
+				DA0CC5401EB6AD0E009A8ED9 /* MasterPassword.xcdatamodeld in Sources */,
 				DA35148D233EF93400BCF504 /* mpw-algorithm_v3.c in Sources */,
 				DAB07C9D1F7725C500CC6D43 /* aes.c in Sources */,
 				93D39EAA4D064193074D3021 /* MPFixable.m in Sources */,
