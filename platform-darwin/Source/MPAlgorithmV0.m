@@ -88,7 +88,7 @@ static NSOperationQueue *_mpwQueue = nil;
 - (BOOL)tryMigrateUser:(MPUserEntity *)user inContext:(NSManagedObjectContext *)moc {
 
     NSError *error = nil;
-    NSFetchRequest *migrationRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPSiteEntity class] )];
+    NSFetchRequest *migrationRequest = [MPSiteEntity fetchRequest];
     migrationRequest.predicate = [NSPredicate predicateWithFormat:@"version_ < %d AND user == %@", self.version, user];
     NSArray *migrationSites = [moc executeFetchRequest:migrationRequest error:&error];
     if (!migrationSites) {

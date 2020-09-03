@@ -696,7 +696,7 @@ referenceSizeForFooterInSection:(NSInteger)section {
 
     [self afterUpdatesMainQueue:^{
         if (![MPiOSAppDelegate managedObjectContextForMainThreadPerformBlockAndWait:^(NSManagedObjectContext *mainContext) {
-            NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPUserEntity class] )];
+            NSFetchRequest *fetchRequest = [MPUserEntity fetchRequest];
             fetchRequest.sortDescriptors = @[
                     [NSSortDescriptor sortDescriptorWithKey:NSStringFromSelector( @selector( lastUsed ) ) ascending:NO]
             ];

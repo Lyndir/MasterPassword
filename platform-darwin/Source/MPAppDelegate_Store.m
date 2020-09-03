@@ -623,7 +623,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
 
         // Find an existing user to update.
         NSError *error = nil;
-        NSFetchRequest *userFetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPUserEntity class] )];
+        NSFetchRequest *userFetchRequest = [MPUserEntity fetchRequest];
         userFetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@", @(importUser->fullName)];
         NSArray *users = [context executeFetchRequest:userFetchRequest error:&error];
         if (!users)
@@ -661,7 +661,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
             MPMarshalledSite *importSite = &importUser->sites[s];
 
             // Find an existing site to update.
-            NSFetchRequest *siteFetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPSiteEntity class] )];
+            NSFetchRequest *siteFetchRequest = [MPSiteEntity fetchRequest];
             siteFetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@ AND user == %@", @(importSite->siteName), user];
             NSArray *existingSites = [context executeFetchRequest:siteFetchRequest error:&error];
             if (!existingSites)
@@ -735,9 +735,9 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
             return nil;
         }
 
-        for (NSString *feature in @[MPProductGenerateLogins, MPProductGenerateAnswers, MPProductOSIntegration, MPProductTouchID])
+        for (NSString *feature in @[ MPProductGenerateLogins, MPProductGenerateAnswers, MPProductOSIntegration, MPProductTouchID ])
             if ([[MPAppDelegate_Shared get] isFeatureUnlocked:feature])
-                mpw_marshal_data_set_str( digest( strf( @"%@/%@", user.name, feature )).UTF8String, exportFile->data,
+                mpw_marshal_data_set_str( digest( strf( @"%@/%@", user.name, feature ) ).UTF8String, exportFile->data,
                         "user", "_ext_mpw", feature.UTF8String, nil );
 
         MPKey *key = [[MPKey alloc] initForFullName:user.name withMasterPassword:masterPassword];

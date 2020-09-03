@@ -628,7 +628,7 @@
     [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
         prof_rewind( @"moc" );
 
-        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPSiteEntity class] )];
+        NSFetchRequest *fetchRequest = [MPSiteEntity fetchRequest];
         fetchRequest.sortDescriptors = @[ [[NSSortDescriptor alloc] initWithKey:@"lastUsed" ascending:NO] ];
         fetchRequest.predicate =
                 [NSPredicate predicateWithFormat:@"name LIKE[cd] %@ AND user == %@", queryPattern, [MPMacAppDelegate get].activeUserOID];

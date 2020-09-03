@@ -475,8 +475,7 @@ MP_LIBS_END
             for (NSURLQueryItem *item in [NSURLComponents componentsWithString:[url absoluteString]].queryItems)
                 if ([item.name isEqualToString:@"fullName"]) {
                     [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-                        NSFetchRequest
-                                *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPUserEntity class] )];
+                        NSFetchRequest *fetchRequest = [MPUserEntity fetchRequest];
                         fetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@", item.value];
                         NSArray *users = [context executeFetchRequest:fetchRequest error:nil];
                         [self migrateFor:users.firstObject];

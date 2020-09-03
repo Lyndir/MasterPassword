@@ -646,7 +646,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     self.deleteUserItem.toolTip = mainActiveUser? nil: @"First select the user to delete.";
 
     NSError *error = nil;
-    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPUserEntity class] )];
+    NSFetchRequest *fetchRequest = [MPUserEntity fetchRequest];
     fetchRequest.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"lastUsed" ascending:NO] ];
     NSArray *users = [mainContext executeFetchRequest:fetchRequest error:&error];
     if (!users)
