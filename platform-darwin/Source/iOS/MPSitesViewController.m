@@ -199,11 +199,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
 
     if (controller == self.fetchedResultsController)
-        PearlMainQueue( ^{
-            [self.collectionView updateDataSource:self.dataSource
-                                       toSections:[self createDataSource]
-                                      reloadItems:nil completion:nil];
-        } );
+        [self updateSites];
 }
 
 #pragma mark - UISearchBarDelegate
@@ -385,18 +381,23 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
         NSError *error = nil;
         self.fetchedResultsController.fetchRequest.predicate =
                 [NSPredicate predicateWithFormat:@"name LIKE[cd] %@ AND user == %@", queryPattern, [MPiOSAppDelegate get].activeUserOID];
-        if (![self.fetchedResultsController performFetch:&error])
+        if (![self.fetchedResultsController performFetch:&error] || error)
             MPError( error, @"Couldn't fetch sites." );
 
-        PearlMainQueue( ^{
-            [self.collectionView updateDataSource:self.dataSource
-                                       toSections:[self createDataSource]
-                                      reloadItems:@[ MPTransientPasswordItem ] completion:^(BOOL finished) {
-                        for (MPSiteCell *cell in self.collectionView.visibleCells)
-                            [cell setQueryGroups:self.queryGroups];
-                    }];
-        } );
+        [self updateSites];
     }];
+}
+
+- (void)updateSites {
+
+    PearlMainQueue( ^{
+        [self.collectionView updateDataSource:self.dataSource
+                                   toSections:[self createDataSource]
+                                  reloadItems:@[ MPTransientPasswordItem ] completion:^(BOOL finished) {
+                    for (MPSiteCell *cell in self.collectionView.visibleCells)
+                        [cell setQueryGroups:self.queryGroups];
+                }];
+    } );
 }
 
 #pragma mark - Properties
@@ -416,14 +417,19 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 
     if (!_fetchedResultsController) {
         [MPiOSAppDelegate managedObjectContextForMainThreadPerformBlockAndWait:^(NSManagedObjectContext *mainContext) {
-            NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPSiteEntity class] )];
+            NSFetchRequest *fetchRequest = [MPSiteEntity fetchRequest];
             fetchRequest.sortDescriptors = @[
                     [[NSSortDescriptor alloc] initWithKey:NSStringFromSelector( @selector( lastUsed ) ) ascending:NO]
             ];
-            fetchRequest.fetchBatchSize = 10;
+
             (self.fetchedResultsController = [[NSFetchedResultsController alloc]
                     initWithFetchRequest:fetchRequest managedObjectContext:mainContext
                       sectionNameKeyPath:nil cacheName:nil]).delegate = self;
+
+            NSError *error = nil;
+            if (![self.fetchedResultsController performFetch:&error] || error)
+                MPError( error, @"Couldn't fetch sites." );
+            [self updateSites];
         }];
         [self registerObservers];
     }

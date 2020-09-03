@@ -183,12 +183,12 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
     } );
 
     // Do nothing if already fully set up, otherwise (re-)load the store.
-    if (self.storeCoordinator && self.mainManagedObjectContext && self.privateManagedObjectContext)
+    if (self.mainManagedObjectContext && self.privateManagedObjectContext)
         return;
 
     [self.storeQueue addOperationWithBlock:^{
         // Do nothing if already fully set up, otherwise (re-)load the store.
-        if (self.storeCoordinator && self.mainManagedObjectContext && self.privateManagedObjectContext)
+        if (self.mainManagedObjectContext && self.privateManagedObjectContext)
             return;
 
         // Unregister any existing observers and contexts.
@@ -201,6 +201,12 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
             [self.privateManagedObjectContext reset];
             self.privateManagedObjectContext = nil;
         }];
+        NSError *error = nil;
+        for (NSPersistentStore *store in self.storeCoordinator.persistentStores)
+            if (![self.storeCoordinator removePersistentStore:store error:&error] || error) {
+                MPError( error, @"Couldn't remove persistence store from coordinator." );
+                return;
+            }
 
         // Don't load when the store is corrupted.
         if ([self.storeCorrupted boolValue])
@@ -209,33 +215,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
         // Check if migration is necessary.
         [self migrateStore];
 
-        // Install managed object contexts and observers.
-        self.privateManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-        [self.privateManagedObjectContext performBlockAndWait:^{
-            self.privateManagedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy;
-            self.privateManagedObjectContext.persistentStoreCoordinator = self.storeCoordinator;
-        }];
-
-        self.mainManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-        self.mainManagedObjectContext.parentContext = self.privateManagedObjectContext;
-        if (@available( iOS 10.0, macOS 10.12, * ))
-            self.mainManagedObjectContext.automaticallyMergesChangesFromParent = YES;
-        else
-            // When privateManagedObjectContext is saved, import the changes into mainManagedObjectContext.
-            PearlAddNotificationObserverTo( self.mainManagedObjectContext, NSManagedObjectContextDidSaveNotification,
-                    self.privateManagedObjectContext, nil, ^(NSManagedObjectContext *mainContext, NSNotification *note) {
-                [mainContext performBlock:^{
-                    @try {
-                        [mainContext mergeChangesFromContextDidSaveNotification:note];
-                    }
-                    @catch (NSException *exception) {
-                        err( @"While merging changes:\n%@", [exception fullDescription] );
-                    }
-                }];
-            } );
-
         // Create a new store coordinator.
-        NSError *error = nil;
         NSURL *localStoreURL = [self localStoreURL];
         if (![[NSFileManager defaultManager] createDirectoryAtURL:[localStoreURL URLByDeletingLastPathComponent]
                                       withIntermediateDirectories:YES attributes:nil error:&error]) {
@@ -260,6 +240,29 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
             return;
         }
         self.storeCorrupted = @NO;
+
+        // Install managed object contexts and observers.
+        self.privateManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+        self.privateManagedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy;
+        self.privateManagedObjectContext.persistentStoreCoordinator = self.storeCoordinator;
+
+        self.mainManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+        self.mainManagedObjectContext.parentContext = self.privateManagedObjectContext;
+        if (@available( iOS 10.0, macOS 10.12, * ))
+            self.mainManagedObjectContext.automaticallyMergesChangesFromParent = YES;
+        else
+            // When privateManagedObjectContext is saved, import the changes into mainManagedObjectContext.
+            PearlAddNotificationObserverTo( self.mainManagedObjectContext, NSManagedObjectContextDidSaveNotification,
+                    self.privateManagedObjectContext, nil, ^(NSManagedObjectContext *mainContext, NSNotification *note) {
+                [mainContext performBlock:^{
+                    @try {
+                        [mainContext mergeChangesFromContextDidSaveNotification:note];
+                    }
+                    @catch (NSException *exception) {
+                        err( @"While merging changes:\n%@", [exception fullDescription] );
+                    }
+                }];
+            } );
 
 #if TARGET_OS_IPHONE
         PearlAddNotificationObserver( UIApplicationWillResignActiveNotification, UIApp, [NSOperationQueue mainQueue],
