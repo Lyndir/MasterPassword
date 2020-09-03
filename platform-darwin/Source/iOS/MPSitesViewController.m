@@ -423,6 +423,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
             fetchRequest.sortDescriptors = @[
                     [[NSSortDescriptor alloc] initWithKey:NSStringFromSelector( @selector( lastUsed ) ) ascending:NO]
             ];
+            fetchRequest.predicate = [NSPredicate predicateWithFormat:@"user == %@", [MPiOSAppDelegate get].activeUserOID];
 
             (self.fetchedResultsController = [[NSFetchedResultsController alloc]
                     initWithFetchRequest:fetchRequest managedObjectContext:mainContext
