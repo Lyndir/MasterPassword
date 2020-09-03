@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16096" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16096"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097.3"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -199,6 +199,7 @@
                                 </attributedString>
                                 <modifierMask key="keyEquivalentModifierMask"/>
                             </menuItem>
+                            <menuItem isSeparatorItem="YES" id="lhE-aV-1P4"/>
                             <menuItem title="Diagnostics" id="GSN-f0-q7s">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
@@ -208,6 +209,23 @@
                             <menuItem title="Crash and usage information is anonymized and sent to development." enabled="NO" id="WfD-lX-C93">
                                 <attributedString key="attributedTitle">
                                     <fragment content="Crash and usage information is anonymized and sent to development.">
+                                        <attributes>
+                                            <font key="NSFont" size="11" name="Helvetica"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" firstLineHeadIndent="8"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                            </menuItem>
+                            <menuItem title="Copy Device Identifier" id="c2c-Vy-iqg">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="copyIdentifier:" target="494" id="dDF-fR-z6h"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Your anonymous device identifier allows support to find your diagnostic reports." enabled="NO" id="xMa-pq-Bqg">
+                                <attributedString key="attributedTitle">
+                                    <fragment content="Your anonymous device identifier allows support to find your diagnostic reports.">
                                         <attributes>
                                             <font key="NSFont" size="11" name="Helvetica"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" firstLineHeadIndent="8"/>

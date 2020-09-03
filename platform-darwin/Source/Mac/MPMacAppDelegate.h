@@ -42,6 +42,7 @@
 - (IBAction)showPasswordWindow:(id)sender;
 - (void)setLoginItemEnabled:(BOOL)enabled;
 - (IBAction)togglePreference:(id)sender;
+- (IBAction)copyIdentifier:(id)sender;
 - (IBAction)newUser:(NSMenuItem *)sender;
 - (IBAction)lock:(id)sender;
 - (IBAction)terminate:(id)sender;

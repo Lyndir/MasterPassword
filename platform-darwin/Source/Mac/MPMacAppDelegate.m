@@ -435,6 +435,12 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     [self updateMenuItems];
 }
 
+- (IBAction)copyIdentifier:(id)sender {
+    [[NSPasteboard generalPasteboard] declareTypes:@[ NSStringPboardType ] owner:nil];
+    if (![[NSPasteboard generalPasteboard] setString:[PearlKeyChain deviceIdentifier] forType:NSPasteboardTypeString])
+        wrn( @"Couldn't copy device identifier to pasteboard." );
+}
+
 - (IBAction)newUser:(NSMenuItem *)sender {
 
     NSAlert *alert = [NSAlert new];
