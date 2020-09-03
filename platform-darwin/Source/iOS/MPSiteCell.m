@@ -543,7 +543,7 @@
     self.loginNameContainer.visible = settingsMode || mainSite.loginGenerated || [mainSite.loginName length];
     self.modeButton.visible = !self.transientSite;
     self.modeButton.alpha = settingsMode? 0.5f: 0.1f;
-    self.counterLabel.visible = self.counterButton.visible = mainSite.type & MPResultTypeClassTemplate;
+    self.counterLabel.visible = self.counterButton.visible = (mainSite.type & MPResultTypeClassTemplate) == MPResultTypeClassTemplate;
     self.modeButton.selected = settingsMode;
     self.strengthLabel.gone = !settingsMode;
     self.modeScrollView.scrollEnabled = !self.transientSite;
