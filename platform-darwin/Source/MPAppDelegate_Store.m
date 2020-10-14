@@ -51,6 +51,8 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
 
 + (NSManagedObjectContext *)managedObjectContextForMainThreadIfReady {
 
+    NSAssert( [[NSThread currentThread] isMainThread], @"Direct access to main MOC only allowed from the main thread." );
+
     NSManagedObjectContext *mainManagedObjectContext = [[self get] mainManagedObjectContextIfReady];
     if (!mainManagedObjectContext || ![[NSThread currentThread] isMainThread])
         return nil;
@@ -153,8 +155,6 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
 }
 
 - (NSManagedObjectContext *)mainManagedObjectContextIfReady {
-
-    NSAssert( [[NSThread currentThread] isMainThread], @"Can only access main MOC from the main thread." );
 
     [self loadStore];
 
