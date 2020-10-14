@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7352E972184B980C428B66A2 /* Pods_MasterPassword_macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E9477508F419F29008C7553 /* Pods_MasterPassword_macOS.framework */; };
 		93D390C676DF52DA7E459F19 /* MPSitesWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39D9D0061FF1159998F06 /* MPSitesWindow.m */; };
 		93D391E61DC23E128DA4446C /* NSView+Traversing.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D393EE88DE554BCCBC1C2D /* NSView+Traversing.h */; };
 		93D393A1646430FAAC73E7FE /* MPMacApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39F83DD151985F2C7345A /* MPMacApplication.m */; };
@@ -18,6 +17,7 @@
 		93D398D1F5D8CD5A22AF6929 /* MPGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39934FD8D5BFABA46F41C /* MPGradientView.m */; };
 		93D39C5789EFA607CF788082 /* MPSiteModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39E73BF5CBF8E5B005CD3 /* MPSiteModel.m */; };
 		93D39F833DEC1C89B2F795AC /* MPSitesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39A57A7823DE98A0FF83C /* MPSitesWindowController.m */; };
+		C6D1011AA5C6C5391BFC9DC0 /* Pods_MasterPassword_macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C2AEAB82916C4A50EE4A4DE /* Pods_MasterPassword_macOS.framework */; };
 		DA0933CC1747AD2D00DE1CEF /* shot-laptop-leaning-iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0933CB1747AD2D00DE1CEF /* shot-laptop-leaning-iphone.png */; };
 		DA0933D01747B91B00DE1CEF /* appstore.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0933CF1747B91B00DE1CEF /* appstore.png */; };
 		DA09745E1E99586600F0BFE8 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DA09745D1E99586600F0BFE8 /* libxml2.tbd */; };
@@ -348,11 +348,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		04D86D0B84D29123756339FD /* Pods-MasterPassword.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MasterPassword.debug.xcconfig"; path = "Target Support Files/Pods-MasterPassword/Pods-MasterPassword.debug.xcconfig"; sourceTree = "<group>"; };
-		1E9477508F419F29008C7553 /* Pods_MasterPassword_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MasterPassword_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		1E9ED9547411486CE0898611 /* Pods-MasterPassword-macOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MasterPassword-macOS.debug.xcconfig"; path = "Target Support Files/Pods-MasterPassword-macOS/Pods-MasterPassword-macOS.debug.xcconfig"; sourceTree = "<group>"; };
-		28DD0F6129ECC496C8DFE6F8 /* Pods-MasterPassword-macOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MasterPassword-macOS.release.xcconfig"; path = "Target Support Files/Pods-MasterPassword-macOS/Pods-MasterPassword-macOS.release.xcconfig"; sourceTree = "<group>"; };
-		7791961245EBC3023523FDCD /* Pods-MasterPassword.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MasterPassword.release.xcconfig"; path = "Target Support Files/Pods-MasterPassword/Pods-MasterPassword.release.xcconfig"; sourceTree = "<group>"; };
+		2C2AEAB82916C4A50EE4A4DE /* Pods_MasterPassword_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MasterPassword_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6F97B456DA90E7D2E95B64A5 /* Pods-MasterPassword-macOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MasterPassword-macOS.debug.xcconfig"; path = "Target Support Files/Pods-MasterPassword-macOS/Pods-MasterPassword-macOS.debug.xcconfig"; sourceTree = "<group>"; };
 		93D39240B5143E01F0B75E96 /* MPSiteModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSiteModel.h; sourceTree = "<group>"; };
 		93D392870DF659AFC1870521 /* NSView+Traversing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSView+Traversing.m"; sourceTree = "<group>"; };
 		93D392A4F3DE0BD758B9B056 /* MPNoStateButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPNoStateButton.h; sourceTree = "<group>"; };
@@ -1119,6 +1116,7 @@
 		DAFE4A63150399FF003ABA87 /* NSObject+PearlKVO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+PearlKVO.h"; sourceTree = "<group>"; };
 		DAFE4A63150399FF003ABA91 /* NSDateFormatter+RFC3339.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDateFormatter+RFC3339.m"; sourceTree = "<group>"; };
 		DAFE4A63150399FF003ABA93 /* NSDateFormatter+RFC3339.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDateFormatter+RFC3339.h"; sourceTree = "<group>"; };
+		DF299A3DC20096A2D2942352 /* Pods-MasterPassword-macOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MasterPassword-macOS.release.xcconfig"; path = "Target Support Files/Pods-MasterPassword-macOS/Pods-MasterPassword-macOS.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1154,7 +1152,7 @@
 				DA16B345170661F2000A0EAB /* libPearl.a in Frameworks */,
 				DA16B344170661EE000A0EAB /* Cocoa.framework in Frameworks */,
 				DA72E2272444081200676D4F /* SystemConfiguration.framework in Frameworks */,
-				7352E972184B980C428B66A2 /* Pods_MasterPassword_macOS.framework in Frameworks */,
+				C6D1011AA5C6C5391BFC9DC0 /* Pods_MasterPassword_macOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1181,10 +1179,8 @@
 		0C357E29DE20E18311095EBF /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				04D86D0B84D29123756339FD /* Pods-MasterPassword.debug.xcconfig */,
-				7791961245EBC3023523FDCD /* Pods-MasterPassword.release.xcconfig */,
-				1E9ED9547411486CE0898611 /* Pods-MasterPassword-macOS.debug.xcconfig */,
-				28DD0F6129ECC496C8DFE6F8 /* Pods-MasterPassword-macOS.release.xcconfig */,
+				6F97B456DA90E7D2E95B64A5 /* Pods-MasterPassword-macOS.debug.xcconfig */,
+				DF299A3DC20096A2D2942352 /* Pods-MasterPassword-macOS.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -1261,7 +1257,7 @@
 				DAD9B5EF1762CAA4001835F9 /* ServiceManagement.framework */,
 				DA6701DD16406B7300B61001 /* Social.framework */,
 				DABB981515100B4000B05417 /* SystemConfiguration.framework */,
-				1E9477508F419F29008C7553 /* Pods_MasterPassword_macOS.framework */,
+				2C2AEAB82916C4A50EE4A4DE /* Pods_MasterPassword_macOS.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -2320,15 +2316,15 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword-macOS" */;
 			buildPhases = (
-				0DC4F66C2499C40A68A07D58 /* [CP] Check Pods Manifest.lock */,
+				A4743CFBA7F5C60D2E440512 /* [CP] Check Pods Manifest.lock */,
 				DA4EF9CB19FD4B600032ECB5 /* Run Script: genassets */,
 				DA5BFA40147E415C00F98B1E /* Sources */,
 				DA5BFA41147E415C00F98B1E /* Frameworks */,
 				DA5BFA42147E415C00F98B1E /* Resources */,
 				DAD9B5EE1762CA3A001835F9 /* Copy LoginHelper */,
 				DA6556E314D55F3000841C99 /* Run Script: GIT version -> Info.plist */,
-				43E5966C8C236E86824DDADE /* [CP] Embed Pods Frameworks */,
 				DA3C4EB2243941AE00A6C4A8 /* Sentry dSYM Upload */,
+				85C937E180CD7620A471A930 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -2544,7 +2540,29 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0DC4F66C2499C40A68A07D58 /* [CP] Check Pods Manifest.lock */ = {
+		85C937E180CD7620A471A930 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MasterPassword-macOS/Pods-MasterPassword-macOS-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/JRSwizzle-macOS/JRSwizzle.framework",
+				"${BUILT_PRODUCTS_DIR}/KCOrderedAccessorFix-macOS/KCOrderedAccessorFix.framework",
+				"${BUILT_PRODUCTS_DIR}/Sentry-macOS/Sentry.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JRSwizzle.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KCOrderedAccessorFix.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Sentry.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MasterPassword-macOS/Pods-MasterPassword-macOS-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A4743CFBA7F5C60D2E440512 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2564,23 +2582,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		43E5966C8C236E86824DDADE /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MasterPassword-macOS/Pods-MasterPassword-macOS-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MasterPassword-macOS/Pods-MasterPassword-macOS-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MasterPassword-macOS/Pods-MasterPassword-macOS-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		DA3C4EB2243941AE00A6C4A8 /* Sentry dSYM Upload */ = {
@@ -3194,7 +3195,7 @@
 		};
 		DA5BFA6E147E415C00F98B1E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1E9ED9547411486CE0898611 /* Pods-MasterPassword-macOS.debug.xcconfig */;
+			baseConfigurationReference = 6F97B456DA90E7D2E95B64A5 /* Pods-MasterPassword-macOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -3234,7 +3235,7 @@
 		};
 		DA5BFA6F147E415C00F98B1E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 28DD0F6129ECC496C8DFE6F8 /* Pods-MasterPassword-macOS.release.xcconfig */;
+			baseConfigurationReference = DF299A3DC20096A2D2942352 /* Pods-MasterPassword-macOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;

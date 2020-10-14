@@ -30,10 +30,18 @@
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
+		536DEA2BDA9F2F9583C53D8F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		DA1554D220B3924000EA92C5 = {
 			isa = PBXGroup;
 			children = (
 				DA1554DD20B3928E00EA92C5 /* core */,
+				536DEA2BDA9F2F9583C53D8F /* Products */,
 			);
 			sourceTree = "<group>";
 		};
@@ -105,6 +113,7 @@
 				Base,
 			);
 			mainGroup = DA1554D220B3924000EA92C5;
+			productRefGroup = 536DEA2BDA9F2F9583C53D8F /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
