@@ -29,7 +29,7 @@ subprojects {
         maven { url 'https://maven.lyndir.com' }
     }
     dependencies {
-        spotbugsPlugins group: 'com.h3xstream.findsecbugs', name: 'findsecbugs-plugin', version: '1.9.0'
+        //spotbugsPlugins group: 'com.h3xstream.findsecbugs', name: 'findsecbugs-plugin', version: '1.11.0'
         //spotbugsPlugins group: 'com.mebigfatguy.sb-contrib', name: 'sb-contrib', version: '7.4.6'
     }
     spotbugs {
