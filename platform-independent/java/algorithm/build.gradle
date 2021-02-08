@@ -15,7 +15,7 @@ configurations {
 
 dependencies {
     implementation group: 'com.lyndir.lhunath.opal', name: 'opal-system', version: '1.7-p2'
-    implementation group: 'com.github.spotbugs', name: 'spotbugs-annotations', version: '4.0.0-beta4'
+    implementation group: 'com.github.spotbugs', name: 'spotbugs-annotations', version: '4.2.1'
 
     api group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.8'
     api group: 'org.jetbrains', name: 'annotations', version: '16.0.2'

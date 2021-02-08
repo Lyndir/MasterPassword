@@ -459,7 +459,8 @@ public class UserContentPanel extends JPanel implements State.Listener, MPUser.L
             char[] masterPassword = masterPasswordField.getPassword();
             MPIdenticon identicon = ((masterPassword != null) && (masterPassword.length > 0))?
                     user.getAlgorithm().identicon( user.getFullName(), masterPassword ): null;
-            Arrays.fill( masterPassword, (char) 0 );
+            if (masterPassword != null)
+                Arrays.fill( masterPassword, (char) 0 );
 
             Res.ui( () -> {
                 if (identicon != null) {

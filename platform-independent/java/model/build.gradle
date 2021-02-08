@@ -7,7 +7,7 @@ description = 'Master Password Site Model'
 dependencies {
     implementation group: 'com.lyndir.lhunath.opal', name: 'opal-system', version: '1.7-p2'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.8'
-    implementation group: 'com.github.spotbugs', name: 'spotbugs-annotations', version: '4.0.0-beta4'
+    implementation group: 'com.github.spotbugs', name: 'spotbugs-annotations', version: '4.2.1'
 
     api project( ':masterpassword-algorithm' )
     api group: 'joda-time', name: 'joda-time', version: '2.10'
