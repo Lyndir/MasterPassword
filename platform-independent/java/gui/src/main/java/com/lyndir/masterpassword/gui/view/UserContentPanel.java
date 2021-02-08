@@ -901,6 +901,12 @@ public class UserContentPanel extends JPanel implements State.Listener, MPUser.L
         private void showSiteItem(@Nullable final MPQuery.Result<? extends MPSite<?>> item) {
             MPSite<?> site = (item != null)? item.getValue(): null;
             Res.ui( getSiteResult( site, showLogin ), result -> {
+                settingsButton.setEnabled( site != null );
+                questionsButton.setEnabled( site != null );
+                editButton.setEnabled( site != null );
+                keyButton.setEnabled( site != null );
+                deleteButton.setEnabled( site != null );
+
                 if (!showLogin && (site != null))
                     resultLabel.setText( (result != null)? strf( "Your password for %s:", site.getSiteName() ): " " );
                 else if (showLogin && (site != null))
@@ -912,11 +918,6 @@ public class UserContentPanel extends JPanel implements State.Listener, MPUser.L
                     resultField.setText( EACH_CHARACTER.matcher( result ).replaceAll( "•" ) );
                 else
                     resultField.setText( result );
-                settingsButton.setEnabled( result != null );
-                questionsButton.setEnabled( result != null );
-                editButton.setEnabled( result != null );
-                keyButton.setEnabled( result != null );
-                deleteButton.setEnabled( result != null );
             } );
         }
 
