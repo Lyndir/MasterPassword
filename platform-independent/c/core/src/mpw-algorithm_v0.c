@@ -169,7 +169,7 @@ const char *mpw_site_crypted_password_v0(
     if (strlen( cipherText ) % 4 != 0) {
         wrn( "Malformed encrypted state, not base64." );
         // This can happen if state was stored in a non-encrypted form, eg. login in old mpsites.
-        return strdup( cipherText );
+        return mpw_strdup( cipherText );
     }
 
     // Base64-decode
