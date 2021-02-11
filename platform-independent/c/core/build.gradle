@@ -74,7 +74,7 @@ library {
             link.linkerArgs = ['-lc', '-nodefaultlibs', '-flto']
         } else if (toolChain in VisualCpp) {
             // TODO: Should this be shared instead of static?
-            compile.compilerArgs = ['/TC', '/MT', '/Ox', '/DSODIUM_STATIC', '/DSODIUM_EXPORT=']
+            compile.compilerArgs = ['/TC', '/MT', '/Ox', '/DSODIUM_STATIC', '/DSODIUM_EXPORT=', '/std:c11']
         }
     }
 }

@@ -22,7 +22,6 @@ MP_LIBS_BEGIN
 #include <string.h>
 #include <ctype.h>
 #include <errno.h>
-#include <libgen.h>
 
 #if MPW_CPERCIVA
 #include <scrypt/crypto_scrypt.h>

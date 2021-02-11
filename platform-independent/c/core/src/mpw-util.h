@@ -86,6 +86,21 @@ void mpw_log_ssink(LogLevel level, const char *file, int line, const char *funct
 
 //// Utilities
 
+#ifndef OK
+#define OK 0
+#endif
+#ifndef ERR
+#define ERR -1
+#endif
+
+#ifndef stringify
+#define stringify(s) #s
+#endif
+#ifndef stringify_def
+#define stringify_def(s) stringify(s)
+#endif
+
+#if !__STRICT_ANSI__ && __GNUC__ >= 3
 #ifndef min
 #define min(a, b) ({ \
     __typeof__ (a) _a = (a); \
@@ -98,21 +113,18 @@ void mpw_log_ssink(LogLevel level, const char *file, int line, const char *funct
     __typeof__ (b) _b = (b); \
     _a > _b ? _a : _b; })
 #endif
-#ifndef ERR
-#define ERR -1
+#define mpw_default(__default, __value) ({ __typeof__ (__value) _v = (__value); _v? _v: (__default); })
+#define mpw_default_n(__default, __num) ({ __typeof__ (__num) _n = (__num); !isnan( _n )? (__typeof__ (__default))_n: (__default); })
+#else
+#ifndef min
+#define min(a, b) ( (a) < (b) ? (a) : (b) )
 #endif
-#ifndef OK
-#define OK 0
+#ifndef max
+#define max(a, b) ( (a) > (b) ? (a) : (b) )
 #endif
-#ifndef stringify
-#define stringify(s) #s
+#define mpw_default(__default, __value) ( (__value)? (__value): (__default) )
+#define mpw_default_n(__default, __num) ( !isnan( (__num) )? (__num): (__default) )
 #endif
-#ifndef stringify_def
-#define stringify_def(s) stringify(s)
-#endif
-
-#define mpw_default(__default, __value) ({ __typeof__ (__value) _v = __value; _v? _v: __default; })
-#define mpw_default_n(__default, __num) ({ __typeof__ (__num) _n = (__num); !isnan( _n )? (__typeof__ (__default))_n: __default; })
 
 
 //// Buffers and memory.

@@ -250,7 +250,7 @@ void mpw_marshal_file_free(
 MPMarshalledData *mpw_marshal_data_new() {
 
     MPMarshalledData *data = malloc( sizeof( MPMarshalledData ) );
-    *data = (MPMarshalledData){};
+    *data = (MPMarshalledData){ 0 };
     mpw_marshal_data_set_null( data, NULL );
     data->is_null = false;
     return data;
