@@ -16,7 +16,7 @@ buildscript {
 
 allprojects {
     group = 'com.lyndir.masterpassword'
-    version = '2.7.10'
+    version = '2.7.11'
 }
 
 subprojects {
