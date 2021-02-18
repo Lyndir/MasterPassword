@@ -14,9 +14,9 @@ echo "Cleaning .."
 git clean -ffdx .
 
 echo "Creating archive $mpwArchive .."
-echo "$version" > VERSION
-git show --show-signature --pretty=format:%H --quiet "$tag" > TAG
-{ git ls-files -z .; printf '%s\0' VERSION TAG; } | xargs -0 tar -Lcvzf "$mpwArchive"
+echo "$version" > cli/VERSION
+git show --show-signature --pretty=format:%H --quiet "$tag" > cli/TAG
+{ git ls-files -z .; printf '%s\0' cli/VERSION cli/TAG; } | xargs -0 tar -Lcvzf "$mpwArchive"
 
 echo "Creating archive signature $mpwArchive.sig .."
 gpg --detach-sign --local-user 5C2D1D61853F20F2FCDDCCB70EF21226F43EA6BC "$mpwArchive"
